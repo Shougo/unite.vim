@@ -46,6 +46,7 @@ endif
 " Variables  "{{{
 " buffer number of the unite buffer
 let s:unite_bufnr = s:INVALID_BUFNR
+let s:unite_sources = []
 "}}}
 
 function! unite#start(...)"{{{
@@ -61,20 +62,44 @@ function! unite#start(...)"{{{
     let s:unite_bufnr = bufnr('')
     call s:initialize_unite_buffer()
   endif
-  2 wincmd _
+  20 wincmd _
+  
+  " Initialize sources.
+  let s:unite_sources = []
+  for l:source_name in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n')
+        \, 'fnamemodify(v:val, ":t:r")')
+      let l:source = call('unite#sources#' . l:source_name . '#define', [])
+      call add(s:unite_sources, l:source)
+  endfor
 
   silent % delete _
   normal! o
   call setline(s:LNUM_STATUS, 'Sources: ')
   call setline(s:LNUM_PATTERN, '')
-  execute 'normal!' s:LNUM_PATTERN . 'G'
+  execute s:LNUM_PATTERN
+
+  let l:candidates = s:gather_candidates('')
+  call append('$', l:candidates)
 
   call feedkeys('A', 'n')
 
   return s:TRUE
 endfunction"}}}
 
-function! s:initialize_unite_buffer()  "{{{2
+function! s:gather_candidates(args)"{{{
+  let l:candidates = []
+  for l:source in s:unite_sources
+    for l:candidate in l:source.gather_candidates(a:args)
+      call add(l:candidates, l:candidate.word)
+    endfor
+  endfor
+
+  echomsg string(l:candidates)
+  return l:candidates
+endfunction"}}}
+
+
+function! s:initialize_unite_buffer()"{{{
   " The current buffer is initialized.
 
   " Basic settings.
@@ -97,17 +122,11 @@ function! s:initialize_unite_buffer()  "{{{2
   setfiletype unite
 
   return
-endfunction
+endfunction"}}}
 
 function! s:quit_session()  "{{{
   close
 endfunction"}}}
-
-
-
-
-
-
 
 
 " vim: foldmethod=marker
