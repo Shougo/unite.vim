@@ -57,6 +57,11 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   return filter(map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'), 'fnamemodify(v:val, ":t:r")')
         \ , printf('v:val =~ "^%s"', a:arglead))
 endfunction"}}}
+function! unite#set_default(var, val)  "{{{
+  if !exists(a:var) || type({a:var}) != type(a:val)
+    let {a:var} = a:val
+  endif
+endfunction"}}}
 "}}}
 
 function! unite#start(sources)"{{{
@@ -92,8 +97,6 @@ function! unite#start(sources)"{{{
   let b:unite.candidates = s:gather_candidates({}, '')
   call append('$', s:convert_lines(b:unite.candidates))
 
-  call feedkeys('A', 'n')
-
   return s:TRUE
 endfunction"}}}
 
@@ -111,7 +114,7 @@ function! s:gather_candidates(args, text)"{{{
   return filter(l:candidates, 'v:val.word =~ ' . string(unite#escape_match(a:text)))
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
-  return map(copy(a:candidates), 'unite#util#truncate(v:val.word, 80) . v:val.source')
+  return map(copy(a:candidates), 'unite#util#truncate(has_key(v:val, "abbr")? v:val.abbr : v:val.word, 80) . v:val.source')
 endfunction"}}}
 
 function! s:initialize_unite_buffer()"{{{

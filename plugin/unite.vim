@@ -33,6 +33,12 @@ endif
 if !exists('g:unite_update_time')
   let g:unite_update_time = 200
 endif
+if !exists('g:unite_temporary_directory')
+  let g:unite_temporary_directory = expand('~/.unite')
+endif
+if !isdirectory(fnamemodify(g:unite_temporary_directory, ':p'))
+  call mkdir(fnamemodify(g:unite_temporary_directory, ':p'), 'p')
+endif
 "}}}
 
 " Wrapper command.

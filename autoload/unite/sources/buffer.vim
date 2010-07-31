@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jul 2010
+" Last Modified: 31 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,7 +39,7 @@ function! s:source.gather_candidates(args)"{{{
   let l:candidates = range(1, bufnr('$'))
 
   call filter(l:candidates, 'bufexists(v:val) && buflisted(v:val)')
-  call map(l:candidates, '{"word" : bufname(v:val), "source" : "buffer", "buffer_nr" : v:val}')
+  call map(l:candidates, '{"word" : bufname(v:val), "source" : "buffer", "unite_buffer_nr" : v:val}')
 
   return l:candidates
 endfunction"}}}
@@ -65,8 +65,8 @@ function! unite#sources#buffer#define()"{{{
 endfunction"}}}
 
 function! s:bufnr_from_candidate(candidate)"{{{
-  if has_key(a:candidate, 'buffer_nr')
-    return a:candidate.buffer_nr
+  if has_key(a:candidate, 'unite_buffer_nr')
+    return a:candidate.unite_buffer_nr
   else
     let _ = bufnr(fnameescape(a:candidate.word))
     if 1 <= _
@@ -98,7 +98,6 @@ function! s:open(bang, candidate)"{{{
   else
     let v:errmsg = _
   endif
-
 
   return v:errmsg == '' ? 0 : v:errmsg
 endfunction"}}}
