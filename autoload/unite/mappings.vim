@@ -27,9 +27,11 @@
 " Define default mappings.
 function! unite#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
-  inoremap <silent> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
+  inoremap <silent> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   
   nnoremap <silent> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
+  nnoremap <silent> <Plug>(unite_do_default_action)  <ESC>:<C-u>call <SID>do_default_action()<CR>
+  nnoremap <silent> <Plug>(unite_choose_action)  <ESC>:<C-u>call <SID>choose_action()<CR>
   "}}}
   
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -38,15 +40,29 @@ function! unite#mappings#define_default_mappings()"{{{
   
   " Normal mode key-mappings.
   nmap <buffer> <ESC> <Plug>(unite_exit)
+  nmap <buffer> q <Plug>(unite_exit)
+  nmap <buffer> <CR> <Plug>(unite_do_default_action)
 
   " Insert mode key-mappings.
-  imap <buffer> <ESC>     <Plug>(unite_exit)
-  imap <buffer> <CR>     :<ESC>j
-  imap <buffer> <TAB>     :<ESC>j
+  "imap <buffer> <ESC>     <Plug>(unite_exit)
+  imap <buffer> <CR>      <ESC>j
+  imap <buffer> <TAB>     <ESC>j
 endfunction"}}}
 
 " key-mappings functions.
 function! s:exit()"{{{
+  close
+endfunction"}}}
+function! s:do_default_action()"{{{
+  if line('.') <= 2
+    " Ignore.
+    return
+  endif
+  
+  let l:candidate = b:unite.candidates[line('.') - 3]
+  call b:unite.sources[l:candidate.source].action_table[b:unite.sources[l:candidate.source].default_action](l:candidate)
+endfunction"}}}
+function! s:choose_action()"{{{
   close
 endfunction"}}}
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jul 2010
+" Last Modified: 31 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,6 +29,11 @@ if exists('g:loaded_unite')
   finish
 endif
 
+" Global options definition."{{{
+if !exists('g:unite_update_time')
+  let g:unite_update_time = 200
+endif
+"}}}
 
 " Wrapper command.
 command! -nargs=+ -complete=customlist,unite#complete_source Unite call s:call_unite(<q-args>)

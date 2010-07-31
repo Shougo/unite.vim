@@ -26,36 +26,37 @@
 
 let s:source = {
       \ 'name' : 'buffer',
-      \ 'default_key_table': {
+      \ 'key_table': {
       \     'D': 'delete',
       \     'U': 'unload',
       \     'W': 'wipeout',
       \    },
-      \ 'default_action_table': {},
+      \ 'action_table': {},
+      \ 'default_action': 'open',
       \}
 
 function! s:source.gather_candidates(args)"{{{
   let l:candidates = range(1, bufnr('$'))
 
   call filter(l:candidates, 'bufexists(v:val) && buflisted(v:val)')
-  call map(l:candidates, '{"word":  bufname(v:val), "buffer_nr": v:val}')
+  call map(l:candidates, '{"word" : bufname(v:val), "source" : "buffer", "buffer_nr" : v:val}')
 
   return l:candidates
 endfunction"}}}
 
-function! s:source.default_action_table.delete(candidate)"{{{
+function! s:source.action_table.delete(candidate)"{{{
   return s:delete('bdelete', a:candidate)
 endfunction"}}}
-function! s:source.default_action_table.open(candidate)"{{{
+function! s:source.action_table.open(candidate)"{{{
   return s:open('', a:candidate)
 endfunction"}}}
-function! s:source.default_action_table.open_x(candidate)"{{{
+function! s:source.action_table.open_x(candidate)"{{{
   return s:open('!', a:candidate)
 endfunction"}}}
-function! s:source.default_action_table.unload(candidate)"{{{
+function! s:source.action_table.unload(candidate)"{{{
   return s:delete('bunload', a:candidate)
 endfunction"}}}
-function! s:source.default_action_table.wipeout(candidate)"{{{
+function! s:source.action_table.wipeout(candidate)"{{{
   return s:delete('bwipeout', a:candidate)
 endfunction"}}}
 
@@ -65,7 +66,7 @@ endfunction"}}}
 
 function! s:bufnr_from_candidate(candidate)"{{{
   if has_key(a:candidate, 'buffer_nr')
-    return a:candidate.neoui_buffer_nr
+    return a:candidate.buffer_nr
   else
     let _ = bufnr(fnameescape(a:candidate.word))
     if 1 <= _

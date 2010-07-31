@@ -46,10 +46,20 @@ endif
 " Variables  "{{{
 " buffer number of the unite buffer
 let s:unite_bufnr = s:INVALID_BUFNR
-let s:unite_sources = []
+let s:update_time_save = &updatetime
 "}}}
 
-function! unite#start(...)"{{{
+" Helper functions."{{{
+function! unite#escape_match(str)"{{{
+  return escape(a:str, '~" \.^$[]')
+endfunction"}}}
+function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
+  return filter(map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'), 'fnamemodify(v:val, ":t:r")')
+        \ , printf('v:val =~ "^%s"', a:arglead))
+endfunction"}}}
+"}}}
+
+function! unite#start(sources)"{{{
   " Open or create the unite buffer.
   let v:errmsg = ''
   execute 'topleft' (bufexists(s:unite_bufnr) ? 'split' : 'new')
@@ -65,42 +75,43 @@ function! unite#start(...)"{{{
   20 wincmd _
   
   " Initialize sources.
-  let s:unite_sources = []
-  for l:source_name in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n')
-        \, 'fnamemodify(v:val, ":t:r")')
-      let l:source = call('unite#sources#' . l:source_name . '#define', [])
-      call add(s:unite_sources, l:source)
+  let b:unite.sources = []
+  for l:source_name in a:sources
+    let l:source = call('unite#sources#' . l:source_name . '#define', [])
+    call add(b:unite.sources, l:source)
   endfor
 
   silent % delete _
   normal! o
-  call setline(s:LNUM_STATUS, 'Sources: ')
-  call setline(s:LNUM_PATTERN, '')
+  call setline(s:LNUM_STATUS, 'Sources: ' . join(a:sources, ', '))
+  call setline(s:LNUM_PATTERN, '>')
   execute s:LNUM_PATTERN
 
-  let l:candidates = s:gather_candidates('')
-  call append('$', l:candidates)
+  let b:unite.candidates = s:gather_candidates({}, '')
+  call append('$', s:convert_lines(b:unite.candidates))
 
   call feedkeys('A', 'n')
 
   return s:TRUE
 endfunction"}}}
 
-function! s:gather_candidates(args)"{{{
+function! s:gather_candidates(args, text)"{{{
   let l:candidates = []
-  for l:source in s:unite_sources
+  for l:source in b:unite.sources
     for l:candidate in l:source.gather_candidates(a:args)
-      call add(l:candidates, l:candidate.word)
+      call add(l:candidates, l:candidate)
     endfor
   endfor
 
-  echomsg string(l:candidates)
-  return l:candidates
+  return filter(l:candidates, 'v:val.word =~ ' . string(unite#escape_match(a:text)))
 endfunction"}}}
-
+function! s:convert_lines(candidates)"{{{
+  return map(copy(a:candidates), 'unite#util#truncate(v:val.word, 80) . v:val.source')
+endfunction"}}}
 
 function! s:initialize_unite_buffer()"{{{
   " The current buffer is initialized.
+  let b:unite = {}
 
   " Basic settings.
   setlocal bufhidden=hide
@@ -111,12 +122,20 @@ function! s:initialize_unite_buffer()"{{{
 
   " Autocommands.
   augroup plugin-unite
+    autocmd InsertEnter <buffer>  call s:on_insert_enter()
+    autocmd InsertLeave <buffer>  call s:on_insert_leave()
+    autocmd CursorHoldI <buffer>  call s:on_cursor_hold()
     autocmd BufLeave <buffer>  call s:quit_session()
     autocmd WinLeave <buffer>  call s:quit_session()
     " autocmd TabLeave <buffer>  call s:quit_session()  " not necessary
   augroup END
 
   call unite#mappings#define_default_mappings()
+
+  if exists(':NeoComplCacheLock')
+    " Lock neocomplcache.
+    NeoComplCacheLock
+  endif
 
   " User's initialization.
   setfiletype unite
@@ -128,5 +147,35 @@ function! s:quit_session()  "{{{
   close
 endfunction"}}}
 
+" Autocmd events.
+function! s:on_insert_enter()  "{{{
+  if &updatetime > g:unite_update_time
+    let s:update_time_save = &updatetime
+    let &updatetime = g:unite_update_time
+  endif
+  
+  if line('.') != 2
+    2
+    startinsert!
+  endif
+endfunction"}}}
+function! s:on_insert_leave()  "{{{
+  if &updatetime < s:update_time_save
+    let &updatetime = s:update_time_save
+  endif
+endfunction"}}}
+function! s:on_cursor_hold()  "{{{
+  let l:candidates = s:gather_candidates({}, getline(2)[1:])
+  let l:lines = s:convert_lines(l:candidates)
+  if len(l:lines) < len(b:unite.candidates)
+    let l:pos = getpos('.')
+    silent! 3,$delete _
+    call setpos('.', l:pos)
+  endif
+  
+  let b:unite.candidates = l:candidates
+
+  call setline(3, l:lines)
+endfunction"}}}
 
 " vim: foldmethod=marker
