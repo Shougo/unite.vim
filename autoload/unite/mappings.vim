@@ -32,6 +32,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
   nnoremap <silent> <Plug>(unite_do_default_action)  <ESC>:<C-u>call <SID>do_default_action()<CR>
   nnoremap <silent> <Plug>(unite_choose_action)  <ESC>:<C-u>call <SID>choose_action()<CR>
+  nnoremap <silent> <Plug>(unite_insert_enter)  <ESC>:<C-u>call <SID>insert_enter()<CR>
   "}}}
   
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -40,6 +41,7 @@ function! unite#mappings#define_default_mappings()"{{{
   
   " Normal mode key-mappings.
   nmap <buffer> <ESC> <Plug>(unite_exit)
+  nmap <buffer> i <Plug>(unite_insert_enter)
   nmap <buffer> q <Plug>(unite_exit)
   nmap <buffer> <CR> <Plug>(unite_do_default_action)
 
@@ -65,6 +67,9 @@ function! s:do_default_action()"{{{
 endfunction"}}}
 function! s:choose_action()"{{{
   close
+endfunction"}}}
+function! s:insert_enter()"{{{
+  startinsert
 endfunction"}}}
 
 " vim: foldmethod=marker

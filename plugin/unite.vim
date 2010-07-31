@@ -49,7 +49,7 @@ function! s:call_unite(args)
     call add(l:list, l:arg)
   endfor
 
-  call unite#start(l:list)
+  call unite#start(l:list, '')
 endfunction
 
 

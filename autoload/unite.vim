@@ -47,6 +47,7 @@ endif
 " buffer number of the unite buffer
 let s:unite_bufnr = s:INVALID_BUFNR
 let s:update_time_save = &updatetime
+let s:unite = {}
 "}}}
 
 " Helper functions."{{{
@@ -64,7 +65,7 @@ function! unite#set_default(var, val)  "{{{
 endfunction"}}}
 "}}}
 
-function! unite#start(sources)"{{{
+function! unite#start(sources, cur_text)"{{{
   " Open or create the unite buffer.
   let v:errmsg = ''
   execute 'topleft' (bufexists(s:unite_bufnr) ? 'split' : 'new')
@@ -80,22 +81,28 @@ function! unite#start(sources)"{{{
   20 wincmd _
   
   " Initialize sources.
-  let b:unite.sources = []
-  let b:unite.sources_dict = {}
+  let s:unite.sources = []
+  let s:unite.sources_dict = {}
   for l:source_name in a:sources
     let l:source = call('unite#sources#' . l:source_name . '#define', [])
-    let b:unite.sources_dict[l:source_name] = l:source
-    call add(b:unite.sources, l:source)
+    if !has_key(s:unite.sources_dict, l:source_name)
+      let s:unite.sources_dict[l:source_name] = l:source
+      call add(s:unite.sources, l:source)
+    endif
   endfor
 
+  setlocal modifiable
+  
   silent % delete _
-  normal! o
   call setline(s:LNUM_STATUS, 'Sources: ' . join(a:sources, ', '))
-  call setline(s:LNUM_PATTERN, '>')
+  call setline(s:LNUM_PATTERN, '>' . a:cur_text)
   execute s:LNUM_PATTERN
 
-  let b:unite.candidates = s:gather_candidates({}, '')
-  call append('$', s:convert_lines(b:unite.candidates))
+  let s:unite.candidates = s:gather_candidates({}, a:cur_text)
+  call append('$', s:convert_lines(s:unite.candidates))
+  3
+  
+  setlocal nomodifiable
 
   return s:TRUE
 endfunction"}}}
@@ -105,7 +112,7 @@ function! s:gather_candidates(args, text)"{{{
   let l:args.cur_text = a:text
   
   let l:candidates = []
-  for l:source in b:unite.sources
+  for l:source in s:unite.sources
     for l:candidate in l:source.gather_candidates(a:args)
       call add(l:candidates, l:candidate)
     endfor
@@ -119,7 +126,7 @@ endfunction"}}}
 
 function! s:initialize_unite_buffer()"{{{
   " The current buffer is initialized.
-  let b:unite = {}
+  let s:unite = {}
 
   " Basic settings.
   setlocal bufhidden=hide
@@ -162,26 +169,30 @@ function! s:on_insert_enter()  "{{{
     let &updatetime = g:unite_update_time
   endif
   
-  if line('.') != 2
+  if line('.') != 2 || col('.') == 1
     2
     startinsert!
   endif
+
+  setlocal modifiable
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   if &updatetime < s:update_time_save
     let &updatetime = s:update_time_save
   endif
+
+  setlocal nomodifiable
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   let l:candidates = s:gather_candidates({}, getline(2)[1:])
   let l:lines = s:convert_lines(l:candidates)
-  if len(l:lines) < len(b:unite.candidates)
+  if len(l:lines) < len(s:unite.candidates)
     let l:pos = getpos('.')
     silent! 3,$delete _
     call setpos('.', l:pos)
   endif
   
-  let b:unite.candidates = l:candidates
+  let s:unite.candidates = l:candidates
 
   call setline(3, l:lines)
 endfunction"}}}
