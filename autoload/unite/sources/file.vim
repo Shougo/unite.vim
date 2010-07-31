@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: mappings.vim
-" AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jul 2010
+" FILE: file.vim
+" AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 31 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,47 +24,39 @@
 " }}}
 "=============================================================================
 
-" Define default mappings.
-function! unite#mappings#define_default_mappings()"{{{
-  " Plugin keymappings"{{{
-  inoremap <silent> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
-  
-  nnoremap <silent> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
-  nnoremap <silent> <Plug>(unite_do_default_action)  <ESC>:<C-u>call <SID>do_default_action()<CR>
-  nnoremap <silent> <Plug>(unite_choose_action)  <ESC>:<C-u>call <SID>choose_action()<CR>
-  "}}}
-  
-  if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
-    return
-  endif
-  
-  " Normal mode key-mappings.
-  nmap <buffer> <ESC> <Plug>(unite_exit)
-  nmap <buffer> q <Plug>(unite_exit)
-  nmap <buffer> <CR> <Plug>(unite_do_default_action)
+let s:source = {
+      \ 'name' : 'file',
+      \ 'key_table': {
+      \    },
+      \ 'action_table': {},
+      \ 'default_action': 'open',
+      \}
 
-  " Insert mode key-mappings.
-  "imap <buffer> <ESC>     <Plug>(unite_exit)
-  imap <buffer> <CR>      <ESC>j
-  imap <buffer> <TAB>     <ESC>j
+function! s:source.gather_candidates(args)"{{{
+  let l:candidates = split(glob(a:args.cur_text.'*'), '\n')
+
+  call map(l:candidates, '{"word" : v:val, "source" : "file"}')
+
+  return l:candidates
 endfunction"}}}
 
-" key-mappings functions.
-function! s:exit()"{{{
-  close
+function! s:source.action_table.open(candidate)"{{{
+  return s:open('', a:candidate)
 endfunction"}}}
-function! s:do_default_action()"{{{
-  if line('.') <= 2
-    " Ignore.
-    return
-  endif
-  
-  let l:candidate = b:unite.candidates[line('.') - 3]
-  let l:source = b:unite.sources_dict[l:candidate.source]
-  call l:source.action_table[l:source.default_action](l:candidate)
+function! s:source.action_table.open_x(candidate)"{{{
+  return s:open('!', a:candidate)
 endfunction"}}}
-function! s:choose_action()"{{{
-  close
+
+function! unite#sources#file#define()"{{{
+  return s:source
+endfunction"}}}
+
+function! s:open(bang, candidate)"{{{
+  let v:errmsg = ''
+
+  edit `=a:candidate.word`
+
+  return v:errmsg == '' ? 0 : v:errmsg
 endfunction"}}}
 
 " vim: foldmethod=marker

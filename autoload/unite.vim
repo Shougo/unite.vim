@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jul 2010
+" Last Modified: 31 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -76,8 +76,10 @@ function! unite#start(sources)"{{{
   
   " Initialize sources.
   let b:unite.sources = []
+  let b:unite.sources_dict = {}
   for l:source_name in a:sources
     let l:source = call('unite#sources#' . l:source_name . '#define', [])
+    let b:unite.sources_dict[l:source_name] = l:source
     call add(b:unite.sources, l:source)
   endfor
 
@@ -96,6 +98,9 @@ function! unite#start(sources)"{{{
 endfunction"}}}
 
 function! s:gather_candidates(args, text)"{{{
+  let l:args = a:args
+  let l:args.cur_text = a:text
+  
   let l:candidates = []
   for l:source in b:unite.sources
     for l:candidate in l:source.gather_candidates(a:args)
