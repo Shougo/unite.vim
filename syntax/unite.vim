@@ -30,30 +30,32 @@ elseif exists('b:current_syntax')
   finish
 endif
 
-syntax match UniteStatusLine /\%1l.*/
-\            contains=UniteSourcePrompt,UniteSourceSeparator,UniteSourceNames
-syntax match UniteSourcePrompt /^Sources/ contained nextgroup=UniteSourceSeparator
-syntax match UniteSourceSeparator /: / contained nextgroup=UniteSourceNames
-syntax match UniteSourceNames /[a-z/-]\+/ contained
+syntax match uniteStatusLine /\%1l.*/
+\            contains=uniteSourcePrompt,uniteSourceSeparator,uniteSourceNames
+syntax match uniteSourcePrompt /^Sources/ contained nextgroup=uniteSourceSeparator
+syntax match uniteSourceSeparator /: / contained nextgroup=uniteSourceNames
+syntax match uniteSourceNames /[a-z/-]\+/ contained
 
-syntax match UniteInputLine /\%2l.*/ contains=UniteInputPrompt
-syntax match UniteInputPrompt /^>/ contained nextgroup=UniteInputPattern
-syntax match UniteInputPattern /.*/ contained
+syntax match uniteInputLine /\%2l.*/ contains=uniteInputPrompt,uniteInputPromptError
+syntax match uniteInputPrompt /^>/ contained nextgroup=uniteInputPattern
+syntax match uniteInputPromptError /^[^>].*$/ contained
+syntax match uniteInputPattern /.*/ contained
 
 
-highlight default link UniteSourceNames  Type
-highlight default link UniteSourcePrompt  Statement
-highlight default link UniteSourceSeparator  NONE
+highlight default link uniteSourceNames  Type
+highlight default link uniteSourcePrompt  Statement
+highlight default link uniteSourceSeparator  NONE
 
-highlight default link UniteInputPrompt  Identifier
-highlight default link UniteInputPattern  NONE
+highlight default link uniteInputPrompt  Identifier
+highlight default link uniteInputPromptError  Error
+highlight default link uniteInputPattern  NONE
 
 " The following definitions are for <Plug>(unite-choose-action).
-highlight default link UniteChooseAction  NONE
-highlight default link UniteChooseCandidate  NONE
-highlight default link UniteChooseKey  SpecialKey
-highlight default link UniteChooseMessage  NONE
-highlight default link UniteChoosePrompt  UniteSourcePrompt
-highlight default link UniteChooseSource  UniteSourceNames
+highlight default link uniteChooseAction  NONE
+highlight default link uniteChooseCandidate  NONE
+highlight default link uniteChooseKey  SpecialKey
+highlight default link uniteChooseMessage  NONE
+highlight default link uniteChoosePrompt  uniteSourcePrompt
+highlight default link uniteChooseSource  uniteSourceNames
 
 let b:current_syntax = 'unite'

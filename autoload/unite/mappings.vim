@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jul 2010
+" Last Modified: 01 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,12 +27,18 @@
 " Define default mappings.
 function! unite#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
-  inoremap <silent> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
+  inoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
+  inoremap <expr><buffer> <Plug>(unite_backward_char)  col('.') == 2 ? '' : "\<C-h>"
+  inoremap <expr><buffer> <Plug>(unite_kill_current_line)  repeat("\<C-h>", col('.')-2)
+  inoremap <expr><buffer> <Plug>(unite_kill_cursor_word)  col('.') == 2 ? '' : "\<C-w>"
   
-  nnoremap <silent> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
-  nnoremap <silent> <Plug>(unite_do_default_action)  <ESC>:<C-u>call <SID>do_default_action()<CR>
-  nnoremap <silent> <Plug>(unite_choose_action)  <ESC>:<C-u>call <SID>choose_action()<CR>
-  nnoremap <silent> <Plug>(unite_insert_enter)  <ESC>:<C-u>call <SID>insert_enter()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_default_action)  <ESC>:<C-u>call <SID>do_default_action()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_choose_action)  <ESC>:<C-u>call <SID>choose_action()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_insert_enter)  <ESC>:<C-u>call <SID>insert_enter()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_insert_head)  <ESC>:<C-u>call <SID>insert_head()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_append_enter)  <ESC>:<C-u>call <SID>append_enter()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_append_end)  <ESC>:<C-u>call <SID>append_end()<CR>
   "}}}
   
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -42,13 +48,20 @@ function! unite#mappings#define_default_mappings()"{{{
   " Normal mode key-mappings.
   nmap <buffer> <ESC> <Plug>(unite_exit)
   nmap <buffer> i <Plug>(unite_insert_enter)
+  nmap <buffer> I <Plug>(unite_insert_head)
+  nmap <buffer> a <Plug>(unite_append_enter)
+  nmap <buffer> A <Plug>(unite_append_end)
   nmap <buffer> q <Plug>(unite_exit)
   nmap <buffer> <CR> <Plug>(unite_do_default_action)
 
   " Insert mode key-mappings.
-  "imap <buffer> <ESC>     <Plug>(unite_exit)
-  imap <buffer> <CR>      <ESC>j
-  imap <buffer> <TAB>     <ESC>j
+  inoremap <buffer> <ESC>     <ESC>j
+  inoremap <buffer> <CR>      <ESC>j
+  inoremap <buffer> <TAB>     <ESC>j
+  imap <buffer> <C-h>     <Plug>(unite_backward_char)
+  imap <buffer> <BS>     <Plug>(unite_backward_char)
+  imap <buffer> <C-u>     <Plug>(unite_kill_current_line)
+  imap <buffer> <C-w>     <Plug>(unite_kill_cursor_word)
 endfunction"}}}
 
 " key-mappings functions.
@@ -70,6 +83,18 @@ function! s:choose_action()"{{{
 endfunction"}}}
 function! s:insert_enter()"{{{
   startinsert
+endfunction"}}}
+function! s:insert_head()"{{{
+  normal! 0
+  normal! l
+  startinsert
+endfunction"}}}
+function! s:append_enter()"{{{
+  startinsert
+  normal! l
+endfunction"}}}
+function! s:append_end()"{{{
+  startinsert!
 endfunction"}}}
 
 " vim: foldmethod=marker

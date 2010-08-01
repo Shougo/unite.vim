@@ -103,6 +103,7 @@ CHANGELOG					*unite-changelog*
 
 2010-08-01
 - Updated file_mru.
+- Improved mappings.
 
 2010-07-31
 - Added documentation.
