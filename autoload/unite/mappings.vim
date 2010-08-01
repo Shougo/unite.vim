@@ -61,8 +61,8 @@ function! s:do_default_action()"{{{
     return
   endif
   
-  let l:candidate = b:unite.candidates[line('.') - 3]
-  let l:source = b:unite.sources_dict[l:candidate.source]
+  let l:candidate = unite#get_unite_candidates()[line('.') - 3]
+  let l:source = unite#available_sources(l:candidate.source)
   call l:source.action_table[l:source.default_action](l:candidate)
 endfunction"}}}
 function! s:choose_action()"{{{

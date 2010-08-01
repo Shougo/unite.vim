@@ -51,6 +51,12 @@ let s:unite = {}
 "}}}
 
 " Helper functions."{{{
+function! unite#get_unite_candidates()"{{{
+  return s:unite.candidates
+endfunction"}}}
+function! unite#available_sources(...)"{{{
+  return a:0 == 0 ? s:unite.sources_dict : s:unite.sources_dict[a:1]
+endfunction"}}}
 function! unite#escape_match(str)"{{{
   return escape(a:str, '~" \.^$[]')
 endfunction"}}}

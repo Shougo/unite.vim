@@ -101,6 +101,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-01
+- Updated file_mru.
+
 2010-07-31
 - Added documentation.
 - Added syntax file.

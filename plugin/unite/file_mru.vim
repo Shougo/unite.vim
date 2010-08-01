@@ -34,6 +34,8 @@ augroup plugin-unite-source-file_mru
   autocmd BufEnter,BufWritePost,BufFilePost * call unite#sources#file_mru#_append()
 augroup END
 
+command! -bar UniteFilemruSweep call unite#sources#file_mru#_sweep()
+
 let g:loaded_unite_source_file_mru = 1
 
 " __END__
