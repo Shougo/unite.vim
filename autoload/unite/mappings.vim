@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Aug 2010
+" Last Modified: 02 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,9 +28,9 @@
 function! unite#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
   inoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
-  inoremap <expr><buffer> <Plug>(unite_backward_char)  col('.') == 2 ? '' : "\<C-h>"
-  inoremap <expr><buffer> <Plug>(unite_kill_current_line)  repeat("\<C-h>", col('.')-2)
-  inoremap <expr><buffer> <Plug>(unite_kill_cursor_word)  col('.') == 2 ? '' : "\<C-w>"
+  inoremap <expr><buffer> <Plug>(unite_delete_backward_char)  col('.') == 2 ? '' : "\<C-h>"
+  inoremap <expr><buffer> <Plug>(unite_delete_line)  repeat("\<C-h>", col('.')-2)
+  inoremap <expr><buffer> <Plug>(unite_delete_word)  col('.') == 2 ? '' : "\<C-w>"
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  <ESC>:<C-u>call <SID>do_default_action()<CR>
@@ -58,10 +58,10 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <buffer> <ESC>     <ESC>j
   inoremap <buffer> <CR>      <ESC>j
   inoremap <buffer> <TAB>     <ESC>j
-  imap <buffer> <C-h>     <Plug>(unite_backward_char)
-  imap <buffer> <BS>     <Plug>(unite_backward_char)
-  imap <buffer> <C-u>     <Plug>(unite_kill_current_line)
-  imap <buffer> <C-w>     <Plug>(unite_kill_cursor_word)
+  imap <buffer> <C-h>     <Plug>(unite_delete_backward_char)
+  imap <buffer> <BS>     <Plug>(unite_delete_backward_char)
+  imap <buffer> <C-u>     <Plug>(unite_delete_line)
+  imap <buffer> <C-w>     <Plug>(unite_delete_word)
 endfunction"}}}
 
 " key-mappings functions.
