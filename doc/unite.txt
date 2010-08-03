@@ -101,6 +101,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-03
+- Changed mru file format.
+
 2010-08-02
 - Improved mappings name.
 
