@@ -104,6 +104,7 @@ CHANGELOG					*unite-changelog*
 2010-08-03
 - Changed mru file format.
 - Changed mappings name.
+- Added highlight match.
 
 2010-08-02
 - Improved mappings name.
