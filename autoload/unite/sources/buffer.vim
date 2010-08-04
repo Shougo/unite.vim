@@ -94,6 +94,7 @@ function! s:open(bang, candidate)"{{{
 
   let _ = s:bufnr_from_candidate(a:candidate)
   if type(_) == type(0)
+    call unite#buf_leave()
     execute s:bufnr_from_candidate(a:candidate) 'buffer'.a:bang
   else
     let v:errmsg = _

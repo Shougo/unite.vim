@@ -32,13 +32,13 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-2)
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') == 2 ? '' : "\<C-w>"
   
-  nnoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_default_action)  <ESC>:<C-u>call <SID>do_default_action()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_choose_action)  <ESC>:<C-u>call <SID>choose_action()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_insert_enter)  <ESC>:<C-u>call <SID>insert_enter()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_insert_head)  <ESC>:<C-u>call <SID>insert_head()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_append_enter)  <ESC>:<C-u>call <SID>append_enter()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_append_end)  <ESC>:<C-u>call <SID>append_end()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_default_action()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_append_enter)  :<C-u>call <SID>append_enter()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_append_end)  :<C-u>call <SID>append_end()<CR>
   "}}}
   
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -66,7 +66,7 @@ endfunction"}}}
 
 " key-mappings functions.
 function! s:exit()"{{{
-  close
+  call unite#quit_session()
 endfunction"}}}
 function! s:do_default_action()"{{{
   if line('.') <= 2
@@ -79,7 +79,6 @@ function! s:do_default_action()"{{{
   call l:source.action_table[l:source.default_action](l:candidate)
 endfunction"}}}
 function! s:choose_action()"{{{
-  close
 endfunction"}}}
 function! s:insert_enter()"{{{
   startinsert

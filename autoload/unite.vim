@@ -84,6 +84,11 @@ function! unite#start(sources, cur_text)"{{{
     let s:unite_bufnr = bufnr('')
     call s:initialize_unite_buffer()
   endif
+
+  " Save redrawtime
+  let s:redrawtime_save = &redrawtime
+  let &redrawtime = 500
+
   20 wincmd _
   
   " Initialize sources.
@@ -148,9 +153,8 @@ function! s:initialize_unite_buffer()"{{{
     autocmd InsertEnter <buffer>  call s:on_insert_enter()
     autocmd InsertLeave <buffer>  call s:on_insert_leave()
     autocmd CursorHoldI <buffer>  call s:on_cursor_hold()
-    autocmd BufLeave <buffer>  call s:quit_session()
-    autocmd WinLeave <buffer>  call s:quit_session()
-    " autocmd TabLeave <buffer>  call s:quit_session()  " not necessary
+    autocmd WinLeave <buffer>  call unite#quit_session()
+    " autocmd TabLeave <buffer>  call unite#quit_session()  " not necessary
   augroup END
 
   call unite#mappings#define_default_mappings()
@@ -163,16 +167,20 @@ function! s:initialize_unite_buffer()"{{{
   " User's initialization.
   setfiletype unite
 
-  " Save redrawtime
-  let s:redrawtime_save = &redrawtime
-  let &redrawtime = 500
-
   return
 endfunction"}}}
 
-function! s:quit_session()  "{{{
+function! unite#quit_session()  "{{{
   let &redrawtime = s:redrawtime_save
-  close
+  if bufnr('$') != 1
+    close
+  endif
+endfunction"}}}
+function! unite#buf_leave()  "{{{
+  let &redrawtime = s:redrawtime_save
+  if bufwinnr(s:unite_BUFFER_NAME) >= 0
+    close
+  endif
 endfunction"}}}
 
 " Autocmd events.

@@ -95,6 +95,7 @@ endfunction"}}}
 function! s:open(bang, candidate)"{{{
   let v:errmsg = ''
 
+  call unite#buf_leave()
   edit `=a:candidate.word`
 
   return v:errmsg == '' ? 0 : v:errmsg

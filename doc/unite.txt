@@ -106,6 +106,7 @@ CHANGELOG					*unite-changelog*
 - Improved syntax.
 - Improved redrawtime.
 - Improved file source.
+- Fixed open bugs.
 
 2010-08-03
 - Changed mru file format.
