@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Aug 2010
+" Last Modified: 04 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -107,6 +107,8 @@ function! unite#start(sources, cur_text)"{{{
   let s:unite.candidates = s:gather_candidates({}, a:cur_text)
   call append('$', s:convert_lines(s:unite.candidates))
   3
+  normal! 0
+  execute "normal! \<C-B>"
   
   setlocal nomodifiable
 
@@ -127,7 +129,7 @@ function! s:gather_candidates(args, text)"{{{
   return filter(l:candidates, 'v:val.word =~ ' . string(unite#escape_match(a:text)))
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
-  return map(copy(a:candidates), 'unite#util#truncate(has_key(v:val, "abbr")? v:val.abbr : v:val.word, 80) . v:val.source')
+  return map(copy(a:candidates), 'unite#util#truncate(has_key(v:val, "abbr")? v:val.abbr : v:val.word, 80) . " " . v:val.source')
 endfunction"}}}
 
 function! s:initialize_unite_buffer()"{{{
@@ -139,7 +141,7 @@ function! s:initialize_unite_buffer()"{{{
   setlocal buftype=nofile
   setlocal nobuflisted
   setlocal noswapfile
-  silent file `=s:unite_BUFFER_NAME`
+  silent! file `=s:unite_BUFFER_NAME`
 
   " Autocommands.
   augroup plugin-unite
@@ -161,10 +163,15 @@ function! s:initialize_unite_buffer()"{{{
   " User's initialization.
   setfiletype unite
 
+  " Save redrawtime
+  let s:redrawtime_save = &redrawtime
+  let &redrawtime = 500
+
   return
 endfunction"}}}
 
 function! s:quit_session()  "{{{
+  let &redrawtime = s:redrawtime_save
   close
 endfunction"}}}
 

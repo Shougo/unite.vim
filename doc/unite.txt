@@ -101,6 +101,12 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-04
+- Improved menu.
+- Improved syntax.
+- Improved redrawtime.
+- Improved file source.
+
 2010-08-03
 - Changed mru file format.
 - Changed mappings name.

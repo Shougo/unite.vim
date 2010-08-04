@@ -49,7 +49,8 @@ let s:source = {
 
 function! s:source.gather_candidates(args)"{{{
   call s:load()
-  return sort(map(copy(s:mru_files), '{
+  let l:mru_files = filter(copy(s:mru_files), '!bufexists(v:val[0])')
+  return sort(map(l:mru_files, '{
         \     "abbr" : strftime(g:unite_source_file_mru_time_format, v:val[1]) .
         \             fnamemodify(v:val[0], ":~:."),
         \     "word" : v:val[0],
