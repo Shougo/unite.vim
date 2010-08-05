@@ -111,9 +111,8 @@ function! unite#start(sources, cur_text)"{{{
 
   let s:unite.candidates = s:gather_candidates({}, a:cur_text)
   call append('$', s:convert_lines(s:unite.candidates))
-  3
-  normal! 0
-  execute "normal! \<C-B>"
+  10
+  normal! 0z.
   
   setlocal nomodifiable
 
@@ -197,6 +196,7 @@ function! s:on_insert_enter()  "{{{
   endif
 
   setlocal modifiable
+  match
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   if &updatetime < s:update_time_save
@@ -204,6 +204,9 @@ function! s:on_insert_leave()  "{{{
   endif
 
   setlocal nomodifiable
+
+  let l:cur_text = getline(2)[1:]
+  execute 'match IncSearch' '/'.substitute(l:cur_text, '[/\\]', '\\\0', 'g').'/'
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   let l:cur_text = getline(2)[1:]
@@ -218,8 +221,6 @@ function! s:on_cursor_hold()  "{{{
   let s:unite.candidates = l:candidates
 
   call setline(3, l:lines)
-
-  execute 'match IncSearch' '/'.substitute(l:cur_text, '[/\\]', '\\\0', 'g').'/'
 endfunction"}}}
 
 " vim: foldmethod=marker

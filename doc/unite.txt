@@ -103,6 +103,7 @@ CHANGELOG					*unite-changelog*
 
 2010-08-05
 - Fixed buffer switch.
+- Improved match behavior.
 
 2010-08-04
 - Improved menu.
