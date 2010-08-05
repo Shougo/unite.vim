@@ -178,7 +178,8 @@ function! unite#quit_session()  "{{{
 endfunction"}}}
 function! unite#buf_leave()  "{{{
   let &redrawtime = s:redrawtime_save
-  if bufwinnr(s:unite_BUFFER_NAME) >= 0
+  echomsg bufname('%')
+  if &filetype ==# 'unite'
     close
   endif
 endfunction"}}}

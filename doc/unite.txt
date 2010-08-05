@@ -101,6 +101,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-05
+- Fixed buffer switch.
+
 2010-08-04
 - Improved menu.
 - Improved syntax.
