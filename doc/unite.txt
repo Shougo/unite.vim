@@ -104,6 +104,8 @@ CHANGELOG					*unite-changelog*
 2010-08-06
 - Improved buffer abbr.
 - Renamed unite#buf_leave().
+- Improved buffer sort.
+- Improved cursor position.
 
 2010-08-05
 - Fixed buffer switch.

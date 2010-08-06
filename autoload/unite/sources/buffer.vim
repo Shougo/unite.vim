@@ -24,6 +24,10 @@
 " }}}
 "=============================================================================
 
+" Variables  "{{{
+let s:buffer_list = {}
+"}}}
+
 let s:source = {
       \ 'name' : 'buffer',
       \ 'key_table': {
@@ -36,17 +40,16 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args)"{{{
-  let l:candidates = range(1, bufnr('$'))
-
-  call filter(l:candidates, 'bufexists(v:val) && buflisted(v:val)')
-  call map(l:candidates, '{
-        \ "word" : bufname(v:val),
-        \ "abbr" : s:make_abbr(v:val),
+  call filter(s:buffer_list, 'bufexists(v:val.bufnr) && buflisted(v:val.bufnr)')
+  let l:candidates = map(values(s:buffer_list), '{
+        \ "word" : bufname(v:val.bufnr),
+        \ "abbr" : s:make_abbr(v:val.bufnr),
         \ "source" : "buffer",
-        \ "unite_buffer_nr" : v:val
+        \ "unite_buffer_nr" : v:val.bufnr,
+        \ "time" : v:val.time,
         \}')
 
-  return l:candidates
+  return sort(l:candidates, 's:compare')
 endfunction"}}}
 
 function! s:source.action_table.delete(candidate)"{{{
@@ -68,7 +71,14 @@ endfunction"}}}
 function! unite#sources#buffer#define()"{{{
   return s:source
 endfunction"}}}
+function! unite#sources#buffer#_append()"{{{
+  " Append the current buffer.
+  let s:buffer_list[bufnr('%')] = {
+        \ 'bufnr' : bufnr('%'), 'time' : localtime()
+        \ }
+endfunction"}}}
 
+" Misc
 function! s:bufnr_from_candidate(candidate)"{{{
   if has_key(a:candidate, 'unite_buffer_nr')
     return a:candidate.unite_buffer_nr
@@ -118,6 +128,9 @@ function! s:open(bang, candidate)"{{{
   endif
 
   return v:errmsg == '' ? 0 : v:errmsg
+endfunction"}}}
+function! s:compare(candidate_a, candidate_b)"{{{
+  return a:candidate_b.time - a:candidate_a.time
 endfunction"}}}
 
 " vim: foldmethod=marker

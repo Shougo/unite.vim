@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: file_mru.vim
+" FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 06 Aug 2010
 " License: MIT license  {{{
@@ -25,18 +25,16 @@
 " Version: 0.1, for Vim 7.0
 "=============================================================================
 
-if exists('g:loaded_unite_source_file_mru')
+if exists('g:loaded_unite_source_buffer')
   finish
 endif
 
-augroup plugin-unite-source-file_mru
+augroup plugin-unite-source-buffer
   autocmd!
-  autocmd BufEnter,BufWinEnter,BufFilePost * call unite#sources#file_mru#_append()
+  autocmd BufEnter,BufWinEnter,BufFilePost * call unite#sources#buffer#_append()
 augroup END
 
-command! -bar UniteFilemruSweep call unite#sources#file_mru#_sweep()
-
-let g:loaded_unite_source_file_mru = 1
+let g:loaded_unite_source_buffer = 1
 
 " __END__
 " vim: foldmethod=marker

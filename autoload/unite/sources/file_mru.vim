@@ -52,7 +52,7 @@ function! s:source.gather_candidates(args)"{{{
   let l:mru_files = filter(copy(s:mru_files), '!bufexists(v:val[0])')
   return sort(map(l:mru_files, '{
         \     "abbr" : strftime(g:unite_source_file_mru_time_format, v:val[1]) .
-        \             fnamemodify(v:val[0], ":~:."),
+        \             fnamemodify(v:val[0], ":~:.") . (isdirectory(v:val[0]) ? "/" : ""),
         \     "word" : v:val[0],
         \     "source" : "file_mru",
         \     "unite_file_mru_time" : v:val[1],

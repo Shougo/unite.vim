@@ -111,7 +111,7 @@ function! unite#start(sources, cur_text)"{{{
 
   let s:unite.candidates = s:gather_candidates({}, a:cur_text)
   call append('$', s:convert_lines(s:unite.candidates))
-  10
+  3
   normal! 0z.
   
   setlocal nomodifiable
