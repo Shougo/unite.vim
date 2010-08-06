@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Aug 2010
+" Last Modified: 06 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,15 +92,7 @@ function! unite#start(sources, cur_text)"{{{
   20 wincmd _
   
   " Initialize sources.
-  let s:unite.sources = []
-  let s:unite.sources_dict = {}
-  for l:source_name in a:sources
-    let l:source = call('unite#sources#' . l:source_name . '#define', [])
-    if !has_key(s:unite.sources_dict, l:source_name)
-      let s:unite.sources_dict[l:source_name] = l:source
-      call add(s:unite.sources, l:source)
-    endif
-  endfor
+  call s:initialize_sources(a:sources)
 
   setlocal modifiable
   
@@ -119,6 +111,17 @@ function! unite#start(sources, cur_text)"{{{
   return s:TRUE
 endfunction"}}}
 
+function! s:initialize_sources(sources)"{{{
+  let s:unite.sources = []
+  let s:unite.sources_dict = {}
+  for l:source_name in a:sources
+    let l:source = call('unite#sources#' . l:source_name . '#define', [])
+    if !has_key(s:unite.sources_dict, l:source_name)
+      let s:unite.sources_dict[l:source_name] = l:source
+      call add(s:unite.sources, l:source)
+    endif
+  endfor
+endfunction"}}}
 function! s:gather_candidates(args, text)"{{{
   let l:args = a:args
   let l:args.cur_text = a:text
@@ -170,16 +173,16 @@ function! s:initialize_unite_buffer()"{{{
 endfunction"}}}
 
 function! unite#quit_session()  "{{{
-  let &redrawtime = s:redrawtime_save
-  if bufnr('$') != 1
-    close
-  endif
+  call unite#leave_buffer()
 endfunction"}}}
 function! unite#leave_buffer()  "{{{
-  let &redrawtime = s:redrawtime_save
-  echomsg bufname('%')
   if &filetype ==# 'unite'
+    let &redrawtime = s:redrawtime_save
+    let l:cwd = getcwd()
     close
+    
+    " Restore current directory.
+    lcd `=l:cwd`
   endif
 endfunction"}}}
 
