@@ -101,6 +101,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-06
+- Improved buffer abbr.
+- Renamed unite#buf_leave().
+
 2010-08-05
 - Fixed buffer switch.
 - Improved match behavior.

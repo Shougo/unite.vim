@@ -39,7 +39,12 @@ function! s:source.gather_candidates(args)"{{{
   let l:candidates = range(1, bufnr('$'))
 
   call filter(l:candidates, 'bufexists(v:val) && buflisted(v:val)')
-  call map(l:candidates, '{"word" : bufname(v:val), "source" : "buffer", "unite_buffer_nr" : v:val}')
+  call map(l:candidates, '{
+        \ "word" : bufname(v:val),
+        \ "abbr" : s:make_abbr(v:val),
+        \ "source" : "buffer",
+        \ "unite_buffer_nr" : v:val
+        \}')
 
   return l:candidates
 endfunction"}}}
@@ -77,6 +82,18 @@ function! s:bufnr_from_candidate(candidate)"{{{
     endif
   endif
 endfunction"}}}
+function! s:make_abbr(bufnr)"{{{
+  let l:filetype = getbufvar(a:bufnr, '&filetype')
+  if l:filetype ==# 'vimfiler'
+    let l:bufvar = getbufvar(a:bufnr, 'vimfiler')
+    return '*vimfiler* - ' . l:bufvar.current_dir
+  elseif l:filetype ==# 'vimshell'
+    let l:bufvar = getbufvar(a:bufnr, 'vimshell')
+    return '*vimshell* - ' . l:bufvar.save_dir
+  else
+    return bufname(a:bufnr)
+  endif
+endfunction"}}}
 function! s:delete(delete_command, candidate)"{{{
   let v:errmsg = ''
 
@@ -94,7 +111,7 @@ function! s:open(bang, candidate)"{{{
 
   let _ = s:bufnr_from_candidate(a:candidate)
   if type(_) == type(0)
-    call unite#buf_leave()
+    call unite#leave_buffer()
     execute s:bufnr_from_candidate(a:candidate) 'buffer'.a:bang
   else
     let v:errmsg = _

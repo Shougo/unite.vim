@@ -175,7 +175,7 @@ function! unite#quit_session()  "{{{
     close
   endif
 endfunction"}}}
-function! unite#buf_leave()  "{{{
+function! unite#leave_buffer()  "{{{
   let &redrawtime = s:redrawtime_save
   echomsg bufname('%')
   if &filetype ==# 'unite'
