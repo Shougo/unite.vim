@@ -202,11 +202,14 @@ function! s:initialize_unite_buffer()"{{{
   let s:unite = {}
 
   " Basic settings.
+  setlocal number
   setlocal bufhidden=hide
   setlocal buftype=nofile
   setlocal nobuflisted
   setlocal noswapfile
   setlocal nomodifiable
+  setlocal nofoldenable
+  setlocal foldcolumn=0
   silent! file `=s:unite_BUFFER_NAME`
 
   " Autocommands.

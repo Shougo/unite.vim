@@ -105,6 +105,7 @@ CHANGELOG					*unite-changelog*
 - Implemented buffer delete.
 - Improved action table.
 - Implemented marks.
+- Improved buffer settings.
 
 2010-08-06
 - Improved buffer abbr.
