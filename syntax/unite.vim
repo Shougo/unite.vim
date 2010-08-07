@@ -42,6 +42,7 @@ syntax match uniteInputPrompt /^>/ contained nextgroup=uniteInputPattern
 syntax match uniteInputPromptError /^[^>].*$/ contained
 syntax match uniteInputPattern /.*/ contained
 
+syntax match uniteMarkedLine /^\*.*/
 
 highlight default link uniteSourceNames  Type
 highlight default link uniteSourcePrompt  Statement
@@ -50,6 +51,8 @@ highlight default link uniteSourceSeparator  NONE
 highlight default link uniteInputPrompt  Identifier
 highlight default link uniteInputPromptError  Error
 highlight default link uniteInputPattern  NONE
+
+highlight default link uniteMarkedLine  Special
 
 " The following definitions are for <Plug>(unite-choose-action).
 highlight default link uniteChooseAction  NONE

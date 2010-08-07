@@ -103,6 +103,8 @@ CHANGELOG					*unite-changelog*
 
 2010-08-07
 - Implemented buffer delete.
+- Improved action table.
+- Implemented marks.
 
 2010-08-06
 - Improved buffer abbr.

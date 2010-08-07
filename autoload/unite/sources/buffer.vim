@@ -34,9 +34,9 @@ let s:source = {
       \     'd': 'delete',
       \     'u': 'unload',
       \     'w': 'wipeout',
+      \     'default' : 'open'
       \    },
       \ 'action_table': {},
-      \ 'default_action': 'open',
       \}
 
 function! s:source.gather_candidates(args)"{{{

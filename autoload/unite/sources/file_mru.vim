@@ -42,9 +42,9 @@ call unite#set_default('g:unite_source_file_mru_ignore_pattern', '')
 let s:source = {
       \ 'name' : 'file_mru',
       \ 'key_table': {
+      \      'default' : 'open',
       \    },
       \ 'action_table': {},
-      \ 'default_action': 'open',
       \}
 
 function! s:source.gather_candidates(args)"{{{

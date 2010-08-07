@@ -93,7 +93,30 @@ function! unite#redraw() "{{{
     let s:is_invalidate = 0
 
     setlocal nomodifiable
+  elseif &filetype ==# 'unite'
+    " Redraw marks.
+    setlocal modifiable
+
+    call setline(3, s:convert_lines(s:unite.candidates))
+
+    setlocal nomodifiable
   endif
+endfunction"}}}
+function! unite#redraw_current_line() "{{{
+  if line('.') <= 2 || &filetype !=# 'unite'
+    " Ignore.
+    return
+  endif
+
+  setlocal modifiable
+
+  let l:candidate = unite#get_unite_candidates()[line('.') - 3]
+  call setline('.', s:convert_line(l:candidate))
+
+  setlocal nomodifiable
+endfunction"}}}
+function! unite#get_marked_candidates() "{{{
+  return filter(copy(s:unite.candidates), 'v:val.is_marked')
 endfunction"}}}
 "}}}
 
@@ -157,6 +180,7 @@ function! s:gather_candidates(args, text)"{{{
   let l:candidates = []
   for l:source in s:unite.sources
     for l:candidate in l:source.gather_candidates(a:args)
+      let l:candidate.is_marked = 0
       call add(l:candidates, l:candidate)
     endfor
   endfor
@@ -164,7 +188,13 @@ function! s:gather_candidates(args, text)"{{{
   return filter(l:candidates, 'v:val.word =~ ' . string(unite#escape_match(a:text)))
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
-  return map(copy(a:candidates), 'unite#util#truncate(has_key(v:val, "abbr")? v:val.abbr : v:val.word, 80) . " " . v:val.source')
+  return map(copy(a:candidates),
+        \ '(v:val.is_marked ? "* " : "- ") . unite#util#truncate(has_key(v:val, "abbr")? v:val.abbr : v:val.word, 80) . " " . v:val.source')
+endfunction"}}}
+function! s:convert_line(candidate)"{{{
+  return (a:candidate.is_marked ? '* ' : '- ')
+        \ . unite#util#truncate(has_key(a:candidate, 'abbr')? a:candidate.abbr : a:candidate.word, 80)
+        \ . " " . a:candidate.source
 endfunction"}}}
 
 function! s:initialize_unite_buffer()"{{{

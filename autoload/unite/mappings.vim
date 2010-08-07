@@ -33,13 +33,14 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') == 2 ? '' : "\<C-w>"
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_default_action()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call <SID>do_delete_action()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_action('default')<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call <SID>do_action('d')<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
   nnoremap <silent><buffer> <Plug>(unite_append_enter)  :<C-u>call <SID>append_enter()<CR>
   nnoremap <silent><buffer> <Plug>(unite_append_end)  :<C-u>call <SID>append_end()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_file)  :<C-u>call <SID>toggle_mark()<CR>
   "}}}
   
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -55,11 +56,12 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> q <Plug>(unite_exit)
   nmap <buffer> <CR> <Plug>(unite_do_default_action)
   nmap <buffer> d <Plug>(unite_do_delete_action)
+  nmap <buffer> <Space> <Plug>(unite_toggle_mark_current_file)
+  nmap <buffer> <Tab> <Plug>(unite_choose_action)
 
   " Insert mode key-mappings.
   inoremap <buffer> <ESC>     <ESC>j
   inoremap <buffer> <CR>      <ESC>j
-  inoremap <buffer> <TAB>     <ESC>j
   imap <buffer> <C-h>     <Plug>(unite_delete_backward_char)
   imap <buffer> <BS>     <Plug>(unite_delete_backward_char)
   imap <buffer> <C-u>     <Plug>(unite_delete_backward_line)
@@ -70,34 +72,36 @@ endfunction"}}}
 function! s:exit()"{{{
   call unite#quit_session()
 endfunction"}}}
-function! s:do_default_action()"{{{
-  if line('.') <= 2
-    " Ignore.
-    return
+function! s:do_action(key)"{{{
+  let l:candidates = unite#get_marked_candidates()
+  if empty(l:candidates)
+    if line('.') <= 2
+      " Ignore.
+      return
+    endif
+
+    let l:candidates = [unite#get_unite_candidates()[line('.') - 3]]
   endif
-  
-  let l:candidate = unite#get_unite_candidates()[line('.') - 3]
-  let l:source = unite#available_sources(l:candidate.source)
-  call l:source.action_table[l:source.default_action](l:candidate)
+  for l:candidate in l:candidates
+    let l:source = unite#available_sources(l:candidate.source)
+    if has_key(l:source.key_table, a:key)
+      call l:source.action_table[l:source.key_table[a:key]](l:candidate)
+    endif
+  endfor
 
   call unite#redraw()
 endfunction"}}}
-function! s:do_delete_action()"{{{
+function! s:toggle_mark()"{{{
   if line('.') <= 2
     " Ignore.
     return
   endif
   
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
-  let l:source = unite#available_sources(l:candidate.source)
-  if !has_key(l:source.key_table, 'd')
-    " Not found delete command.
-    return
-  endif
+  let l:candidate.is_marked = !l:candidate.is_marked
+  call unite#redraw_current_line()
   
-  call l:source.action_table[l:source.key_table['d']](l:candidate)
-  
-  call unite#redraw()
+  normal! j
 endfunction"}}}
 function! s:choose_action()"{{{
 endfunction"}}}
