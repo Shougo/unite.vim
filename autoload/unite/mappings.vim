@@ -34,6 +34,7 @@ function! unite#mappings#define_default_mappings()"{{{
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_default_action()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call <SID>do_delete_action()<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
@@ -53,6 +54,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> A <Plug>(unite_append_end)
   nmap <buffer> q <Plug>(unite_exit)
   nmap <buffer> <CR> <Plug>(unite_do_default_action)
+  nmap <buffer> d <Plug>(unite_do_delete_action)
 
   " Insert mode key-mappings.
   inoremap <buffer> <ESC>     <ESC>j
@@ -77,6 +79,25 @@ function! s:do_default_action()"{{{
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
   let l:source = unite#available_sources(l:candidate.source)
   call l:source.action_table[l:source.default_action](l:candidate)
+
+  call unite#redraw()
+endfunction"}}}
+function! s:do_delete_action()"{{{
+  if line('.') <= 2
+    " Ignore.
+    return
+  endif
+  
+  let l:candidate = unite#get_unite_candidates()[line('.') - 3]
+  let l:source = unite#available_sources(l:candidate.source)
+  if !has_key(l:source.key_table, 'd')
+    " Not found delete command.
+    return
+  endif
+  
+  call l:source.action_table[l:source.key_table['d']](l:candidate)
+  
+  call unite#redraw()
 endfunction"}}}
 function! s:choose_action()"{{{
 endfunction"}}}

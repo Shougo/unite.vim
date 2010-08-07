@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jul 2010
+" Last Modified: 07 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,9 +31,9 @@ let s:buffer_list = {}
 let s:source = {
       \ 'name' : 'buffer',
       \ 'key_table': {
-      \     'D': 'delete',
-      \     'U': 'unload',
-      \     'W': 'wipeout',
+      \     'd': 'delete',
+      \     'u': 'unload',
+      \     'w': 'wipeout',
       \    },
       \ 'action_table': {},
       \ 'default_action': 'open',
@@ -53,6 +53,7 @@ function! s:source.gather_candidates(args)"{{{
 endfunction"}}}
 
 function! s:source.action_table.delete(candidate)"{{{
+  call unite#invalidate_cache('buffer')
   return s:delete('bdelete', a:candidate)
 endfunction"}}}
 function! s:source.action_table.open(candidate)"{{{

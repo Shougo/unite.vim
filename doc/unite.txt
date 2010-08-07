@@ -101,6 +101,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-07
+- Implemented buffer delete.
+
 2010-08-06
 - Improved buffer abbr.
 - Renamed unite#buf_leave().

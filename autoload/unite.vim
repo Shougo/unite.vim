@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2010
+" Last Modified: 07 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,6 +48,7 @@ endif
 let s:unite_bufnr = s:INVALID_BUFNR
 let s:update_time_save = &updatetime
 let s:unite = {}
+let s:is_invalidate = 0
 "}}}
 
 " Helper functions."{{{
@@ -67,6 +68,31 @@ endfunction"}}}
 function! unite#set_default(var, val)  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
     let {a:var} = a:val
+  endif
+endfunction"}}}
+function! unite#invalidate_cache(source_name)  "{{{
+  let s:is_invalidate = 1
+endfunction"}}}
+function! unite#redraw() "{{{
+  if s:is_invalidate
+    setlocal modifiable
+    
+    let l:cur_text = getline(2)[1:]
+    let l:candidates = s:gather_candidates({}, l:cur_text)
+    let l:lines = s:convert_lines(l:candidates)
+    if len(l:lines) < len(s:unite.candidates)
+      let l:pos = getpos('.')
+      silent! 3,$delete _
+      call setpos('.', l:pos)
+    endif
+
+    let s:unite.candidates = l:candidates
+
+    call setline(3, l:lines)
+
+    let s:is_invalidate = 0
+
+    setlocal nomodifiable
   endif
 endfunction"}}}
 "}}}
@@ -89,24 +115,25 @@ function! unite#start(sources, cur_text)"{{{
   let s:redrawtime_save = &redrawtime
   let &redrawtime = 500
 
+  let s:is_invalidate = 0
+
   20 wincmd _
   
   " Initialize sources.
   call s:initialize_sources(a:sources)
 
   setlocal modifiable
-  
   silent % delete _
   call setline(s:LNUM_STATUS, 'Sources: ' . join(a:sources, ', '))
   call setline(s:LNUM_PATTERN, '>' . a:cur_text)
   execute s:LNUM_PATTERN
+  setlocal nomodifiable
 
-  let s:unite.candidates = s:gather_candidates({}, a:cur_text)
-  call append('$', s:convert_lines(s:unite.candidates))
+  let s:is_invalidate = 1
+  call unite#redraw()
+
   3
   normal! 0z.
-  
-  setlocal nomodifiable
 
   return s:TRUE
 endfunction"}}}
@@ -121,6 +148,7 @@ function! s:initialize_sources(sources)"{{{
       call add(s:unite.sources, l:source)
     endif
   endfor
+  let s:unite.candidates = []
 endfunction"}}}
 function! s:gather_candidates(args, text)"{{{
   let l:args = a:args
@@ -148,6 +176,7 @@ function! s:initialize_unite_buffer()"{{{
   setlocal buftype=nofile
   setlocal nobuflisted
   setlocal noswapfile
+  setlocal nomodifiable
   silent! file `=s:unite_BUFFER_NAME`
 
   " Autocommands.
@@ -179,7 +208,9 @@ function! unite#leave_buffer()  "{{{
   if &filetype ==# 'unite'
     let &redrawtime = s:redrawtime_save
     let l:cwd = getcwd()
-    close
+    if winnr('$') != 1
+      close
+    endif
     
     " Restore current directory.
     lcd `=l:cwd`
@@ -212,18 +243,9 @@ function! s:on_insert_leave()  "{{{
   execute 'match IncSearch' '/'.substitute(l:cur_text, '[/\\]', '\\\0', 'g').'/'
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
-  let l:cur_text = getline(2)[1:]
-  let l:candidates = s:gather_candidates({}, l:cur_text)
-  let l:lines = s:convert_lines(l:candidates)
-  if len(l:lines) < len(s:unite.candidates)
-    let l:pos = getpos('.')
-    silent! 3,$delete _
-    call setpos('.', l:pos)
-  endif
-  
-  let s:unite.candidates = l:candidates
-
-  call setline(3, l:lines)
+  " Force redraw.
+  let s:is_invalidate = 1
+  call unite#redraw()
 endfunction"}}}
 
 " vim: foldmethod=marker
