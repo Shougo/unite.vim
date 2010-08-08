@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Aug 2010
+" Last Modified: 08 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,30 +73,32 @@ endfunction"}}}
 function! unite#invalidate_cache(source_name)  "{{{
   let s:is_invalidate = 1
 endfunction"}}}
+function! unite#force_redraw() "{{{
+  if mode() !=# 'i'
+    setlocal modifiable
+  endif
+
+  let l:cur_text = getline(2)[1:]
+  let l:candidates = s:gather_candidates({}, l:cur_text)
+  let l:lines = s:convert_lines(l:candidates)
+  if len(l:lines) < len(s:unite.candidates)
+    let l:pos = getpos('.')
+    silent! 3,$delete _
+    call setpos('.', l:pos)
+  endif
+  call setline(3, l:lines)
+
+  let s:unite.candidates = l:candidates
+
+  let s:is_invalidate = 0
+
+  if mode() !=# 'i'
+    setlocal nomodifiable
+  endif
+endfunction"}}}
 function! unite#redraw() "{{{
   if s:is_invalidate
-    if mode() !=# 'i'
-      setlocal modifiable
-    endif
-    
-    let l:cur_text = getline(2)[1:]
-    let l:candidates = s:gather_candidates({}, l:cur_text)
-    let l:lines = s:convert_lines(l:candidates)
-    if len(l:lines) < len(s:unite.candidates)
-      let l:pos = getpos('.')
-      silent! 3,$delete _
-      call setpos('.', l:pos)
-    endif
-
-    let s:unite.candidates = l:candidates
-
-    call setline(3, l:lines)
-
-    let s:is_invalidate = 0
-
-    if mode() !=# 'i'
-      setlocal nomodifiable
-    endif
+    call unite#force_redraw()
   elseif &filetype ==# 'unite'
     " Redraw marks.
     if mode() !=# 'i'
@@ -160,8 +162,7 @@ function! unite#start(sources, cur_text)"{{{
   execute s:LNUM_PATTERN
   setlocal nomodifiable
 
-  let s:is_invalidate = 1
-  call unite#redraw()
+  call unite#force_redraw()
 
   3
   normal! 0z.
@@ -193,7 +194,13 @@ function! s:gather_candidates(args, text)"{{{
     endfor
   endfor
 
-  return filter(l:candidates, 'v:val.word =~ ' . string(unite#escape_match(a:text)))
+  if a:text != ''
+    for l:pattern in split(a:text)
+      call filter(l:candidates, 'stridx(v:val.word, ' . string(l:pattern) . ') != -1')
+    endfor
+  endif
+
+  return l:candidates
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
   return map(copy(a:candidates),
@@ -281,12 +288,11 @@ function! s:on_insert_leave()  "{{{
   setlocal nomodifiable
 
   let l:cur_text = getline(2)[1:]
-  execute 'match IncSearch' '/'.substitute(l:cur_text, '[/\\]', '\\\0', 'g').'/'
+  execute 'match IncSearch' '"'.substitute(l:cur_text, ' ', '\\|', 'g').'"'
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   " Force redraw.
-  let s:is_invalidate = 1
-  call unite#redraw()
+  call unite#force_redraw()
 endfunction"}}}
 
 " vim: foldmethod=marker
