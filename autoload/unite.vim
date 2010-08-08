@@ -75,7 +75,9 @@ function! unite#invalidate_cache(source_name)  "{{{
 endfunction"}}}
 function! unite#redraw() "{{{
   if s:is_invalidate
-    setlocal modifiable
+    if mode() !=# 'i'
+      setlocal modifiable
+    endif
     
     let l:cur_text = getline(2)[1:]
     let l:candidates = s:gather_candidates({}, l:cur_text)
@@ -92,14 +94,20 @@ function! unite#redraw() "{{{
 
     let s:is_invalidate = 0
 
-    setlocal nomodifiable
+    if mode() !=# 'i'
+      setlocal nomodifiable
+    endif
   elseif &filetype ==# 'unite'
     " Redraw marks.
-    setlocal modifiable
-
+    if mode() !=# 'i'
+      setlocal modifiable
+    endif
+    
     call setline(3, s:convert_lines(s:unite.candidates))
 
-    setlocal nomodifiable
+    if mode() !=# 'i'
+      setlocal nomodifiable
+    endif
   endif
 endfunction"}}}
 function! unite#redraw_current_line() "{{{
