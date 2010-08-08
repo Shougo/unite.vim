@@ -42,6 +42,8 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_append_end)  :<C-u>call <SID>append_end()<CR>
   nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_file)  :<C-u>call <SID>toggle_mark()<CR>
   nnoremap <silent><buffer> <Plug>(unite_redraw)  :<C-u>call <SID>redraw()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_search_next_source)  :<C-u>call <SID>search_source(1)<CR>
+  nnoremap <silent><buffer> <Plug>(unite_search_previous_source)  :<C-u>call <SID>search_source(0)<CR>
   "}}}
   
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -59,6 +61,8 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> d <Plug>(unite_do_delete_action)
   nmap <buffer> <Space> <Plug>(unite_toggle_mark_current_file)
   nmap <buffer> <Tab> <Plug>(unite_choose_action)
+  nmap <buffer> <C-n> <Plug>(unite_search_next_source)
+  nmap <buffer> <C-p> <Plug>(unite_search_previous_source)
 
   " Insert mode key-mappings.
   inoremap <buffer> <ESC>     <ESC>j
@@ -123,6 +127,44 @@ function! s:append_end()"{{{
 endfunction"}}}
 function! s:redraw()"{{{
   call unite#force_redraw()
+endfunction"}}}
+function! s:search_source(is_next)"{{{
+  let l:new_pos = getpos('.')
+  
+  let l:current_source = line('.') < 2 ? '' : matchstr(getline('.'), '[[:space:]]\zs[a-z_-]\+$')
+
+  3
+  let l:poses = []
+  let i = 0
+  let l:current_pos = -1
+  for l:source in unite#available_sources_name()
+    let l:pos = searchpos(l:source . '$', 'W')
+    if l:pos[0] != 0
+      if l:current_source ==# l:source
+        echomsg len(l:poses)
+        let l:current_pos = len(l:poses)
+      endif
+      
+      call add(l:poses, l:pos)
+    endif
+
+    let i += 1
+  endfor
+  
+  if a:is_next
+    if l:current_pos + 1 < len(l:poses)
+      let l:new_pos[1] = l:poses[l:current_pos + 1][0]
+      let l:new_pos[2] = l:poses[l:current_pos + 1][1]
+    endif
+  else
+    if l:current_pos >= 1
+      let l:new_pos[1] = l:poses[l:current_pos - 1][0]
+      let l:new_pos[2] = l:poses[l:current_pos - 1][1]
+    endif
+  endif
+
+  call setpos('.', l:new_pos)
+  normal! 0
 endfunction"}}}
 
 " vim: foldmethod=marker

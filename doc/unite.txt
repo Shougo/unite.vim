@@ -104,6 +104,7 @@ CHANGELOG					*unite-changelog*
 2010-08-08
 - Fixed nomodifiable error.
 - Improved redraw.
+- Implemented previous/next source.
 
 2010-08-07
 - Implemented buffer delete.

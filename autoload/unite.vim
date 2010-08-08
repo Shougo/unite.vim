@@ -55,6 +55,9 @@ let s:is_invalidate = 0
 function! unite#get_unite_candidates()"{{{
   return s:unite.candidates
 endfunction"}}}
+function! unite#available_sources_name()"{{{
+  return map(copy(s:unite.sources), 'v:val.name')
+endfunction"}}}
 function! unite#available_sources(...)"{{{
   return a:0 == 0 ? s:unite.sources_dict : s:unite.sources_dict[a:1]
 endfunction"}}}
