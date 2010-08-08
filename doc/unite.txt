@@ -101,6 +101,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-08
+- Fixed nomodifiable error.
+
 2010-08-07
 - Implemented buffer delete.
 - Improved action table.

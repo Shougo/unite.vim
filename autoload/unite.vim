@@ -257,12 +257,12 @@ function! s:on_insert_enter()  "{{{
     let &updatetime = g:unite_update_time
   endif
   
+  setlocal modifiable
   if line('.') != 2 || col('.') == 1
     2
     startinsert!
   endif
 
-  setlocal modifiable
   match
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
