@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Aug 2010
+" Last Modified: 10 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,6 +31,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_delete_backward_char)  col('.') == 2 ? '' : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-2)
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') == 2 ? '' : "\<C-w>"
+  inoremap <silent><buffer> <Plug>(unite_do_default_action)  <ESC>j:<C-u>call <SID>do_action('default')<CR>
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_action('default')<CR>
@@ -63,10 +64,13 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <Tab> <Plug>(unite_choose_action)
   nmap <buffer> <C-n> <Plug>(unite_search_next_source)
   nmap <buffer> <C-p> <Plug>(unite_search_previous_source)
+  nmap <buffer> <silent> l <Plug>(unite_do_default_action)
+  nmap <buffer> <silent> h i../<ESC>
+  nmap <buffer> <silent> ~ i~/<ESC>
 
   " Insert mode key-mappings.
   inoremap <buffer> <ESC>     <ESC>j
-  inoremap <buffer> <CR>      <ESC>j
+  imap <buffer> <CR>      <Plug>(unite_do_default_action)
   imap <buffer> <C-h>     <Plug>(unite_delete_backward_char)
   imap <buffer> <BS>     <Plug>(unite_delete_backward_char)
   imap <buffer> <C-u>     <Plug>(unite_delete_backward_line)

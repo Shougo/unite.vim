@@ -101,6 +101,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-10
+- Improved keymappings.
+- Improved InsertLeave behavior.
+
 2010-08-08
 - Fixed nomodifiable error.
 - Improved redraw.

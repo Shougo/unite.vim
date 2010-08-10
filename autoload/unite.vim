@@ -81,7 +81,7 @@ function! unite#force_redraw() "{{{
     setlocal modifiable
   endif
 
-  let l:cur_text = getline(2)[1:]
+  let l:cur_text = substitute(getline(2)[1:], '^\~', substitute($HOME, '\\', '/', 'g'), '')
   let l:candidates = s:gather_candidates({}, l:cur_text)
   let l:lines = s:convert_lines(l:candidates)
   if len(l:lines) < len(s:unite.candidates)
@@ -284,14 +284,17 @@ function! s:on_insert_enter()  "{{{
   match
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
+  " Force redraw.
+  call unite#force_redraw()
+  
   if &updatetime < s:update_time_save
     let &updatetime = s:update_time_save
   endif
 
   setlocal nomodifiable
 
-  let l:cur_text = getline(2)[1:]
-  execute 'match IncSearch' '"'.substitute(l:cur_text, ' ', '\\|', 'g').'"'
+  let l:cur_text = substitute(getline(2)[1:], '^\~', substitute($HOME, '\\', '/', 'g'), '')
+  execute 'match IncSearch' '"'.substitute(unite#escape_match(l:cur_text), ' ', '\\|', 'g').'"'
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   " Force redraw.
