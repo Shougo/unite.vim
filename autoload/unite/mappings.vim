@@ -66,7 +66,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-p> <Plug>(unite_search_previous_source)
   nmap <buffer> <silent> l <Plug>(unite_do_default_action)
   nmap <buffer> <silent> h i../<ESC>
-  nmap <buffer> <silent> ~ i~/<ESC>
+  nmap <buffer> <silent> ~ i<Plug>(unite_delete_backward_line)~/<ESC>
 
   " Insert mode key-mappings.
   inoremap <buffer> <ESC>     <ESC>j

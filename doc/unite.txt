@@ -104,6 +104,7 @@ CHANGELOG					*unite-changelog*
 2010-08-10
 - Improved keymappings.
 - Improved InsertLeave behavior.
+- Improved substitute tilde.
 
 2010-08-08
 - Fixed nomodifiable error.

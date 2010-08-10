@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Aug 2010
+" Last Modified: 10 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -81,7 +81,7 @@ function! unite#force_redraw() "{{{
     setlocal modifiable
   endif
 
-  let l:cur_text = substitute(getline(2)[1:], '^\~', substitute($HOME, '\\', '/', 'g'), '')
+  let l:cur_text = substitute(expand(getline(2)[1:]), '\\', '/', 'g')
   let l:candidates = s:gather_candidates({}, l:cur_text)
   let l:lines = s:convert_lines(l:candidates)
   if len(l:lines) < len(s:unite.candidates)
@@ -293,7 +293,7 @@ function! s:on_insert_leave()  "{{{
 
   setlocal nomodifiable
 
-  let l:cur_text = substitute(getline(2)[1:], '^\~', substitute($HOME, '\\', '/', 'g'), '')
+  let l:cur_text = substitute(expand(getline(2)[1:]), '\\', '/', 'g')
   execute 'match IncSearch' '"'.substitute(unite#escape_match(l:cur_text), ' ', '\\|', 'g').'"'
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
