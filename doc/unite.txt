@@ -62,6 +62,16 @@ g:unite_update_time				*g:unite_update_time*
 		
 		Default value is 200.
 
+g:unite_substitute_patterns			*g:unite_substitute_patterns*
+		
+		
+		Default value is refer to autoload/unite.vim.
+
+g:unite_temporary_directory			*g:unite_temporary_directory*
+		
+		
+		Default value is expand('~/.unite').
+
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*unite-key-mappings*
 
@@ -105,6 +115,7 @@ CHANGELOG					*unite-changelog*
 - Improved keymappings.
 - Improved InsertLeave behavior.
 - Improved substitute tilde.
+- Added g:unite_substitute_patterns option.
 
 2010-08-08
 - Fixed nomodifiable error.

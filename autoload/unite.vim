@@ -25,6 +25,14 @@
 " Version: 0.1, for Vim 7.0
 "=============================================================================
 
+function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
+  for key in split(a:keys, ',')
+    if !has_key(a:variable, key) 
+      let a:variable[key] = a:pattern
+    endif
+  endfor
+endfunction"}}}
+
 " Constants"{{{
 
 let s:FALSE = 0
@@ -49,6 +57,8 @@ let s:unite_bufnr = s:INVALID_BUFNR
 let s:update_time_save = &updatetime
 let s:unite = {}
 let s:is_invalidate = 0
+
+call unite#set_dictionary_helper(g:unite_substitute_patterns, '^\~', substitute($HOME, '\\', '/', 'g'))
 "}}}
 
 " Helper functions."{{{
@@ -81,7 +91,10 @@ function! unite#force_redraw() "{{{
     setlocal modifiable
   endif
 
-  let l:cur_text = substitute(expand(getline(2)[1:]), '\\', '/', 'g')
+  let l:cur_text = getline(2)[1:]
+  for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
+    let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
+  endfor
   let l:candidates = s:gather_candidates({}, l:cur_text)
   let l:lines = s:convert_lines(l:candidates)
   if len(l:lines) < len(s:unite.candidates)
@@ -293,7 +306,10 @@ function! s:on_insert_leave()  "{{{
 
   setlocal nomodifiable
 
-  let l:cur_text = substitute(expand(getline(2)[1:]), '\\', '/', 'g')
+  let l:cur_text = getline(2)[1:]
+  for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
+    let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
+  endfor
   execute 'match IncSearch' '"'.substitute(unite#escape_match(l:cur_text), ' ', '\\|', 'g').'"'
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
