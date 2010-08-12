@@ -40,7 +40,7 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args)"{{{
-  call filter(s:buffer_list, 'bufexists(v:val.bufnr) && buflisted(v:val.bufnr)')
+  call filter(s:buffer_list, 'bufexists(v:val.bufnr) && buflisted(v:val.bufnr) && v:val.bufnr != ' . bufnr('#'))
   let l:candidates = map(values(s:buffer_list), '{
         \ "word" : bufname(v:val.bufnr),
         \ "abbr" : s:make_abbr(v:val.bufnr),

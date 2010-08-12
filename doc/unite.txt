@@ -111,6 +111,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-12
+- Improved source buffer.
+
 2010-08-10
 - Improved keymappings.
 - Improved InsertLeave behavior.
