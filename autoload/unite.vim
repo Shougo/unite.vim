@@ -219,10 +219,10 @@ function! s:gather_candidates(args, text)"{{{
   " Save options.
   let l:ignorecase_save = &ignorecase
 
-  if g:neocomplcache_enable_smart_case && a:text =~ '\u'
+  if g:unite_enable_smart_case && a:text =~ '\u'
     let &ignorecase = 0
   else
-    let &ignorecase = g:neocomplcache_enable_ignore_case
+    let &ignorecase = g:unite_enable_ignore_case
   endif
   
   let l:args = a:args
