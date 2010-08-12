@@ -259,6 +259,8 @@ function! s:initialize_unite_buffer()"{{{
   " The current buffer is initialized.
   let s:unite = {}
 
+  silent! file `=s:unite_BUFFER_NAME`
+  
   " Basic settings.
   setlocal number
   setlocal bufhidden=hide
@@ -268,7 +270,6 @@ function! s:initialize_unite_buffer()"{{{
   setlocal nomodifiable
   setlocal nofoldenable
   setlocal foldcolumn=0
-  silent! file `=s:unite_BUFFER_NAME`
 
   " Autocommands.
   augroup plugin-unite
