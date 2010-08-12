@@ -145,21 +145,22 @@ function! unite#get_marked_candidates() "{{{
   return filter(copy(s:unite.candidates), 'v:val.is_marked')
 endfunction"}}}
 function! unite#keyword_filter(list, cur_keyword_str)"{{{
-  if a:cur_keyword_str =~ '[*]'
-    let l:cur_keyword_str = substitute(unite#escape_match(a:cur_keyword_str), '\*', '.*', 'g')
-    return filter(a:list, 'v:val.word =~ ' . string(l:cur_keyword_str))
-  else
-    return unite#fast_filter(a:list, a:cur_keyword_str)
-  endif
-endfunction"}}}
-function! unite#fast_filter(list, cur_keyword_str)"{{{
-  if &ignorecase
-    let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(a:cur_keyword_str)))
-  else
-    let l:expr = printf('stridx(v:val.word, %s) != -1', string(a:cur_keyword_str))
-  endif
+  for l:cur_keyword_str in split(a:cur_keyword_str)
+    if l:cur_keyword_str =~ '[*]'
+      let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '.*', 'g')
+      call filter(a:list, 'v:val.word =~ ' . string(l:cur_keyword_str))
+    else
+      if &ignorecase
+        let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:cur_keyword_str)))
+      else
+        let l:expr = printf('stridx(v:val.word, %s) != -1', string(l:cur_keyword_str))
+      endif
 
-  return filter(a:list, l:expr)
+      call filter(a:list, l:expr)
+    endif
+  endfor
+
+  return a:list
 endfunction"}}}
 "}}}
 
