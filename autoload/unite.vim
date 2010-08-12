@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2010
+" Last Modified: 12 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -144,6 +144,23 @@ endfunction"}}}
 function! unite#get_marked_candidates() "{{{
   return filter(copy(s:unite.candidates), 'v:val.is_marked')
 endfunction"}}}
+function! unite#keyword_filter(list, cur_keyword_str)"{{{
+  if a:cur_keyword_str =~ '[*]'
+    let l:cur_keyword_str = substitute(unite#escape_match(a:cur_keyword_str), '\*', '.*', 'g')
+    return filter(a:list, 'v:val.word =~ ' . string(l:cur_keyword_str))
+  else
+    return unite#fast_filter(a:list, a:cur_keyword_str)
+  endif
+endfunction"}}}
+function! unite#fast_filter(list, cur_keyword_str)"{{{
+  if &ignorecase
+    let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(a:cur_keyword_str)))
+  else
+    let l:expr = printf('stridx(v:val.word, %s) != -1', string(a:cur_keyword_str))
+  endif
+
+  return filter(a:list, l:expr)
+endfunction"}}}
 "}}}
 
 function! unite#start(sources, cur_text)"{{{
@@ -199,6 +216,15 @@ function! s:initialize_sources(sources)"{{{
   let s:unite.candidates = []
 endfunction"}}}
 function! s:gather_candidates(args, text)"{{{
+  " Save options.
+  let l:ignorecase_save = &ignorecase
+
+  if g:neocomplcache_enable_smart_case && a:text =~ '\u'
+    let &ignorecase = 0
+  else
+    let &ignorecase = g:neocomplcache_enable_ignore_case
+  endif
+  
   let l:args = a:args
   let l:args.cur_text = a:text
   
@@ -211,10 +237,10 @@ function! s:gather_candidates(args, text)"{{{
   endfor
 
   if a:text != ''
-    for l:pattern in split(a:text)
-      call filter(l:candidates, 'stridx(v:val.word, ' . string(l:pattern) . ') != -1')
-    endfor
+    call unite#keyword_filter(l:candidates, a:text)
   endif
+
+  let &ignorecase = l:ignorecase_save
 
   return l:candidates
 endfunction"}}}

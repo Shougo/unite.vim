@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2010
+" Last Modified: 12 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,7 +39,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_append_enter)  :<C-u>call <SID>append_enter()<CR>
+  nnoremap <silent><buffer><expr> <Plug>(unite_append_enter)  col('.') == col('$') ? "\:<C-u>call \<SID>append_enter()\<CR>" : ":\<C-u>call \<SID>append_end()\<CR>"
   nnoremap <silent><buffer> <Plug>(unite_append_end)  :<C-u>call <SID>append_end()<CR>
   nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_file)  :<C-u>call <SID>toggle_mark()<CR>
   nnoremap <silent><buffer> <Plug>(unite_redraw)  :<C-u>call <SID>redraw()<CR>
@@ -64,12 +64,13 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <Tab> <Plug>(unite_choose_action)
   nmap <buffer> <C-n> <Plug>(unite_search_next_source)
   nmap <buffer> <C-p> <Plug>(unite_search_previous_source)
-  nmap <buffer> <silent> l <Plug>(unite_do_default_action)
-  nmap <buffer> <silent> h i../<ESC>
+  nmap <buffer><expr><silent> l line('.') <= 2 ? 'l' : "\<Plug>(unite_do_default_action)"
+  nmap <buffer><expr><silent> h line('.') <= 2 ? 'h' : "i../\<ESC>"
   nmap <buffer> <silent> ~ i<Plug>(unite_delete_backward_line)~/<ESC>
 
   " Insert mode key-mappings.
   inoremap <buffer> <ESC>     <ESC>j
+  inoremap <buffer> /     */
   imap <buffer> <CR>      <Plug>(unite_do_default_action)
   imap <buffer> <C-h>     <Plug>(unite_delete_backward_char)
   imap <buffer> <BS>     <Plug>(unite_delete_backward_char)
