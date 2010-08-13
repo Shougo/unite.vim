@@ -121,6 +121,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-13
+- Fixed highlight bug.
+- Fixed buffer filtering bug.
+
 2010-08-12
 - Improved source buffer.
 - Improved mappings.

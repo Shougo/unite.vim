@@ -147,7 +147,7 @@ endfunction"}}}
 function! unite#keyword_filter(list, cur_keyword_str)"{{{
   for l:cur_keyword_str in split(a:cur_keyword_str)
     if l:cur_keyword_str =~ '[*]'
-      let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '.*', 'g')
+      let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '[^/]*', 'g')
       call filter(a:list, 'v:val.word =~ ' . string(l:cur_keyword_str))
     else
       if &ignorecase
@@ -338,7 +338,7 @@ function! s:on_insert_leave()  "{{{
   for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
     let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
   endfor
-  execute 'match IncSearch' '"'.substitute(unite#escape_match(l:cur_text), ' ', '\\|', 'g').'"'
+  execute 'match IncSearch' '"'.substitute(substitute(unite#escape_match(l:cur_text), '\*', '[^/]*', 'g'), ' ', '\\|', 'g').'"'
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   " Force redraw.
