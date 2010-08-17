@@ -72,7 +72,7 @@ function! unite#available_sources(...)"{{{
   return a:0 == 0 ? s:unite.sources_dict : s:unite.sources_dict[a:1]
 endfunction"}}}
 function! unite#escape_match(str)"{{{
-  return escape(a:str, '~" \.^$[]')
+  return escape(a:str, '~"\.^$[]')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   return filter(map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'), 'fnamemodify(v:val, ":t:r")')
@@ -145,7 +145,7 @@ function! unite#get_marked_candidates() "{{{
   return filter(copy(s:unite.candidates), 'v:val.is_marked')
 endfunction"}}}
 function! unite#keyword_filter(list, cur_keyword_str)"{{{
-  for l:cur_keyword_str in split(a:cur_keyword_str)
+  for l:cur_keyword_str in split(a:cur_keyword_str, '\\\@<! ')
     if l:cur_keyword_str =~ '[*]'
       let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '[^/]*', 'g')
       call filter(a:list, 'v:val.word =~ ' . string(l:cur_keyword_str))
@@ -338,7 +338,7 @@ function! s:on_insert_leave()  "{{{
   for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
     let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
   endfor
-  execute 'match IncSearch' '"'.substitute(substitute(unite#escape_match(l:cur_text), '\*', '[^/]*', 'g'), ' ', '\\|', 'g').'"'
+  execute 'match IncSearch' '"'.substitute(substitute(unite#escape_match(l:cur_text), '\*', '[^/]*', 'g'), '\\\@! ', '\\|', 'g').'"'
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   " Force redraw.
