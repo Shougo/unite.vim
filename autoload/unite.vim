@@ -315,8 +315,10 @@ function! s:on_insert_enter()  "{{{
     let s:update_time_save = &updatetime
     let &updatetime = g:unite_update_time
   endif
-  
+
+  setlocal cursorline
   setlocal modifiable
+  
   if line('.') != 2 || col('.') == 1
     2
     startinsert!
@@ -332,6 +334,7 @@ function! s:on_insert_leave()  "{{{
     let &updatetime = s:update_time_save
   endif
 
+  setlocal nocursorline
   setlocal nomodifiable
 
   let l:cur_text = getline(2)[1:]

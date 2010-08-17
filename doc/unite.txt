@@ -125,6 +125,7 @@ CHANGELOG					*unite-changelog*
 - Added <Plug>(unite_print_candidate) mapping.
 - Improved truncate string.
 - Fixed escape bug.
+- Implemented insert mode completion.
 
 2010-08-13
 - Fixed highlight bug.

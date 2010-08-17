@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Aug 2010
+" Last Modified: 17 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,7 +31,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_delete_backward_char)  col('.') == 2 ? '' : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-2)
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') == 2 ? '' : "\<C-w>"
-  inoremap <silent><buffer> <Plug>(unite_do_default_action)  <ESC>j:<C-u>call <SID>do_action('default')<CR>
+  inoremap <silent><expr><buffer> <Plug>(unite_enter) line('.') <= 2 ? "\<ESC>3G:call \<SID>do_action('default')\<CR>" : "\<C-o>:\<C-u>call \<SID>insert_candidate()\<CR>"
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_action('default')<CR>
@@ -73,7 +73,9 @@ function! unite#mappings#define_default_mappings()"{{{
   " Insert mode key-mappings.
   inoremap <buffer> <ESC>     <ESC>j
   inoremap <buffer> /     */
-  imap <buffer> <CR>      <Plug>(unite_do_default_action)
+  inoremap <buffer> <expr><TAB>     pumvisible() ? "\<C-n>" : "\<Down>"
+  inoremap <buffer> <expr><S-TAB>     pumvisible() ? "\<C-p>" : "\<Up>"
+  imap <buffer> <CR>      <Plug>(unite_enter)
   imap <buffer> <C-h>     <Plug>(unite_delete_backward_char)
   imap <buffer> <BS>     <Plug>(unite_delete_backward_char)
   imap <buffer> <C-u>     <Plug>(unite_delete_backward_line)
@@ -181,6 +183,19 @@ function! s:print_candidate()"{{{
 
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
   echo l:candidate.word
+endfunction"}}}
+function! s:insert_candidate()"{{{
+  if line('.') <= 2
+    " Ignore.
+    return
+  endif
+
+  setlocal modifiable
+  let l:candidate = unite#get_unite_candidates()[line('.') - 3]
+  call setline(2, '>' . l:candidate.word)
+  
+  2
+  startinsert!
 endfunction"}}}
 
 " vim: foldmethod=marker
