@@ -31,7 +31,9 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_delete_backward_char)  col('.') == 2 ? '' : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-2)
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') == 2 ? '' : "\<C-w>"
-  inoremap <silent><expr><buffer> <Plug>(unite_enter) line('.') <= 2 ? "\<ESC>3G:call \<SID>do_action('default')\<CR>" : "\<C-o>:\<C-u>call \<SID>insert_candidate()\<CR>"
+  inoremap <silent><expr><buffer> <Plug>(unite_enter) line('.') <= 2 ?
+        \ "\<ESC>2G:call \<SID>do_action('default')\<CR>"
+        \ : "\<C-o>:\<C-u>call \<SID>insert_selected_candidate()\<CR>"
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_action('default')<CR>
@@ -90,11 +92,17 @@ function! s:do_action(key)"{{{
   let l:candidates = unite#get_marked_candidates()
   if empty(l:candidates)
     if line('.') <= 2
-      " Ignore.
-      return
+      if line('$') < 3
+        " Ignore.
+        return
+      endif
+
+      let l:num = 0
+    else
+      let l:num = line('.') - 3
     endif
 
-    let l:candidates = [unite#get_unite_candidates()[line('.') - 3]]
+    let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
   for l:candidate in l:candidates
     let l:source = unite#available_sources(l:candidate.source)
@@ -184,7 +192,7 @@ function! s:print_candidate()"{{{
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
   echo l:candidate.word
 endfunction"}}}
-function! s:insert_candidate()"{{{
+function! s:insert_selected_candidate()"{{{
   if line('.') <= 2
     " Ignore.
     return
