@@ -126,6 +126,7 @@ CHANGELOG					*unite-changelog*
 - Improved truncate string.
 - Fixed escape bug.
 - Implemented insert mode completion.
+- Improved truncate max.
 
 2010-08-13
 - Fixed highlight bug.

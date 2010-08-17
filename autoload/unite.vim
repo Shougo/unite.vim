@@ -246,8 +246,9 @@ function! s:gather_candidates(args, text)"{{{
   return l:candidates
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
+  let l:max_width = winwidth(0) - 20
   return map(copy(a:candidates),
-        \ '(v:val.is_marked ? "* " : "- ") . unite#util#truncate_smart(has_key(v:val, "abbr")? v:val.abbr : v:val.word, 80, 25, "..") . " " . v:val.source')
+        \ '(v:val.is_marked ? "* " : "- ") . unite#util#truncate_smart(has_key(v:val, "abbr")? v:val.abbr : v:val.word, ' . l:max_width .  ', 25, "..") . " " . v:val.source')
 endfunction"}}}
 function! s:convert_line(candidate)"{{{
   return (a:candidate.is_marked ? '* ' : '- ')
