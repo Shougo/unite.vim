@@ -192,7 +192,7 @@ function! s:insert_candidate()"{{{
 
   setlocal modifiable
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
-  call setline(2, '>' . l:candidate.word)
+  call setline(2, '>' . escape(l:candidate.word, ' *'))
   
   2
   startinsert!
