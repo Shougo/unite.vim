@@ -128,6 +128,7 @@ CHANGELOG					*unite-changelog*
 - Implemented insert mode completion.
 - Improved truncate max.
 - Improved unite_enter.
+- Implemented <Plug>(unite_insert_leave) mapping.
 
 2010-08-13
 - Fixed highlight bug.

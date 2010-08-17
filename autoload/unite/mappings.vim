@@ -28,12 +28,17 @@
 function! unite#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
   inoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
+  inoremap <buffer><expr> <Plug>(unite_insert_leave)  line('.') == 2 ? "\<ESC>j" : "\<ESC>0"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_char)  col('.') == 2 ? '' : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-2)
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') == 2 ? '' : "\<C-w>"
   inoremap <silent><expr><buffer> <Plug>(unite_enter) line('.') <= 2 ?
         \ "\<ESC>2G:call \<SID>do_action('default')\<CR>"
         \ : "\<C-o>:\<C-u>call \<SID>insert_selected_candidate()\<CR>"
+  inoremap <expr><buffer> <Plug>(unite_select_next_line)  pumvisible() ? "\<C-n>" : "\<Down>"
+  inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : "\<Up>"
+  inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
+  inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_action('default')<CR>
@@ -73,10 +78,14 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-g> <Plug>(unite_print_candidate)
 
   " Insert mode key-mappings.
-  inoremap <buffer> <ESC>     <ESC>j
   inoremap <buffer> /     */
-  inoremap <buffer> <expr><TAB>     pumvisible() ? "\<C-n>" : "\<Down>"
-  inoremap <buffer> <expr><S-TAB>     pumvisible() ? "\<C-p>" : "\<Up>"
+  imap <buffer> <ESC>     <Plug>(unite_insert_leave)
+  imap <buffer> <TAB>     <Plug>(unite_select_next_line)
+  imap <buffer> <S-TAB>   <Plug>(unite_select_previous_line)
+  imap <buffer> <C-n>     <Plug>(unite_select_next_line)
+  imap <buffer> <C-p>   <Plug>(unite_select_previous_line)
+  imap <buffer> <C-f>     <Plug>(unite_select_next_page)
+  imap <buffer> <C-b>   <Plug>(unite_select_previous_page)
   imap <buffer> <CR>      <Plug>(unite_enter)
   imap <buffer> <C-h>     <Plug>(unite_delete_backward_char)
   imap <buffer> <BS>     <Plug>(unite_delete_backward_char)
