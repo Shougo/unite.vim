@@ -45,6 +45,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_redraw)  :<C-u>call <SID>redraw()<CR>
   nnoremap <silent><buffer> <Plug>(unite_search_next_source)  :<C-u>call <SID>search_source(1)<CR>
   nnoremap <silent><buffer> <Plug>(unite_search_previous_source)  :<C-u>call <SID>search_source(0)<CR>
+  nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
   "}}}
   
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -67,6 +68,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer><expr><silent> l line('.') <= 2 ? 'l' : "\<Plug>(unite_do_default_action)"
   nmap <buffer><expr><silent> h line('.') <= 2 ? 'h' : "i../\<ESC>"
   nmap <buffer> <silent> ~ i<Plug>(unite_delete_backward_line)~/<ESC>
+  nmap <buffer> <C-g> <Plug>(unite_print_candidate)
 
   " Insert mode key-mappings.
   inoremap <buffer> <ESC>     <ESC>j
@@ -170,6 +172,15 @@ function! s:search_source(is_next)"{{{
 
   call setpos('.', l:new_pos)
   normal! 0
+endfunction"}}}
+function! s:print_candidate()"{{{
+  if line('.') <= 2
+    " Ignore.
+    return
+  endif
+
+  let l:candidate = unite#get_unite_candidates()[line('.') - 3]
+  echo l:candidate.word
 endfunction"}}}
 
 " vim: foldmethod=marker
