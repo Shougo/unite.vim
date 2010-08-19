@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2010
+" Last Modified: 19 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -268,6 +268,7 @@ function! s:initialize_unite_buffer()"{{{
   setlocal buftype=nofile
   setlocal nobuflisted
   setlocal noswapfile
+  setlocal noreadonly
   setlocal nomodifiable
   setlocal nofoldenable
   setlocal foldcolumn=0
@@ -342,7 +343,7 @@ function! s:on_insert_leave()  "{{{
   for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
     let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
   endfor
-  execute 'match IncSearch' '"'.substitute(substitute(unite#escape_match(l:cur_text), '\*', '[^/]*', 'g'), '\\\@! ', '\\|', 'g').'"'
+  execute 'match IncSearch' '"'.substitute(substitute(unite#escape_match(l:cur_text), '\*', '[^/]*', 'g'), '\\\@<! ', '\\|', 'g').'"'
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   " Force redraw.

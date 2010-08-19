@@ -121,6 +121,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-19
+- Added wildcard syntax.
+
 2010-08-18
 - Added <Plug>(unite_print_candidate) mapping.
 - Improved truncate string.
