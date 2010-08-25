@@ -109,7 +109,22 @@ Normal mode mappings.
 EXAMPLES					*unite-examples*
 >
 	
+	" The prefix key.
+	nnoremap    [unite]   <Nop>
+	nmap    ' [unite]
 	
+	nnoremap [unite]u  :<C-u>Unite<Space>
+	nnoremap <silent> [unite]'  :<C-u>Unite buffer file_mru file<CR>
+	
+	autocmd FileType unite call s:unite_my_settings()
+	function! s:unite_my_settings()"{{{
+	" Overwrite settings.
+	imap <buffer> jj      <Plug>(unite_insert_leave)
+	nnoremap <buffer> t G
+	"startinsert
+	endfunction"}}}
+	
+	let g:unite_source_file_mru_limit = 200
 	
 >
 ==============================================================================
@@ -120,6 +135,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2010-08-25
+- Added examples.
 
 2010-08-19
 - Added wildcard syntax.
