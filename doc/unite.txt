@@ -136,6 +136,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-08-27
+- Improved <Enter> mappings.
+
 2010-08-25
 - Added examples.
 

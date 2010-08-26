@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2010
+" Last Modified: 27 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,6 +41,9 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
+  nnoremap <silent><expr><buffer> <Plug>(unite_enter) line('.') <= 2 ?
+        \ "2G:call \<SID>do_action('default')\<CR>"
+        \ : ":\<C-u>call \<SID>insert_selected_candidate()\<CR>"
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_action('default')<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call <SID>do_action('d')<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
@@ -66,7 +69,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> a <Plug>(unite_append_enter)
   nmap <buffer> A <Plug>(unite_append_end)
   nmap <buffer> q <Plug>(unite_exit)
-  nmap <buffer> <CR> <Plug>(unite_do_default_action)
+  nmap <buffer> <CR> <Plug>(unite_enter)
   nmap <buffer> d <Plug>(unite_do_delete_action)
   nmap <buffer> <Space> <Plug>(unite_toggle_mark_current_file)
   nmap <buffer> <Tab> <Plug>(unite_choose_action)
