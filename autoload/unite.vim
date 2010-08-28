@@ -189,10 +189,15 @@ function! unite#start(sources, cur_text)"{{{
   " Initialize sources.
   call s:initialize_sources(a:sources)
 
+  setlocal modifiable
+
   silent % delete _
   call setline(s:LNUM_STATUS, 'Sources: ' . join(a:sources, ', '))
   call setline(s:LNUM_PATTERN, '>' . a:cur_text)
   execute s:LNUM_PATTERN
+
+  " User's initialization.
+  setfiletype unite
 
   call unite#force_redraw()
 
@@ -287,9 +292,6 @@ function! s:initialize_unite_buffer()"{{{
     " Lock neocomplcache.
     NeoComplCacheLock
   endif
-
-  " User's initialization.
-  setfiletype unite
 
   return
 endfunction"}}}

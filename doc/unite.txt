@@ -139,6 +139,8 @@ CHANGELOG					*unite-changelog*
 2010-08-28
 - Fixed / mapping.
 - Fixed startinsert error.
+- Fixed mappings.
+- Fixed initialization bug.
 
 2010-08-27
 - Improved <Enter> mappings.

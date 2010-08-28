@@ -32,9 +32,6 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_delete_backward_char)  col('.') == 2 ? '' : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-2)
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') == 2 ? '' : "\<C-w>"
-  inoremap <silent><expr><buffer> <Plug>(unite_enter) line('.') <= 2 ?
-        \ "\<ESC>2G:call \<SID>do_action('default')\<CR>"
-        \ : "\<C-o>:\<C-u>call \<SID>insert_selected_candidate()\<CR>"
   inoremap <expr><buffer> <Plug>(unite_select_next_line)  pumvisible() ? "\<C-n>" : "\<Down>"
   inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : "\<Up>"
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
@@ -56,6 +53,8 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_search_next_source)  :<C-u>call <SID>search_source(1)<CR>
   nnoremap <silent><buffer> <Plug>(unite_search_previous_source)  :<C-u>call <SID>search_source(0)<CR>
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
+  nnoremap <silent><expr><buffer> <Plug>(unite_edit_candidate) line('.') <= 2 ?
+        \ ":\<C-u>call \<SID>insert_enter()\<CR>" : ":\<C-u>call \<SID>insert_selected_candidate()\<CR>"
   "}}}
   
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -69,7 +68,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> a <Plug>(unite_append_enter)
   nmap <buffer> A <Plug>(unite_append_end)
   nmap <buffer> q <Plug>(unite_exit)
-  nmap <buffer> <CR> <Plug>(unite_enter)
+  nmap <buffer> <CR> <Plug>(unite_do_default_action)
   nmap <buffer> d <Plug>(unite_do_delete_action)
   nmap <buffer> <Space> <Plug>(unite_toggle_mark_current_file)
   nmap <buffer> <Tab> <Plug>(unite_choose_action)
@@ -79,6 +78,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer><expr><silent> h line('.') <= 2 ? 'h' : "i../\<ESC>"
   nmap <buffer> <silent> ~ i<Plug>(unite_delete_backward_line)~/<ESC>
   nmap <buffer> <C-g> <Plug>(unite_print_candidate)
+  nmap <buffer> e <Plug>(unite_edit_candidate)
 
   " Insert mode key-mappings.
   inoremap <buffer> <expr> /    getline(2) == '>' ? '/' : '*/'
