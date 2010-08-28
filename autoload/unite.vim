@@ -190,7 +190,7 @@ function! unite#start(sources, cur_text)"{{{
   call s:initialize_sources(a:sources)
   
   " Caching candidates.
-  let s:unite.cached_candidates = s:caching_candidates({}, a:cur_text)
+  let s:unite.cached_candidates = s:caching_candidates({}, '')
 
   setlocal modifiable
 
