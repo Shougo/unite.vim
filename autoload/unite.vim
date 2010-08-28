@@ -189,17 +189,17 @@ function! unite#start(sources, cur_text)"{{{
   " Initialize sources.
   call s:initialize_sources(a:sources)
 
-  setlocal modifiable
   silent % delete _
   call setline(s:LNUM_STATUS, 'Sources: ' . join(a:sources, ', '))
   call setline(s:LNUM_PATTERN, '>' . a:cur_text)
   execute s:LNUM_PATTERN
-  setlocal nomodifiable
 
   call unite#force_redraw()
 
   3
   normal! 0z.
+
+  setlocal nomodifiable
 
   return s:TRUE
 endfunction"}}}
@@ -269,7 +269,6 @@ function! s:initialize_unite_buffer()"{{{
   setlocal nobuflisted
   setlocal noswapfile
   setlocal noreadonly
-  setlocal nomodifiable
   setlocal nofoldenable
   setlocal foldcolumn=0
 

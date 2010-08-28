@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Aug 2010
+" Last Modified: 28 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -81,7 +81,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-g> <Plug>(unite_print_candidate)
 
   " Insert mode key-mappings.
-  inoremap <buffer> /     */
+  inoremap <buffer> <expr> /    getline(2) == '>' ? '/' : '*/'
   imap <buffer> <ESC>     <Plug>(unite_insert_leave)
   imap <buffer> <TAB>     <Plug>(unite_select_next_line)
   imap <buffer> <S-TAB>   <Plug>(unite_select_previous_line)
