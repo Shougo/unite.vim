@@ -52,7 +52,10 @@ INTERFACE					*unite-interface*
 COMMANDS 					*unite-commands*
 
 :Unite {sources}				*:Unite*
-		Unite all sources.
+		Unite all sources. Initial narrowing text is empty.
+
+:UniteCurrentDir {sources}			*:Unite*
+		Unite all sources. Initial narrowing text is current directory.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*unite-variables*
@@ -144,6 +147,7 @@ CHANGELOG					*unite-changelog*
 - Implemented caching candidates.
 - Improved caching behavior.
 - Improved <Plug>(unite_enter).
+- Added UniteCurrentDir.
 
 2010-08-27
 - Improved <Enter> mappings.

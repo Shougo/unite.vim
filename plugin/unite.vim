@@ -51,14 +51,24 @@ endif
 "}}}
 
 " Wrapper command.
-command! -nargs=+ -complete=customlist,unite#complete_source Unite call s:call_unite(<q-args>)
-function! s:call_unite(args)
+command! -nargs=+ -complete=customlist,unite#complete_source Unite call s:call_unite_empty(<q-args>)
+function! s:call_unite_empty(args)
   let l:list = []
   for l:arg in split(a:args)
     call add(l:list, l:arg)
   endfor
 
   call unite#start(l:list, '')
+endfunction
+
+command! -nargs=+ -complete=customlist,unite#complete_source UniteCurrentDir call s:call_unite_current_dir(<q-args>)
+function! s:call_unite_current_dir(args)
+  let l:list = []
+  for l:arg in split(a:args)
+    call add(l:list, l:arg)
+  endfor
+
+  call unite#start(l:list, fnamemodify(getcwd(), ':p'))
 endfunction
 
 
