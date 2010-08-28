@@ -36,11 +36,11 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : "\<Up>"
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
+  inoremap <silent><expr><buffer> <Plug>(unite_enter) line('.') <= 2 ?
+        \ "\<ESC>2G:call \<SID>do_action('default')\<CR>"
+        \ : "\<ESC>:\<C-u>call \<SID>insert_selected_candidate()\<CR>"
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
-  nnoremap <silent><expr><buffer> <Plug>(unite_enter) line('.') <= 2 ?
-        \ "2G:call \<SID>do_action('default')\<CR>"
-        \ : ":\<C-u>call \<SID>insert_selected_candidate()\<CR>"
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_action('default')<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call <SID>do_action('d')<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
@@ -212,10 +212,14 @@ function! s:insert_selected_candidate()"{{{
 
   setlocal modifiable
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
-  call setline(2, '>' . escape(l:candidate.word, ' *'))
-  
-  2
-  startinsert!
+  if has_key(l:candidate, 'is_directory') && l:candidate.is_directory
+    call setline(2, '>' . escape(l:candidate.word . '/', ' *'))
+    2
+    startinsert!
+  else
+    " Do default action.
+    call s:do_action('default')
+  endif
 endfunction"}}}
 
 " vim: foldmethod=marker

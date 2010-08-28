@@ -143,6 +143,7 @@ CHANGELOG					*unite-changelog*
 - Fixed initialization bug.
 - Implemented caching candidates.
 - Improved caching behavior.
+- Improved <Plug>(unite_enter).
 
 2010-08-27
 - Improved <Enter> mappings.
