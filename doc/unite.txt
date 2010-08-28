@@ -141,6 +141,7 @@ CHANGELOG					*unite-changelog*
 - Fixed startinsert error.
 - Fixed mappings.
 - Fixed initialization bug.
+- Implemented caching candidates.
 
 2010-08-27
 - Improved <Enter> mappings.

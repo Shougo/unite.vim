@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Aug 2010
+" Last Modified: 28 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -188,6 +188,9 @@ function! unite#start(sources, cur_text)"{{{
   
   " Initialize sources.
   call s:initialize_sources(a:sources)
+  
+  " Caching candidates.
+  let s:unite.cached_candidates = s:caching_candidates({}, a:cur_text)
 
   setlocal modifiable
 
@@ -221,6 +224,38 @@ function! s:initialize_sources(sources)"{{{
   endfor
   let s:unite.candidates = []
 endfunction"}}}
+function! s:caching_candidates(args, text)"{{{
+  " Save options.
+  let l:ignorecase_save = &ignorecase
+
+  if g:unite_enable_smart_case && a:text =~ '\u'
+    let &ignorecase = 0
+  else
+    let &ignorecase = g:unite_enable_ignore_case
+  endif
+  
+  let l:args = a:args
+  let l:args.cur_text = a:text
+  
+  let l:cached = {}
+  for l:source in filter(copy(s:unite.sources), '!has_key(v:val, "is_volatile") || !v:val.is_volatile')
+    let l:candidates = []
+    for l:candidate in l:source.gather_candidates(a:args)
+      let l:candidate.is_marked = 0
+      call add(l:candidates, l:candidate)
+    endfor
+
+    if a:text != ''
+      call unite#keyword_filter(l:candidates, a:text)
+    endif
+
+    let l:cached[l:source.name] = l:candidates
+  endfor
+
+  let &ignorecase = l:ignorecase_save
+
+  return l:cached
+endfunction"}}}
 function! s:gather_candidates(args, text)"{{{
   " Save options.
   let l:ignorecase_save = &ignorecase
@@ -236,10 +271,14 @@ function! s:gather_candidates(args, text)"{{{
   
   let l:candidates = []
   for l:source in s:unite.sources
-    for l:candidate in l:source.gather_candidates(a:args)
-      let l:candidate.is_marked = 0
-      call add(l:candidates, l:candidate)
-    endfor
+    if has_key(s:unite.cached_candidates, l:source.name)
+      let l:candidates += s:unite.cached_candidates[l:source.name]
+    else
+      for l:candidate in l:source.gather_candidates(a:args)
+        let l:candidate.is_marked = 0
+        call add(l:candidates, l:candidate)
+      endfor
+    endif
   endfor
 
   if a:text != ''
