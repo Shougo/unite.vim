@@ -54,8 +54,12 @@ COMMANDS 					*unite-commands*
 :Unite {sources}				*:Unite*
 		Unite all sources. Initial narrowing text is empty.
 
-:UniteCurrentDir {sources}			*:Unite*
+:UniteWithCurrentDir {sources}			*:UniteWithCurrentDir*
 		Unite all sources. Initial narrowing text is current directory.
+
+:UniteWithBufferDir {sources}			*:UniteWithBufferDir*
+		Unite all sources. Initial narrowing text is current buffer
+		directory.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*unite-variables*
@@ -117,7 +121,8 @@ EXAMPLES					*unite-examples*
 	nmap    ' [unite]
 	
 	nnoremap [unite]u  :<C-u>Unite<Space>
-	nnoremap <silent> [unite]'  :<C-u>Unite buffer file_mru file<CR>
+	nnoremap <silent> [unite]'  :<C-u>UniteWithCurrentDir buffer file_mru file<CR>
+	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir buffer file_mru file<CR>
 	
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{
@@ -147,7 +152,9 @@ CHANGELOG					*unite-changelog*
 - Implemented caching candidates.
 - Improved caching behavior.
 - Improved <Plug>(unite_enter).
-- Added UniteCurrentDir.
+- Added UniteWithCurrentDir.
+- Added UniteWithBufferDir.
+- Improved <Plug>(unite_do_selected_candidate).
 
 2010-08-27
 - Improved <Enter> mappings.

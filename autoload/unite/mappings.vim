@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Aug 2010
+" Last Modified: 29 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,9 +36,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : "\<Up>"
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
-  inoremap <silent><expr><buffer> <Plug>(unite_enter) line('.') <= 2 ?
-        \ "\<ESC>2G:call \<SID>do_action('default')\<CR>"
-        \ : "\<ESC>:\<C-u>call \<SID>insert_selected_candidate()\<CR>"
+  inoremap <silent><buffer> <Plug>(unite_do_selected_candidate) <ESC>:call <SID>do_selected_candidate()<CR>
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_action('default')<CR>
@@ -89,7 +87,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-p>   <Plug>(unite_select_previous_line)
   imap <buffer> <C-f>     <Plug>(unite_select_next_page)
   imap <buffer> <C-b>   <Plug>(unite_select_previous_page)
-  imap <buffer> <CR>      <Plug>(unite_enter)
+  imap <buffer> <CR>      <Plug>(unite_do_selected_candidate)
   imap <buffer> <C-h>     <Plug>(unite_delete_backward_char)
   imap <buffer> <BS>     <Plug>(unite_delete_backward_char)
   imap <buffer> <C-u>     <Plug>(unite_delete_backward_line)
@@ -212,6 +210,24 @@ function! s:insert_selected_candidate()"{{{
 
   setlocal modifiable
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
+  call setline(2, '>' . escape(l:candidate.word, ' *'))
+  2
+  startinsert!
+endfunction"}}}
+function! s:do_selected_candidate()"{{{
+  if line('.') <= 2
+    if line('$') < 3
+      " Ignore.
+      return
+    endif
+
+    let l:num = 0
+  else
+    let l:num = line('.') - 3
+  endif
+
+  setlocal modifiable
+  let l:candidate = unite#get_unite_candidates()[l:num]
   if has_key(l:candidate, 'is_directory') && l:candidate.is_directory
     call setline(2, '>' . escape(l:candidate.word . '/', ' *'))
     2
