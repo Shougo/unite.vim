@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Aug 2010
+" Last Modified: 04 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,11 +37,10 @@ syntax match uniteSourceSeparator /: / contained nextgroup=uniteSourceNames
 syntax match uniteSourceNames /[a-z_-]\+/ contained
 syntax match uniteSourceNames /[[:space:]]\zs[a-z_-]\+$/
 
-syntax match uniteInputLine /\%2l.*/ contains=uniteInputPrompt,uniteInputPromptError,uniteInputWildCard
-syntax match uniteInputPrompt /^>/ contained nextgroup=uniteInputPattern
+syntax match uniteInputLine /\%2l.*/ contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial
+syntax match uniteInputPrompt /^>/ contained
 syntax match uniteInputPromptError /^[^>].*$/ contained
-syntax match uniteInputPattern /[^*]*/ contained
-syntax match uniteInputWildCard /\\\@<!\*/ contained
+syntax match uniteInputSpecial /\\\@<![*\^]/ contained
 
 syntax match uniteMarkedLine /^\*.*/
 
@@ -51,8 +50,7 @@ highlight default link uniteSourceSeparator  NONE
 
 highlight default link uniteInputPrompt  Identifier
 highlight default link uniteInputPromptError  Error
-highlight default link uniteInputPattern  NONE
-highlight default link uniteInputWildCard  Special
+highlight default link uniteInputSpecial  Special
 
 highlight default link uniteMarkedLine  Special
 

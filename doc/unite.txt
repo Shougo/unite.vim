@@ -144,6 +144,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-04
+- Implemented exclude pattern.
+- Improved syntax.
+
 2010-08-30
 - Improved UniteWithBufferDir.
 

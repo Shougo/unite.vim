@@ -72,7 +72,7 @@ function! unite#available_sources(...)"{{{
   return a:0 == 0 ? s:unite.sources_dict : s:unite.sources_dict[a:1]
 endfunction"}}}
 function! unite#escape_match(str)"{{{
-  return escape(a:str, '~"\.^$[]')
+  return escape(a:str, '~"\.$[]')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   return filter(map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'), 'fnamemodify(v:val, ":t:r")')
@@ -144,9 +144,14 @@ endfunction"}}}
 function! unite#get_marked_candidates() "{{{
   return filter(copy(s:unite.candidates), 'v:val.is_marked')
 endfunction"}}}
-function! unite#keyword_filter(list, cur_keyword_str)"{{{
-  for l:cur_keyword_str in split(a:cur_keyword_str, '\\\@<! ')
-    if l:cur_keyword_str =~ '[*]'
+function! unite#keyword_filter(list, cur_text)"{{{
+  for l:cur_keyword_str in split(a:cur_text, '\\\@<! ')
+    if l:cur_keyword_str =~ '^\^'
+      " Exclusion.
+      let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '[^/]*', 'g')
+      call filter(a:list, 'v:val.word !~ ' . string(l:cur_keyword_str[1:]))
+    elseif l:cur_keyword_str =~ '[*]'
+      " Wildcard.
       let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '[^/]*', 'g')
       call filter(a:list, 'v:val.word =~ ' . string(l:cur_keyword_str))
     else
@@ -267,7 +272,8 @@ function! s:gather_candidates(args, text)"{{{
   endif
   
   let l:args = a:args
-  let l:args.cur_text = a:text
+  let l:cur_text_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "\^"')
+  let l:args.cur_text = empty(l:cur_text_list) ? '' : l:cur_text_list[0]
   
   let l:candidates = []
   for l:source in s:unite.sources
@@ -383,7 +389,10 @@ function! s:on_insert_leave()  "{{{
   for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
     let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
   endfor
-  execute 'match IncSearch' '"'.substitute(substitute(unite#escape_match(l:cur_text), '\*', '[^/]*', 'g'), '\\\@<! ', '\\|', 'g').'"'
+  let l:cur_text_list = split(substitute(unite#escape_match(l:cur_text), '\*', '[^/]*', 'g'), '\\\@<! ')
+  call filter(l:cur_text_list, 'v:val !~ "^\^"')
+  execute 'match IncSearch' string(join(l:cur_text_list, '\|'))
+  echomsg 'match IncSearch' string(join(l:cur_text_list, '\|'))
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   " Force redraw.
