@@ -304,8 +304,9 @@ function! s:convert_lines(candidates)"{{{
         \ '(v:val.is_marked ? "* " : "- ") . unite#util#truncate_smart(has_key(v:val, "abbr")? v:val.abbr : v:val.word, ' . l:max_width .  ', 25, "..") . " " . v:val.source')
 endfunction"}}}
 function! s:convert_line(candidate)"{{{
+  let l:max_width = winwidth(0) - 20
   return (a:candidate.is_marked ? '* ' : '- ')
-        \ . unite#util#truncate(has_key(a:candidate, 'abbr')? a:candidate.abbr : a:candidate.word, 80)
+        \ . unite#util#truncate_smart(has_key(a:candidate, 'abbr')? a:candidate.abbr : a:candidate.word, l:max_width, 25, '..')
         \ . " " . a:candidate.source
 endfunction"}}}
 
@@ -363,6 +364,11 @@ endfunction"}}}
 
 " Autocmd events.
 function! s:on_insert_enter()  "{{{
+  if &eventignore =~# 'InsertEnter'
+    echomsg 'a'
+    return
+  endif
+  
   if &updatetime > g:unite_update_time
     let s:update_time_save = &updatetime
     let &updatetime = g:unite_update_time

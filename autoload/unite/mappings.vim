@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2010
+" Last Modified: 05 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,6 +37,8 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
   inoremap <silent><buffer> <Plug>(unite_do_selected_candidate) <ESC>:call <SID>do_selected_candidate()<CR>
+  inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_file)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
+  inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_action('default')<CR>
@@ -79,7 +81,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> e <Plug>(unite_edit_candidate)
 
   " Insert mode key-mappings.
-  inoremap <buffer> <expr> /    getline(2) == '>' ? '/' : '*/'
+  inoremap <buffer><expr> /    getline(2) == '>' ? '/' : '*/'
   imap <buffer> <ESC>     <Plug>(unite_insert_leave)
   imap <buffer> <TAB>     <Plug>(unite_select_next_line)
   imap <buffer> <S-TAB>   <Plug>(unite_select_previous_line)
@@ -92,6 +94,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <BS>     <Plug>(unite_delete_backward_char)
   imap <buffer> <C-u>     <Plug>(unite_delete_backward_line)
   imap <buffer> <C-w>     <Plug>(unite_delete_backward_word)
+  imap <buffer><expr> <Space>  line('.') == 2 ? ' ' : "\<Plug>(unite_toggle_mark_current_file)"
 endfunction"}}}
 
 " key-mappings functions.
@@ -228,7 +231,7 @@ function! s:do_selected_candidate()"{{{
 
   setlocal modifiable
   let l:candidate = unite#get_unite_candidates()[l:num]
-  if has_key(l:candidate, 'is_directory') && l:candidate.is_directory
+  if empty(unite#get_marked_candidates()) && has_key(l:candidate, 'is_directory') && l:candidate.is_directory
     call setline(2, '>' . escape(l:candidate.word . '/', ' *'))
     2
     startinsert!

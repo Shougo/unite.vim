@@ -147,6 +147,8 @@ CHANGELOG					*unite-changelog*
 2010-09-05
 - Fixed filtering bug.
 - Improved close buffer.
+- Improved truncate.
+- Improved mappings.
 
 2010-09-04
 - Implemented exclude pattern.
