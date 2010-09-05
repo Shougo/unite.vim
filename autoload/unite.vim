@@ -54,6 +54,7 @@ endif
 " Variables  "{{{
 " buffer number of the unite buffer
 let s:unite_bufnr = s:INVALID_BUFNR
+let s:old_winnr = s:INVALID_BUFNR
 let s:update_time_save = &updatetime
 let s:unite = {}
 let s:is_invalidate = 0
@@ -170,6 +171,8 @@ endfunction"}}}
 "}}}
 
 function! unite#start(sources, cur_text)"{{{
+  let s:old_winnr = winnr()
+  
   " Open or create the unite buffer.
   let v:errmsg = ''
   execute 'topleft' (bufexists(s:unite_bufnr) ? 'split' : 'new')
@@ -273,7 +276,6 @@ function! s:gather_candidates(args, text)"{{{
   
   let l:args = a:args
   let l:cur_text_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "\\^"')
-  echomsg string(l:cur_text_list)
   let l:args.cur_text = empty(l:cur_text_list) ? '' : l:cur_text_list[0]
   
   let l:candidates = []
@@ -351,6 +353,7 @@ function! unite#leave_buffer()  "{{{
     let l:cwd = getcwd()
     if winnr('$') != 1
       close
+      execute s:old_winnr . 'wincmd w'
     endif
     
     " Restore current directory.
