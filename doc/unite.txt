@@ -144,6 +144,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-05
+- Fixed filtering bug.
+
 2010-09-04
 - Implemented exclude pattern.
 - Improved syntax.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Aug 2010
+" Last Modified: 05 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -272,7 +272,8 @@ function! s:gather_candidates(args, text)"{{{
   endif
   
   let l:args = a:args
-  let l:cur_text_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "\^"')
+  let l:cur_text_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "\\^"')
+  echomsg string(l:cur_text_list)
   let l:args.cur_text = empty(l:cur_text_list) ? '' : l:cur_text_list[0]
   
   let l:candidates = []
@@ -390,9 +391,8 @@ function! s:on_insert_leave()  "{{{
     let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
   endfor
   let l:cur_text_list = split(substitute(unite#escape_match(l:cur_text), '\*', '[^/]*', 'g'), '\\\@<! ')
-  call filter(l:cur_text_list, 'v:val !~ "^\^"')
+  call filter(l:cur_text_list, 'v:val !~ "^\\^"')
   execute 'match IncSearch' string(join(l:cur_text_list, '\|'))
-  echomsg 'match IncSearch' string(join(l:cur_text_list, '\|'))
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   " Force redraw.
