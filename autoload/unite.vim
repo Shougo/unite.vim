@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Sep 2010
+" Last Modified: 08 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -186,9 +186,11 @@ function! unite#start(sources, cur_text)"{{{
     call s:initialize_unite_buffer()
   endif
 
-  " Save redrawtime
-  let s:redrawtime_save = &redrawtime
-  let &redrawtime = 500
+  if exists('&redrawtime')
+    " Save redrawtime
+    let s:redrawtime_save = &redrawtime
+    let &redrawtime = 500
+  endif
 
   let s:is_invalidate = 0
 
@@ -350,7 +352,10 @@ function! unite#quit_session()  "{{{
 endfunction"}}}
 function! unite#leave_buffer()  "{{{
   if &filetype ==# 'unite'
-    let &redrawtime = s:redrawtime_save
+    if exists('&redrawtime')
+      let &redrawtime = s:redrawtime_save
+    endif
+    
     let l:cwd = getcwd()
     if winnr('$') != 1
       close

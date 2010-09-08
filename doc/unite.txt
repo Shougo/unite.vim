@@ -144,6 +144,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-09
+- Check redrawtime.
+
 2010-09-05
 - Fixed filtering bug.
 - Improved close buffer.
