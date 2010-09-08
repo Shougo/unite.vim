@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Aug 2010
+" Last Modified: 08 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,6 +32,9 @@ endif
 " Global options definition."{{{
 if !exists('g:unite_update_time')
   let g:unite_update_time = 200
+endif
+if !exists('g:unite_enable_start_insert')
+  let g:unite_enable_start_insert = 0
 endif
 if !exists('g:unite_enable_ignore_case')
   let g:unite_enable_ignore_case = &ignorecase

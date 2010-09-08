@@ -214,8 +214,13 @@ function! unite#start(sources, cur_text)"{{{
 
   call unite#force_redraw()
 
-  3
-  normal! 0z.
+  if g:unite_enable_start_insert
+    2
+    startinsert!
+  else
+    3
+    normal! 0z.
+  endif
 
   setlocal nomodifiable
 
@@ -364,6 +369,7 @@ function! unite#leave_buffer()  "{{{
     
     " Restore current directory.
     lcd `=l:cwd`
+    stopinsert
   endif
 endfunction"}}}
 
@@ -382,11 +388,6 @@ function! s:on_insert_enter()  "{{{
   setlocal cursorline
   setlocal modifiable
   
-  if line('.') != 2 || col('.') == 1
-    2
-    startinsert!
-  endif
-
   match
 endfunction"}}}
 function! s:on_insert_leave()  "{{{

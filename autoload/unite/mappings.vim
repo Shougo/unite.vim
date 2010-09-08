@@ -36,7 +36,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : "\<Up>"
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
-  inoremap <silent><buffer> <Plug>(unite_do_selected_candidate) <ESC>:call <SID>do_selected_candidate()<CR>
+  inoremap <silent><buffer> <Plug>(unite_do_selected_candidate) <C-o>:call <SID>do_selected_candidate()<CR>
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_file)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   
@@ -141,18 +141,24 @@ endfunction"}}}
 function! s:choose_action()"{{{
 endfunction"}}}
 function! s:insert_enter()"{{{
-  startinsert
+  if line('.') != 2 || col('.') == 1
+    2
+    startinsert!
+  else
+    startinsert
+  endif
 endfunction"}}}
 function! s:insert_head()"{{{
   normal! 0
   normal! l
-  startinsert
+  call s:insert_enter()
 endfunction"}}}
 function! s:append_enter()"{{{
-  startinsert
+  call s:insert_enter()
   normal! l
 endfunction"}}}
 function! s:append_end()"{{{
+  call s:insert_enter()
   startinsert!
 endfunction"}}}
 function! s:redraw()"{{{

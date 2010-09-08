@@ -69,6 +69,12 @@ g:unite_update_time				*g:unite_update_time*
 		
 		Default value is 200.
 
+g:unite_enable_start_insert			*g:unite_enable_start_insert*
+		If this variable is enabled, unite.vim will
+		execute|:startinsert| automatically.
+		
+		Default value is 0.
+
 g:unite_enable_ignore_case			*g:unite_enable_ignore_case*
 		
 		
@@ -129,7 +135,7 @@ EXAMPLES					*unite-examples*
 	" Overwrite settings.
 	imap <buffer> jj      <Plug>(unite_insert_leave)
 	nnoremap <buffer> t G
-	"startinsert
+	"let g:unite_enable_start_insert = 1
 	endfunction"}}}
 	
 	let g:unite_source_file_mru_limit = 200
@@ -147,6 +153,7 @@ CHANGELOG					*unite-changelog*
 2010-09-09
 - Check redrawtime.
 - Implemented ! exclude pattern.
+- Added g:unite_enable_start_insert option.
 
 2010-09-05
 - Fixed filtering bug.
