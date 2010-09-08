@@ -155,6 +155,7 @@ CHANGELOG					*unite-changelog*
 - Implemented ! exclude pattern.
 - Added g:unite_enable_start_insert option.
 - Improved file_mru.
+- Fixed filtering bug.
 
 2010-09-05
 - Fixed filtering bug.

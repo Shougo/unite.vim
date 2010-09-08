@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Sep 2010
+" Last Modified: 09 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -156,6 +156,7 @@ function! unite#keyword_filter(list, cur_text)"{{{
       let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '[^/]*', 'g')
       call filter(a:list, 'v:val.word =~ ' . string(l:cur_keyword_str))
     else
+      let l:cur_keyword_str = substitute(l:cur_keyword_str, '\\ ', ' ', 'g')
       if &ignorecase
         let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:cur_keyword_str)))
       else
@@ -376,7 +377,6 @@ endfunction"}}}
 " Autocmd events.
 function! s:on_insert_enter()  "{{{
   if &eventignore =~# 'InsertEnter'
-    echomsg 'a'
     return
   endif
   
