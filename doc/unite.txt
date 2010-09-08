@@ -154,6 +154,7 @@ CHANGELOG					*unite-changelog*
 - Check redrawtime.
 - Implemented ! exclude pattern.
 - Added g:unite_enable_start_insert option.
+- Improved file_mru.
 
 2010-09-05
 - Fixed filtering bug.

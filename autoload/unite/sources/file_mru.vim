@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Aug 2010
+" Last Modified: 08 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,7 @@ function! s:source.gather_candidates(args)"{{{
   call s:load()
   return sort(map(copy(s:mru_files), '{
         \ "abbr" : strftime(g:unite_source_file_mru_time_format, v:val[1]) .
-        \          fnamemodify(v:val[0], ":~:.") . (isdirectory(v:val[0]) ? "/" : ""),
+        \          fnamemodify(v:val[0], ":~:."),
         \ "word" : v:val[0],
         \ "source" : "file_mru",
         \ "unite_file_mru_time" : v:val[1],
@@ -71,10 +71,10 @@ function! unite#sources#file_mru#define()"{{{
 endfunction"}}}
 function! unite#sources#file_mru#_append()"{{{
   " Append the current buffer to the mru list.
-  let l:path = expand('%:p')
-  if !s:is_exists_path(path) || &l:buftype != ''
+  let l:path = substitute(expand('%:p'), '\\', '/', 'g')
+  if !s:is_exists_path(path) || &l:buftype =~ 'help'
   \   || (g:unite_source_file_mru_ignore_pattern != ''
-  \      && substitute(l:path, '\\', '/', 'g') =~# g:unite_source_file_mru_ignore_pattern)
+  \      && l:path =~# g:unite_source_file_mru_ignore_pattern)
     return
   endif
 
