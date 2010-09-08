@@ -147,7 +147,7 @@ function! unite#get_marked_candidates() "{{{
 endfunction"}}}
 function! unite#keyword_filter(list, cur_text)"{{{
   for l:cur_keyword_str in split(a:cur_text, '\\\@<! ')
-    if l:cur_keyword_str =~ '^\^'
+    if l:cur_keyword_str =~ '^!'
       " Exclusion.
       let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '[^/]*', 'g')
       call filter(a:list, 'v:val.word !~ ' . string(l:cur_keyword_str[1:]))
@@ -277,7 +277,7 @@ function! s:gather_candidates(args, text)"{{{
   endif
   
   let l:args = a:args
-  let l:cur_text_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "\\^"')
+  let l:cur_text_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "!"')
   let l:args.cur_text = empty(l:cur_text_list) ? '' : l:cur_text_list[0]
   
   let l:candidates = []
@@ -405,7 +405,7 @@ function! s:on_insert_leave()  "{{{
     let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
   endfor
   let l:cur_text_list = split(substitute(unite#escape_match(l:cur_text), '\*', '[^/]*', 'g'), '\\\@<! ')
-  call filter(l:cur_text_list, 'v:val !~ "^\\^"')
+  call filter(l:cur_text_list, 'v:val !~ "^!"')
   execute 'match IncSearch' string(join(l:cur_text_list, '\|'))
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{

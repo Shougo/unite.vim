@@ -146,6 +146,7 @@ CHANGELOG					*unite-changelog*
 
 2010-09-09
 - Check redrawtime.
+- Implemented ! exclude pattern.
 
 2010-09-05
 - Fixed filtering bug.
