@@ -231,7 +231,8 @@ endfunction"}}}
 function! s:initialize_sources(sources)"{{{
   " Gathering all sources name.
   let l:all_sources = {}
-  for l:source_name in split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n')
+  for l:source_name in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'),
+        \ 'fnamemodify(v:val, ":t:r")')
     let l:all_sources[l:source_name] = 1
   endfor
   
@@ -299,14 +300,14 @@ function! s:gather_candidates(args, text)"{{{
   
   let l:candidates = []
   for l:source in s:unite.sources
-    if has_key(s:unite.cached_candidates, l:source.name)
-      let l:candidates += s:unite.cached_candidates[l:source.name]
-    else
-      for l:candidate in l:source.gather_candidates(a:args)
-        let l:candidate.is_marked = 0
-        call add(l:candidates, l:candidate)
-      endfor
+    let l:source_candidates = has_key(s:unite.cached_candidates, l:source.name) ?
+          \ s:unite.cached_candidates[l:source.name] : l:source.gather_candidates(a:args)
+    if has_key(l:source, 'max_candidates') && l:source.max_candidates != 0
+      " Filtering too many candidates.
+      let l:source_candidates = l:source_candidates[: l:source.max_candidates - 1]
     endif
+    
+    let l:candidates += l:source_candidates
   endfor
 
   if a:text != ''
@@ -314,6 +315,10 @@ function! s:gather_candidates(args, text)"{{{
   endif
 
   let &ignorecase = l:ignorecase_save
+  
+  for l:candidate in l:candidates
+    let l:candidate.is_marked = 0
+  endfor
 
   return l:candidates
 endfunction"}}}

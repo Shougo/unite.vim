@@ -157,6 +157,7 @@ CHANGELOG					*unite-changelog*
 - Improved file_mru.
 - Fixed filtering bug.
 - Detect invalid source name.
+- Implemented maximum candidates attribute.
 
 2010-09-05
 - Fixed filtering bug.

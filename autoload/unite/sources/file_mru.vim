@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Sep 2010
+" Last Modified: 09 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,6 +45,7 @@ let s:source = {
       \      'default' : 'open',
       \    },
       \ 'action_table': {},
+      \ 'max_candidates': 30,
       \}
 
 function! s:source.gather_candidates(args)"{{{
