@@ -176,7 +176,10 @@ function! unite#start(sources, cur_text)"{{{
   
   " Open or create the unite buffer.
   let v:errmsg = ''
-  execute 'topleft' (bufexists(s:unite_bufnr) ? 'split' : 'new')
+  execute g:unite_split_rule 
+        \ g:unite_enable_split_vertically ?
+        \        (bufexists(s:unite_bufnr) ? 'vsplit' : 'vnew')
+        \      : (bufexists(s:unite_bufnr) ? 'split' : 'new')
   if v:errmsg != ''
     return s:FALSE
   endif
@@ -195,7 +198,9 @@ function! unite#start(sources, cur_text)"{{{
 
   let s:is_invalidate = 0
 
-  20 wincmd _
+  if !g:unite_enable_split_vertically
+    20 wincmd _
+  endif
   
   " Initialize sources.
   call s:initialize_sources(a:sources)

@@ -85,6 +85,16 @@ g:unite_enable_smart_case			*g:unite_enable_smart_case*
 		
 		Default value is same to 'infercase'.
 
+g:unite_split_rule				*g:unite_split_rule*
+		Define split position rule.
+		
+		Default value is "topleft".
+
+g:unite_enable_split_vertically				*g:unite_enable_split_vertically*
+		If this option is true, split unite window vertically.
+		
+		Default value is 0.
+
 g:unite_substitute_patterns			*g:unite_substitute_patterns*
 		
 		
@@ -158,6 +168,7 @@ CHANGELOG					*unite-changelog*
 - Fixed filtering bug.
 - Detect invalid source name.
 - Implemented maximum candidates attribute.
+- Added g:unite_split_rule and g:unite_enable_split_vertically options.
 
 2010-09-05
 - Fixed filtering bug.

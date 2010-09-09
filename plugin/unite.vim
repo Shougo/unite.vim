@@ -42,6 +42,12 @@ endif
 if !exists('g:unite_enable_smart_case')
   let g:unite_enable_smart_case = &infercase
 endif
+if !exists('g:unite_split_rule')
+  let g:unite_split_rule = 'topleft'
+endif
+if !exists('g:unite_enable_split_vertically')
+  let g:unite_enable_split_vertically = 0
+endif
 if !exists('g:unite_substitute_patterns')
   let g:unite_substitute_patterns = {}
 endif
