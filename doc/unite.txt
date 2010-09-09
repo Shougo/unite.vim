@@ -129,6 +129,41 @@ Normal mode mappings.
 	autoload/unite/mappings.vim.
 
 ==============================================================================
+SOURCE						*unite-source*
+
+------------------------------------------------------------------------------
+SOURCE ATTRIBUTES				*unite-source-attributes*
+
+						*unite-source-attribute-name*
+name			string		(requried)
+			The name of a source. It must consist of the following
+			characters:
+			- a-z
+			- 0-9
+			- _
+
+			For example:
+			- "buffer" and "file_mru" are valid.
+			- "BadOne", "virw/git", "!@#$%^&*()_[]{}-|" and "" are
+			  not valid.
+
+						*unite-source-attribute-max_candidates*
+max_candidates		number		(optional)
+			The maximum number of candidates.
+
+			This attribute is optional; if it is not given, 0 is
+			used as the default value.  This means maximum number
+			is infinity.
+
+						*unite-source-attribute-required_pattern_length*
+required_pattern_length	number		(optional)
+			The required pattern length to collect candidates.
+
+			This attribute is optional; if it is not given, 0 is
+			used as the default value. This means that always
+			collect candidates.
+
+==============================================================================
 EXAMPLES					*unite-examples*
 >
 	
@@ -169,6 +204,7 @@ CHANGELOG					*unite-changelog*
 - Detect invalid source name.
 - Implemented maximum candidates attribute.
 - Added g:unite_split_rule and g:unite_enable_split_vertically options.
+- Implemented required_pattern_length attribute.
 
 2010-09-05
 - Fixed filtering bug.

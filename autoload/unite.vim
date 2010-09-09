@@ -305,8 +305,16 @@ function! s:gather_candidates(args, text)"{{{
   
   let l:candidates = []
   for l:source in s:unite.sources
-    let l:source_candidates = has_key(s:unite.cached_candidates, l:source.name) ?
-          \ s:unite.cached_candidates[l:source.name] : l:source.gather_candidates(a:args)
+    if !has_key(s:unite.cached_candidates, l:source.name)
+      " Check required pattern length.
+      let l:source_candidates = 
+            \ (has_key(l:source, 'required_pattern_length')
+            \   && len(l:args.cur_text) < l:source.required_pattern_length) ?
+            \ [] : l:source.gather_candidates(a:args)
+    else
+      let l:source_candidates = s:unite.cached_candidates[l:source.name]
+    endif
+    
     if has_key(l:source, 'max_candidates') && l:source.max_candidates != 0
       " Filtering too many candidates.
       let l:source_candidates = l:source_candidates[: l:source.max_candidates - 1]
