@@ -156,6 +156,7 @@ CHANGELOG					*unite-changelog*
 - Added g:unite_enable_start_insert option.
 - Improved file_mru.
 - Fixed filtering bug.
+- Detect invalid source name.
 
 2010-09-05
 - Fixed filtering bug.

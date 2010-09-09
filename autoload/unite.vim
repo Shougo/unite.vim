@@ -229,16 +229,27 @@ function! unite#start(sources, cur_text)"{{{
 endfunction"}}}
 
 function! s:initialize_sources(sources)"{{{
+  " Gathering all sources name.
+  let l:all_sources = {}
+  for l:source_name in split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n')
+    let l:all_sources[l:source_name] = 1
+  endfor
+  
   let s:unite.sources = []
   let s:unite.sources_dict = {}
+  let s:unite.candidates = []
   for l:source_name in a:sources
+    if !has_key(l:all_sources, l:source_name)
+      echoerr 'Invalid source name "' . l:source_name . '" is detected.'
+      return
+    endif
+      
     let l:source = call('unite#sources#' . l:source_name . '#define', [])
     if !has_key(s:unite.sources_dict, l:source_name)
       let s:unite.sources_dict[l:source_name] = l:source
       call add(s:unite.sources, l:source)
     endif
   endfor
-  let s:unite.candidates = []
 endfunction"}}}
 function! s:caching_candidates(args, text)"{{{
   " Save options.
