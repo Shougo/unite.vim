@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Sep 2010
+" Last Modified: 10 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,34 +39,6 @@ call unite#set_default('g:unite_source_file_mru_limit', 100)
 call unite#set_default('g:unite_source_file_mru_ignore_pattern', '')
 "}}}
 
-let s:source = {
-      \ 'name' : 'file_mru',
-      \ 'key_table': {
-      \      'default' : 'open',
-      \    },
-      \ 'action_table': {},
-      \ 'max_candidates': 30,
-      \}
-
-function! s:source.gather_candidates(args)"{{{
-  call s:load()
-  return sort(map(copy(s:mru_files), '{
-        \ "abbr" : strftime(g:unite_source_file_mru_time_format, v:val[1]) .
-        \          fnamemodify(v:val[0], ":~:."),
-        \ "word" : v:val[0],
-        \ "source" : "file_mru",
-        \ "unite_file_mru_time" : v:val[1],
-        \ "is_directory" : isdirectory(v:val[0]),
-        \   }'), 's:compare')
-endfunction"}}}
-
-function! s:source.action_table.open(candidate)"{{{
-  return s:open('', a:candidate)
-endfunction"}}}
-function! s:source.action_table.open_x(candidate)"{{{
-  return s:open('!', a:candidate)
-endfunction"}}}
-
 function! unite#sources#file_mru#define()"{{{
   return s:source
 endfunction"}}}
@@ -92,15 +64,24 @@ function! unite#sources#file_mru#_sweep()  "{{{
   call s:save()
 endfunction"}}}
 
-" Misc
-function! s:open(bang, candidate)"{{{
-  let v:errmsg = ''
+let s:source = {
+      \ 'name' : 'file_mru',
+      \ 'max_candidates': 30,
+      \}
 
-  call unite#leave_buffer()
-  edit `=a:candidate.word`
-
-  return v:errmsg == '' ? 0 : v:errmsg
+function! s:source.gather_candidates(args)"{{{
+  call s:load()
+  return sort(map(copy(s:mru_files), '{
+        \ "abbr" : strftime(g:unite_source_file_mru_time_format, v:val[1]) .
+        \          fnamemodify(v:val[0], ":~:."),
+        \ "word" : v:val[0],
+        \ "source" : "file_mru",
+        \ "unite_file_mru_time" : v:val[1],
+        \ "kind" : (isdirectory(v:val[0]) ? "directory" : "file"),
+        \   }'), 's:compare')
 endfunction"}}}
+
+" Misc
 function! s:compare(candidate_a, candidate_b)"{{{
   return a:candidate_b['unite_file_mru_time'] - a:candidate_a['unite_file_mru_time']
 endfunction"}}}

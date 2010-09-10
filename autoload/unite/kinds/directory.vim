@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: file.vim
+" FILE: directory.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 10 Sep 2010
 " License: MIT license  {{{
@@ -24,28 +24,47 @@
 " }}}
 "=============================================================================
 
-let s:source = {
-      \ 'name' : 'file',
-      \ 'is_volatile' : 1,
-      \}
-
-function! s:source.gather_candidates(args)"{{{
-  let l:cur_text = substitute(substitute(a:args.cur_text, '\*$\|\*\*', '', 'g'), '^\a\+:\zs\*/', '/', '')
-  let l:cur_text = substitute(l:cur_text, '\\ ', ' ', 'g')
-  let l:candidates = split(substitute(glob(l:cur_text . '*'), '\\', '/', 'g'), '\n')
-
-  call map(l:candidates, '{
-        \ "word" : v:val,
-        \ "abbr" : v:val . (isdirectory(v:val) ? "/" : ""),
-        \ "source" : "file",
-        \ "kind" : (isdirectory(v:val) ? "directory" : "file"),
-        \}')
-
-  return l:candidates
+function! unite#kinds#directory#define()"{{{
+  return s:kind
 endfunction"}}}
 
-function! unite#sources#file#define()"{{{
-  return s:source
+let s:kind = {
+      \ 'name' : 'directory',
+      \ 'default_action' : 'narrow',
+      \ 'action_table': {},
+      \}
+
+" Actions"{{{
+let s:kind.action_table.open = {
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:kind.action_table.open.func(candidate)"{{{
+  return s:open('', a:candidate)
+endfunction"}}}
+
+let s:kind.action_table.fopen = {
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:kind.action_table.fopen.func(candidate)"{{{
+  return s:open('!', a:candidate)
+endfunction"}}}
+
+let s:kind.action_table.narrow = {
+      \ 'is_quit' : 0,
+      \ }
+function! s:kind.action_table.narrow.func(candidate)"{{{
+  let l:word = a:candidate.word . (a:candidate.word =~ '[\\/]$' ? '' : '/')
+  call unite#mappings#narrowing(l:word)
+  return 0
+endfunction"}}}
+"}}}
+
+function! s:open(bang, candidate)"{{{
+  let v:errmsg = ''
+
+  edit `=a:candidate.word`
+
+  return v:errmsg == '' ? 0 : v:errmsg
 endfunction"}}}
 
 " vim: foldmethod=marker

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Sep 2010
+" Last Modified: 10 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -22,7 +22,7 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 0.1, for Vim 7.0
+" Version: 0.5, for Vim 7.0
 "=============================================================================
 
 function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
@@ -57,7 +57,6 @@ let s:unite_bufnr = s:INVALID_BUFNR
 let s:old_winnr = s:INVALID_BUFNR
 let s:update_time_save = &updatetime
 let s:unite = {}
-let s:is_invalidate = 0
 
 call unite#set_dictionary_helper(g:unite_substitute_patterns, '^\~', substitute($HOME, '\\', '/', 'g'))
 "}}}
@@ -67,10 +66,16 @@ function! unite#get_unite_candidates()"{{{
   return s:unite.candidates
 endfunction"}}}
 function! unite#available_sources_name()"{{{
-  return map(copy(s:unite.sources), 'v:val.name')
+  return map(unite#available_sources_list(), 'v:val.name')
+endfunction"}}}
+function! unite#available_sources_list()"{{{
+  return sort(values(s:unite.sources), 's:compare')
 endfunction"}}}
 function! unite#available_sources(...)"{{{
-  return a:0 == 0 ? s:unite.sources_dict : s:unite.sources_dict[a:1]
+  return a:0 == 0 ? s:unite.sources : s:unite.sources[a:1]
+endfunction"}}}
+function! unite#available_kinds(...)"{{{
+  return a:0 == 0 ? s:unite.kinds : s:unite.kinds[a:1]
 endfunction"}}}
 function! unite#escape_match(str)"{{{
   return escape(a:str, '~"\.$[]')
@@ -85,49 +90,13 @@ function! unite#set_default(var, val)  "{{{
   endif
 endfunction"}}}
 function! unite#invalidate_cache(source_name)  "{{{
-  let s:is_invalidate = 1
+  let s:unite.sources[a:source_name].unite__is_invalidate = 1
 endfunction"}}}
 function! unite#force_redraw() "{{{
-  if mode() !=# 'i'
-    setlocal modifiable
-  endif
-
-  let l:cur_text = getline(2)[1:]
-  for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
-    let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
-  endfor
-  let l:candidates = s:gather_candidates({}, l:cur_text)
-  let l:lines = s:convert_lines(l:candidates)
-  if len(l:lines) < len(s:unite.candidates)
-    let l:pos = getpos('.')
-    silent! 3,$delete _
-    call setpos('.', l:pos)
-  endif
-  call setline(3, l:lines)
-
-  let s:unite.candidates = l:candidates
-
-  let s:is_invalidate = 0
-
-  if mode() !=# 'i'
-    setlocal nomodifiable
-  endif
+  call s:redraw(1)
 endfunction"}}}
 function! unite#redraw() "{{{
-  if s:is_invalidate
-    call unite#force_redraw()
-  elseif &filetype ==# 'unite'
-    " Redraw marks.
-    if mode() !=# 'i'
-      setlocal modifiable
-    endif
-    
-    call setline(3, s:convert_lines(s:unite.candidates))
-
-    if mode() !=# 'i'
-      setlocal nomodifiable
-    endif
-  endif
+  call s:redraw(0)
 endfunction"}}}
 function! unite#redraw_current_line() "{{{
   if line('.') <= 2 || &filetype !=# 'unite'
@@ -143,7 +112,7 @@ function! unite#redraw_current_line() "{{{
   setlocal nomodifiable
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{
-  return filter(copy(s:unite.candidates), 'v:val.is_marked')
+  return filter(copy(s:unite.candidates), 'v:val.unite__is_marked')
 endfunction"}}}
 function! unite#keyword_filter(list, cur_text)"{{{
   for l:cur_keyword_str in split(a:cur_text, '\\\@<! ')
@@ -196,17 +165,18 @@ function! unite#start(sources, cur_text)"{{{
     let &redrawtime = 500
   endif
 
-  let s:is_invalidate = 0
-
   if !g:unite_enable_split_vertically
     20 wincmd _
   endif
   
   " Initialize sources.
   call s:initialize_sources(a:sources)
+  " Initialize kinds.
+  call s:initialize_kinds()
   
-  " Caching candidates.
-  let s:unite.cached_candidates = s:caching_candidates({}, '')
+  " User's initialization.
+  setlocal nomodifiable
+  setfiletype unite
 
   setlocal modifiable
 
@@ -214,9 +184,6 @@ function! unite#start(sources, cur_text)"{{{
   call setline(s:LNUM_STATUS, 'Sources: ' . join(a:sources, ', '))
   call setline(s:LNUM_PATTERN, '>' . a:cur_text)
   execute s:LNUM_PATTERN
-
-  " User's initialization.
-  setfiletype unite
 
   call unite#force_redraw()
 
@@ -235,15 +202,17 @@ endfunction"}}}
 
 function! s:initialize_sources(sources)"{{{
   " Gathering all sources name.
+  let s:unite.sources = {}
+  let s:unite.candidates = []
+  let s:unite.cached_candidates = {}
+  
   let l:all_sources = {}
   for l:source_name in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'),
         \ 'fnamemodify(v:val, ":t:r")')
     let l:all_sources[l:source_name] = 1
   endfor
   
-  let s:unite.sources = []
-  let s:unite.sources_dict = {}
-  let s:unite.candidates = []
+  let l:number = 0
   for l:source_name in a:sources
     if !has_key(l:all_sources, l:source_name)
       echoerr 'Invalid source name "' . l:source_name . '" is detected.'
@@ -251,45 +220,31 @@ function! s:initialize_sources(sources)"{{{
     endif
       
     let l:source = call('unite#sources#' . l:source_name . '#define', [])
-    if !has_key(s:unite.sources_dict, l:source_name)
-      let s:unite.sources_dict[l:source_name] = l:source
-      call add(s:unite.sources, l:source)
+    if !has_key(s:unite.sources, l:source_name)
+      if !has_key(l:source, 'is_volatile')
+        let l:source.is_volatile = 0
+      endif
+      let l:source.unite__is_invalidate = 1
+      
+      let l:source.unite__number = l:number
+      let l:number += 1
+      
+      let s:unite.sources[l:source_name] = l:source
     endif
   endfor
 endfunction"}}}
-function! s:caching_candidates(args, text)"{{{
-  " Save options.
-  let l:ignorecase_save = &ignorecase
-
-  if g:unite_enable_smart_case && a:text =~ '\u'
-    let &ignorecase = 0
-  else
-    let &ignorecase = g:unite_enable_ignore_case
-  endif
-  
-  let l:args = a:args
-  let l:args.cur_text = a:text
-  
-  let l:cached = {}
-  for l:source in filter(copy(s:unite.sources), '!has_key(v:val, "is_volatile") || !v:val.is_volatile')
-    let l:candidates = []
-    for l:candidate in l:source.gather_candidates(a:args)
-      let l:candidate.is_marked = 0
-      call add(l:candidates, l:candidate)
-    endfor
-
-    if a:text != ''
-      call unite#keyword_filter(l:candidates, a:text)
+function! s:initialize_kinds()"{{{
+  " Gathering all kinds name.
+  let s:unite.kinds = {}
+  for l:kind_name in map(split(globpath(&runtimepath, 'autoload/unite/kinds/*.vim'), '\n'),
+        \ 'fnamemodify(v:val, ":t:r")')
+    let l:kind = call('unite#kinds#' . l:kind_name . '#define', [])
+    if !has_key(s:unite.kinds, l:kind_name)
+      let s:unite.kinds[l:kind_name] = l:kind
     endif
-
-    let l:cached[l:source.name] = l:candidates
   endfor
-
-  let &ignorecase = l:ignorecase_save
-
-  return l:cached
 endfunction"}}}
-function! s:gather_candidates(args, text)"{{{
+function! s:gather_candidates(text, args)"{{{
   " Save options.
   let l:ignorecase_save = &ignorecase
 
@@ -304,13 +259,22 @@ function! s:gather_candidates(args, text)"{{{
   let l:args.cur_text = empty(l:cur_text_list) ? '' : l:cur_text_list[0]
   
   let l:candidates = []
-  for l:source in s:unite.sources
-    if !has_key(s:unite.cached_candidates, l:source.name)
+  for l:source in unite#available_sources_list()
+    if l:source.is_volatile
+          \ || has_key(s:unite.cached_candidates, l:source.name)
+          \ || (l:args.is_force && l:source.unite__is_invalidate)
       " Check required pattern length.
       let l:source_candidates = 
             \ (has_key(l:source, 'required_pattern_length')
             \   && len(l:args.cur_text) < l:source.required_pattern_length) ?
-            \ [] : l:source.gather_candidates(a:args)
+            \ [] : l:source.gather_candidates(l:args)
+
+      if l:args.cur_text != ''
+        call unite#keyword_filter(l:candidates, l:args.cur_text)
+      elseif !l:source.is_volatile
+        " Recaching.
+        let s:unite.cached_candidates[l:source.name] = l:source_candidates
+      endif
     else
       let l:source_candidates = s:unite.cached_candidates[l:source.name]
     endif
@@ -330,7 +294,7 @@ function! s:gather_candidates(args, text)"{{{
   let &ignorecase = l:ignorecase_save
   
   for l:candidate in l:candidates
-    let l:candidate.is_marked = 0
+    let l:candidate.unite__is_marked = 0
   endfor
 
   return l:candidates
@@ -338,11 +302,11 @@ endfunction"}}}
 function! s:convert_lines(candidates)"{{{
   let l:max_width = winwidth(0) - 20
   return map(copy(a:candidates),
-        \ '(v:val.is_marked ? "* " : "- ") . unite#util#truncate_smart(has_key(v:val, "abbr")? v:val.abbr : v:val.word, ' . l:max_width .  ', 25, "..") . " " . v:val.source')
+        \ '(v:val.unite__is_marked ? "* " : "- ") . unite#util#truncate_smart(has_key(v:val, "abbr")? v:val.abbr : v:val.word, ' . l:max_width .  ', 25, "..") . " " . v:val.source')
 endfunction"}}}
 function! s:convert_line(candidate)"{{{
   let l:max_width = winwidth(0) - 20
-  return (a:candidate.is_marked ? '* ' : '- ')
+  return (a:candidate.unite__is_marked ? '* ' : '- ')
         \ . unite#util#truncate_smart(has_key(a:candidate, 'abbr')? a:candidate.abbr : a:candidate.word, l:max_width, 25, '..')
         \ . " " . a:candidate.source
 endfunction"}}}
@@ -380,6 +344,44 @@ function! s:initialize_unite_buffer()"{{{
   endif
 
   return
+endfunction"}}}
+
+function! s:redraw(is_force) "{{{
+  if &filetype !=# 'unite'
+    return
+  endif
+  
+  if mode() !=# 'i'
+    setlocal modifiable
+  endif
+
+  let l:cur_text = getline(2)[1:]
+  for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
+    let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
+  endfor
+
+  let l:candidates = s:gather_candidates(l:cur_text, { 'is_force' : a:is_force })
+  let l:lines = s:convert_lines(l:candidates)
+  if len(l:lines) < len(s:unite.candidates)
+    if mode() !=# 'i' && line('.') == 2
+      silent! 3,$delete _
+      startinsert!
+    else
+      let l:pos = getpos('.')
+      silent! 3,$delete _
+      call setpos('.', l:pos)
+    endif
+  endif
+  call setline(3, l:lines)
+
+  let s:unite.candidates = l:candidates
+
+  if mode() !=# 'i'
+    setlocal nomodifiable
+  endif
+endfunction"}}}
+function! s:compare(source_a, source_b) "{{{
+  return a:source_a.unite__number - a:source_b.unite__number
 endfunction"}}}
 
 function! unite#quit_session()  "{{{
