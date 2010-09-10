@@ -195,6 +195,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-10
+- Improved UniteWithBufferDir and UniteWithCurrentDir.
+
 2010-09-09
 - Check redrawtime.
 - Implemented ! exclude pattern.
