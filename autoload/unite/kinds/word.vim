@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: file.vim
+" FILE: word.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Sep 2010
+" Last Modified: 12 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,28 +24,41 @@
 " }}}
 "=============================================================================
 
-function! unite#sources#file#define()"{{{
-  return s:source
+function! unite#kinds#word#define()"{{{
+  return s:kind
 endfunction"}}}
 
-let s:source = {
-      \ 'name' : 'file',
-      \ 'is_volatile' : 1,
+let s:kind = {
+      \ 'name' : 'word',
+      \ 'default_action' : 'insert',
+      \ 'action_table': {},
       \}
 
-function! s:source.gather_candidates(args)"{{{
-  let l:cur_text = substitute(substitute(a:args.cur_text, '\*$\|\*\*', '', 'g'), '^\a\+:\zs\*/', '/', '')
-  let l:cur_text = substitute(l:cur_text, '\\ ', ' ', 'g')
-  let l:candidates = split(substitute(glob(l:cur_text . '*'), '\\', '/', 'g'), '\n')
-
-  call map(l:candidates, '{
-        \ "word" : v:val,
-        \ "abbr" : v:val . (isdirectory(v:val) ? "/" : ""),
-        \ "source" : "file",
-        \ "kind" : (isdirectory(v:val) ? "directory" : "file"),
-        \}')
-
-  return l:candidates
+" Actions"{{{
+let s:kind.action_table.insert = {
+      \ }
+function! s:kind.action_table.insert.func(candidate)"{{{
+  let [l:old_col, l:old_max_col] = [col('.'), col('$')]
+  
+  " Paste.
+  let l:old_reg = @"
+  let @" = a:candidate.word
+  normal! ""p
+  let @" = l:old_reg
+  
+  if a:candidate.is_insert
+    PP! [l:old_col+len(a:candidate.word), l:old_max_col]
+    if l:old_col+1 >= l:old_max_col
+      startinsert!
+    else
+      let l:pos = getpos('.')
+      let l:pos[2] += len(a:candidate.word)
+      call setpos('.', l:pos)
+    endif
+  endif
+  
+  return 0
 endfunction"}}}
+"}}}
 
 " vim: foldmethod=marker

@@ -57,6 +57,7 @@ let s:unite_bufnr = s:INVALID_BUFNR
 let s:old_winnr = s:INVALID_BUFNR
 let s:update_time_save = &updatetime
 let s:unite = {}
+let s:args = {}
 
 call unite#set_dictionary_helper(g:unite_substitute_patterns, '^\~', substitute($HOME, '\\', '/', 'g'))
 "}}}
@@ -140,8 +141,14 @@ function! unite#keyword_filter(list, cur_text)"{{{
 endfunction"}}}
 "}}}
 
-function! unite#start(sources, cur_text)"{{{
+function! unite#start(sources, cur_text, args)"{{{
   let s:old_winnr = winnr()
+  
+  " Save args.
+  let s:args = a:args
+  if !has_key(s:args, 'is_insert')
+    let s:args.is_insert = 0
+  endif
   
   " Open or create the unite buffer.
   let v:errmsg = ''
@@ -360,7 +367,9 @@ function! s:redraw(is_force) "{{{
     let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
   endfor
 
-  let l:candidates = s:gather_candidates(l:cur_text, { 'is_force' : a:is_force })
+  let l:args = s:args
+  let l:args.is_force = a:is_force
+  let l:candidates = s:gather_candidates(l:cur_text, l:args)
   let l:lines = s:convert_lines(l:candidates)
   if len(l:lines) < len(s:unite.candidates)
     if mode() !=# 'i' && line('.') == 2
@@ -401,7 +410,10 @@ function! unite#leave_buffer()  "{{{
     
     " Restore current directory.
     lcd `=l:cwd`
-    stopinsert
+    
+    if !s:args.is_insert
+      stopinsert
+    endif
   endif
 endfunction"}}}
 

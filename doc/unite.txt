@@ -197,6 +197,8 @@ CHANGELOG					*unite-changelog*
 
 2010-09-12
 - Fixed filtering.
+- Added source register.
+- Added kind word.
 
 2010-09-10
 - Ver.0.5 development is started.
