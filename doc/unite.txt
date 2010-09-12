@@ -195,6 +195,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-12
+- Fixed filtering.
+
 2010-09-10
 - Ver.0.5 development is started.
 - Implemented kind.

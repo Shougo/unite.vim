@@ -279,6 +279,10 @@ function! s:gather_candidates(text, args)"{{{
       let l:source_candidates = s:unite.cached_candidates[l:source.name]
     endif
     
+    if a:text != ''
+      call unite#keyword_filter(l:source_candidates, a:text)
+    endif
+    
     if has_key(l:source, 'max_candidates') && l:source.max_candidates != 0
       " Filtering too many candidates.
       let l:source_candidates = l:source_candidates[: l:source.max_candidates - 1]
@@ -286,10 +290,6 @@ function! s:gather_candidates(text, args)"{{{
     
     let l:candidates += l:source_candidates
   endfor
-
-  if a:text != ''
-    call unite#keyword_filter(l:candidates, a:text)
-  endif
 
   let &ignorecase = l:ignorecase_save
   
