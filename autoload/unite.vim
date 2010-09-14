@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Sep 2010
+" Last Modified: 14 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -115,8 +115,8 @@ endfunction"}}}
 function! unite#get_marked_candidates() "{{{
   return filter(copy(s:unite.candidates), 'v:val.unite__is_marked')
 endfunction"}}}
-function! unite#keyword_filter(list, cur_text)"{{{
-  for l:cur_keyword_str in split(a:cur_text, '\\\@<! ')
+function! unite#keyword_filter(list, input)"{{{
+  for l:cur_keyword_str in split(a:input, '\\\@<! ')
     if l:cur_keyword_str =~ '^!'
       " Exclusion.
       let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '[^/]*', 'g')
@@ -141,11 +141,14 @@ function! unite#keyword_filter(list, cur_text)"{{{
 endfunction"}}}
 "}}}
 
-function! unite#start(sources, cur_text, args)"{{{
+function! unite#start(sources, ...)"{{{
   let s:old_winnr = winnr()
   
   " Save args.
-  let s:args = a:args
+  let s:args = a:0 > 1 ? a:1 : {}
+  if !has_key(s:args, 'input')
+    let s:args.input = ''
+  endif
   if !has_key(s:args, 'is_insert')
     let s:args.is_insert = 0
   endif
@@ -189,7 +192,7 @@ function! unite#start(sources, cur_text, args)"{{{
 
   silent % delete _
   call setline(s:LNUM_STATUS, 'Sources: ' . join(a:sources, ', '))
-  call setline(s:LNUM_PATTERN, '>' . a:cur_text)
+  call setline(s:LNUM_PATTERN, '>' . s:args.input)
   execute s:LNUM_PATTERN
 
   call unite#force_redraw()
@@ -262,8 +265,8 @@ function! s:gather_candidates(text, args)"{{{
   endif
   
   let l:args = a:args
-  let l:cur_text_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "!"')
-  let l:args.cur_text = empty(l:cur_text_list) ? '' : l:cur_text_list[0]
+  let l:input_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "!"')
+  let l:args.input = empty(l:input_list) ? '' : l:input_list[0]
   
   let l:candidates = []
   for l:source in unite#available_sources_list()
@@ -273,11 +276,11 @@ function! s:gather_candidates(text, args)"{{{
       " Check required pattern length.
       let l:source_candidates = 
             \ (has_key(l:source, 'required_pattern_length')
-            \   && len(l:args.cur_text) < l:source.required_pattern_length) ?
+            \   && len(l:args.input) < l:source.required_pattern_length) ?
             \ [] : l:source.gather_candidates(l:args)
 
-      if l:args.cur_text != ''
-        call unite#keyword_filter(l:candidates, l:args.cur_text)
+      if l:args.input != ''
+        call unite#keyword_filter(l:candidates, l:args.input)
       elseif !l:source.is_volatile
         " Recaching.
         let s:unite.cached_candidates[l:source.name] = l:source_candidates
@@ -362,14 +365,14 @@ function! s:redraw(is_force) "{{{
     setlocal modifiable
   endif
 
-  let l:cur_text = getline(2)[1:]
+  let l:input = getline(2)[1:]
   for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
-    let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
+    let l:input = substitute(l:input, l:pattern, l:subst, 'g')
   endfor
 
   let l:args = s:args
   let l:args.is_force = a:is_force
-  let l:candidates = s:gather_candidates(l:cur_text, l:args)
+  let l:candidates = s:gather_candidates(l:input, l:args)
   let l:lines = s:convert_lines(l:candidates)
   if len(l:lines) < len(s:unite.candidates)
     if mode() !=# 'i' && line('.') == 2
@@ -444,13 +447,13 @@ function! s:on_insert_leave()  "{{{
   setlocal nocursorline
   setlocal nomodifiable
 
-  let l:cur_text = getline(2)[1:]
+  let l:input = getline(2)[1:]
   for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
-    let l:cur_text = substitute(l:cur_text, l:pattern, l:subst, 'g')
+    let l:input = substitute(l:input, l:pattern, l:subst, 'g')
   endfor
-  let l:cur_text_list = split(substitute(unite#escape_match(l:cur_text), '\*', '[^/]*', 'g'), '\\\@<! ')
-  call filter(l:cur_text_list, 'v:val !~ "^!"')
-  execute 'match IncSearch' string(join(l:cur_text_list, '\|'))
+  let l:input_list = split(substitute(unite#escape_match(l:input), '\*', '[^/]*', 'g'), '\\\@<! ')
+  call filter(l:input_list, 'v:val !~ "^!"')
+  execute 'match IncSearch' string(join(l:input_list, '\|'))
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   " Force redraw.

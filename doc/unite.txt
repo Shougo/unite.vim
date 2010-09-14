@@ -197,6 +197,8 @@ CHANGELOG					*unite-changelog*
 
 2010-09-14
 - Added dummy candidate in file source.
+- Changed cur_text as input.
+- Changed unite#start() arguments.
 
 2010-09-12
 - Fixed filtering.

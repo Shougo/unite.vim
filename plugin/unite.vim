@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Sep 2010
+" Last Modified: 14 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,19 +62,19 @@ endif
 " Wrapper command.
 command! -nargs=+ -complete=customlist,unite#complete_source Unite call s:call_unite_empty(<q-args>)
 function! s:call_unite_empty(args)
-  call unite#start(split(a:args), '', {})
+  call unite#start(split(a:args))
 endfunction
 
 command! -nargs=+ -complete=customlist,unite#complete_source UniteWithCurrentDir call s:call_unite_current_dir(<q-args>)
 function! s:call_unite_current_dir(args)
   let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(getcwd(), ':p'), '\\', '/', 'g')
-  call unite#start(split(a:args), l:path . (l:path =~ '[\\/]$' ? '' : '/'), {})
+  call unite#start(split(a:args), { 'input' : l:path.(l:path =~ '[\\/]$' ? '' : '/') })
 endfunction
 
 command! -nargs=+ -complete=customlist,unite#complete_source UniteWithBufferDir call s:call_unite_buffer_dir(<q-args>)
 function! s:call_unite_buffer_dir(args)
   let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(bufname('%'), ':p:h'), '\\', '/', 'g')
-  call unite#start(split(a:args), l:path . (l:path =~ '[\\/]$' ? '' : '/'), {})
+  call unite#start(split(a:args), { 'input' : l:path.(l:path =~ '[\\/]$' ? '' : '/') })
 endfunction
 
 let g:loaded_unite = 1

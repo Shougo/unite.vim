@@ -34,13 +34,13 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args)"{{{
-  let l:cur_text = substitute(substitute(a:args.cur_text, '\*$\|\*\*', '', 'g'), '^\a\+:\zs\*/', '/', '')
-  let l:cur_text = substitute(l:cur_text, '\\ ', ' ', 'g')
-  let l:candidates = split(substitute(glob(l:cur_text . '*'), '\\', '/', 'g'), '\n')
+  let l:input = substitute(substitute(a:args.input, '\*$\|\*\*', '', 'g'), '^\a\+:\zs\*/', '/', '')
+  let l:input = substitute(l:input, '\\ ', ' ', 'g')
+  let l:candidates = split(substitute(glob(l:input . '*'), '\\', '/', 'g'), '\n')
 
-  if empty(l:candidates) && a:args.cur_text !~ '\*'
+  if empty(l:candidates) && a:args.input !~ '\*'
     " Add dummy candidate.
-    let l:candidates = [ a:args.cur_text ]
+    let l:candidates = [ a:args.input ]
   endif
   
   call map(l:candidates, '{
