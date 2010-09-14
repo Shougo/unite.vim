@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Sep 2010
+" Last Modified: 14 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,6 +38,11 @@ function! s:source.gather_candidates(args)"{{{
   let l:cur_text = substitute(l:cur_text, '\\ ', ' ', 'g')
   let l:candidates = split(substitute(glob(l:cur_text . '*'), '\\', '/', 'g'), '\n')
 
+  if empty(l:candidates) && a:args.cur_text !~ '\*'
+    " Add dummy candidate.
+    let l:candidates = [ a:args.cur_text ]
+  endif
+  
   call map(l:candidates, '{
         \ "word" : v:val,
         \ "abbr" : v:val . (isdirectory(v:val) ? "/" : ""),
