@@ -198,6 +198,7 @@ CHANGELOG					*unite-changelog*
 2010-09-15
 - Improved complete sources.
 - Implemented choose action.
+- Resolve link file.
 
 2010-09-14
 - Added dummy candidate in file source.
