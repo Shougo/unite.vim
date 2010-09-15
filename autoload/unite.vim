@@ -58,6 +58,7 @@ let s:old_winnr = s:INVALID_BUFNR
 let s:update_time_save = &updatetime
 let s:unite = {}
 let s:args = {}
+let s:win_rest_cmd = ''
 
 call unite#set_dictionary_helper(g:unite_substitute_patterns, '^\~', substitute($HOME, '\\', '/', 'g'))
 "}}}
@@ -150,6 +151,7 @@ endfunction"}}}
 
 function! unite#start(sources, ...)"{{{
   let s:old_winnr = winnr()
+  let s:win_rest_cmd = winrestcmd()
   
   " Save args.
   let s:args = a:0 > 1 ? a:1 : {}
@@ -416,6 +418,7 @@ function! unite#leave_buffer()  "{{{
     if winnr('$') != 1
       close
       execute s:old_winnr . 'wincmd w'
+      execute s:win_rest_cmd
     endif
     
     " Restore current directory.

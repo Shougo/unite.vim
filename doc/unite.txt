@@ -199,6 +199,7 @@ CHANGELOG					*unite-changelog*
 - Improved complete sources.
 - Implemented choose action.
 - Resolve link file.
+- Improved restore window.
 
 2010-09-14
 - Added dummy candidate in file source.
