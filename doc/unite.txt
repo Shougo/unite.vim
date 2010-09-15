@@ -195,6 +195,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-15
+- Improved complete sources.
+
 2010-09-14
 - Added dummy candidate in file source.
 - Changed cur_text as input.

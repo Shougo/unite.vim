@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Sep 2010
+" Last Modified: 15 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -124,6 +124,7 @@ function! s:do_action(action_name)"{{{
 
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
+  
   for l:candidate in l:candidates
     let l:kind = unite#available_kinds(l:candidate.kind)
     let l:action_name = (a:action_name ==# 'default' ?
@@ -167,6 +168,43 @@ function! s:toggle_mark()"{{{
   normal! j
 endfunction"}}}
 function! s:choose_action()"{{{
+  let l:candidates = unite#get_marked_candidates()
+  if empty(l:candidates)
+    if line('.') <= 2
+      if line('$') < 3
+        " Ignore.
+        return
+      endif
+
+      let l:num = 0
+    else
+      let l:num = line('.') - 3
+    endif
+
+    let l:candidates = [ unite#get_unite_candidates()[l:num] ]
+  endif
+  
+  let s:actions = {}
+  for l:candidate in l:candidates
+    let l:kind = unite#available_kinds(l:candidate.kind)
+    for [l:action_name, l:action] in items(l:kind.action_table)
+      " Check selectable flag.
+      if has_key(l:action, 'is_selectable') && !l:action.is_selectable
+            \ && len(l:candidates) > 1
+        " Ignore.
+      else
+        let s:actions[l:action_name] = l:action
+      endif
+    endfor
+  endfor
+  
+  " Print action names.
+  for l:action_name in keys(s:actions)
+    echo l:action_name
+  endfor
+  
+  " Choose action.
+  let l:input = input('What action? ', '', 'customlist,unite#mappings#complete_actions')
 endfunction"}}}
 function! s:insert_enter()"{{{
   if line('.') != 2 || col('.') == 1
@@ -246,6 +284,10 @@ function! s:insert_selected_candidate()"{{{
 
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
   call unite#mappings#narrowing(l:candidate.word)
+endfunction"}}}
+
+function! unite#mappings#complete_actions(arglead, cmdline, cursorpos)"{{{
+  return filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 
 " vim: foldmethod=marker

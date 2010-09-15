@@ -82,8 +82,15 @@ function! unite#escape_match(str)"{{{
   return escape(a:str, '~"\.$[]')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
-  return filter(map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'), 'fnamemodify(v:val, ":t:r")')
-        \ , printf('v:val =~ "^%s"', a:arglead))
+  " Unique.
+  let l:dict = {}
+  for l:source in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'), 'fnamemodify(v:val, ":t:r")')
+    if !has_key(l:dict, l:source)
+      let l:dict[l:source] = 1
+    endif
+  endfor
+  
+  return filter(keys(l:dict), printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 function! unite#set_default(var, val)  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
