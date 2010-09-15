@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Sep 2010
+" Last Modified: 15 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -444,8 +444,10 @@ function! s:on_insert_enter()  "{{{
   match
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
-  " Force redraw.
-  call unite#force_redraw()
+  if line('.') == 2
+    " Force redraw.
+    call unite#force_redraw()
+  endif
   
   if &updatetime < s:update_time_save
     let &updatetime = s:update_time_save
@@ -463,8 +465,10 @@ function! s:on_insert_leave()  "{{{
   execute 'match IncSearch' string(join(l:input_list, '\|'))
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
-  " Force redraw.
-  call unite#force_redraw()
+  if line('.') == 2
+    " Force redraw.
+    call unite#force_redraw()
+  endif
 endfunction"}}}
 
 " vim: foldmethod=marker

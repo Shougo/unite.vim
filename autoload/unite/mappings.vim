@@ -84,7 +84,7 @@ function! unite#mappings#define_default_mappings()"{{{
   " Insert mode key-mappings.
   inoremap <buffer><expr> /    getline(2) == '>' ? '/' : '*/'
   imap <buffer> <ESC>     <Plug>(unite_insert_leave)
-  imap <buffer> <TAB>     <Plug>(unite_select_next_line)
+  imap <buffer> <TAB>     <Plug>(unite_choose_action)
   imap <buffer> <S-TAB>   <Plug>(unite_select_previous_line)
   imap <buffer> <C-n>     <Plug>(unite_select_next_line)
   imap <buffer> <C-p>   <Plug>(unite_select_previous_line)
@@ -199,12 +199,47 @@ function! s:choose_action()"{{{
   endfor
   
   " Print action names.
-  for l:action_name in keys(s:actions)
-    echo l:action_name
-  endfor
+  let l:width = winwidth(0)
+  let l:max = l:width > 90 ? 6 : l:width > 75 ? 5 : l:width > 50 ? 4 : 3
+  let l:cnt = 0
   
-  " Choose action.
-  let l:input = input('What action? ', '', 'customlist,unite#mappings#complete_actions')
+  echohl Statement
+  for l:action_name in keys(s:actions)
+    echon unite#util#truncate(l:action_name, 14) . ' '
+    let l:cnt += 1
+    
+    if l:cnt >= l:max
+      echo ''
+      let l:cnt = 0
+    endif
+  endfor
+  echohl None
+  
+  let l:input = ''
+  while 1
+    " Choose action.
+    let l:input = input('What action? ', l:input, 'customlist,unite#mappings#complete_actions')
+
+    if l:input == ''
+      " Cancel.
+      return
+    endif
+
+    " Check action candidates.
+    let l:actions = filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(l:input)))
+    if empty(l:actions)
+      echohl Error | echo 'Invalid action.' | echohl None
+    elseif len(l:actions) > 2
+      echohl Error | echo 'Too match action.' | echohl None
+    else
+      break
+    endif
+    
+    echo ''
+  endwhile
+  
+  " Execute action.
+  call s:do_action(l:actions[0])
 endfunction"}}}
 function! s:insert_enter()"{{{
   if line('.') != 2 || col('.') == 1
