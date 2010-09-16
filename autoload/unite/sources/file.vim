@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Sep 2010
+" Last Modified: 16 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,6 +24,11 @@
 " }}}
 "=============================================================================
 
+" Variables  "{{{
+call unite#set_default('g:unite_source_file_ignore_pattern', 
+      \'\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|[/\\]\)\.\%(hg\|git\|bzr\|svn\)\%($\|[/\\]\)')
+"}}}
+
 function! unite#sources#file#define()"{{{
   return s:source
 endfunction"}}}
@@ -34,15 +39,13 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args)"{{{
-  let l:input = a:args.input
-  let l:input = substitute(substitute(l:input, '\*$\|\*\*', '', 'g'), '^\a\+:\zs\*/', '/', '')
-  let l:input = substitute(l:input, '\\ ', ' ', 'g')
+  let l:input = substitute(substitute(a:args.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
   
   if l:input !~ '\*'
     " Resolve link.
     let l:input = resolve(l:input)
   endif
-  let l:candidates = split(substitute(glob(l:input . '*'), '\\', '/', 'g'), '\n')
+  let l:candidates = split(substitute(glob(l:input . (l:input =~ '\*$' ? '' : '*')), '\\', '/', 'g'), '\n')
 
   if empty(l:candidates) && a:args.input !~ '\*'
     " Add dummy candidate.
@@ -55,6 +58,10 @@ function! s:source.gather_candidates(args)"{{{
         \ "source" : "file",
         \ "kind" : (isdirectory(v:val) ? "directory" : "file"),
         \}')
+  
+  if g:unite_source_file_ignore_pattern != ''
+    call filter(l:candidates, 'v:val.word !~ ' . string(g:unite_source_file_ignore_pattern))
+  endif
 
   return l:candidates
 endfunction"}}}

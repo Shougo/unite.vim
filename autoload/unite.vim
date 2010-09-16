@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Sep 2010
+" Last Modified: 16 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -80,7 +80,7 @@ function! unite#available_kinds(...)"{{{
   return a:0 == 0 ? s:unite.kinds : s:unite.kinds[a:1]
 endfunction"}}}
 function! unite#escape_match(str)"{{{
-  return escape(a:str, '~"\.$[]')
+  return substitute(substitute(escape(a:str, '~"\.$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*', '.*', 'g')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   " Unique.
@@ -124,21 +124,21 @@ function! unite#get_marked_candidates() "{{{
   return filter(copy(s:unite.candidates), 'v:val.unite__is_marked')
 endfunction"}}}
 function! unite#keyword_filter(list, input)"{{{
-  for l:cur_keyword_str in split(a:input, '\\\@<! ')
-    if l:cur_keyword_str =~ '^!'
+  for l:input in split(a:input, '\\\@<! ')
+    if l:input =~ '^!'
       " Exclusion.
-      let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '[^/]*', 'g')
-      call filter(a:list, 'v:val.word !~ ' . string(l:cur_keyword_str[1:]))
-    elseif l:cur_keyword_str =~ '[*]'
+      let l:input = unite#escape_match(l:input)
+      call filter(a:list, 'v:val.word !~ ' . string(l:input[1:]))
+    elseif l:input =~ '[*]'
       " Wildcard.
-      let l:cur_keyword_str = substitute(unite#escape_match(l:cur_keyword_str), '\*', '[^/]*', 'g')
-      call filter(a:list, 'v:val.word =~ ' . string(l:cur_keyword_str))
+      let l:input = unite#escape_match(l:input)
+      call filter(a:list, 'v:val.word =~ ' . string(l:input))
     else
-      let l:cur_keyword_str = substitute(l:cur_keyword_str, '\\ ', ' ', 'g')
+      let l:input = substitute(l:input, '\\ ', ' ', 'g')
       if &ignorecase
-        let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:cur_keyword_str)))
+        let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:input)))
       else
-        let l:expr = printf('stridx(v:val.word, %s) != -1', string(l:cur_keyword_str))
+        let l:expr = printf('stridx(v:val.word, %s) != -1', string(l:input))
       endif
 
       call filter(a:list, l:expr)
@@ -463,7 +463,8 @@ function! s:on_insert_leave()  "{{{
   for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
     let l:input = substitute(l:input, l:pattern, l:subst, 'g')
   endfor
-  let l:input_list = split(substitute(unite#escape_match(l:input), '\*', '[^/]*', 'g'), '\\\@<! ')
+  let l:input = unite#escape_match(l:input)
+  let l:input_list = split(l:input, '\\\@<! ')
   call filter(l:input_list, 'v:val !~ "^!"')
   execute 'match IncSearch' string(join(l:input_list, '\|'))
 endfunction"}}}

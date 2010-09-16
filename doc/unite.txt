@@ -108,6 +108,11 @@ g:unite_temporary_directory			*g:unite_temporary_directory*
 
 SOURCES VARIABLES 					*unite-sources-variables*
 
+g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
+		
+		
+		Default value is refer to autoload/unite/sources/file.vim.
+
 g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 		
 		
@@ -126,7 +131,7 @@ g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
 g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 		
 		
-		Default value is "".
+		Default value is refer to autoload/unite/sources/file_mru.vim.
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*unite-key-mappings*
@@ -222,6 +227,9 @@ CHANGELOG					*unite-changelog*
 - Added <Plug>(unite_move_head) keymapping.
 - Deleted h keymappings.
 - Added sources variables description.
+- Supported ** pattern.
+- Added g:unite_source_file_ignore_pattern option.
+- Improved g:unite_source_file_mru_ignore_pattern option.
 
 2010-09-15
 - Improved complete sources.
