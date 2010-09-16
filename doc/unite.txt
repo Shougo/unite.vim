@@ -195,6 +195,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-16
+- Added <Plug>(unite_move_head) keymapping.
+- Deleted h keymappings.
+
 2010-09-15
 - Improved complete sources.
 - Implemented choose action.
