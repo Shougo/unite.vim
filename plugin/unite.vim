@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Sep 2010
+" Last Modified: 16 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,19 +62,46 @@ endif
 " Wrapper command.
 command! -nargs=+ -complete=customlist,unite#complete_source Unite call s:call_unite_empty(<q-args>)
 function! s:call_unite_empty(args)
-  call unite#start(split(a:args))
+  let [l:args, l:options] = s:parse_options(split(a:args))
+  call unite#start(l:args, l:options)
 endfunction
 
 command! -nargs=+ -complete=customlist,unite#complete_source UniteWithCurrentDir call s:call_unite_current_dir(<q-args>)
 function! s:call_unite_current_dir(args)
-  let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(getcwd(), ':p'), '\\', '/', 'g')
-  call unite#start(split(a:args), { 'input' : l:path.(l:path =~ '[\\/]$' ? '' : '/') })
+  let [l:args, l:options] = s:parse_options(split(a:args))
+  if !has_key(l:options, 'input')
+    let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(getcwd(), ':p'), '\\', '/', 'g')
+    let l:options.input = l:path.(l:path =~ '[\\/]$' ? '' : '/')
+  endif
+  
+  call unite#start(split(a:args), l:options)
 endfunction
 
 command! -nargs=+ -complete=customlist,unite#complete_source UniteWithBufferDir call s:call_unite_buffer_dir(<q-args>)
 function! s:call_unite_buffer_dir(args)
-  let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(bufname('%'), ':p:h'), '\\', '/', 'g')
-  call unite#start(split(a:args), { 'input' : l:path.(l:path =~ '[\\/]$' ? '' : '/') })
+  let [l:args, l:options] = s:parse_options(split(a:args))
+  if !has_key(l:options, 'input')
+    let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(bufname('%'), ':p:h'), '\\', '/', 'g')
+    let l:options.input = l:path.(l:path =~ '[\\/]$' ? '' : '/')
+  endif
+  
+  call unite#start(split(a:args), l:options)
+endfunction
+
+function! s:parse_options(args)
+  let l:args = []
+  let l:options = {}
+  for l:arg in a:args
+    if l:arg =~# '^-buffer-name='
+      let l:options['buffer_name'] = matchstr(l:arg, '^-buffer-name=\zs.*')
+    elseif l:arg =~# '^-input='
+      let l:options['input'] = matchstr(l:arg, '^-input=\zs.*')
+    else
+      call add(l:args, l:arg)
+    endif
+  endfor
+  
+  return [l:args, l:options]
 endfunction
 
 let g:loaded_unite = 1

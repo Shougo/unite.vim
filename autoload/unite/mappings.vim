@@ -36,14 +36,15 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : "\<Up>"
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
-  inoremap <silent><buffer> <Plug>(unite_do_default_action) <C-o>:call <SID>do_action('default')<CR>
+  inoremap <silent><buffer> <Plug>(unite_do_default_action) <C-o>:call unite#mappings#do_action('default')<CR>
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_file)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <silent><buffer> <Plug>(unite_move_head)  <C-o>:<C-u>call <SID>insert_head()<CR>
   
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call <SID>do_action('default')<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call <SID>do_action('delete')<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call unite#mappings#do_action('default')<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call unite#mappings#do_action('delete')<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_preview_action)  :<C-u>call unite#mappings#do_action('preview')<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
@@ -79,6 +80,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <silent> ~ i<Plug>(unite_delete_backward_line)~/<ESC>
   nmap <buffer> <C-g> <Plug>(unite_print_candidate)
   nmap <buffer> e <Plug>(unite_edit_candidate)
+  nmap <buffer> p <Plug>(unite_do_preview_action)
   nmap <buffer> <C-l> <Plug>(unite_redraw)
 
   " Insert mode key-mappings.
@@ -107,10 +109,7 @@ function! unite#mappings#narrowing(word)"{{{
   2
   startinsert!
 endfunction"}}}
-function! s:exit()"{{{
-  call unite#quit_session()
-endfunction"}}}
-function! s:do_action(action_name)"{{{
+function! unite#mappings#do_action(action_name)"{{{
   let l:candidates = unite#get_marked_candidates()
   if empty(l:candidates)
     if line('.') <= 2
@@ -143,7 +142,7 @@ function! s:do_action(action_name)"{{{
       
       " Check quit flag.
       if !has_key(l:action, 'is_quit') || l:action.is_quit
-        call unite#leave_buffer()
+        call unite#quit_session()
       endif
       
       call l:action.func(l:candidate)
@@ -156,6 +155,9 @@ function! s:do_action(action_name)"{{{
   endfor
 
   call unite#redraw()
+endfunction"}}}
+function! s:exit()"{{{
+  call unite#quit_session()
 endfunction"}}}
 function! s:toggle_mark()"{{{
   if line('.') <= 2
@@ -241,7 +243,7 @@ function! s:choose_action()"{{{
   endwhile
   
   " Execute action.
-  call s:do_action(l:actions[0])
+  call unite#mappings#do_action(l:actions[0])
 endfunction"}}}
 function! s:insert_enter()"{{{
   if line('.') != 2 || col('.') == 1

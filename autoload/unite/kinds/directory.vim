@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Sep 2010
+" Last Modified: 16 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,19 +35,7 @@ let s:kind = {
       \}
 
 " Actions"{{{
-let s:kind.action_table.open = {
-      \ 'is_selectable' : 1, 
-      \ }
-function! s:kind.action_table.open.func(candidate)"{{{
-  return s:open('', a:candidate)
-endfunction"}}}
-
-let s:kind.action_table.fopen = {
-      \ 'is_selectable' : 1, 
-      \ }
-function! s:kind.action_table.fopen.func(candidate)"{{{
-  return s:open('!', a:candidate)
-endfunction"}}}
+let s:kind.action_table = unite#kinds#file#define().action_table
 
 let s:kind.action_table.narrow = {
       \ 'is_quit' : 0,

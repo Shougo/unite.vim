@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Sep 2010
+" Last Modified: 16 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,28 +84,20 @@ function! s:bufnr_from_candidate(candidate)"{{{
   endif
 endfunction"}}}
 function! s:delete(delete_command, candidate)"{{{
-  let v:errmsg = ''
-
   let _ = s:bufnr_from_candidate(a:candidate)
   if type(_) == type(0)
     execute s:bufnr_from_candidate(a:candidate) a:delete_command
   else
     let v:errmsg = _
   endif
-
-  return v:errmsg == '' ? 0 : v:errmsg
 endfunction"}}}
 function! s:open(bang, candidate)"{{{
-  let v:errmsg = ''
-
   let _ = s:bufnr_from_candidate(a:candidate)
   if type(_) == type(0)
     execute s:bufnr_from_candidate(a:candidate) 'buffer'.a:bang
   else
     let v:errmsg = _
   endif
-
-  return v:errmsg == '' ? 0 : v:errmsg
 endfunction"}}}
 
 " vim: foldmethod=marker

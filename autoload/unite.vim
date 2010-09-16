@@ -43,12 +43,6 @@ let s:LNUM_PATTERN = 2
 
 let s:INVALID_BUFNR = -2357
 let s:INVALID_COLUMN = -20091017
-
-if has('win16') || has('win32') || has('win64')  " on Microsoft Windows
-  let s:unite_BUFFER_NAME = '[unite]'
-else
-  let s:unite_BUFFER_NAME = '*unite*'
-endif
 "}}}
 
 " Variables  "{{{
@@ -64,6 +58,9 @@ call unite#set_dictionary_helper(g:unite_substitute_patterns, '^\~', substitute(
 "}}}
 
 " Helper functions."{{{
+function! unite#is_win()"{{{
+  return has('win16') || has('win32') || has('win64')
+endfunction"}}}
 function! unite#get_unite_candidates()"{{{
   return s:unite.candidates
 endfunction"}}}
@@ -154,12 +151,15 @@ function! unite#start(sources, ...)"{{{
   let s:win_rest_cmd = winrestcmd()
   
   " Save args.
-  let s:args = a:0 > 1 ? a:1 : {}
+  let s:args = a:0 >= 1 ? a:1 : {}
   if !has_key(s:args, 'input')
     let s:args.input = ''
   endif
   if !has_key(s:args, 'is_insert')
     let s:args.is_insert = 0
+  endif
+  if !has_key(s:args, 'buffer_name')
+    let s:args.buffer_name = ''
   endif
   
   " Open or create the unite buffer.
@@ -334,7 +334,16 @@ function! s:initialize_unite_buffer()"{{{
   " The current buffer is initialized.
   let s:unite = {}
 
-  silent! file `=s:unite_BUFFER_NAME`
+  if unite#is_win()
+    let l:buffer_name = '[unite]'
+  else
+    let l:buffer_name = '*unite*'
+  endif
+  if s:args.buffer_name != ''
+    let l:buffer_name .= ' - ' . s:args.buffer_name
+  endif
+  
+  silent! file `=l:buffer_name`
   
   " Basic settings.
   setlocal number
@@ -351,8 +360,6 @@ function! s:initialize_unite_buffer()"{{{
     autocmd InsertEnter <buffer>  call s:on_insert_enter()
     autocmd InsertLeave <buffer>  call s:on_insert_leave()
     autocmd CursorHoldI <buffer>  call s:on_cursor_hold()
-    autocmd WinLeave <buffer>  call unite#quit_session()
-    " autocmd TabLeave <buffer>  call unite#quit_session()  " not necessary
   augroup END
 
   call unite#mappings#define_default_mappings()
@@ -406,27 +413,29 @@ function! s:compare(source_a, source_b) "{{{
 endfunction"}}}
 
 function! unite#quit_session()  "{{{
-  call unite#leave_buffer()
-endfunction"}}}
-function! unite#leave_buffer()  "{{{
-  if &filetype ==# 'unite'
-    if exists('&redrawtime')
-      let &redrawtime = s:redrawtime_save
-    endif
-    
-    let l:cwd = getcwd()
-    if winnr('$') != 1
-      close
-      execute s:old_winnr . 'wincmd w'
-      execute s:win_rest_cmd
-    endif
-    
-    " Restore current directory.
-    lcd `=l:cwd`
-    
-    if !s:args.is_insert
-      stopinsert
-    endif
+  if &filetype !=# 'unite'
+    return
+  endif
+  
+  if exists('&redrawtime')
+    let &redrawtime = s:redrawtime_save
+  endif
+
+  " Close preview window.
+  pclose
+
+  let l:cwd = getcwd()
+  if winnr('$') != 1
+    close
+    execute s:old_winnr . 'wincmd w'
+    execute s:win_rest_cmd
+  endif
+
+  " Restore current directory.
+  lcd `=l:cwd`
+
+  if !s:args.is_insert
+    stopinsert
   endif
 endfunction"}}}
 

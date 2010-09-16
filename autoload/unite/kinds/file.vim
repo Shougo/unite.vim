@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Sep 2010
+" Last Modified: 16 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,23 +39,44 @@ let s:kind.action_table.open = {
       \ 'is_selectable' : 1, 
       \ }
 function! s:kind.action_table.open.func(candidate)"{{{
-  return s:open('', a:candidate)
+  edit `=a:candidate.word`
 endfunction"}}}
 
 let s:kind.action_table.fopen = {
       \ 'is_selectable' : 1, 
       \ }
 function! s:kind.action_table.fopen.func(candidate)"{{{
-  return s:open('!', a:candidate)
+  edit! `=a:candidate.word`
+endfunction"}}}
+
+let s:kind.action_table.preview = {
+      \ 'is_quit' : 0,
+      \ }
+function! s:kind.action_table.preview.func(candidate)"{{{
+  pedit `=a:candidate.word`
+endfunction"}}}
+
+let s:kind.action_table.tabopen = {
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:kind.action_table.tabopen.func(candidate)"{{{
+  tabedit `=a:candidate.word`
+endfunction"}}}
+
+let s:kind.action_table.split = {
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:kind.action_table.split.func(candidate)"{{{
+  split `=a:candidate.word`
+endfunction"}}}
+
+let s:kind.action_table.vsplit = {
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:kind.action_table.vsplit.func(candidate)"{{{
+  vsplit `=a:candidate.word`
 endfunction"}}}
 "}}}
 
-function! s:open(bang, candidate)"{{{
-  let v:errmsg = ''
-
-  edit `=a:candidate.word`
-
-  return v:errmsg == '' ? 0 : v:errmsg
-endfunction"}}}
 
 " vim: foldmethod=marker
