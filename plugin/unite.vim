@@ -71,7 +71,7 @@ function! s:call_unite_current_dir(args)
   let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
   if !has_key(l:options, 'input')
     let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(getcwd(), ':p'), '\\', '/', 'g')
-    let l:options.input = l:path.(l:path =~ '[\\/]$' ? '' : '/')
+    let l:options.input = escape(l:path.(l:path =~ '[\\/]$' ? '' : '/'), ' ')
   endif
   
   call unite#start(split(a:args), l:options)
@@ -82,7 +82,7 @@ function! s:call_unite_buffer_dir(args)
   let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
   if !has_key(l:options, 'input')
     let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(bufname('%'), ':p:h'), '\\', '/', 'g')
-    let l:options.input = l:path.(l:path =~ '[\\/]$' ? '' : '/')
+    let l:options.input = escape(l:path.(l:path =~ '[\\/]$' ? '' : '/'), ' ')
   endif
   
   call unite#start(split(a:args), l:options)

@@ -161,8 +161,6 @@ function! unite#start(sources, ...)"{{{
   if !has_key(s:args, 'buffer_name')
     let s:args.buffer_name = ''
   endif
-  " Escape input.
-  let s:args.input = escape(s:args.input, ' ')
   
   " Open or create the unite buffer.
   let v:errmsg = ''
