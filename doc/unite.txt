@@ -29,6 +29,7 @@ Install			|unite-install|
 Interface		|unite-interface|
   Commands		  |unite-commands|
   Variables		  |unite-variables|
+    Sources variables	    |unite-sources-variables|
   Key mappings		  |unite-key-mappings|
 Examples		|unite-examples|
 Create source		|unite-create-source|
@@ -104,6 +105,28 @@ g:unite_temporary_directory			*g:unite_temporary_directory*
 		
 		
 		Default value is expand('~/.unite').
+
+SOURCES VARIABLES 					*unite-sources-variables*
+
+g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
+		
+		
+		Default value is "(%x %H:%M:%S)".
+
+g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
+		
+		
+		Default value is |g:unite_temporary_directory| . '/.file_mru'.
+
+g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
+		
+		
+		Default value is 100.
+
+g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
+		
+		
+		Default value is "".
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*unite-key-mappings*
@@ -198,6 +221,7 @@ CHANGELOG					*unite-changelog*
 2010-09-16
 - Added <Plug>(unite_move_head) keymapping.
 - Deleted h keymappings.
+- Added sources variables description.
 
 2010-09-15
 - Improved complete sources.
