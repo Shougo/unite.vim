@@ -68,6 +68,7 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'file_mru',
       \ 'max_candidates': 30,
+      \ 'action_table': {},
       \}
 
 function! s:source.gather_candidates(args)"{{{
@@ -81,6 +82,18 @@ function! s:source.gather_candidates(args)"{{{
         \ "kind" : (isdirectory(v:val[0]) ? "directory" : "file"),
         \   }'), 's:compare')
 endfunction"}}}
+
+" Actions"{{{
+let s:source.action_table.delete = {
+      \ 'is_invalidate_cache' : 1, 
+      \ 'is_quit' : 0, 
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:source.action_table.delete.func(candidate)"{{{
+  call filter(s:mru_files, 'v:val[0] !=# ' . string(a:candidate.word))
+  call s:save()
+endfunction"}}}
+"}}}
 
 " Misc
 function! s:compare(candidate_a, candidate_b)"{{{

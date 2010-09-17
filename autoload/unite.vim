@@ -333,7 +333,7 @@ endfunction"}}}
 function! s:convert_line(candidate)"{{{
   let l:max_width = winwidth(0) - 20
   return (a:candidate.unite__is_marked ? '* ' : '- ')
-        \ . unite#util#truncate_smart(a:candidate.word, l:max_width, 25, '..')
+        \ . unite#util#truncate_smart(a:candidate.abbr, l:max_width, 25, '..')
         \ . " " . a:candidate.source
 endfunction"}}}
 
