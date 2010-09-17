@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Sep 2010
+" Last Modified: 17 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,7 +35,7 @@ let s:kind = {
       \}
 
 " Actions"{{{
-let s:kind.action_table = unite#kinds#file#define().action_table
+let s:kind.action_table = copy(unite#kinds#file#define().action_table)
 
 let s:kind.action_table.narrow = {
       \ 'is_quit' : 0,
@@ -45,6 +45,16 @@ function! s:kind.action_table.narrow.func(candidate)"{{{
   call unite#mappings#narrowing(l:word)
   return 0
 endfunction"}}}
+
+if exists(':VimShell')
+  let s:kind.action_table.vimshell = {
+        \ }
+  function! s:kind.action_table.vimshell.func(candidate)"{{{
+    let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+    lcd `=l:dir`
+    VimShellCreate `=l:dir`
+  endfunction"}}}
+endif
 "}}}
 
 function! s:open(bang, candidate)"{{{

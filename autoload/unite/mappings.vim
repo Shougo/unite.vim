@@ -137,6 +137,7 @@ function! unite#mappings#do_action(action_name)"{{{
       if has_key(l:action, 'is_selectable') && !l:action.is_selectable
             \ && len(l:candidates) > 1
         " Ignore.
+        echohl Error | execute 'echo' printf('"%s" isn''t selectable action.', l:action_name) | echohl None
         continue
       endif
       
@@ -196,6 +197,7 @@ function! s:choose_action()"{{{
       if has_key(l:action, 'is_selectable') && !l:action.is_selectable
             \ && len(l:candidates) > 1
         " Ignore.
+        echohl Error | execute 'echo' printf('"%s" isn''t selectable action.', l:action_name) | echohl None
       else
         let s:actions[l:action_name] = l:action
       endif
@@ -233,7 +235,7 @@ function! s:choose_action()"{{{
     let l:actions = filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(l:input)))
     if empty(l:actions)
       echohl Error | echo 'Invalid action.' | echohl None
-    elseif len(l:actions) > 2
+    elseif len(l:actions) > 1
       echohl Error | echo 'Too match action.' | echohl None
     else
       break
