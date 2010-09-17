@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Sep 2010
+" Last Modified: 17 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -103,6 +103,20 @@ let s:kind.action_table.below = {
       \ }
 function! s:kind.action_table.below.func(candidate)"{{{
   rightbelow split `=a:candidate.word`
+endfunction"}}}
+
+let s:kind.action_table.cd = {
+      \ }
+function! s:kind.action_table.cd.func(candidate)"{{{
+  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+  cd `=l:dir`
+endfunction"}}}
+
+let s:kind.action_table.lcd = {
+      \ }
+function! s:kind.action_table.lcd.func(candidate)"{{{
+  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+  lcd `=l:dir`
 endfunction"}}}
 
 "}}}
