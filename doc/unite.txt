@@ -230,6 +230,7 @@ CHANGELOG					*unite-changelog*
 
 2010-09-17
 - Implemented escape ' '.
+- Added split actions in kind file.
 
 2010-09-16
 - Added <Plug>(unite_move_head) keymapping.

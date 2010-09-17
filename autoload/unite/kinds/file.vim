@@ -76,6 +76,35 @@ let s:kind.action_table.vsplit = {
 function! s:kind.action_table.vsplit.func(candidate)"{{{
   vsplit `=a:candidate.word`
 endfunction"}}}
+
+let s:kind.action_table.left = {
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:kind.action_table.left.func(candidate)"{{{
+  leftabove vsplit `=a:candidate.word`
+endfunction"}}}
+
+let s:kind.action_table.right = {
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:kind.action_table.right.func(candidate)"{{{
+  rightbelow vsplit `=a:candidate.word`
+endfunction"}}}
+
+let s:kind.action_table.above = {
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:kind.action_table.above.func(candidate)"{{{
+  leftabove split `=a:candidate.word`
+endfunction"}}}
+
+let s:kind.action_table.below = {
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:kind.action_table.below.func(candidate)"{{{
+  rightbelow split `=a:candidate.word`
+endfunction"}}}
+
 "}}}
 
 
