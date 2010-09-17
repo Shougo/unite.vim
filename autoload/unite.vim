@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Sep 2010
+" Last Modified: 17 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,17 +125,17 @@ function! unite#keyword_filter(list, input)"{{{
     if l:input =~ '^!'
       " Exclusion.
       let l:input = unite#escape_match(l:input)
-      call filter(a:list, 'v:val.word !~ ' . string(l:input[1:]))
+      call filter(a:list, 'v:val.abbr !~ ' . string(l:input[1:]))
     elseif l:input =~ '[*]'
       " Wildcard.
       let l:input = unite#escape_match(l:input)
-      call filter(a:list, 'v:val.word =~ ' . string(l:input))
+      call filter(a:list, 'v:val.abbr =~ ' . string(l:input))
     else
       let l:input = substitute(l:input, '\\ ', ' ', 'g')
       if &ignorecase
-        let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:input)))
+        let l:expr = printf('stridx(tolower(v:val.abbr), %s) != -1', string(tolower(l:input)))
       else
-        let l:expr = printf('stridx(v:val.word, %s) != -1', string(l:input))
+        let l:expr = printf('stridx(v:val.abbr, %s) != -1', string(l:input))
       endif
 
       call filter(a:list, l:expr)
@@ -298,6 +298,12 @@ function! s:gather_candidates(text, args)"{{{
       let l:source_candidates = s:unite.cached_candidates[l:source.name]
     endif
     
+    for l:candidate in l:source_candidates
+      if !has_key(l:candidate, 'abbr')
+        let l:candidate.abbr = l:candidate.word
+      endif
+    endfor
+    
     if a:text != ''
       call unite#keyword_filter(l:source_candidates, a:text)
     endif
@@ -309,24 +315,25 @@ function! s:gather_candidates(text, args)"{{{
     
     let l:candidates += l:source_candidates
   endfor
-
-  let &ignorecase = l:ignorecase_save
   
   for l:candidate in l:candidates
+    " Initialize.
     let l:candidate.unite__is_marked = 0
   endfor
-
+    
+  let &ignorecase = l:ignorecase_save
+  
   return l:candidates
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
   let l:max_width = winwidth(0) - 20
   return map(copy(a:candidates),
-        \ '(v:val.unite__is_marked ? "* " : "- ") . unite#util#truncate_smart(has_key(v:val, "abbr")? v:val.abbr : v:val.word, ' . l:max_width .  ', 25, "..") . " " . v:val.source')
+        \ '(v:val.unite__is_marked ? "* " : "- ") . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', 25, "..") . " " . v:val.source')
 endfunction"}}}
 function! s:convert_line(candidate)"{{{
   let l:max_width = winwidth(0) - 20
   return (a:candidate.unite__is_marked ? '* ' : '- ')
-        \ . unite#util#truncate_smart(has_key(a:candidate, 'abbr')? a:candidate.abbr : a:candidate.word, l:max_width, 25, '..')
+        \ . unite#util#truncate_smart(a:candidate.word, l:max_width, 25, '..')
         \ . " " . a:candidate.source
 endfunction"}}}
 
