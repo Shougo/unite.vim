@@ -119,6 +119,12 @@ function! s:kind.action_table.lcd.func(candidate)"{{{
   lcd `=l:dir`
 endfunction"}}}
 
+let s:kind.action_table.ex = {
+      \ }
+function! s:kind.action_table.ex.func(candidate)"{{{
+  " Result is ':| {candidate}', here '|' means the cursor position.
+  call feedkeys(printf(": %s\<C-b>", escape(a:candidate.word, " \t\n*?[{`$\\%#'\"|!<")), 'n')
+endfunction"}}}
 "}}}
 
 

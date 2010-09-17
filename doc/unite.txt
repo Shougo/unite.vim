@@ -232,6 +232,7 @@ CHANGELOG					*unite-changelog*
 - Implemented escape ' '.
 - Added split actions in kind file.
 - Added cd and lcd actions in kind file.
+- Added ex action in kind file.
 
 2010-09-16
 - Added <Plug>(unite_move_head) keymapping.
