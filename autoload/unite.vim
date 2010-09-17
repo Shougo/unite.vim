@@ -76,6 +76,30 @@ endfunction"}}}
 function! unite#available_kinds(...)"{{{
   return a:0 == 0 ? s:unite.kinds : s:unite.kinds[a:1]
 endfunction"}}}
+function! unite#get_action_table(source_name, kind_name)"{{{
+  let l:kind = s:unite.kinds[a:kind_name]
+  let l:source = s:unite.sources[a:source_name]
+  
+  let l:action_table = l:kind.action_table
+  if has_key(l:source, 'action_table')
+    " Overwrite actions.
+    let l:action_table = extend(copy(l:action_table), l:source.action_table)
+  endif
+  
+  return l:action_table
+endfunction"}}}
+function! unite#get_default_action(source_name, kind_name)"{{{
+  let l:kind = s:unite.kinds[a:kind_name]
+  let l:source = s:unite.sources[a:source_name]
+  
+  if has_key(l:source, 'default_action')
+    let l:default_action = l:source.default_action
+  else
+    let l:default_action = l:kind.default_action
+  endif
+  
+  return l:default_action
+endfunction"}}}
 function! unite#escape_match(str)"{{{
   return substitute(substitute(escape(a:str, '~"\.$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*', '.*', 'g')
 endfunction"}}}

@@ -237,6 +237,7 @@ CHANGELOG					*unite-changelog*
 - Added vimshell action in kind directory.
 - Improved mru format.
 - Implemented delete action in file_mru.
+- Improved action table.
 
 2010-09-16
 - Added <Plug>(unite_move_head) keymapping.

@@ -127,17 +127,11 @@ function! unite#mappings#do_action(action_name)"{{{
   endif
   
   for l:candidate in l:candidates
-    let l:kind = unite#available_kinds(l:candidate.kind)
-    let l:source = unite#available_sources(l:candidate.source)
-    let l:action_table = l:kind.action_table
-    if has_key(l:source, 'action_table')
-      " Overwrite actions.
-      let l:action_table = extend(l:action_table, l:source.action_table)
-    endif
+    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
     
     let l:action_name = 
           \ a:action_name ==# 'default' ?
-          \ (has_key(l:source, 'default_action') ? l:source.default_action : l:kind.default_action)
+          \ unite#get_default_action(l:candidate.source, l:candidate.kind)
           \ : a:action_name
     
     if has_key(l:action_table, l:action_name)
@@ -201,13 +195,7 @@ function! s:choose_action()"{{{
   
   let s:actions = {}
   for l:candidate in l:candidates
-    let l:kind = unite#available_kinds(l:candidate.kind)
-    let l:source = unite#available_sources(l:candidate.source)
-    let l:action_table = l:kind.action_table
-    if has_key(l:source, 'action_table')
-      " Overwrite actions.
-      let l:action_table = extend(l:action_table, l:source.action_table)
-    endif
+    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
     
     for [l:action_name, l:action] in items(l:action_table)
       " Check selectable flag.
