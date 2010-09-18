@@ -305,17 +305,18 @@ function! s:gather_candidates(text, args)"{{{
   let l:candidates = []
   for l:source in unite#available_sources_list()
     if l:source.is_volatile
-          \ || has_key(b:unite.cached_candidates, l:source.name)
-          \ || (l:args.is_force && l:source.unite__is_invalidate)
+          \ || !has_key(b:unite.cached_candidates, l:source.name)
+          \ || (l:args.is_force || l:source.unite__is_invalidate)
+      
       " Check required pattern length.
       let l:source_candidates = 
             \ (has_key(l:source, 'required_pattern_length')
             \   && len(l:args.input) < l:source.required_pattern_length) ?
             \ [] : l:source.gather_candidates(l:args)
+      
+      let l:source.unite__is_invalidate = 0
 
-      if l:args.input != ''
-        call unite#keyword_filter(l:candidates, l:args.input)
-      elseif !l:source.is_volatile
+      if !l:source.is_volatile
         " Recaching.
         let b:unite.cached_candidates[l:source.name] = l:source_candidates
       endif
@@ -487,8 +488,8 @@ function! s:on_insert_enter()  "{{{
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   if line('.') == 2
-    " Force redraw.
-    call unite#force_redraw()
+    " Redraw.
+    call unite#redraw()
   endif
   
   if &updatetime < b:unite.update_time_save
@@ -509,8 +510,8 @@ function! s:on_insert_leave()  "{{{
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   if line('.') == 2
-    " Force redraw.
-    call unite#force_redraw()
+    " Redraw.
+    call unite#redraw()
   endif
 endfunction"}}}
 
