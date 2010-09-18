@@ -234,6 +234,7 @@ CHANGELOG					*unite-changelog*
 - Refactoringed.
 - Fixed :UniteWithBufferDir and :UniteWithCurrentDir.
 - Improved multiple unite buffer.
+- Set nomodeline.
 
 2010-09-17
 - Implemented escape ' '.

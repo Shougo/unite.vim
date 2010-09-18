@@ -401,6 +401,7 @@ function! s:initialize_unite_buffer(args)"{{{
   setlocal noswapfile
   setlocal noreadonly
   setlocal nofoldenable
+  setlocal nomodeline
   setlocal foldcolumn=0
 
   " Autocommands.
