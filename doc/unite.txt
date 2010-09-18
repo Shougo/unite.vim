@@ -230,6 +230,7 @@ CHANGELOG					*unite-changelog*
 
 2010-09-18
 - Display modified flag in source buffer.
+- Fixed multiple unite buffer bug.
 
 2010-09-17
 - Implemented escape ' '.

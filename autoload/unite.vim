@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Sep 2010
+" Last Modified: 18 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -459,7 +459,10 @@ function! unite#quit_session()  "{{{
   if winnr('$') != 1
     close
     execute s:old_winnr . 'wincmd w'
-    execute s:win_rest_cmd
+    
+    if winnr('$') != 1
+      execute s:win_rest_cmd
+    endif
   endif
 
   " Restore current directory.
