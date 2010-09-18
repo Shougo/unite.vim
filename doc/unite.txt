@@ -228,6 +228,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-18
+- Display modified flag in source buffer.
+
 2010-09-17
 - Implemented escape ' '.
 - Added split actions in kind file.

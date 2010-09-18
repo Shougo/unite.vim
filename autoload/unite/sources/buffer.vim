@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Sep 2010
+" Last Modified: 18 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -66,7 +66,7 @@ function! s:make_abbr(bufnr)"{{{
     let l:bufvar = getbufvar(a:bufnr, 'vimshell')
     return '*vimshell* - ' . l:bufvar.save_dir
   else
-    return bufname(a:bufnr)
+    return bufname(a:bufnr) . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
   endif
 endfunction"}}}
 function! s:compare(candidate_a, candidate_b)"{{{
