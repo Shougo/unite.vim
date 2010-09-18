@@ -372,6 +372,9 @@ function! s:initialize_unite_buffer(args)"{{{
   if a:args.buffer_name != ''
     let l:buffer_name .= ' - ' . a:args.buffer_name
   endif
+
+  let l:winnr = winnr()
+  let l:win_rest_cmd = winrestcmd()
   
   if bufname('%') !=# l:buffer_name
     " Split window.
@@ -389,8 +392,8 @@ function! s:initialize_unite_buffer(args)"{{{
   
   " Set parameters.
   let b:unite = {}
-  let b:unite.old_winnr = winnr()
-  let b:unite.win_rest_cmd = winrestcmd()
+  let b:unite.old_winnr = l:winnr
+  let b:unite.win_rest_cmd = l:win_rest_cmd
   let b:unite.args = a:args
   
   " Basic settings.
