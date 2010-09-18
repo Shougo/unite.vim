@@ -492,7 +492,7 @@ function! s:on_insert_leave()  "{{{
     call unite#redraw()
   endif
   
-  if &updatetime < b:unite.update_time_save
+  if has_key(b:unite, 'update_time_save') && &updatetime < b:unite.update_time_save
     let &updatetime = b:unite.update_time_save
   endif
 

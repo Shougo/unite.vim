@@ -31,7 +31,7 @@ endif
 
 " Global options definition."{{{
 if !exists('g:unite_update_time')
-  let g:unite_update_time = 200
+  let g:unite_update_time = 400
 endif
 if !exists('g:unite_enable_start_insert')
   let g:unite_enable_start_insert = 0

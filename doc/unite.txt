@@ -73,7 +73,7 @@ VARIABLES 					*unite-variables*
 g:unite_update_time				*g:unite_update_time*
 		
 		
-		Default value is 200.
+		Default value is 400.
 
 g:unite_enable_start_insert			*g:unite_enable_start_insert*
 		If this variable is enabled, unite.vim will
@@ -236,6 +236,7 @@ CHANGELOG					*unite-changelog*
 - Improved multiple unite buffer.
 - Set nomodeline.
 - Fixed redraw bug.
+- Changed g:unite_update_time default value.
 
 2010-09-17
 - Implemented escape ' '.
