@@ -232,6 +232,8 @@ CHANGELOG					*unite-changelog*
 - Display modified flag in source buffer.
 - Fixed multiple unite buffer bug.
 - Refactoringed.
+- Fixed :UniteWithBufferDir and :UniteWithCurrentDir.
+- Improved multiple unite buffer.
 
 2010-09-17
 - Implemented escape ' '.

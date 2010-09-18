@@ -74,7 +74,7 @@ function! s:call_unite_current_dir(args)
     let l:options.input = escape(l:path.(l:path =~ '[\\/]$' ? '' : '/'), ' ')
   endif
   
-  call unite#start(split(a:args), l:options)
+  call unite#start(l:args, l:options)
 endfunction
 
 command! -nargs=+ -complete=customlist,unite#complete_source UniteWithBufferDir call s:call_unite_buffer_dir(<q-args>)
@@ -85,7 +85,7 @@ function! s:call_unite_buffer_dir(args)
     let l:options.input = escape(l:path.(l:path =~ '[\\/]$' ? '' : '/'), ' ')
   endif
   
-  call unite#start(split(a:args), l:options)
+  call unite#start(l:args, l:options)
 endfunction
 
 function! s:parse_options(args)

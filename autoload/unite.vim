@@ -363,10 +363,6 @@ function! s:convert_line(candidate)"{{{
 endfunction"}}}
 
 function! s:initialize_unite_buffer(args)"{{{
-  " Open or create the unite buffer.
-  execute g:unite_split_rule 
-        \ g:unite_enable_split_vertically ? 'vnew' : 'new'
-  
   " The current buffer is initialized.
   if unite#is_win()
     let l:buffer_name = '[unite]'
@@ -377,7 +373,19 @@ function! s:initialize_unite_buffer(args)"{{{
     let l:buffer_name .= ' - ' . a:args.buffer_name
   endif
   
-  silent! file `=l:buffer_name`
+  if bufname('%') !=# l:buffer_name
+    " Split window.
+    execute g:unite_split_rule 
+          \ g:unite_enable_split_vertically ?
+          \        (bufexists(l:buffer_name) ? 'vsplit' : 'vnew')
+          \      : (bufexists(l:buffer_name) ? 'split' : 'new')
+  endif
+  
+  if bufexists(l:buffer_name)
+    silent execute bufnr(l:buffer_name) 'buffer'
+  else
+    silent! file `=l:buffer_name`
+  endif
   
   " Set parameters.
   let b:unite = {}
