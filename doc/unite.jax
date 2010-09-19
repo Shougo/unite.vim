@@ -1,0 +1,529 @@
+*unite.txt*	すべての情報源を合わせる
+
+Version: 0.5
+Author : Shougo <Shougo.Matsu@gmail.com>
+License: MIT license  {{{
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
+
+目次						*unite-contents*
+
+概要			|unite-introduction|
+使い方			|unite-usage|
+インストール		|unite-install|
+インターフェース	|unite-interface|
+  コマンド		  |unite-commands|
+  変数			  |unite-variables|
+    情報源の変数	    |unite-sources-variables|
+  キーマッピング	  |unite-key-mappings|
+  情報源		  |unite-source|
+  種類			  |unite-kind|
+  アクション		  |unite-action|
+例			|unite-examples|
+情報源の作成		|unite-create-source|
+ToDo			|unite-todo|
+バグ			|unite-bugs|
+更新履歴		|unite-changelog|
+
+==============================================================================
+概要						*unite-introduction*
+
+*unite* はファイル、バッファ、最近使用したファイル、レジスタなどの情報源からの
+検索、表示を行う。表示された候補に対して、候補の種類ごとに定義されたアクション
+を実行することができる。
+
+==============================================================================
+使い方						*unite-usage*
+
+	情報源としてファイル及び、バッファを指定して起動
+>
+	:Unite file buffer
+<
+
+	絞込みテキストとしてhogeを入力した状態で起動
+>
+	:Unite -input=hoge file
+<
+
+uniteを起動すると、デフォルトの状態ではウィンドウが垂直に分割され、右側にunite
+のバッファが開かれる。例えば
+>
+	:Unite file
+<
+として起動した場合、ファイルの一覧が表示されているはずである。
+その状態で j、k、で候補を選択できるので、適当に候補を選び、Enter を押せば選択
+した候補が新しいバッファで開かれる。これは選択した候補の種類がファイルであった
+場合の、デフォルトのアクションである。
+候補を選択して <Tab> を押下すると候補に対するアクションが選択できる。アクショ
+ンについては|unite-action|を参照。
+
+候補が多い場合などはキーワードによって絞り込むことができる。
+前回と同じように起動した後に、i を押下するとカーソルが2行目の > の右側に移る。
+これで絞込みテキストが入力できる。この状態で文字を入力すると、1文字入力するご
+とに候補が絞り込まれていく。また * (ワイルドカード)を入力すると任意の文字で絞
+り込むことができる。例えば
+>
+	*hoge
+<
+上記は hoge、ahoge、foohoge などにヒットする。
+また、ワイルドカードを2つ続けて入力すると、ディレクトリを再帰的に指定できる。
+例えば
+>
+	**/foo
+<
+上記は hoge/foo、hoge/fuga/foo などにヒットする。
+
+uniteを終了させるには、ノーマルモードで q もしくは <ESC> とすればよい。もしイ
+ンサートモードであれば <ESC> でノーマルモードに移行し、キーを押下すればよい。
+
+その他の操作については|unite_default_key_mappings|を参照。
+
+==============================================================================
+インストール					*unite-install*
+
+==============================================================================
+インターフェース				*unite-interface*
+
+------------------------------------------------------------------------------
+コマンド 					*unite-commands*
+
+:Unite [-buffer-name={buffer-name}] [-input={input-text}] {sources}
+						*:Unite*
+		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
+		絞込みテキストは空。{sources} はスペースで区切って複数指定でき
+		る。また、{sources} の指定順序が情報源の候補の表示順序となる。
+		情報源については|unite-source|を参照。
+		{buffer-name} はuniteのバッファ名を指定する。
+		{input-text} は初期の絞込みテキストを指定する。
+
+:UniteWithCurrentDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
+						*:UniteWithCurrentDir*
+		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
+		絞込みテキストは現在のディレクトリ。
+
+:UniteWithBufferDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
+						*:UniteWithBufferDir*
+		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
+		絞込みテキストは現在のバッファのディレクトリ。
+
+------------------------------------------------------------------------------
+変数						*unite-variables*
+
+g:unite_update_time				*g:unite_update_time*
+		絞込みテキストを入力するごとに表示される候補の更新間隔を制御す
+		る。単位はミリ秒。
+		
+		初期値は400である。
+
+g:unite_enable_start_insert			*g:unite_enable_start_insert*
+		uniteを実行したあとすぐに絞込みテキストの入力モードにするかを
+		制御する。1ならば有効になる。
+		
+		初期値は0である。
+
+g:unite_enable_ignore_case			*g:unite_enable_ignore_case*
+		大文字・小文字を区別するかを制御する。1ならば区別しない。
+		
+		初期値は'ignorecase'オプションと同じである。
+
+g:unite_enable_smart_case			*g:unite_enable_smart_case*
+		入力に大文字が含まれている場合は、大文字・小文字を区別する。1
+		ならば有効になる。
+		
+		初期値は'infercase'オプションと同じである。
+
+g:unite_split_rule				*g:unite_split_rule*
+		画面分割の位置ルールを指定する。
+		
+		初期値は"topleft"である。
+
+g:unite_enable_split_vertically			*g:unite_enable_split_vertically*
+		uniteのウィンドウを垂直分割にするかどうかを制御する。1ならば垂
+		直分割にする。
+		
+		初期値は0なので、水平分割である。
+
+g:unite_substitute_patterns			*g:unite_substitute_patterns*
+		絞込みテキストの置換パターンを指定する。形式はキーを置換パター
+		ンの正規表現、値を置換する文字列とした辞書である。次の例では絞
+		込みテキストを"hoge"で終わるように入力した場合に、"foo"で検索
+		されるようにする。
+		例:
+>
+			let g:unite_substitute_patterns = {
+				\ ".*hoge$": "foo",
+			\}
+<
+		
+		初期値は{}である。
+
+g:unite_temporary_directory			*g:unite_temporary_directory*
+		uniteが一時ファイルを書き出すディレクトリを指定する。ここで指
+		定したディレクトリが実際に存在しない場合、作成される。例えば最
+		近使用したファイルの情報をこの下に保存する。
+		
+		初期値は'~/.unite'の絶対パスである。
+
+g:unite_no_default_keymappings			*g:unite_no_default_keymappings*
+		この変数の値を1にすれば、uniteが予め用意しているキーマッピング
+		を設定しない。特に理由がない限り、通常は有効にすべきではない。
+		
+		この変数はユーザーが自分で定義しない限り存在しない。
+
+情報源の変数					*unite-sources-variables*
+
+g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
+		情報源が|file|の候補に表示しないファイルの正規表現パターンを指定
+		する。この変数が空文字列以外であれば、指定した正規表現で結果を
+		フィルタリングする。正規表現の大文字・小文字の区別は
+		'ignorecase'の設定次第である。
+
+		初期値は autoload/unite/sources/file.vim を参照。
+
+g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
+		情報源が|file_mru|の候補での最終アクセス時間の表示フォーマットを
+		指定する。フォーマットは|strftime()|で指定できるものと同じであ
+		る。
+		
+		初期値は"(%x %H:%M:%S)"である。
+
+g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
+		最近使用したファイルの情報を書き出すファイルを指定する。
+		
+		初期値は |g:unite_temporary_directory| . '/.file_mru' である。
+
+g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
+		最近使用したファイルの最大保存件数を指定する。
+		
+		初期値は100である。
+
+g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
+		情報源が|file_mru|の候補に表示しないファイルの正規表現パターンを
+		指定する。この変数が空文字列以外であれば、指定した正規表現で結
+		果をフィルタリングする。正規表現の大文字・小文字は'ignorecase'
+		の設定に関わらず、明確に区別される。
+		
+		初期値は autoload/unite/sources/file_mru.vim を参照。
+
+------------------------------------------------------------------------------
+キーマッピング 					*unite-key-mappings*
+
+ノーマルモードマッピング
+
+<Plug>(unite_exit)				*<Plug>(unite_exit)*
+		uniteを終了する。
+
+<Plug>(unite_do_default_action)			*<Plug>(unite_do_default_action)*
+		選択している候補に対してデフォルトのアクションを実行する。アク
+		ションは候補の種類ごとに定義されている。
+		種類については|unite-kind|を参照。
+		デフォルトのアクションについては|unite-default-action|を参照。
+
+<Plug>(unite_do_delete_action)			*<Plug>(unite_do_delete_action)*
+		選択している候補に対してdeleteアクションを実行する。アクショ
+		ンは候補の種類ごとに定義されている。
+		種類については|unite-kind|を参照。
+		deleteアクションについては|unite-action|を参照。
+
+<Plug>(unite_do_preview_action)			*<Plug>(unite_do_preview_action)*
+		選択している候補に対してアクションを実行した結果を、プレビュー
+		ウィンドウに表示する。このマッピングは候補の種類がファイルの場
+		合のみ動作する。情報源がレジスタの場合のプレビューは
+		|<Plug>(unite_print_candidate)|が使用できる。
+
+<Plug>(unite_choose_action)			*<Plug>(unite_choose_action)*
+		選択している候補に対して実行するアクションを選択する。アクショ
+		ンは種類ごとに定義されている。
+		種類については|unite-kind|を参照。
+
+<Plug>(unite_insert_enter)			*<Plug>(unite_insert_enter)*
+		カーソル位置から絞込みテキスト入力を開始する。
+
+<Plug>(unite_insert_head)			*<Plug>(unite_insert_head)*
+		カーソルを先頭に移動して絞込みテキスト入力を開始する。
+
+<Plug>(unite_append_enter)			*<Plug>(unite_append_enter)*
+		カーソルの右側から絞込みテキスト入力を開始します。
+
+<Plug>(unite_append_end)			*<Plug>(unite_append_end)*
+		カーソルを行末に移動して絞込みテキストの入力を開始する。
+
+<Plug>(unite_toggle_mark_current_file)		*<Plug>(unite_toggle_mark_current_file)*
+		複数の候補に対して一気にアクションを実行するためのマークのオン
+		オフを切り替える。
+
+<Plug>(unite_redraw)				*<Plug>(unite_redraw)*
+		|g:unite_update_time|で制御される更新間隔を待たずに、すぐに表
+		示を更新する。
+
+<Plug>(unite_search_next_source)		*<Plug>(unite_search_next_source)*
+		次の情報源の最初の候補にカーソルを移動。
+
+<Plug>(unite_search_previous_source)		*<Plug>(unite_serch_previous_source)*
+		前の情報源の最初の候補にカーソルを移動。
+
+<Plug>(unite_print_candidate)			*<Plug>(unite_print_candidate)*
+		選択している候補に対するアクションの対象を表示する。例えば、選
+		択している候補の種類が|word|の場合は、対象の内容が表示される。
+
+<Plug>(unite_edit_candidate)			*<Plug>(unite_edit_candidate)*
+		選択している候補を絞込みテキストとして入力した状態にして、絞込
+		みテキスト入力を開始する。
+
+インサートモードマッピング
+
+<Plug>(unite_exit)				*i_<Plug>(unite_exit)*
+		uniteを終了する。
+
+<Plug>(unite_insert_leave)			*<Plug>(unite_insert_leave)*
+		ノーマルモードに移行する。
+
+<Plug>(unite_delete_backward_char)		*<Plug>(unite_delete_backward_char)*
+		カーソル直前の1文字を消す。
+
+<Plug>(unite_delete_backward_line)		*<Plug>(unite_delete_backward_line)*
+		カーソルから行の先頭までの文字をすべて消す。
+
+<Plug>(unite_delete_backward_word)		*<Plug>(unite_delete_backward_word)*
+		カーソル直前の単語を消す。
+
+<Plug>(unite_select_next_line)			*<Plug>(unite_select_next_line)*
+		次の候補に移動。
+
+<Plug>(unite_select_previous_line)		*<Plug>(unite_select_previous_line)*
+		前の候補に移動。
+
+<Plug>(unite_select_next_page)			*<Plug>(unite_select_next_page)*
+		次の候補ページを表示。
+
+<Plug>(unite_select_previous_page)		*<Plug>(unite_select_previous_page)*
+		前の候補ページを表示。
+
+<Plug>(unite_do_default_action)			*i_<Plug>(unite_do_default_action)*
+		絞込みテキストに入力されているテキストを候補として、候補の種類
+		に応じたデフォルトのアクションを実行する。候補が完全な形で入力
+		されていない場合は、補完を試みる。
+		種類については|unite-kind|を参照。
+		デフォルトのアクションについては|unite-default-action|を参照。
+
+<Plug>(unite_toggle_mark_current_file)		*i_<Plug>(unite_toggle_mark_current_file)*
+		複数の候補に対して一気にアクションを実行するためのマークのオン
+		オフを切り替える。
+
+<Plug>(unite_choose_action)			*i_<Plug>(unite_choose_action)*
+		絞込みテキストに入力されているテキストを候補として、実行するア
+		クションを選択する。候補が完全な形で入力されていない場合は、補
+		完を試みる。アクションは候補の種類ごとに定義されている。
+		種類については|unite-kind|を参照。
+
+<Plug>(unite_move_head)				*<Plug>(unite_move_head)*
+		カーソルを先頭に移動する。
+
+ビジュアルモードマッピング
+
+<Plug>(unite_toggle_mark_selected_lines)	*<Plug>(unite_toggle_selected_lines)*
+		ビジュアル選択している候補に対して一気にアクションを実行するた
+		めのマークのオンオフを切り替える。(未実装)
+
+						*unite_default_key_mappings*
+デフォルトキーマッピング
+
+ノーマルモードマッピング
+{lhs}		{rhs}
+--------	-----------------------------
+<ESC>		|<Plug>(unite_exit)|
+i		|<Plug>(unite_insert_enter)|
+I		|<Plug>(unite_insert_head)|
+a		|<Plug>(unite_append_enter)|
+A		|<Plug>(unite_append_end)|
+q		|<Plug>(unite_exit)|
+<CR>		|<Plug>(unite_do_default_action)|
+d		|<Plug>(unite_do_delete_action)|
+<Space>		|<Plug>(unite_toggle_mark_current_file)|
+<Tab>		|<Plug>(unite_choose_action)|
+<C-n>		|<Plug>(unite_search_next_source)|
+<C-p>		|<Plug>(unite_search_previous_source)|
+l		候補を選択している場合は|<Plug>(unite_do_default_action)|
+~		絞込みテキストを ~/ にする
+<C-g>		|<Plug>(unite_print_candidate)|
+e		|<Plug>(unite_edit_candidate)|
+p		|<Plug>(unite_do_preview_action)|
+<C-l>		|<Plug>(unite_redraw)|
+
+インサートモードマッピング
+{lhs}		{rhs}
+--------	-----------------------------
+/		なにか入力していれば */ 、そうでなければ /
+<ESC>		|<Plug>(unite_insert_leave)|
+<Tab>		|i_<Plug>(unite_choose_action)|
+<S-Tab>		|<Plug>(unite_select_previous_line)|
+<C-n>		|<Plug>(unite_select_next_line)|
+<C-p>		|<Plug>(unite_select_previous_line)|
+<C-f>		|<Plug>(unite_select_next_page)|
+<C-b>		|<Plug>(unite_select_previous_page)|
+<CR>		|i_<Plug>(unite_do_default_action)|
+<C-h>		|<Plug>(unite_delete_backward_char)|
+<BS>		|<Plug>(unite_delete_backward_char)|
+<C-u>		|<Plug>(unite_delete_backward_line)|
+<C-w>		|<Plug>(unite_delete_backward_word)|
+<C-a>		|<Plug>(unite_move_head)|
+<Home>		|<Plug>(unite_move_head)|
+<Space>		候補を選択していれば|i_<Plug>(unite_toggle_mark_current_file)|
+
+==============================================================================
+情報源						*unite-source* *{sources}*
+
+file		ファイル
+file_mru	最近使用したファイル
+buffer		開いているバッファ
+register	レジスタに保存されている文字列
+
+==============================================================================
+種類						*unite-kind* *{kind}*
+
+候補の種類
+
+file		ファイル
+buffer		バッファ
+directory	ディレクトリ
+word		文字列
+
+==============================================================================
+アクション					*unite-action* *{action}*
+
+種類別アクション
+
+file						*unite-action-file*
+ファイルはすべて別のバッファに開かれる。
+	open		ファイルを開く
+	fopen		現在のバッファの変更を破棄してファイルを開く
+	preview		プレビューウィンドウにファイルを開く
+	tabopen		ファイルをタブで開く
+	split		ウィンドウを水平分割してファイルを開く
+	vsplit		ウィンドウを垂直分割してファイルを開く
+	left		ウィンドウを垂直分割して左側にファイルを開く
+	right		ウィンドウを垂直分割して右側にファイルを開く
+	above		ウィンドウを水平分割して上側にファイルを開く
+	below		ウィンドウを水平分割して下側にファイルを開く
+	cd		カレントディレクトリを変更
+	lcd		現在のウィンドウのカレントディレクトリを変更
+	ex		候補をコマンドラインに入力した状態にする
+
+buffer						*unite-action-buffer*
+	open		バッファを表示
+	delete		バッファをアンロード
+	fopen		現在のバッファの変更を破棄して表示
+	fdelete		現在のバッファの変更を破棄してアンロード
+
+directory					*unite-action-directory*
+|unite-action-file|のアクションを継承している。
+	narrow		ディレクトリで候補を絞り込む
+	vimshell	VimShellがインストールされている場合に有効なアクション
+			VimShellCreate {candidate} を起動
+
+word						*unite-action-word*
+	insert		現在のバッファに文字列を挿入
+
+情報源別アクション
+
+file_mru					*unite-action-file_mru*
+	delete		最近使用したファイルの候補から削除
+
+						*unite-default-action*
+デフォルトアクション
+
+種類		アクション
+{kind}		{action}
+----------	----------
+file		open
+buffer		open
+directory	narrow
+word		insert
+
+==============================================================================
+情報源の作成					*unite-create-source*
+
+------------------------------------------------------------------------------
+情報源の属性					*unite-source-attributes*
+
+						*unite-source-attribute-name*
+name			文字列		(必須)
+			情報源の名前。以下の文字で構成しなければなりません。
+			文字:
+			- a-z
+			- 0-9
+			- _
+
+			例:
+			- "buffer" と "file_mru" は正当です。
+			- "BadOne", "virw/git", "!@#$%^&*()_[]{}-|" と "" は
+			  正当ではありません。
+
+						*unite-source-attribute-max_candidates*
+max_candidates		数値		(任意)
+			候補の最大数。
+
+			この属性は任意です。もしこれが与えられない場合、0がデ
+			フォルト値として使われます。この場合、最大数の制限はあ
+			りません。
+
+						*unite-source-attribute-required_pattern_length*
+required_pattern_length	数値		(任意)
+			候補を収集するのに必要なパターンの長さ。
+
+			この属性は任意です。もしこれが与えられない場合、0がデ
+			フォルト値として使われます。この場合、常に候補が収集さ
+			れます。
+
+==============================================================================
+例						*unite-examples*
+>
+	
+	" The prefix key.
+	nnoremap    [unite]   <Nop>
+	nmap    f [unite]
+	
+	nnoremap [unite]u  :<C-u>Unite<Space>
+	nnoremap <silent> [unite]f  :<C-u>Unite -buffer-name=files buffer file_mru file<CR>
+	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir buffer file_mru file<CR>
+	
+	autocmd FileType unite call s:unite_my_settings()
+	function! s:unite_my_settings()"{{{
+	" Overwrite settings.
+	imap <buffer> jj      <Plug>(unite_insert_leave)
+	nnoremap <buffer> t G
+	"let g:unite_enable_start_insert = 1
+	endfunction"}}}
+	
+	let g:unite_source_file_mru_limit = 200
+	
+>
+==============================================================================
+TODO						*unite-todo*
+
+==============================================================================
+バグ						*unite-bugs*
+
+==============================================================================
+更新履歴					*unite-changelog*
+
+doc/unite.txtを参照。
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:fdl=0:fdm=marker:
