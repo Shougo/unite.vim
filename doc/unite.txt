@@ -234,6 +234,7 @@ CHANGELOG					*unite-changelog*
 
 2010-09-20
 - Added :UniteWithCursorWord command.
+- Improved initialization.
 
 2010-09-19
 - Fixed wildcard bug.

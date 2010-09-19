@@ -46,6 +46,12 @@ let s:LNUM_PATTERN = 2
 " buffer number of the unite buffer
 let s:unite = {}
 
+let s:default_sources = {}
+let s:default_kinds = {}
+
+let s:custom_sources = {}
+let s:custom_kinds = {}
+
 call unite#set_dictionary_helper(g:unite_substitute_patterns, '^\~', substitute($HOME, '\\', '/', 'g'))
 "}}}
 
@@ -180,6 +186,11 @@ endfunction"}}}
 "}}}
 
 function! unite#start(sources, ...)"{{{
+  if empty(s:default_sources)
+    " Initialize load.
+    call s:load_default_sources_and_kinds()
+  endif
+  
   " Save args.
   let l:args = a:0 >= 1 ? a:1 : {}
   if !has_key(l:args, 'input')
@@ -192,13 +203,8 @@ function! unite#start(sources, ...)"{{{
     let l:args.buffer_name = ''
   endif
   
-  call s:initialize_unite_buffer(l:args)
+  call s:initialize_unite_buffer(a:sources, l:args)
 
-  " Initialize sources.
-  call s:initialize_sources(a:sources)
-  " Initialize kinds.
-  call s:initialize_kinds()
-  
   " User's initialization.
   setlocal nomodifiable
   setfiletype unite
@@ -258,49 +264,53 @@ function! unite#quit_session()  "{{{
   endif
 endfunction"}}}
 
-function! s:initialize_sources(sources)"{{{
-  " Gathering all sources name.
-  let b:unite.sources = {}
-  let b:unite.candidates = []
-  let b:unite.cached_candidates = {}
+function! s:load_default_sources_and_kinds()"{{{
+  " Gathering all sources and kind name.
+  let s:default_sources = {}
+  let s:default_kinds = {}
   
-  let l:all_sources = {}
-  for l:source_name in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'),
+  for l:name in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'),
         \ 'fnamemodify(v:val, ":t:r")')
-    let l:all_sources[l:source_name] = 1
+    if !has_key(s:default_sources, l:name)
+      let s:default_sources[l:name] = 
+            \ call('unite#sources#' . l:name . '#define', [])
+    endif
   endfor
   
-  let l:number = 0
-  for l:source_name in a:sources
-    if !has_key(l:all_sources, l:source_name)
-      echoerr 'Invalid source name "' . l:source_name . '" is detected.'
-      return
-    endif
-      
-    let l:source = call('unite#sources#' . l:source_name . '#define', [])
-    if !has_key(b:unite.sources, l:source_name)
-      if !has_key(l:source, 'is_volatile')
-        let l:source.is_volatile = 0
-      endif
-      let l:source.unite__is_invalidate = 1
-      
-      let l:source.unite__number = l:number
-      let l:number += 1
-      
-      let b:unite.sources[l:source_name] = l:source
+  for l:name in map(split(globpath(&runtimepath, 'autoload/unite/kinds/*.vim'), '\n'),
+        \ 'fnamemodify(v:val, ":t:r")')
+    if !has_key(s:default_kinds, l:name)
+      let s:default_kinds[l:name] = 
+            \ call('unite#kinds#' . l:name . '#define', [])
     endif
   endfor
 endfunction"}}}
-function! s:initialize_kinds()"{{{
-  " Gathering all kinds name.
-  let b:unite.kinds = {}
-  for l:kind_name in map(split(globpath(&runtimepath, 'autoload/unite/kinds/*.vim'), '\n'),
-        \ 'fnamemodify(v:val, ":t:r")')
-    let l:kind = call('unite#kinds#' . l:kind_name . '#define', [])
-    if !has_key(b:unite.kinds, l:kind_name)
-      let b:unite.kinds[l:kind_name] = l:kind
+function! s:initialize_sources(sources)"{{{
+  let l:sources = {}
+  
+  let l:number = 0
+  for l:source_name in a:sources
+    if !has_key(s:default_sources, l:source_name)
+      echoerr 'Invalid source name "' . l:source_name . '" is detected.'
+      return {}
     endif
+    
+    let l:source = s:default_sources[l:source_name]
+    if !has_key(l:source, 'is_volatile')
+      let l:source.is_volatile = 0
+    endif
+    let l:source.unite__is_invalidate = 1
+
+    let l:source.unite__number = l:number
+    let l:number += 1
+
+    let l:sources[l:source_name] = l:source
   endfor
+  
+  return l:sources
+endfunction"}}}
+function! s:initialize_kinds()"{{{
+  return s:default_kinds
 endfunction"}}}
 function! s:gather_candidates(text, args)"{{{
   " Save options.
@@ -377,7 +387,7 @@ function! s:convert_line(candidate)"{{{
         \ . " " . a:candidate.source
 endfunction"}}}
 
-function! s:initialize_unite_buffer(args)"{{{
+function! s:initialize_unite_buffer(sources, args)"{{{
   " The current buffer is initialized.
   if unite#is_win()
     let l:buffer_name = '[unite]'
@@ -410,6 +420,10 @@ function! s:initialize_unite_buffer(args)"{{{
   let b:unite.old_winnr = l:winnr
   let b:unite.win_rest_cmd = l:win_rest_cmd
   let b:unite.args = a:args
+  let b:unite.candidates = []
+  let b:unite.cached_candidates = {}
+  let b:unite.sources = s:initialize_sources(a:sources)
+  let b:unite.kinds = s:initialize_kinds()
   
   " Basic settings.
   setlocal number
