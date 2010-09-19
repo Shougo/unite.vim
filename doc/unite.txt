@@ -228,6 +228,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-19
+- Fixed wildcard bug.
+
 2010-09-18
 - Display modified flag in source buffer.
 - Fixed multiple unite buffer bug.
