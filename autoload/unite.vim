@@ -525,7 +525,7 @@ endfunction"}}}
 function! s:fnameescape(string) "{{{
   return escape(a:string, " \t\n*?[{`$\\%#'\"|!<")
 endfunction"}}}
-function! s:bufexists(bufname) "{{{
+function! s:bufexists(name) "{{{
   return bufname(s:fnameescape(a:name)) ==# a:name
 endfunction"}}}
 "}}}
