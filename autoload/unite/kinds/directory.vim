@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Sep 2010
+" Last Modified: 19 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,7 +35,7 @@ let s:kind = {
       \}
 
 " Actions"{{{
-let s:kind.action_table = copy(unite#kinds#file#define().action_table)
+let s:kind.action_table = deepcopy(unite#kinds#file#define().action_table)
 
 let s:kind.action_table.narrow = {
       \ 'is_quit' : 0,

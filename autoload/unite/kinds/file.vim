@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Sep 2010
+" Last Modified: 19 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -67,42 +67,48 @@ let s:kind.action_table.split = {
       \ 'is_selectable' : 1, 
       \ }
 function! s:kind.action_table.split.func(candidate)"{{{
-  split `=a:candidate.word`
+  split
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.vsplit = {
       \ 'is_selectable' : 1, 
       \ }
 function! s:kind.action_table.vsplit.func(candidate)"{{{
-  vsplit `=a:candidate.word`
+  vsplit
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.left = {
       \ 'is_selectable' : 1, 
       \ }
 function! s:kind.action_table.left.func(candidate)"{{{
-  leftabove vsplit `=a:candidate.word`
+  leftabove vsplit
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.right = {
       \ 'is_selectable' : 1, 
       \ }
 function! s:kind.action_table.right.func(candidate)"{{{
-  rightbelow vsplit `=a:candidate.word`
+  rightbelow vsplit
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.above = {
       \ 'is_selectable' : 1, 
       \ }
 function! s:kind.action_table.above.func(candidate)"{{{
-  leftabove split `=a:candidate.word`
+  leftabove split
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.below = {
       \ 'is_selectable' : 1, 
       \ }
 function! s:kind.action_table.below.func(candidate)"{{{
-  rightbelow split `=a:candidate.word`
+  rightbelow split
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.cd = {

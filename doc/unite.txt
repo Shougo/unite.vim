@@ -231,6 +231,7 @@ CHANGELOG					*unite-changelog*
 2010-09-19
 - Fixed wildcard bug.
 - Improved buffer check.
+- Improved split.
 
 2010-09-18
 - Display modified flag in source buffer.
