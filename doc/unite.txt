@@ -67,6 +67,10 @@ COMMANDS 					*unite-commands*
 		Unite all sources. Initial narrowing text is current buffer
 		directory.
 
+:UniteWithCursorWord [-buffer-name={buffer-name}] [-input={input-text}] {sources}
+						*:UniteWithCursorWord*
+		Unite all sources. Initial narrowing text is cursor word.
+
 ------------------------------------------------------------------------------
 VARIABLES 					*unite-variables*
 
@@ -227,6 +231,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2010-09-20
+- Added :UniteWithCursorWord command.
 
 2010-09-19
 - Fixed wildcard bug.
