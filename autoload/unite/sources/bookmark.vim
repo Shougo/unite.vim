@@ -51,6 +51,19 @@ function! unite#sources#bookmark#_append(filename)"{{{
     let l:pattern = ''
   endif
   
+  let l:filename = (a:filename == '' ? expand('%') : a:filename)
+  if bufexists(l:filename)
+    let l:filetype = getbufvar(l:path, '&filetype')
+    
+    " Detect vimfiler and vimshell.
+    if l:filetype ==# 'vimfiler'
+      let l:path = getbufvar(l:path, 'vimfiler').current_dir
+    elseif l:filetype ==# 'vimshell'
+      let l:path = getbufvar(l:path, 'vimshell').save_dir
+    endif
+  endif
+  echomsg l:path
+  
   let l:path = substitute(l:path, '\\', '/', 'g')
   if !s:is_exists_path(path)
     return
@@ -60,9 +73,6 @@ function! unite#sources#bookmark#_append(filename)"{{{
   echo a:filename
   let l:name = input('Please input bookmark name : ')
   
-  redraw
-  echo ''
-
   call s:load()
   call insert(s:bookmark_files, [l:name, l:path, l:linenr, l:pattern])
   call s:save()

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2010
+" Last Modified: 20 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -402,7 +402,7 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
   
-  if bufname('%') !=# l:buffer_name
+  if expand('%') !=# l:buffer_name
     " Split window.
     execute g:unite_split_rule 
           \ g:unite_enable_split_vertically ?
