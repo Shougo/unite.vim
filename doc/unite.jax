@@ -344,28 +344,28 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
 		uniteを終了する。
 
-<Plug>(unite_insert_leave)			*<Plug>(unite_insert_leave)*
+<Plug>(unite_insert_leave)			*i_<Plug>(unite_insert_leave)*
 		ノーマルモードに移行する。
 
-<Plug>(unite_delete_backward_char)		*<Plug>(unite_delete_backward_char)*
+<Plug>(unite_delete_backward_char)		*i_<Plug>(unite_delete_backward_char)*
 		カーソル直前の1文字を消す。
 
-<Plug>(unite_delete_backward_line)		*<Plug>(unite_delete_backward_line)*
+<Plug>(unite_delete_backward_line)		*i_<Plug>(unite_delete_backward_line)*
 		カーソルから行の先頭までの文字をすべて削除する。
 
-<Plug>(unite_delete_backward_word)		*<Plug>(unite_delete_backward_word)*
+<Plug>(unite_delete_backward_word)		*i_<Plug>(unite_delete_backward_word)*
 		カーソル直前の単語を削除する。
 
-<Plug>(unite_select_next_line)			*<Plug>(unite_select_next_line)*
+<Plug>(unite_select_next_line)			*i_<Plug>(unite_select_next_line)*
 		次の候補に移動。
 
-<Plug>(unite_select_previous_line)		*<Plug>(unite_select_previous_line)*
+<Plug>(unite_select_previous_line)		*i_<Plug>(unite_select_previous_line)*
 		前の候補に移動。
 
-<Plug>(unite_select_next_page)			*<Plug>(unite_select_next_page)*
+<Plug>(unite_select_next_page)			*i_<Plug>(unite_select_next_page)*
 		次の候補ページを表示。
 
-<Plug>(unite_select_previous_page)		*<Plug>(unite_select_previous_page)*
+<Plug>(unite_select_previous_page)		*i_<Plug>(unite_select_previous_page)*
 		前の候補ページを表示。
 
 <Plug>(unite_do_default_action)			*i_<Plug>(unite_do_default_action)*
@@ -385,12 +385,12 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		みる。候補が複数ある場合はエラーとなる。
 		種類については|unite-kind|を参照。
 
-<Plug>(unite_move_head)				*<Plug>(unite_move_head)*
+<Plug>(unite_move_head)				*i_<Plug>(unite_move_head)*
 		カーソルを先頭に移動する。
 
 ビジュアルモードマッピング
 
-<Plug>(unite_toggle_mark_selected_candidates)	*<Plug>(unite_toggle_selected_candidates)*
+<Plug>(unite_toggle_mark_selected_candidates)	*v_<Plug>(unite_toggle_selected_candidates)*
 		ビジュアル選択している候補に対して、マークのオンオフを切り替え
 		る。
 
@@ -424,46 +424,64 @@ p		|<Plug>(unite_do_preview_action)|
 {lhs}		{rhs}
 --------	-----------------------------
 /		なにか入力していれば */ 、そうでなければ /
-<ESC>		|<Plug>(unite_insert_leave)|
+<ESC>		|i_<Plug>(unite_insert_leave)|
 <Tab>		|i_<Plug>(unite_choose_action)|
-<S-Tab>		|<Plug>(unite_select_previous_line)|
-<C-n>		|<Plug>(unite_select_next_line)|
-<C-p>		|<Plug>(unite_select_previous_line)|
-<C-f>		|<Plug>(unite_select_next_page)|
-<C-b>		|<Plug>(unite_select_previous_page)|
+<S-Tab>		|i_<Plug>(unite_select_previous_line)|
+<C-n>		|i_<Plug>(unite_select_next_line)|
+<C-p>		|i_<Plug>(unite_select_previous_line)|
+<C-f>		|i_<Plug>(unite_select_next_page)|
+<C-b>		|i_<Plug>(unite_select_previous_page)|
 <CR>		|i_<Plug>(unite_do_default_action)|
-<C-h>		|<Plug>(unite_delete_backward_char)|
-<BS>		|<Plug>(unite_delete_backward_char)|
-<C-u>		|<Plug>(unite_delete_backward_line)|
-<C-w>		|<Plug>(unite_delete_backward_word)|
-<C-a>		|<Plug>(unite_move_head)|
-<Home>		|<Plug>(unite_move_head)|
+<C-h>		|i_<Plug>(unite_delete_backward_char)|
+<BS>		|i_<Plug>(unite_delete_backward_char)|
+<C-u>		|i_<Plug>(unite_delete_backward_line)|
+<C-w>		|i_<Plug>(unite_delete_backward_word)|
+<C-a>		|i_<Plug>(unite_move_head)|
+<Home>		|i_<Plug>(unite_move_head)|
 <Space>		候補を選択していれば|i_<Plug>(unite_toggle_mark_current_candidate)|
 
 ビジュアルモードマッピング
 {lhs}		{rhs}
 --------	-----------------------------
-<Space>		|<Plug>(unite_toggle_mark_selected_candidates)|
+<Space>		|v_<Plug>(unite_toggle_mark_selected_candidates)|
 
 ==============================================================================
 情報源						*unite-source* *{sources}*
 
-*file*		ファイル
-*file_mru*	最近使用したファイル
-*buffer*	開いているバッファ
-*register*	レジスタに保存されている文字列
-*bookmark*	ブックマーク
+						*unite-source-file*
+file		ファイル
+
+						*unite-source-file_mru*
+file_mru	最近使用したファイル
+
+						*unite-source-buffer*
+buffer		開いているバッファ
+
+						*unite-source-register*
+register	レジスタに保存されている文字列
+
+						*unite-source-bookmark*
+bookmark	ブックマーク
 
 ==============================================================================
 種類						*unite-kind* *{kind}*
 
 候補の種類
 
-*file*		ファイル
-*buffer*	バッファ
-*directory*	ディレクトリ
-*word*		文字列
-*jump_list*	ジャンプリスト
+						*unite-kind-file*
+file		ファイル
+
+						*unite-kind-buffer*
+buffer		バッファ
+
+						*unite-kind-directory*
+directory	ディレクトリ
+
+						*unite-kind-word*
+word		文字列
+
+						*unite-kind-jump_list*
+jump_list	ジャンプリスト
 
 ==============================================================================
 アクション					*unite-action* *{action}*
@@ -519,7 +537,7 @@ jump_list					*unite-action-jump_list*
 file_mru					*unite-action-file_mru*
 	delete		最近使用したファイルの候補から削除
 
-bookmark					*unite-action-file_mru*
+bookmark					*unite-action-bookmark*
 	delete		ブックマークファイルの候補から削除
 
 						*unite-default-action*
