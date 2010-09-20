@@ -404,14 +404,16 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   
   if expand('%') !=# l:buffer_name
     " Split window.
+
     execute g:unite_split_rule 
           \ g:unite_enable_split_vertically ?
-          \        (s:bufexists(l:buffer_name) ? 'vsplit' : 'vnew')
-          \      : (s:bufexists(l:buffer_name) ? 'split' : 'new')
+          \        (bufexists(escape(l:buffer_name, '*')) ? 'vsplit' : 'vnew')
+          \      : (bufexists(escape(l:buffer_name, '*')) ? 'split' : 'new')
   endif
   
-  if s:bufexists(l:buffer_name)
-    silent execute bufnr(s:fnameescape(l:buffer_name)) 'buffer'
+  " Note: Must escape buffer name *.
+  if bufexists(escape(l:buffer_name, '*'))
+    silent execute bufnr(escape(l:buffer_name, '*')) 'buffer'
   else
     silent! file `=l:buffer_name`
   endif
@@ -550,12 +552,6 @@ function! s:get_unite() "{{{
 endfunction"}}}
 function! s:compare(source_a, source_b) "{{{
   return a:source_a.unite__number - a:source_b.unite__number
-endfunction"}}}
-function! s:fnameescape(string) "{{{
-  return escape(a:string, " \t\n*?[{`$\\%#'\"|!<")
-endfunction"}}}
-function! s:bufexists(name) "{{{
-  return bufname(s:fnameescape(a:name)) ==# a:name
 endfunction"}}}
 "}}}
 
