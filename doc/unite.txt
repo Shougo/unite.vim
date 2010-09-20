@@ -235,7 +235,7 @@ CHANGELOG					*unite-changelog*
 2010-09-20
 - Added :UniteWithCursorWord command.
 - Improved initialization.
-- Added Japanese help.
+- Added Japanese help(Thanks naoina!).
 - Added <Plug>(unite_toggle_mark_selected_candidates) keymapping.
 - Changed some keymappings name.
 
