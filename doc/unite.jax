@@ -139,11 +139,6 @@ uniteを終了させるには、ノーマルモードで q もしくは <ESC> �
 		絞込みテキストが現在のカーソル位置文字列である他は|:Unite|と同
 		一である。
 
-:UniteWithCursorWord [-buffer-name={buffer-name}] [-input={input-text}] {sources}
-						*:UniteWithCursorWord*
-		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
-		絞込みテキストはカーソル下の単語。
-
 ------------------------------------------------------------------------------
 変数						*unite-variables*
 
