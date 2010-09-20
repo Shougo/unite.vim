@@ -434,10 +434,10 @@ p		|<Plug>(unite_do_preview_action)|
 
 候補の種類
 
-file		ファイル
-buffer		バッファ
-directory	ディレクトリ
-word		文字列
+*file*		ファイル
+*buffer*	バッファ
+*directory*	ディレクトリ
+*word*		文字列
 
 ==============================================================================
 アクション					*unite-action* *{action}*
