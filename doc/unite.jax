@@ -1,4 +1,4 @@
-*unite.txt*	すべての情報源を合わせる
+*unite.txt*	すべての情報源を統合する
 
 Version: 0.5
 Author : Shougo <Shougo.Matsu@gmail.com>
@@ -35,38 +35,39 @@ License: MIT license  {{{
   情報源		  |unite-source|
   種類			  |unite-kind|
   アクション		  |unite-action|
-例			|unite-examples|
+設定例			|unite-examples|
 情報源の作成		|unite-create-source|
 ToDo			|unite-todo|
-バグ			|unite-bugs|
+既知のバグ			|unite-bugs|
 更新履歴		|unite-changelog|
 
 ==============================================================================
 概要						*unite-introduction*
 
-*unite* はファイル、バッファ、最近使用したファイル、レジスタなどの情報源からの
-検索、表示を行う。表示された候補に対して、候補の種類ごとに定義されたアクション
-を実行することができる。
+*unite* はファイル、バッファ、最近使用したファイル、レジスタといった、任意の情
+報源からの検索、表示を行う。表示された候補に対して、候補の種類ごとに定義された
+アクションを実行することができる。
 
 ==============================================================================
 使い方						*unite-usage*
 
-	情報源としてファイル及び、バッファを指定して起動
+	情報源としてファイル及び、バッファを指定して起動する場合
 >
 	:Unite file buffer
 <
 
-	絞込みテキストとしてhogeを入力した状態で起動
+	絞込みテキストとしてhogeを入力した状態で起動する場合
 >
 	:Unite -input=hoge file
 <
 
-uniteを起動すると、デフォルトの状態ではウィンドウが垂直に分割され、右側にunite
-のバッファが開かれる。例えば
+uniteを起動すると、デフォルトの状態ではウィンドウが水平に分割され、デフォルトで
+は上側にuniteのバッファが開かれる。例えば
 >
 	:Unite file
 <
-として起動した場合、ファイルの一覧が表示されているはずである。
+として起動した場合、カレントディレクトリのファイルの一覧が表示されているはずで
+ある。
 その状態で j、k、で候補を選択できるので、適当に候補を選び、Enter を押せば選択
 した候補が新しいバッファで開かれる。これは選択した候補の種類がファイルであった
 場合の、デフォルトのアクションである。
@@ -82,6 +83,8 @@ uniteを起動すると、デフォルトの状態ではウィンドウが垂直
 	*hoge
 <
 上記は hoge、ahoge、foohoge などにヒットする。
+デフォルトでは/が/*にマッピングされるため、ディレクトリの最初の数文字を入力する
+だけで絞り込むことができる。
 また、ワイルドカードを2つ続けて入力すると、ディレクトリを再帰的に指定できる。
 例えば
 >
@@ -96,6 +99,12 @@ uniteを終了させるには、ノーマルモードで q もしくは <ESC> �
 
 ==============================================================================
 インストール					*unite-install*
+
+1: 配布ファイルをVimスクリプトのディレクトリへインストールする
+   (普通は ~/.vim/ またはWindowsの場合、 Program Files/Vim/vimfiles)
+2: 情報源を引数に指定して、|:Unite|コマンドを実行する。
+毎回このコマンドを実行するのは非常に手間であるため、何かしらのキーマッピングを
+定義すると良いだろう。
 
 ==============================================================================
 インターフェース				*unite-interface*
@@ -115,12 +124,20 @@ uniteを終了させるには、ノーマルモードで q もしくは <ESC> �
 :UniteWithCurrentDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
 						*:UniteWithCurrentDir*
 		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
-		絞込みテキストは現在のディレクトリ。
+		絞込みテキストが現在のディレクトリである他は|:Unite|と同一であ
+		る。
 
 :UniteWithBufferDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
 						*:UniteWithBufferDir*
 		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
-		絞込みテキストは現在のバッファのディレクトリ。
+		絞込みテキストが現在のバッファのディレクトリである他は|:Unite|
+		と同一である。
+
+:UniteWithCursorWord [-buffer-name={buffer-name}] [-input={input-text}] {sources}
+						*:UniteWithCursorWord*
+		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
+		絞込みテキストが現在のカーソル位置文字列である他は|:Unite|と同
+		一である。
 
 ------------------------------------------------------------------------------
 変数						*unite-variables*
@@ -132,7 +149,7 @@ g:unite_update_time				*g:unite_update_time*
 		初期値は400である。
 
 g:unite_enable_start_insert			*g:unite_enable_start_insert*
-		uniteを実行したあとすぐに絞込みテキストの入力モードにするかを
+		uniteを実行したあとすぐに、絞込みテキストの入力モードにするかを
 		制御する。1ならば有効になる。
 		
 		初期値は0である。
@@ -149,7 +166,7 @@ g:unite_enable_smart_case			*g:unite_enable_smart_case*
 		初期値は'infercase'オプションと同じである。
 
 g:unite_split_rule				*g:unite_split_rule*
-		画面分割の位置ルールを指定する。
+		uniteのウィンドウを生成する際、画面分割の位置ルールを指定する。
 		
 		初期値は"topleft"である。
 
@@ -174,15 +191,17 @@ g:unite_substitute_patterns			*g:unite_substitute_patterns*
 		初期値は{}である。
 
 g:unite_temporary_directory			*g:unite_temporary_directory*
-		uniteが一時ファイルを書き出すディレクトリを指定する。ここで指
-		定したディレクトリが実際に存在しない場合、作成される。例えば最
-		近使用したファイルの情報をこの下に保存する。
+		uniteやその情報源が一時ファイルを書き出すディレクトリを指定する
+		。ここで指定したディレクトリが実際に存在しない場合、自動的に作
+		成される。例えばfile_mruの情報源は最近使用したファイルの情報を
+		この下に保存する。
 		
 		初期値は'~/.unite'の絶対パスである。
 
 g:unite_no_default_keymappings			*g:unite_no_default_keymappings*
 		この変数の値を1にすれば、uniteが予め用意しているキーマッピング
-		を設定しない。特に理由がない限り、通常は有効にすべきではない。
+		を設定しない。混乱するので、特に理由がない限り、通常は有効にす
+		べきではない。
 		
 		この変数はユーザーが自分で定義しない限り存在しない。
 
@@ -254,37 +273,45 @@ g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 
 <Plug>(unite_insert_enter)			*<Plug>(unite_insert_enter)*
 		カーソル位置から絞込みテキスト入力を開始する。
+		ただし、カーソルがプロンプト行にいない場合、カーソルが自動的に
+		プロンプト行へと移動する。
 
 <Plug>(unite_insert_head)			*<Plug>(unite_insert_head)*
 		カーソルを先頭に移動して絞込みテキスト入力を開始する。
+		ただし、カーソルがプロンプト行にいない場合、カーソルが自動的に
+		プロンプト行へと移動する。
 
 <Plug>(unite_append_enter)			*<Plug>(unite_append_enter)*
 		カーソルの右側から絞込みテキスト入力を開始します。
+		ただし、カーソルがプロンプト行にいない場合、カーソルが自動的に
+		プロンプト行へと移動する。
 
 <Plug>(unite_append_end)			*<Plug>(unite_append_end)*
 		カーソルを行末に移動して絞込みテキストの入力を開始する。
+		ただし、カーソルがプロンプト行にいない場合、カーソルが自動的に
+		プロンプト行へと移動する。
 
-<Plug>(unite_toggle_mark_current_file)		*<Plug>(unite_toggle_mark_current_file)*
-		複数の候補に対して一気にアクションを実行するためのマークのオン
-		オフを切り替える。
+<Plug>(unite_toggle_mark_current_candidate)	*<Plug>(unite_toggle_mark_current_candidate)*
+		カレント行の候補のマークを反転させる。複数の候補をマークすれば、
+		複数の候補に対して一気にアクションを実行することができる。
 
 <Plug>(unite_redraw)				*<Plug>(unite_redraw)*
 		|g:unite_update_time|で制御される更新間隔を待たずに、すぐに表
 		示を更新する。
 
 <Plug>(unite_search_next_source)		*<Plug>(unite_search_next_source)*
-		次の情報源の最初の候補にカーソルを移動。
+		次の情報源の最初の候補にカーソルを移動する。
 
 <Plug>(unite_search_previous_source)		*<Plug>(unite_serch_previous_source)*
-		前の情報源の最初の候補にカーソルを移動。
+		前の情報源の最初の候補にカーソルを移動する。
 
 <Plug>(unite_print_candidate)			*<Plug>(unite_print_candidate)*
 		選択している候補に対するアクションの対象を表示する。例えば、選
 		択している候補の種類が|word|の場合は、対象の内容が表示される。
 
 <Plug>(unite_edit_candidate)			*<Plug>(unite_edit_candidate)*
-		選択している候補を絞込みテキストとして入力した状態にして、絞込
-		みテキスト入力を開始する。
+		選択している候補を絞込みテキストとし、絞込みテキスト入力を開始
+		する。
 
 インサートモードマッピング
 
@@ -298,10 +325,10 @@ g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 		カーソル直前の1文字を消す。
 
 <Plug>(unite_delete_backward_line)		*<Plug>(unite_delete_backward_line)*
-		カーソルから行の先頭までの文字をすべて消す。
+		カーソルから行の先頭までの文字をすべて削除する。
 
 <Plug>(unite_delete_backward_word)		*<Plug>(unite_delete_backward_word)*
-		カーソル直前の単語を消す。
+		カーソル直前の単語を削除する。
 
 <Plug>(unite_select_next_line)			*<Plug>(unite_select_next_line)*
 		次の候補に移動。
@@ -317,19 +344,19 @@ g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 
 <Plug>(unite_do_default_action)			*i_<Plug>(unite_do_default_action)*
 		絞込みテキストに入力されているテキストを候補として、候補の種類
-		に応じたデフォルトのアクションを実行する。候補が完全な形で入力
-		されていない場合は、補完を試みる。
+		に応じたデフォルトのアクションを実行する。
 		種類については|unite-kind|を参照。
 		デフォルトのアクションについては|unite-default-action|を参照。
 
-<Plug>(unite_toggle_mark_current_file)		*i_<Plug>(unite_toggle_mark_current_file)*
+<Plug>(unite_toggle_mark_current_candidate)	*i_<Plug>(unite_toggle_mark_current_candidate)*
 		複数の候補に対して一気にアクションを実行するためのマークのオン
 		オフを切り替える。
 
 <Plug>(unite_choose_action)			*i_<Plug>(unite_choose_action)*
 		絞込みテキストに入力されているテキストを候補として、実行するア
-		クションを選択する。候補が完全な形で入力されていない場合は、補
-		完を試みる。アクションは候補の種類ごとに定義されている。
+		クションを選択する。アクションは候補の種類ごとに定義されている。
+		候補が完全な形で入力されていない場合は、先頭マッチでの補完を試
+		みる。候補が複数ある場合はエラーとなる。
 		種類については|unite-kind|を参照。
 
 <Plug>(unite_move_head)				*<Plug>(unite_move_head)*
@@ -337,9 +364,9 @@ g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 
 ビジュアルモードマッピング
 
-<Plug>(unite_toggle_mark_selected_lines)	*<Plug>(unite_toggle_selected_lines)*
-		ビジュアル選択している候補に対して一気にアクションを実行するた
-		めのマークのオンオフを切り替える。(未実装)
+<Plug>(unite_toggle_mark_selected_candidates)	*<Plug>(unite_toggle_selected_candidates)*
+		ビジュアル選択している候補に対して、マークのオンオフを切り替え
+		る。
 
 						*unite_default_key_mappings*
 デフォルトキーマッピング
@@ -355,7 +382,7 @@ A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
 <CR>		|<Plug>(unite_do_default_action)|
 d		|<Plug>(unite_do_delete_action)|
-<Space>		|<Plug>(unite_toggle_mark_current_file)|
+<Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_search_next_source)|
 <C-p>		|<Plug>(unite_search_previous_source)|
@@ -384,7 +411,12 @@ p		|<Plug>(unite_do_preview_action)|
 <C-w>		|<Plug>(unite_delete_backward_word)|
 <C-a>		|<Plug>(unite_move_head)|
 <Home>		|<Plug>(unite_move_head)|
-<Space>		候補を選択していれば|i_<Plug>(unite_toggle_mark_current_file)|
+<Space>		候補を選択していれば|i_<Plug>(unite_toggle_mark_current_candidate)|
+
+ビジュアルモードマッピング
+{lhs}		{rhs}
+--------	-----------------------------
+<Space>		|<Plug>(unite_toggle_mark_selected_candidates)|
 
 ==============================================================================
 情報源						*unite-source* *{sources}*
@@ -407,12 +439,16 @@ word		文字列
 ==============================================================================
 アクション					*unite-action* *{action}*
 
+|<Plug>(unite_choose_action)|で選択するときは、アクション名を補完したり、曖昧で
+なければ先頭文字で省略することができる。
+
 種類別アクション
 
 file						*unite-action-file*
 ファイルはすべて別のバッファに開かれる。
 	open		ファイルを開く
-	fopen		現在のバッファの変更を破棄してファイルを開く
+	fopen		現在のバッファの変更を破棄してファイルを開く。
+			force openの略語。
 	preview		プレビューウィンドウにファイルを開く
 	tabopen		ファイルをタブで開く
 	split		ウィンドウを水平分割してファイルを開く
@@ -423,22 +459,25 @@ file						*unite-action-file*
 	below		ウィンドウを水平分割して下側にファイルを開く
 	cd		カレントディレクトリを変更
 	lcd		現在のウィンドウのカレントディレクトリを変更
-	ex		候補をコマンドラインに入力した状態にする
+	ex		候補をコマンドラインに入力した状態にする。
+			選択した状態では動作しない。
 
 buffer						*unite-action-buffer*
 	open		バッファを表示
-	delete		バッファをアンロード
+	delete		バッファを削除
 	fopen		現在のバッファの変更を破棄して表示
-	fdelete		現在のバッファの変更を破棄してアンロード
+	fdelete		現在のバッファの変更を破棄して削除
 
 directory					*unite-action-directory*
-|unite-action-file|のアクションを継承している。
-	narrow		ディレクトリで候補を絞り込む
-	vimshell	VimShellがインストールされている場合に有効なアクション
-			VimShellCreate {candidate} を起動
+このkindは|unite-action-file|のアクションを継承している。ここではdirectory独自
+のアクションについて解説する。
+	narrow		ディレクトリ名で候補を絞り込む
+	vimshell	そのディレクトリで|vimshell|を起動する。これは
+			|vimshell|がインストールされている場合にのみ有効なアク
+			ションである。
 
 word						*unite-action-word*
-	insert		現在のバッファに文字列を挿入
+	insert		現在のバッファに文字列を挿入する
 
 情報源別アクション
 
@@ -459,40 +498,41 @@ word		insert
 ==============================================================================
 情報源の作成					*unite-create-source*
 
+この項はまだ未完成である。
+
 ------------------------------------------------------------------------------
 情報源の属性					*unite-source-attributes*
 
 						*unite-source-attribute-name*
 name			文字列		(必須)
-			情報源の名前。以下の文字で構成しなければなりません。
+			情報源の名前。以下の文字で構成しなければならない。
 			文字:
 			- a-z
 			- 0-9
 			- _
 
 			例:
-			- "buffer" と "file_mru" は正当です。
+			- "buffer" と "file_mru" は正当。
 			- "BadOne", "virw/git", "!@#$%^&*()_[]{}-|" と "" は
-			  正当ではありません。
+			  情報源の名前としては使えない。
 
 						*unite-source-attribute-max_candidates*
 max_candidates		数値		(任意)
 			候補の最大数。
 
-			この属性は任意です。もしこれが与えられない場合、0がデ
-			フォルト値として使われます。この場合、最大数の制限はあ
-			りません。
+			この属性は任意である。もしこれが与えられない場合、0がデ
+			フォルト値として使われる。この場合、最大数の制限はない。
 
 						*unite-source-attribute-required_pattern_length*
 required_pattern_length	数値		(任意)
-			候補を収集するのに必要なパターンの長さ。
+			候補を収集するのに必要な絞り込み文字列の長さ。
 
-			この属性は任意です。もしこれが与えられない場合、0がデ
+			この属性は任意である。もしこれが与えられない場合、0がデ
 			フォルト値として使われます。この場合、常に候補が収集さ
-			れます。
+			れる。
 
 ==============================================================================
-例						*unite-examples*
+設定例						*unite-examples*
 >
 	
 	" The prefix key.
@@ -518,12 +558,12 @@ required_pattern_length	数値		(任意)
 TODO						*unite-todo*
 
 ==============================================================================
-バグ						*unite-bugs*
+既知のバグ					*unite-bugs*
 
 ==============================================================================
 更新履歴					*unite-changelog*
 
-doc/unite.txtを参照。
+doc/unite.txtを参照せよ。
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:fdl=0:fdm=marker:

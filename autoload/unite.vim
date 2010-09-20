@@ -143,16 +143,17 @@ endfunction"}}}
 function! unite#redraw() "{{{
   call s:redraw(0)
 endfunction"}}}
-function! unite#redraw_current_line() "{{{
-  if line('.') <= 2 || &filetype !=# 'unite'
+function! unite#redraw_line(...) "{{{
+  let l:linenr = a:0 > 0 ? a:1 : line('.')
+  if l:linenr <= 2 || &filetype !=# 'unite'
     " Ignore.
     return
   endif
 
   setlocal modifiable
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - 3]
-  call setline('.', s:convert_line(l:candidate))
+  let l:candidate = unite#get_unite_candidates()[l:linenr - 3]
+  call setline(l:linenr, s:convert_line(l:candidate))
 
   setlocal nomodifiable
 endfunction"}}}
