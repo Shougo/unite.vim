@@ -152,8 +152,8 @@ Normal mode mappings.
 
 Visual mode mappings.
 
-<Plug>(unite_toggle_mark_selected_lines)	*<Plug>(unite_toggle_selected_lines)*
-		Toggle marks in selected lines.
+<Plug>(unite_toggle_mark_selected_candidates)	*<Plug>(unite_toggle_selected_candidates)*
+		Toggle marks in selected candidates.
 
 						*g:unite_default_key_mappings*
 Following keymappings are default keymappings.
@@ -235,6 +235,9 @@ CHANGELOG					*unite-changelog*
 2010-09-20
 - Added :UniteWithCursorWord command.
 - Improved initialization.
+- Added Japanese help.
+- Added <Plug>(unite_toggle_mark_selected_candidates) keymapping.
+- Changed some keymappings name.
 
 2010-09-19
 - Fixed wildcard bug.

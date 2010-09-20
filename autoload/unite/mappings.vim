@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Sep 2010
+" Last Modified: 20 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,6 +27,25 @@
 " Define default mappings.
 function! unite#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
+  nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call unite#mappings#do_action('default')<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call unite#mappings#do_action('delete')<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_preview_action)  :<C-u>call unite#mappings#do_action('preview')<CR>
+  nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
+  nnoremap <silent><buffer><expr> <Plug>(unite_append_enter)  col('.') == col('$') ? "\:<C-u>call \<SID>append_enter()\<CR>" : ":\<C-u>call \<SID>append_end()\<CR>"
+  nnoremap <silent><buffer> <Plug>(unite_append_end)  :<C-u>call <SID>append_end()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  :<C-u>call <SID>toggle_mark()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_redraw)  :<C-u>call <SID>redraw()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_search_next_source)  :<C-u>call <SID>search_source(1)<CR>
+  nnoremap <silent><buffer> <Plug>(unite_search_previous_source)  :<C-u>call <SID>search_source(0)<CR>
+  nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
+  nnoremap <silent><expr><buffer> <Plug>(unite_edit_candidate) line('.') <= 2 ?
+        \ ":\<C-u>call \<SID>insert_enter()\<CR>" : ":\<C-u>call \<SID>insert_selected_candidate()\<CR>"
+  
+  vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
+  
   inoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   inoremap <buffer><expr> <Plug>(unite_insert_leave)  line('.') == 2 ? "\<ESC>j" : "\<ESC>0"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_char)  col('.') == 2 ? '' : "\<C-h>"
@@ -37,26 +56,9 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
   inoremap <silent><buffer> <Plug>(unite_do_default_action) <C-o>:call unite#mappings#do_action('default')<CR>
-  inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_file)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
+  inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <silent><buffer> <Plug>(unite_move_head)  <C-o>:<C-u>call <SID>insert_head()<CR>
-  
-  nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call unite#mappings#do_action('default')<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call unite#mappings#do_action('delete')<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_preview_action)  :<C-u>call unite#mappings#do_action('preview')<CR>
-  nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
-  nnoremap <silent><buffer><expr> <Plug>(unite_append_enter)  col('.') == col('$') ? "\:<C-u>call \<SID>append_enter()\<CR>" : ":\<C-u>call \<SID>append_end()\<CR>"
-  nnoremap <silent><buffer> <Plug>(unite_append_end)  :<C-u>call <SID>append_end()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_file)  :<C-u>call <SID>toggle_mark()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_redraw)  :<C-u>call <SID>redraw()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_search_next_source)  :<C-u>call <SID>search_source(1)<CR>
-  nnoremap <silent><buffer> <Plug>(unite_search_previous_source)  :<C-u>call <SID>search_source(0)<CR>
-  nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
-  nnoremap <silent><expr><buffer> <Plug>(unite_edit_candidate) line('.') <= 2 ?
-        \ ":\<C-u>call \<SID>insert_enter()\<CR>" : ":\<C-u>call \<SID>insert_selected_candidate()\<CR>"
   "}}}
   
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -72,7 +74,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> q <Plug>(unite_exit)
   nmap <buffer> <CR> <Plug>(unite_do_default_action)
   nmap <buffer> d <Plug>(unite_do_delete_action)
-  nmap <buffer> <Space> <Plug>(unite_toggle_mark_current_file)
+  nmap <buffer> <Space> <Plug>(unite_toggle_mark_current_candidate)
   nmap <buffer> <Tab> <Plug>(unite_choose_action)
   nmap <buffer> <C-n> <Plug>(unite_search_next_source)
   nmap <buffer> <C-p> <Plug>(unite_search_previous_source)
@@ -82,6 +84,9 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> e <Plug>(unite_edit_candidate)
   nmap <buffer> p <Plug>(unite_do_preview_action)
   nmap <buffer> <C-l> <Plug>(unite_redraw)
+
+  " Visual mode key-mappings.
+  xmap <buffer> <Space> <Plug>(unite_toggle_mark_selected_candidates)
 
   " Insert mode key-mappings.
   inoremap <buffer><expr> /    getline(2) == '>' ? '/' : '*/'
@@ -99,7 +104,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-w>     <Plug>(unite_delete_backward_word)
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>     <Plug>(unite_move_head)
-  imap <buffer><expr> <Space>  line('.') == 2 ? ' ' : "\<Plug>(unite_toggle_mark_current_file)"
+  imap <buffer><expr> <Space>  line('.') == 2 ? ' ' : "\<Plug>(unite_toggle_mark_current_candidate)"
 endfunction"}}}
 
 " key-mappings functions.
@@ -172,9 +177,25 @@ function! s:toggle_mark()"{{{
   
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
   let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
-  call unite#redraw_current_line()
+  call unite#redraw_line()
   
   normal! j
+endfunction"}}}
+function! s:toggle_mark_candidates(start, end)"{{{
+  if a:start <= 2
+    " Ignore.
+    return
+  endif
+  
+  let l:cnt = a:start
+  while l:cnt <= a:end
+    let l:candidate = unite#get_unite_candidates()[l:cnt - 3]
+    let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
+    
+    call unite#redraw_line(l:cnt)
+
+    let l:cnt += 1
+  endwhile
 endfunction"}}}
 function! s:choose_action()"{{{
   let l:candidates = unite#get_marked_candidates()
