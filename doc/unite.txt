@@ -243,7 +243,7 @@ CHANGELOG					*unite-changelog*
 - Added jump_list kind.
 - Added <Plug>(unite_do_bookmark_action)
 - Detect vimfiler and vimshell in bookmark.
-- Improved buffer escape.
+- Improved buffer search.
 
 2010-09-19
 - Fixed wildcard bug.

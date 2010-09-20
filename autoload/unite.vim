@@ -404,16 +404,24 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   
   if expand('%') !=# l:buffer_name
     " Split window.
-
     execute g:unite_split_rule 
           \ g:unite_enable_split_vertically ?
-          \        (bufexists(escape(l:buffer_name, '*')) ? 'vsplit' : 'vnew')
-          \      : (bufexists(escape(l:buffer_name, '*')) ? 'split' : 'new')
+          \        (bufexists(l:buffer_name) ? 'vsplit' : 'vnew')
+          \      : (bufexists(l:buffer_name) ? 'split' : 'new')
   endif
   
   " Note: Must escape buffer name *.
-  if bufexists(escape(l:buffer_name, '*'))
-    silent execute bufnr(escape(l:buffer_name, '*')) 'buffer'
+  if bufexists(l:buffer_name)
+    " Search buffer name.
+    let l:bufnr = 1
+    let l:max = bufnr('$')
+    while l:bufnr <= l:max
+      if bufname(l:bufnr) ==# l:buffer_name
+        silent execute l:bufnr 'buffer'
+      endif
+      
+      let l:bufnr += 1
+    endwhile
   else
     silent! file `=l:buffer_name`
   endif
