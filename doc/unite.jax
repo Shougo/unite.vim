@@ -220,7 +220,7 @@ g:unite_no_default_keymappings			*g:unite_no_default_keymappings*
 情報源の変数					*unite-sources-variables*
 
 g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
-		情報源が|file|の候補に表示しないファイルの正規表現パターンを指定
+		情報源がfileの候補に表示しないファイルの正規表現パターンを指定
 		する。この変数が空文字列以外であれば、指定した正規表現で結果を
 		フィルタリングする。正規表現の大文字・小文字の区別は
 		'ignorecase'の設定次第である。
@@ -228,7 +228,7 @@ g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
 		初期値は autoload/unite/sources/file.vim を参照。
 
 g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
-		情報源が|file_mru|の候補での最終アクセス時間の表示フォーマットを
+		情報源がfile_mruの候補での最終アクセス時間の表示フォーマットを
 		指定する。フォーマットは|strftime()|で指定できるものと同じであ
 		る。
 		
@@ -245,7 +245,7 @@ g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
 		初期値は100である。
 
 g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
-		情報源が|file_mru|の候補に表示しないファイルの正規表現パターンを
+		情報源がfile_mruの候補に表示しないファイルの正規表現パターンを
 		指定する。この変数が空文字列以外であれば、指定した正規表現で結
 		果をフィルタリングする。正規表現の大文字・小文字は'ignorecase'
 		の設定に関わらず、明確に区別される。
