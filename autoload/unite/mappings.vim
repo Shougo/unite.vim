@@ -30,6 +30,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call unite#mappings#do_action('default')<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call unite#mappings#do_action('delete')<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_bookmark_action)  :<C-u>call unite#mappings#do_action('bookmark')<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_preview_action)  :<C-u>call unite#mappings#do_action('preview')<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
@@ -74,6 +75,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> q <Plug>(unite_exit)
   nmap <buffer> <CR> <Plug>(unite_do_default_action)
   nmap <buffer> d <Plug>(unite_do_delete_action)
+  nmap <buffer> b <Plug>(unite_do_bookmark_action)
   nmap <buffer> <Space> <Plug>(unite_toggle_mark_current_candidate)
   nmap <buffer> <Tab> <Plug>(unite_choose_action)
   nmap <buffer> <C-n> <Plug>(unite_search_next_source)

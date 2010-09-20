@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: buffer.vim
+" FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2010
+" Last Modified: 20 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,16 +24,13 @@
 " }}}
 "=============================================================================
 
-if exists('g:loaded_unite_source_buffer')
+if exists('g:loaded_unite_source_bookmark')
   finish
 endif
 
-augroup plugin-unite-source-buffer
-  autocmd!
-  autocmd BufEnter,BufWinEnter,BufFilePost * call unite#sources#buffer#_append()
-augroup END
+command! -nargs=? -complete=file UniteBookmarkAdd call unite#sources#bookmark#_append(<q-args>)
 
-let g:loaded_unite_source_buffer = 1
+let g:loaded_unite_source_bookmark = 1
 
 " __END__
 " vim: foldmethod=marker

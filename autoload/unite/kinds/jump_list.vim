@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: buffer.vim
+" FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2010
+" Last Modified: 20 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,16 +24,36 @@
 " }}}
 "=============================================================================
 
-if exists('g:loaded_unite_source_buffer')
-  finish
-endif
+function! unite#kinds#jump_list#define()"{{{
+  return s:kind
+endfunction"}}}
 
-augroup plugin-unite-source-buffer
-  autocmd!
-  autocmd BufEnter,BufWinEnter,BufFilePost * call unite#sources#buffer#_append()
-augroup END
+let s:kind = {
+      \ 'name' : 'jump_list',
+      \ 'default_action' : 'open',
+      \ 'action_table': {},
+      \}
 
-let g:loaded_unite_source_buffer = 1
+" Actions"{{{
+let s:kind.action_table = deepcopy(unite#kinds#file#define().action_table)
 
-" __END__
+let s:kind.action_table.open = {
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:kind.action_table.open.func(candidate)"{{{
+  edit `=a:candidate.word`
+  
+  let l:linenr = (has_key(a:candidate, 'line') && a:candidate.line != '') ? a:candidate.line : 1
+
+  if has_key(a:candidate, 'pattern') && a:candidate.pattern != ''
+        \ && getline(l:linenr) !~ a:candidate.pattern
+    " Search pattern.
+    call search(a:candidate.pattern, 'w')
+  else
+    " Jump to a:candidate.line.
+    execute l:linenr
+  endif
+endfunction"}}}
+"}}}
+
 " vim: foldmethod=marker

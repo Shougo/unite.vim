@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Sep 2010
+" Last Modified: 20 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,7 +28,7 @@
 " The version of MRU file format.
 let s:VERSION = '0.2.0'
 
-" [ { 'path' : full_path, 'time' : localtime()}, ... ]
+" [[full_path, localtime()], ... ]
 let s:mru_files = []
 
 let s:mru_file_mtime = 0  " the last modified time of the mru file.

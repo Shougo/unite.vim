@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2010
+" Last Modified: 20 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,13 +56,5 @@ if exists(':VimShell')
   endfunction"}}}
 endif
 "}}}
-
-function! s:open(bang, candidate)"{{{
-  let v:errmsg = ''
-
-  edit `=a:candidate.word`
-
-  return v:errmsg == '' ? 0 : v:errmsg
-endfunction"}}}
 
 " vim: foldmethod=marker

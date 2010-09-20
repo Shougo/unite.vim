@@ -1,0 +1,131 @@
+"=============================================================================
+" FILE: bookmark.vim
+" AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 20 Sep 2010
+" License: MIT license  {{{
+"     Permission is hereby granted, free of charge, to any person obtaining
+"     a copy of this software and associated documentation files (the
+"     "Software"), to deal in the Software without restriction, including
+"     without limitation the rights to use, copy, modify, merge, publish,
+"     distribute, sublicense, and/or sell copies of the Software, and to
+"     permit persons to whom the Software is furnished to do so, subject to
+"     the following conditions:
+"
+"     The above copyright notice and this permission notice shall be included
+"     in all copies or substantial portions of the Software.
+"
+"     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+"     OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+"     MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+"     IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+"     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+"     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+"     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+" }}}
+"=============================================================================
+
+" Variables  "{{{
+" The version of bookmark file format.
+let s:VERSION = '0.1.0'
+
+let s:bookmark_file_mtime = 0  " the last modified time of the bookmark file.
+
+" [ [ name, full_path, linenr, search pattern ], ... ]
+let s:bookmark_files = []
+
+call unite#set_default('g:unite_source_bookmark_file',  g:unite_temporary_directory . '/.bookmark')
+"}}}
+
+function! unite#sources#bookmark#define()"{{{
+  return s:source
+endfunction"}}}
+function! unite#sources#bookmark#_append(filename)"{{{
+  if a:filename == ''
+    " Append the current buffer to the bookmark list.
+    let l:path = expand('%:p')
+    let l:linenr = line('.')
+    let l:pattern = escape(getline('.'), '~"\.^*$[]')
+  else
+    let l:path = fnamemodify(a:filename, ':p')
+    let l:linenr = ''
+    let l:pattern = ''
+  endif
+  
+  let l:path = substitute(l:path, '\\', '/', 'g')
+  if !s:is_exists_path(path)
+    return
+  endif
+  
+  redraw
+  echo a:filename
+  let l:name = input('Please input bookmark name : ')
+  
+  redraw
+  echo ''
+
+  call s:load()
+  call insert(s:bookmark_files, [l:name, l:path, l:linenr, l:pattern])
+  call s:save()
+endfunction"}}}
+
+let s:source = {
+      \ 'name' : 'bookmark',
+      \ 'action_table': {},
+      \}
+
+function! s:source.gather_candidates(args)"{{{
+  call s:load()
+  return map(copy(s:bookmark_files), '{
+        \ "abbr" : (v:val[0] != "" ? "[" . v:val[0] . "] " : "") .  
+        \          (fnamemodify(v:val[1], ":~:.") != "" ? fnamemodify(v:val[1], ":~:.") : v:val[1]),
+        \ "word" : v:val[1],
+        \ "source" : "bookmark",
+        \ "kind" : (isdirectory(v:val[1]) ? "directory" : "jump_list"),
+        \ "bookmark_name" : v:val[0],
+        \ "line" : v:val[2],
+        \ "pattern" : v:val[3],
+        \   }')
+endfunction"}}}
+
+" Actions"{{{
+let s:source.action_table.delete = {
+      \ 'is_invalidate_cache' : 1, 
+      \ 'is_quit' : 0, 
+      \ 'is_selectable' : 1, 
+      \ }
+function! s:source.action_table.delete.func(candidate)"{{{
+  call filter(s:bookmark_files, 'string(v:val) !=# ' .
+        \ string(string([a:candidate.bookmark_name, a:candidate.word, a:candidate.line, a:candidate.pattern])))
+  call s:save()
+endfunction"}}}
+"}}}
+
+" Misc
+function! s:save()  "{{{
+  call writefile([s:VERSION] + map(copy(s:bookmark_files), 'join(v:val, "\t")'),
+  \              g:unite_source_bookmark_file)
+  let s:bookmark_file_mtime = getftime(g:unite_source_bookmark_file)
+endfunction"}}}
+function! s:load()  "{{{
+  if filereadable(g:unite_source_bookmark_file)
+  \  && s:bookmark_file_mtime != getftime(g:unite_source_bookmark_file)
+    let [ver; s:bookmark_files] = readfile(g:unite_source_bookmark_file)
+    if ver !=# s:VERSION
+      echohl WarningMsg
+      echomsg 'Sorry, the version of bookmark file is old.  Clears the bookmark list.'
+      echohl None
+      let s:bookmark_files = []
+      return
+    endif
+    let s:bookmark_files =
+    \   filter(map(s:bookmark_files,
+    \              'split(v:val, "\t", 1)'), 's:is_exists_path(v:val[1])')
+    let s:bookmark_file_mtime = getftime(g:unite_source_bookmark_file)
+  endif
+endfunction"}}}
+function! s:is_exists_path(path)  "{{{
+  return isdirectory(a:path) || filereadable(a:path)
+endfunction"}}}
+
+
+" vim: foldmethod=marker

@@ -142,6 +142,15 @@ uniteを終了させるには、ノーマルモードで q もしくは <ESC> �
 		絞込みテキストが現在のカーソル位置文字列である他は|:Unite|と同
 		一である。
 
+情報源のコマンド				*unite-sources-commands*
+
+:UniteFilemruSweep				*:UniteFilemruSweep*
+		最近使ったファイルリストから、存在しないファイルを削除する。
+
+:UniteBookmarkAdd [{file}]			*:UniteBookmarkAdd*
+		ブックマークリストにファイルを追加する。引数が指定されなかった
+		場合、現在のファイルの現在位置が記録される。
+
 ------------------------------------------------------------------------------
 変数						*unite-variables*
 
@@ -243,6 +252,11 @@ g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 		
 		初期値は autoload/unite/sources/file_mru.vim を参照。
 
+g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
+		ブックマークを書き出すファイルを指定する。
+		
+		初期値は |g:unite_temporary_directory| . '/.bookmark' である。
+
 ------------------------------------------------------------------------------
 キーマッピング 					*unite-key-mappings*
 
@@ -262,12 +276,21 @@ g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 		ンは候補の種類ごとに定義されている。
 		種類については|unite-kind|を参照。
 		deleteアクションについては|unite-action|を参照。
+		アクションが存在しないときは無視される。
+
+<Plug>(unite_do_bookmark_action)		*<Plug>(unite_do_bookmark_action)*
+		選択している候補に対してbookmarkアクションを実行する。アクショ
+		ンは候補の種類ごとに定義されている。
+		種類については|unite-kind|を参照。
+		bookmarkアクションについては|unite-action|を参照。
+		アクションが存在しないときは無視される。
 
 <Plug>(unite_do_preview_action)			*<Plug>(unite_do_preview_action)*
 		選択している候補に対してアクションを実行した結果を、プレビュー
 		ウィンドウに表示する。このマッピングは候補の種類がファイルの場
 		合のみ動作する。情報源がレジスタの場合のプレビューは
 		|<Plug>(unite_print_candidate)|が使用できる。
+		アクションが存在しないときは無視される。
 
 <Plug>(unite_choose_action)			*<Plug>(unite_choose_action)*
 		選択している候補に対して実行するアクションを選択する。アクショ
@@ -385,6 +408,7 @@ A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
 <CR>		|<Plug>(unite_do_default_action)|
 d		|<Plug>(unite_do_delete_action)|
+b		|<Plug>(unite_do_bookmark_action)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_search_next_source)|
@@ -428,6 +452,7 @@ p		|<Plug>(unite_do_preview_action)|
 *file_mru*	最近使用したファイル
 *buffer*	開いているバッファ
 *register*	レジスタに保存されている文字列
+*bookmark*	ブックマーク
 
 ==============================================================================
 種類						*unite-kind* *{kind}*
@@ -438,6 +463,7 @@ p		|<Plug>(unite_do_preview_action)|
 *buffer*	バッファ
 *directory*	ディレクトリ
 *word*		文字列
+*jump_list*	ジャンプリスト
 
 ==============================================================================
 アクション					*unite-action* *{action}*
@@ -464,6 +490,7 @@ file						*unite-action-file*
 	lcd		現在のウィンドウのカレントディレクトリを変更
 	ex		候補をコマンドラインに入力した状態にする。
 			選択した状態では動作しない。
+	bookmark	候補をブックマークに追加する
 
 buffer						*unite-action-buffer*
 	open		バッファを表示
@@ -482,10 +509,18 @@ directory					*unite-action-directory*
 word						*unite-action-word*
 	insert		現在のバッファに文字列を挿入する
 
+jump_list					*unite-action-jump_list*
+このkindは|unite-action-file|のアクションを継承している。ここではjump_list独自
+のアクションについて解説する。
+	open		その候補のファイルにジャンプする
+
 情報源別アクション
 
 file_mru					*unite-action-file_mru*
 	delete		最近使用したファイルの候補から削除
+
+bookmark					*unite-action-file_mru*
+	delete		ブックマークファイルの候補から削除
 
 						*unite-default-action*
 デフォルトアクション
@@ -497,6 +532,7 @@ file		open
 buffer		open
 directory	narrow
 word		insert
+jump_list	open
 
 ==============================================================================
 情報源の作成					*unite-create-source*
@@ -543,8 +579,8 @@ required_pattern_length	数値		(任意)
 	nmap    f [unite]
 	
 	nnoremap [unite]u  :<C-u>Unite<Space>
-	nnoremap <silent> [unite]f  :<C-u>Unite -buffer-name=files buffer file_mru file<CR>
-	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir buffer file_mru file<CR>
+	nnoremap <silent> [unite]f  :<C-u>UniteWithCurrentDir -buffer-name=files buffer file_mru bookmark file<CR>
+	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
 	
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{
