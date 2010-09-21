@@ -104,7 +104,7 @@ uniteを終了させるには、ノーマルモードで q もしくは <ESC> �
 インストール					*unite-install*
 
 1: 配布ファイルをVimスクリプトのディレクトリへインストールする
-   (普通は ~/.vim/ またはWindowsの場合、 Program Files/Vim/vimfiles)
+   (普通は ~/.vim/ またはWindowsの場合、 $HOME/vimfiles)
 2: 情報源を引数に指定して、|:Unite|コマンドを実行する。
 毎回このコマンドを実行するのは非常に手間であるため、何かしらのキーマッピングを
 定義すると良いだろう。

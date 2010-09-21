@@ -402,15 +402,17 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
   
-  if expand('%') !=# l:buffer_name
-    " Split window.
-    execute g:unite_split_rule 
-          \ g:unite_enable_split_vertically ?
-          \        (bufexists(l:buffer_name) ? 'vsplit' : 'vnew')
-          \      : (bufexists(l:buffer_name) ? 'split' : 'new')
+  if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
+    " Quit unite buffer.
+    call unite#quit_session()
   endif
   
-  " Note: Must escape buffer name *.
+  " Split window.
+  execute g:unite_split_rule 
+        \ g:unite_enable_split_vertically ?
+        \        (bufexists(l:buffer_name) ? 'vsplit' : 'vnew')
+        \      : (bufexists(l:buffer_name) ? 'split' : 'new')
+  
   if bufexists(l:buffer_name)
     " Search buffer name.
     let l:bufnr = 1

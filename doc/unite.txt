@@ -232,6 +232,11 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-21
+- Ver.0.5 is released.
+- Fixed japanese documentation.
+- Improved unite buffer detect.
+
 2010-09-20
 - Added :UniteWithCursorWord command.
 - Improved initialization.
