@@ -232,6 +232,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-23
+- Fixed filtering bug.
+
 2010-09-21
 - Ver.1.0 development is started.
 - Fixed unite buffer restore bug.

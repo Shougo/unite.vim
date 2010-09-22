@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Sep 2010
+" Last Modified: 23 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -346,7 +346,7 @@ function! s:gather_candidates(text, args)"{{{
         let b:unite.cached_candidates[l:source.name] = l:source_candidates
       endif
     else
-      let l:source_candidates = b:unite.cached_candidates[l:source.name]
+      let l:source_candidates = copy(b:unite.cached_candidates[l:source.name])
     endif
     
     for l:candidate in l:source_candidates
