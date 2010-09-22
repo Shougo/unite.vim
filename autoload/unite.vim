@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2010
+" Last Modified: 22 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -389,6 +389,11 @@ function! s:convert_line(candidate)"{{{
 endfunction"}}}
 
 function! s:initialize_unite_buffer(sources, args)"{{{
+  while getbufvar(bufnr('%'), '&filetype') ==# 'unite'
+    " Quit unite buffer.
+    call unite#quit_session()
+  endwhile
+
   " The current buffer is initialized.
   if unite#is_win()
     let l:buffer_name = '[unite]'
@@ -401,11 +406,6 @@ function! s:initialize_unite_buffer(sources, args)"{{{
 
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
-  
-  if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
-    " Quit unite buffer.
-    call unite#quit_session()
-  endif
   
   " Split window.
   execute g:unite_split_rule 

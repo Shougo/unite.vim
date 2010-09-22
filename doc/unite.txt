@@ -234,6 +234,7 @@ CHANGELOG					*unite-changelog*
 
 2010-09-21
 - Ver.1.0 development is started.
+- Fixed unite buffer restore bug.
 
 Ver.0.5 {{{
 2010-09-21 
