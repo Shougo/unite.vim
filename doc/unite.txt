@@ -217,6 +217,7 @@ EXAMPLES					*unite-examples*
 	" Overwrite settings.
 	imap <buffer> jj      <Plug>(unite_insert_leave)
 	nnoremap <buffer> t G
+	nnoremap <silent><buffer> <C-k> :<C-u>call unite#mappings#do_action('preview')<CR>
 	"let g:unite_enable_start_insert = 1
 	endfunction"}}}
 	
@@ -234,6 +235,7 @@ CHANGELOG					*unite-changelog*
 
 2010-09-23
 - Fixed filtering bug.
+- Added the unite-functions description into Japanese document.
 
 2010-09-21
 - Ver.1.0 development is started.

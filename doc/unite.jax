@@ -1,6 +1,6 @@
 *unite.txt*	すべての情報源を統合する
 
-Version: 0.5
+Version: 1.0
 Author : Shougo <Shougo.Matsu@gmail.com>
 Japanese Documentation Author : naoina
 License: MIT license  {{{
@@ -33,6 +33,7 @@ License: MIT license  {{{
   変数			  |unite-variables|
     情報源の変数	    |unite-sources-variables|
   キーマッピング	  |unite-key-mappings|
+  関数			  |unite-functions|
   情報源		  |unite-source|
   種類			  |unite-kind|
   アクション		  |unite-action|
@@ -394,15 +395,6 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		ビジュアル選択している候補に対して、マークのオンオフを切り替え
 		る。
 
-						*unite-functions*
-関数
-
-unite#mappings#do_action({action})		*unite#mappings#do_action()*
-		選択及び、マークしている候補に対して{action}アクションを実行す
-		る。この関数はuniteが起動している時にのみ動作する。
-		ユーザー側で特定のアクションを実行するためのマッピングを定義す
-		る場合に便利である。|unite-examples|を参照。
-
 						*unite_default_key_mappings*
 デフォルトキーマッピング
 
@@ -453,6 +445,16 @@ p		|<Plug>(unite_do_preview_action)|
 {lhs}		{rhs}
 --------	-----------------------------
 <Space>		|v_<Plug>(unite_toggle_mark_selected_candidates)|
+
+==============================================================================
+						*unite-functions*
+関数
+
+unite#mappings#do_action({action})		*unite#mappings#do_action()*
+		選択及び、マークしている候補に対して{action}アクションを実行す
+		る。この関数はuniteが起動している時にのみ動作する。
+		ユーザー側で特定のアクションを実行するためのマッピングを定義す
+		る場合に便利である。|unite-examples|を参照。
 
 ==============================================================================
 情報源						*unite-source* *{sources}*
@@ -614,7 +616,7 @@ required_pattern_length	数値		(任意)
 	" Overwrite settings.
 	imap <buffer> jj      <Plug>(unite_insert_leave)
 	nnoremap <buffer> t G
-	nnoremap <buffer> <C-k> :call unite#mappings#do_action('preview')<CR>
+	nnoremap <silent><buffer> <C-k> :<C-u>call unite#mappings#do_action('preview')<CR>
 	"let g:unite_enable_start_insert = 1
 	endfunction"}}}
 	
