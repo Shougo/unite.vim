@@ -105,11 +105,6 @@ g:unite_enable_split_vertically				*g:unite_enable_split_vertically*
 		
 		Default value is 0.
 
-g:unite_substitute_patterns			*g:unite_substitute_patterns*
-		
-		
-		Default value is refer to autoload/unite.vim.
-
 g:unite_temporary_directory			*g:unite_temporary_directory*
 		
 		
@@ -240,6 +235,7 @@ CHANGELOG					*unite-changelog*
 - Improved <Plug>(unite_select_next_line) and <Plug>(unite_previous_line) behavior.
 - Fixed documentation typo.
 - Added unite#set_substitute_pattern().
+- Deleted g:unite_substitute_patterns.
 
 2010-09-23
 - Fixed filtering bug.

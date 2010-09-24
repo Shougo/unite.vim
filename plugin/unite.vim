@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2010
+" Last Modified: 24 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,9 +47,6 @@ if !exists('g:unite_split_rule')
 endif
 if !exists('g:unite_enable_split_vertically')
   let g:unite_enable_split_vertically = 0
-endif
-if !exists('g:unite_substitute_patterns')
-  let g:unite_substitute_patterns = {}
 endif
 if !exists('g:unite_temporary_directory')
   let g:unite_temporary_directory = expand('~/.unite')
