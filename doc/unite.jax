@@ -358,10 +358,10 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		カーソル直前の単語を削除する。
 
 <Plug>(unite_select_next_line)			*i_<Plug>(unite_select_next_line)*
-		次の候補に移動。
+		次の候補に移動。ただし候補の候補にいる場合はループする。
 
 <Plug>(unite_select_previous_line)		*i_<Plug>(unite_select_previous_line)*
-		前の候補に移動。
+		前の候補に移動。ただし候補の先頭にいる場合はループする。
 
 <Plug>(unite_select_next_page)			*i_<Plug>(unite_select_next_page)*
 		次の候補ページを表示。
