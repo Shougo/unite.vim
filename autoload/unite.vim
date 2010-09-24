@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2010
+" Last Modified: 24 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,6 +32,14 @@ function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
     endif
   endfor
 endfunction"}}}
+function! unite#set_substitute_pattern(buffer_name, pattern, subst)"{{{
+  let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
+  if !has_key(s:substitute_pattern, l:buffer_name)
+    let s:substitute_pattern[l:buffer_name] = {}
+  endif
+  
+  let s:substitute_pattern[l:buffer_name][a:pattern] = a:subst
+endfunction"}}}
 
 " Constants"{{{
 
@@ -52,7 +60,9 @@ let s:default_kinds = {}
 let s:custom_sources = {}
 let s:custom_kinds = {}
 
-call unite#set_dictionary_helper(g:unite_substitute_patterns, '^\~', substitute($HOME, '\\', '/', 'g'))
+let s:substitute_pattern = {}
+call unite#set_substitute_pattern('default', '^\~', substitute($HOME, '\\', '/', 'g'))
+call unite#set_substitute_pattern('default', '^\@<!/', '*/')
 "}}}
 
 " Helper functions."{{{
@@ -437,6 +447,7 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let b:unite.cached_candidates = {}
   let b:unite.sources = s:initialize_sources(a:sources)
   let b:unite.kinds = s:initialize_kinds()
+  let b:unite.buffer_name = (a:args.buffer_name == '') ? 'default' : a:args.buffer_name
   
   " Basic settings.
   setlocal number
@@ -484,9 +495,11 @@ function! s:redraw(is_force) "{{{
   endif
 
   let l:input = getline(2)[1:]
-  for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
-    let l:input = substitute(l:input, l:pattern, l:subst, 'g')
-  endfor
+  if has_key(s:substitute_pattern, b:unite.buffer_name)
+    for [l:pattern, l:subst] in items(s:substitute_pattern[b:unite.buffer_name])
+      let l:input = substitute(l:input, l:pattern, l:subst, 'g')
+    endfor
+  endif
 
   let l:args = b:unite.args
   let l:args.is_force = a:is_force
@@ -541,9 +554,13 @@ function! s:on_insert_leave()  "{{{
   setlocal nomodifiable
 
   let l:input = getline(2)[1:]
-  for [l:pattern, l:subst] in items(g:unite_substitute_patterns)
-    let l:input = substitute(l:input, l:pattern, l:subst, 'g')
-  endfor
+  if has_key(s:substitute_pattern, b:unite.buffer_name)
+    for [l:pattern, l:subst] in items(s:substitute_pattern[b:unite.buffer_name])
+      let l:input = substitute(l:input, l:pattern, l:subst, 'g')
+    endfor
+  endif
+  echomsg l:input
+  
   let l:input = unite#escape_match(l:input)
   let l:input_list = split(l:input, '\\\@<! ')
   call filter(l:input_list, 'v:val !~ "^!"')

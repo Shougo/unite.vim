@@ -91,7 +91,6 @@ function! unite#mappings#define_default_mappings()"{{{
   xmap <buffer> <Space> <Plug>(unite_toggle_mark_selected_candidates)
 
   " Insert mode key-mappings.
-  inoremap <buffer><expr> /    getline(2) == '>' ? '/' : '*/'
   imap <buffer> <ESC>     <Plug>(unite_insert_leave)
   imap <buffer> <TAB>     <Plug>(unite_choose_action)
   imap <buffer> <S-TAB>   <Plug>(unite_select_previous_line)

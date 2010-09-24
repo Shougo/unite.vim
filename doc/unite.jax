@@ -87,7 +87,7 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 	*hoge
 <
 上記は hoge、ahoge、foohoge などにヒットする。
-デフォルトでは/が/*にマッピングされるため、ディレクトリの最初の数文字を入力する
+デフォルトでは/が*/にマッピングされるため、ディレクトリの最初の数文字を入力する
 だけで絞り込むことができる。
 また、ワイルドカードを2つ続けて入力すると、ディレクトリを再帰的に指定できる。
 例えば
@@ -188,20 +188,6 @@ g:unite_enable_split_vertically			*g:unite_enable_split_vertically*
 		直分割にする。
 		
 		初期値は0なので、水平分割である。
-
-g:unite_substitute_patterns			*g:unite_substitute_patterns*
-		絞込みテキストの置換パターンを指定する。形式はキーを置換パター
-		ンの正規表現、値を置換する文字列とした辞書である。次の例では絞
-		込みテキストを"hoge"で終わるように入力した場合に、"foo"で検索
-		されるようにする。
-		例:
->
-			let g:unite_substitute_patterns = {
-				\ ".*hoge$": "foo",
-			\}
-<
-		
-		初期値は{}である。
 
 g:unite_temporary_directory			*g:unite_temporary_directory*
 		uniteやその情報源が一時ファイルを書き出すディレクトリを指定する
@@ -456,6 +442,18 @@ unite#mappings#do_action({action})		*unite#mappings#do_action()*
 		ユーザー側で特定のアクションを実行するためのマッピングを定義す
 		る場合に便利である。|unite-examples|を参照。
 
+unite#set_substitute_pattern({buffer-name}, {pattern}, {subst})
+						*unite#set_substitute_pattern()*
+		{buffer-name}における絞込みテキストの置換パターンを指定する。
+		{pattern}は置換対象の正規表現、{subst}は置換する文字列である。
+		次の例では絞込みテキストを"~"で始まるように入力した場合に、
+		$HOMEで検索されるようにする。{buffer-name}を省略すると、
+		"default"となる。
+		例:
+>
+		call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
+		call unite#set_substitute_pattern('files', '^\@<!/', '*/')
+<
 ==============================================================================
 情報源						*unite-source* *{sources}*
 
@@ -610,6 +608,9 @@ required_pattern_length	数値		(任意)
 	nnoremap [unite]u  :<C-u>Unite<Space>
 	nnoremap <silent> [unite]f  :<C-u>UniteWithCurrentDir -buffer-name=files buffer file_mru bookmark file<CR>
 	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
+	
+	call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
+	call unite#set_substitute_pattern('files', '^\@<!/', '*/')
 	
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{

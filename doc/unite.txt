@@ -212,6 +212,9 @@ EXAMPLES					*unite-examples*
 	nnoremap <silent> [unite]f  :<C-u>UniteWithCurrentDir -buffer-name=files buffer file_mru bookmark file<CR>
 	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
 	
+	call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
+	call unite#set_substitute_pattern('files', '^\@<!/', '*/')
+	
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{
 	" Overwrite settings.
@@ -235,6 +238,8 @@ CHANGELOG					*unite-changelog*
 
 2010-09-24
 - Improved <Plug>(unite_select_next_line) and <Plug>(unite_previous_line) behavior.
+- Fixed documentation typo.
+- Added unite#set_substitute_pattern().
 
 2010-09-23
 - Fixed filtering bug.
