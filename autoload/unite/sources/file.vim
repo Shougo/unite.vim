@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Sep 2010
+" Last Modified: 26 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,6 +45,8 @@ function! s:source.gather_candidates(args)"{{{
     " Resolve link.
     let l:input = resolve(l:input)
   endif
+  " Glob by directory name.
+  let l:input = substitute(l:input, '/\zs[^/]*$', '', '')
   let l:candidates = split(substitute(glob(l:input . (l:input =~ '\*$' ? '' : '*')), '\\', '/', 'g'), '\n')
 
   if empty(l:candidates) && a:args.input !~ '\*'
