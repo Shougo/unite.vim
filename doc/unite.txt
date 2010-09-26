@@ -231,6 +231,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-26
+- Fixed ignorecase bug.
+
 2010-09-24
 - Improved <Plug>(unite_select_next_line) and <Plug>(unite_previous_line) behavior.
 - Fixed documentation typo.

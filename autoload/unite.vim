@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Sep 2010
+" Last Modified: 26 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -324,15 +324,6 @@ function! s:initialize_kinds()"{{{
   return s:default_kinds
 endfunction"}}}
 function! s:gather_candidates(text, args)"{{{
-  " Save options.
-  let l:ignorecase_save = &ignorecase
-
-  if g:unite_enable_smart_case && a:text =~ '\u'
-    let &ignorecase = 0
-  else
-    let &ignorecase = g:unite_enable_ignore_case
-  endif
-  
   let l:args = a:args
   let l:input_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "!"')
   let l:args.input = empty(l:input_list) ? '' : l:input_list[0]
@@ -382,8 +373,6 @@ function! s:gather_candidates(text, args)"{{{
     let l:candidate.unite__is_marked = 0
   endfor
     
-  let &ignorecase = l:ignorecase_save
-  
   return l:candidates
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
@@ -495,6 +484,16 @@ function! s:redraw(is_force) "{{{
   endif
 
   let l:input = getline(2)[1:]
+
+  " Save options.
+  let l:ignorecase_save = &ignorecase
+
+  if g:unite_enable_smart_case && l:input =~ '\u'
+    let &ignorecase = 0
+  else
+    let &ignorecase = g:unite_enable_ignore_case
+  endif
+
   if has_key(s:substitute_pattern, b:unite.buffer_name)
     for [l:pattern, l:subst] in items(s:substitute_pattern[b:unite.buffer_name])
       let l:input = substitute(l:input, l:pattern, l:subst, 'g')
@@ -503,7 +502,11 @@ function! s:redraw(is_force) "{{{
 
   let l:args = b:unite.args
   let l:args.is_force = a:is_force
+  
   let l:candidates = s:gather_candidates(l:input, l:args)
+
+  let &ignorecase = l:ignorecase_save
+
   let l:lines = s:convert_lines(l:candidates)
   if len(l:lines) < len(b:unite.candidates)
     if mode() !=# 'i' && line('.') == 2
@@ -554,17 +557,28 @@ function! s:on_insert_leave()  "{{{
   setlocal nomodifiable
 
   let l:input = getline(2)[1:]
+
+  " Save options.
+  let l:ignorecase_save = &ignorecase
+
+  if g:unite_enable_smart_case && l:input =~ '\u'
+    let &ignorecase = 0
+  else
+    let &ignorecase = g:unite_enable_ignore_case
+  endif
+
   if has_key(s:substitute_pattern, b:unite.buffer_name)
     for [l:pattern, l:subst] in items(s:substitute_pattern[b:unite.buffer_name])
       let l:input = substitute(l:input, l:pattern, l:subst, 'g')
     endfor
   endif
-  echomsg l:input
   
   let l:input = unite#escape_match(l:input)
   let l:input_list = split(l:input, '\\\@<! ')
   call filter(l:input_list, 'v:val !~ "^!"')
   execute 'match IncSearch' string(join(l:input_list, '\|'))
+
+  let &ignorecase = l:ignorecase_save
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   if line('.') == 2
