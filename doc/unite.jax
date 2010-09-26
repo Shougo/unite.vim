@@ -86,7 +86,7 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 >
 	*hoge
 <
-上記は hoge、ahoge、foohoge などにヒットする。
+上記は hoge、ahoge、foohoge などにマッチする。
 デフォルトでは/が*/にマッピングされるため、ディレクトリの最初の数文字を入力する
 だけで絞り込むことができる。
 また、ワイルドカードを2つ続けて入力すると、ディレクトリを再帰的に指定できる。
@@ -94,10 +94,21 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 >
 	**/foo
 <
-上記は hoge/foo、hoge/fuga/foo などにヒットする。
+上記は hoge/foo、hoge/fuga/foo などにマッチする。
 
-uniteを終了させるには、ノーマルモードで q もしくは <ESC> とすればよい。もしイ
-ンサートモードであれば <ESC> でノーマルモードに移行し、キーを押下すればよい。
+絞り込み文字列はスペース区切りで複数指定できる。
+例えば
+>
+	hoge piyo
+<
+上記は hogeにマッチかつ、piyoにマッチする候補にマッチする。
+
+除外パターンを!で記述できる。
+例えば
+>
+	hoge !piyo
+<
+上記は hogeにマッチするが、piyoにマッチする候補は除外される。
 
 その他の操作については|unite_default_key_mappings|を参照。
 
@@ -327,6 +338,15 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		選択している候補を絞込みテキストとし、絞込みテキスト入力を開始
 		する。
 
+<Plug>(unite_cursor_top)			*<Plug>(unite_cursor_top)*
+		uniteバッファの一番上へ移動する。
+
+<Plug>(unite_loop_cursor_down)			*<Plug>(unite_loop_cursor_down)*
+		次の行に移動。ただしバッファの最後にいる場合はループする。
+
+<Plug>(unite_loop_cursor_up)			*<Plug>(unite_loop_cursor_up)*
+		前の行に移動。ただしバッファの一番上にいる場合はループする。
+
 インサートモードマッピング
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -345,7 +365,7 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		カーソル直前の単語を削除する。
 
 <Plug>(unite_select_next_line)			*i_<Plug>(unite_select_next_line)*
-		次の候補に移動。ただし候補の候補にいる場合はループする。
+		次の候補に移動。ただし候補の最後にいる場合はループする。
 
 <Plug>(unite_select_previous_line)		*i_<Plug>(unite_select_previous_line)*
 		前の候補に移動。ただし候補の先頭にいる場合はループする。
@@ -406,6 +426,9 @@ l		候補を選択している場合は|<Plug>(unite_do_default_action)|
 e		|<Plug>(unite_edit_candidate)|
 p		|<Plug>(unite_do_preview_action)|
 <C-l>		|<Plug>(unite_redraw)|
+gg		|<Plug>(unite_cursor_top)|
+j		|<Plug>(unite_loop_cursor_down)|
+k		|<Plug>(unite_loop_cursor_up)|
 
 インサートモードマッピング
 {lhs}		{rhs}
@@ -447,12 +470,24 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst})
 		{pattern}は置換対象の正規表現、{subst}は置換する文字列である。
 		次の例では絞込みテキストを"~"で始まるように入力した場合に、
 		$HOMEで検索されるようにする。{buffer-name}を省略すると、
-		"default"となる。
+		"default"となり、|:Unite|でbuffer-nameを省略したときに使われる
+		。
 		例:
 >
 		call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
 		call unite#set_substitute_pattern('files', '^\@<!/', '*/')
 <
+		この関数を使うと、曖昧マッチを模倣することができる。
+>
+		call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0')
+		call unite#set_substitute_pattern('files', '[[:alnum:]]', ' \0')
+<
+		上の設定は/を越えずに曖昧検索をするが、下の場合は/を越えて曖昧
+		検索することができる。
+		
+		初期値ではbuffer_nameを省略したdefaultバッファにおいて、~を
+		$HOME、/はワイルドカードを付加するように設定されている。 
+
 ==============================================================================
 情報源						*unite-source* *{sources}*
 
@@ -610,6 +645,8 @@ required_pattern_length	数値		(任意)
 	
 	call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
 	call unite#set_substitute_pattern('files', '^\@<!/', '*/')
+	" Fuzzy.
+	"call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0')
 	
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{
@@ -617,6 +654,7 @@ required_pattern_length	数値		(任意)
 	imap <buffer> jj      <Plug>(unite_insert_leave)
 	nnoremap <buffer> t G
 	nnoremap <silent><buffer> <C-k> :<C-u>call unite#mappings#do_action('preview')<CR>
+	" Start insert.
 	"let g:unite_enable_start_insert = 1
 	endfunction"}}}
 	

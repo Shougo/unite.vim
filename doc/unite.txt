@@ -209,6 +209,8 @@ EXAMPLES					*unite-examples*
 	
 	call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
 	call unite#set_substitute_pattern('files', '^\@<!/', '*/')
+	" Fuzzy.
+	"call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0')
 	
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{
@@ -216,6 +218,7 @@ EXAMPLES					*unite-examples*
 	imap <buffer> jj      <Plug>(unite_insert_leave)
 	nnoremap <buffer> t G
 	nnoremap <silent><buffer> <C-k> :<C-u>call unite#mappings#do_action('preview')<CR>
+	" Start insert.
 	"let g:unite_enable_start_insert = 1
 	endfunction"}}}
 	
@@ -237,6 +240,8 @@ CHANGELOG					*unite-changelog*
 - Improved prompt.
 - Implemented input text save.
 - Optimized file_mru.
+- Added <Plug>(unite_cursor_top) and <Plug>(unite_loop_cursor_down) and <Plug>(unite_loop_cursor_up) mappings.
+- Improved documentation.
 
 2010-09-24
 - Improved <Plug>(unite_select_next_line) and <Plug>(unite_previous_line) behavior.

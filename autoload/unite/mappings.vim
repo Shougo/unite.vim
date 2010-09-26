@@ -44,6 +44,9 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
   nnoremap <silent><expr><buffer> <Plug>(unite_edit_candidate) line('.') <= 2 ?
         \ ":\<C-u>call \<SID>insert_enter()\<CR>" : ":\<C-u>call \<SID>insert_selected_candidate()\<CR>"
+  nnoremap <buffer> <Plug>(unite_cursor_top)  2G0z.
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? '2G0z.' : 'j'
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= 2)? 'G' : 'k'
   
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
   
@@ -85,6 +88,9 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> e <Plug>(unite_edit_candidate)
   nmap <buffer> p <Plug>(unite_do_preview_action)
   nmap <buffer> <C-l> <Plug>(unite_redraw)
+  nmap <buffer> gg <Plug>(unite_cursor_top)
+  nmap <buffer> j <Plug>(unite_loop_cursor_down)
+  nmap <buffer> k <Plug>(unite_loop_cursor_up)
 
   " Visual mode key-mappings.
   xmap <buffer> <Space> <Plug>(unite_toggle_mark_selected_candidates)
