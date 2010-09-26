@@ -124,6 +124,7 @@ uniteを終了させるには、ノーマルモードで q もしくは <ESC> �
 		情報源については|unite-source|を参照。
 		{buffer-name} はuniteのバッファ名を指定する。
 		{input-text} は初期の絞込みテキストを指定する。
+		uniteバッファに居る場合、絞り込みテキストは保存される。
 
 :UniteWithCurrentDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
 						*:UniteWithCurrentDir*

@@ -391,11 +391,12 @@ function! s:convert_line(candidate)"{{{
 endfunction"}}}
 
 function! s:initialize_unite_buffer(sources, args)"{{{
+  let l:args = a:args
+  
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
-    if a:args.input == ''
+    if l:args.input == ''
       " Get input text.
-      let l:input = getline(2)[len(a:args.prompt):]
-      
+      let l:args.input = getline(2)[len(l:args.prompt):]
     endif
     
     " Quit unite buffer.
@@ -408,8 +409,8 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   else
     let l:buffer_name = '*unite*'
   endif
-  if a:args.buffer_name != ''
-    let l:buffer_name .= ' - ' . a:args.buffer_name
+  if l:args.buffer_name != ''
+    let l:buffer_name .= ' - ' . l:args.buffer_name
   endif
 
   let l:winnr = winnr()
@@ -440,13 +441,13 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let b:unite = {}
   let b:unite.old_winnr = l:winnr
   let b:unite.win_rest_cmd = l:win_rest_cmd
-  let b:unite.args = a:args
+  let b:unite.args = l:args
   let b:unite.candidates = []
   let b:unite.cached_candidates = {}
   let b:unite.sources = s:initialize_sources(a:sources)
   let b:unite.kinds = s:initialize_kinds()
-  let b:unite.buffer_name = (a:args.buffer_name == '') ? 'default' : a:args.buffer_name
-  let b:unite.prompt = a:args.prompt
+  let b:unite.buffer_name = (l:args.buffer_name == '') ? 'default' : l:args.buffer_name
+  let b:unite.prompt = l:args.prompt
   
   " Basic settings.
   setlocal number
