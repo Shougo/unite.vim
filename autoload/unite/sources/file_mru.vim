@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Sep 2010
+" Last Modified: 26 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,15 +53,15 @@ function! unite#sources#file_mru#_append()"{{{
   endif
 
   call s:load()
-  call insert(filter(s:mru_files, 'v:val[0] !=# path'),
-  \           [path, localtime()])
+  call insert(filter(s:mru_files, 'v:val.word !=# path'),
+  \           s:convert2dictionary([path, localtime()]))
   if 0 < g:unite_source_file_mru_limit
     unlet s:mru_files[g:unite_source_file_mru_limit]
   endif
   call s:save()
 endfunction"}}}
 function! unite#sources#file_mru#_sweep()  "{{{
-  call filter(s:mru_files, 's:is_exists_path(v:val[0])')
+  call filter(s:mru_files, 's:is_exists_path(v:val.word)')
   call s:save()
 endfunction"}}}
 
@@ -73,13 +73,7 @@ let s:source = {
 
 function! s:source.gather_candidates(args)"{{{
   call s:load()
-  return sort(map(copy(s:mru_files), '{
-        \ "abbr" : strftime(g:unite_source_file_mru_time_format, v:val[1]) . v:val[0],
-        \ "word" : v:val[0],
-        \ "source" : "file_mru",
-        \ "unite_file_mru_time" : v:val[1],
-        \ "kind" : (isdirectory(v:val[0]) ? "directory" : "file"),
-        \   }'), 's:compare')
+  return sort(s:mru_files, 's:compare')
 endfunction"}}}
 
 " Actions"{{{
@@ -89,7 +83,7 @@ let s:source.action_table.delete = {
       \ 'is_selectable' : 1, 
       \ }
 function! s:source.action_table.delete.func(candidate)"{{{
-  call filter(s:mru_files, 'v:val[0] !=# ' . string(a:candidate.word))
+  call filter(s:mru_files, 'v:val.word !=# ' . string(a:candidate.word))
   call s:save()
 endfunction"}}}
 "}}}
@@ -99,7 +93,7 @@ function! s:compare(candidate_a, candidate_b)"{{{
   return a:candidate_b['unite_file_mru_time'] - a:candidate_a['unite_file_mru_time']
 endfunction"}}}
 function! s:save()  "{{{
-  call writefile([s:VERSION] + map(copy(s:mru_files), 'join(v:val, "\t")'),
+  call writefile([s:VERSION] + map(copy(s:mru_files), 'join(s:convert2list(v:val), "\t")'),
   \              g:unite_source_file_mru_file)
   let s:mru_file_mtime = getftime(g:unite_source_file_mru_file)
 endfunction"}}}
@@ -115,14 +109,28 @@ function! s:load()  "{{{
       return
     endif
     let s:mru_files =
-    \   filter(map(s:mru_files[0 : g:unite_source_file_mru_limit - 1],
-    \              'split(v:val, "\t")'), 's:is_exists_path(v:val[0])')
+    \   map(filter(map(s:mru_files[0 : g:unite_source_file_mru_limit - 1],
+    \              'split(v:val, "\t")'), 's:is_exists_path(v:val[0])'),
+    \              's:convert2dictionary(v:val)')
     let s:mru_file_mtime = getftime(g:unite_source_file_mru_file)
   endif
 endfunction"}}}
 function! s:is_exists_path(path)  "{{{
   return isdirectory(a:path) || filereadable(a:path)
 endfunction"}}}
-
+function! s:convert2dictionary(list)  "{{{
+  return {
+        \ 'abbr' : strftime(g:unite_source_file_mru_time_format, a:list[1]) .
+        \          (fnamemodify(a:list[0], ':.') != '' ?
+        \          fnamemodify(a:list[0], ':.') : a:list[0]),
+        \ 'word' : a:list[0],
+        \ 'source' : 'file_mru',
+        \ 'unite_file_mru_time' : a:list[1],
+        \ 'kind' : (isdirectory(a:list[0]) ? 'directory' : "file"),
+        \   }
+endfunction"}}}
+function! s:convert2list(dict)  "{{{
+  return [ a:dict.word, a:dict.unite_file_mru_time ]
+endfunction"}}}
 
 " vim: foldmethod=marker

@@ -236,6 +236,7 @@ CHANGELOG					*unite-changelog*
 - Deleted obsolute mappings.
 - Improved prompt.
 - Implemented input text save.
+- Optimized file_mru.
 
 2010-09-24
 - Improved <Plug>(unite_select_next_line) and <Plug>(unite_previous_line) behavior.
