@@ -213,6 +213,9 @@ function! unite#start(sources, ...)"{{{
   if !has_key(l:args, 'buffer_name')
     let l:args.buffer_name = ''
   endif
+  if !has_key(l:args, 'prompt')
+    let l:args.prompt = '>'
+  endif
   
   call s:initialize_unite_buffer(a:sources, l:args)
 
@@ -388,10 +391,16 @@ function! s:convert_line(candidate)"{{{
 endfunction"}}}
 
 function! s:initialize_unite_buffer(sources, args)"{{{
-  while getbufvar(bufnr('%'), '&filetype') ==# 'unite'
+  if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
+    if a:args.input == ''
+      " Get input text.
+      let l:input = getline(2)[len(a:args.prompt):]
+      
+    endif
+    
     " Quit unite buffer.
     call unite#quit_session()
-  endwhile
+  endif
 
   " The current buffer is initialized.
   if unite#is_win()
@@ -437,6 +446,7 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let b:unite.sources = s:initialize_sources(a:sources)
   let b:unite.kinds = s:initialize_kinds()
   let b:unite.buffer_name = (a:args.buffer_name == '') ? 'default' : a:args.buffer_name
+  let b:unite.prompt = a:args.prompt
   
   " Basic settings.
   setlocal number
@@ -483,7 +493,7 @@ function! s:redraw(is_force) "{{{
     setlocal modifiable
   endif
 
-  let l:input = getline(2)[1:]
+  let l:input = getline(2)[len(b:unite.prompt):]
 
   " Save options.
   let l:ignorecase_save = &ignorecase
@@ -556,7 +566,7 @@ function! s:on_insert_leave()  "{{{
   setlocal nocursorline
   setlocal nomodifiable
 
-  let l:input = getline(2)[1:]
+  let l:input = getline(2)[len(b:unite.prompt):]
 
   " Save options.
   let l:ignorecase_save = &ignorecase

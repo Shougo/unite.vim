@@ -401,7 +401,6 @@ b		|<Plug>(unite_do_bookmark_action)|
 <C-n>		|<Plug>(unite_search_next_source)|
 <C-p>		|<Plug>(unite_search_previous_source)|
 l		候補を選択している場合は|<Plug>(unite_do_default_action)|
-~		絞込みテキストを ~/ にする
 <C-g>		|<Plug>(unite_print_candidate)|
 e		|<Plug>(unite_edit_candidate)|
 p		|<Plug>(unite_do_preview_action)|
@@ -410,7 +409,6 @@ p		|<Plug>(unite_do_preview_action)|
 インサートモードマッピング
 {lhs}		{rhs}
 --------	-----------------------------
-/		なにか入力していれば */ 、そうでなければ /
 <ESC>		|i_<Plug>(unite_insert_leave)|
 <Tab>		|i_<Plug>(unite_choose_action)|
 <S-Tab>		|i_<Plug>(unite_select_previous_line)|
