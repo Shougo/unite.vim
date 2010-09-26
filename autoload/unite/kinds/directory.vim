@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Sep 2010
+" Last Modified: 26 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,6 @@ if exists(':VimShell')
         \ }
   function! s:kind.action_table.vimshell.func(candidate)"{{{
     let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
-    lcd `=l:dir`
     VimShellCreate `=l:dir`
   endfunction"}}}
 endif

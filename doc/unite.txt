@@ -242,6 +242,7 @@ CHANGELOG					*unite-changelog*
 - Optimized file_mru.
 - Added <Plug>(unite_cursor_top) and <Plug>(unite_loop_cursor_down) and <Plug>(unite_loop_cursor_up) mappings.
 - Improved documentation.
+- Fixed vimshell error.
 
 2010-09-24
 - Improved <Plug>(unite_select_next_line) and <Plug>(unite_previous_line) behavior.
