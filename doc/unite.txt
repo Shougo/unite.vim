@@ -234,6 +234,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-27
+- Fixed file glob.
+
 2010-09-26
 - Fixed ignorecase bug.
 - Deleted obsolute mappings.
