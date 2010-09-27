@@ -26,7 +26,7 @@
 
 " Variables  "{{{
 call unite#set_default('g:unite_source_file_ignore_pattern', 
-      \'\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|[/\\]\)\.\%(hg\|git\|bzr\|svn\)\%($\|[/\\]\)')
+      \'/\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|[/\\]\)\.\%(hg\|git\|bzr\|svn\)\%($\|[/\\]\)')
 "}}}
 
 function! unite#sources#file#define()"{{{
