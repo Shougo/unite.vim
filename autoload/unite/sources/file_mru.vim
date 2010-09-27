@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Sep 2010
+" Last Modified: 27 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,6 +73,16 @@ let s:source = {
 
 function! s:source.gather_candidates(args)"{{{
   call s:load()
+  
+  " Create abbr.
+  for l:mru in s:mru_files
+    let l:mru.abbr = strftime(g:unite_source_file_mru_time_format, l:mru.unite_file_mru_time) .
+          \          fnamemodify(l:mru.word, ':.')
+    if l:mru.abbr == ''
+      let l:mru.abbr = strftime(g:unite_source_file_mru_time_format, l:mru.unite_file_mru_time) . l:mru.word
+    endif
+  endfor
+  
   return sort(s:mru_files, 's:compare')
 endfunction"}}}
 
@@ -120,9 +130,6 @@ function! s:is_exists_path(path)  "{{{
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
   return {
-        \ 'abbr' : strftime(g:unite_source_file_mru_time_format, a:list[1]) .
-        \          (fnamemodify(a:list[0], ':.') != '' ?
-        \          fnamemodify(a:list[0], ':.') : a:list[0]),
         \ 'word' : a:list[0],
         \ 'source' : 'file_mru',
         \ 'unite_file_mru_time' : a:list[1],
