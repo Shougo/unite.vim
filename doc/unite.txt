@@ -237,6 +237,7 @@ CHANGELOG					*unite-changelog*
 2010-09-27
 - Fixed file glob.
 - Fixed abbr in file_mru.
+- Fixed doted file search.
 
 2010-09-26
 - Fixed ignorecase bug.

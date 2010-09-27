@@ -46,7 +46,7 @@ function! s:source.gather_candidates(args)"{{{
     let l:input = resolve(l:input)
   endif
   " Glob by directory name.
-  let l:input = substitute(l:input, '/\?\zs[^/]*$', '', '')
+  let l:input = substitute(l:input, '\%(/\.\?\)\?\zs[^/]*$', '', '')
   let l:candidates = split(substitute(glob(l:input . (l:input =~ '\*$' ? '' : '*')), '\\', '/', 'g'), '\n')
 
   if empty(l:candidates) && a:args.input !~ '\*'

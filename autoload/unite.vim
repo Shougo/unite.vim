@@ -540,10 +540,6 @@ endfunction"}}}
 
 " Autocmd events.
 function! s:on_insert_enter()  "{{{
-  if &eventignore =~# 'InsertEnter'
-    return
-  endif
-  
   if &updatetime > g:unite_update_time
     let b:unite.update_time_save = &updatetime
     let &updatetime = g:unite_update_time
