@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Sep 2010
+" Last Modified: 28 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -448,6 +448,7 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let b:unite.kinds = s:initialize_kinds()
   let b:unite.buffer_name = (l:args.buffer_name == '') ? 'default' : l:args.buffer_name
   let b:unite.prompt = l:args.prompt
+  let b:unite.last_input = l:args.input
   
   " Basic settings.
   setlocal number
@@ -490,11 +491,10 @@ function! s:redraw(is_force) "{{{
     return
   endif
   
-  if mode() !=# 'i'
-    setlocal modifiable
-  endif
-
   let l:input = getline(2)[len(b:unite.prompt):]
+  if !a:is_force && l:input ==# b:unite.last_input
+    return
+  endif
 
   " Save options.
   let l:ignorecase_save = &ignorecase
@@ -518,6 +518,10 @@ function! s:redraw(is_force) "{{{
 
   let &ignorecase = l:ignorecase_save
 
+  if mode() !=# 'i'
+    setlocal modifiable
+  endif
+
   let l:lines = s:convert_lines(l:candidates)
   if len(l:lines) < len(b:unite.candidates)
     if mode() !=# 'i' && line('.') == 2
@@ -531,11 +535,11 @@ function! s:redraw(is_force) "{{{
   endif
   call setline(3, l:lines)
 
-  let b:unite.candidates = l:candidates
-
   if mode() !=# 'i'
     setlocal nomodifiable
   endif
+
+  let b:unite.candidates = l:candidates
 endfunction"}}}
 
 " Autocmd events.
@@ -547,8 +551,6 @@ function! s:on_insert_enter()  "{{{
 
   setlocal cursorline
   setlocal modifiable
-  
-  match
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   if line('.') == 2
@@ -562,30 +564,6 @@ function! s:on_insert_leave()  "{{{
 
   setlocal nocursorline
   setlocal nomodifiable
-
-  let l:input = getline(2)[len(b:unite.prompt):]
-
-  " Save options.
-  let l:ignorecase_save = &ignorecase
-
-  if g:unite_enable_smart_case && l:input =~ '\u'
-    let &ignorecase = 0
-  else
-    let &ignorecase = g:unite_enable_ignore_case
-  endif
-
-  if has_key(s:substitute_pattern, b:unite.buffer_name)
-    for [l:pattern, l:subst] in items(s:substitute_pattern[b:unite.buffer_name])
-      let l:input = substitute(l:input, l:pattern, l:subst, 'g')
-    endfor
-  endif
-  
-  let l:input = unite#escape_match(l:input)
-  let l:input_list = split(l:input, '\\\@<! ')
-  call filter(l:input_list, 'v:val !~ "^!"')
-  execute 'match IncSearch' string(join(l:input_list, '\|'))
-
-  let &ignorecase = l:ignorecase_save
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   if line('.') == 2

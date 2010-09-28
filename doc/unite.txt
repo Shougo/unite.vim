@@ -234,6 +234,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-28
+- Optimized redraw.
+
 2010-09-27
 - Fixed file glob.
 - Fixed abbr in file_mru.
