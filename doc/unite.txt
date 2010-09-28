@@ -239,6 +239,7 @@ CHANGELOG					*unite-changelog*
 - Reverted / behavior.
 - Added narrow action in buffer.
 - Fixed glob().
+- Fixed force redraw bug.
 
 2010-09-27
 - Fixed file glob.

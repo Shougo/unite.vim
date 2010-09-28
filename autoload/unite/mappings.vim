@@ -137,6 +137,7 @@ function! unite#mappings#do_action(action_name)"{{{
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
   
+  let l:is_redraw = 0
   for l:candidate in l:candidates
     let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
     
@@ -166,11 +167,14 @@ function! unite#mappings#do_action(action_name)"{{{
       " Check invalidate cache flag.
       if has_key(l:action, 'is_invalidate_cache') && l:action.is_invalidate_cache
         call unite#invalidate_cache(l:candidate.source)
+        let l:is_redraw = 1
       endif
     endif
   endfor
 
-  call unite#redraw()
+  if l:is_redraw
+    call unite#force_redraw()
+  endif
 endfunction"}}}
 function! s:exit()"{{{
   call unite#quit_session()
