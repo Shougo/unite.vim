@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Sep 2010
+" Last Modified: 29 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,6 +32,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call unite#mappings#do_action('delete')<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_bookmark_action)  :<C-u>call unite#mappings#do_action('bookmark')<CR>
   nnoremap <silent><buffer> <Plug>(unite_do_preview_action)  :<C-u>call unite#mappings#do_action('preview')<CR>
+  nnoremap <silent><buffer> <Plug>(unite_do_narrow_action)  :<C-u>call unite#mappings#do_action('narrow')<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
@@ -42,8 +43,6 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_search_next_source)  :<C-u>call <SID>search_source(1)<CR>
   nnoremap <silent><buffer> <Plug>(unite_search_previous_source)  :<C-u>call <SID>search_source(0)<CR>
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
-  nnoremap <silent><expr><buffer> <Plug>(unite_edit_candidate) line('.') <= 2 ?
-        \ ":\<C-u>call \<SID>insert_enter()\<CR>" : ":\<C-u>call \<SID>insert_selected_candidate()\<CR>"
   nnoremap <buffer> <Plug>(unite_cursor_top)  2G0z.
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? '2G0z.' : 'j'
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= 2)? 'G' : 'k'
@@ -79,13 +78,13 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <CR> <Plug>(unite_do_default_action)
   nmap <buffer> d <Plug>(unite_do_delete_action)
   nmap <buffer> b <Plug>(unite_do_bookmark_action)
+  nmap <buffer> e <Plug>(unite_do_narrow_action)
   nmap <buffer> <Space> <Plug>(unite_toggle_mark_current_candidate)
   nmap <buffer> <Tab> <Plug>(unite_choose_action)
   nmap <buffer> <C-n> <Plug>(unite_search_next_source)
   nmap <buffer> <C-p> <Plug>(unite_search_previous_source)
   nmap <buffer><expr><silent> l line('.') <= 2 ? 'l' : "\<Plug>(unite_do_default_action)"
   nmap <buffer> <C-g> <Plug>(unite_print_candidate)
-  nmap <buffer> e <Plug>(unite_edit_candidate)
   nmap <buffer> p <Plug>(unite_do_preview_action)
   nmap <buffer> <C-l> <Plug>(unite_redraw)
   nmap <buffer> gg <Plug>(unite_cursor_top)

@@ -138,6 +138,18 @@ function! s:kind.action_table.bookmark.func(candidate)"{{{
   " Add to bookmark.
   call unite#sources#bookmark#_append(a:candidate.word)
 endfunction"}}}
+
+let s:kind.action_table.narrow = {
+      \ 'is_quit' : 0,
+      \ }
+function! s:kind.action_table.narrow.func(candidate)"{{{
+  let l:word = fnamemodify(a:candidate.word, ':h')
+  if l:word !~ '[\\/]$'
+    let l:word .= '/'
+  endif
+  
+  call unite#mappings#narrowing(l:word)
+endfunction"}}}
 "}}}
 
 

@@ -236,6 +236,7 @@ CHANGELOG					*unite-changelog*
 
 2010-09-28
 - Optimized redraw.
+- Added <Plug>(unite_do_narrow_action).
 
 2010-09-27
 - Fixed file glob.

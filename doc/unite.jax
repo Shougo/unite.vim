@@ -291,6 +291,10 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		|<Plug>(unite_print_candidate)|が使用できる。
 		アクションが存在しないときは無視される。
 
+<Plug>(unite_do_narrow_action)			*<Plug>(unite_do_narrow_action)*
+		選択している候補のディレクトリを絞込みテキストとし、絞込みテキ
+		スト入力を開始する。
+
 <Plug>(unite_choose_action)			*<Plug>(unite_choose_action)*
 		選択している候補に対して実行するアクションを選択する。アクショ
 		ンは種類ごとに定義されている。
@@ -333,10 +337,6 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 <Plug>(unite_print_candidate)			*<Plug>(unite_print_candidate)*
 		選択している候補に対するアクションの対象を表示する。例えば、選
 		択している候補の種類が|word|の場合は、対象の内容が表示される。
-
-<Plug>(unite_edit_candidate)			*<Plug>(unite_edit_candidate)*
-		選択している候補を絞込みテキストとし、絞込みテキスト入力を開始
-		する。
 
 <Plug>(unite_cursor_top)			*<Plug>(unite_cursor_top)*
 		uniteバッファの一番上へ移動する。
@@ -417,13 +417,13 @@ q		|<Plug>(unite_exit)|
 <CR>		|<Plug>(unite_do_default_action)|
 d		|<Plug>(unite_do_delete_action)|
 b		|<Plug>(unite_do_bookmark_action)|
+e		|<Plug>(unite_do_narrow_action)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_search_next_source)|
 <C-p>		|<Plug>(unite_search_previous_source)|
 l		候補を選択している場合は|<Plug>(unite_do_default_action)|
 <C-g>		|<Plug>(unite_print_candidate)|
-e		|<Plug>(unite_edit_candidate)|
 p		|<Plug>(unite_do_preview_action)|
 <C-l>		|<Plug>(unite_redraw)|
 gg		|<Plug>(unite_cursor_top)|
@@ -552,6 +552,7 @@ file						*unite-action-file*
 	ex		候補をコマンドラインに入力した状態にする。
 			選択した状態では動作しない。
 	bookmark	候補をブックマークに追加する
+	narrow		ファイルのあるディレクトリ名で候補を絞り込む
 
 buffer						*unite-action-buffer*
 	open		バッファを表示
