@@ -238,6 +238,7 @@ CHANGELOG					*unite-changelog*
 - Added <Plug>(unite_do_narrow_action).
 - Reverted / behavior.
 - Added narrow action in buffer.
+- Fixed glob().
 
 2010-09-27
 - Fixed file glob.
