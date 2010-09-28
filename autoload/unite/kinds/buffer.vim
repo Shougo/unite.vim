@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Sep 2010
+" Last Modified: 28 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -67,6 +67,17 @@ function! s:kind.action_table.fdelete.func(candidate)"{{{
   return s:delete('bdelete!', a:candidate)
 endfunction"}}}
 
+let s:kind.action_table.narrow = {
+      \ 'is_quit' : 0,
+      \ }
+function! s:kind.action_table.narrow.func(candidate)"{{{
+  let l:word = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':h')
+  if l:word !~ '[\\/]$'
+    let l:word .= '/'
+  endif
+  
+  call unite#mappings#narrowing(l:word)
+endfunction"}}}
 "}}}
 
 " Misc

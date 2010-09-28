@@ -560,6 +560,7 @@ buffer						*unite-action-buffer*
 	delete		バッファを削除
 	fopen		現在のバッファの変更を破棄して表示
 	fdelete		現在のバッファの変更を破棄して削除
+	narrow		ファイルのあるディレクトリ名で候補を絞り込む
 
 directory					*unite-action-directory*
 このkindは|unite-action-file|のアクションを継承している。ここではdirectory独自
