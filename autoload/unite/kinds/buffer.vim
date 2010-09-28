@@ -78,6 +78,20 @@ function! s:kind.action_table.narrow.func(candidate)"{{{
   
   call unite#mappings#narrowing(l:word)
 endfunction"}}}
+
+let s:kind.action_table.cd = {
+      \ }
+function! s:kind.action_table.cd.func(candidate)"{{{
+  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+  cd `=l:dir`
+endfunction"}}}
+
+let s:kind.action_table.lcd = {
+      \ }
+function! s:kind.action_table.lcd.func(candidate)"{{{
+  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+  lcd `=l:dir`
+endfunction"}}}
 "}}}
 
 " Misc
