@@ -241,6 +241,7 @@ CHANGELOG					*unite-changelog*
 - Fixed glob().
 - Fixed force redraw bug.
 - Added cd and lcd action in buffer.
+- Fixed modifiable bug.
 
 2010-09-27
 - Fixed file glob.

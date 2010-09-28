@@ -517,7 +517,9 @@ function! s:redraw(is_force) "{{{
 
   let &ignorecase = l:ignorecase_save
 
-  setlocal modifiable
+  if mode() != 'i'
+    setlocal modifiable
+  endif
 
   let l:lines = s:convert_lines(l:candidates)
   if len(l:lines) < len(b:unite.candidates)
@@ -532,7 +534,9 @@ function! s:redraw(is_force) "{{{
   endif
   call setline(3, l:lines)
 
-  setlocal nomodifiable
+  if mode() != 'i'
+    setlocal nomodifiable
+  endif
 
   let b:unite.candidates = l:candidates
 endfunction"}}}
