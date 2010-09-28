@@ -53,19 +53,29 @@ function! s:source.gather_candidates(args)"{{{
     " Add dummy candidate.
     let l:candidates = [ a:args.input ]
   endif
-  
-  call map(l:candidates, '{
-        \ "word" : v:val,
-        \ "abbr" : v:val . (isdirectory(v:val) ? "/" : ""),
-        \ "source" : "file",
-        \ "kind" : (isdirectory(v:val) ? "directory" : "file"),
-        \}')
-  
-  if g:unite_source_file_ignore_pattern != ''
-    call filter(l:candidates, 'v:val.word !~ ' . string(g:unite_source_file_ignore_pattern))
-  endif
 
-  return l:candidates
+  if g:unite_source_file_ignore_pattern != ''
+    call filter(l:candidates, 'v:val !~ ' . string(g:unite_source_file_ignore_pattern))
+  endif
+  
+  let l:candidates_dir = []
+  let l:candidates_file = []
+  for l:file in l:candidates
+    let l:dict = { 'word' : l:file, 'abbr' : l:file, 'source' : 'file', }
+    
+    if isdirectory(l:file) 
+      let l:dict.abbr .= '/'
+      let l:dict.kind = 'directory'
+      
+      call add(l:candidates_dir, l:dict)
+    else
+      let l:dict.kind = 'file'
+      
+      call add(l:candidates_file, l:dict)
+    endif
+  endfor
+  
+  return l:candidates_dir + l:candidates_file
 endfunction"}}}
 
 " vim: foldmethod=marker

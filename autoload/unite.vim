@@ -495,6 +495,8 @@ function! s:redraw(is_force) "{{{
     return
   endif
 
+  let b:unite.last_input = l:args.input
+
   " Save options.
   let l:ignorecase_save = &ignorecase
 
