@@ -82,14 +82,14 @@ endfunction"}}}
 let s:kind.action_table.cd = {
       \ }
 function! s:kind.action_table.cd.func(candidate)"{{{
-  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+  let l:dir = s:get_directory(a:candidate)
   cd `=l:dir`
 endfunction"}}}
 
 let s:kind.action_table.lcd = {
       \ }
 function! s:kind.action_table.lcd.func(candidate)"{{{
-  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+  let l:dir = s:get_directory(a:candidate)
   lcd `=l:dir`
 endfunction"}}}
 "}}}
@@ -123,6 +123,18 @@ function! s:open(bang, candidate)"{{{
   else
     let v:errmsg = _
   endif
+endfunction"}}}
+function! s:get_directory(candidate)"{{{
+  let l:filetype = getbufvar(a:candidate.unite_buffer_nr, '&filetype')
+  if l:filetype ==# 'vimfiler'
+    let l:dir = getbufvar(a:bufnr, 'vimfiler').current_dir
+  elseif l:filetype ==# 'vimshell'
+    let l:dir = getbufvar(a:bufnr, 'vimshell').save_dir
+  else
+    let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+  endif
+  
+  return l:dir
 endfunction"}}}
 
 " vim: foldmethod=marker
