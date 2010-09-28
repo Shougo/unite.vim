@@ -208,7 +208,6 @@ EXAMPLES					*unite-examples*
 	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
 	
 	call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
-	call unite#set_substitute_pattern('files', '^\@<!/', '*/')
 	" Fuzzy.
 	"call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0')
 	
@@ -237,6 +236,7 @@ CHANGELOG					*unite-changelog*
 2010-09-28
 - Optimized redraw.
 - Added <Plug>(unite_do_narrow_action).
+- Reverted / behavior.
 
 2010-09-27
 - Fixed file glob.

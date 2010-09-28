@@ -448,6 +448,7 @@ k		|<Plug>(unite_loop_cursor_up)|
 <C-a>		|i_<Plug>(unite_move_head)|
 <Home>		|i_<Plug>(unite_move_head)|
 <Space>		候補を選択していれば|i_<Plug>(unite_toggle_mark_current_candidate)|
+/		*/
 
 ビジュアルモードマッピング
 {lhs}		{rhs}
@@ -645,7 +646,6 @@ required_pattern_length	数値		(任意)
 	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
 	
 	call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
-	call unite#set_substitute_pattern('files', '^\@<!/', '*/')
 	" Fuzzy.
 	"call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0')
 	
