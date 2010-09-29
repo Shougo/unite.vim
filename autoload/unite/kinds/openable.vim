@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: file.vim
+" FILE: openable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 29 Sep 2010
 " License: MIT license  {{{
@@ -24,78 +24,71 @@
 " }}}
 "=============================================================================
 
-function! unite#kinds#file#define()"{{{
+function! unite#kinds#openable#define()"{{{
   return s:kind
 endfunction"}}}
 
 let s:kind = {
-      \ 'name' : 'file',
+      \ 'name' : 'openable',
       \ 'default_action' : 'open',
       \ 'action_table': {},
       \}
 
 " Actions"{{{
-let s:kind.action_table = deepcopy(unite#kinds#openable#define().action_table)
-
-let s:kind.action_table.open = {
+let s:kind.action_table.tabopen = {
       \ 'is_selectable' : 1, 
       \ }
-function! s:kind.action_table.open.func(candidate)"{{{
-  edit `=a:candidate.word`
+function! s:kind.action_table.tabopen.func(candidate)"{{{
+  tabnew
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
-let s:kind.action_table.fopen = {
+let s:kind.action_table.split = {
       \ 'is_selectable' : 1, 
       \ }
-function! s:kind.action_table.fopen.func(candidate)"{{{
-  edit! `=a:candidate.word`
+function! s:kind.action_table.split.func(candidate)"{{{
+  split
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
-let s:kind.action_table.preview = {
-      \ 'is_quit' : 0,
+let s:kind.action_table.vsplit = {
+      \ 'is_selectable' : 1, 
       \ }
-function! s:kind.action_table.preview.func(candidate)"{{{
-  pedit `=a:candidate.word`
+function! s:kind.action_table.vsplit.func(candidate)"{{{
+  vsplit
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
-let s:kind.action_table.cd = {
+let s:kind.action_table.left = {
+      \ 'is_selectable' : 1, 
       \ }
-function! s:kind.action_table.cd.func(candidate)"{{{
-  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
-  cd `=l:dir`
+function! s:kind.action_table.left.func(candidate)"{{{
+  leftabove vsplit
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
-let s:kind.action_table.lcd = {
+let s:kind.action_table.right = {
+      \ 'is_selectable' : 1, 
       \ }
-function! s:kind.action_table.lcd.func(candidate)"{{{
-  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
-  lcd `=l:dir`
+function! s:kind.action_table.right.func(candidate)"{{{
+  rightbelow vsplit
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
-let s:kind.action_table.ex = {
+let s:kind.action_table.above = {
+      \ 'is_selectable' : 1, 
       \ }
-function! s:kind.action_table.ex.func(candidate)"{{{
-  " Result is ':| {candidate}', here '|' means the cursor position.
-  call feedkeys(printf(": %s\<C-b>", escape(a:candidate.word, " \t\n*?[{`$\\%#'\"|!<")), 'n')
+function! s:kind.action_table.above.func(candidate)"{{{
+  leftabove split
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 
-let s:kind.action_table.bookmark = {
+let s:kind.action_table.below = {
+      \ 'is_selectable' : 1, 
       \ }
-function! s:kind.action_table.bookmark.func(candidate)"{{{
-  " Add to bookmark.
-  call unite#sources#bookmark#_append(a:candidate.word)
-endfunction"}}}
-
-let s:kind.action_table.narrow = {
-      \ 'is_quit' : 0,
-      \ }
-function! s:kind.action_table.narrow.func(candidate)"{{{
-  let l:word = fnamemodify(a:candidate.word, ':h')
-  if l:word !~ '[\\/]$'
-    let l:word .= '/'
-  endif
-  
-  call unite#mappings#narrowing(l:word)
+function! s:kind.action_table.below.func(candidate)"{{{
+  rightbelow split
+  call unite#_take_action('open', a:candidate)
 endfunction"}}}
 "}}}
 

@@ -233,6 +233,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-09-29
+- Added openable kind.
+
 2010-09-28
 - Optimized redraw.
 - Added <Plug>(unite_do_narrow_action).

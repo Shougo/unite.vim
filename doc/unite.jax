@@ -512,6 +512,9 @@ bookmark	ブックマーク
 
 候補の種類
 
+						*unite-kind-openable*
+open		オープン可能インタフェース
+
 						*unite-kind-file*
 file		ファイル
 
@@ -535,11 +538,9 @@ jump_list	ジャンプリスト
 
 種類別アクション
 
-file						*unite-action-file*
-ファイルはすべて別のバッファに開かれる。
-	open		ファイルを開く
-	fopen		現在のバッファの変更を破棄してファイルを開く。
-			force openの略語。
+openable					*unite-action-openable*
+オープン可能ファイルのインタフェースを定義している。
+openアクションは個別に定義する必要がある。
 	preview		プレビューウィンドウにファイルを開く
 	tabopen		ファイルをタブで開く
 	split		ウィンドウを水平分割してファイルを開く
@@ -548,6 +549,14 @@ file						*unite-action-file*
 	right		ウィンドウを垂直分割して右側にファイルを開く
 	above		ウィンドウを水平分割して上側にファイルを開く
 	below		ウィンドウを水平分割して下側にファイルを開く
+
+file						*unite-action-file*
+ファイルはすべて別のバッファに開かれる。
+このkindは|unite-action-openable|のアクションを継承している。
+	open		ファイルを開く
+	fopen		現在のバッファの変更を破棄してファイルを開く。
+			force openの略語。
+	preview		プレビューウィンドウにファイルを開く
 	cd		カレントディレクトリを変更
 	lcd		現在のウィンドウのカレントディレクトリを変更
 	ex		候補をコマンドラインに入力した状態にする。
@@ -556,6 +565,7 @@ file						*unite-action-file*
 	narrow		ファイルのあるディレクトリ名で候補を絞り込む
 
 buffer						*unite-action-buffer*
+このkindは|unite-action-openable|のアクションを継承している。
 	open		バッファを表示
 	delete		バッファを削除
 	fopen		現在のバッファの変更を破棄して表示

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Sep 2010
+" Last Modified: 29 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,6 +35,8 @@ let s:kind = {
       \}
 
 " Actions"{{{
+let s:kind.action_table = deepcopy(unite#kinds#openable#define().action_table)
+
 let s:kind.action_table.open = {
       \ 'is_selectable' : 1, 
       \ }
