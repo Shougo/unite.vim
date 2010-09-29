@@ -448,7 +448,7 @@ k		|<Plug>(unite_loop_cursor_up)|
 <C-a>		|i_<Plug>(unite_move_head)|
 <Home>		|i_<Plug>(unite_move_head)|
 <Space>		候補を選択していれば|i_<Plug>(unite_toggle_mark_current_candidate)|
-/		*/
+/		絞り込み行なら*/、その他は"narrow" actionを実行
 
 ビジュアルモードマッピング
 {lhs}		{rhs}

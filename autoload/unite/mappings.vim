@@ -110,7 +110,8 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>     <Plug>(unite_move_head)
   imap <buffer><expr> <Space>  line('.') == 2 ? ' ' : "\<Plug>(unite_toggle_mark_current_candidate)"
-  inoremap <buffer><expr> /     col('.') <= (len(b:unite.prompt)+1) ? '/' : '*/'
+  inoremap <buffer><expr> /    line('.')  == 2 ? (col('.') <= (len(b:unite.prompt)+1) ? '/' : '*/') :
+        \ "\<C-o>:\<C-u>call unite#mappings#do_action('narrow')\<CR>"
 endfunction"}}}
 
 " key-mappings functions.
