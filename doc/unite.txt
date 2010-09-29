@@ -235,6 +235,7 @@ CHANGELOG					*unite-changelog*
 
 2010-09-29
 - Added openable kind.
+- Print candidates when <Plug>(unite_choose_action).
 
 2010-09-28
 - Optimized redraw.

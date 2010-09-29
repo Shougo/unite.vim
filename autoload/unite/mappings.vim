@@ -224,8 +224,15 @@ function! s:choose_action()"{{{
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
   
+  echohl Statement | echo 'Candidates:' | echohl None
+  
   let s:actions = {}
   for l:candidate in l:candidates
+    " Print candidates.
+    echo l:candidate.abbr . '('
+    echohl Type | echon l:candidate.source | echohl None
+    echon ')'
+    
     let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
     
     for [l:action_name, l:action] in items(l:action_table)
@@ -239,13 +246,14 @@ function! s:choose_action()"{{{
       endif
     endfor
   endfor
-  
+
   " Print action names.
   let l:width = winwidth(0)
   let l:max = l:width > 90 ? 6 : l:width > 75 ? 5 : l:width > 50 ? 4 : 3
   let l:cnt = 0
   
-  echohl Statement
+  echohl Identifier
+  echo ''
   for l:action_name in keys(s:actions)
     echon unite#util#truncate(l:action_name, 14) . ' '
     let l:cnt += 1
