@@ -50,7 +50,7 @@ function! unite#mappings#define_default_mappings()"{{{
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
   
   inoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
-  inoremap <buffer><expr> <Plug>(unite_insert_leave)  line('.') == 2 ? "\<ESC>j" : "\<ESC>0"
+  inoremap <buffer><expr> <Plug>(unite_insert_leave)  unite#mappings#smart_imap("\<ESC>j", "\<ESC>0")
   inoremap <expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(b:unite.prompt)+1) ? '' : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(b:unite.prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(b:unite.prompt)+1) ? '' : "\<C-w>"
@@ -109,9 +109,9 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-w>     <Plug>(unite_delete_backward_word)
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>     <Plug>(unite_move_head)
-  imap <buffer><expr> <Space>  line('.') == 2 ? ' ' : "\<Plug>(unite_toggle_mark_current_candidate)"
-  inoremap <buffer><expr> /    line('.')  == 2 ? (col('.') <= (len(b:unite.prompt)+1) ? '/' : '*/') :
-        \ "\<C-o>:\<C-u>call unite#mappings#do_action('narrow')\<CR>"
+  imap <buffer><expr> <Space>  unite#mappings#smart_imap(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
+  inoremap <buffer><expr> /    unite#mappings#smart_imap((col('.') <= (len(b:unite.prompt)+1) ? '/' : '*/'), 
+        \ "\<C-o>:\<C-u>call unite#mappings#do_action('narrow')\<CR>")
 endfunction"}}}
 
 " key-mappings functions.
@@ -176,6 +176,9 @@ function! unite#mappings#do_action(action_name)"{{{
   if l:is_redraw
     call unite#force_redraw()
   endif
+endfunction"}}}
+function! unite#mappings#smart_imap(narrow_map, select_map)"{{{
+  return line('.')  == 2 ? a:narrow_map : a:select_map
 endfunction"}}}
 function! s:exit()"{{{
   call unite#quit_session()

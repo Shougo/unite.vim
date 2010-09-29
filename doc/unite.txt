@@ -237,6 +237,7 @@ CHANGELOG					*unite-changelog*
 - Added openable kind.
 - Print candidates when <Plug>(unite_choose_action).
 - Changed / mapping.
+- Implemented unite#mappings#smart_imap().
 
 2010-09-28
 - Optimized redraw.
