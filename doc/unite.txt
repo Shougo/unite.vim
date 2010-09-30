@@ -215,7 +215,6 @@ EXAMPLES					*unite-examples*
 	function! s:unite_my_settings()"{{{
 	" Overwrite settings.
 	imap <buffer> jj      <Plug>(unite_insert_leave)
-	nnoremap <buffer> t G
 	nnoremap <silent><buffer> <C-k> :<C-u>call unite#mappings#do_action('preview')<CR>
 	" Start insert.
 	"let g:unite_enable_start_insert = 1
