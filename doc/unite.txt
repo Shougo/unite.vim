@@ -105,7 +105,7 @@ g:unite_enable_split_vertically				*g:unite_enable_split_vertically*
 		
 		Default value is 0.
 
-g:unite_temporary_directory			*g:unite_temporary_directory*
+g:unite_data_directory					*g:unite_data_directory*
 		
 		
 		Default value is expand('~/.unite').
@@ -125,7 +125,7 @@ g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		
 		
-		Default value is |g:unite_temporary_directory| . '/.file_mru'.
+		Default value is |g:unite_data_directory| . '/.file_mru'.
 
 g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
 		
@@ -235,6 +235,7 @@ CHANGELOG					*unite-changelog*
 
 2010-09-30
 - Improved g:unite_source_file_ignore_pattern.
+- Changed g:unite_temporary_directory into g:unite_data_directory.
 
 2010-09-29
 - Added openable kind.

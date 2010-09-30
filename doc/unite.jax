@@ -201,11 +201,11 @@ g:unite_enable_split_vertically			*g:unite_enable_split_vertically*
 		
 		初期値は0なので、水平分割である。
 
-g:unite_temporary_directory			*g:unite_temporary_directory*
-		uniteやその情報源が一時ファイルを書き出すディレクトリを指定する
-		。ここで指定したディレクトリが実際に存在しない場合、自動的に作
-		成される。例えばfile_mruの情報源は最近使用したファイルの情報を
-		この下に保存する。
+g:unite_data_directory				*g:unite_data_directory*
+		uniteやその情報源が内部で使用する設定ファイルを書き出すディレク
+		トリを指定する。ここで指定したディレクトリが実際に存在しない場
+		合、自動的に作成される。例えばfile_mruの情報源は最近使用したフ
+		ァイルの情報をこの下に保存する。
 		
 		初期値は'~/.unite'の絶対パスである。
 
@@ -236,7 +236,7 @@ g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		最近使用したファイルの情報を書き出すファイルを指定する。
 		
-		初期値は |g:unite_temporary_directory| . '/.file_mru' である。
+		初期値は |g:unite_data_directory| . '/.file_mru' である。
 
 g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
 		最近使用したファイルの最大保存件数を指定する。
@@ -254,7 +254,7 @@ g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		ブックマークを書き出すファイルを指定する。
 		
-		初期値は |g:unite_temporary_directory| . '/.bookmark' である。
+		初期値は |g:unite_data_directory| . '/.bookmark' である。
 
 ------------------------------------------------------------------------------
 キーマッピング 					*unite-key-mappings*

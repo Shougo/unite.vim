@@ -48,11 +48,11 @@ endif
 if !exists('g:unite_enable_split_vertically')
   let g:unite_enable_split_vertically = 0
 endif
-if !exists('g:unite_temporary_directory')
-  let g:unite_temporary_directory = expand('~/.unite')
+if !exists('g:unite_data_directory')
+  let g:unite_data_directory = expand('~/.unite')
 endif
-if !isdirectory(fnamemodify(g:unite_temporary_directory, ':p'))
-  call mkdir(fnamemodify(g:unite_temporary_directory, ':p'), 'p')
+if !isdirectory(fnamemodify(g:unite_data_directory, ':p'))
+  call mkdir(fnamemodify(g:unite_data_directory, ':p'), 'p')
 endif
 "}}}
 
