@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Sep 2010
+" Last Modified: 30 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -452,7 +452,6 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let b:unite.last_input = l:args.input
   
   " Basic settings.
-  setlocal number
   setlocal bufhidden=hide
   setlocal buftype=nofile
   setlocal nobuflisted

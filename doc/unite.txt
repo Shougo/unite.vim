@@ -238,6 +238,8 @@ CHANGELOG					*unite-changelog*
 - Changed g:unite_temporary_directory into g:unite_data_directory.
 - Improved / mapping.
 - Fixed globing.
+- Deleted setlocal number.
+- Fixed / mapping.
 
 2010-09-29
 - Added openable kind.
