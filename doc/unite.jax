@@ -220,9 +220,10 @@ g:unite_no_default_keymappings			*g:unite_no_default_keymappings*
 
 g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
 		情報源がfileの候補に表示しないファイルの正規表現パターンを指定
-		する。この変数が空文字列以外であれば、指定した正規表現で結果を
-		フィルタリングする。正規表現の大文字・小文字の区別は
-		'ignorecase'の設定次第である。
+		する。マッチングはファイルのフルパスに対して行われる。この変数
+		が空文字列以外であれば、指定した正規表現で結果をフィルタリング
+		する。正規表現の大文字・小文字の区別は'ignorecase'の設定次第で
+		ある。
 
 		初期値は autoload/unite/sources/file.vim を参照。
 
@@ -245,9 +246,10 @@ g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
 
 g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 		情報源がfile_mruの候補に表示しないファイルの正規表現パターンを
-		指定する。この変数が空文字列以外であれば、指定した正規表現で結
-		果をフィルタリングする。正規表現の大文字・小文字は'ignorecase'
-		の設定に関わらず、明確に区別される。
+		指定する。マッチングはファイルのフルパスに対して行われる。この
+		変数が空文字列以外であれば、指定した正規表現で結果をフィルタリ
+		ングする。正規表現の大文字・小文字は'ignorecase'の設定に関わら
+		ず、明確に区別される。
 		
 		初期値は autoload/unite/sources/file_mru.vim を参照。
 
