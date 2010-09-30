@@ -110,14 +110,14 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>     <Plug>(unite_move_head)
   imap <buffer><expr> <Space>  unite#mappings#smart_imap(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
-  inoremap <buffer><expr> /    unite#mappings#smart_imap((col('.') <= (len(b:unite.prompt)+1) ? '/' : '*/'), 
+  inoremap <buffer><expr> /    unite#mappings#smart_imap((unite#get_input() =~ '^[~.]*$' ? '/' : '*/'), 
         \ "\<C-o>:\<C-u>call unite#mappings#do_action('narrow')\<CR>")
 endfunction"}}}
 
 " key-mappings functions.
 function! unite#mappings#narrowing(word)"{{{
   setlocal modifiable
-  call setline(2, '>' . escape(a:word, ' *'))
+  call setline(2, b:unite.prompt . escape(a:word, ' *'))
   2
   startinsert!
 endfunction"}}}

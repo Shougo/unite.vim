@@ -192,6 +192,9 @@ function! unite#keyword_filter(list, input)"{{{
 
   return a:list
 endfunction"}}}
+function! unite#get_input()"{{{
+  return getline(2)[len(b:unite.prompt):]
+endfunction"}}}
 "}}}
 
 function! unite#start(sources, ...)"{{{
@@ -225,7 +228,7 @@ function! unite#start(sources, ...)"{{{
 
   silent % delete _
   call setline(s:LNUM_STATUS, 'Sources: ' . join(a:sources, ', '))
-  call setline(s:LNUM_PATTERN, '>' . b:unite.args.input)
+  call setline(s:LNUM_PATTERN, b:unite.prompt . b:unite.args.input)
   execute s:LNUM_PATTERN
 
   call unite#force_redraw()
@@ -489,7 +492,7 @@ function! s:redraw(is_force) "{{{
     return
   endif
   
-  let l:input = getline(2)[len(b:unite.prompt):]
+  let l:input = unite#get_input()
   if !a:is_force && l:input ==# b:unite.last_input
     return
   endif
