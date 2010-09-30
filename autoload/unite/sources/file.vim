@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Sep 2010
+" Last Modified: 30 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,7 +26,7 @@
 
 " Variables  "{{{
 call unite#set_default('g:unite_source_file_ignore_pattern', 
-      \'/\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|[/\\]\)\.\%(hg\|git\|bzr\|svn\)\%($\|[/\\]\)')
+      \'\%(^\|/\)\.$\|\~$\|\.\%(o|exe|dll|bak|sw[po]\)$')
 "}}}
 
 function! unite#sources#file#define()"{{{
