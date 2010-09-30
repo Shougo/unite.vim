@@ -237,6 +237,7 @@ CHANGELOG					*unite-changelog*
 - Improved g:unite_source_file_ignore_pattern.
 - Changed g:unite_temporary_directory into g:unite_data_directory.
 - Improved / mapping.
+- Fixed globing.
 
 2010-09-29
 - Added openable kind.
