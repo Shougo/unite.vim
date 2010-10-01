@@ -460,6 +460,7 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   setlocal nofoldenable
   setlocal nomodeline
   setlocal foldcolumn=0
+  setlocal iskeyword+=-,+,\\,!,~
 
   " Autocommands.
   augroup plugin-unite
