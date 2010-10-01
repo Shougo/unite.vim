@@ -502,19 +502,24 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst})
 情報源						*unite-source* *{sources}*
 
 						*unite-source-file*
-file		ファイル
+file		入力されたファイルを候補とする。
 
 						*unite-source-file_mru*
-file_mru	最近使用したファイル
+file_mru	最近使用したファイルを候補とする。
+
+						*unite-source-file_rec*
+file_rec	現在ディレクトリ直下のファイルすべてを候補とする。
+		ディレクトリや隠しファイルは候補から除外される。
+		ファイルが多すぎる場合、フリーズするかもしれない。
 
 						*unite-source-buffer*
-buffer		開いているバッファ
+buffer		開いているバッファを候補とする。
 
 						*unite-source-register*
-register	レジスタに保存されている文字列
+register	レジスタに保存されている文字列を候補とする。
 
 						*unite-source-bookmark*
-bookmark	ブックマーク
+bookmark	ブックマークされたファイルやディレクトリを候補とする。
 
 ==============================================================================
 種類						*unite-kind* *{kind}*
