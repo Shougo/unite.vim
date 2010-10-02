@@ -238,6 +238,7 @@ CHANGELOG					*unite-changelog*
 - Added :UniteWithInput command.
 - Improved get input text.
 - Improved invalid source detection.
+- Detect home directory in file_rec.
 
 2010-10-01
 - Improved iskeyword.

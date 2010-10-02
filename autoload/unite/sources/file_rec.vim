@@ -35,14 +35,22 @@ let s:source = {
 
 function! s:source.gather_candidates(args)"{{{
   if isdirectory(a:args.input)
-    let l:directory = a:args.input . (a:args.input =~ '[\\/]$' ? '' : '/') 
+    let l:directory = a:args.input
+    if l:directory !~ '[\\/]$'
+      let l:directory .= '/'
+    endif
+    
     let l:input = l:directory
   else
     let l:directory = substitute(getcwd(), '\\', '/', 'g')
+    if l:directory !~ '[\\/]$'
+      let l:directory .= '/'
+    endif
+    
     let l:input = ''
   endif
   
-  if l:directory =~ '^\%(\a\+:\)\?/$'
+  if l:directory =~ '^\%(\a\+:\)\?/$' || expand(l:directory) ==# substitute($HOME . '/', '\\', '/', 'g')
     call unite#print_error('file_rec: Too many candidates.')
     return []
   endif
