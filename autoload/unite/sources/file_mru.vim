@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Sep 2010
+" Last Modified: 02 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,11 +53,13 @@ function! unite#sources#file_mru#_append()"{{{
   endif
 
   call s:load()
-  call insert(filter(s:mru_files, 'v:val.word !=# path'),
+  call insert(filter(s:mru_files, 'v:val.word !=# l:path'),
   \           s:convert2dictionary([path, localtime()]))
-  if 0 < g:unite_source_file_mru_limit
+  
+  if g:unite_source_file_mru_limit > 0
     unlet s:mru_files[g:unite_source_file_mru_limit]
   endif
+  
   call s:save()
 endfunction"}}}
 function! unite#sources#file_mru#_sweep()  "{{{
@@ -111,6 +113,7 @@ function! s:load()  "{{{
   if filereadable(g:unite_source_file_mru_file)
   \  && s:mru_file_mtime != getftime(g:unite_source_file_mru_file)
     let [ver; s:mru_files] = readfile(g:unite_source_file_mru_file)
+    
     if ver !=# s:VERSION
       echohl WarningMsg
       echomsg 'Sorry, the version of MRU file is old.  Clears the MRU list.'
@@ -118,10 +121,12 @@ function! s:load()  "{{{
       let s:mru_files = []
       return
     endif
+    
     let s:mru_files =
-    \   map(filter(map(s:mru_files[0 : g:unite_source_file_mru_limit - 1],
+    \   map(filter(map(s:mru_files[: g:unite_source_file_mru_limit - 1],
     \              'split(v:val, "\t")'), 's:is_exists_path(v:val[0])'),
     \              's:convert2dictionary(v:val)')
+    
     let s:mru_file_mtime = getftime(g:unite_source_file_mru_file)
   endif
 endfunction"}}}
