@@ -221,7 +221,11 @@ function! unite#start(sources, ...)"{{{
     let l:args.prompt = '>'
   endif
   
-  call s:initialize_unite_buffer(a:sources, l:args)
+  try
+    call s:initialize_unite_buffer(a:sources, l:args)
+  catch /^Invalid source/
+    return
+  endtry
 
   " User's initialization.
   setlocal nomodifiable
@@ -310,7 +314,7 @@ function! s:initialize_sources(sources)"{{{
   for l:source_name in a:sources
     if !has_key(s:default_sources, l:source_name)
       call unite#print_error('Invalid source name "' . l:source_name . '" is detected.')
-      return {}
+      throw 'Invalid source'
     endif
     
     let l:source = s:default_sources[l:source_name]
@@ -395,6 +399,9 @@ function! s:convert_line(candidate)"{{{
 endfunction"}}}
 
 function! s:initialize_unite_buffer(sources, args)"{{{
+  " Check sources.
+  let l:sources = s:initialize_sources(a:sources)
+  
   let l:args = a:args
   
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
@@ -449,7 +456,7 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let b:unite.args = l:args
   let b:unite.candidates = []
   let b:unite.cached_candidates = {}
-  let b:unite.sources = s:initialize_sources(a:sources)
+  let b:unite.sources = l:sources
   let b:unite.kinds = s:initialize_kinds()
   let b:unite.buffer_name = (l:args.buffer_name == '') ? 'default' : l:args.buffer_name
   let b:unite.prompt = l:args.prompt
