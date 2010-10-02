@@ -195,6 +195,9 @@ endfunction"}}}
 function! unite#get_input()"{{{
   return getline(2)[len(b:unite.prompt):]
 endfunction"}}}
+function! unite#print_error(message)"{{{
+  echohl WarningMsg | echomsg a:message | echohl None
+endfunction"}}}
 "}}}
 
 function! unite#start(sources, ...)"{{{
@@ -306,7 +309,7 @@ function! s:initialize_sources(sources)"{{{
   let l:number = 0
   for l:source_name in a:sources
     if !has_key(s:default_sources, l:source_name)
-      echoerr 'Invalid source name "' . l:source_name . '" is detected.'
+      call unite#print_error('Invalid source name "' . l:source_name . '" is detected.')
       return {}
     endif
     

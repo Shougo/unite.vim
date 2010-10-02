@@ -34,7 +34,24 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args)"{{{
-  let l:candidates = split(substitute(glob('**'), '\\', '/', 'g'), '\n')
+  if isdirectory(a:args.input)
+    let l:directory = a:args.input . (a:args.input =~ '[\\/]$' ? '' : '/') 
+    let l:input = l:directory
+  else
+    let l:directory = substitute(getcwd(), '\\', '/', 'g')
+    let l:input = ''
+  endif
+  
+  if l:directory =~ '^\%(\a\+:\)\?/$'
+    call unite#print_error('file_rec: Too many candidates.')
+    return []
+  endif
+  let l:candidates = split(substitute(glob(l:input . '**'), '\\', '/', 'g'), '\n')
+  
+  if len(l:candidates) > 10000
+    call unite#print_error('file_rec: Too many candidates.')
+    return []
+  endif
 
   " Remove directories.
   call filter(l:candidates, '!isdirectory(v:val)')

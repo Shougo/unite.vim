@@ -155,6 +155,11 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		絞込みテキストが現在のカーソル位置文字列である他は|:Unite|と同
 		一である。
 
+:UniteWithInput [-buffer-name={buffer-name}] [-input={input-text}] {sources}
+						*:UniteWithInput*
+		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
+		絞込みテキストはユーザーが入力する。
+
 情報源のコマンド				*unite-sources-commands*
 
 :UniteFilemruSweep				*:UniteFilemruSweep*
@@ -508,9 +513,10 @@ file		入力されたファイルを候補とする。
 file_mru	最近使用したファイルを候補とする。
 
 						*unite-source-file_rec*
-file_rec	現在ディレクトリ直下のファイルすべてを候補とする。
-		ディレクトリや隠しファイルは候補から除外される。
-		ファイルが多すぎる場合、フリーズするかもしれない。
+file_rec	入力された絞り込みテキストのディレクトリまたは、現在ディレクト
+		リ直下のファイルすべてを候補とする。ディレクトリや隠しファイル
+		は候補から除外される。候補が多すぎる場合はフリーズするかもしれ
+		ない。
 
 						*unite-source-buffer*
 buffer		開いているバッファを候補とする。

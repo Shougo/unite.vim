@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Sep 2010
+" Last Modified: 02 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,7 +68,7 @@ function! s:call_unite_current_dir(args)"{{{
   let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
   if !has_key(l:options, 'input')
     let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(getcwd(), ':p'), '\\', '/', 'g')
-    let l:options.input = escape(l:path.(l:path =~ '[\\/]$' ? '' : '/'), ' ')
+    let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
   endif
   
   call unite#start(l:args, l:options)
@@ -79,7 +79,7 @@ function! s:call_unite_buffer_dir(args)"{{{
   let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
   if !has_key(l:options, 'input')
     let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(bufname('%'), ':p:h'), '\\', '/', 'g')
-    let l:options.input = escape(l:path.(l:path =~ '[\\/]$' ? '' : '/'), ' ')
+    let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
   endif
   
   call unite#start(l:args, l:options)
@@ -90,6 +90,17 @@ function! s:call_unite_cursor_word(args)"{{{
   let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
   if !has_key(l:options, 'input')
     let l:options.input = expand('<cword>')
+  endif
+  
+  call unite#start(l:args, l:options)
+endfunction"}}}
+
+command! -nargs=+ -complete=customlist,unite#complete_source UniteWithInput call s:call_unite_input(<q-args>)
+function! s:call_unite_input(args)"{{{
+  let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
+  if !has_key(l:options, 'input')
+    let l:path = substitute(input('Input narrowing text: ', '', 'dir'), '\\', '/', 'g')
+    let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
   endif
   
   call unite#start(l:args, l:options)
