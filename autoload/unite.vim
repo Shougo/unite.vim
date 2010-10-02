@@ -399,8 +399,9 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
     if l:args.input == ''
+          \ && b:unite.buffer_name ==# l:args.buffer_name
       " Get input text.
-      let l:args.input = getline(2)[len(l:args.prompt):]
+      let l:args.input = unite#get_input()
     endif
     
     " Quit unite buffer.

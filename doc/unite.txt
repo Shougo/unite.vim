@@ -236,6 +236,7 @@ CHANGELOG					*unite-changelog*
 - Added file_rec source.
 - Improved file_rec source.
 - Added :UniteWithInput command.
+- Improved get input text.
 
 2010-10-01
 - Improved iskeyword.
