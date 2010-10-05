@@ -133,9 +133,12 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		絞込みテキストは空。{sources} はスペースで区切って複数指定でき
 		る。また、{sources} の指定順序が情報源の候補の表示順序となる。
 		情報源については|unite-source|を参照。
-		{buffer-name} はuniteのバッファ名を指定する。
+		{buffer-name} はuniteのバッファ名を指定する。同じ目的を持つ
+		uniteバッファに同じバッファ名を付けることで、
+		|unite#set_substitute_pattern()|などの設定を共通化することがで
+		きる。
 		{input-text} は初期の絞込みテキストを指定する。
-		uniteバッファに居る場合、絞り込みテキストは保存される。
+		現在uniteバッファに居る場合、絞り込みテキストは保存される。
 
 :UniteWithCurrentDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
 						*:UniteWithCurrentDir*
@@ -481,12 +484,12 @@ unite#mappings#smart_imap({narrow-map}, {select-map})		*unite#mappings#smart_ima
 <
 unite#set_substitute_pattern({buffer-name}, {pattern}, {subst})
 						*unite#set_substitute_pattern()*
-		{buffer-name}における絞込みテキストの置換パターンを指定する。
-		{pattern}は置換対象の正規表現、{subst}は置換する文字列である。
-		次の例では絞込みテキストを"~"で始まるように入力した場合に、
-		$HOMEで検索されるようにする。{buffer-name}を省略すると、
-		"default"となり、|:Unite|でbuffer-nameを省略したときに使われる
-		。
+		uniteのバッファ名{buffer-name}における絞込みテキストの置換パタ
+		ーンを指定する。{pattern}は置換対象の正規表現、{subst}は置換す
+		る文字列である。次の例では絞込みテキストを"~"で始まるように入力
+		した場合に、$HOMEで検索されるようにする。{buffer-name}を""とす
+		ると、"default"となり、|:Unite|で-buffer-name=を省略したときに
+		使われるbuffer-nameと同じになる。
 		例:
 >
 		call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
