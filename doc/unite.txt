@@ -232,6 +232,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-06
+- Improved unite#set_substitute_pattern().
+- Deleted / mappings.
+
 2010-10-04
 - Fixed Japanese description.
 - Deleted :UniteFilemruSweep command.

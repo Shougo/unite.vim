@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Sep 2010
+" Last Modified: 06 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,13 +32,23 @@ function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
     endif
   endfor
 endfunction"}}}
-function! unite#set_substitute_pattern(buffer_name, pattern, subst)"{{{
+function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
+  let l:priority = a:0 > 0 ? a:1 : 0
   let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
+  
   if !has_key(s:substitute_pattern, l:buffer_name)
     let s:substitute_pattern[l:buffer_name] = {}
   endif
   
-  let s:substitute_pattern[l:buffer_name][a:pattern] = a:subst
+  if has_key(s:substitute_pattern[l:buffer_name], a:pattern)
+        \ && s:substitute_pattern[l:buffer_name][a:pattern] == ''
+    call remove(s:substitute_pattern[l:buffer_name], a:pattern)
+  else
+    let s:substitute_pattern[l:buffer_name][a:pattern] = {
+          \ 'pattern' : a:pattern,
+          \ 'subst' : a:subst, 'priority' : l:priority
+          \ }
+  endif
 endfunction"}}}
 
 " Constants"{{{
@@ -60,7 +70,8 @@ let s:custom_sources = {}
 let s:custom_kinds = {}
 
 let s:substitute_pattern = {}
-call unite#set_substitute_pattern('default', '^\~', substitute($HOME, '\\', '/', 'g'))
+call unite#set_substitute_pattern('default', '^\~', substitute($HOME, '\\', '/', 'g'), -100)
+call unite#set_substitute_pattern('default', '[~.*]\+\@<!/', '*/', 100)
 "}}}
 
 " Helper functions."{{{
@@ -88,7 +99,7 @@ function! unite#available_sources_name()"{{{
   return map(unite#available_sources_list(), 'v:val.name')
 endfunction"}}}
 function! unite#available_sources_list()"{{{
-  return sort(values(unite#available_sources()), 's:compare')
+  return sort(values(unite#available_sources()), 's:compare_sources')
 endfunction"}}}
 function! unite#available_sources(...)"{{{
   let l:unite = s:get_unite()
@@ -460,6 +471,7 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let b:unite.kinds = s:initialize_kinds()
   let b:unite.buffer_name = (l:args.buffer_name == '') ? 'default' : l:args.buffer_name
   let b:unite.prompt = l:args.prompt
+  let b:unite.input = l:args.input
   let b:unite.last_input = l:args.input
   
   " Basic settings.
@@ -520,9 +532,23 @@ function! s:redraw(is_force) "{{{
   endif
 
   if has_key(s:substitute_pattern, b:unite.buffer_name)
-    for [l:pattern, l:subst] in items(s:substitute_pattern[b:unite.buffer_name])
-      let l:input = substitute(l:input, l:pattern, l:subst, 'g')
+    
+    if b:unite.input != '' && stridx(l:input, b:unite.input) == 0
+      " Substitute after input.
+      let l:input_save = l:input
+      let l:subst = l:input_save[len(b:unite.input) :]
+      let l:input = l:input_save[: len(b:unite.input)-1]
+    else
+      " Substitute all input.
+      let l:subst = l:input
+      let l:input = ''
+    endif
+    
+    for l:pattern in sort(values(s:substitute_pattern[b:unite.buffer_name]), 's:compare_substitute_patterns')
+      let l:subst = substitute(l:subst, l:pattern.pattern, l:pattern.subst, 'g')
     endfor
+    
+    let l:input .= l:subst
   endif
 
   let l:args = b:unite.args
@@ -590,8 +616,11 @@ endfunction"}}}
 function! s:get_unite() "{{{
   return exists('b:unite') ? b:unite : s:unite
 endfunction"}}}
-function! s:compare(source_a, source_b) "{{{
+function! s:compare_sources(source_a, source_b) "{{{
   return a:source_a.unite__number - a:source_b.unite__number
+endfunction"}}}
+function! s:compare_substitute_patterns(pattern_a, pattern_b)"{{{
+  return a:pattern_b.priority - a:pattern_a.priority
 endfunction"}}}
 "}}}
 

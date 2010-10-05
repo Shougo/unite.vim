@@ -110,7 +110,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>     <Plug>(unite_move_head)
   imap <buffer><expr> <Space>  unite#mappings#smart_imap(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
-  inoremap <buffer><expr> /    unite#mappings#smart_imap((unite#get_input() =~ '[~.*]\+$' ? '/' : '*/'), 
+  inoremap <buffer><expr> /    unite#mappings#smart_imap('/', 
         \ "\<C-o>:\<C-u>call unite#mappings#do_action('narrow')\<CR>")
 endfunction"}}}
 
