@@ -234,6 +234,7 @@ CHANGELOG					*unite-changelog*
 
 2010-10-04
 - Fixed Japanese description.
+- Deleted :UniteFilemruSweep command.
 
 2010-10-02
 - Added file_rec source.

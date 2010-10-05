@@ -165,9 +165,6 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 
 情報源のコマンド				*unite-sources-commands*
 
-:UniteFilemruSweep				*:UniteFilemruSweep*
-		最近使ったファイルリストから、存在しないファイルを削除する。
-
 :UniteBookmarkAdd [{file}]			*:UniteBookmarkAdd*
 		ブックマークリストにファイルを追加する。引数が指定されなかった
 		場合、現在のファイルの現在位置が記録される。

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2010
+" Last Modified: 05 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,8 +32,6 @@ augroup plugin-unite-source-file_mru
   autocmd!
   autocmd BufEnter,BufWinEnter,BufFilePost * call unite#sources#file_mru#_append()
 augroup END
-
-command! -bar UniteFilemruSweep call unite#sources#file_mru#_sweep()
 
 let g:loaded_unite_source_file_mru = 1
 
