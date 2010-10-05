@@ -481,14 +481,18 @@ unite#mappings#smart_imap({narrow-map}, {select-map})		*unite#mappings#smart_ima
 unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 						*unite#set_substitute_pattern()*
 		uniteのバッファ名{buffer-name}における絞込みテキストの置換パタ
-		ーンを指定する。{pattern}は置換対象の正規表現、{subst}は置換す
-		る文字列である。次の例では絞込みテキストを"~"で始まるように入力
-		した場合に、$HOMEで検索されるようにする。{buffer-name}を""とす
-		ると、"default"となり、|:Unite|で-buffer-name=を省略したときに
-		使われるbuffer-nameと同じになる。
+		ーンを指定する。{buffer-name}を""とすると、"default"となり、
+		|:Unite|で-buffer-name=を省略したときに使われるbuffer-nameと同
+		じになる。
+		{pattern}は置換対象の正規表現、{subst}は置換する文字列である。
+		{subst}を""とすると、{pattern}は無効化される。
 		{priority}とは置換処理の優先度である。{pattern}は{priority}でソ
 		ートされた上で、{priority}が大きい順に適用される。{priority}を
-		省略すると0になる。
+		省略すると0になる。先に処理されるべき{pattern}は{priority}を大
+		きくすると良い。
+		
+		次の例では絞込みテキストを"~"で始まるように入力
+		した場合に、$HOMEで検索されるようにする。
 		例:
 >
 		call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'), -100)
@@ -502,8 +506,13 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		上の設定は/を越えずに曖昧検索をするが、下の場合は/を越えて曖昧
 		検索することができる。
 		
-		初期値ではbuffer_nameを省略したdefaultバッファにおいて、~を
-		$HOME、/はワイルドカードを付加するように設定されている。 
+		初期値は次のように設定されていて、buffer_nameを省略したdefault
+		バッファにおいて、~を$HOME、/はワイルドカードを付加するようにな
+		っている。
+>
+		call unite#set_substitute_pattern('default', '^\~', substitute($HOME, '\\', '/', 'g'), -100)
+		call unite#set_substitute_pattern('default', '[~.*]\+\@<!/', '*/', 100)
+<
 
 ==============================================================================
 情報源						*unite-source* *{sources}*
