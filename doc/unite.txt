@@ -238,6 +238,7 @@ CHANGELOG					*unite-changelog*
 - Improved description.
 - Improved globing pattern.
 - List current buffer.
+- Added vimshell action in buffer.
 
 2010-10-04
 - Fixed Japanese description.

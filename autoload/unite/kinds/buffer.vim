@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Sep 2010
+" Last Modified: 06 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -94,6 +94,15 @@ function! s:kind.action_table.lcd.func(candidate)"{{{
   let l:dir = s:get_directory(a:candidate)
   lcd `=l:dir`
 endfunction"}}}
+
+if exists(':VimShell')
+  let s:kind.action_table.vimshell = {
+        \ }
+  function! s:kind.action_table.vimshell.func(candidate)"{{{
+    let l:dir = s:get_directory(a:candidate)
+    VimShellCreate `=l:dir`
+  endfunction"}}}
+endif
 "}}}
 
 " Misc
