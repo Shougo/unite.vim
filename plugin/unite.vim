@@ -70,7 +70,7 @@ function! s:call_unite_current_dir(args)"{{{
     let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(getcwd(), ':p'), '\\', '/', 'g')
     let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
   endif
-  
+
   call unite#start(l:args, l:options)
 endfunction"}}}
 
@@ -81,7 +81,7 @@ function! s:call_unite_buffer_dir(args)"{{{
     let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(bufname('%'), ':p:h'), '\\', '/', 'g')
     let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
   endif
-  
+
   call unite#start(l:args, l:options)
 endfunction"}}}
 
@@ -91,7 +91,7 @@ function! s:call_unite_cursor_word(args)"{{{
   if !has_key(l:options, 'input')
     let l:options.input = expand('<cword>')
   endif
-  
+
   call unite#start(l:args, l:options)
 endfunction"}}}
 
@@ -102,7 +102,7 @@ function! s:call_unite_input(args)"{{{
     let l:path = substitute(input('Input narrowing text: ', '', 'dir'), '\\', '/', 'g')
     let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
   endif
-  
+
   call unite#start(l:args, l:options)
 endfunction"}}}
 
@@ -118,8 +118,50 @@ function! s:parse_options(args)"{{{
       call add(l:args, l:arg)
     endif
   endfor
-  
+
   return [l:args, l:options]
+endfunction"}}}
+
+command! -nargs=1 -complete=customlist,unite#complete_buffer UniteResume call s:call_resume(<q-args>)
+function! s:call_resume(buffer_name)"{{{
+  let l:buffer_dict = {}
+  for l:unite in map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite"'), 'getbufvar(v:val, "unite")')
+    let l:buffer_dict[l:unite.buffer_name] = l:unite.bufnr
+  endfor
+
+  if !has_key(l:buffer_dict, a:buffer_name)
+    call unite#print_error('Invalid buffer name : ' . a:buffer_name)
+    ret
+  endif
+
+  let l:winnr = winnr()
+  let l:win_rest_cmd = winrestcmd()
+
+  " Split window.
+  execute g:unite_split_rule
+        \ g:unite_enable_split_vertically ?  'vsplit' : 'split'
+
+  silent execute l:buffer_dict[a:buffer_name] 'buffer'
+
+  " Set parameters.
+  let b:unite.old_winnr = l:winnr
+  let b:unite.win_rest_cmd = l:win_rest_cmd
+
+  if !g:unite_enable_split_vertically
+    20 wincmd _
+  endif
+
+  setlocal modifiable
+
+  if g:unite_enable_start_insert
+    2
+    startinsert!
+  else
+    3
+    normal! 0z.
+  endif
+
+  setlocal nomodifiable
 endfunction"}}}
 
 let g:loaded_unite = 1

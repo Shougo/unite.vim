@@ -163,6 +163,10 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
 		絞込みテキストはユーザーが入力する。
 
+:UniteResume {buffer-name}			*:UniteWithInput*
+		以前開いた{buffer-name}という名前のuniteバッファを再利用する。
+		絞込みテキストや候補はそのままの状態となる。
+
 情報源のコマンド				*unite-sources-commands*
 
 :UniteBookmarkAdd [{file}]			*:UniteBookmarkAdd*
@@ -505,8 +509,8 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		において、~を$HOME、/は部分マッチできるように、ワイルドカードを
 		付加するようになっている。
 >
-		call unite#set_substitute_pattern('default', '^\~', substitute($HOME, '\\', '/', 'g'), -100)
-		call unite#set_substitute_pattern('default', '[~.*]\+\@<!/', '*/*', 100)
+		call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'), -100)
+		call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
 <
 
 ==============================================================================
