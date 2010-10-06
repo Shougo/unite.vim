@@ -235,6 +235,7 @@ CHANGELOG					*unite-changelog*
 2010-10-06
 - Improved unite#set_substitute_pattern().
 - Deleted / mappings.
+- Improved description.
 
 2010-10-04
 - Fixed Japanese description.

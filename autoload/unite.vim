@@ -41,7 +41,7 @@ function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
   endif
   
   if has_key(s:substitute_pattern[l:buffer_name], a:pattern)
-        \ && s:substitute_pattern[l:buffer_name][a:pattern] == ''
+        \ && a:pattern == ''
     call remove(s:substitute_pattern[l:buffer_name], a:pattern)
   else
     let s:substitute_pattern[l:buffer_name][a:pattern] = {

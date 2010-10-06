@@ -485,11 +485,13 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		|:Unite|で-buffer-name=を省略したときに使われるbuffer-nameと同
 		じになる。
 		{pattern}は置換対象の正規表現、{subst}は置換する文字列である。
+		同じ{pattern}を複数回指定すると、設定は上書きされる。
 		{subst}を""とすると、{pattern}は無効化される。
 		{priority}とは置換処理の優先度である。{pattern}は{priority}でソ
 		ートされた上で、{priority}が大きい順に適用される。{priority}を
 		省略すると0になる。先に処理されるべき{pattern}は{priority}を大
 		きくすると良い。
+		ちなみに、uniteバッファの初期文字列は置換の対象とならない。
 		
 		次の例では絞込みテキストを"~"で始まるように入力
 		した場合に、$HOMEで検索されるようにする。
