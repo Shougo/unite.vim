@@ -35,11 +35,11 @@ endfunction"}}}
 function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
   let l:priority = a:0 > 0 ? a:1 : 0
   let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
-  
+
   if !has_key(s:substitute_pattern, l:buffer_name)
     let s:substitute_pattern[l:buffer_name] = {}
   endif
-  
+
   if has_key(s:substitute_pattern[l:buffer_name], a:pattern)
         \ && a:pattern == ''
     call remove(s:substitute_pattern[l:buffer_name], a:pattern)

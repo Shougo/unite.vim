@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Sep 2010
+" Last Modified: 06 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,13 +40,17 @@ let s:source = {
 
 function! s:source.gather_candidates(args)"{{{
   let l:input = substitute(substitute(a:args.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
-  
+
+  " Substitute *. -> .* .
+  let l:input = substitute(l:input, '\*\.', '.*', 'g')
+
   if l:input !~ '\*' && getftype(l:input) == 'link'
     " Resolve link.
     let l:input = resolve(l:input)
   endif
+
   " Glob by directory name.
-  let l:input = substitute(l:input, '\%(\%(^\|/\)\.*\)\?\zs[^/]*$', '', '')
+  let l:input = substitute(l:input, '[^/.]*$', '', '')
   let l:candidates = split(substitute(glob(l:input . (l:input =~ '\*$' ? '' : '*')), '\\', '/', 'g'), '\n')
 
   if empty(l:candidates) && a:args.input !~ '\*'
@@ -57,24 +61,24 @@ function! s:source.gather_candidates(args)"{{{
   if g:unite_source_file_ignore_pattern != ''
     call filter(l:candidates, 'v:val !~ ' . string(g:unite_source_file_ignore_pattern))
   endif
-  
+
   let l:candidates_dir = []
   let l:candidates_file = []
   for l:file in l:candidates
     let l:dict = { 'word' : l:file, 'abbr' : l:file, 'source' : 'file', }
-    
-    if isdirectory(l:file) 
+
+    if isdirectory(l:file)
       let l:dict.abbr .= '/'
       let l:dict.kind = 'directory'
-      
+
       call add(l:candidates_dir, l:dict)
     else
       let l:dict.kind = 'file'
-      
+
       call add(l:candidates_file, l:dict)
     endif
   endfor
-  
+
   return l:candidates_dir + l:candidates_file
 endfunction"}}}
 
