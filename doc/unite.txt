@@ -207,10 +207,6 @@ EXAMPLES					*unite-examples*
 	nnoremap <silent> [unite]f  :<C-u>UniteWithCurrentDir -buffer-name=files buffer file_mru bookmark file<CR>
 	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
 	
-	call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
-	" Fuzzy.
-	"call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0')
-	
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{
 	" Overwrite settings.
@@ -239,6 +235,7 @@ CHANGELOG					*unite-changelog*
 - Improved globing pattern.
 - List current buffer.
 - Added vimshell action in buffer.
+- Improved default substitute patterns.
 
 2010-10-04
 - Fixed Japanese description.

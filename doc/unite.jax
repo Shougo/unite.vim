@@ -493,13 +493,6 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		きくすると良い。
 		ちなみに、uniteバッファの初期文字列は置換の対象とならない。
 		
-		次の例では絞込みテキストを"~"で始まるように入力
-		した場合に、$HOMEで検索されるようにする。
-		例:
->
-		call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'), -100)
-		call unite#set_substitute_pattern('files', '\%([~.*]\+\)\@<!/', '*/', 100)
-<
 		この関数を使うと、曖昧マッチを模倣することができる。
 >
 		call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0', 100)
@@ -508,9 +501,8 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		上の設定は/を越えずに曖昧検索をするが、下の場合は/を越えて曖昧
 		検索することができる。
 		
-		初期値は次のように設定されていて、buffer_nameを省略したdefault
-		バッファにおいて、~を$HOME、/はワイルドカードを付加するようにな
-		っている。
+		初期値は次のように設定されていて、buffer_nameがfilesのバッファ
+		において、~を$HOME、/はワイルドカードを付加するようになっている。
 >
 		call unite#set_substitute_pattern('default', '^\~', substitute($HOME, '\\', '/', 'g'), -100)
 		call unite#set_substitute_pattern('default', '[~.*]\+\@<!/', '*/', 100)
@@ -693,10 +685,6 @@ required_pattern_length	数値		(任意)
 	nnoremap [unite]u  :<C-u>Unite<Space>
 	nnoremap <silent> [unite]f  :<C-u>UniteWithCurrentDir -buffer-name=files buffer file_mru bookmark file<CR>
 	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
-	
-	call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'))
-	" Fuzzy.
-	"call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0')
 	
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{

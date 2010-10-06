@@ -70,8 +70,8 @@ let s:custom_sources = {}
 let s:custom_kinds = {}
 
 let s:substitute_pattern = {}
-call unite#set_substitute_pattern('default', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\ ', 'g'), -100)
-call unite#set_substitute_pattern('default', '\%([~.*]\+\)\@<!/', '*/', 100)
+call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\ ', 'g'), -100)
+call unite#set_substitute_pattern('files', '\%([~.*]\+\)\@<!/', '*/', 100)
 "}}}
 
 " Helper functions."{{{
