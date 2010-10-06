@@ -237,6 +237,7 @@ CHANGELOG					*unite-changelog*
 - Deleted / mappings.
 - Improved description.
 - Improved globing pattern.
+- List current buffer.
 
 2010-10-04
 - Fixed Japanese description.
