@@ -502,10 +502,11 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		検索することができる。
 		
 		初期値は次のように設定されていて、buffer_nameがfilesのバッファ
-		において、~を$HOME、/はワイルドカードを付加するようになっている。
+		において、~を$HOME、/は部分マッチできるように、ワイルドカードを
+		付加するようになっている。
 >
 		call unite#set_substitute_pattern('default', '^\~', substitute($HOME, '\\', '/', 'g'), -100)
-		call unite#set_substitute_pattern('default', '[~.*]\+\@<!/', '*/', 100)
+		call unite#set_substitute_pattern('default', '[~.*]\+\@<!/', '*/*', 100)
 <
 
 ==============================================================================

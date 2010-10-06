@@ -236,6 +236,7 @@ CHANGELOG					*unite-changelog*
 - List current buffer.
 - Added vimshell action in buffer.
 - Improved default substitute patterns.
+- Improved / substitute pattern.
 
 2010-10-04
 - Fixed Japanese description.
