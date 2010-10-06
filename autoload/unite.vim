@@ -71,7 +71,7 @@ let s:custom_kinds = {}
 
 let s:substitute_pattern = {}
 call unite#set_substitute_pattern('default', '^\~', substitute($HOME, '\\', '/', 'g'), -100)
-call unite#set_substitute_pattern('default', '[~.*]\+\@<!/', '*/', 100)
+call unite#set_substitute_pattern('default', '\%([~.*]\+\)\@<!/', '*/', 100)
 "}}}
 
 " Helper functions."{{{
