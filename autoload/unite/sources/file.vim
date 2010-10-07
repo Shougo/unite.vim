@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Oct 2010
+" Last Modified: 07 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,7 +44,7 @@ function! s:source.gather_candidates(args)"{{{
   " Substitute *. -> .* .
   let l:input = substitute(l:input, '\*\.', '.*', 'g')
 
-  if l:input !~ '\*' && getftype(l:input) == 'link'
+  if l:input !~ '\*' && unite#is_win() && getftype(l:input) == 'link'
     " Resolve link.
     let l:input = resolve(l:input)
   endif

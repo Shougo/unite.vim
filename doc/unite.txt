@@ -232,6 +232,7 @@ CHANGELOG					*unite-changelog*
 - Improved :UniteResume.
 - Fixed file_mru word.
 - Optimized register source.
+- Don't chase link.
 
 2010-10-06
 - Improved unite#set_substitute_pattern().
