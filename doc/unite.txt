@@ -228,6 +228,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-08
+- Fixed dummy candidates bug.
+
 2010-10-07
 - Improved :UniteResume.
 - Fixed file_mru word.
