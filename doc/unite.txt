@@ -40,6 +40,14 @@ Changelog		|unite-changelog|
 ==============================================================================
 INTRODUCTION					*unite-introduction*
 
+*unite* searches and displays information from arbitrary resources like files,
+buffers, recently used files or registers. You can run one of defined action
+on a target displayed.
+
+The differences between *unite* and similar plugins like |fuzzyfinder| or |ku|
+are that *unite* doesn't use the built-in completion interface of Vim, and
+integrates resources at the same time.
+
 ==============================================================================
 USAGE						*unite-usage*
 
