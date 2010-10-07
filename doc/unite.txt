@@ -239,6 +239,7 @@ CHANGELOG					*unite-changelog*
 - Improved / substitute pattern.
 - Fixed substitute pattern.
 - Added :UniteResume.
+- Improved :UniteResume.
 
 2010-10-04
 - Fixed Japanese description.

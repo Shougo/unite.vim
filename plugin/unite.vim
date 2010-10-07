@@ -122,47 +122,7 @@ function! s:parse_options(args)"{{{
   return [l:args, l:options]
 endfunction"}}}
 
-command! -nargs=1 -complete=customlist,unite#complete_buffer UniteResume call s:call_resume(<q-args>)
-function! s:call_resume(buffer_name)"{{{
-  let l:buffer_dict = {}
-  for l:unite in map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite"'), 'getbufvar(v:val, "unite")')
-    let l:buffer_dict[l:unite.buffer_name] = l:unite.bufnr
-  endfor
-
-  if !has_key(l:buffer_dict, a:buffer_name)
-    call unite#print_error('Invalid buffer name : ' . a:buffer_name)
-    ret
-  endif
-
-  let l:winnr = winnr()
-  let l:win_rest_cmd = winrestcmd()
-
-  " Split window.
-  execute g:unite_split_rule
-        \ g:unite_enable_split_vertically ?  'vsplit' : 'split'
-
-  silent execute l:buffer_dict[a:buffer_name] 'buffer'
-
-  " Set parameters.
-  let b:unite.old_winnr = l:winnr
-  let b:unite.win_rest_cmd = l:win_rest_cmd
-
-  if !g:unite_enable_split_vertically
-    20 wincmd _
-  endif
-
-  setlocal modifiable
-
-  if g:unite_enable_start_insert
-    2
-    startinsert!
-  else
-    3
-    normal! 0z.
-  endif
-
-  setlocal nomodifiable
-endfunction"}}}
+command! -nargs=? -complete=customlist,unite#complete_buffer UniteResume call unite#resume(<q-args>)
 
 let g:loaded_unite = 1
 

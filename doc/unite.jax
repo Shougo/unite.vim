@@ -163,8 +163,9 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
 		絞込みテキストはユーザーが入力する。
 
-:UniteResume {buffer-name}			*:UniteWithInput*
+:UniteResume [{buffer-name}]			*:UniteResume*
 		以前開いた{buffer-name}という名前のuniteバッファを再利用する。
+		{buffer-name}を省略すると、以前使用したバッファを再利用する。
 		絞込みテキストや候補はそのままの状態となる。
 
 情報源のコマンド				*unite-sources-commands*

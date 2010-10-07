@@ -61,6 +61,7 @@ let s:LNUM_PATTERN = 2
 
 " Variables  "{{{
 " buffer number of the unite buffer
+let s:last_unite_bufnr = -1
 let s:unite = {}
 
 let s:default_sources = {}
@@ -216,6 +217,7 @@ function! unite#print_error(message)"{{{
 endfunction"}}}
 "}}}
 
+" Command functions.
 function! unite#start(sources, ...)"{{{
   if empty(s:default_sources)
     " Initialize load.
@@ -267,6 +269,57 @@ function! unite#start(sources, ...)"{{{
   setlocal nomodifiable
 
   return s:TRUE
+endfunction"}}}
+function! unite#resume(buffer_name)"{{{
+  if a:buffer_name == ''
+    " Use last unite buffer.
+    if !bufexists(s:last_unite_bufnr)
+      call unite#print_error('No unite buffer.')
+      return
+    endif
+
+    let l:bufnr = s:last_unite_bufnr
+  else
+    let l:buffer_dict = {}
+    for l:unite in map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite"'), 'getbufvar(v:val, "unite")')
+      let l:buffer_dict[l:unite.buffer_name] = l:unite.bufnr
+    endfor
+
+    if !has_key(l:buffer_dict, a:buffer_name)
+      call unite#print_error('Invalid buffer name : ' . a:buffer_name)
+      return
+    endif
+    let l:bufnr = l:buffer_dict[a:buffer_name]
+  endif
+
+  let l:winnr = winnr()
+  let l:win_rest_cmd = winrestcmd()
+
+  " Split window.
+  execute g:unite_split_rule
+        \ g:unite_enable_split_vertically ?  'vsplit' : 'split'
+
+  silent execute l:bufnr 'buffer'
+
+  " Set parameters.
+  let b:unite.old_winnr = l:winnr
+  let b:unite.win_rest_cmd = l:win_rest_cmd
+
+  if !g:unite_enable_split_vertically
+    20 wincmd _
+  endif
+
+  setlocal modifiable
+
+  if g:unite_enable_start_insert
+    2
+    startinsert!
+  else
+    3
+    normal! 0z.
+  endif
+
+  setlocal nomodifiable
 endfunction"}}}
 
 function! unite#quit_session()  "{{{
@@ -479,6 +532,8 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let b:unite.input = l:args.input
   let b:unite.last_input = l:args.input
   let b:unite.bufnr = bufnr('%')
+
+  let s:last_unite_bufnr = bufnr('%')
 
   " Basic settings.
   setlocal bufhidden=hide
