@@ -233,6 +233,7 @@ CHANGELOG					*unite-changelog*
 - Fixed file_mru word.
 - Optimized register source.
 - Don't chase link.
+- Fixed filtering bug.
 
 2010-10-06
 - Improved unite#set_substitute_pattern().

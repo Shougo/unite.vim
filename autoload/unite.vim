@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Oct 2010
+" Last Modified: 07 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -187,6 +187,8 @@ function! unite#get_marked_candidates() "{{{
 endfunction"}}}
 function! unite#keyword_filter(list, input)"{{{
   for l:input in split(a:input, '\\\@<! ')
+    let l:input = substitute(l:input, '\\ ', ' ', 'g')
+
     if l:input =~ '^!'
       " Exclusion.
       let l:input = unite#escape_match(l:input)
@@ -196,7 +198,6 @@ function! unite#keyword_filter(list, input)"{{{
       let l:input = unite#escape_match(l:input)
       call filter(a:list, 'v:val.abbr =~ ' . string(l:input))
     else
-      let l:input = substitute(l:input, '\\ ', ' ', 'g')
       if &ignorecase
         let l:expr = printf('stridx(tolower(v:val.abbr), %s) != -1', string(tolower(l:input)))
       else
@@ -609,7 +610,6 @@ function! s:redraw(is_force) "{{{
     endfor
 
     let l:input .= l:subst
-    echomsg l:input
   endif
 
   let l:args = b:unite.args
