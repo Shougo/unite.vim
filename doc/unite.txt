@@ -228,6 +228,11 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-07
+- Improved :UniteResume.
+- Fixed file_mru word.
+- Optimized register source.
+
 2010-10-06
 - Improved unite#set_substitute_pattern().
 - Deleted / mappings.
@@ -239,8 +244,6 @@ CHANGELOG					*unite-changelog*
 - Improved / substitute pattern.
 - Fixed substitute pattern.
 - Added :UniteResume.
-- Improved :UniteResume.
-- Fixed file_mru word.
 
 2010-10-04
 - Fixed Japanese description.
