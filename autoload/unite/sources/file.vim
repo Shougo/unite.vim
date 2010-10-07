@@ -53,9 +53,10 @@ function! s:source.gather_candidates(args)"{{{
   let l:input = substitute(l:input, '[^/.]*$', '', '')
   let l:candidates = split(substitute(glob(l:input . (l:input =~ '\*$' ? '' : '*')), '\\', '/', 'g'), '\n')
 
-  if empty(l:candidates) && a:args.input !~ '\*'
+  if a:args.input != ''
+        \ && !filereadable(substitute(a:args.input, '[*\\]', '', 'g'))
     " Add dummy candidate.
-    let l:candidates = [ a:args.input ]
+    call add(l:candidates, substitute(a:args.input, '[*\\]', '', 'g'))
   endif
 
   if g:unite_source_file_ignore_pattern != ''

@@ -234,6 +234,7 @@ CHANGELOG					*unite-changelog*
 - Optimized register source.
 - Don't chase link.
 - Fixed filtering bug.
+- Fixed dummy candidates bug.
 
 2010-10-06
 - Improved unite#set_substitute_pattern().
