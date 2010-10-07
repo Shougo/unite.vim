@@ -240,6 +240,7 @@ CHANGELOG					*unite-changelog*
 - Fixed substitute pattern.
 - Added :UniteResume.
 - Improved :UniteResume.
+- Fixed file_mru word.
 
 2010-10-04
 - Fixed Japanese description.
