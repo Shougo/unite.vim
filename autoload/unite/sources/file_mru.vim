@@ -71,16 +71,19 @@ let s:source = {
 
 function! s:source.gather_candidates(args)"{{{
   call s:load()
-  
+
   " Create abbr.
   for l:mru in s:mru_files
-    let l:mru.abbr = strftime(g:unite_source_file_mru_time_format, l:mru.unite_file_mru_time) .
+    let l:abbr = strftime(g:unite_source_file_mru_time_format, l:mru.unite_file_mru_time) .
           \          fnamemodify(l:mru.word, ':.')
-    if l:mru.abbr == ''
-      let l:mru.abbr = strftime(g:unite_source_file_mru_time_format, l:mru.unite_file_mru_time) . l:mru.word
+
+    if l:abbr == ''
+      let l:abbr = strftime(g:unite_source_file_mru_time_format, l:mru.unite_file_mru_time) . l:mru.word
     endif
+
+    let l:mru.abbr = substitute(l:abbr, '\\', '/', 'g')
   endfor
-  
+
   return sort(s:mru_files, 's:compare')
 endfunction"}}}
 
