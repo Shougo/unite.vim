@@ -243,6 +243,7 @@ CHANGELOG					*unite-changelog*
 - Improved unite#mappings#do_action().
 - Improved choose action.
 - Improved mapping description.
+- Changed source action specification.
 
 2010-10-07
 - Improved :UniteResume.

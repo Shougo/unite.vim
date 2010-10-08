@@ -121,8 +121,9 @@ function! unite#get_action_table(source_name, kind_name)"{{{
   let l:action_table = extend(copy(l:action_table), l:kind.action_table)
 
   if has_key(l:source, 'action_table')
+        \ && has_key(l:source.action_table, a:kind_name)
     " Overwrite actions.
-    let l:action_table = extend(copy(l:action_table), l:source.action_table)
+    let l:action_table = extend(copy(l:action_table), l:source.action_table[a:kind_name])
   endif
 
   return l:action_table
@@ -132,7 +133,8 @@ function! unite#get_default_action(source_name, kind_name)"{{{
   let l:source = unite#available_sources(a:source_name)
 
   if has_key(l:source, 'default_action')
-    let l:default_action = l:source.default_action
+        \ && has_key(l:source.default_action, a:kind_name)
+    let l:default_action = l:source.default_action[a:kind_name]
   else
     let l:default_action = l:kind.default_action
   endif
