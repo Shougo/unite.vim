@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: register.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Oct 2010
+" Last Modified: 08 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,7 +32,7 @@ let s:source = {
       \ 'name' : 'register',
       \}
 
-function! s:source.gather_candidates(args)"{{{
+function! s:source.gather_candidates(args, context)"{{{
   let l:candidates = []
 
   let l:max_width = winwidth(0) - 40

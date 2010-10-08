@@ -26,9 +26,9 @@ function! s:run()
         \ 'name' : 'hoge',
         \ 'is_volatile' : 1,
         \}
-  function! l:source.gather_candidates(args)"{{{
+  function! l:source.gather_candidates(args, context)"{{{
     " Add dummy candidate.
-    let l:candidates = [ a:args.input ]
+    let l:candidates = [ a:context.input ]
 
     call map(l:candidates, '{
           \ "word" : v:val,

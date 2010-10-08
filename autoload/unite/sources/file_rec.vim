@@ -33,29 +33,29 @@ let s:source = {
       \ 'max_candidates': 30,
       \}
 
-function! s:source.gather_candidates(args)"{{{
-  if isdirectory(a:args.input)
-    let l:directory = a:args.input
+function! s:source.gather_candidates(args, context)"{{{
+  if isdirectory(a:context.input)
+    let l:directory = a:context.input
     if l:directory !~ '[\\/]$'
       let l:directory .= '/'
     endif
-    
+
     let l:input = l:directory
   else
     let l:directory = substitute(getcwd(), '\\', '/', 'g')
     if l:directory !~ '[\\/]$'
       let l:directory .= '/'
     endif
-    
+
     let l:input = ''
   endif
-  
+
   if l:directory =~ '^\%(\a\+:\)\?/$' || expand(l:directory) ==# substitute($HOME . '/', '\\', '/', 'g')
     call unite#print_error('file_rec: Too many candidates.')
     return []
   endif
   let l:candidates = split(substitute(glob(l:input . '**'), '\\', '/', 'g'), '\n')
-  
+
   if len(l:candidates) > 10000
     call unite#print_error('file_rec: Too many candidates.')
     return []
@@ -63,11 +63,11 @@ function! s:source.gather_candidates(args)"{{{
 
   " Remove directories.
   call filter(l:candidates, '!isdirectory(v:val)')
-  
+
   if g:unite_source_file_ignore_pattern != ''
     call filter(l:candidates, 'v:val !~ ' . string(g:unite_source_file_ignore_pattern))
   endif
-  
+
   return map(l:candidates, '{
         \ "word" : v:val,
         \ "source" : "file_rec",

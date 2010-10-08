@@ -69,7 +69,7 @@ let s:source = {
       \ 'action_table': {},
       \}
 
-function! s:source.gather_candidates(args)"{{{
+function! s:source.gather_candidates(args, context)"{{{
   call s:load()
 
   " Create abbr.

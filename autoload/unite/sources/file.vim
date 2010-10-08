@@ -38,8 +38,8 @@ let s:source = {
       \ 'is_volatile' : 1,
       \}
 
-function! s:source.gather_candidates(args)"{{{
-  let l:input = substitute(substitute(a:args.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
+function! s:source.gather_candidates(args, context)"{{{
+  let l:input = substitute(substitute(a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
 
   " Substitute *. -> .* .
   let l:input = substitute(l:input, '\*\.', '.*', 'g')
@@ -53,8 +53,8 @@ function! s:source.gather_candidates(args)"{{{
   let l:input = substitute(l:input, '[^/.]*$', '', '')
   let l:candidates = split(substitute(glob(l:input . (l:input =~ '\*$' ? '' : '*')), '\\', '/', 'g'), '\n')
 
-  if a:args.input != ''
-    let l:dummy = substitute(a:args.input, '[*\\]', '', 'g')
+  if a:context.input != ''
+    let l:dummy = substitute(a:context.input, '[*\\]', '', 'g')
     if (!filereadable(l:dummy) && !isdirectory(l:dummy))
           \ || (l:dummy =~ '^\%(/\|\a\+:/\)$')
       " Add dummy candidate.

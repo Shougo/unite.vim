@@ -232,23 +232,23 @@ function! unite#start(sources, ...)"{{{
     call s:load_default_sources_and_kinds()
   endif
 
-  " Save args.
-  let l:args = a:0 >= 1 ? a:1 : {}
-  if !has_key(l:args, 'input')
-    let l:args.input = ''
+  " Save context.
+  let l:context = a:0 >= 1 ? a:1 : {}
+  if !has_key(l:context, 'input')
+    let l:context.input = ''
   endif
-  if !has_key(l:args, 'is_insert')
-    let l:args.is_insert = 0
+  if !has_key(l:context, 'is_insert')
+    let l:context.is_insert = 0
   endif
-  if !has_key(l:args, 'buffer_name')
-    let l:args.buffer_name = ''
+  if !has_key(l:context, 'buffer_name')
+    let l:context.buffer_name = ''
   endif
-  if !has_key(l:args, 'prompt')
-    let l:args.prompt = '>'
+  if !has_key(l:context, 'prompt')
+    let l:context.prompt = '>'
   endif
 
   try
-    call s:initialize_unite_buffer(a:sources, l:args)
+    call s:initialize_unite_buffer(a:sources, l:context)
   catch /^Invalid source/
     return
   endtry
@@ -260,8 +260,8 @@ function! unite#start(sources, ...)"{{{
   setlocal modifiable
 
   silent % delete _
-  call setline(s:LNUM_STATUS, 'Sources: ' . join(a:sources, ', '))
-  call setline(s:LNUM_PATTERN, b:unite.prompt . b:unite.args.input)
+  call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(a:sources), 'v:val[0]'), ', '))
+  call setline(s:LNUM_PATTERN, b:unite.prompt . b:unite.context.input)
   execute s:LNUM_PATTERN
 
   call unite#force_redraw()
@@ -358,7 +358,7 @@ function! unite#quit_session()  "{{{
   " Restore current directory.
   lcd `=l:cwd`
 
-  if !s:unite.args.is_insert
+  if !s:unite.context.is_insert
     stopinsert
   endif
 endfunction"}}}
@@ -388,13 +388,14 @@ function! s:initialize_sources(sources)"{{{
   let l:sources = {}
 
   let l:number = 0
-  for l:source_name in a:sources
+  for [l:source_name, l:args] in a:sources
     if !has_key(s:default_sources, l:source_name)
       call unite#print_error('Invalid source name "' . l:source_name . '" is detected.')
       throw 'Invalid source'
     endif
 
     let l:source = s:default_sources[l:source_name]
+    let l:source.args = l:args
     if !has_key(l:source, 'is_volatile')
       let l:source.is_volatile = 0
     endif
@@ -411,22 +412,22 @@ endfunction"}}}
 function! s:initialize_kinds()"{{{
   return s:default_kinds
 endfunction"}}}
-function! s:gather_candidates(text, args)"{{{
-  let l:args = a:args
+function! s:gather_candidates(text, context)"{{{
+  let l:context = a:context
   let l:input_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "!"')
-  let l:args.input = empty(l:input_list) ? '' : l:input_list[0]
+  let l:context.input = empty(l:input_list) ? '' : l:input_list[0]
 
   let l:candidates = []
   for l:source in unite#available_sources_list()
     if l:source.is_volatile
           \ || !has_key(b:unite.cached_candidates, l:source.name)
-          \ || (l:args.is_force || l:source.unite__is_invalidate)
+          \ || (l:context.is_force || l:source.unite__is_invalidate)
 
       " Check required pattern length.
       let l:source_candidates = 
             \ (has_key(l:source, 'required_pattern_length')
-            \   && len(l:args.input) < l:source.required_pattern_length) ?
-            \ [] : l:source.gather_candidates(l:args)
+            \   && len(l:context.input) < l:source.required_pattern_length) ?
+            \ [] : l:source.gather_candidates(l:source.args, l:context)
 
       let l:source.unite__is_invalidate = 0
 
@@ -475,17 +476,17 @@ function! s:convert_line(candidate)"{{{
         \ . " " . a:candidate.source
 endfunction"}}}
 
-function! s:initialize_unite_buffer(sources, args)"{{{
+function! s:initialize_unite_buffer(sources, context)"{{{
   " Check sources.
   let l:sources = s:initialize_sources(a:sources)
 
-  let l:args = a:args
+  let l:context = a:context
 
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
-    if l:args.input == ''
-          \ && b:unite.buffer_name ==# l:args.buffer_name
+    if l:context.input == ''
+          \ && b:unite.buffer_name ==# l:context.buffer_name
       " Get input text.
-      let l:args.input = unite#get_input()
+      let l:context.input = unite#get_input()
     endif
 
     " Quit unite buffer.
@@ -498,8 +499,8 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   else
     let l:buffer_name = '*unite*'
   endif
-  if l:args.buffer_name != ''
-    let l:buffer_name .= ' - ' . l:args.buffer_name
+  if l:context.buffer_name != ''
+    let l:buffer_name .= ' - ' . l:context.buffer_name
   endif
 
   let l:winnr = winnr()
@@ -530,15 +531,15 @@ function! s:initialize_unite_buffer(sources, args)"{{{
   let b:unite = {}
   let b:unite.old_winnr = l:winnr
   let b:unite.win_rest_cmd = l:win_rest_cmd
-  let b:unite.args = l:args
+  let b:unite.context = l:context
   let b:unite.candidates = []
   let b:unite.cached_candidates = {}
   let b:unite.sources = l:sources
   let b:unite.kinds = s:initialize_kinds()
-  let b:unite.buffer_name = (l:args.buffer_name == '') ? 'default' : l:args.buffer_name
-  let b:unite.prompt = l:args.prompt
-  let b:unite.input = l:args.input
-  let b:unite.last_input = l:args.input
+  let b:unite.buffer_name = (l:context.buffer_name == '') ? 'default' : l:context.buffer_name
+  let b:unite.prompt = l:context.prompt
+  let b:unite.input = l:context.input
+  let b:unite.last_input = l:context.input
   let b:unite.bufnr = bufnr('%')
 
   let s:last_unite_bufnr = bufnr('%')
@@ -619,10 +620,10 @@ function! s:redraw(is_force) "{{{
     let l:input .= l:subst
   endif
 
-  let l:args = b:unite.args
-  let l:args.is_force = a:is_force
+  let l:context = b:unite.context
+  let l:context.is_force = a:is_force
 
-  let l:candidates = s:gather_candidates(l:input, l:args)
+  let l:candidates = s:gather_candidates(l:input, l:context)
 
   let &ignorecase = l:ignorecase_save
 

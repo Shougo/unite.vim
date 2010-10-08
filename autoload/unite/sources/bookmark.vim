@@ -83,7 +83,7 @@ let s:source = {
       \ 'action_table': {},
       \}
 
-function! s:source.gather_candidates(args)"{{{
+function! s:source.gather_candidates(args, context)"{{{
   call s:load()
   return map(copy(s:bookmark_files), '{
         \ "abbr" : (v:val[0] != "" ? "[" . v:val[0] . "] " : "") .  

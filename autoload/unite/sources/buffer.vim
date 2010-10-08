@@ -42,7 +42,7 @@ let s:source = {
       \ 'name' : 'buffer',
       \}
 
-function! s:source.gather_candidates(args)"{{{
+function! s:source.gather_candidates(args, context)"{{{
   let l:list = values(filter(copy(s:buffer_list), 'bufexists(v:val.bufnr) && buflisted(v:val.bufnr)'))
   let l:candidates = map(l:list, '{
         \ "word" : bufname(v:val.bufnr),
