@@ -487,12 +487,12 @@ unite#mappings#do_action({action})		*unite#mappings#do_action()*
 		ユーザー側で特定のアクションを実行するためのマッピングを定義す
 		る場合に便利である。|unite-examples|を参照。
 
-unite#mappings#smart_imap({narrow-map}, {select-map})		*unite#mappings#smart_imap()*
+unite#mappings#smart_map({narrow-map}, {select-map})		*unite#mappings#smart_map()*
 		絞り込み時と選択時のマッピングを設定し、文脈によって切り換える。
-		inoremap <buffer><expr>で通常用いる。
+		inoremap <buffer><expr>やnnoremap <buffer><expr>で通常用いる。
 		例:
 >
-		inoremap <buffer><expr> ' unite#mappings#smart_imap("'", "\<C-o>:\<C-u>call unite#mappings#do_action('default')\<CR>")
+		inoremap <buffer><expr> ' unite#mappings#smart_map("'", "\<C-o>:\<C-u>call unite#mappings#do_action('default')\<CR>")
 <
 unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 						*unite#set_substitute_pattern()*

@@ -249,6 +249,7 @@ CHANGELOG					*unite-changelog*
 - Improved English description.
 - Added g:unite_cd_command and g:unite_lcd_command options.
 - Changed gather_candidates() specification.
+- Changed the name of unite#mappings#smart_imap to unite#mappings#smart_map
 
 2010-10-07
 - Improved :UniteResume.
