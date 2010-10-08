@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Sep 2010
+" Last Modified: 08 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,9 +46,9 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <buffer> <Plug>(unite_cursor_top)  2G0z.
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? '2G0z.' : 'j'
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= 2)? 'G' : 'k'
-  
+
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
-  
+
   inoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
   inoremap <buffer><expr> <Plug>(unite_insert_leave)  unite#mappings#smart_imap("\<ESC>j", "\<ESC>0")
   inoremap <expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(b:unite.prompt)+1) ? '' : "\<C-h>"
@@ -63,11 +63,11 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <silent><buffer> <Plug>(unite_move_head)  <C-o>:<C-u>call <SID>insert_head()<CR>
   "}}}
-  
+
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
     return
   endif
-  
+
   " Normal mode key-mappings.
   nmap <buffer> <ESC> <Plug>(unite_exit)
   nmap <buffer> i <Plug>(unite_insert_enter)
@@ -110,7 +110,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>     <Plug>(unite_move_head)
   imap <buffer><expr> <Space>  unite#mappings#smart_imap(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
-  inoremap <buffer><expr> /    unite#mappings#smart_imap('/', 
+  inoremap <buffer><expr> /    unite#mappings#smart_imap('/',
         \ "\<C-o>:\<C-u>call unite#mappings#do_action('narrow')\<CR>")
 endfunction"}}}
 
@@ -122,54 +122,65 @@ function! unite#mappings#narrowing(word)"{{{
   startinsert!
 endfunction"}}}
 function! unite#mappings#do_action(action_name)"{{{
+  if line('$') < 3
+    " Ignore.
+    return
+  endif
+
   let l:candidates = unite#get_marked_candidates()
   if empty(l:candidates)
-    if line('.') <= 2
-      if line('$') < 3
-        " Ignore.
-        return
-      endif
-
-      let l:num = 0
-    else
-      let l:num = line('.') - 3
-    endif
+    let l:num = line('.') <= 2 ? 0 : line('.') - 3
 
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
-  
-  let l:is_redraw = 0
+
+  " Check action.
   for l:candidate in l:candidates
     let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
-    
-    let l:action_name = 
+
+    let l:action_name =
           \ a:action_name ==# 'default' ?
           \ unite#get_default_action(l:candidate.source, l:candidate.kind)
           \ : a:action_name
-    
-    if has_key(l:action_table, l:action_name)
-      let l:action = l:action_table[l:action_name]
-      
-      " Check selectable flag.
-      if has_key(l:action, 'is_selectable') && !l:action.is_selectable
-            \ && len(l:candidates) > 1
-        " Ignore.
-        echohl Error | execute 'echo' printf('"%s" isn''t selectable action.', l:action_name) | echohl None
-        continue
-      endif
-      
-      " Check quit flag.
-      if !has_key(l:action, 'is_quit') || l:action.is_quit
-        call unite#quit_session()
-      endif
-      
-      call l:action.func(l:candidate)
-      
-      " Check invalidate cache flag.
-      if has_key(l:action, 'is_invalidate_cache') && l:action.is_invalidate_cache
-        call unite#invalidate_cache(l:candidate.source)
-        let l:is_redraw = 1
-      endif
+
+    if !has_key(l:action_table, l:action_name)
+      call unite#print_error(l:candidate.source . ': no such action ' . l:action_name)
+      return
+    endif
+
+    let l:action = l:action_table[l:action_name]
+
+    " Check selectable flag.
+    if has_key(l:action, 'is_selectable') && !l:action.is_selectable
+          \ && len(l:candidates) > 1
+      call unite#print_error(printf('"%s" isn''t selectable action.', l:action_name))
+      return
+    endif
+  endfor
+
+  " Execute action.
+  let l:is_redraw = 0
+  for l:candidate in l:candidates
+    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
+
+    let l:action_name =
+          \ a:action_name ==# 'default' ?
+          \ unite#get_default_action(l:candidate.source, l:candidate.kind)
+          \ : a:action_name
+
+    let l:action = l:action_table[l:action_name]
+
+    " Check quit flag.
+    if !has_key(l:action, 'is_quit') || l:action.is_quit
+      call unite#quit_session()
+    endif
+
+    call l:action.func(l:candidate)
+
+    " Check invalidate cache flag.
+    if has_key(l:action, 'is_invalidate_cache') && l:action.is_invalidate_cache
+      call unite#invalidate_cache(l:candidate.source)
+      let l:is_redraw = 1
     endif
   endfor
 
@@ -188,11 +199,11 @@ function! s:toggle_mark()"{{{
     " Ignore.
     return
   endif
-  
+
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
   let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
   call unite#redraw_line()
-  
+
   normal! j
 endfunction"}}}
 function! s:toggle_mark_candidates(start, end)"{{{
@@ -200,45 +211,41 @@ function! s:toggle_mark_candidates(start, end)"{{{
     " Ignore.
     return
   endif
-  
+
   let l:cnt = a:start
   while l:cnt <= a:end
     let l:candidate = unite#get_unite_candidates()[l:cnt - 3]
     let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
-    
+
     call unite#redraw_line(l:cnt)
 
     let l:cnt += 1
   endwhile
 endfunction"}}}
 function! s:choose_action()"{{{
+  if line('$') < 3
+    " Ignore.
+    return
+  endif
+
   let l:candidates = unite#get_marked_candidates()
   if empty(l:candidates)
-    if line('.') <= 2
-      if line('$') < 3
-        " Ignore.
-        return
-      endif
-
-      let l:num = 0
-    else
-      let l:num = line('.') - 3
-    endif
+    let l:num = line('.') <= 2 ? 0 : line('.') - 3
 
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
-  
+
   echohl Statement | echo 'Candidates:' | echohl None
-  
+
   let s:actions = {}
   for l:candidate in l:candidates
     " Print candidates.
     echo l:candidate.abbr . '('
     echohl Type | echon l:candidate.source | echohl None
     echon ')'
-    
+
     let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
-    
+
     for [l:action_name, l:action] in items(l:action_table)
       " Check selectable flag.
       if has_key(l:action, 'is_selectable') && !l:action.is_selectable
@@ -255,20 +262,20 @@ function! s:choose_action()"{{{
   let l:width = winwidth(0)
   let l:max = l:width > 90 ? 6 : l:width > 75 ? 5 : l:width > 50 ? 4 : 3
   let l:cnt = 0
-  
+
   echohl Identifier
   echo ''
   for l:action_name in keys(s:actions)
     echon unite#util#truncate(l:action_name, 14) . ' '
     let l:cnt += 1
-    
+
     if l:cnt >= l:max
       echo ''
       let l:cnt = 0
     endif
   endfor
   echohl None
-  
+
   let l:input = ''
   while 1
     " Choose action.
@@ -288,10 +295,10 @@ function! s:choose_action()"{{{
     else
       break
     endif
-    
+
     echo ''
   endwhile
-  
+
   " Execute action.
   call unite#mappings#do_action(l:actions[0])
 endfunction"}}}
@@ -320,7 +327,7 @@ function! s:redraw()"{{{
 endfunction"}}}
 function! s:search_source(is_next)"{{{
   let l:new_pos = getpos('.')
-  
+
   let l:current_source = line('.') < 2 ? '' : matchstr(getline('.'), '[[:space:]]\zs[a-z_-]\+$')
 
   3
@@ -333,13 +340,13 @@ function! s:search_source(is_next)"{{{
       if l:current_source ==# l:source
         let l:current_pos = len(l:poses)
       endif
-      
+
       call add(l:poses, l:pos)
     endif
 
     let i += 1
   endfor
-  
+
   if a:is_next
     if l:current_pos + 1 < len(l:poses)
       let l:new_pos[1] = l:poses[l:current_pos + 1][0]

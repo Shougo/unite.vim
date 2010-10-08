@@ -240,6 +240,7 @@ CHANGELOG					*unite-changelog*
 - Fixed dummy candidates bug.
 - Improved buffer narrowing.
 - Added common kind.
+- Improved unite#mappings#do_action().
 
 2010-10-07
 - Improved :UniteResume.

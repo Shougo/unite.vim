@@ -36,7 +36,7 @@ let s:kind = {
 
 " Actions"{{{
 let s:kind.action_table.tabopen = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.tabopen.func(candidate)"{{{
   tabnew
@@ -44,7 +44,7 @@ function! s:kind.action_table.tabopen.func(candidate)"{{{
 endfunction"}}}
 
 let s:kind.action_table.split = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.split.func(candidate)"{{{
   split
@@ -52,7 +52,7 @@ function! s:kind.action_table.split.func(candidate)"{{{
 endfunction"}}}
 
 let s:kind.action_table.vsplit = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.vsplit.func(candidate)"{{{
   vsplit
@@ -60,7 +60,7 @@ function! s:kind.action_table.vsplit.func(candidate)"{{{
 endfunction"}}}
 
 let s:kind.action_table.left = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.left.func(candidate)"{{{
   leftabove vsplit
@@ -68,7 +68,7 @@ function! s:kind.action_table.left.func(candidate)"{{{
 endfunction"}}}
 
 let s:kind.action_table.right = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.right.func(candidate)"{{{
   rightbelow vsplit
@@ -76,7 +76,7 @@ function! s:kind.action_table.right.func(candidate)"{{{
 endfunction"}}}
 
 let s:kind.action_table.above = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.above.func(candidate)"{{{
   leftabove split
@@ -84,7 +84,7 @@ function! s:kind.action_table.above.func(candidate)"{{{
 endfunction"}}}
 
 let s:kind.action_table.below = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.below.func(candidate)"{{{
   rightbelow split

@@ -38,32 +38,39 @@ let s:kind = {
 let s:kind.action_table = deepcopy(unite#kinds#openable#define().action_table)
 
 let s:kind.action_table.open = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.open.func(candidate)"{{{
   return s:open('', a:candidate)
 endfunction"}}}
 
+let s:kind.action_table.preview = {
+      \ 'is_quit' : 0,
+      \ }
+function! s:kind.action_table.preview.func(candidate)"{{{
+  pedit `=a:candidate.word`
+endfunction"}}}
+
 let s:kind.action_table.delete = {
-      \ 'is_invalidate_cache' : 1, 
-      \ 'is_quit' : 0, 
-      \ 'is_selectable' : 1, 
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.delete.func(candidate)"{{{
   return s:delete('bdelete', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.fopen = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.fopen.func(candidate)"{{{
   return s:open('!', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.fdelete = {
-      \ 'is_invalidate_cache' : 1, 
-      \ 'is_quit' : 0, 
-      \ 'is_selectable' : 1, 
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.fdelete.func(candidate)"{{{
   return s:delete('bdelete!', a:candidate)

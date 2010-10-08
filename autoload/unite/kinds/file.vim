@@ -38,14 +38,14 @@ let s:kind = {
 let s:kind.action_table = deepcopy(unite#kinds#openable#define().action_table)
 
 let s:kind.action_table.open = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.open.func(candidate)"{{{
   edit `=a:candidate.word`
 endfunction"}}}
 
 let s:kind.action_table.fopen = {
-      \ 'is_selectable' : 1, 
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.fopen.func(candidate)"{{{
   edit! `=a:candidate.word`
@@ -94,7 +94,7 @@ function! s:kind.action_table.narrow.func(candidate)"{{{
   if l:word !~ '[\\/]$'
     let l:word .= '/'
   endif
-  
+
   call unite#mappings#narrowing(l:word)
 endfunction"}}}
 "}}}
