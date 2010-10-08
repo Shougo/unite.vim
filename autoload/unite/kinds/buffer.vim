@@ -99,7 +99,7 @@ function! s:kind.action_table.cd.func(candidate)"{{{
     call vimshell#switch_shell(0, l:dir)
   endif
 
-  cd `=l:dir`
+  execute g:unite_cd_command '`=l:dir`'
 endfunction"}}}
 
 let s:kind.action_table.lcd = {
@@ -113,7 +113,7 @@ function! s:kind.action_table.lcd.func(candidate)"{{{
     call vimshell#switch_shell(0, l:dir)
   endif
 
-  lcd `=l:dir`
+  execute g:unite_lcd_command '`=l:dir`'
 endfunction"}}}
 
 if exists(':VimShell')

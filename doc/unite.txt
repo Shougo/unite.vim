@@ -247,6 +247,7 @@ CHANGELOG					*unite-changelog*
 - Improved cd action.
 - Improved dummy.
 - Improved English description.
+- Added g:unite_cd_command and g:unite_lcd_command options.
 
 2010-10-07
 - Improved :UniteResume.

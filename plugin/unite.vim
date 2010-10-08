@@ -48,6 +48,12 @@ endif
 if !exists('g:unite_enable_split_vertically')
   let g:unite_enable_split_vertically = 0
 endif
+if !exists('g:unite_cd_command')
+  let g:unite_cd_command = 'cd'
+endif
+if !exists('g:unite_lcd_command')
+  let g:unite_lcd_command = 'lcd'
+endif
 if !exists('g:unite_data_directory')
   let g:unite_data_directory = expand('~/.unite')
 endif

@@ -211,6 +211,16 @@ g:unite_enable_split_vertically			*g:unite_enable_split_vertically*
 		
 		初期値は0なので、水平分割である。
 
+g:unite_cd_command				*g:unite_cd_command*
+		cdアクションで実行されるVimのコマンドを指定する。
+		
+		初期値は"cd"である。
+
+g:unite_lcd_command				*g:unite_lcd_command*
+		lcdアクションで実行されるVimのコマンドを指定する。
+		
+		初期値は"lcd"である。
+
 g:unite_data_directory				*g:unite_data_directory*
 		uniteやその情報源が内部で使用する設定ファイルを書き出すディレク
 		トリを指定する。ここで指定したディレクトリが実際に存在しない場
