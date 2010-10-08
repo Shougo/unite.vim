@@ -83,7 +83,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <Tab> <Plug>(unite_choose_action)
   nmap <buffer> <C-n> <Plug>(unite_search_next_source)
   nmap <buffer> <C-p> <Plug>(unite_search_previous_source)
-  nmap <buffer><expr><silent> l line('.') <= 2 ? 'l' : "\<Plug>(unite_do_default_action)"
+  nmap <buffer><expr><silent> l unite#mappings#smart_map('l', "\<Plug>(unite_do_default_action)")
   nmap <buffer> <C-g> <Plug>(unite_print_candidate)
   nmap <buffer> p <Plug>(unite_do_preview_action)
   nmap <buffer> <C-l> <Plug>(unite_redraw)
