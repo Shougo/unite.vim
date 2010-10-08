@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Oct 2010
+" Last Modified: 08 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -114,7 +114,12 @@ function! unite#get_action_table(source_name, kind_name)"{{{
   let l:kind = unite#available_kinds(a:kind_name)
   let l:source = unite#available_sources(a:source_name)
 
-  let l:action_table = l:kind.action_table
+  " Default actions.
+  let l:action_table = (a:kind_name != 'common')?
+        \ unite#available_kinds('common').action_table : {}
+
+  let l:action_table = extend(copy(l:action_table), l:kind.action_table)
+
   if has_key(l:source, 'action_table')
     " Overwrite actions.
     let l:action_table = extend(copy(l:action_table), l:source.action_table)

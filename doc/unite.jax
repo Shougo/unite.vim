@@ -543,8 +543,11 @@ bookmark	ブックマークされたファイルやディレクトリを候補�
 
 候補の種類
 
+						*unite-kind-common*
+common		共通アクション
+
 						*unite-kind-openable*
-open		オープン可能インタフェース
+openable	オープン可能インタフェース
 
 						*unite-kind-file*
 file		ファイル
@@ -568,6 +571,11 @@ jump_list	ジャンプリスト
 なければ先頭文字で省略することができる。
 
 種類別アクション
+
+common					*unite-action-common*
+全てのkindに共通なインタフェースを定義している。
+	nop		何もしない
+	yank		ヤンクする
 
 openable					*unite-action-openable*
 オープン可能ファイルのインタフェースを定義している。

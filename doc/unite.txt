@@ -238,6 +238,8 @@ CHANGELOG					*unite-changelog*
 
 2010-10-08
 - Fixed dummy candidates bug.
+- Improved buffer narrowing.
+- Added common kind.
 
 2010-10-07
 - Improved :UniteResume.
