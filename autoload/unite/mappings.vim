@@ -144,7 +144,8 @@ function! unite#mappings#do_action(action_name)"{{{
           \ : a:action_name
 
     if !has_key(l:action_table, l:action_name)
-      call unite#print_error(l:candidate.source . ': no such action ' . l:action_name)
+      call unite#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
+      call unite#print_error('No such action : ' . l:action_name)
       return
     endif
 
@@ -153,7 +154,8 @@ function! unite#mappings#do_action(action_name)"{{{
     " Check selectable flag.
     if has_key(l:action, 'is_selectable') && !l:action.is_selectable
           \ && len(l:candidates) > 1
-      call unite#print_error(printf('"%s" isn''t selectable action.', l:action_name))
+      call unite#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
+      call unite#print_error('Not selectable action : ' . l:action_name)
       return
     endif
   endfor
@@ -238,17 +240,15 @@ function! s:choose_action()"{{{
   echohl Statement | echo 'Candidates:' | echohl None
 
   let s:actions = unite#get_action_table(l:candidates[0].source, l:candidates[0].kind)
-  for l:candidate in l:candidates
-    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
-    " Filtering unique items.
-    call filter(s:actions, 'has_key(l:action_table, v:key)')
-
-    if len(l:candidates) > 1
-      " Check selectable flag.
-      call filter(s:actions,
-            \ 'has_key(l:action_table[v:key], "is_selectable") && l:action_table[v:key].is_selectable')
-    endif
-  endfor
+  if len(l:candidates) > 1
+    for l:candidate in l:candidates
+      let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
+      " Filtering unique items and check selectable flag.
+      call filter(s:actions, 'has_key(l:action_table, v:key)
+            \ && has_key(l:action_table[v:key], "is_selectable")
+            \ && l:action_table[v:key].is_selectable')
+    endfor
+  endif
 
   if empty(s:actions)
     call unite#print_error('No actions.')
