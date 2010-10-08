@@ -309,7 +309,8 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 
 <Plug>(unite_choose_action)			*<Plug>(unite_choose_action)*
 		選択している候補に対して実行するアクションを選択する。アクショ
-		ンは種類ごとに定義されている。
+		ンは種類ごとに定義されている。複数の候補が選択されている場合は
+		共通なアクションのみ選択ができる。
 		種類については|unite-kind|を参照。
 
 <Plug>(unite_insert_enter)			*<Plug>(unite_insert_enter)*
@@ -472,7 +473,8 @@ k		|<Plug>(unite_loop_cursor_up)|
 
 unite#mappings#do_action({action})		*unite#mappings#do_action()*
 		選択及び、マークしている候補に対して{action}アクションを実行す
-		る。この関数はuniteが起動している時にのみ動作する。
+		る。この関数はuniteが起動している時にのみ動作する。{action}が存
+		在しない、もしくは不正な実行だった場合はエラーとなる。
 		ユーザー側で特定のアクションを実行するためのマッピングを定義す
 		る場合に便利である。|unite-examples|を参照。
 

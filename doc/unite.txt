@@ -242,6 +242,7 @@ CHANGELOG					*unite-changelog*
 - Added common kind.
 - Improved unite#mappings#do_action().
 - Improved choose action.
+- Improved mapping description.
 
 2010-10-07
 - Improved :UniteResume.
