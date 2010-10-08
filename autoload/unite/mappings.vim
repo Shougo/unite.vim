@@ -237,25 +237,30 @@ function! s:choose_action()"{{{
 
   echohl Statement | echo 'Candidates:' | echohl None
 
-  let s:actions = {}
+  let s:actions = unite#get_action_table(l:candidates[0].source, l:candidates[0].kind)
+  for l:candidate in l:candidates
+    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
+    " Filtering unique items.
+    call filter(s:actions, 'has_key(l:action_table, v:key)')
+
+    if len(l:candidates) > 1
+      " Check selectable flag.
+      call filter(s:actions,
+            \ 'has_key(l:action_table[v:key], "is_selectable") && l:action_table[v:key].is_selectable')
+    endif
+  endfor
+
+  if empty(s:actions)
+    call unite#print_error('No actions.')
+    return
+  endif
+
+  " Print candidates.
   for l:candidate in l:candidates
     " Print candidates.
     echo l:candidate.abbr . '('
     echohl Type | echon l:candidate.source | echohl None
     echon ')'
-
-    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
-
-    for [l:action_name, l:action] in items(l:action_table)
-      " Check selectable flag.
-      if has_key(l:action, 'is_selectable') && !l:action.is_selectable
-            \ && len(l:candidates) > 1
-        " Ignore.
-        echohl Error | execute 'echo' printf('"%s" isn''t selectable action.', l:action_name) | echohl None
-      else
-        let s:actions[l:action_name] = l:action
-      endif
-    endfor
   endfor
 
   " Print action names.
@@ -276,9 +281,9 @@ function! s:choose_action()"{{{
   endfor
   echohl None
 
+  " Choose action.
   let l:input = ''
   while 1
-    " Choose action.
     let l:input = input('What action? ', l:input, 'customlist,unite#mappings#complete_actions')
 
     if l:input == ''

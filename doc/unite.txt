@@ -241,6 +241,7 @@ CHANGELOG					*unite-changelog*
 - Improved buffer narrowing.
 - Added common kind.
 - Improved unite#mappings#do_action().
+- Improved choose action.
 
 2010-10-07
 - Improved :UniteResume.
