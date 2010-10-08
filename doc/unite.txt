@@ -44,8 +44,8 @@ INTRODUCTION					*unite-introduction*
 buffers, recently used files or registers. You can run one of defined action
 on a target displayed.
 
-The differences between *unite* and similar plugins like |fuzzyfinder| or |ku|
-are that *unite* doesn't use the built-in completion interface of Vim, and
+The differences between |unite| and similar plugins like |fuzzyfinder| or |ku|
+are that |unite| doesn't use the built-in completion interface of Vim, and
 integrates resources at the same time.
 
 ==============================================================================
@@ -246,6 +246,7 @@ CHANGELOG					*unite-changelog*
 - Changed source action specification.
 - Improved cd action.
 - Improved dummy.
+- Improved English description.
 
 2010-10-07
 - Improved :UniteResume.
