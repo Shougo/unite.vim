@@ -92,6 +92,13 @@ let s:kind.action_table.cd = {
       \ }
 function! s:kind.action_table.cd.func(candidate)"{{{
   let l:dir = s:get_directory(a:candidate)
+
+  if &filetype ==# 'vimfiler'
+    call vimfiler#internal_commands#cd(l:dir)
+  elseif &filetype ==# 'vimshell'
+    call vimshell#switch_shell(0, l:dir)
+  endif
+
   cd `=l:dir`
 endfunction"}}}
 
@@ -99,6 +106,13 @@ let s:kind.action_table.lcd = {
       \ }
 function! s:kind.action_table.lcd.func(candidate)"{{{
   let l:dir = s:get_directory(a:candidate)
+
+  if &filetype ==# 'vimfiler'
+    call vimfiler#internal_commands#cd(l:dir)
+  elseif &filetype ==# 'vimshell'
+    call vimshell#switch_shell(0, l:dir)
+  endif
+
   lcd `=l:dir`
 endfunction"}}}
 

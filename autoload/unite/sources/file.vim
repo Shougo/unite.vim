@@ -55,7 +55,8 @@ function! s:source.gather_candidates(args)"{{{
 
   if a:args.input != ''
     let l:dummy = substitute(a:args.input, '[*\\]', '', 'g')
-    if !filereadable(l:dummy) && !isdirectory(l:dummy)
+    if (!filereadable(l:dummy) && !isdirectory(l:dummy))
+          \ || (l:dummy =~ '^\%(/\|\a\+:/\)$')
       " Add dummy candidate.
       call add(l:candidates, l:dummy)
     endif
@@ -71,7 +72,10 @@ function! s:source.gather_candidates(args)"{{{
     let l:dict = { 'word' : l:file, 'abbr' : l:file, 'source' : 'file', }
 
     if isdirectory(l:file)
-      let l:dict.abbr .= '/'
+      if l:file !~ '^\%(/\|\a\+:/\)$'
+        let l:dict.abbr .= '/'
+      endif
+
       let l:dict.kind = 'directory'
 
       call add(l:candidates_dir, l:dict)

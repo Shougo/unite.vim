@@ -244,6 +244,8 @@ CHANGELOG					*unite-changelog*
 - Improved choose action.
 - Improved mapping description.
 - Changed source action specification.
+- Improved cd action.
+- Improved dummy.
 
 2010-10-07
 - Improved :UniteResume.
