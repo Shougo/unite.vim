@@ -243,6 +243,7 @@ CHANGELOG					*unite-changelog*
 - Improved default mappings.
 - Modifiable unite buffer.
 - Fixed register source error.
+- Improved prompt highlight.
 
 2010-10-08
 - Fixed dummy candidates bug.

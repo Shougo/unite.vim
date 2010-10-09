@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2010
+" Last Modified: 09 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -252,12 +252,6 @@ function! unite#start(sources, ...)"{{{
   catch /^Invalid source/
     return
   endtry
-
-  " User's initialization.
-  setlocal nomodifiable
-  setfiletype unite
-
-  setlocal modifiable
 
   silent % delete _
   call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(a:sources), 'v:val[0]'), ', '))
@@ -579,6 +573,23 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   if !g:unite_enable_split_vertically
     20 wincmd _
   endif
+
+  " Clear syntax.
+  syntax clear
+  highlight clear
+  if exists('b:current_syntax')
+    unlet b:current_syntax
+  endif
+
+  " User's initialization.
+  setlocal nomodifiable
+  setfiletype unite
+
+  setlocal modifiable
+
+  " Set highlight.
+  let l:match_prompt = escape(b:unite.prompt, '\/*~.^$[]')
+  execute 'syntax match uniteInputPrompt' '/^'.l:match_prompt.'/ contained'
 endfunction"}}}
 
 function! s:redraw(is_force) "{{{
