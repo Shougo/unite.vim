@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2010
+" Last Modified: 09 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,12 +45,12 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
   nnoremap <buffer> <Plug>(unite_cursor_top)  2G0z.
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? '2G0z.' : 'j'
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  unite#mappings#smart_map('G', 'k')
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= 2)? 'G' : 'k'
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
 
   inoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
-  inoremap <buffer><expr> <Plug>(unite_insert_leave)  unite#mappings#smart_map("\<ESC>j", "\<ESC>0")
+  inoremap <buffer><expr> <Plug>(unite_insert_leave)  unite#mappings#smart_map("\<ESC>j0", "\<ESC>0")
   inoremap <expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(b:unite.prompt)+1) ? '' : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(b:unite.prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(b:unite.prompt)+1) ? '' : "\<C-w>"
@@ -59,6 +59,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
   inoremap <silent><buffer> <Plug>(unite_do_default_action) <C-o>:call unite#mappings#do_action('default')<CR>
+  inoremap <silent><buffer> <Plug>(unite_do_narrow_action) <C-o>:call unite#mappings#do_action('narrow')<CR>
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <silent><buffer> <Plug>(unite_move_head)  <C-o>:<C-u>call <SID>insert_head()<CR>
@@ -69,48 +70,47 @@ function! unite#mappings#define_default_mappings()"{{{
   endif
 
   " Normal mode key-mappings.
-  nmap <buffer> <ESC> <Plug>(unite_exit)
-  nmap <buffer> i <Plug>(unite_insert_enter)
-  nmap <buffer> I <Plug>(unite_insert_head)
-  nmap <buffer> a <Plug>(unite_append_enter)
-  nmap <buffer> A <Plug>(unite_append_end)
-  nmap <buffer> q <Plug>(unite_exit)
-  nmap <buffer> <CR> <Plug>(unite_do_default_action)
-  nmap <buffer> d <Plug>(unite_do_delete_action)
-  nmap <buffer> b <Plug>(unite_do_bookmark_action)
-  nmap <buffer> e <Plug>(unite_do_narrow_action)
-  nmap <buffer> <Space> <Plug>(unite_toggle_mark_current_candidate)
-  nmap <buffer> <Tab> <Plug>(unite_choose_action)
-  nmap <buffer> <C-n> <Plug>(unite_search_next_source)
-  nmap <buffer> <C-p> <Plug>(unite_search_previous_source)
-  nmap <buffer><expr><silent> l unite#mappings#smart_map('l', "\<Plug>(unite_do_default_action)")
-  nmap <buffer> <C-g> <Plug>(unite_print_candidate)
-  nmap <buffer> p <Plug>(unite_do_preview_action)
-  nmap <buffer> <C-l> <Plug>(unite_redraw)
-  nmap <buffer> gg <Plug>(unite_cursor_top)
-  nmap <buffer> j <Plug>(unite_loop_cursor_down)
-  nmap <buffer> k <Plug>(unite_loop_cursor_up)
+  nmap <buffer> <ESC>     <Plug>(unite_exit)
+  nmap <buffer> i         <Plug>(unite_insert_enter)
+  nmap <buffer> I         <Plug>(unite_insert_head)
+  nmap <buffer> a         <Plug>(unite_append_enter)
+  nmap <buffer> A         <Plug>(unite_append_end)
+  nmap <buffer> q         <Plug>(unite_exit)
+  nmap <buffer> <CR>      <Plug>(unite_do_default_action)
+  nmap <buffer> <Space>   <Plug>(unite_toggle_mark_current_candidate)
+  nmap <buffer> <Tab>     <Plug>(unite_choose_action)
+  nmap <buffer> <C-n>     <Plug>(unite_search_next_source)
+  nmap <buffer> <C-p>     <Plug>(unite_search_previous_source)
+  nmap <buffer> <C-g>     <Plug>(unite_print_candidate)
+  nmap <buffer> <C-l>     <Plug>(unite_redraw)
+  nmap <buffer> gg        <Plug>(unite_cursor_top)
+  nmap <buffer> j         <Plug>(unite_loop_cursor_down)
+  nmap <buffer> k         <Plug>(unite_loop_cursor_up)
+  nmap <buffer><expr> d   unite#mappings#smart_map('d', "\<Plug>(unite_do_delete_action)")
+  nmap <buffer><expr> b   unite#mappings#smart_map('b', "\<Plug>(unite_do_bookmark_action)")
+  nmap <buffer><expr> e   unite#mappings#smart_map('e', "\<Plug>(unite_do_narrow_action)")
+  nmap <buffer><expr> l   unite#mappings#smart_map('l', "\<Plug>(unite_do_default_action)")
+  nmap <buffer><expr> p    unite#mappings#smart_map('p', "\<Plug>(unite_do_preview_action)")
 
   " Visual mode key-mappings.
-  xmap <buffer> <Space> <Plug>(unite_toggle_mark_selected_candidates)
+  xmap <buffer> <Space>   <Plug>(unite_toggle_mark_selected_candidates)
 
   " Insert mode key-mappings.
   imap <buffer> <ESC>     <Plug>(unite_insert_leave)
   imap <buffer> <TAB>     <Plug>(unite_choose_action)
   imap <buffer> <C-n>     <Plug>(unite_select_next_line)
-  imap <buffer> <C-p>   <Plug>(unite_select_previous_line)
+  imap <buffer> <C-p>     <Plug>(unite_select_previous_line)
   imap <buffer> <C-f>     <Plug>(unite_select_next_page)
-  imap <buffer> <C-b>   <Plug>(unite_select_previous_page)
+  imap <buffer> <C-b>     <Plug>(unite_select_previous_page)
   imap <buffer> <CR>      <Plug>(unite_do_default_action)
   imap <buffer> <C-h>     <Plug>(unite_delete_backward_char)
-  imap <buffer> <BS>     <Plug>(unite_delete_backward_char)
+  imap <buffer> <BS>      <Plug>(unite_delete_backward_char)
   imap <buffer> <C-u>     <Plug>(unite_delete_backward_line)
   imap <buffer> <C-w>     <Plug>(unite_delete_backward_word)
   imap <buffer> <C-a>     <Plug>(unite_move_head)
-  imap <buffer> <Home>     <Plug>(unite_move_head)
-  imap <buffer><expr> <Space>  unite#mappings#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
-  inoremap <buffer><expr> /    unite#mappings#smart_map('/',
-        \ "\<C-o>:\<C-u>call unite#mappings#do_action('narrow')\<CR>")
+  imap <buffer> <Home>    <Plug>(unite_move_head)
+  imap <buffer><expr> <Space>   unite#mappings#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
+  imap <buffer><expr> /         unite#mappings#smart_map('/', "\<Plug>(unite_do_narrow_action)")
 endfunction"}}}
 
 " key-mappings functions.
@@ -190,7 +190,7 @@ function! unite#mappings#do_action(action_name)"{{{
   endif
 endfunction"}}}
 function! unite#mappings#smart_map(narrow_map, select_map)"{{{
-  return line('.')  <= 2 ? a:narrow_map : a:select_map
+  return (line('.') <= 2 && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
 endfunction"}}}
 function! s:exit()"{{{
   call unite#quit_session()

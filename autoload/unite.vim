@@ -560,6 +560,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
     autocmd InsertEnter <buffer>  call s:on_insert_enter()
     autocmd InsertLeave <buffer>  call s:on_insert_leave()
     autocmd CursorHoldI <buffer>  call s:on_cursor_hold()
+    autocmd CursorMoved <buffer>  call s:on_cursor_moved()
   augroup END
 
   call unite#mappings#define_default_mappings()
@@ -679,6 +680,9 @@ function! s:on_cursor_hold()  "{{{
     " Redraw.
     call unite#redraw()
   endif
+endfunction"}}}
+function! s:on_cursor_moved()  "{{{
+  execute 'setlocal' line('.') == 2 ? 'modifiable' : 'nomodifiable'
 endfunction"}}}
 
 " Internal helper functions."{{{

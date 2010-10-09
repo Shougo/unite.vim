@@ -296,25 +296,26 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		ンは候補の種類ごとに定義されている。
 		種類については|unite-kind|を参照。
 		deleteアクションについては|unite-action|を参照。
-		アクションが存在しないときは無視される。
+		アクションが存在しないときはエラー。
 
 <Plug>(unite_do_bookmark_action)		*<Plug>(unite_do_bookmark_action)*
 		選択している候補に対してbookmarkアクションを実行する。アクショ
 		ンは候補の種類ごとに定義されている。
 		種類については|unite-kind|を参照。
 		bookmarkアクションについては|unite-action|を参照。
-		アクションが存在しないときは無視される。
+		アクションが存在しないときはエラー。
 
 <Plug>(unite_do_preview_action)			*<Plug>(unite_do_preview_action)*
 		選択している候補に対してアクションを実行した結果を、プレビュー
 		ウィンドウに表示する。このマッピングは候補の種類がファイルの場
 		合のみ動作する。情報源がレジスタの場合のプレビューは
 		|<Plug>(unite_print_candidate)|が使用できる。
-		アクションが存在しないときは無視される。
+		アクションが存在しないときはエラー。
 
 <Plug>(unite_do_narrow_action)			*<Plug>(unite_do_narrow_action)*
 		選択している候補のディレクトリを絞込みテキストとし、絞込みテキ
 		スト入力を開始する。
+		アクションが存在しないときはエラー。
 
 <Plug>(unite_choose_action)			*<Plug>(unite_choose_action)*
 		選択している候補に対して実行するアクションを選択する。アクショ
@@ -399,21 +400,16 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		前の候補ページを表示。
 
 <Plug>(unite_do_default_action)			*i_<Plug>(unite_do_default_action)*
-		絞込みテキストに入力されているテキストを候補として、候補の種類
-		に応じたデフォルトのアクションを実行する。
-		種類については|unite-kind|を参照。
-		デフォルトのアクションについては|unite-default-action|を参照。
+		|<Plug>(unite_do_default_action)|と同じ。
+
+<Plug>(unite_do_narrow_action)			*i_<Plug>(unite_do_narrow_action)*
+		|<Plug>(unite_do_narrow_action)|と同じ。
 
 <Plug>(unite_toggle_mark_current_candidate)	*i_<Plug>(unite_toggle_mark_current_candidate)*
-		複数の候補に対して一気にアクションを実行するためのマークのオン
-		オフを切り替える。
+		|<Plug>(unite_toggle_mark_current_candidate)|と同じ。
 
 <Plug>(unite_choose_action)			*i_<Plug>(unite_choose_action)*
-		絞込みテキストに入力されているテキストを候補として、実行するア
-		クションを選択する。アクションは候補の種類ごとに定義されている。
-		候補が完全な形で入力されていない場合は、先頭マッチでの補完を試
-		みる。候補が複数ある場合はエラーとなる。
-		種類については|unite-kind|を参照。
+		|<Plug>(unite_choose_action)|と同じ。
 
 <Plug>(unite_move_head)				*i_<Plug>(unite_move_head)*
 		カーソルを先頭に移動する。
@@ -436,17 +432,17 @@ I		|<Plug>(unite_insert_head)|
 a		|<Plug>(unite_append_enter)|
 A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
-<CR>		|<Plug>(unite_do_default_action)|
-d		|<Plug>(unite_do_delete_action)|
-b		|<Plug>(unite_do_bookmark_action)|
-e		|<Plug>(unite_do_narrow_action)|
+<CR>		候補を選択している場合は|<Plug>(unite_do_default_action)|
+d		候補を選択している場合は|<Plug>(unite_do_delete_action)|
+b		候補を選択している場合は|<Plug>(unite_do_bookmark_action)|
+e		候補を選択している場合は|<Plug>(unite_do_narrow_action)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_search_next_source)|
 <C-p>		|<Plug>(unite_search_previous_source)|
 l		候補を選択している場合は|<Plug>(unite_do_default_action)|
 <C-g>		|<Plug>(unite_print_candidate)|
-p		|<Plug>(unite_do_preview_action)|
+p		候補を選択している場合は|<Plug>(unite_do_preview_action)|
 <C-l>		|<Plug>(unite_redraw)|
 gg		|<Plug>(unite_cursor_top)|
 j		|<Plug>(unite_loop_cursor_down)|
@@ -468,7 +464,8 @@ k		|<Plug>(unite_loop_cursor_up)|
 <C-w>		|i_<Plug>(unite_delete_backward_word)|
 <C-a>		|i_<Plug>(unite_move_head)|
 <Home>		|i_<Plug>(unite_move_head)|
-<Space>		候補を選択していれば|i_<Plug>(unite_toggle_mark_current_candidate)|
+<Space>		候補を選択している場合は|i_<Plug>(unite_toggle_mark_current_candidate)|
+/		候補を選択している場合は|i_<Plug>(unite_do_narrow_action)|
 
 ビジュアルモードマッピング
 {lhs}		{rhs}
