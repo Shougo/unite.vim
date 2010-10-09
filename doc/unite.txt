@@ -238,6 +238,7 @@ CHANGELOG					*unite-changelog*
 
 2010-10-09
 - Improved unite#mappings#smart_map().
+- Deleted <S-Tab> default mapping.
 
 2010-10-08
 - Fixed dummy candidates bug.
