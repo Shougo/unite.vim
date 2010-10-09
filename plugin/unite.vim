@@ -103,10 +103,12 @@ endfunction"}}}
 
 command! -nargs=+ -complete=customlist,unite#complete_source UniteWithInput call s:call_unite_input(<q-args>)
 function! s:call_unite_input(args)"{{{
-  let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
+  let [l:args, l:options] = s:parse_options(a:args)
   if !has_key(l:options, 'input')
     let l:path = substitute(input('Input narrowing text: ', '', 'dir'), '\\', '/', 'g')
-    let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
+    if l:path != ''
+      let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
+    endif
   endif
 
   call unite#start(l:args, l:options)

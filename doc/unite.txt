@@ -300,6 +300,7 @@ CHANGELOG					*unite-changelog*
 - Implemented restore prompt.
 - Improved <Plug>(unite_delete_backward_char).
 - Fixed syntax clear.
+- Fixed :UniteWithInput.
 
 2010-10-08
 - Fixed dummy candidates bug.
