@@ -246,6 +246,7 @@ CHANGELOG					*unite-changelog*
 - Improved prompt highlight.
 - Improved Japanese description.
 - Parse prompt.
+- Implemented restore prompt.
 
 2010-10-08
 - Fixed dummy candidates bug.

@@ -218,6 +218,12 @@ function! unite#keyword_filter(list, input)"{{{
   return a:list
 endfunction"}}}
 function! unite#get_input()"{{{
+  " Prompt check.
+  if stridx(getline(2), b:unite.prompt) != 0
+    " Restore prompt.
+    call setline(2, b:unite.prompt . getline(2))
+  endif
+
   return getline(2)[len(b:unite.prompt):]
 endfunction"}}}
 function! unite#print_error(message)"{{{
