@@ -251,7 +251,7 @@ g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 		指定する。フォーマットは|strftime()|で指定できるものと同じであ
 		る。
 		
-		初期値は"(%x %H:%M:%S)"である。
+		初期値は"(%x %r)"である。
 
 g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		最近使用したファイルの情報を書き出すファイルを指定する。
