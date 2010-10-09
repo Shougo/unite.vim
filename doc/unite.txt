@@ -179,7 +179,7 @@ g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
 g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 		
 		
-		Default value is "(%x %r)".
+		Default value is "(%x %c)".
 
 g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		

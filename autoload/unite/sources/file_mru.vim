@@ -33,7 +33,7 @@ let s:mru_files = []
 
 let s:mru_file_mtime = 0  " the last modified time of the mru file.
 
-call unite#set_default('g:unite_source_file_mru_time_format', '(%x %r)')
+call unite#set_default('g:unite_source_file_mru_time_format', '(%x %c)')
 call unite#set_default('g:unite_source_file_mru_file',  g:unite_data_directory . '/.file_mru')
 call unite#set_default('g:unite_source_file_mru_limit', 100)
 call unite#set_default('g:unite_source_file_mru_ignore_pattern', 
