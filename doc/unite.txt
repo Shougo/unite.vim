@@ -299,6 +299,7 @@ CHANGELOG					*unite-changelog*
 - Parse prompt.
 - Implemented restore prompt.
 - Improved <Plug>(unite_delete_backward_char).
+- Fixed syntax clear.
 
 2010-10-08
 - Fixed dummy candidates bug.

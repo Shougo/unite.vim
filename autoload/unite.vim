@@ -580,13 +580,6 @@ function! s:initialize_unite_buffer(sources, context)"{{{
     20 wincmd _
   endif
 
-  " Clear syntax.
-  syntax clear
-  highlight clear
-  if exists('b:current_syntax')
-    unlet b:current_syntax
-  endif
-
   " User's initialization.
   setlocal nomodifiable
   setfiletype unite
@@ -595,6 +588,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
 
   " Set highlight.
   let l:match_prompt = escape(b:unite.prompt, '\/*~.^$[]')
+  syntax clear uniteInputPrompt
   execute 'syntax match uniteInputPrompt' '/^'.l:match_prompt.'/ contained'
 endfunction"}}}
 
