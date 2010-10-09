@@ -242,6 +242,7 @@ CHANGELOG					*unite-changelog*
 - Improved g:unite_source_file_mru_time_format default pattern.
 - Improved default mappings.
 - Modifiable unite buffer.
+- Fixed register source error.
 
 2010-10-08
 - Fixed dummy candidates bug.
