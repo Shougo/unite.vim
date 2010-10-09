@@ -247,6 +247,7 @@ CHANGELOG					*unite-changelog*
 - Improved Japanese description.
 - Parse prompt.
 - Implemented restore prompt.
+- Improved <Plug>(unite_delete_backward_char).
 
 2010-10-08
 - Fixed dummy candidates bug.

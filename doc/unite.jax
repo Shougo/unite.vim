@@ -378,7 +378,8 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		ノーマルモードに移行する。
 
 <Plug>(unite_delete_backward_char)		*i_<Plug>(unite_delete_backward_char)*
-		カーソル直前の1文字を消す。
+		カーソル直前の1文字を消す。文字が入力されていない場合はuniteを
+		終了する。
 
 <Plug>(unite_delete_backward_line)		*i_<Plug>(unite_delete_backward_line)*
 		カーソルから行の先頭までの文字をすべて削除する。
