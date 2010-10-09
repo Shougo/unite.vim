@@ -236,6 +236,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-09
+- Improved unite#mappings#smart_map().
+
 2010-10-08
 - Fixed dummy candidates bug.
 - Improved buffer narrowing.

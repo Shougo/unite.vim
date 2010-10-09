@@ -45,7 +45,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
   nnoremap <buffer> <Plug>(unite_cursor_top)  2G0z.
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? '2G0z.' : 'j'
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= 2)? 'G' : 'k'
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  unite#mappings#smart_map('G', 'k')
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
 
@@ -191,7 +191,7 @@ function! unite#mappings#do_action(action_name)"{{{
   endif
 endfunction"}}}
 function! unite#mappings#smart_map(narrow_map, select_map)"{{{
-  return line('.')  == 2 ? a:narrow_map : a:select_map
+  return line('.')  <= 2 ? a:narrow_map : a:select_map
 endfunction"}}}
 function! s:exit()"{{{
   call unite#quit_session()
