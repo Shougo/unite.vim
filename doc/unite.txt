@@ -244,6 +244,8 @@ CHANGELOG					*unite-changelog*
 - Modifiable unite buffer.
 - Fixed register source error.
 - Improved prompt highlight.
+- Improved Japanese description.
+- Parse prompt.
 
 2010-10-08
 - Fixed dummy candidates bug.

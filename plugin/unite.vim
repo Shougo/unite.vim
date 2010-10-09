@@ -65,13 +65,13 @@ endif
 " Wrapper command.
 command! -nargs=+ -complete=customlist,unite#complete_source Unite call s:call_unite_empty(<q-args>)
 function! s:call_unite_empty(args)"{{{
-  let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
+  let [l:args, l:options] = s:parse_options(a:args)
   call unite#start(l:args, l:options)
 endfunction"}}}
 
 command! -nargs=+ -complete=customlist,unite#complete_source UniteWithCurrentDir call s:call_unite_current_dir(<q-args>)
 function! s:call_unite_current_dir(args)"{{{
-  let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
+  let [l:args, l:options] = s:parse_options(a:args)
   if !has_key(l:options, 'input')
     let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(getcwd(), ':p'), '\\', '/', 'g')
     let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
@@ -82,7 +82,7 @@ endfunction"}}}
 
 command! -nargs=+ -complete=customlist,unite#complete_source UniteWithBufferDir call s:call_unite_buffer_dir(<q-args>)
 function! s:call_unite_buffer_dir(args)"{{{
-  let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
+  let [l:args, l:options] = s:parse_options(a:args)
   if !has_key(l:options, 'input')
     let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : substitute(fnamemodify(bufname('%'), ':p:h'), '\\', '/', 'g')
     let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
@@ -93,7 +93,7 @@ endfunction"}}}
 
 command! -nargs=+ -complete=customlist,unite#complete_source UniteWithCursorWord call s:call_unite_cursor_word(<q-args>)
 function! s:call_unite_cursor_word(args)"{{{
-  let [l:args, l:options] = s:parse_options(split(a:args, '\\\@<! '))
+  let [l:args, l:options] = s:parse_options(a:args)
   if !has_key(l:options, 'input')
     let l:options.input = expand('<cword>')
   endif
@@ -115,11 +115,15 @@ endfunction"}}}
 function! s:parse_options(args)"{{{
   let l:args = []
   let l:options = {}
-  for l:arg in a:args
+  for l:arg in split(a:args, '\\\@<! ')
+    let l:arg = substitute(l:arg, '\\\(.\)', '\1', 'g')
+
     if l:arg =~# '^-buffer-name='
       let l:options['buffer_name'] = matchstr(l:arg, '^-buffer-name=\zs.*')
     elseif l:arg =~# '^-input='
       let l:options['input'] = matchstr(l:arg, '^-input=\zs.*')
+    elseif l:arg =~# '^-prompt='
+      let l:options['prompt'] = matchstr(l:arg, '^-prompt=\zs.*')
     else
       call add(l:args, [l:arg, []])
     endif
