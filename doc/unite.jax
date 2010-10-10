@@ -179,7 +179,7 @@ g:unite_update_time				*g:unite_update_time*
 		絞込みテキストを入力するごとに表示される候補の更新間隔を制御す
 		る。単位はミリ秒。
 		
-		初期値は400である。
+		初期値は200である。
 
 g:unite_enable_start_insert			*g:unite_enable_start_insert*
 		uniteを実行したあとすぐに、絞込みテキストの入力モードにするかを
