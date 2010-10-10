@@ -232,10 +232,11 @@ name			string		(requried)
 			- a-z
 			- 0-9
 			- _
+			- /
 
 			For example:
-			- "buffer" and "file_mru" are valid.
-			- "BadOne", "virw/git", "!@#$%^&*()_[]{}-|" and "" are
+			- "buffer" , "file_mru" and "virw/git" are valid.
+			- "BadOne", "!@#$%^&*()_[]{}-|" and "" are
 			  not valid.
 
 						*unite-source-attribute-max_candidates*
@@ -286,6 +287,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2010-10-10
+- Allowed source name contained /.
 
 2010-10-09
 - Improved unite#mappings#smart_map().
