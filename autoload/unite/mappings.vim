@@ -197,22 +197,9 @@ function! s:exit()"{{{
   call unite#quit_session()
 endfunction"}}}
 function! s:delete_backward_path()"{{{
-    let l:input = unite#get_input()
-    if l:input == ''
-        return "\<C-h>"
-    endif
-
-    " Chop path separators.
-    let sep = unite#is_win() ? '[/\]' : '/'
-    let l:input = substitute(l:input, sep . '\+$', '', '')
-
-    let l:orig_path = getcwd() . '/' . l:input
-    if getftype(l:orig_path) == ''
-        return "\<C-h>"
-    endif
-
-    let l:path = fnamemodify(l:orig_path, ':h')
-    return repeat("\<C-h>", strlen(l:orig_path) - strlen(l:path))
+  let l:input = unite#get_input()
+  let l:path = substitute(l:input, '[^/]*.$', '', 'g')
+  return repeat("\<C-h>", strlen(l:input) - strlen(l:path))
 endfunction"}}}
 function! s:toggle_mark()"{{{
   if line('.') <= 2

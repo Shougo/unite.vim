@@ -270,8 +270,11 @@ EXAMPLES					*unite-examples*
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{
 	" Overwrite settings.
+	
 	imap <buffer> jj      <Plug>(unite_insert_leave)
 	nnoremap <silent><buffer> <C-k> :<C-u>call unite#mappings#do_action('preview')<CR>
+	"imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+	
 	" Start insert.
 	"let g:unite_enable_start_insert = 1
 	endfunction"}}}
@@ -292,6 +295,7 @@ CHANGELOG					*unite-changelog*
 - Changed g:unite_update_time default value.
 - Allowed source name contained /.
 - Allowed sources#define to list sources.
+- Added <Plug>(unite_delete_backward_path) mapping.
 
 2010-10-09
 - Improved unite#mappings#smart_map().
