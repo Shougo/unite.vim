@@ -674,10 +674,11 @@ name			文字列		(必須)
 			- a-z
 			- 0-9
 			- _
+			- /
 
 			例:
-			- "buffer" と "file_mru" は正当。
-			- "BadOne", "virw/git", "!@#$%^&*()_[]{}-|" と "" は
+			- "buffer", "virw/git" と "file_mru" は正当。
+			- "BadOne", "!@#$%^&*()_[]{}-|" と "" は
 			  情報源の名前としては使えない。
 
 						*unite-source-attribute-max_candidates*
