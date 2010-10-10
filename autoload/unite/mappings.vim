@@ -54,6 +54,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(b:unite.prompt)+1) ? "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(b:unite.prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(b:unite.prompt)+1) ? '' : "\<C-w>"
+  inoremap <expr><buffer> <Plug>(unite_delete_backward_path)  col('.') <= (len(b:unite.prompt)+1) ? '' : <SID>delete_backward_path()
   inoremap <expr><buffer> <Plug>(unite_select_next_line)  pumvisible() ? "\<C-n>" : line('.') == line('$') ? "\<C-Home>\<Down>\<Down>" : "\<Home>\<Down>"
   inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : line('.') <= 3 ? "\<C-End>\<Home>" : "\<Home>\<Up>"
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
@@ -194,6 +195,24 @@ function! unite#mappings#smart_map(narrow_map, select_map)"{{{
 endfunction"}}}
 function! s:exit()"{{{
   call unite#quit_session()
+endfunction"}}}
+function! s:delete_backward_path()"{{{
+    let l:input = unite#get_input()
+    if l:input == ''
+        return "\<C-h>"
+    endif
+
+    " Chop path separators.
+    let sep = unite#is_win() ? '[/\]' : '/'
+    let l:input = substitute(l:input, sep . '\+$', '', '')
+
+    let l:orig_path = getcwd() . '/' . l:input
+    if getftype(l:orig_path) == ''
+        return "\<C-h>"
+    endif
+
+    let l:path = fnamemodify(l:orig_path, ':h')
+    return repeat("\<C-h>", strlen(l:orig_path) - strlen(l:path))
 endfunction"}}}
 function! s:toggle_mark()"{{{
   if line('.') <= 2
