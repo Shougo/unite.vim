@@ -387,6 +387,16 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 <Plug>(unite_delete_backward_word)		*i_<Plug>(unite_delete_backward_word)*
 		カーソル直前の単語を削除する。
 
+<Plug>(unite_delete_backward_path)		*i_<Plug>(unite_delete_backward_path)*
+		1段階上のパスに移ります。
+		たとえば >
+		/home/Shougo/Desktop
+<		や >
+		/home/Shougo/Desktop/
+<		の時に<Plug>(unite_delete_backward_path)すると >
+		/home/Shougo
+<		になります。
+
 <Plug>(unite_select_next_line)			*i_<Plug>(unite_select_next_line)*
 		次の候補に移動。ただし候補の最後にいる場合はループする。
 
