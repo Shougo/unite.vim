@@ -290,6 +290,7 @@ CHANGELOG					*unite-changelog*
 
 2010-10-10
 - Allowed source name contained /.
+- Allowed sources#define to list sources.
 
 2010-10-09
 - Improved unite#mappings#smart_map().
