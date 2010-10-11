@@ -356,7 +356,7 @@ function! unite#quit_session()  "{{{
   endif
 
   " Restore current directory.
-  lcd `=l:cwd`
+  execute g:unite_lcd_command '`=l:dir`'
 
   if !s:unite.context.is_insert
     stopinsert

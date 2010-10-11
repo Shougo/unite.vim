@@ -293,6 +293,7 @@ CHANGELOG					*unite-changelog*
 
 2010-10-11
 - Fixed modifiable problem in insert mode.
+- Fixed lcd in unite#quit_session().
 
 2010-10-10
 - Changed g:unite_update_time default value.
