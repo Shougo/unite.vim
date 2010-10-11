@@ -291,6 +291,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-11
+- Fixed modifiable problem in insert mode.
+
 2010-10-10
 - Changed g:unite_update_time default value.
 - Allowed source name contained /.

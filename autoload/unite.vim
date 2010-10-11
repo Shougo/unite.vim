@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Oct 2010
+" Last Modified: 11 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -574,7 +574,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
     autocmd InsertEnter <buffer>  call s:on_insert_enter()
     autocmd InsertLeave <buffer>  call s:on_insert_leave()
     autocmd CursorHoldI <buffer>  call s:on_cursor_hold()
-    autocmd CursorMoved <buffer>  call s:on_cursor_moved()
+    autocmd CursorMoved,CursorMovedI <buffer>  call s:on_cursor_moved()
   augroup END
 
   call unite#mappings#define_default_mappings()
