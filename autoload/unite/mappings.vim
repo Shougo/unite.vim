@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Oct 2010
+" Last Modified: 11 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -197,9 +197,8 @@ function! s:exit()"{{{
   call unite#quit_session()
 endfunction"}}}
 function! s:delete_backward_path()"{{{
-  let l:input = unite#get_input()
-  let l:path = substitute(l:input, '[^/]*.$', '', 'g')
-  return repeat("\<C-h>", strlen(l:input) - strlen(l:path))
+  let l:input = getline(2)[len(b:unite.prompt):]
+  return repeat("\<C-h>", len(matchstr(l:input, '[^/]*.$')))
 endfunction"}}}
 function! s:toggle_mark()"{{{
   if line('.') <= 2

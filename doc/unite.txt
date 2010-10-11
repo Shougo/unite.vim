@@ -294,6 +294,7 @@ CHANGELOG					*unite-changelog*
 2010-10-11
 - Fixed modifiable problem in insert mode.
 - Fixed lcd in unite#quit_session().
+- Improved <Plug>(unite_delete_backward_path) mapping.
 
 2010-10-10
 - Changed g:unite_update_time default value.
