@@ -370,7 +370,7 @@ function! s:load_default_sources_and_kinds()"{{{
 
   for l:name in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'),
         \ 'fnamemodify(v:val, ":t:r")')
-    let l:sources = call('unite#sources#' . l:name . '#define', [])
+    let l:sources = {'unite#sources#' . l:name . '#define'}()
 
     if type(l:sources) == type([])
       for l:source in l:sources
@@ -385,7 +385,7 @@ function! s:load_default_sources_and_kinds()"{{{
 
   for l:name in map(split(globpath(&runtimepath, 'autoload/unite/kinds/*.vim'), '\n'),
         \ 'fnamemodify(v:val, ":t:r")')
-    let l:kinds = call('unite#kinds#' . l:name . '#define', [])
+    let l:kinds = {'unite#kinds#' . l:name . '#define'}()
 
     if type(l:kinds) == type([])
       for l:kind in l:kinds
