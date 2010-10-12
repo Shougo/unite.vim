@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2010
+" Last Modified: 12 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -159,9 +159,9 @@ endfunction"}}}
 function! s:get_directory(candidate)"{{{
   let l:filetype = getbufvar(a:candidate.unite_buffer_nr, '&filetype')
   if l:filetype ==# 'vimfiler'
-    let l:dir = getbufvar(a:bufnr, 'vimfiler').current_dir
+    let l:dir = getbufvar(a:candidate.unite_buffer_nr, 'vimfiler').current_dir
   elseif l:filetype ==# 'vimshell'
-    let l:dir = getbufvar(a:bufnr, 'vimshell').save_dir
+    let l:dir = getbufvar(a:candidate.unite_buffer_nr, 'vimshell').save_dir
   else
     let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
   endif
