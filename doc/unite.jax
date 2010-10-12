@@ -538,7 +538,7 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 file		入力されたファイルを候補とする。
 
 						*unite-source-file_mru*
-file_mru	最近使用したファイルを候補とする。
+file_mru	最近使用したファイルを候補とする。使用した順番に整列される。
 
 						*unite-source-file_rec*
 file_rec	入力された絞り込みテキストのディレクトリまたは、現在ディレクト
@@ -547,10 +547,12 @@ file_rec	入力された絞り込みテキストのディレクトリまたは�
 		ない。
 
 						*unite-source-buffer*
-buffer		開いているバッファを候補とする。
+buffer		開いているバッファを候補とする。バッファは使用した順番に整列さ
+		れる。
 
 						*unite-source-buffer_tab*
-buffer_tab	現在のタブで開いたバッファを候補とする。
+buffer_tab	現在のタブで開いたバッファを候補とする。バッファは使用した順番
+		に整列される。
 
 						*unite-source-register*
 register	レジスタに保存されている文字列を候補とする。

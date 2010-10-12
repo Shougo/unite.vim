@@ -44,17 +44,23 @@ let s:source_buffer_all = {
       \}
 
 function! s:source_buffer_all.gather_candidates(args, context)"{{{
-  let l:list = values(filter(copy(s:buffer_list), 'bufexists(v:val.bufnr) && buflisted(v:val.bufnr)'))
+  let l:list = sort(values(filter(copy(s:buffer_list), '
+        \ bufexists(v:val.bufnr) && buflisted(v:val.bufnr) && v:val.bufnr != ' . bufnr('#'))), 's:compare')
+
+  if buflisted(bufnr('#'))
+    " Add current buffer.
+    let l:list = add(l:list, s:buffer_list[bufnr('#')])
+  endif
+
   let l:candidates = map(l:list, '{
         \ "word" : bufname(v:val.bufnr),
         \ "abbr" : s:make_abbr(v:val.bufnr),
         \ "kind" : "buffer",
         \ "source" : "buffer",
         \ "unite_buffer_nr" : v:val.bufnr,
-        \ "time" : v:val.time,
         \}')
 
-  return sort(l:candidates, 's:compare')
+  return l:candidates
 endfunction"}}}
 
 let s:source_buffer_tab = {
@@ -62,17 +68,24 @@ let s:source_buffer_tab = {
       \}
 
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{
-  let l:list = values(filter(copy(s:buffer_list), 'bufexists(v:val.bufnr) && buflisted(v:val.bufnr) && v:val.tabpagenr == tabpagenr()'))
+  let l:list = sort(values(filter(copy(s:buffer_list), '
+        \ bufexists(v:val.bufnr) && buflisted(v:val.bufnr)
+        \ && v:val.tabpagenr == tabpagenr() && v:val.bufnr != ' . bufnr('#'))), 's:compare')
+
+  if buflisted(bufnr('#'))
+    " Add current buffer.
+    let l:list = add(l:list, s:buffer_list[bufnr('#')])
+  endif
+
   let l:candidates = map(l:list, '{
         \ "word" : bufname(v:val.bufnr),
         \ "abbr" : s:make_abbr(v:val.bufnr),
         \ "kind" : "buffer",
         \ "source" : "buffer_tab",
         \ "unite_buffer_nr" : v:val.bufnr,
-        \ "time" : v:val.time,
         \}')
 
-  return sort(l:candidates, 's:compare')
+  return l:candidates
 endfunction"}}}
 
 " Misc
