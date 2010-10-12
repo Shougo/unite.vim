@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Oct 2010
+" Last Modified: 12 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -370,31 +370,29 @@ function! s:load_default_sources_and_kinds()"{{{
 
   for l:name in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'),
         \ 'fnamemodify(v:val, ":t:r")')
-    let l:sources = {'unite#sources#' . l:name . '#define'}()
 
-    if type(l:sources) == type([])
-      for l:source in l:sources
+    if type({'unite#sources#' . l:name . '#define'}()) == type([])
+      for l:source in {'unite#sources#' . l:name . '#define'}()
         if !has_key(s:default_sources, l:source.name)
           let s:default_sources[l:source.name] = l:source
         endif
       endfor
     elseif !has_key(s:default_sources, l:name)
-      let s:default_sources[l:name] = l:sources
+      let s:default_sources[l:name] = {'unite#sources#' . l:name . '#define'}()
     endif
   endfor
 
   for l:name in map(split(globpath(&runtimepath, 'autoload/unite/kinds/*.vim'), '\n'),
         \ 'fnamemodify(v:val, ":t:r")')
-    let l:kinds = {'unite#kinds#' . l:name . '#define'}()
 
-    if type(l:kinds) == type([])
-      for l:kind in l:kinds
+    if type({'unite#kinds#' . l:name . '#define'}()) == type([])
+      for l:kind in {'unite#kinds#' . l:name . '#define'}()
         if !has_key(s:default_kinds, l:kind.name)
           let s:default_kinds[l:kind.name] = l:kind
         endif
       endfor
     elseif !has_key(s:default_kinds, l:name)
-      let s:default_kinds[l:name] = l:kinds
+      let s:default_kinds[l:name] = {'unite#kinds#' . l:name . '#define'}()
     endif
   endfor
 endfunction"}}}

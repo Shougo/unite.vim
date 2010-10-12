@@ -549,6 +549,9 @@ file_rec	入力された絞り込みテキストのディレクトリまたは�
 						*unite-source-buffer*
 buffer		開いているバッファを候補とする。
 
+						*unite-source-buffer_tab*
+buffer_tab	現在のタブで開いたバッファを候補とする。
+
 						*unite-source-register*
 register	レジスタに保存されている文字列を候補とする。
 

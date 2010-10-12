@@ -293,6 +293,8 @@ CHANGELOG					*unite-changelog*
 
 2010-10-12
 - Fixed get directory error.
+- Fixed s:load_default_sources_and_kinds() error.
+- Added buffer_tab source.
 
 2010-10-11
 - Fixed modifiable problem in insert mode.
