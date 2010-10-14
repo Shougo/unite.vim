@@ -297,6 +297,7 @@ CHANGELOG					*unite-changelog*
 - Implemented unite#get_substitute_pattern().
 - Fixed :Unite completion.
 - Improved buffer_tab.
+- Improved s:load_default_sources_and_kinds() loading.
 
 2010-10-12
 - Fixed get directory error.
