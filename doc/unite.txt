@@ -295,6 +295,7 @@ CHANGELOG					*unite-changelog*
 - Fixed substitute pattern.
 - Improved dummy file.
 - Implemented unite#get_substitute_pattern().
+- Fixed :Unite completion.
 
 2010-10-12
 - Fixed get directory error.

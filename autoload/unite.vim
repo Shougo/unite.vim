@@ -148,15 +148,8 @@ function! unite#escape_match(str)"{{{
   return substitute(substitute(escape(a:str, '~"\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
-  " Unique.
-  let l:dict = {}
-  for l:source in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'), 'fnamemodify(v:val, ":t:r")')
-    if !has_key(l:dict, l:source)
-      let l:dict[l:source] = 1
-    endif
-  endfor
-
-  return filter(keys(l:dict), printf('stridx(v:val, %s) == 0', string(a:arglead)))
+  let l:sources = extend(copy(s:default_sources), s:custom_sources)
+  return filter(keys(l:sources), printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
   let l:buffer_list = map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite"'), 'getbufvar(v:val, "unite").buffer_name')
