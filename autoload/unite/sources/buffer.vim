@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Oct 2010
+" Last Modified: 14 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,10 +33,26 @@ function! unite#sources#buffer#define()"{{{
 endfunction"}}}
 function! unite#sources#buffer#_append()"{{{
   " Append the current buffer.
-  let s:buffer_list[bufnr('%')] = {
-        \ 'bufnr' : bufnr('%'), 'time' : localtime(),
-        \ 'tabpagenr' : tabpagenr(),
+  let l:bufnr = bufnr('%')
+  let s:buffer_list[l:bufnr] = {
+        \ 'bufnr' : l:bufnr, 'time' : localtime(),
         \ }
+
+  if !exists('t:unite_buffer_dictionary')
+    let t:unite_buffer_dictionary = {}
+  endif
+
+  if !exists('*gettabvar')
+    " Delete same buffer in other tab pages.
+    for l:tabnr in range(1, tabpagenr('$'))
+      let l:buffer_dict = gettabvar(l:tabnr, 'unite_buffer_dictionary')
+      if type(l:buffer_dict) == type({}) && has_key(l:buffer_dict, l:bufnr)
+        call remove(l:buffer_dict, l:bufnr)
+      endif
+    endfor
+  endif
+
+  let t:unite_buffer_dictionary[l:bufnr] = 1
 endfunction"}}}
 
 let s:source_buffer_all = {
@@ -70,7 +86,7 @@ let s:source_buffer_tab = {
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{
   let l:list = sort(values(filter(copy(s:buffer_list), '
         \ bufexists(v:val.bufnr) && buflisted(v:val.bufnr)
-        \ && v:val.tabpagenr == tabpagenr() && v:val.bufnr != ' . bufnr('#'))), 's:compare')
+        \ && exists("t:unite_buffer_dictionary") && has_key(t:unite_buffer_dictionary, v:val.bufnr) && v:val.bufnr != ' . bufnr('#'))), 's:compare')
 
   if buflisted(bufnr('#'))
     " Add current buffer.

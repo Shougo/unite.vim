@@ -296,6 +296,7 @@ CHANGELOG					*unite-changelog*
 - Improved dummy file.
 - Implemented unite#get_substitute_pattern().
 - Fixed :Unite completion.
+- Improved buffer_tab.
 
 2010-10-12
 - Fixed get directory error.
