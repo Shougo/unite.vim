@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2010
+" Last Modified: 14 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -80,6 +80,11 @@ function! s:source.gather_candidates(args, context)"{{{
 
       call add(l:candidates_dir, l:dict)
     else
+      if !filereadable(l:file)
+        " Dummy.
+        let l:dict.abbr = '[new file]' . l:file
+      endif
+
       let l:dict.kind = 'file'
 
       call add(l:candidates_file, l:dict)
