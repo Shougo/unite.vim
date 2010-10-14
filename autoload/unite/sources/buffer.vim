@@ -42,7 +42,7 @@ function! unite#sources#buffer#_append()"{{{
     let t:unite_buffer_dictionary = {}
   endif
 
-  if !exists('*gettabvar')
+  if exists('*gettabvar')
     " Delete same buffer in other tab pages.
     for l:tabnr in range(1, tabpagenr('$'))
       let l:buffer_dict = gettabvar(l:tabnr, 'unite_buffer_dictionary')
