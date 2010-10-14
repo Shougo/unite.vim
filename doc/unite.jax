@@ -527,7 +527,7 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		において、~を$HOME、/は部分マッチできるように、ワイルドカードを
 		付加するようになっている。
 >
-		call unite#set_substitute_pattern('files', '^\~', substitute($HOME, '\\', '/', 'g'), -100)
+		call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
 		call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
 <
 
