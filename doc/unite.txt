@@ -294,6 +294,7 @@ CHANGELOG					*unite-changelog*
 2010-10-14
 - Fixed substitute pattern.
 - Improved dummy file.
+- Implemented unite#get_substitute_pattern().
 
 2010-10-12
 - Fixed get directory error.

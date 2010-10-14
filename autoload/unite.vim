@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Oct 2010
+" Last Modified: 14 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,6 +31,9 @@ function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
       let a:variable[key] = a:pattern
     endif
   endfor
+endfunction"}}}
+function! unite#get_substitute_pattern(buffer_name)"{{{
+  return s:substitute_pattern[a:buffer_name]
 endfunction"}}}
 function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
   let l:priority = a:0 > 0 ? a:1 : 0

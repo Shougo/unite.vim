@@ -531,6 +531,12 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
 <
 
+unite#get_substitute_pattern({buffer-name})
+						*unite#get_substitute_pattern()*
+		uniteのバッファ名{buffer-name}における絞込みテキストの置換パタ
+		ーンを取得する。{buffer-name}に置換パターンが定義されていないと
+		、エラーになる。デバッグ用である。
+
 ==============================================================================
 情報源						*unite-source* *{sources}*
 
