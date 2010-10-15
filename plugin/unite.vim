@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Oct 2010
+" Last Modified: 15 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -126,6 +126,8 @@ function! s:parse_options(args)"{{{
       let l:options['input'] = matchstr(l:arg, '^-input=\zs.*')
     elseif l:arg =~# '^-prompt='
       let l:options['prompt'] = matchstr(l:arg, '^-prompt=\zs.*')
+    elseif l:arg =~# '^-default-action='
+      let l:options['default_action'] = matchstr(l:arg, '^-default-action=\zs.*')
     else
       call add(l:args, [l:arg, []])
     endif

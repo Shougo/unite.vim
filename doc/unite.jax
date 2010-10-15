@@ -135,11 +135,15 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		-buffer-name={buffer-name}
 		uniteのバッファ名を指定する。同じ目的を持つuniteバッファに同じ
 		バッファ名を付けることで、|unite#set_substitute_pattern()|など
-		の設定を共通化することができる。
+		の設定を共通化することができる。指定しないと、'default'が使われ
+		る。
 		-input={input-text}
-		初期の絞込みテキストを指定する。
+		初期の絞込みテキストを指定する。指定しないと、''が使われる。
 		-prompt={prompt-text}
-		プロンプトを指定する。
+		プロンプトを指定する。指定しないと、'> 'が使われる。
+		-default-action={default-action}
+		デフォルトアクションを指定する。指定しないと、'default'が使われ
+		る。
 
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同

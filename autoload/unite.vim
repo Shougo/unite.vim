@@ -149,7 +149,8 @@ function! unite#escape_match(str)"{{{
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   let l:sources = extend(copy(s:default_sources), s:custom_sources)
-  return filter(keys(l:sources), printf('stridx(v:val, %s) == 0', string(a:arglead)))
+  let l:options = ['-buffer-name=', '-input=', '-prompt=',  '-default-action=']
+  return filter(keys(l:sources)+l:options, printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
   let l:buffer_list = map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite"'), 'getbufvar(v:val, "unite").buffer_name')
@@ -247,6 +248,9 @@ function! unite#start(sources, ...)"{{{
   endif
   if !has_key(l:context, 'prompt')
     let l:context.prompt = '>'
+  endif
+  if !has_key(l:context, 'default_action')
+    let l:context.default_action = 'default'
   endif
 
   try
