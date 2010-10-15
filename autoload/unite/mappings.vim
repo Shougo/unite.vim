@@ -114,12 +114,15 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer><expr> <Space>   unite#mappings#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <buffer><expr> /         unite#mappings#smart_map('/', "\<Plug>(unite_do_narrow_action)")
 
-  for i in range(1, 9)
-    execute 'imap <buffer><silent> ' . i . ' <C-o>:call unite#mappings#do_action(b:unite.context.default_action, ' . (i-1) . ')<CR>'
-    execute 'nmap <buffer><silent> ' . i . ' :<C-u>call unite#mappings#do_action(b:unite.context.default_action, ' . (i-1) . ')<CR>'
-  endfor
-  execute 'imap <buffer><silent> ' . 0 . ' <C-o>:call unite#mappings#do_action(b:unite.context.default_action, ' . 9 . ')<CR>'
-  execute 'nmap <buffer><silent> ' . 0 . ' :<C-u>call unite#mappings#do_action(b:unite.context.default_action, ' . 9 . ')<CR>'
+  if g:unite_enable_quick_match_mappings
+    " Define quick match mappings.
+    for i in range(1, 9)
+      execute 'inoremap <buffer><silent> ' . i . ' <C-o>:call unite#mappings#do_action(b:unite.context.default_action, ' . (i-1) . ')<CR>'
+      execute 'nnoremap <buffer><silent> ' . i . ' :<C-u>call unite#mappings#do_action(b:unite.context.default_action, ' . (i-1) . ')<CR>'
+    endfor
+    execute 'inoremap <buffer><silent> ' . 0 . ' <C-o>:call unite#mappings#do_action(b:unite.context.default_action, ' . 9 . ')<CR>'
+    execute 'nnoremap <buffer><silent> ' . 0 . ' :<C-u>call unite#mappings#do_action(b:unite.context.default_action, ' . 9 . ')<CR>'
+  endif
 endfunction"}}}
 
 " key-mappings functions.
