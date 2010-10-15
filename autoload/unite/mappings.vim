@@ -71,7 +71,6 @@ function! unite#mappings#define_default_mappings()"{{{
   endif
 
   " Normal mode key-mappings.
-  nmap <buffer> <ESC>     <Plug>(unite_exit)
   nmap <buffer> i         <Plug>(unite_insert_enter)
   nmap <buffer> I         <Plug>(unite_insert_head)
   nmap <buffer> a         <Plug>(unite_append_enter)
