@@ -291,6 +291,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-15
+- Improved <Plug>(unite_select_next_line) and <Plug>(unite_select_previous_line).
+
 2010-10-14
 - Fixed substitute pattern.
 - Improved dummy file.
