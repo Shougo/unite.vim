@@ -302,6 +302,7 @@ CHANGELOG					*unite-changelog*
 - Displays candidates number.
 - Implemented quick match.
 - Added g:unite_enable_quick_match_mappings option.
+- Added cursor key support.
 
 2010-10-14
 - Fixed substitute pattern.

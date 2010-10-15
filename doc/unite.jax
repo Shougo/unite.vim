@@ -462,7 +462,9 @@ p		候補を選択している場合は|<Plug>(unite_do_preview_action)|
 <C-l>		|<Plug>(unite_redraw)|
 gg		|<Plug>(unite_cursor_top)|
 j		|<Plug>(unite_loop_cursor_down)|
+<Down>		|<Plug>(unite_loop_cursor_down)|
 k		|<Plug>(unite_loop_cursor_up)|
+<Up>		|<Plug>(unite_loop_cursor_up)|
 0-9		その番号の候補を実行する(|g:unite_enable_quick_match_mappings|
 		が有効のときのみ)
 
@@ -472,7 +474,9 @@ k		|<Plug>(unite_loop_cursor_up)|
 <ESC>		|i_<Plug>(unite_insert_leave)|
 <Tab>		|i_<Plug>(unite_choose_action)|
 <C-n>		|i_<Plug>(unite_select_next_line)|
+<Down>		|i_<Plug>(unite_select_next_line)|
 <C-p>		|i_<Plug>(unite_select_previous_line)|
+<Up>		|i_<Plug>(unite_select_previous_line)|
 <C-f>		|i_<Plug>(unite_select_next_page)|
 <C-b>		|i_<Plug>(unite_select_previous_page)|
 <CR>		|i_<Plug>(unite_do_default_action)|
