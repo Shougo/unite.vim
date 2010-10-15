@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Sep 2010
+" Last Modified: 15 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,9 +38,9 @@ syntax match uniteSourceNames /[a-z_-]\+/ contained
 syntax match uniteSourceNames /[[:space:]]\zs[a-z_-]\+$/
 
 syntax match uniteInputLine /\%2l.*/ contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial
-syntax match uniteInputSpecial /\\\@<![*!]/ contained
+syntax match uniteInputSpecial /\\\@<![*!,]/ contained
 
-syntax match uniteMarkedLine /^\*.*/
+syntax match uniteMarkedLine /^\s*\%(\d\+:\)\?\s*\*.*/
 
 highlight default link uniteSourceNames  Type
 highlight default link uniteSourcePrompt  Statement

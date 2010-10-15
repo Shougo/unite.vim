@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Oct 2010
+" Last Modified: 15 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -182,7 +182,7 @@ function! unite#redraw_line(...) "{{{
   setlocal modifiable
 
   let l:candidate = unite#get_unite_candidates()[l:linenr - 3]
-  call setline(l:linenr, s:convert_line(l:candidate))
+  call setline(l:linenr, s:convert_line(l:candidate, l:linenr - 2))
 
   setlocal nomodifiable
 endfunction"}}}
@@ -436,7 +436,7 @@ function! s:gather_candidates(text, context)"{{{
           \ || (l:context.is_force || l:source.unite__is_invalidate)
 
       " Check required pattern length.
-      let l:source_candidates = 
+      let l:source_candidates =
             \ (has_key(l:source, 'required_pattern_length')
             \   && len(l:context.input) < l:source.required_pattern_length) ?
             \ [] : l:source.gather_candidates(l:source.args, l:context)
@@ -478,12 +478,26 @@ function! s:gather_candidates(text, context)"{{{
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
   let l:max_width = winwidth(0) - 20
-  return map(copy(a:candidates),
-        \ '(v:val.unite__is_marked ? "* " : "- ") . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', 30, "..") . " " . v:val.source')
+  let l:candidates = []
+
+  " Add number.
+  let l:num = 1
+  for l:candidate in a:candidates[: 9]
+    let l:line = (l:num == 10 ? 0: l:num) . ': '  . (l:candidate.unite__is_marked ? '* ' : '- ')
+          \ . unite#util#truncate_smart(l:candidate.abbr, l:max_width, 30, '..') . ' ' . l:candidate.source
+    let l:num += 1
+    call add(l:candidates, l:line)
+  endfor
+  let l:candidates += map(copy(a:candidates[10:]),
+        \ '(v:val.unite__is_marked ? "   * " : "   - ") . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', 30, "..") . " " . v:val.source')
+
+  return l:candidates
 endfunction"}}}
-function! s:convert_line(candidate)"{{{
+function! s:convert_line(candidate, num)"{{{
   let l:max_width = winwidth(0) - 20
-  return (a:candidate.unite__is_marked ? '* ' : '- ')
+
+  return (a:num > 10 ? '   ' : a:num == 10 ? 0.': ' : a:num.': ')
+        \ . (a:candidate.unite__is_marked ? '* ' : '- ')
         \ . unite#util#truncate_smart(a:candidate.abbr, l:max_width, 30, '..')
         \ . " " . a:candidate.source
 endfunction"}}}

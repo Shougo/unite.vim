@@ -59,7 +59,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : line('.') == 2 ? "\<C-End>\<Home>" : line('.') == 3 ? "\<End>\<Up>" : "\<Home>\<Up>"
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
-  inoremap <silent><buffer> <Plug>(unite_do_default_action) <C-o>:call unite#mappings#do_action(b:unite.default_action)<CR>
+  inoremap <silent><buffer> <Plug>(unite_do_default_action) <C-o>:call unite#mappings#do_action(b:unite.context.default_action)<CR>
   inoremap <silent><buffer> <Plug>(unite_do_narrow_action) <C-o>:call unite#mappings#do_action('narrow')<CR>
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
@@ -91,7 +91,8 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer><expr> b   unite#mappings#smart_map('b', "\<Plug>(unite_do_bookmark_action)")
   nmap <buffer><expr> e   unite#mappings#smart_map('e', "\<Plug>(unite_do_narrow_action)")
   nmap <buffer><expr> l   unite#mappings#smart_map('l', "\<Plug>(unite_do_default_action)")
-  nmap <buffer><expr> p    unite#mappings#smart_map('p', "\<Plug>(unite_do_preview_action)")
+  nmap <buffer><expr> p   unite#mappings#smart_map('p', "\<Plug>(unite_do_preview_action)")
+  nmap <buffer><expr> x   unite#mappings#smart_map('x', "\<Plug>(unite_execute_count)")
 
   " Visual mode key-mappings.
   xmap <buffer> <Space>   <Plug>(unite_toggle_mark_selected_candidates)
@@ -112,6 +113,13 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <Home>    <Plug>(unite_move_head)
   imap <buffer><expr> <Space>   unite#mappings#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <buffer><expr> /         unite#mappings#smart_map('/', "\<Plug>(unite_do_narrow_action)")
+
+  for i in range(1, 9)
+    execute 'imap <buffer><silent> ' . i . ' <C-o>:call unite#mappings#do_action(b:unite.context.default_action, ' . (i-1) . ')<CR>'
+    execute 'nmap <buffer><silent> ' . i . ' :<C-u>call unite#mappings#do_action(b:unite.context.default_action, ' . (i-1) . ')<CR>'
+  endfor
+  execute 'imap <buffer><silent> ' . 0 . ' <C-o>:call unite#mappings#do_action(b:unite.context.default_action, ' . 9 . ')<CR>'
+  execute 'nmap <buffer><silent> ' . 0 . ' :<C-u>call unite#mappings#do_action(b:unite.context.default_action, ' . 9 . ')<CR>'
 endfunction"}}}
 
 " key-mappings functions.
@@ -121,15 +129,17 @@ function! unite#mappings#narrowing(word)"{{{
   2
   startinsert!
 endfunction"}}}
-function! unite#mappings#do_action(action_name)"{{{
-  if line('$') < 3
-    " Ignore.
-    return
-  endif
-
+function! unite#mappings#do_action(action_name, ...)"{{{
   let l:candidates = unite#get_marked_candidates()
+
   if empty(l:candidates)
-    let l:num = line('.') <= 2 ? 0 : line('.') - 3
+    let l:num = a:0 >= 0 ? a:1 : line('.') <= 2 ? 0 : line('.') - 3
+
+    if line('$') < l:num - 3
+      " Ignore.
+      call unite#print_error('Candidate ' . l:num . ' is nothing.')
+      return
+    endif
 
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
