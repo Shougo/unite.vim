@@ -369,6 +369,10 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 <Plug>(unite_loop_cursor_up)			*<Plug>(unite_loop_cursor_up)*
 		前の行に移動。ただしバッファの一番上にいる場合はループする。
 
+<Plug>(unite_quick_match_default_action)	*<Plug>(unite_quick_match_default_action)*
+		クイックマッチを行い、選択した候補のデフォルトアクションを実行
+		する。マークしている候補がある場合は無効となる。
+
 インサートモードマッピング
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -424,6 +428,9 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 <Plug>(unite_move_head)				*i_<Plug>(unite_move_head)*
 		カーソルを先頭に移動する。
 
+<Plug>(unite_quick_match_default_action)	*i_<Plug>(unite_quick_match_default_action)*
+		|<Plug>(unite_quick_match_default_action)|と同じ。
+
 ビジュアルモードマッピング
 
 <Plug>(unite_toggle_mark_selected_candidates)	*v_<Plug>(unite_toggle_selected_candidates)*
@@ -458,6 +465,7 @@ j		|<Plug>(unite_loop_cursor_down)|
 <Down>		|<Plug>(unite_loop_cursor_down)|
 k		|<Plug>(unite_loop_cursor_up)|
 <Up>		|<Plug>(unite_loop_cursor_up)|
+x		候補を選択している場合は|<Plug>(unite_quick_match_default_action)|
 
 インサートモードマッピング
 {lhs}		{rhs}
@@ -479,6 +487,7 @@ k		|<Plug>(unite_loop_cursor_up)|
 <Home>		|i_<Plug>(unite_move_head)|
 <Space>		候補を選択している場合は|i_<Plug>(unite_toggle_mark_current_candidate)|
 /		候補を選択している場合は|i_<Plug>(unite_do_narrow_action)|
+x		候補を選択している場合は|i_<Plug>(unite_quick_match_default_action)|
 
 ビジュアルモードマッピング
 {lhs}		{rhs}

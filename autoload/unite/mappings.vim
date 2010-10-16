@@ -46,7 +46,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <buffer> <Plug>(unite_cursor_top)  2G0z.
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? '2G0z.' : 'j'
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= 2)? 'G' : 'k'
-  nnoremap <silent><buffer> <Plug>(unite_quick_match)  :<C-u>call <SID>quick_match()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  :<C-u>call <SID>quick_match()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
 
@@ -65,7 +65,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <silent><buffer> <Plug>(unite_move_head)  <C-o>:<C-u>call <SID>insert_head()<CR>
-  inoremap <silent><buffer> <Plug>(unite_quick_match)  <C-o>:<C-u>call <SID>quick_match()<CR>
+  inoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  <C-o>:<C-u>call <SID>quick_match()<CR>
   "}}}
 
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -95,7 +95,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer><expr> e   unite#mappings#smart_map('e', "\<Plug>(unite_do_narrow_action)")
   nmap <buffer><expr> l   unite#mappings#smart_map('l', "\<Plug>(unite_do_default_action)")
   nmap <buffer><expr> p   unite#mappings#smart_map('p', "\<Plug>(unite_do_preview_action)")
-  nmap <buffer><expr> x   unite#mappings#smart_map('x', "\<Plug>(unite_quick_match)")
+  nmap <buffer><expr> x   unite#mappings#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 
   " Visual mode key-mappings.
   xmap <buffer> <Space>   <Plug>(unite_toggle_mark_selected_candidates)
@@ -118,10 +118,9 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <Home>    <Plug>(unite_move_head)
   imap <buffer><expr> <Space>   unite#mappings#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <buffer><expr> /         unite#mappings#smart_map('/', "\<Plug>(unite_do_narrow_action)")
-  imap <buffer><expr> x         unite#mappings#smart_map('x', "\<Plug>(unite_quick_match)")
+  imap <buffer><expr> x         unite#mappings#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 endfunction"}}}
 
-" key-mappings functions.
 function! unite#mappings#narrowing(word)"{{{
   setlocal modifiable
   call setline(2, b:unite.prompt . escape(a:word, ' *'))
@@ -202,6 +201,8 @@ endfunction"}}}
 function! unite#mappings#smart_map(narrow_map, select_map)"{{{
   return (line('.') <= 2 && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
 endfunction"}}}
+
+" key-mappings functions.
 function! s:exit()"{{{
   call unite#quit_session()
 endfunction"}}}
@@ -397,6 +398,36 @@ function! s:insert_selected_candidate()"{{{
 
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
   call unite#mappings#narrowing(l:candidate.word)
+endfunction"}}}
+function! s:quick_match()"{{{
+  if line('$') < 3
+    call unite#print_error('Candidate is nothing.')
+    return
+  elseif !empty(unite#get_marked_candidates())
+    call unite#print_error('Marked candidates is detected.')
+    return
+  endif
+
+  call unite#quick_match_redraw()
+
+  if mode() !~# '^c'
+    echo 'Input quick match key: '
+  endif
+  let l:char = ''
+
+  while l:char == ''
+    let l:char = nr2char(getchar())
+  endwhile
+
+  call unite#force_redraw()
+
+  if has_key(g:unite_quick_match_table, l:char)
+        \ && g:unite_quick_match_table[l:char] < len(b:unite.candidates)
+    call unite#mappings#do_action(b:unite.context.default_action,
+          \ g:unite_quick_match_table[l:char])
+  else
+    call unite#print_error('Invalid quick match key.')
+  endif
 endfunction"}}}
 
 function! unite#mappings#complete_actions(arglead, cmdline, cursorpos)"{{{

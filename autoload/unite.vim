@@ -192,6 +192,7 @@ function! unite#quick_match_redraw() "{{{
   endif
 
   call setline(3, s:convert_quick_match_lines(b:unite.candidates))
+  redraw
 
   if mode() != 'i'
     setlocal nomodifiable
@@ -491,16 +492,23 @@ function! s:convert_quick_match_lines(candidates)"{{{
   let l:max_width = winwidth(0) - 20
   let l:candidates = []
 
-  " Add number.
-  let l:num = 1
-  for l:candidate in a:candidates[: 9]
-    let l:line = (l:num == 10 ? 0: l:num) . ': '  . (l:candidate.unite__is_marked ? '* ' : '- ')
-          \ . unite#util#truncate_smart(l:candidate.abbr, l:max_width, 30, '..') . ' ' . l:candidate.source
-    let l:num += 1
-    call add(l:candidates, l:line)
+  " Create key table.
+  let l:keys = {}
+  for [l:key, l:number] in items(g:unite_quick_match_table)
+    let l:keys[l:number] = l:key . ': '
   endfor
-  let l:candidates += map(copy(a:candidates[10:]),
-        \ '(v:val.unite__is_marked ? "   * " : "   - ") . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', 30, "..") . " " . v:val.source')
+
+  " Add number.
+  let l:num = 0
+  for l:candidate in a:candidates
+    call add(l:candidates,
+          \ (has_key(l:keys, l:num) ? l:keys[l:num] : '   ')
+          \ . (l:candidate.unite__is_marked ? '* ' : '- ')
+          \ . unite#util#truncate_smart(l:candidate.abbr, l:max_width, 30, '..')
+          \ . ' ' . l:candidate.source)
+
+    let l:num += 1
+  endfor
 
   return l:candidates
 endfunction"}}}

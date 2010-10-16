@@ -40,7 +40,7 @@ syntax match uniteSourceNames /[[:space:]]\zs[a-z_-]\+$/
 syntax match uniteInputLine /\%2l.*/ contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial
 syntax match uniteInputSpecial /\\\@<![*!,]/ contained
 
-syntax match uniteMarkedLine /^\s*\%(\d\+:\)\?\s*\*.*/
+syntax match uniteMarkedLine /^\*.*/
 
 highlight default link uniteSourceNames  Type
 highlight default link uniteSourcePrompt  Statement
