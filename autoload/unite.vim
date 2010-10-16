@@ -58,6 +58,15 @@ function! unite#custom_alias(kind, alias_name, alias_action)"{{{
     let s:custom_aliases[key][a:alias_name] = a:alias_action
   endfor
 endfunction"}}}
+function! unite#custom_default_action(kind, default_action)"{{{
+  for key in split(a:kind, ',')
+    if !has_key(s:custom_default_actions, key)
+      let s:custom_default_actions[key] = {}
+    endif
+
+    let s:custom_default_actions[key] = a:default_action
+  endfor
+endfunction"}}}
 "}}}
 
 " Constants"{{{
@@ -169,17 +178,23 @@ function! unite#get_action_table(source_name, kind_name)"{{{
   return filter(l:action_table, 'v:key !=# "nop"')
 endfunction"}}}
 function! unite#get_default_action(source_name, kind_name)"{{{
-  let l:kind = unite#available_kinds(a:kind_name)
   let l:source = unite#available_sources(a:source_name)
 
-  if has_key(l:source, 'default_action')
+  if has_key(s:custom_default_actions, a:source_name.'/'.a:kind_name)
+    " Source/kind custom actions.
+    return s:custom_default_actions[a:source_name.'/'.a:kind_name]
+  elseif has_key(l:source, 'default_action')
         \ && has_key(l:source.default_action, a:kind_name)
-    let l:default_action = l:source.default_action[a:kind_name]
-  else
-    let l:default_action = l:kind.default_action
-  endif
+    " Source custom default actions.
 
-  return l:default_action
+    return l:source.default_action[a:kind_name]
+  elseif has_key(s:custom_default_actions, a:kind_name)
+    " Kind custom default actions.
+    return s:custom_default_actions[a:kind_name]
+  else
+    " Kind default actions.
+    return unite#available_kinds(a:kind_name).default_action
+  endif
 endfunction"}}}
 function! unite#escape_match(str)"{{{
   return substitute(substitute(escape(a:str, '~"\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')

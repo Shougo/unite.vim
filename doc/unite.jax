@@ -559,6 +559,14 @@ unite#get_substitute_pattern({buffer-name})
 		ーンを取得する。{buffer-name}に置換パターンが定義されていない
 		と、エラーになる。デバッグ用である。
 
+unite#custom_default_action({kind}, {default-action})
+						*unite#custom_alias(*
+		{kind}に対するデフォルトアクションを{default-action}に置き換え
+		る。
+		例:
+>
+		call unite#custom_default_action('file', 'tabopen')
+<
 unite#custom_alias({kind}, {alias-name}, {alias-action})
 						*unite#custom_alias(*
 		{kind}に対する{alias-action}の別名である、{alias-name}というア

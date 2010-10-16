@@ -300,6 +300,7 @@ CHANGELOG					*unite-changelog*
 - Added g:unite_quick_match_table option.
 - Implemented unite#custom_alias().
 - Improved unite#set_substitute_pattern() and unite#custom_alias().
+- Implemented unite#custom_default_action().
 
 2010-10-15
 - Improved <Plug>(unite_select_next_line) and <Plug>(unite_select_previous_line).
