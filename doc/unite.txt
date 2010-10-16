@@ -296,6 +296,7 @@ CHANGELOG					*unite-changelog*
 - Deleted g:unite_enable_quick_match_mappings option.
 - Added <Plug>(unite_quick_match_default_action) mapping.
 - Improved quick match.
+- Improved unite#mappings#do_action() description.
 
 2010-10-15
 - Improved <Plug>(unite_select_next_line) and <Plug>(unite_select_previous_line).
