@@ -25,13 +25,7 @@
 " Version: 1.0, for Vim 7.0
 "=============================================================================
 
-function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
-  for key in split(a:keys, ',')
-    if !has_key(a:variable, key) 
-      let a:variable[key] = a:pattern
-    endif
-  endfor
-endfunction"}}}
+" User functions."{{{
 function! unite#get_substitute_pattern(buffer_name)"{{{
   return s:substitute_pattern[a:buffer_name]
 endfunction"}}}
@@ -53,6 +47,14 @@ function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
           \ }
   endif
 endfunction"}}}
+function! unite#custom_alias(kind, alias_name, alias_action)"{{{
+  if !has_key(s:custom_aliases, a:kind)
+    let s:custom_aliases[a:kind] = {}
+  endif
+
+  let s:custom_aliases[a:kind][a:alias_name] = a:alias_action
+endfunction"}}}
+"}}}
 
 " Constants"{{{
 let s:FALSE = 0
@@ -73,12 +75,24 @@ let s:default_kinds = {}
 let s:custom_sources = {}
 let s:custom_kinds = {}
 
+let s:custom_actions = {}
+let s:custom_default_actions = {}
+let s:custom_aliases = {}
+
 let s:substitute_pattern = {}
 call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
 call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
 "}}}
 
+
 " Helper functions."{{{
+function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
+  for key in split(a:keys, ',')
+    if !has_key(a:variable, key) 
+      let a:variable[key] = a:pattern
+    endif
+  endfor
+endfunction"}}}
 function! unite#_take_action(action_name, candidate)"{{{
   let l:action_table = unite#get_action_table(a:candidate.source, a:candidate.kind)
 
@@ -117,19 +131,38 @@ function! unite#get_action_table(source_name, kind_name)"{{{
   let l:kind = unite#available_kinds(a:kind_name)
   let l:source = unite#available_sources(a:source_name)
 
-  " Default actions.
+  " Common actions.
   let l:action_table = (a:kind_name != 'common')?
         \ unite#available_kinds('common').action_table : {}
+  " Common custom actions.
+  " Common custom aliases.
+  if has_key(s:custom_aliases, 'common')
+    call s:filter_alias_action(l:action_table, s:custom_aliases['common'])
+  endif
 
+  " Kind actions.
   let l:action_table = extend(copy(l:action_table), l:kind.action_table)
+  " Kind custom actions.
+  " Kind custom aliases.
+  if has_key(s:custom_aliases, a:kind_name)
+    call s:filter_alias_action(l:action_table, s:custom_aliases[a:kind_name])
+  endif
 
+  " Source/kind actions.
   if has_key(l:source, 'action_table')
         \ && has_key(l:source.action_table, a:kind_name)
     " Overwrite actions.
     let l:action_table = extend(copy(l:action_table), l:source.action_table[a:kind_name])
   endif
+  let l:source_kind = a:source_name.'/'.a:kind_name
+  " Source/kind custom actions.
+  " Source/kind custom aliases.
+  if has_key(s:custom_aliases, l:source_kind)
+    call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind])
+  endif
 
-  return l:action_table
+  " Filtering nop action.
+  return filter(l:action_table, 'v:key !=# "nop"')
 endfunction"}}}
 function! unite#get_default_action(source_name, kind_name)"{{{
   let l:kind = unite#available_kinds(a:kind_name)
@@ -755,6 +788,16 @@ function! s:compare_sources(source_a, source_b) "{{{
 endfunction"}}}
 function! s:compare_substitute_patterns(pattern_a, pattern_b)"{{{
   return a:pattern_b.priority - a:pattern_a.priority
+endfunction"}}}
+function! s:filter_alias_action(action_table, alias_table)"{{{
+  for [l:alias_name, l:alias_action] in items(a:alias_table)
+    if l:alias_action ==# 'nop'
+      " Delete nop action.
+      call remove(a:action_table, l:alias_name)
+    else
+      let a:action_table[l:alias_name] = a:action_table[l:alias_action]
+    endif
+  endfor
 endfunction"}}}
 "}}}
 

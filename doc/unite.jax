@@ -553,13 +553,21 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
 		call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
 <
-
 unite#get_substitute_pattern({buffer-name})
 						*unite#get_substitute_pattern()*
 		uniteのバッファ名{buffer-name}における絞込みテキストの置換パタ
 		ーンを取得する。{buffer-name}に置換パターンが定義されていない
 		と、エラーになる。デバッグ用である。
 
+unite#custom_alias({kind}, {alias-name}, {alias-action})
+						*unite#custom_alias(*
+		{kind}に対する{alias-action}の別名である、{alias-name}というア
+		クションを定義する。アクションに短縮名を付けたい場合に便利。
+		{alias-action}を"nop"とすると、そのアクションは無効化される。
+		例:
+>
+		call unite#custom_alias('file', 'h', 'left')
+<
 ==============================================================================
 情報源						*unite-source* *{sources}*
 
