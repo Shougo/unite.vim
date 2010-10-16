@@ -577,12 +577,12 @@ unite#custom_action({kind}, {name}, {action})
 		\ 'is_selectable' : 1,
 		\ }
 		function! my_tabopen.func(candidate)
-		  tabnew
-		  call unite#take_action('open', a:candidate)
-		  let dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
-		  execute g:unite_lcd_command '`=dir`'
+		  call unite#take_action('tabopen', a:candidate)
+		
+		  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+		  execute g:unite_lcd_command '`=l:dir`'
 		endfunction
-		call unite#custom_action('file,buffer', 'my_tabopen', my_tabopen)
+		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen
 <
 unite#custom_alias({kind}, {name}, {action})
