@@ -599,6 +599,8 @@ unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
 		{candidate}に対し、{action-name}という名前のアクションを実行する。
 		主に、unite#custom_action()などで用いる。
+		ただし、unite#custom_alias()やunite#custom_action()で定義された
+		アクションは呼び出せない。
 
 ==============================================================================
 情報源						*unite-source* *{sources}*

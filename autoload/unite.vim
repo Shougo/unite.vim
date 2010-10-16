@@ -112,7 +112,7 @@ function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
   endfor
 endfunction"}}}
 function! unite#take_action(action_name, candidate)"{{{
-  let l:action_table = unite#get_action_table(a:candidate.source, a:candidate.kind)
+  let l:action_table = unite#get_action_table(a:candidate.source, a:candidate.kind, 0)
 
   let l:action_name =
         \ a:action_name ==# 'default' ?
@@ -145,30 +145,31 @@ function! unite#available_kinds(...)"{{{
   let l:unite = s:get_unite()
   return a:0 == 0 ? l:unite.kinds : l:unite.kinds[a:1]
 endfunction"}}}
-function! unite#get_action_table(source_name, kind_name)"{{{
+function! unite#get_action_table(source_name, kind_name, ...)"{{{
   let l:kind = unite#available_kinds(a:kind_name)
   let l:source = unite#available_sources(a:source_name)
+  let l:contains_custom_action = a:0 > 0 ? a:1 : 1
 
   " Common actions.
   let l:action_table = (a:kind_name != 'common')?
         \ copy(unite#available_kinds('common').action_table) : {}
   " Common custom actions.
-  if has_key(s:custom_actions, 'common')
+  if l:contains_custom_action && has_key(s:custom_actions, 'common')
     let l:action_table = extend(l:action_table, s:custom_actions['common'])
   endif
   " Common custom aliases.
-  if has_key(s:custom_aliases, 'common')
+  if l:contains_custom_action && has_key(s:custom_aliases, 'common')
     call s:filter_alias_action(l:action_table, s:custom_aliases['common'])
   endif
 
   " Kind actions.
   let l:action_table = extend(copy(l:action_table), l:kind.action_table)
   " Kind custom actions.
-  if has_key(s:custom_actions, a:kind_name)
+  if l:contains_custom_action && has_key(s:custom_actions, a:kind_name)
     let l:action_table = extend(l:action_table, s:custom_actions[a:kind_name])
   endif
   " Kind custom aliases.
-  if has_key(s:custom_aliases, a:kind_name)
+  if l:contains_custom_action && has_key(s:custom_aliases, a:kind_name)
     call s:filter_alias_action(l:action_table, s:custom_aliases[a:kind_name])
   endif
 
@@ -179,11 +180,11 @@ function! unite#get_action_table(source_name, kind_name)"{{{
   endif
   let l:source_kind = a:source_name.'/'.a:kind_name
   " Source/kind custom actions.
-  if has_key(s:custom_actions, l:source_kind)
+  if l:contains_custom_action && has_key(s:custom_actions, l:source_kind)
     let l:action_table = extend(l:action_table, s:custom_actions[a:kind_name])
   endif
   " Source/kind custom aliases.
-  if has_key(s:custom_aliases, l:source_kind)
+  if l:contains_custom_action && has_key(s:custom_aliases, l:source_kind)
     call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind])
   endif
 
