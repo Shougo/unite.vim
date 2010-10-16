@@ -528,7 +528,7 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		uniteのバッファ名{buffer-name}における絞込みテキストの置換パタ
 		ーンを指定する。{buffer-name}を""とすると、"default"となり、
 		|:Unite|で-buffer-name=を省略したときに使われるbuffer-nameと同
-		じになる。
+		じになる。{buffer-name}は","区切りで複数指定ができる。
 		{pattern}は置換対象の正規表現、{subst}は置換する文字列である。
 		同じ{pattern}を複数回指定すると、設定は上書きされる。
 		{subst}を""とすると、{pattern}は無効化される。
@@ -563,6 +563,7 @@ unite#custom_alias({kind}, {alias-name}, {alias-action})
 						*unite#custom_alias(*
 		{kind}に対する{alias-action}の別名である、{alias-name}というア
 		クションを定義する。アクションに短縮名を付けたい場合に便利。
+		{kind}は","区切りで複数指定ができる。
 		{alias-action}を"nop"とすると、そのアクションは無効化される。
 		例:
 >

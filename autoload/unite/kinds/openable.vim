@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: openable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Sep 2010
+" Last Modified: 16 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,7 +40,7 @@ let s:kind.action_table.tabopen = {
       \ }
 function! s:kind.action_table.tabopen.func(candidate)"{{{
   tabnew
-  call unite#_take_action('open', a:candidate)
+  call unite#take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.split = {
@@ -48,7 +48,7 @@ let s:kind.action_table.split = {
       \ }
 function! s:kind.action_table.split.func(candidate)"{{{
   split
-  call unite#_take_action('open', a:candidate)
+  call unite#take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.vsplit = {
@@ -56,7 +56,7 @@ let s:kind.action_table.vsplit = {
       \ }
 function! s:kind.action_table.vsplit.func(candidate)"{{{
   vsplit
-  call unite#_take_action('open', a:candidate)
+  call unite#take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.left = {
@@ -64,7 +64,7 @@ let s:kind.action_table.left = {
       \ }
 function! s:kind.action_table.left.func(candidate)"{{{
   leftabove vsplit
-  call unite#_take_action('open', a:candidate)
+  call unite#take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.right = {
@@ -72,7 +72,7 @@ let s:kind.action_table.right = {
       \ }
 function! s:kind.action_table.right.func(candidate)"{{{
   rightbelow vsplit
-  call unite#_take_action('open', a:candidate)
+  call unite#take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.above = {
@@ -80,7 +80,7 @@ let s:kind.action_table.above = {
       \ }
 function! s:kind.action_table.above.func(candidate)"{{{
   leftabove split
-  call unite#_take_action('open', a:candidate)
+  call unite#take_action('open', a:candidate)
 endfunction"}}}
 
 let s:kind.action_table.below = {
@@ -88,7 +88,7 @@ let s:kind.action_table.below = {
       \ }
 function! s:kind.action_table.below.func(candidate)"{{{
   rightbelow split
-  call unite#_take_action('open', a:candidate)
+  call unite#take_action('open', a:candidate)
 endfunction"}}}
 "}}}
 

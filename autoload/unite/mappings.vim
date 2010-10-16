@@ -419,6 +419,9 @@ function! s:quick_match()"{{{
     let l:char = nr2char(getchar())
   endwhile
 
+  redraw
+  echo ''
+
   call unite#force_redraw()
 
   if has_key(g:unite_quick_match_table, l:char)

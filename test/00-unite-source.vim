@@ -50,7 +50,7 @@ function! s:run()
   \   'word': 'EMPRESS',
   \ }
 
-  silent! let _ = unite#_take_action('*choose*', candidate)
+  silent! let _ = unite#take_action('*choose*', candidate)
   Like _ 'no such action'
   
 endfunction

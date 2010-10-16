@@ -33,26 +33,30 @@ function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
   let l:priority = a:0 > 0 ? a:1 : 0
   let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
 
-  if !has_key(s:substitute_pattern, l:buffer_name)
-    let s:substitute_pattern[l:buffer_name] = {}
-  endif
+  for key in split(l:buffer_name, ',')
+    if !has_key(s:substitute_pattern, key)
+      let s:substitute_pattern[key] = {}
+    endif
 
-  if has_key(s:substitute_pattern[l:buffer_name], a:pattern)
-        \ && a:pattern == ''
-    call remove(s:substitute_pattern[l:buffer_name], a:pattern)
-  else
-    let s:substitute_pattern[l:buffer_name][a:pattern] = {
-          \ 'pattern' : a:pattern,
-          \ 'subst' : a:subst, 'priority' : l:priority
-          \ }
-  endif
+    if has_key(s:substitute_pattern[key], a:pattern)
+          \ && a:pattern == ''
+      call remove(s:substitute_pattern[key], a:pattern)
+    else
+      let s:substitute_pattern[key][a:pattern] = {
+            \ 'pattern' : a:pattern,
+            \ 'subst' : a:subst, 'priority' : l:priority
+            \ }
+    endif
+  endfor
 endfunction"}}}
 function! unite#custom_alias(kind, alias_name, alias_action)"{{{
-  if !has_key(s:custom_aliases, a:kind)
-    let s:custom_aliases[a:kind] = {}
-  endif
+  for key in split(a:kind, ',')
+    if !has_key(s:custom_aliases, key)
+      let s:custom_aliases[key] = {}
+    endif
 
-  let s:custom_aliases[a:kind][a:alias_name] = a:alias_action
+    let s:custom_aliases[key][a:alias_name] = a:alias_action
+  endfor
 endfunction"}}}
 "}}}
 
@@ -88,12 +92,12 @@ call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
 " Helper functions."{{{
 function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
   for key in split(a:keys, ',')
-    if !has_key(a:variable, key) 
+    if !has_key(a:variable, key)
       let a:variable[key] = a:pattern
     endif
   endfor
 endfunction"}}}
-function! unite#_take_action(action_name, candidate)"{{{
+function! unite#take_action(action_name, candidate)"{{{
   let l:action_table = unite#get_action_table(a:candidate.source, a:candidate.kind)
 
   let l:action_name =
