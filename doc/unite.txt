@@ -280,9 +280,6 @@ EXAMPLES					*unite-examples*
 	
 	endfunction"}}}
 	
-	" Enable quick match.
-	"let g:unite_enable_quick_match_mappings = 1
-	
 	let g:unite_source_file_mru_limit = 200
 	
 >
@@ -294,6 +291,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2010-10-16
+- Deleted g:unite_enable_quick_match_mappings option.
 
 2010-10-15
 - Improved <Plug>(unite_select_next_line) and <Plug>(unite_select_previous_line).

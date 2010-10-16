@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Oct 2010
+" Last Modified: 16 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,6 +46,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <buffer> <Plug>(unite_cursor_top)  2G0z.
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? '2G0z.' : 'j'
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= 2)? 'G' : 'k'
+  nnoremap <silent><buffer> <Plug>(unite_quick_match)  :<C-u>call <SID>quick_match()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
 
@@ -64,6 +65,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <silent><buffer> <Plug>(unite_move_head)  <C-o>:<C-u>call <SID>insert_head()<CR>
+  inoremap <silent><buffer> <Plug>(unite_quick_match)  <C-o>:<C-u>call <SID>quick_match()<CR>
   "}}}
 
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -93,7 +95,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer><expr> e   unite#mappings#smart_map('e', "\<Plug>(unite_do_narrow_action)")
   nmap <buffer><expr> l   unite#mappings#smart_map('l', "\<Plug>(unite_do_default_action)")
   nmap <buffer><expr> p   unite#mappings#smart_map('p', "\<Plug>(unite_do_preview_action)")
-  nmap <buffer><expr> x   unite#mappings#smart_map('x', "\<Plug>(unite_execute_count)")
+  nmap <buffer><expr> x   unite#mappings#smart_map('x', "\<Plug>(unite_quick_match)")
 
   " Visual mode key-mappings.
   xmap <buffer> <Space>   <Plug>(unite_toggle_mark_selected_candidates)
@@ -116,16 +118,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <Home>    <Plug>(unite_move_head)
   imap <buffer><expr> <Space>   unite#mappings#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <buffer><expr> /         unite#mappings#smart_map('/', "\<Plug>(unite_do_narrow_action)")
-
-  if g:unite_enable_quick_match_mappings
-    " Define quick match mappings.
-    for i in range(1, 9)
-      execute 'inoremap <buffer><silent> ' . i . ' <C-o>:call unite#mappings#do_action(b:unite.context.default_action, ' . (i-1) . ')<CR>'
-      execute 'nnoremap <buffer><silent> ' . i . ' :<C-u>call unite#mappings#do_action(b:unite.context.default_action, ' . (i-1) . ')<CR>'
-    endfor
-    execute 'inoremap <buffer><silent> ' . 0 . ' <C-o>:call unite#mappings#do_action(b:unite.context.default_action, ' . 9 . ')<CR>'
-    execute 'nnoremap <buffer><silent> ' . 0 . ' :<C-u>call unite#mappings#do_action(b:unite.context.default_action, ' . 9 . ')<CR>'
-  endif
+  imap <buffer><expr> x         unite#mappings#smart_map('x', "\<Plug>(unite_quick_match)")
 endfunction"}}}
 
 " key-mappings functions.

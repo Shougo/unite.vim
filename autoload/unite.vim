@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Oct 2010
+" Last Modified: 16 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -182,9 +182,20 @@ function! unite#redraw_line(...) "{{{
   setlocal modifiable
 
   let l:candidate = unite#get_unite_candidates()[l:linenr - 3]
-  call setline(l:linenr, s:convert_line(l:candidate, l:linenr - 2))
+  call setline(l:linenr, s:convert_line(l:candidate))
 
   setlocal nomodifiable
+endfunction"}}}
+function! unite#quick_match_redraw() "{{{
+  if mode() != 'i'
+    setlocal modifiable
+  endif
+
+  call setline(3, s:convert_quick_match_lines(b:unite.candidates))
+
+  if mode() != 'i'
+    setlocal nomodifiable
+  endif
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{
   return filter(copy(unite#get_unite_candidates()), 'v:val.unite__is_marked')
@@ -476,7 +487,7 @@ function! s:gather_candidates(text, context)"{{{
 
   return l:candidates
 endfunction"}}}
-function! s:convert_lines(candidates)"{{{
+function! s:convert_quick_match_lines(candidates)"{{{
   let l:max_width = winwidth(0) - 20
   let l:candidates = []
 
@@ -493,11 +504,16 @@ function! s:convert_lines(candidates)"{{{
 
   return l:candidates
 endfunction"}}}
-function! s:convert_line(candidate, num)"{{{
+function! s:convert_lines(candidates)"{{{
   let l:max_width = winwidth(0) - 20
 
-  return (a:num > 10 ? '   ' : a:num == 10 ? 0.': ' : a:num.': ')
-        \ . (a:candidate.unite__is_marked ? '* ' : '- ')
+  return map(copy(a:candidates),
+        \ '(v:val.unite__is_marked ? "* " : "- ") . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', 30, "..") . " " . v:val.source')
+endfunction"}}}
+function! s:convert_line(candidate)"{{{
+  let l:max_width = winwidth(0) - 20
+
+  return (a:candidate.unite__is_marked ? '* ' : '- ')
         \ . unite#util#truncate_smart(a:candidate.abbr, l:max_width, 30, '..')
         \ . " " . a:candidate.source
 endfunction"}}}

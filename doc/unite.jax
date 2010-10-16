@@ -209,12 +209,6 @@ g:unite_enable_split_vertically			*g:unite_enable_split_vertically*
 		
 		初期値は0なので、水平分割である。
 
-g:unite_enable_quick_match_mappings		*g:unite_enable_quick_match_mappings*
-		候補を数字で実行できるクイックマッチを有効にするかどうかを制御
-		する。これを有効化すると、数字のマッピングが上書きされる。
-		
-		初期値は0なので、無効化されている。
-
 g:unite_cd_command				*g:unite_cd_command*
 		cdアクションで実行されるVimのコマンドを指定する。
 		
@@ -464,8 +458,6 @@ j		|<Plug>(unite_loop_cursor_down)|
 <Down>		|<Plug>(unite_loop_cursor_down)|
 k		|<Plug>(unite_loop_cursor_up)|
 <Up>		|<Plug>(unite_loop_cursor_up)|
-0-9		その番号の候補を実行する(|g:unite_enable_quick_match_mappings|
-		が有効のときのみ)
 
 インサートモードマッピング
 {lhs}		{rhs}
@@ -487,8 +479,6 @@ k		|<Plug>(unite_loop_cursor_up)|
 <Home>		|i_<Plug>(unite_move_head)|
 <Space>		候補を選択している場合は|i_<Plug>(unite_toggle_mark_current_candidate)|
 /		候補を選択している場合は|i_<Plug>(unite_do_narrow_action)|
-0-9		その番号の候補を実行する(|g:unite_enable_quick_match_mappings|
-		が有効のときのみ)
 
 ビジュアルモードマッピング
 {lhs}		{rhs}
@@ -753,10 +743,6 @@ required_pattern_length	数値		(任意)
 	" Start insert.
 	"let g:unite_enable_start_insert = 1
 	endfunction"}}}
-	
-	" Enable quick match.
-	"let g:unite_enable_quick_match_mappings = 1
-	
 	
 	let g:unite_source_file_mru_limit = 200
 	
