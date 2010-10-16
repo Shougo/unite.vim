@@ -796,8 +796,10 @@ endfunction"}}}
 function! s:filter_alias_action(action_table, alias_table)"{{{
   for [l:alias_name, l:alias_action] in items(a:alias_table)
     if l:alias_action ==# 'nop'
-      " Delete nop action.
-      call remove(a:action_table, l:alias_name)
+      if has_key(a:action_table, l:alias_name)
+        " Delete nop action.
+        call remove(a:action_table, l:alias_name)
+      endif
     else
       let a:action_table[l:alias_name] = a:action_table[l:alias_action]
     endif
