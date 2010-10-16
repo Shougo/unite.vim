@@ -219,6 +219,12 @@ g:unite_lcd_command				*g:unite_lcd_command*
 		
 		初期値は"lcd"である。
 
+g:unite_quick_match_table			*g:unite_quick_match_table*
+		入力文字と対応する、クイックマッチリストの補完候補のテーブルで
+		ある。
+		
+		初期値は複雑なので、plugin/unite.vimを参照せよ。
+
 g:unite_data_directory				*g:unite_data_directory*
 		uniteやその情報源が内部で使用する設定ファイルを書き出すディレク
 		トリを指定する。ここで指定したディレクトリが実際に存在しない場
