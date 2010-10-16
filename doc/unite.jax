@@ -560,23 +560,46 @@ unite#get_substitute_pattern({buffer-name})
 		と、エラーになる。デバッグ用である。
 
 unite#custom_default_action({kind}, {default-action})
-						*unite#custom_alias(*
+						*unite#custom_default_action()*
 		{kind}に対するデフォルトアクションを{default-action}に置き換え
 		る。
 		例:
 >
 		call unite#custom_default_action('file', 'tabopen')
 <
-unite#custom_alias({kind}, {alias-name}, {alias-action})
-						*unite#custom_alias(*
-		{kind}に対する{alias-action}の別名である、{alias-name}というア
-		クションを定義する。アクションに短縮名を付けたい場合に便利。
+unite#custom_action({kind}, {name}, {action})
+						*unite#custom_action()*
+		{kind}に対し、{name}という名前の{action}を付け加える。
 		{kind}は","区切りで複数指定ができる。
-		{alias-action}を"nop"とすると、そのアクションは無効化される。
+		例:
+>
+		let my_tabopen = {
+		\ 'is_selectable' : 1,
+		\ }
+		function! my_tabopen.func(candidate)
+		  tabnew
+		  call unite#take_action('open', a:candidate)
+		  let dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+		  execute g:unite_lcd_command '`=dir`'
+		endfunction
+		call unite#custom_action('file,buffer', 'my_tabopen', my_tabopen)
+		unlet my_tabopen
+<
+unite#custom_alias({kind}, {name}, {action})
+						*unite#custom_alias()*
+		{kind}に対する{action}の別名である、{name}というアクションを定
+		義する。アクションに短縮名を付けたい場合に便利。
+		{kind}は","区切りで複数指定ができる。
+		{action}を"nop"とすると、そのアクションは無効化される。
 		例:
 >
 		call unite#custom_alias('file', 'h', 'left')
 <
+unite#take_action({action-name}, {candidate})
+						*unite#take_action()*
+		{candidate}に対し、{action-name}という名前のアクションを実行する。
+		主に、unite#custom_action()などで用いる。
+
 ==============================================================================
 情報源						*unite-source* *{sources}*
 

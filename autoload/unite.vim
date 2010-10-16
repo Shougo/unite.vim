@@ -49,22 +49,27 @@ function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
     endif
   endfor
 endfunction"}}}
-function! unite#custom_alias(kind, alias_name, alias_action)"{{{
+function! unite#custom_alias(kind, name, action)"{{{
   for key in split(a:kind, ',')
     if !has_key(s:custom_aliases, key)
       let s:custom_aliases[key] = {}
     endif
 
-    let s:custom_aliases[key][a:alias_name] = a:alias_action
+    let s:custom_aliases[key][a:name] = a:action
   endfor
 endfunction"}}}
 function! unite#custom_default_action(kind, default_action)"{{{
   for key in split(a:kind, ',')
-    if !has_key(s:custom_default_actions, key)
-      let s:custom_default_actions[key] = {}
+    let s:custom_default_actions[key] = a:default_action
+  endfor
+endfunction"}}}
+function! unite#custom_action(kind, name, action)"{{{
+  for key in split(a:kind, ',')
+    if !has_key(s:custom_actions, key)
+      let s:custom_actions[key] = {}
     endif
 
-    let s:custom_default_actions[key] = a:default_action
+    let s:custom_actions[key][a:name] = a:action
   endfor
 endfunction"}}}
 "}}}
@@ -146,8 +151,11 @@ function! unite#get_action_table(source_name, kind_name)"{{{
 
   " Common actions.
   let l:action_table = (a:kind_name != 'common')?
-        \ unite#available_kinds('common').action_table : {}
+        \ copy(unite#available_kinds('common').action_table) : {}
   " Common custom actions.
+  if has_key(s:custom_actions, 'common')
+    let l:action_table = extend(l:action_table, s:custom_actions['common'])
+  endif
   " Common custom aliases.
   if has_key(s:custom_aliases, 'common')
     call s:filter_alias_action(l:action_table, s:custom_aliases['common'])
@@ -156,6 +164,9 @@ function! unite#get_action_table(source_name, kind_name)"{{{
   " Kind actions.
   let l:action_table = extend(copy(l:action_table), l:kind.action_table)
   " Kind custom actions.
+  if has_key(s:custom_actions, a:kind_name)
+    let l:action_table = extend(l:action_table, s:custom_actions[a:kind_name])
+  endif
   " Kind custom aliases.
   if has_key(s:custom_aliases, a:kind_name)
     call s:filter_alias_action(l:action_table, s:custom_aliases[a:kind_name])
@@ -164,11 +175,13 @@ function! unite#get_action_table(source_name, kind_name)"{{{
   " Source/kind actions.
   if has_key(l:source, 'action_table')
         \ && has_key(l:source.action_table, a:kind_name)
-    " Overwrite actions.
-    let l:action_table = extend(copy(l:action_table), l:source.action_table[a:kind_name])
+    let l:action_table = extend(l:action_table, l:source.action_table[a:kind_name])
   endif
   let l:source_kind = a:source_name.'/'.a:kind_name
   " Source/kind custom actions.
+  if has_key(s:custom_actions, l:source_kind)
+    let l:action_table = extend(l:action_table, s:custom_actions[a:kind_name])
+  endif
   " Source/kind custom aliases.
   if has_key(s:custom_aliases, l:source_kind)
     call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind])
@@ -186,7 +199,6 @@ function! unite#get_default_action(source_name, kind_name)"{{{
   elseif has_key(l:source, 'default_action')
         \ && has_key(l:source.default_action, a:kind_name)
     " Source custom default actions.
-
     return l:source.default_action[a:kind_name]
   elseif has_key(s:custom_default_actions, a:kind_name)
     " Kind custom default actions.
