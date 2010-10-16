@@ -46,9 +46,8 @@ function! unite#sources#buffer#_append()"{{{
     " Delete same buffer in other tab pages.
     for l:tabnr in range(1, tabpagenr('$'))
       let l:buffer_dict = gettabvar(l:tabnr, 'unite_buffer_dictionary')
-      if type(l:buffer_dict) == type({})
-        if has_key(l:buffer_dict, l:bufnr)
-          call remove(l:buffer_dict, l:bufnr)
+      if type(l:buffer_dict) == type({}) && has_key(l:buffer_dict, l:bufnr)
+        call remove(l:buffer_dict, l:bufnr)
       endif
       unlet l:buffer_dict
     endfor
