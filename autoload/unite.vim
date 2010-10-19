@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Oct 2010
+" Last Modified: 19 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -213,6 +213,11 @@ function! unite#escape_match(str)"{{{
   return substitute(substitute(escape(a:str, '~"\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
+  if empty(s:default_sources)
+    " Initialize load.
+    call s:load_default_sources_and_kinds()
+  endif
+
   let l:sources = extend(copy(s:default_sources), s:custom_sources)
   let l:options = ['-buffer-name=', '-input=', '-prompt=',  '-default-action=']
   return filter(keys(l:sources)+l:options, printf('stridx(v:val, %s) == 0', string(a:arglead)))
