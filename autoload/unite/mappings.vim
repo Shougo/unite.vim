@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Oct 2010
+" Last Modified: 20 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -135,7 +135,6 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
     if line('$') < l:num - 3
       " Ignore.
-      call unite#print_error('Candidate ' . l:num . ' is nothing.')
       return
     endif
 

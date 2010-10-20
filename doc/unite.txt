@@ -292,6 +292,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-20
+- Improved do_action().
+
 2010-10-19
 - Improved source name completion.
 
