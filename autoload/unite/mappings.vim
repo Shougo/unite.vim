@@ -133,7 +133,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   if empty(l:candidates)
     let l:num = a:0 > 0 ? a:1 : line('.') <= 2 ? 0 : line('.') - 3
 
-    if line('$') < l:num - 3
+    if line('$')-3 < l:num
       " Ignore.
       return
     endif
