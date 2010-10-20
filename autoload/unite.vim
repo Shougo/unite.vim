@@ -219,7 +219,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   endif
 
   let l:sources = extend(copy(s:default_sources), s:custom_sources)
-  let l:options = ['-buffer-name=', '-input=', '-prompt=',  '-default-action=']
+  let l:options = ['-buffer-name=', '-input=', '-prompt=',  '-default-action=', '-start-insert']
   return filter(keys(l:sources)+l:options, printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
@@ -322,6 +322,9 @@ function! unite#start(sources, ...)"{{{
   if !has_key(l:context, 'input')
     let l:context.input = ''
   endif
+  if !has_key(l:context, 'start_insert')
+    let l:context.start_insert = 0
+  endif
   if !has_key(l:context, 'is_insert')
     let l:context.is_insert = 0
   endif
@@ -349,6 +352,7 @@ function! unite#start(sources, ...)"{{{
   call unite#force_redraw()
 
   if g:unite_enable_start_insert
+        \ || b:unite.context.start_insert || b:unite.context.is_insert
     2
     startinsert!
   else

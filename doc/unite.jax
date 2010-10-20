@@ -144,6 +144,9 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		-default-action={default-action}
 		デフォルトアクションを指定する。指定しないと、'default'が使われ
 		る。
+		-start-insert
+		初期状態が絞り込みモードになる。指定しないと、初期状態はNormal
+		modeになる。
 
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同

@@ -296,6 +296,7 @@ CHANGELOG					*unite-changelog*
 - Improved do_action().
 - Fixed source name syntax.
 - Added i_<Plug>(unite_do_delete_action) mapping.
+- Added -start-insert option.
 
 2010-10-19
 - Improved source name completion.
