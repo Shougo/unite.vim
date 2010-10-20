@@ -422,6 +422,9 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 <Plug>(unite_do_default_action)			*i_<Plug>(unite_do_default_action)*
 		|<Plug>(unite_do_default_action)|と同じ。
 
+<Plug>(unite_do_delete_action)			*i_<Plug>(unite_do_delete_action)*
+		|<Plug>(unite_do_delete_action)|と同じ。
+
 <Plug>(unite_do_narrow_action)			*i_<Plug>(unite_do_narrow_action)*
 		|<Plug>(unite_do_narrow_action)|と同じ。
 
@@ -494,6 +497,7 @@ x		候補を選択している場合は|<Plug>(unite_quick_match_default_action)
 <Space>		候補を選択している場合は|i_<Plug>(unite_toggle_mark_current_candidate)|
 /		候補を選択している場合は|i_<Plug>(unite_do_narrow_action)|
 x		候補を選択している場合は|i_<Plug>(unite_quick_match_default_action)|
+d		候補を選択している場合は|i_<Plug>(unite_do_delete_action)|
 
 ビジュアルモードマッピング
 {lhs}		{rhs}
