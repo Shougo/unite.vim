@@ -726,9 +726,12 @@ file						*unite-action-file*
 			選択した状態では動作しない。
 	bookmark	候補をブックマークに追加する
 	narrow		ファイルのあるディレクトリ名で候補を絞り込む
-	vimshell	バッファのあるディレクトリで|vimshell|を起動する。これ
+	vimshell	そのディレクトリで|vimshell|を起動する。これ
 			は|vimshell|がインストールされている場合にのみ有効なア
 			クションである。
+	tabvimshell	そのディレクトリで|:VimShellTab|を実行する。これは
+			|vimshell|がインストールされている場合にのみ有効な
+			アクションである。
 
 buffer						*unite-action-buffer*
 このkindは|unite-action-openable|のアクションを継承している。

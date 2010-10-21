@@ -297,6 +297,7 @@ CHANGELOG					*unite-changelog*
 - Added unite#define_source() and unite#define_kind() and unite#undef_source() and unite#undef_kind().
 - Added unite-user-sources.
 - Improved Japanese help.
+- Added tabvimshell action in directory kind.
 
 2010-10-20
 - Improved do_action().
