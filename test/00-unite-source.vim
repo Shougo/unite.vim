@@ -52,6 +52,9 @@ function! s:run()
 
   silent! let _ = unite#take_action('*choose*', candidate)
   Like _ 'no such action'
+
+  Ok unite#undef_kind(l:kind.name) == 0, "undef kind"
+  Ok unite#undef_source(l:source.name) == 0, "undef source"
   
 endfunction
 

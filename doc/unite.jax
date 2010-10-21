@@ -39,6 +39,7 @@ License: MIT license  {{{
   アクション		  |unite-action|
 設定例			|unite-examples|
 情報源の作成		|unite-create-source|
+種類の作成		|unite-create-kind|
 ToDo			|unite-todo|
 既知のバグ			|unite-bugs|
 更新履歴		|unite-changelog|
@@ -609,6 +610,22 @@ unite#take_action({action-name}, {candidate})
 		ただし、unite#custom_alias()やunite#custom_action()で定義された
 		アクションは呼び出せない。
 
+unite#define_source({source})			*unite#define_source()*
+		{source}を動的に追加する。sourceの仕様については、
+		|unite-create-source|を参照せよ。
+
+unite#define_kind({kind})			*unite#define_kind()*
+		{kind}を動的に追加する。kindの仕様については、
+		|unite-create-kind|を参照せよ。
+
+unite#undef_source({name})			*unite#undef_source()*
+		|unite#define_source()|で追加した{name}というsourceを削除する。
+		存在しないときは無視される。
+
+unite#undef_kind({name})			*unite#undef_kind()*
+		|unite#define_kind()|で追加した{name}というkindを削除する。
+		存在しないときは無視される。
+
 ==============================================================================
 情報源						*unite-source* *{sources}*
 
@@ -786,8 +803,16 @@ required_pattern_length	数値		(任意)
 			候補を収集するのに必要な絞り込み文字列の長さ。
 
 			この属性は任意である。もしこれが与えられない場合、0がデ
-			フォルト値として使われます。この場合、常に候補が収集さ
-			れる。
+			フォルト値として使われる。この場合、常に候補が収集され
+			る。
+
+==============================================================================
+種類の作成					*unite-create-kind*
+
+この項はまだ未完成である。
+
+------------------------------------------------------------------------------
+種類の属性					*unite-kind-attributes*
 
 ==============================================================================
 設定例						*unite-examples*

@@ -72,6 +72,39 @@ function! unite#custom_action(kind, name, action)"{{{
     let s:custom_actions[key][a:name] = a:action
   endfor
 endfunction"}}}
+
+function! unite#define_source(source)"{{{
+  if type(a:source) == type([])
+    for l:source in a:source
+      if !has_key(s:custom_sources, l:source.name)
+        let s:custom_sources[l:source.name] = l:source
+      endif
+    endfor
+  elseif !has_key(s:custom_sources, a:source.name)
+    let s:custom_sources[a:source.name] = a:source
+  endif
+endfunction"}}}
+function! unite#define_kind(kind)"{{{
+  if type(a:kind) == type([])
+    for l:kind in a:kind
+      if !has_key(s:custom_kinds, l:kind.name)
+        let s:custom_kinds[l:kind.name] = l:kind
+      endif
+    endfor
+  elseif !has_key(s:custom_kinds, a:kind.name)
+    let s:custom_kinds[a:kind.name] = a:kind
+  endif
+endfunction"}}}
+function! unite#undef_source(name)"{{{
+  if has_key(s:custom_sources, a:name)
+    call remove(s:custom_sources, a:name)
+  endif
+endfunction"}}}
+function! unite#undef_kind(name)"{{{
+  if has_key(s:custom_kind, a:name)
+    call remove(s:custom_kind, a:name)
+  endif
+endfunction"}}}
 "}}}
 
 " Constants"{{{
@@ -463,8 +496,12 @@ function! s:load_default_sources_and_kinds()"{{{
           let s:default_sources[l:source.name] = l:source
         endif
       endfor
-    elseif !has_key(s:default_sources, l:name)
-      let s:default_sources[l:name] = {'unite#sources#' . l:name . '#define'}()
+    else
+      let l:source = {'unite#sources#' . l:name . '#define'}()
+
+      if !has_key(s:default_sources, l:source.name)
+        let s:default_sources[l:source.name] = l:source
+      endif
     endif
   endfor
 
@@ -477,22 +514,27 @@ function! s:load_default_sources_and_kinds()"{{{
           let s:default_kinds[l:kind.name] = l:kind
         endif
       endfor
-    elseif !has_key(s:default_kinds, l:name)
-      let s:default_kinds[l:name] = {'unite#kinds#' . l:name . '#define'}()
+    else
+      let l:kind = {'unite#kinds#' . l:name . '#define'}()
+
+      if !has_key(s:default_kinds, l:kind.name)
+        let s:default_kinds[l:kind.name] = l:kind
+      endif
     endif
   endfor
 endfunction"}}}
 function! s:initialize_sources(sources)"{{{
+  let l:all_sources = extend(copy(s:default_sources), s:custom_sources)
   let l:sources = {}
 
   let l:number = 0
   for [l:source_name, l:args] in a:sources
-    if !has_key(s:default_sources, l:source_name)
+    if !has_key(l:all_sources, l:source_name)
       call unite#print_error('Invalid source name "' . l:source_name . '" is detected.')
       throw 'Invalid source'
     endif
 
-    let l:source = s:default_sources[l:source_name]
+    let l:source = l:all_sources[l:source_name]
     let l:source.args = l:args
     if !has_key(l:source, 'is_volatile')
       let l:source.is_volatile = 0
@@ -508,7 +550,7 @@ function! s:initialize_sources(sources)"{{{
   return l:sources
 endfunction"}}}
 function! s:initialize_kinds()"{{{
-  return s:default_kinds
+  return extend(copy(s:default_kinds), s:custom_kinds)
 endfunction"}}}
 function! s:gather_candidates(text, context)"{{{
   let l:context = a:context
