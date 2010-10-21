@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Sep 2010
+" Last Modified: 21 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,6 +53,16 @@ function! s:kind.action_table.open.func(candidate)"{{{
     " Jump to a:candidate.line.
     execute l:linenr
   endif
+endfunction"}}}
+
+let s:kind.action_table.preview = {
+      \ 'is_quit' : 0,
+      \ }
+function! s:kind.action_table.preview.func(candidate)"{{{
+  execute 'pedit'
+        \ (has_key(a:candidate, 'line') && a:candidate.line != '' ? '+'.a:candidate.line : '')
+        \ (has_key(a:candidate, 'pattern') && a:candidate.pattern != '' ? '+/'.a:candidate.pattern : '')
+        \ '`=a:candidate.word`'
 endfunction"}}}
 "}}}
 

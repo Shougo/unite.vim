@@ -298,6 +298,7 @@ CHANGELOG					*unite-changelog*
 - Added unite-user-sources.
 - Improved Japanese help.
 - Added tabvimshell action in directory kind.
+- Improved jump_list preview action.
 
 2010-10-20
 - Improved do_action().
