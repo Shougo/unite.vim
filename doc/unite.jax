@@ -1,4 +1,4 @@
-*unite.txt*	すべての情報源を統合する
+*unite.txt*	すべてのsourceを統合する
 
 Version: 1.0
 Author : Shougo <Shougo.Matsu@gmail.com>
@@ -31,16 +31,16 @@ License: MIT license  {{{
 インターフェース	|unite-interface|
   コマンド		  |unite-commands|
   変数			  |unite-variables|
-    情報源の変数	    |unite-sources-variables|
+    sourceの変数	    |unite-sources-variables|
   キーマッピング	  |unite-key-mappings|
   関数			  |unite-functions|
-  情報源		  |unite-source|
-  種類			  |unite-kind|
+  source		  |unite-source|
+  kind			  |unite-kind|
   アクション		  |unite-action|
 設定例			|unite-examples|
-情報源の作成		|unite-create-source|
-種類の作成		|unite-create-kind|
-コミュニティ作の情報源	|unite-community-sources|
+sourceの作成		|unite-create-source|
+kindの作成		|unite-create-kind|
+ユーザーのsource	|unite-user-sources|
 ToDo			|unite-todo|
 既知のバグ			|unite-bugs|
 更新履歴		|unite-changelog|
@@ -49,15 +49,15 @@ ToDo			|unite-todo|
 概要						*unite-introduction*
 
 *unite* はファイル、バッファ、最近使用したファイル、レジスタといった、任意の情
-報源からの検索、表示を行う。表示された候補に対して、候補の種類ごとに定義された
+報源からの検索、表示を行う。表示された候補に対して、候補のkindごとに定義された
 アクションを実行することができる。
 似たプラグインとして、|fuzzyfinder|や|ku|があるが、|unite| はVimの補完インタフ
-ェースを使用しないということ、情報源の統合を行うことが違いとして挙げられる。
+ェースを使用しないということ、sourceの統合を行うことが違いとして挙げられる。
 
 ==============================================================================
 使い方						*unite-usage*
 
-	情報源としてファイル及び、バッファを指定して起動する場合
+	sourceとしてファイル及び、バッファを指定して起動する場合
 >
 	:Unite file buffer
 <
@@ -74,7 +74,7 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 <
 として起動した場合、カレントディレクトリのファイルの一覧が表示されているはずで
 ある。その状態で j、k、で候補を選択できるので、適当に候補を選び、Enter を押せ
-ば選択した候補が新しいバッファで開かれる。これは選択した候補の種類がファイルで
+ば選択した候補が新しいバッファで開かれる。これは選択した候補のkindがファイルで
 あった場合の、デフォルトのアクションである。候補を選択して <Tab> を押下すると
 候補に対するアクションが選択できる。アクションについては|unite-action|を参照。
 
@@ -106,6 +106,11 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 <
 上記は hogeにマッチするが、piyoにマッチする候補は除外される。
 
+	-buffer-nameオプションにfilesを設定すると、/区切りでワイルドカードが自
+	動的に付加される。これはファイルをuniteで選択する際に便利である。
+>
+	:Unite -buffer-name=files file
+<
 その他の操作については|unite_default_key_mappings|を参照。
 
 ==============================================================================
@@ -114,7 +119,7 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 配布ファイルをVimスクリプトのディレクトリへインストールする。
 (普通は ~/.vim/ またはWindowsの場合、 $HOME/vimfiles)
 
-インストールに成功すると、情報源を引数に指定して、|:Unite|コマンドでuniteを実
+インストールに成功すると、sourceを引数に指定して、|:Unite|コマンドでuniteを実
 行することができる。しかしながら毎回このコマンドを実行するのは非常に手間である
 ため、何かしらのキーマッピングを定義すると良いだろう。
 
@@ -125,10 +130,10 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 コマンド 					*unite-commands*
 
 :Unite [{options}] {sources}			*:Unite*
-		{sources} で指定した情報源での候補ウィンドウを表示する。初期の
+		{sources} で指定したsourceでの候補ウィンドウを表示する。初期の
 		絞込みテキストは空。{sources} はスペースで区切って複数指定でき
-		る。また、{sources} の指定順序が情報源の候補の表示順序となる。
-		情報源については|unite-source|を参照。
+		る。また、{sources} の指定順序がsourceの候補の表示順序となる。
+		sourceについては|unite-source|を参照。
 		現在uniteバッファに居る場合、絞り込みテキストは保存される。
 		{options}とはuniteバッファに与えるオプションである。
 		オプションは、次のパラメータを取る。値にスペースが含まれるとき
@@ -171,7 +176,7 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		{buffer-name}を省略すると、以前使用したバッファを再利用する。
 		絞込みテキストや候補はそのままの状態となる。
 
-情報源のコマンド				*unite-sources-commands*
+sourceのコマンド				*unite-sources-commands*
 
 :UniteBookmarkAdd [{file}]			*:UniteBookmarkAdd*
 		ブックマークリストにファイルを追加する。引数が指定されなかった
@@ -231,9 +236,9 @@ g:unite_quick_match_table			*g:unite_quick_match_table*
 		初期値は複雑なので、plugin/unite.vimを参照せよ。
 
 g:unite_data_directory				*g:unite_data_directory*
-		uniteやその情報源が内部で使用する設定ファイルを書き出すディレク
+		uniteやそのsourceが内部で使用する設定ファイルを書き出すディレク
 		トリを指定する。ここで指定したディレクトリが実際に存在しない場
-		合、自動的に作成される。例えばfile_mruの情報源は最近使用したフ
+		合、自動的に作成される。例えばfile_mruのsourceは最近使用したフ
 		ァイルの情報をこの下に保存する。
 		
 		初期値は'~/.unite'の絶対パスである。
@@ -245,10 +250,10 @@ g:unite_no_default_keymappings			*g:unite_no_default_keymappings*
 		
 		この変数はユーザーが自分で定義しない限り存在しない。
 
-情報源の変数					*unite-sources-variables*
+sourceの変数					*unite-sources-variables*
 
 g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
-		情報源がfileの候補に表示しないファイルの正規表現パターンを指定
+		sourceがfileの候補に表示しないファイルの正規表現パターンを指定
 		する。マッチングはファイルのフルパスに対して行われる。この変数
 		が空文字列以外であれば、指定した正規表現で結果をフィルタリング
 		する。正規表現の大文字・小文字の区別は'ignorecase'の設定次第で
@@ -257,7 +262,7 @@ g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
 		初期値は autoload/unite/sources/file.vim を参照。
 
 g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
-		情報源がfile_mruの候補での最終アクセス時間の表示フォーマットを
+		sourceがfile_mruの候補での最終アクセス時間の表示フォーマットを
 		指定する。フォーマットは|strftime()|で指定できるものと同じであ
 		る。
 		
@@ -274,7 +279,7 @@ g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
 		初期値は100である。
 
 g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
-		情報源がfile_mruの候補に表示しないファイルの正規表現パターンを
+		sourceがfile_mruの候補に表示しないファイルの正規表現パターンを
 		指定する。マッチングはファイルのフルパスに対して行われる。この
 		変数が空文字列以外であれば、指定した正規表現で結果をフィルタリ
 		ングする。正規表現の大文字・小文字は'ignorecase'の設定に関わら
@@ -297,28 +302,28 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 
 <Plug>(unite_do_default_action)			*<Plug>(unite_do_default_action)*
 		選択している候補に対してデフォルトのアクションを実行する。アク
-		ションは候補の種類ごとに定義されている。
-		種類については|unite-kind|を参照。
+		ションは候補のkindごとに定義されている。
+		kindについては|unite-kind|を参照。
 		デフォルトのアクションについては|unite-default-action|を参照。
 
 <Plug>(unite_do_delete_action)			*<Plug>(unite_do_delete_action)*
 		選択している候補に対してdeleteアクションを実行する。アクショ
-		ンは候補の種類ごとに定義されている。
-		種類については|unite-kind|を参照。
+		ンは候補のkindごとに定義されている。
+		kindについては|unite-kind|を参照。
 		deleteアクションについては|unite-action|を参照。
 		アクションが存在しないときはエラー。
 
 <Plug>(unite_do_bookmark_action)		*<Plug>(unite_do_bookmark_action)*
 		選択している候補に対してbookmarkアクションを実行する。アクショ
-		ンは候補の種類ごとに定義されている。
-		種類については|unite-kind|を参照。
+		ンは候補のkindごとに定義されている。
+		kindについては|unite-kind|を参照。
 		bookmarkアクションについては|unite-action|を参照。
 		アクションが存在しないときはエラー。
 
 <Plug>(unite_do_preview_action)			*<Plug>(unite_do_preview_action)*
 		選択している候補に対してアクションを実行した結果を、プレビュー
-		ウィンドウに表示する。このマッピングは候補の種類がファイルの場
-		合のみ動作する。情報源がレジスタの場合のプレビューは
+		ウィンドウに表示する。このマッピングは候補のkindがファイルの場
+		合のみ動作する。sourceがレジスタの場合のプレビューは
 		|<Plug>(unite_print_candidate)|が使用できる。
 		アクションが存在しないときはエラー。
 
@@ -329,9 +334,9 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 
 <Plug>(unite_choose_action)			*<Plug>(unite_choose_action)*
 		選択している候補に対して実行するアクションを選択する。アクショ
-		ンは種類ごとに定義されている。複数の候補が選択されている場合は
+		ンはkindごとに定義されている。複数の候補が選択されている場合は
 		共通なアクションのみ選択ができる。
-		種類については|unite-kind|を参照。
+		kindについては|unite-kind|を参照。
 
 <Plug>(unite_insert_enter)			*<Plug>(unite_insert_enter)*
 		カーソル位置から絞込みテキスト入力を開始する。
@@ -362,14 +367,14 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		示を更新する。
 
 <Plug>(unite_search_next_source)		*<Plug>(unite_search_next_source)*
-		次の情報源の最初の候補にカーソルを移動する。
+		次のsourceの最初の候補にカーソルを移動する。
 
 <Plug>(unite_search_previous_source)		*<Plug>(unite_serch_previous_source)*
-		前の情報源の最初の候補にカーソルを移動する。
+		前のsourceの最初の候補にカーソルを移動する。
 
 <Plug>(unite_print_candidate)			*<Plug>(unite_print_candidate)*
 		選択している候補に対するアクションの対象を表示する。例えば、選
-		択している候補の種類が|word|の場合は、対象の内容が表示される。
+		択している候補のkindが|word|の場合は、対象の内容が表示される。
 
 <Plug>(unite_cursor_top)			*<Plug>(unite_cursor_top)*
 		uniteバッファの一番上へ移動する。
@@ -630,7 +635,7 @@ unite#undef_kind({name})			*unite#undef_kind()*
 		存在しないときは無視される。
 
 ==============================================================================
-情報源						*unite-source* *{sources}*
+source						*unite-source* *{sources}*
 
 						*unite-source-file*
 file		入力されたファイルを候補とする。
@@ -659,9 +664,9 @@ register	レジスタに保存されている文字列を候補とする。
 bookmark	ブックマークされたファイルやディレクトリを候補とする。
 
 ==============================================================================
-種類						*unite-kind* *{kind}*
+kind						*unite-kind* *{kind}*
 
-候補の種類
+候補のkind
 
 						*unite-kind-common*
 common		共通アクション
@@ -690,7 +695,7 @@ jump_list	ジャンプリスト
 |<Plug>(unite_choose_action)|で選択するときは、アクション名を補完したり、曖昧で
 なければ先頭文字で省略することができる。
 
-種類別アクション
+kind別アクション
 
 common					*unite-action-common*
 全てのkindに共通なインタフェースを定義している。
@@ -752,7 +757,7 @@ jump_list					*unite-action-jump_list*
 のアクションについて解説する。
 	open		その候補のファイルにジャンプする
 
-情報源別アクション
+source別アクション
 
 file_mru					*unite-action-file_mru*
 	delete		最近使用したファイルの候補から削除
@@ -763,7 +768,7 @@ bookmark					*unite-action-bookmark*
 						*unite-default-action*
 デフォルトアクション
 
-種類		アクション
+kind		アクション
 {kind}		{action}
 ----------	----------
 file		open
@@ -773,16 +778,16 @@ word		insert
 jump_list	open
 
 ==============================================================================
-情報源の作成					*unite-create-source*
+sourceの作成					*unite-create-source*
 
 この項はまだ未完成である。
 
 ------------------------------------------------------------------------------
-情報源の属性					*unite-source-attributes*
+sourceの属性					*unite-source-attributes*
 
 						*unite-source-attribute-name*
 name			文字列		(必須)
-			情報源の名前。以下の文字で構成しなければならない。
+			sourceの名前。以下の文字で構成しなければならない。
 			文字:
 			- a-z
 			- 0-9
@@ -792,7 +797,7 @@ name			文字列		(必須)
 			例:
 			- "buffer", "virw/git" と "file_mru" は正当。
 			- "BadOne", "!@#$%^&*()_[]{}-|" と "" は
-			  情報源の名前としては使えない。
+			  sourceの名前としては使えない。
 
 						*unite-source-attribute-max_candidates*
 max_candidates		数値		(任意)
@@ -810,12 +815,12 @@ required_pattern_length	数値		(任意)
 			る。
 
 ==============================================================================
-種類の作成					*unite-create-kind*
+kindの作成					*unite-create-kind*
 
 この項はまだ未完成である。
 
 ------------------------------------------------------------------------------
-種類の属性					*unite-kind-attributes*
+kindの属性					*unite-kind-attributes*
 
 ==============================================================================
 設定例						*unite-examples*
@@ -845,17 +850,19 @@ required_pattern_length	数値		(任意)
 	
 >
 ==============================================================================
-コミュニティ作の情報源				*unite-community-sources*
+ユーザーのsource				*unite-user-sources*
 
-以下のsourceが作者以外の手により作成されている。
+ここでは、作者以外の手により作成されたsourceについて紹介を行う。
 
-source: help
-Author: tsukkee
-http://github.com/tsukkee/unite-help
+help 						*unite-sources-help*
+		http://github.com/tsukkee/unite-help
+		ヘルプを検索するsourceである。
+		作者はtsukkee氏。
 
-source: tags
-Author: tsukkee
-http://github.com/tsukkee/unite-tags
+tags 						*unite-sources-tags*
+		http://github.com/tsukkee/unite-tags
+		タグファイルを検索するsourceである。
+		作者はtsukkee氏。
 
 ==============================================================================
 TODO						*unite-todo*
