@@ -76,22 +76,18 @@ endfunction"}}}
 function! unite#define_source(source)"{{{
   if type(a:source) == type([])
     for l:source in a:source
-      if !has_key(s:custom_sources, l:source.name)
-        let s:custom_sources[l:source.name] = l:source
-      endif
+      let s:custom_sources[l:source.name] = l:source
     endfor
-  elseif !has_key(s:custom_sources, a:source.name)
+  else
     let s:custom_sources[a:source.name] = a:source
   endif
 endfunction"}}}
 function! unite#define_kind(kind)"{{{
   if type(a:kind) == type([])
     for l:kind in a:kind
-      if !has_key(s:custom_kinds, l:kind.name)
-        let s:custom_kinds[l:kind.name] = l:kind
-      endif
+      let s:custom_kinds[l:kind.name] = l:kind
     endfor
-  elseif !has_key(s:custom_kinds, a:kind.name)
+  else
     let s:custom_kinds[a:kind.name] = a:kind
   endif
 endfunction"}}}

@@ -295,6 +295,7 @@ CHANGELOG					*unite-changelog*
 2010-10-21
 - Improved prompt check.
 - Added unite#define_source() and unite#define_kind() and unite#undef_source() and unite#undef_kind().
+- Added unite-community-sources.
 
 2010-10-20
 - Improved do_action().

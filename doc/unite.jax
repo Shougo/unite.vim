@@ -40,6 +40,7 @@ License: MIT license  {{{
 設定例			|unite-examples|
 情報源の作成		|unite-create-source|
 種類の作成		|unite-create-kind|
+コミュニティ作の情報源	|unite-community-sources|
 ToDo			|unite-todo|
 既知のバグ			|unite-bugs|
 更新履歴		|unite-changelog|
@@ -613,10 +614,12 @@ unite#take_action({action-name}, {candidate})
 unite#define_source({source})			*unite#define_source()*
 		{source}を動的に追加する。sourceの仕様については、
 		|unite-create-source|を参照せよ。
+		すでにその名前のsourceが存在する場合は上書きされる。
 
 unite#define_kind({kind})			*unite#define_kind()*
 		{kind}を動的に追加する。kindの仕様については、
 		|unite-create-kind|を参照せよ。
+		すでにその名前のkindが存在する場合は上書きされる。
 
 unite#undef_source({name})			*unite#undef_source()*
 		|unite#define_source()|で追加した{name}というsourceを削除する。
@@ -841,6 +844,19 @@ required_pattern_length	数値		(任意)
 	let g:unite_source_file_mru_limit = 200
 	
 >
+==============================================================================
+コミュニティ作の情報源				*unite-community-sources*
+
+以下のsourceが作者以外の手により作成されている。
+
+source: help
+Author: tsukkee
+http://github.com/tsukkee/unite-help
+
+source: tags
+Author: tsukkee
+http://github.com/tsukkee/unite-tags
+
 ==============================================================================
 TODO						*unite-todo*
 
