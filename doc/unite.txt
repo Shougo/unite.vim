@@ -292,6 +292,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-22
+- Fixed escape pattern.
+
 2010-10-21
 - Improved prompt check.
 - Added unite#define_source() and unite#define_kind() and unite#undef_source() and unite#undef_kind().
