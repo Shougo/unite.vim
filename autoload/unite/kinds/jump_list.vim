@@ -61,7 +61,7 @@ let s:kind.action_table.preview = {
 function! s:kind.action_table.preview.func(candidate)"{{{
   execute 'pedit'
         \ (has_key(a:candidate, 'line') && a:candidate.line != '' ? '+'.a:candidate.line : '')
-        \ (has_key(a:candidate, 'pattern') && a:candidate.pattern != '' ? '+/'.substitute(escape(a:candidate.pattern, '\. '), '[\[\]~/^$]', '\\\\\0') : '')
+        \ (has_key(a:candidate, 'pattern') && a:candidate.pattern != '' ? '+/'.substitute(escape(a:candidate.pattern, '\. ', 'g'), '[\[\]~/^$]', '\\\\\0', 'g') : '')
         \ '`=a:candidate.word`'
 endfunction"}}}
 "}}}
