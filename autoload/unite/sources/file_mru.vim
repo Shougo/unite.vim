@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2010
+" Last Modified: 22 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,7 +54,7 @@ function! unite#sources#file_mru#_append()"{{{
 
   call s:load()
   call insert(filter(s:mru_files, 'v:val.word !=# l:path'),
-  \           s:convert2dictionary([path, localtime()]))
+  \           s:convert2dictionary([l:path, localtime()]))
 
   if g:unite_source_file_mru_limit > 0
     unlet s:mru_files[g:unite_source_file_mru_limit]
@@ -119,9 +119,7 @@ function! s:load()  "{{{
     let [ver; s:mru_files] = readfile(g:unite_source_file_mru_file)
     
     if ver !=# s:VERSION
-      echohl WarningMsg
-      echomsg 'Sorry, the version of MRU file is old.  Clears the MRU list.'
-      echohl None
+      call unite#print_error('Sorry, the version of MRU file is old.  Clears the MRU list.')
       let s:mru_files = []
       return
     endif
@@ -139,10 +137,10 @@ function! s:is_exists_path(path)  "{{{
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
   return {
-        \ 'word' : substitute(a:list[0], '\\', '/', 'g'),
+        \ 'word' : a:list[0],
         \ 'source' : 'file_mru',
         \ 'unite_file_mru_time' : a:list[1],
-        \ 'kind' : (isdirectory(a:list[0]) ? 'directory' : "file"),
+        \ 'kind' : (isdirectory(a:list[0]) ? 'directory' : 'file'),
         \   }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{

@@ -295,6 +295,7 @@ CHANGELOG					*unite-changelog*
 2010-10-22
 - Fixed escape pattern.
 - Added bookmark action in buffer.
+- Improved file_mru.
 
 2010-10-21
 - Improved prompt check.
