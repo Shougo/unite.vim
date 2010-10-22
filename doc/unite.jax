@@ -743,6 +743,7 @@ buffer						*unite-action-buffer*
 	narrow		ファイルのあるディレクトリ名で候補を絞り込む
 	cd		カレントディレクトリを変更
 	lcd		現在のウィンドウのカレントディレクトリを変更
+	bookmark	候補をブックマークに追加する
 
 directory					*unite-action-directory*
 このkindは|unite-action-file|のアクションを継承している。ここではdirectory独自

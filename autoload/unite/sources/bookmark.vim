@@ -62,7 +62,6 @@ function! unite#sources#bookmark#_append(filename)"{{{
       let l:path = getbufvar(l:path, 'vimshell').save_dir
     endif
   endif
-  echomsg l:path
   
   let l:path = substitute(l:path, '\\', '/', 'g')
   if !s:is_exists_path(path)
