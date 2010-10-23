@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Oct 2010
+" Last Modified: 23 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,7 +48,7 @@ function! s:kind.action_table.open.func(candidate)"{{{
   if has_key(a:candidate, 'pattern') && a:candidate.pattern != ''
         \ && getline(l:linenr) !~ a:candidate.pattern
     " Search pattern.
-    call search(escape(a:candidate.pattern, '~\.^$[]'), 'w')
+    call search(a:candidate.pattern, 'w')
   else
     " Jump to a:candidate.line.
     execute l:linenr
@@ -61,7 +61,7 @@ let s:kind.action_table.preview = {
 function! s:kind.action_table.preview.func(candidate)"{{{
   execute 'pedit'
         \ (has_key(a:candidate, 'line') && a:candidate.line != '' ? '+'.a:candidate.line : '')
-        \ (has_key(a:candidate, 'pattern') && a:candidate.pattern != '' ? '+/'.substitute(escape(a:candidate.pattern, '\. ', 'g'), '[\[\]~/^$]', '\\\\\0', 'g') : '')
+        \ (has_key(a:candidate, 'pattern') && a:candidate.pattern != '' ? '+/'.escape(a:candidate.pattern, '\t /'))
         \ '`=a:candidate.word`'
 endfunction"}}}
 "}}}

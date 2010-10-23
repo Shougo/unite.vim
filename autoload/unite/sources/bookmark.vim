@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2010
+" Last Modified: 23 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,17 +44,17 @@ function! unite#sources#bookmark#_append(filename)"{{{
     " Append the current buffer to the bookmark list.
     let l:path = expand('%:p')
     let l:linenr = line('.')
-    let l:pattern = escape(getline('.'), '~"\.^*$[]')
+    let l:pattern = '^' . escape(getline('.'), '~"\.^*$[]') . '$'
   else
     let l:path = fnamemodify(a:filename, ':p')
     let l:linenr = ''
     let l:pattern = ''
   endif
-  
+
   let l:filename = (a:filename == '' ? expand('%') : a:filename)
   if bufexists(l:filename)
     let l:filetype = getbufvar(l:path, '&filetype')
-    
+
     " Detect vimfiler and vimshell.
     if l:filetype ==# 'vimfiler'
       let l:path = getbufvar(l:path, 'vimfiler').current_dir
@@ -62,16 +62,16 @@ function! unite#sources#bookmark#_append(filename)"{{{
       let l:path = getbufvar(l:path, 'vimshell').save_dir
     endif
   endif
-  
+
   let l:path = substitute(l:path, '\\', '/', 'g')
   if !s:is_exists_path(path)
     return
   endif
-  
+
   redraw
   echo a:filename
   let l:name = input('Please input bookmark name : ')
-  
+
   call s:load()
   call insert(s:bookmark_files, [l:name, l:path, l:linenr, l:pattern])
   call s:save()

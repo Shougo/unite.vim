@@ -249,7 +249,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
 
   let l:sources = extend(copy(s:default_sources), s:custom_sources)
   let l:options = ['-buffer-name=', '-input=', '-prompt=',  '-default-action=', '-start-insert']
-  return filter(keys(l:sources)+l:options, printf('stridx(v:val, %s) == 0', string(a:arglead)))
+  return filter(keys(l:sources)+l:options, 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
 function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
   let l:buffer_list = map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite"'), 'getbufvar(v:val, "unite").buffer_name')
