@@ -58,7 +58,7 @@ function! unite#sources#file_mru#_append()"{{{
   call insert(filter(s:mru_files, 'v:val.word !=# l:path'),
   \           s:convert2dictionary([l:path, localtime()]))
 
-  if len(l:old_mru) < len(s:mru_files)
+  if len(l:old_mru) > len(s:mru_files)
     call unite#print_error('MRU list is shortend.')
     call unite#print_error('Old MRU list = ' . string(l:old_mru))
     call unite#print_error('New MRU list = ' . string(s:mru_files))
@@ -139,7 +139,7 @@ function! s:load()  "{{{
     \              'split(v:val, "\t")'), 's:is_exists_path(v:val[0])'),
     \              's:convert2dictionary(v:val)')
 
-    if len(l:old_mru) < len(s:mru_files)
+    if len(l:old_mru) > len(s:mru_files)
       call unite#print_error('MRU list is shortend.')
       call unite#print_error('Old MRU list = ' . string(l:old_mru))
       call unite#print_error('New MRU list = ' . string(s:mru_files))
