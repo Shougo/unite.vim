@@ -91,9 +91,9 @@ endfunction"}}}
 let s:action_table = {}
 
 let s:action_table.delete = {
-      \ 'is_invalidate_cache' : 1, 
-      \ 'is_quit' : 0, 
-      \ 'is_selectable' : 1, 
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+      \ 'is_selectable' : 1,
       \ }
 function! s:action_table.delete.func(candidate)"{{{
   call filter(s:mru_files, 'v:val.word !=# ' . string(a:candidate.word))
