@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Oct 2010
+" Last Modified: 23 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,9 +52,17 @@ function! unite#sources#file_mru#_append()"{{{
     return
   endif
 
+  let l:old_mru = copy(s:mru_files)
+
   call s:load()
   call insert(filter(s:mru_files, 'v:val.word !=# l:path'),
   \           s:convert2dictionary([l:path, localtime()]))
+
+  if len(l:old_mru) < len(s:mru_files)
+    call unite#print_error('MRU list is shortend.')
+    call unite#print_error('Old MRU list = ' . string(l:old_mru))
+    call unite#print_error('New MRU list = ' . string(s:mru_files))
+  endif
 
   if g:unite_source_file_mru_limit > 0
     unlet s:mru_files[g:unite_source_file_mru_limit]
@@ -106,7 +114,7 @@ let s:source.action_table.directory = s:action_table
 
 " Misc
 function! s:compare(candidate_a, candidate_b)"{{{
-  return a:candidate_b['unite_file_mru_time'] - a:candidate_a['unite_file_mru_time']
+  return a:candidate_b.unite_file_mru_time - a:candidate_a.unite_file_mru_time
 endfunction"}}}
 function! s:save()  "{{{
   call writefile([s:VERSION] + map(copy(s:mru_files), 'join(s:convert2list(v:val), "\t")'),
@@ -117,18 +125,26 @@ function! s:load()  "{{{
   if filereadable(g:unite_source_file_mru_file)
   \  && s:mru_file_mtime != getftime(g:unite_source_file_mru_file)
     let [ver; s:mru_files] = readfile(g:unite_source_file_mru_file)
-    
+
     if ver !=# s:VERSION
       call unite#print_error('Sorry, the version of MRU file is old.  Clears the MRU list.')
       let s:mru_files = []
       return
     endif
-    
+
+    let l:old_mru = copy(s:mru_files)
+
     let s:mru_files =
     \   map(filter(map(s:mru_files[: g:unite_source_file_mru_limit - 1],
     \              'split(v:val, "\t")'), 's:is_exists_path(v:val[0])'),
     \              's:convert2dictionary(v:val)')
-    
+
+    if len(l:old_mru) < len(s:mru_files)
+      call unite#print_error('MRU list is shortend.')
+      call unite#print_error('Old MRU list = ' . string(l:old_mru))
+      call unite#print_error('New MRU list = ' . string(s:mru_files))
+    endif
+
     let s:mru_file_mtime = getftime(g:unite_source_file_mru_file)
   endif
 endfunction"}}}
