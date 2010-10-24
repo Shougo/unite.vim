@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2010
+" Last Modified: 24 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,7 +92,7 @@ function! s:source.gather_candidates(args, context)"{{{
     let l:mru.abbr = substitute(l:abbr, '\\', '/', 'g')
   endfor
 
-  return sort(s:mru_files, 's:compare')
+  return s:mru_files
 endfunction"}}}
 
 " Actions"{{{
@@ -113,9 +113,6 @@ let s:source.action_table.directory = s:action_table
 "}}}
 
 " Misc
-function! s:compare(candidate_a, candidate_b)"{{{
-  return a:candidate_b.unite_file_mru_time - a:candidate_a.unite_file_mru_time
-endfunction"}}}
 function! s:save()  "{{{
   call writefile([s:VERSION] + map(copy(s:mru_files), 'join(s:convert2list(v:val), "\t")'),
   \              g:unite_source_file_mru_file)
@@ -124,6 +121,8 @@ endfunction"}}}
 function! s:load()  "{{{
   if filereadable(g:unite_source_file_mru_file)
   \  && s:mru_file_mtime != getftime(g:unite_source_file_mru_file)
+    let l:old_mru = copy(s:mru_files)
+
     let [ver; s:mru_files] = readfile(g:unite_source_file_mru_file)
 
     if ver !=# s:VERSION
@@ -131,8 +130,6 @@ function! s:load()  "{{{
       let s:mru_files = []
       return
     endif
-
-    let l:old_mru = copy(s:mru_files)
 
     let s:mru_files =
     \   map(filter(map(s:mru_files[: g:unite_source_file_mru_limit - 1],

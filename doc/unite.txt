@@ -292,6 +292,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-24
+- Improved file_mru.
+
 2010-10-23
 - Fixed jump_list.
 
