@@ -71,6 +71,13 @@ function! s:source.gather_candidates(args, context)"{{{
     if l:cwd != ''
       let l:abbr .= '(' . l:cwd . ')'
     endif
+    let l:wincount = tabpagewinnr(i, '$')
+    if i == tabpagenr()
+      let l:wincount -= 1
+    endif
+    if l:wincount > 1
+      let l:abbr .= '{' . l:wincount . '}'
+    endif
     let l:abbr .= getbufvar(bufnr('%'), '&modified') ? '[+]' : ''
 
     call add(l:candidates, {
