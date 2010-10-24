@@ -657,6 +657,11 @@ buffer		開いているバッファを候補とする。バッファは使用し
 buffer_tab	現在のタブで開いたバッファを候補とする。バッファは使用した順番
 		に整列される。
 
+						*unite-source-tab*
+tab		開いているタブを候補とする。t:cwdをカレントディレクトリ、
+		t:titleをタブのタイトルとして認識する。ただし、|gettabvar()|が
+		使用可能である必要がある。
+
 						*unite-source-register*
 register	レジスタに保存されている文字列を候補とする。
 
@@ -679,6 +684,9 @@ file		ファイル
 
 						*unite-kind-buffer*
 buffer		バッファ
+
+						*unite-kind-tab*
+tab		タブ
 
 						*unite-kind-directory*
 directory	ディレクトリ
@@ -745,6 +753,10 @@ buffer						*unite-action-buffer*
 	lcd		現在のウィンドウのカレントディレクトリを変更
 	bookmark	候補をブックマークに追加する
 
+tab						*unite-action-tab*
+	open		タブを表示
+	delete		タブを閉じる
+
 directory					*unite-action-directory*
 このkindは|unite-action-file|のアクションを継承している。ここではdirectory独自
 のアクションについて解説する。
@@ -778,6 +790,7 @@ kind		アクション
 ----------	----------
 file		open
 buffer		open
+tab		open
 directory	narrow
 word		insert
 jump_list	open
