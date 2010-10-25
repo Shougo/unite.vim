@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Oct 2010
+" Last Modified: 25 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -168,11 +168,11 @@ function! unite#available_sources_list()"{{{
 endfunction"}}}
 function! unite#available_sources(...)"{{{
   let l:unite = s:get_unite()
-  return a:0 == 0 ? l:unite.sources : l:unite.sources[a:1]
+  return a:0 == 0 ? l:unite.sources : get(l:unite.sources, a:1, {})
 endfunction"}}}
 function! unite#available_kinds(...)"{{{
   let l:unite = s:get_unite()
-  return a:0 == 0 ? l:unite.kinds : l:unite.kinds[a:1]
+  return a:0 == 0 ? l:unite.kinds : get(l:unite.kinds, a:1, {})
 endfunction"}}}
 function! unite#get_action_table(source_name, kind_name, ...)"{{{
   let l:kind = unite#available_kinds(a:kind_name)
@@ -263,7 +263,10 @@ function! unite#set_default(var, val)  "{{{
 endfunction"}}}
 function! unite#invalidate_cache(source_name)  "{{{
   let l:unite = s:get_unite()
-  let l:unite.sources[a:source_name].unite__is_invalidate = 1
+
+  if has_key(l:unite.sources, a:source_name)
+    let l:unite.sources[a:source_name].unite__is_invalidate = 1
+  endif
 endfunction"}}}
 function! unite#force_redraw() "{{{
   call s:redraw(1)
