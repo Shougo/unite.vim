@@ -292,6 +292,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-26
+- Added g:unite_winheight option.
+
 2010-10-25
 - Fixed unite#invalidate_cache() error.
 

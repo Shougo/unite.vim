@@ -219,6 +219,12 @@ g:unite_enable_split_vertically			*g:unite_enable_split_vertically*
 		
 		初期値は0なので、水平分割である。
 
+g:unite_winheight				*g:unite_winheight*
+		uniteのウィンドウが水平分割されたときの高さを指定する。垂直分割
+		の場合は無視される。
+		
+		初期値は20である。
+
 g:unite_cd_command				*g:unite_cd_command*
 		cdアクションで実行されるVimのコマンドを指定する。
 		

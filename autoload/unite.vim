@@ -432,7 +432,7 @@ function! unite#resume(buffer_name)"{{{
   let b:unite.win_rest_cmd = l:win_rest_cmd
 
   if !g:unite_enable_split_vertically
-    20 wincmd _
+    execute g:unite_winheight 'wincmd _'
   endif
 
   setlocal modifiable
