@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Oct 2010
+" Last Modified: 26 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -82,14 +82,7 @@ function! s:source.gather_candidates(args, context)"{{{
 
   " Create abbr.
   for l:mru in s:mru_files
-    let l:abbr = strftime(g:unite_source_file_mru_time_format, l:mru.unite_file_mru_time) .
-          \          fnamemodify(l:mru.word, ':.')
-
-    if l:abbr == ''
-      let l:abbr = strftime(g:unite_source_file_mru_time_format, l:mru.unite_file_mru_time) . l:mru.word
-    endif
-
-    let l:mru.abbr = substitute(l:abbr, '\\', '/', 'g')
+    let l:mru.abbr = strftime(g:unite_source_file_mru_time_format, l:mru.unite_file_mru_time) . l:mru.word
   endfor
 
   return s:mru_files
@@ -150,7 +143,7 @@ function! s:is_exists_path(path)  "{{{
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
   return {
-        \ 'word' : a:list[0],
+        \ 'word' : substitute(a:list[0], '\\', '/', 'g'),
         \ 'source' : 'file_mru',
         \ 'unite_file_mru_time' : a:list[1],
         \ 'kind' : (isdirectory(a:list[0]) ? 'directory' : 'file'),

@@ -295,6 +295,7 @@ CHANGELOG					*unite-changelog*
 2010-10-26
 - Added g:unite_winheight option.
 - Improved modifiable.
+- Improved file_mru abbr.
 
 2010-10-25
 - Fixed unite#invalidate_cache() error.
