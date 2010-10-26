@@ -65,6 +65,7 @@ function! unite#sources#file_mru#_append()"{{{
   endif
 
   if g:unite_source_file_mru_limit > 0
+        \ && len(s:mru_files) > g:unite_source_file_mru_limit
     unlet s:mru_files[g:unite_source_file_mru_limit]
   endif
 
@@ -125,9 +126,9 @@ function! s:load()  "{{{
     endif
 
     let s:mru_files =
-    \   map(filter(map(s:mru_files[: g:unite_source_file_mru_limit - 1],
-    \              'split(v:val, "\t")'), 's:is_exists_path(v:val[0])'),
-    \              's:convert2dictionary(v:val)')
+    \   map(s:mru_files[: g:unite_source_file_mru_limit - 1],
+    \              's:convert2dictionary(split(v:val, "\t"))')
+    call filter(s:mru_files, 's:is_exists_path(v:val.word)')
 
     if len(l:old_mru) > len(s:mru_files)
       call unite#print_error('MRU list is shortend.')
