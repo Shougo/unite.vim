@@ -570,7 +570,7 @@ function! s:gather_candidates(text, context)"{{{
       let l:source_candidates =
             \ (has_key(l:source, 'required_pattern_length')
             \   && len(l:context.input) < l:source.required_pattern_length) ?
-            \ [] : l:source.gather_candidates(l:source.args, l:context)
+            \ [] : copy(l:source.gather_candidates(l:source.args, l:context))
 
       let l:source.unite__is_invalidate = 0
 

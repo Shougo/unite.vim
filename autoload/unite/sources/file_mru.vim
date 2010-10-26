@@ -52,21 +52,12 @@ function! unite#sources#file_mru#_append()"{{{
     return
   endif
 
-  let l:old_mru = copy(s:mru_files)
-
   call s:load()
   call insert(filter(s:mru_files, 'v:val.word !=# l:path'),
   \           s:convert2dictionary([l:path, localtime()]))
 
-  if len(l:old_mru) > len(s:mru_files)
-    call unite#print_error('MRU list is shortend.')
-    call unite#print_error('Old MRU list = ' . string(l:old_mru))
-    call unite#print_error('New MRU list = ' . string(s:mru_files))
-  endif
-
   if g:unite_source_file_mru_limit > 0
-        \ && len(s:mru_files) > g:unite_source_file_mru_limit
-    let s:mru_files = s:mru_files[: g:unite_source_file_mru_limit - 1]
+    unlet s:mru_files[g:unite_source_file_mru_limit]
   endif
 
   call s:save()
@@ -115,8 +106,6 @@ endfunction"}}}
 function! s:load()  "{{{
   if filereadable(g:unite_source_file_mru_file)
   \  && s:mru_file_mtime != getftime(g:unite_source_file_mru_file)
-    let l:old_mru = copy(s:mru_files)
-
     let [ver; s:mru_files] = readfile(g:unite_source_file_mru_file)
 
     if ver !=# s:VERSION
@@ -128,13 +117,7 @@ function! s:load()  "{{{
     let s:mru_files =
     \   map(s:mru_files[: g:unite_source_file_mru_limit - 1],
     \              's:convert2dictionary(split(v:val, "\t"))')
-    " call filter(s:mru_files, 's:is_exists_path(v:val.word)')
-
-    if len(l:old_mru) > len(s:mru_files)
-      call unite#print_error('MRU list is shortend.')
-      call unite#print_error('Old MRU list = ' . string(l:old_mru))
-      call unite#print_error('New MRU list = ' . string(s:mru_files))
-    endif
+    call filter(s:mru_files, 's:is_exists_path(v:val.word)')
 
     let s:mru_file_mtime = getftime(g:unite_source_file_mru_file)
   endif
