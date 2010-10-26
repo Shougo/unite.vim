@@ -746,6 +746,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   endif
 
   " User's initialization.
+  setlocal nomodifiable
   setfiletype unite
 
   " Set highlight.

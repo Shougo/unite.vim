@@ -97,7 +97,7 @@ let s:action_table.delete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:action_table.delete.func(candidate)"{{{
-  call filter(s:mru_files, 'v:val.word !=# ' . string(a:candidate.word))
+  call filter(s:mru_files, 'v:val.word !=# a:candidate.word')
   call s:save()
 endfunction"}}}
 
