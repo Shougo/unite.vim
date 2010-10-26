@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Oct 2010
+" Last Modified: 26 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,7 @@ function! s:source.gather_candidates(args, context)"{{{
     let l:bufnrs = tabpagebuflist(i)
     let l:bufnr = l:bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
 
-    let l:bufname = fnamemodify((i == tabpagenr() ? bufname('#') : bufname(l:bufnr)), ':t')
+    let l:bufname = substitute(fnamemodify((i == tabpagenr() ? bufname('#') : bufname(l:bufnr)), ':p'), '\\', '/', 'g')
     if l:bufname == ''
       let l:bufname = '[No Name]'
     endif
@@ -61,16 +61,31 @@ function! s:source.gather_candidates(args, context)"{{{
     if exists('*gettabvar')
       " Use gettabvar().
       let l:title = gettabvar(i, 'title')
+      if l:title != ''
+        let l:title = '[' . l:title . ']'
+      endif
+
       let l:cwd = substitute((i == tabpagenr() ? getcwd() : gettabvar(i, 'cwd')), '\\', '/', 'g')
+      if l:cwd !~ '/$'
+        let l:cwd .= '/'
+      endif
     else
       let l:title = ''
       let l:cwd = ''
     endif
 
-    let l:abbr = (i-1) . ': ' . l:title . l:bufname
+    let l:abbr = i . ': ' . l:title
     if l:cwd != ''
-      let l:abbr .= '(' . l:cwd . ')'
+      if stridx(l:bufname, l:cwd) == 0
+        let l:bufname = l:bufname[len(l:cwd) :]
+      endif
+      let l:abbr .= l:bufname
+
+      let l:abbr .= '(' . substitute(l:cwd, '.\zs/$', '', '') . ')'
+    else
+      let l:abbr .= l:bufname
     endif
+
     let l:wincount = tabpagewinnr(i, '$')
     if i == tabpagenr()
       let l:wincount -= 1

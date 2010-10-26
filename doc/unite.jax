@@ -766,6 +766,7 @@ tab						*unite-action-tab*
 	次のアクションは|gettabvar()|およびt:cwdが存在する必要がある。
 	cd		カレントディレクトリを変更
 	lcd		現在のウィンドウのカレントディレクトリを変更
+	rename		タブのタイトルを変更
 
 directory					*unite-action-directory*
 このkindは|unite-action-file|のアクションを継承している。ここではdirectory独自

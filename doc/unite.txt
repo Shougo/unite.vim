@@ -297,6 +297,8 @@ CHANGELOG					*unite-changelog*
 - Improved modifiable.
 - Improved file_mru abbr.
 - Improved file_mru load.
+- Improved unite_tab.
+- Added rename action in kind tab.
 
 2010-10-25
 - Fixed unite#invalidate_cache() error.

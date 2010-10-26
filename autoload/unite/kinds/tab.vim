@@ -85,6 +85,19 @@ if exists('*gettabvar')
 
     execute g:unite_lcd_command '`=l:dir`'
   endfunction"}}}
+
+  let s:kind.action_table.rename = {
+      \ 'is_selectable' : 1,
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+        \ }
+  function! s:kind.action_table.rename.func(candidate)"{{{
+    let l:old_title = gettabvar(a:candidate.unite_tab_nr, 'title')
+    let l:title = input(printf('New title: %s -> ', l:old_title), l:old_title)
+    if l:title != ''
+      call settabvar(a:candidate.unite_tab_nr, 'title', l:title)
+    endif
+  endfunction"}}}
 endif
 "}}}
 
