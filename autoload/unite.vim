@@ -281,24 +281,22 @@ function! unite#redraw_line(...) "{{{
     return
   endif
 
+  let l:modifiable_save = &l:modifiable
   setlocal modifiable
 
   let l:candidate = unite#get_unite_candidates()[l:linenr - 3]
   call setline(l:linenr, s:convert_line(l:candidate))
 
-  setlocal nomodifiable
+  let &l:modifiable = l:modifiable_save
 endfunction"}}}
 function! unite#quick_match_redraw() "{{{
-  if mode() != 'i'
-    setlocal modifiable
-  endif
+  let l:modifiable_save = &l:modifiable
+  setlocal modifiable
 
   call setline(3, s:convert_quick_match_lines(b:unite.candidates))
   redraw
 
-  if mode() != 'i'
-    setlocal nomodifiable
-  endif
+  let &l:modifiable = l:modifiable_save
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{
   return filter(copy(unite#get_unite_candidates()), 'v:val.unite__is_marked')
@@ -383,6 +381,10 @@ function! unite#start(sources, ...)"{{{
 
   call unite#force_redraw()
 
+  if !g:unite_enable_split_vertically
+    execute g:unite_winheight 'wincmd _'
+  endif
+
   if g:unite_enable_start_insert
         \ || b:unite.context.start_insert || b:unite.context.is_insert
     2
@@ -434,8 +436,6 @@ function! unite#resume(buffer_name)"{{{
   if !g:unite_enable_split_vertically
     execute g:unite_winheight 'wincmd _'
   endif
-
-  setlocal modifiable
 
   if g:unite_enable_start_insert
     2
@@ -741,15 +741,8 @@ function! s:initialize_unite_buffer(sources, context)"{{{
     let &redrawtime = 500
   endif
 
-  if !g:unite_enable_split_vertically
-    20 wincmd _
-  endif
-
   " User's initialization.
-  setlocal nomodifiable
   setfiletype unite
-
-  setlocal modifiable
 
   " Set highlight.
   let l:match_prompt = escape(b:unite.prompt, '\/*~.^$[]')
@@ -804,9 +797,8 @@ function! s:redraw(is_force) "{{{
 
   let &ignorecase = l:ignorecase_save
 
-  if mode() != 'i'
-    setlocal modifiable
-  endif
+  let l:modifiable_save = &l:modifiable
+  setlocal modifiable
 
   let l:lines = s:convert_lines(l:candidates)
   if len(l:lines) < len(b:unite.candidates)
@@ -821,9 +813,7 @@ function! s:redraw(is_force) "{{{
   endif
   call setline(3, l:lines)
 
-  if mode() != 'i'
-    setlocal nomodifiable
-  endif
+  let &l:modifiable = l:modifiable_save
 
   let b:unite.candidates = l:candidates
 endfunction"}}}
