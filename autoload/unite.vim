@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Oct 2010
+" Last Modified: 26 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -374,6 +374,8 @@ function! unite#start(sources, ...)"{{{
     return
   endtry
 
+  setlocal modifiable
+
   silent % delete _
   call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(a:sources), 'v:val[0]'), ', '))
   call setline(s:LNUM_PATTERN, b:unite.prompt . b:unite.context.input)
@@ -436,6 +438,8 @@ function! unite#resume(buffer_name)"{{{
   if !g:unite_enable_split_vertically
     execute g:unite_winheight 'wincmd _'
   endif
+
+  setlocal modifiable
 
   if g:unite_enable_start_insert
     2
