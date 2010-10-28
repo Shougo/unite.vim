@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2010
+" Last Modified: 28 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,6 +53,10 @@ function! unite#util#truncate(str, width)"{{{
   endif
 
   return ret
+endfunction"}}}
+
+function! unite#util#strchars(str)"{{{
+  return len(substitute(a:str, '.', 'x', 'g'))
 endfunction"}}}
 
 if v:version >= 703

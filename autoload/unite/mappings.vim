@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Oct 2010
+" Last Modified: 28 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -218,6 +218,7 @@ function! s:toggle_mark()"{{{
   endif
 
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
+  let l:candidate.unite__marked_count = len(unite#get_marked_candidates())
   let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
   call unite#redraw_line()
 
@@ -232,6 +233,7 @@ function! s:toggle_mark_candidates(start, end)"{{{
   let l:cnt = a:start
   while l:cnt <= a:end
     let l:candidate = unite#get_unite_candidates()[l:cnt - 3]
+    let l:candidate.unite__marked_count = len(unite#get_marked_candidates())
     let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
 
     call unite#redraw_line(l:cnt)

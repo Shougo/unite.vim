@@ -299,7 +299,7 @@ function! unite#quick_match_redraw() "{{{
   let &l:modifiable = l:modifiable_save
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{
-  return filter(copy(unite#get_unite_candidates()), 'v:val.unite__is_marked')
+  return sort(filter(copy(unite#get_unite_candidates()), 'v:val.unite__is_marked'), 's:compare_marked_candidates')
 endfunction"}}}
 function! unite#keyword_filter(list, input)"{{{
   for l:input in split(a:input, '\\\@<! ')
@@ -555,9 +555,9 @@ endfunction"}}}
 function! s:initialize_kinds()"{{{
   return extend(copy(s:default_kinds), s:custom_kinds)
 endfunction"}}}
-function! s:gather_candidates(text, context)"{{{
+function! s:gather_candidates(input, context)"{{{
   let l:context = a:context
-  let l:input_list = filter(split(a:text, '\\\@<! ', 1), 'v:val !~ "!"')
+  let l:input_list = filter(split(a:input, '\\\@<! ', 1), 'v:val !~ "!"')
   let l:context.input = empty(l:input_list) ? '' : l:input_list[0]
 
   let l:candidates = []
@@ -588,8 +588,8 @@ function! s:gather_candidates(text, context)"{{{
       endif
     endfor
 
-    if a:text != ''
-      call unite#keyword_filter(l:source_candidates, a:text)
+    if a:input != ''
+      call unite#keyword_filter(l:source_candidates, a:input)
     endif
 
     if has_key(l:source, 'max_candidates') && l:source.max_candidates != 0
@@ -870,6 +870,9 @@ function! s:compare_sources(source_a, source_b) "{{{
 endfunction"}}}
 function! s:compare_substitute_patterns(pattern_a, pattern_b)"{{{
   return a:pattern_b.priority - a:pattern_a.priority
+endfunction"}}}
+function! s:compare_marked_candidates(candidate_a, candidate_b)"{{{
+  return a:candidate_a.unite__marked_count - a:candidate_b.unite__marked_count
 endfunction"}}}
 function! s:filter_alias_action(action_table, alias_table)"{{{
   for [l:alias_name, l:alias_action] in items(a:alias_table)
