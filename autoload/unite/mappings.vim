@@ -218,8 +218,8 @@ function! s:toggle_mark()"{{{
   endif
 
   let l:candidate = unite#get_unite_candidates()[line('.') - 3]
-  let l:candidate.unite__marked_count = len(unite#get_marked_candidates())
   let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
+  let l:candidate.unite__marked_time = localtime()
   call unite#redraw_line()
 
   normal! j
@@ -233,8 +233,8 @@ function! s:toggle_mark_candidates(start, end)"{{{
   let l:cnt = a:start
   while l:cnt <= a:end
     let l:candidate = unite#get_unite_candidates()[l:cnt - 3]
-    let l:candidate.unite__marked_count = len(unite#get_marked_candidates())
     let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
+    let l:candidate.unite__marked_time = localtime()
 
     call unite#redraw_line(l:cnt)
 

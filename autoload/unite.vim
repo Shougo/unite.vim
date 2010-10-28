@@ -872,7 +872,7 @@ function! s:compare_substitute_patterns(pattern_a, pattern_b)"{{{
   return a:pattern_b.priority - a:pattern_a.priority
 endfunction"}}}
 function! s:compare_marked_candidates(candidate_a, candidate_b)"{{{
-  return a:candidate_a.unite__marked_count - a:candidate_b.unite__marked_count
+  return a:candidate_a.unite__marked_time - a:candidate_b.unite__marked_time
 endfunction"}}}
 function! s:filter_alias_action(action_table, alias_table)"{{{
   for [l:alias_name, l:alias_action] in items(a:alias_table)
