@@ -715,6 +715,7 @@ common					*unite-action-common*
 全てのkindに共通なインタフェースを定義している。
 	nop		何もしない
 	yank		ヤンクする
+	ex		候補をコマンドラインに入力した状態にする
 
 openable					*unite-action-openable*
 オープン可能ファイルのインタフェースを定義している。
@@ -736,8 +737,6 @@ file						*unite-action-file*
 	preview		プレビューウィンドウにファイルを開く
 	cd		カレントディレクトリを変更
 	lcd		現在のウィンドウのカレントディレクトリを変更
-	ex		候補をコマンドラインに入力した状態にする。
-			選択した状態では動作しない。
 	bookmark	候補をブックマークに追加する
 	narrow		ファイルのあるディレクトリ名で候補を絞り込む
 	vimshell	そのディレクトリで|vimshell|を起動する。これ
@@ -761,7 +760,7 @@ buffer						*unite-action-buffer*
 
 tab						*unite-action-tab*
 	open		タブを表示
-	delete		タブを閉じる。複数選択不可。
+	delete		タブを閉じる
 	
 	次のアクションは|gettabvar()|およびt:cwdが存在する必要がある。
 	cd		カレントディレクトリを変更

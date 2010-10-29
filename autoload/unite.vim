@@ -435,6 +435,8 @@ function! unite#resume(buffer_name)"{{{
   let b:unite.old_winnr = l:winnr
   let b:unite.win_rest_cmd = l:win_rest_cmd
 
+  let s:unite = b:unite
+
   if !g:unite_enable_split_vertically
     execute g:unite_winheight 'wincmd _'
   endif
@@ -710,6 +712,8 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.input = l:context.input
   let b:unite.last_input = l:context.input
   let b:unite.bufnr = bufnr('%')
+
+  let s:unite = b:unite
 
   let s:last_unite_bufnr = bufnr('%')
 

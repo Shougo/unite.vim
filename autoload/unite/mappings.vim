@@ -162,40 +162,50 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     let l:action = l:action_table[l:action_name]
 
     " Check selectable flag.
-    if has_key(l:action, 'is_selectable') && !l:action.is_selectable
+    if (!has_key(l:action, 'is_selectable') || !l:action.is_selectable)
           \ && len(l:candidates) > 1
       call unite#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
       call unite#print_error('Not selectable action : ' . l:action_name)
       return
     endif
+
+    let l:found = 0
+    for l:table in l:action_tables
+      if l:action == l:table.action
+        " Add list.
+        call add(l:table.candidates, l:candidate)
+        call add(l:table.source_names, l:candidate.source)
+        let l:found = 1
+        break
+      endif
+    endfor
+
+    if !l:found
+      " Add action table.
+      call add(l:action_tables, {
+            \ 'action' : l:action,
+            \ 'source_names' : [l:candidate.source],
+            \ 'candidates' : ((!has_key(l:action, 'is_selectable') || !l:action.is_selectable) ? l:candidate : [l:candidate]),
+            \ })
+    endif
   endfor
 
   " Execute action.
   let l:is_redraw = 0
-  for l:candidate in l:candidates
-    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
-
-    let l:action_name =
-          \ a:action_name ==# 'default' ?
-          \ unite#get_default_action(l:candidate.source, l:candidate.kind)
-          \ : a:action_name
-
-    let l:action = l:action_table[l:action_name]
-
+  for l:table in l:action_tables
     " Check quit flag.
-    if !has_key(l:action, 'is_quit') || l:action.is_quit
+    if !has_key(l:table.action, 'is_quit') || l:table.action.is_quit
       call unite#quit_session()
     endif
 
-    if has_key(l:action, 'is_selectable') && l:action.is_selectable
-      call l:action.func([l:candidate])
-    else
-      call l:action.func(l:candidate)
-    endif
+    call l:table.action.func(l:table.candidates)
 
     " Check invalidate cache flag.
-    if has_key(l:action, 'is_invalidate_cache') && l:action.is_invalidate_cache
-      call unite#invalidate_cache(l:candidate.source)
+    if has_key(l:table.action, 'is_invalidate_cache') && l:table.action.is_invalidate_cache
+      for l:source_name in l:table.source_names
+        call unite#invalidate_cache(l:source_name)
+      endfor
+
       let l:is_redraw = 1
     endif
   endfor
