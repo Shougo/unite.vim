@@ -141,18 +141,21 @@ function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
   endfor
 endfunction"}}}
 function! unite#take_action(action_name, candidate)"{{{
-  let l:action_table = unite#get_action_table(a:candidate.source, a:candidate.kind, 0)
+  let l:candidate = type(a:candidate) == type([]) ?
+        \ a:candidate[0] : a:candidate
+
+  let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, 0)
 
   let l:action_name =
         \ a:action_name ==# 'default' ?
-        \ unite#get_default_action(a:candidate.source, a:candidate.kind)
+        \ unite#get_default_action(l:candidate.source, l:candidate.kind)
         \ : a:action_name
 
   if !has_key(l:action_table, a:action_name)
     return 'no such action ' . a:action_name
   endif
 
-  return l:action_table[a:action_name].func(a:candidate)
+  call l:action_table[a:action_name].func(a:candidate)
 endfunction"}}}
 function! unite#is_win()"{{{
   return has('win16') || has('win32') || has('win64')

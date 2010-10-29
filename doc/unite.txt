@@ -295,6 +295,7 @@ CHANGELOG					*unite-changelog*
 2010-10-29
 - Improved selectable action(experimental).
 - Improved tab action.
+- Fixed unite#take_action().
 
 2010-10-28
 - Improved util.vim.

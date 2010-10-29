@@ -596,8 +596,8 @@ unite#custom_action({kind}, {name}, {action})
 		let my_tabopen = {
 		\ 'is_selectable' : 1,
 		\ }
-		function! my_tabopen.func(candidate)
-		  call unite#take_action('tabopen', a:candidate)
+		function! my_tabopen.func(candidates)
+		  call unite#take_action('tabopen', a:candidates)
 		
 		  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
 		  execute g:unite_lcd_command '`=l:dir`'
@@ -621,6 +621,8 @@ unite#take_action({action-name}, {candidate})
 		主に、unite#custom_action()などで用いる。
 		ただし、unite#custom_alias()やunite#custom_action()で定義された
 		アクションは呼び出せない。
+		is_selectableなアクションの場合は{candidate}にリストを渡さなけ
+		ればならない。
 
 unite#define_source({source})			*unite#define_source()*
 		{source}を動的に追加する。sourceの仕様については、
