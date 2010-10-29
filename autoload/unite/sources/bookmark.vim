@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2010
+" Last Modified: 29 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -104,9 +104,12 @@ let s:action_table.delete = {
       \ 'is_quit' : 0, 
       \ 'is_selectable' : 1, 
       \ }
-function! s:action_table.delete.func(candidate)"{{{
-  call filter(s:bookmark_files, 'string(v:val) !=# ' .
-        \ string(string([a:candidate.bookmark_name, a:candidate.word, a:candidate.line, a:candidate.pattern])))
+function! s:action_table.delete.func(candidates)"{{{
+  for l:candidate in a:candidates
+    call filter(s:bookmark_files, 'string(v:val) !=# ' .
+        \ string(string([a:candidate.bookmark_name, l:candidate.word, l:candidate.line, l:candidate.pattern])))
+  endfor
+
   call s:save()
 endfunction"}}}
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: common.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2010
+" Last Modified: 29 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,6 +44,14 @@ let s:kind.action_table.yank = {
       \ }
 function! s:kind.action_table.yank.func(candidate)"{{{
   let @" = a:candidate.word
+endfunction"}}}
+
+let s:kind.action_table.ex = {
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.ex.func(candidates)"{{{
+  " Result is ':| {candidate}', here '|' means the cursor position.
+  call feedkeys(printf(": %s\<C-b>", join(map(map(copy(a:candidates), 'v:val.word'), 'escape(v:val, " *?[{`$\\%#''|!<")'))), 'n')
 endfunction"}}}
 
 "}}}

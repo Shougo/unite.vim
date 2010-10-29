@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Oct 2010
+" Last Modified: 29 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -144,6 +144,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   endif
 
   " Check action.
+  let l:action_tables = []
   for l:candidate in l:candidates
     let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
 
@@ -186,7 +187,11 @@ function! unite#mappings#do_action(action_name, ...)"{{{
       call unite#quit_session()
     endif
 
-    call l:action.func(l:candidate)
+    if has_key(l:action, 'is_selectable') && l:action.is_selectable
+      call l:action.func([l:candidate])
+    else
+      call l:action.func(l:candidate)
+    endif
 
     " Check invalidate cache flag.
     if has_key(l:action, 'is_invalidate_cache') && l:action.is_invalidate_cache

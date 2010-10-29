@@ -42,11 +42,14 @@ function! s:kind.action_table.open.func(candidate)"{{{
 endfunction"}}}
 
 let s:kind.action_table.delete = {
+      \ 'is_selectable' : 1,
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.delete.func(candidate)"{{{
-  execute 'tabclose' a:candidate.unite_tab_nr
+  for l:candidate in sort(a:candidates, 's:compare')
+    execute 'tabclose' l:candidate.unite_tab_nr
+  endfor
 endfunction"}}}
 
 if exists('*gettabvar')
@@ -91,14 +94,21 @@ if exists('*gettabvar')
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
         \ }
-  function! s:kind.action_table.rename.func(candidate)"{{{
-    let l:old_title = gettabvar(a:candidate.unite_tab_nr, 'title')
-    let l:title = input(printf('New title: %s -> ', l:old_title), l:old_title)
-    if l:title != ''
-      call settabvar(a:candidate.unite_tab_nr, 'title', l:title)
-    endif
+  function! s:kind.action_table.rename.func(candidates)"{{{
+    for l:candidate in a:candidates
+      let l:old_title = gettabvar(a:candidate.unite_tab_nr, 'title')
+      let l:title = input(printf('New title: %s -> ', l:old_title), l:old_title)
+      if l:title != ''
+        call settabvar(a:candidate.unite_tab_nr, 'title', l:title)
+      endif
+    endfor
   endfunction"}}}
 endif
 "}}}
+
+" Misc
+function! s:compare(candidate_a, candidate_b)"{{{
+  return a:candidate_a.unite_tab_nr - a:candidate_b.unite_tab_nr
+endfunction"}}}
 
 " vim: foldmethod=marker

@@ -40,8 +40,10 @@ let s:kind.action_table = deepcopy(unite#kinds#openable#define().action_table)
 let s:kind.action_table.open = {
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.open.func(candidate)"{{{
-  return s:open('', a:candidate)
+function! s:kind.action_table.open.func(candidates)"{{{
+  for l:candidate in a:candidates
+    call s:open('', l:candidate)
+  endfor
 endfunction"}}}
 
 let s:kind.action_table.preview = {
@@ -56,15 +58,19 @@ let s:kind.action_table.delete = {
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.delete.func(candidate)"{{{
-  return s:delete('bdelete', a:candidate)
+function! s:kind.action_table.delete.func(candidates)"{{{
+  for l:candidate in a:candidates
+    call s:delete('bdelete', l:candidate)
+  endfor
 endfunction"}}}
 
 let s:kind.action_table.fopen = {
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.fopen.func(candidate)"{{{
-  return s:open('!', a:candidate)
+function! s:kind.action_table.fopen.func(candidates)"{{{
+  for l:candidate in a:candidates
+    call s:open('!', l:candidate)
+  endfor
 endfunction"}}}
 
 let s:kind.action_table.fdelete = {
@@ -72,8 +78,10 @@ let s:kind.action_table.fdelete = {
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.fdelete.func(candidate)"{{{
-  return s:delete('bdelete!', a:candidate)
+function! s:kind.action_table.fdelete.func(candidates)"{{{
+  for l:candidate in a:candidates
+    call s:delete('bdelete!', l:candidate)
+  endfor
 endfunction"}}}
 
 let s:kind.action_table.narrow = {

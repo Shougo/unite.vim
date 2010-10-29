@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Sep 2010
+" Last Modified: 29 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,15 +40,19 @@ let s:kind.action_table = deepcopy(unite#kinds#openable#define().action_table)
 let s:kind.action_table.open = {
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.open.func(candidate)"{{{
-  edit `=a:candidate.word`
+function! s:kind.action_table.open.func(candidates)"{{{
+  for l:candidate in a:candidates
+    edit `=l:candidate.word`
+  endfor
 endfunction"}}}
 
 let s:kind.action_table.fopen = {
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.fopen.func(candidate)"{{{
-  edit! `=a:candidate.word`
+function! s:kind.action_table.fopen.func(candidates)"{{{
+  for l:candidate in a:candidates
+    edit! `=l:candidate.word`
+  endfor
 endfunction"}}}
 
 let s:kind.action_table.preview = {
@@ -84,13 +88,6 @@ function! s:kind.action_table.lcd.func(candidate)"{{{
   endif
 
   execute g:unite_lcd_command '`=l:dir`'
-endfunction"}}}
-
-let s:kind.action_table.ex = {
-      \ }
-function! s:kind.action_table.ex.func(candidate)"{{{
-  " Result is ':| {candidate}', here '|' means the cursor position.
-  call feedkeys(printf(": %s\<C-b>", escape(a:candidate.word, " \t\n*?[{`$\\%#'\"|!<")), 'n')
 endfunction"}}}
 
 let s:kind.action_table.bookmark = {

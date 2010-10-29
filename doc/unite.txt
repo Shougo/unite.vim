@@ -292,6 +292,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-29
+- Improved selectable action(experimental).
+
 2010-10-28
 - Improved util.vim.
 - Sorted marked candidates.

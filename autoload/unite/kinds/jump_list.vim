@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2010
+" Last Modified: 29 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,19 +40,21 @@ let s:kind.action_table = deepcopy(unite#kinds#file#define().action_table)
 let s:kind.action_table.open = {
       \ 'is_selectable' : 1, 
       \ }
-function! s:kind.action_table.open.func(candidate)"{{{
-  edit `=a:candidate.word`
-  
-  let l:linenr = (has_key(a:candidate, 'line') && a:candidate.line != '') ? a:candidate.line : 1
+function! s:kind.action_table.open.func(candidates)"{{{
+  for l:candidate in a:candidates
+    edit `=l:candidate.word`
 
-  if has_key(a:candidate, 'pattern') && a:candidate.pattern != ''
-        \ && getline(l:linenr) !~ a:candidate.pattern
-    " Search pattern.
-    call search(a:candidate.pattern, 'w')
-  else
-    " Jump to a:candidate.line.
-    execute l:linenr
-  endif
+    let l:linenr = (has_key(l:candidate, 'line') && l:candidate.line != '') ? l:candidate.line : 1
+
+    if has_key(l:candidate, 'pattern') && l:candidate.pattern != ''
+          \ && getline(l:linenr) !~ l:candidate.pattern
+      " Search pattern.
+      call search(l:candidate.pattern, 'w')
+    else
+      " Jump to a:candidate.line.
+      execute l:linenr
+    endif
+  endfor
 endfunction"}}}
 
 let s:kind.action_table.preview = {
