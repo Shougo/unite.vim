@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: openable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jun 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -101,7 +101,7 @@ let s:kind.action_table.below = {
 function! s:kind.action_table.below.func(candidates)"{{{
   for l:candidate in a:candidates
     rightbelow split
-    call unite#take_action('open', a:candidate)
+    call unite#take_action('open', l:candidate)
   endfor
 endfunction"}}}
 "}}}
