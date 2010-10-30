@@ -605,7 +605,7 @@ unite#custom_action({kind}, {name}, {action})
 		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen
 <
-unite#undef_source({kind}, {name})			*unite#undef_source()*
+unite#undef_custom_action({kind}, {name})			*unite#undef_custom_action()*
 		|unite#custom_action()|で追加した、{kind}の{name}というactionを削
 		除する。
 		存在しないときは無視される。
