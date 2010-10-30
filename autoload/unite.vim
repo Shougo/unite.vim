@@ -555,7 +555,7 @@ function! s:initialize_sources(sources)"{{{
   let l:sources = {}
 
   let l:number = 0
-  for [l:source_name, l:args] in a:sources
+  for [l:source_name, l:args] in map(a:sources, 'type(v:val) == type("") ? [v:val, []] : v:val')
     if !has_key(l:all_sources, l:source_name)
       call unite#print_error('Invalid source name "' . l:source_name . '" is detected.')
       throw 'Invalid source'

@@ -535,7 +535,8 @@ d		候補を選択している場合は|i_<Plug>(unite_do_delete_action)|
 unite#start({sources}, [, {context}])				*unite#start()*
 		uniteバッファを新しく生成する。現在uniteバッファに居る場合、絞
 		り込みテキストは保存される。
-		{sources}は[{source-name}, {args}]のリストである。
+		{sources}はリストであり、それぞれの要素は{source-name}または、
+		[{source-name}, {args}]という形式である。
 		{args}には{source-name}に渡す引数をリスト形式で指定する。
 		{context}については、|unite-notation-{context}|を参照せよ。値を
 		省略すると、デフォルト値が使用される。
