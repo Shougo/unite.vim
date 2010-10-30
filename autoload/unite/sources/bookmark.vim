@@ -120,7 +120,7 @@ let s:source.action_table.directory = s:action_table
 " Add custom action table."{{{
 let s:file_bookmark_action = {
       \ }
-function! s:bookmark_action.func(candidate)"{{{
+function! s:file_bookmark_action.func(candidate)"{{{
   " Add to bookmark.
   call unite#sources#bookmark#_append(a:candidate.action__path)
 endfunction"}}}
