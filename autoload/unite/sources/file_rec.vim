@@ -34,7 +34,9 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
-  if isdirectory(a:context.input)
+  if !empty(a:args)
+    let l:directory = unite#substitute_path_separator(a:args[0])
+  elseif isdirectory(a:context.input)
     let l:directory = a:context.input
     if l:directory !~ '[\\/]$'
       let l:directory .= '/'
