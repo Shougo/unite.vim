@@ -311,16 +311,16 @@ function! unite#keyword_filter(list, input)"{{{
     if l:input =~ '^!'
       " Exclusion.
       let l:input = unite#escape_match(l:input)
-      call filter(a:list, 'v:val.abbr !~ ' . string(l:input[1:]))
+      call filter(a:list, 'v:val.word !~ ' . string(l:input[1:]))
     elseif l:input =~ '[*]'
       " Wildcard.
       let l:input = unite#escape_match(l:input)
-      call filter(a:list, 'v:val.abbr =~ ' . string(l:input))
+      call filter(a:list, 'v:val.word =~ ' . string(l:input))
     else
       if &ignorecase
-        let l:expr = printf('stridx(tolower(v:val.abbr), %s) != -1', string(tolower(l:input)))
+        let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:input)))
       else
-        let l:expr = printf('stridx(v:val.abbr, %s) != -1', string(l:input))
+        let l:expr = printf('stridx(v:val.word, %s) != -1', string(l:input))
       endif
 
       call filter(a:list, l:expr)
@@ -340,6 +340,9 @@ function! unite#get_input()"{{{
 endfunction"}}}
 function! unite#print_error(message)"{{{
   echohl WarningMsg | echomsg a:message | echohl None
+endfunction"}}}
+function! unite#substitute_path_separator(path)"{{{
+  return unite#is_win() ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
 "}}}
 

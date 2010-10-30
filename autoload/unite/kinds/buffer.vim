@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,7 +50,7 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
-  pedit `=a:candidate.word`
+  pedit `=a:candidate.action__path`
 endfunction"}}}
 
 let s:kind.action_table.delete = {
@@ -127,13 +127,13 @@ endfunction"}}}
 let s:kind.action_table.bookmark = {
       \ }
 function! s:kind.action_table.bookmark.func(candidate)"{{{
-  let l:filetype = getbufvar(a:candidate.unite_buffer_nr, '&filetype')
+  let l:filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
   if l:filetype ==# 'vimfiler'
-    let l:filename = getbufvar(a:candidate.unite_buffer_nr, 'vimfiler').current_dir
+    let l:filename = getbufvar(a:candidate.action__buffer_nr, 'vimfiler').current_dir
   elseif l:filetype ==# 'vimshell'
-    let l:filename = getbufvar(a:candidate.unite_buffer_nr, 'vimshell').save_dir
+    let l:filename = getbufvar(a:candidate.action__buffer_nr, 'vimshell').save_dir
   else
-    let l:filename = a:candidate.word
+    let l:filename = a:candidate.action__path
   endif
 
   " Add to bookmark.
@@ -152,15 +152,15 @@ endif
 
 " Misc
 function! s:bufnr_from_candidate(candidate)"{{{
-  if has_key(a:candidate, 'unite_buffer_nr')
-    return a:candidate.unite_buffer_nr
+  if has_key(a:candidate, 'action__buffer_nr')
+    return a:candidate.action__buffer_nr
   else
-    let _ = bufnr(fnameescape(a:candidate.word))
+    let _ = bufnr(fnameescape(a:candidate.action__path))
     if 1 <= _
       return _
     else
       return ('There is no corresponding buffer to candidate: '
-      \       . string(a:candidate.word))
+      \       . string(a:candidate.action__path))
     endif
   endif
 endfunction"}}}
@@ -181,13 +181,13 @@ function! s:open(bang, candidate)"{{{
   endif
 endfunction"}}}
 function! s:get_directory(candidate)"{{{
-  let l:filetype = getbufvar(a:candidate.unite_buffer_nr, '&filetype')
+  let l:filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
   if l:filetype ==# 'vimfiler'
-    let l:dir = getbufvar(a:candidate.unite_buffer_nr, 'vimfiler').current_dir
+    let l:dir = getbufvar(a:candidate.action__buffer_nr, 'vimfiler').current_dir
   elseif l:filetype ==# 'vimshell'
-    let l:dir = getbufvar(a:candidate.unite_buffer_nr, 'vimshell').save_dir
+    let l:dir = getbufvar(a:candidate.action__buffer_nr, 'vimshell').save_dir
   else
-    let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+    let l:dir = isdirectory(a:candidate.action__path) ? a:candidate.action__path : fnamemodify(a:candidate.action__path, ':p:h')
   endif
   
   return l:dir

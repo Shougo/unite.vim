@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,7 +45,7 @@ function! unite#sources#file_mru#define()"{{{
 endfunction"}}}
 function! unite#sources#file_mru#_append()"{{{
   " Append the current buffer to the mru list.
-  let l:path = substitute(expand('%:p'), '\\', '/', 'g')
+  let l:path = unite#substitute_path_separator(expand('%:p'))
   if !s:is_exists_path(path) || &l:buftype =~ 'help'
   \   || (g:unite_source_file_mru_ignore_pattern != ''
   \      && l:path =~# g:unite_source_file_mru_ignore_pattern)
@@ -53,7 +53,7 @@ function! unite#sources#file_mru#_append()"{{{
   endif
 
   call s:load()
-  call insert(filter(s:mru_files, 'v:val.word !=# l:path'),
+  call insert(filter(s:mru_files, 'v:val.action__path !=# l:path'),
   \           s:convert2dictionary([l:path, localtime()]))
 
   if g:unite_source_file_mru_limit > 0
@@ -74,7 +74,12 @@ function! s:source.gather_candidates(args, context)"{{{
 
   " Create abbr.
   for l:mru in s:mru_files
-    let l:mru.abbr = strftime(g:unite_source_file_mru_time_format, l:mru.unite_file_mru_time) . l:mru.word
+    let l:relative_path = unite#substitute_path_separator(fnamemodify(l:mru.action__path, ':~:.'))
+    if l:relative_path == ''
+      let l:relative_path = l:mru.action__path
+    endif
+
+    let l:mru.abbr = strftime(g:unite_source_file_mru_time_format, l:mru.source__time) . l:relative_path
   endfor
 
   return s:mru_files
@@ -90,7 +95,7 @@ let s:action_table.delete = {
       \ }
 function! s:action_table.delete.func(candidates)"{{{
   for l:candidate in a:candidates
-    call filter(s:mru_files, 'v:val.word !=# a:candidate.word')
+    call filter(s:mru_files, 'v:val.action__path !=# a:candidate.action__path')
   endfor
 
   call s:save()
@@ -120,7 +125,7 @@ function! s:load()  "{{{
     let s:mru_files =
     \   map(s:mru_files[: g:unite_source_file_mru_limit - 1],
     \              's:convert2dictionary(split(v:val, "\t"))')
-    call filter(s:mru_files, 's:is_exists_path(v:val.word)')
+    call filter(s:mru_files, 's:is_exists_path(v:val.action__path)')
 
     let s:mru_file_mtime = getftime(g:unite_source_file_mru_file)
   endif
@@ -130,14 +135,15 @@ function! s:is_exists_path(path)  "{{{
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
   return {
-        \ 'word' : substitute(a:list[0], '\\', '/', 'g'),
+        \ 'word' : unite#substitute_path_separator(a:list[0]),
         \ 'source' : 'file_mru',
-        \ 'unite_file_mru_time' : a:list[1],
         \ 'kind' : (isdirectory(a:list[0]) ? 'directory' : 'file'),
+        \ 'source__time' : a:list[1],
+        \ 'action__path' : unite#substitute_path_separator(a:list[0]),
         \   }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{
-  return [ a:dict.word, a:dict.unite_file_mru_time ]
+  return [ a:dict.action__path, a:dict.source__time ]
 endfunction"}}}
 
 " vim: foldmethod=marker

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,7 +42,7 @@ function! s:source.gather_candidates(args, context)"{{{
 
     let l:input = l:directory
   else
-    let l:directory = substitute(getcwd(), '\\', '/', 'g')
+    let l:directory = unite#substitute_path_separator(getcwd())
     if l:directory !~ '[\\/]$'
       let l:directory .= '/'
     endif
@@ -50,11 +50,12 @@ function! s:source.gather_candidates(args, context)"{{{
     let l:input = ''
   endif
 
-  if l:directory =~ '^\%(\a\+:\)\?/$' || expand(l:directory) ==# substitute($HOME . '/', '\\', '/', 'g')
+  if l:directory =~ '^\%(\a\+:\)\?/$' ||
+        \ unite#substitute_path_separator(expand(l:directory)) ==# unite#substitute_path_separator($HOME . '/')
     call unite#print_error('file_rec: Too many candidates.')
     return []
   endif
-  let l:candidates = split(substitute(glob(l:input . '**'), '\\', '/', 'g'), '\n')
+  let l:candidates = split(unite#substitute_path_separator(glob(l:input . '**')), '\n')
 
   if len(l:candidates) > 10000
     call unite#print_error('file_rec: Too many candidates.')
@@ -72,6 +73,7 @@ function! s:source.gather_candidates(args, context)"{{{
         \ "word" : v:val,
         \ "source" : "file_rec",
         \ "kind" : "file"
+        \ "action__path" : v:val,
         \ }')
 endfunction"}}}
 

@@ -44,7 +44,8 @@ function! s:source.gather_candidates(args, context)"{{{
           \ 'abbr' : printf('register%s - %s', l:reg, l:register[: l:max_width]),
           \ 'source' : 'register',
           \ 'kind' : 'word',
-          \ 'is_insert' : a:context.is_insert,
+          \ 'action__is_insert' : a:context.is_insert,
+          \ 'action__word' : l:register,
           \ })
   endfor
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,7 +35,7 @@ function! unite#sources#buffer#_append()"{{{
   " Append the current buffer.
   let l:bufnr = bufnr('%')
   let s:buffer_list[l:bufnr] = {
-        \ 'bufnr' : l:bufnr, 'time' : localtime(),
+        \ 'action__buffer_nr' : l:bufnr, 'source__time' : localtime(),
         \ }
 
   if !exists('t:unite_buffer_dictionary')
@@ -62,7 +62,7 @@ let s:source_buffer_all = {
 
 function! s:source_buffer_all.gather_candidates(args, context)"{{{
   let l:list = sort(values(filter(copy(s:buffer_list), '
-        \ bufexists(v:val.bufnr) && buflisted(v:val.bufnr) && v:val.bufnr != ' . bufnr('#'))), 's:compare')
+        \ bufexists(v:val.action__buffer_nr) && buflisted(v:val.action__buffer_nr) && v:val.action__buffer_nr != ' . bufnr('#'))), 's:compare')
 
   if buflisted(bufnr('#'))
     " Add current buffer.
@@ -70,11 +70,11 @@ function! s:source_buffer_all.gather_candidates(args, context)"{{{
   endif
 
   let l:candidates = map(l:list, '{
-        \ "word" : bufname(v:val.bufnr),
-        \ "abbr" : s:make_abbr(v:val.bufnr),
+        \ "word" : unite#substitute_path_separator(bufname(v:val.action__buffer_nr)),
+        \ "abbr" : s:make_abbr(v:val.action__buffer_nr),
         \ "kind" : "buffer",
         \ "source" : "buffer",
-        \ "unite_buffer_nr" : v:val.bufnr,
+        \ "action__path" : unite#substitute_path_separator(bufname(v:val.action__buffer_nr)),
         \}')
 
   return l:candidates
@@ -86,8 +86,8 @@ let s:source_buffer_tab = {
 
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{
   let l:list = sort(values(filter(copy(s:buffer_list), '
-        \ bufexists(v:val.bufnr) && buflisted(v:val.bufnr)
-        \ && exists("t:unite_buffer_dictionary") && has_key(t:unite_buffer_dictionary, v:val.bufnr) && v:val.bufnr != ' . bufnr('#'))), 's:compare')
+        \ bufexists(v:val.action__buffer_nr) && buflisted(v:val.action__buffer_nr)
+        \ && exists("t:unite_buffer_dictionary") && has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr) && v:val.action__buffer_nr != ' . bufnr('#'))), 's:compare')
 
   if buflisted(bufnr('#'))
     " Add current buffer.
@@ -95,11 +95,10 @@ function! s:source_buffer_tab.gather_candidates(args, context)"{{{
   endif
 
   let l:candidates = map(l:list, '{
-        \ "word" : bufname(v:val.bufnr),
-        \ "abbr" : s:make_abbr(v:val.bufnr),
+        \ "word" : bufname(v:val.action__buffer_nr),
+        \ "abbr" : s:make_abbr(v:val.action__buffer_nr),
         \ "kind" : "buffer",
         \ "source" : "buffer_tab",
-        \ "unite_buffer_nr" : v:val.bufnr,
         \}')
 
   return l:candidates
@@ -115,11 +114,11 @@ function! s:make_abbr(bufnr)"{{{
     let l:bufvar = getbufvar(a:bufnr, 'vimshell')
     return '*vimshell* - ' . l:bufvar.save_dir
   else
-    return bufname(a:bufnr) . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
+    return unite#substitute_path_separator(bufname(a:bufnr)) . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
   endif
 endfunction"}}}
 function! s:compare(candidate_a, candidate_b)"{{{
-  return a:candidate_b.time - a:candidate_a.time
+  return a:candidate_b.source__time - a:candidate_a.source__time
 endfunction"}}}
 
 " vim: foldmethod=marker

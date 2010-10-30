@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,7 +42,7 @@ let s:kind.action_table.open = {
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
   for l:candidate in a:candidates
-    edit `=l:candidate.word`
+    edit `=l:candidate.action__path`
   endfor
 endfunction"}}}
 
@@ -51,7 +51,7 @@ let s:kind.action_table.fopen = {
       \ }
 function! s:kind.action_table.fopen.func(candidates)"{{{
   for l:candidate in a:candidates
-    edit! `=l:candidate.word`
+    edit! `=l:candidate.action__path`
   endfor
 endfunction"}}}
 
@@ -59,13 +59,13 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
-  pedit `=a:candidate.word`
+  pedit `=a:candidate.action__path`
 endfunction"}}}
 
 let s:kind.action_table.cd = {
       \ }
 function! s:kind.action_table.cd.func(candidate)"{{{
-  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+  let l:dir = isdirectory(a:candidate.action__path) ? a:candidate.action__path : fnamemodify(a:candidate.action__path, ':p:h')
 
   if &filetype ==# 'vimfiler'
     call vimfiler#internal_commands#cd(l:dir)
@@ -79,7 +79,7 @@ endfunction"}}}
 let s:kind.action_table.lcd = {
       \ }
 function! s:kind.action_table.lcd.func(candidate)"{{{
-  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+  let l:dir = isdirectory(a:candidate.action__path) ? a:candidate.action__path : fnamemodify(a:candidate.action__path, ':p:h')
 
   if &filetype ==# 'vimfiler'
     call vimfiler#internal_commands#cd(l:dir)
@@ -94,14 +94,14 @@ let s:kind.action_table.bookmark = {
       \ }
 function! s:kind.action_table.bookmark.func(candidate)"{{{
   " Add to bookmark.
-  call unite#sources#bookmark#_append(a:candidate.word)
+  call unite#sources#bookmark#_append(a:candidate.action__path)
 endfunction"}}}
 
 let s:kind.action_table.narrow = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.narrow.func(candidate)"{{{
-  let l:word = fnamemodify(a:candidate.word, ':h')
+  let l:word = fnamemodify(a:candidate.action__path, ':h')
   if l:word !~ '[\\/]$'
     let l:word .= '/'
   endif

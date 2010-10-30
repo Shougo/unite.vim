@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,7 @@ function! s:source.gather_candidates(args, context)"{{{
     let l:bufnrs = tabpagebuflist(i)
     let l:bufnr = l:bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
 
-    let l:bufname = substitute(fnamemodify((i == tabpagenr() ? bufname('#') : bufname(l:bufnr)), ':p'), '\\', '/', 'g')
+    let l:bufname = unite#substitute_path_separator(fnamemodify((i == tabpagenr() ? bufname('#') : bufname(l:bufnr)), ':p'))
     if l:bufname == ''
       let l:bufname = '[No Name]'
     endif
@@ -65,7 +65,7 @@ function! s:source.gather_candidates(args, context)"{{{
         let l:title = '[' . l:title . ']'
       endif
 
-      let l:cwd = substitute((i == tabpagenr() ? getcwd() : gettabvar(i, 'cwd')), '\\', '/', 'g')
+      let l:cwd = unite#substitute_path_separator((i == tabpagenr() ? getcwd() : gettabvar(i, 'cwd')))
       if l:cwd !~ '/$'
         let l:cwd .= '/'
       endif
@@ -100,8 +100,8 @@ function! s:source.gather_candidates(args, context)"{{{
           \ 'abbr' : l:abbr,
           \ 'kind' : 'tab',
           \ 'source' : 'tab',
-          \ 'unite_tab_nr' : i,
-          \ 'unite_tab_cwd' : l:cwd,
+          \ 'action__tab_nr' : i,
+          \ 'action__tab_cwd' : l:cwd,
           \ })
   endfor
 

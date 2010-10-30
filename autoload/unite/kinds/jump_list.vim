@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,14 +42,14 @@ let s:kind.action_table.open = {
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
   for l:candidate in a:candidates
-    edit `=l:candidate.word`
+    edit `=l:candidate.action__path`
 
-    let l:linenr = (has_key(l:candidate, 'line') && l:candidate.line != '') ? l:candidate.line : 1
+    let l:linenr = (has_key(l:candidate, 'action__line') && l:candidate.action__line != '') ? l:candidate.action__line : 1
 
-    if has_key(l:candidate, 'pattern') && l:candidate.pattern != ''
-          \ && getline(l:linenr) !~ l:candidate.pattern
+    if has_key(l:candidate, 'action__pattern') && l:candidate.action__pattern != ''
+          \ && getline(l:linenr) !~ l:candidate.action__pattern
       " Search pattern.
-      call search(l:candidate.pattern, 'w')
+      call search(l:candidate.action__pattern, 'w')
     else
       " Jump to a:candidate.line.
       execute l:linenr
@@ -62,9 +62,9 @@ let s:kind.action_table.preview = {
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
   execute 'pedit'
-        \ (has_key(a:candidate, 'line') && a:candidate.line != '' ? '+'.a:candidate.line : '')
-        \ .(has_key(a:candidate, 'pattern') && a:candidate.pattern != '' ? '+/'.escape(a:candidate.pattern, "\t /") : '')
-        \ '`=a:candidate.word`'
+        \ (has_key(a:candidate, 'action__line') && a:candidate.action__line != '' ? '+'.a:candidate.action__line : '')
+        \ .(has_key(a:candidate, 'action__pattern') && a:candidate.action__pattern != '' ? '+/'.escape(a:candidate.action__pattern, "\t /") : '')
+        \ '`=a:candidate.action__path`'
 endfunction"}}}
 "}}}
 

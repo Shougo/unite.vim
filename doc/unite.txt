@@ -292,6 +292,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-30
+- Action specification is changed dramatically.
+- Improved substitute path separator.
+
 2010-10-29
 - Improved selectable action(experimental).
 - Improved tab action.
