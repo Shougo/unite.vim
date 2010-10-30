@@ -74,7 +74,7 @@ function! s:source.gather_candidates(args, context)"{{{
   return map(l:candidates, '{
         \ "word" : v:val,
         \ "source" : "file_rec",
-        \ "kind" : "file"
+        \ "kind" : "file",
         \ "action__path" : v:val,
         \ }')
 endfunction"}}}
