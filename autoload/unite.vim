@@ -447,6 +447,8 @@ function! unite#resume(buffer_name)"{{{
   " Set parameters.
   let b:unite.old_winnr = l:winnr
   let b:unite.win_rest_cmd = l:win_rest_cmd
+  let b:unite.redrawtime_save = &redrawtime
+  let b:unite.hlsearch_save = &hlsearch
 
   let s:unite = b:unite
 
@@ -475,9 +477,16 @@ function! unite#quit_session()  "{{{
   " Save unite value.
   let s:unite = b:unite
 
+  " Highlight off.
+  let @/ = ''
+
+  " Restore options.
   if exists('&redrawtime')
     let &redrawtime = s:unite.redrawtime_save
   endif
+  let &hlsearch = s:unite.hlsearch_save
+
+  nohlsearch
 
   " Close preview window.
   pclose
@@ -727,6 +736,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.input = l:context.input
   let b:unite.last_input = l:context.input
   let b:unite.bufnr = bufnr('%')
+  let b:unite.hlsearch_save = &hlsearch
 
   let s:unite = b:unite
 
@@ -742,6 +752,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   setlocal nomodeline
   setlocal foldcolumn=0
   setlocal iskeyword+=-,+,\\,!,~
+  set hlsearch
 
   " Autocommands.
   augroup plugin-unite
@@ -783,6 +794,9 @@ function! s:redraw(is_force) "{{{
   if !a:is_force && l:input ==# b:unite.last_input
     return
   endif
+
+  " Highlight off.
+  let @/ = ''
 
   let b:unite.last_input = l:input
 

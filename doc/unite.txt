@@ -299,6 +299,7 @@ CHANGELOG					*unite-changelog*
 - Source bookmark uses unite#custom_action().
 - :Unite command analyses source arguments.
 - Improved Japanese documentation.
+- Set hlsearch option.
 
 2010-10-29
 - Improved selectable action(experimental).
