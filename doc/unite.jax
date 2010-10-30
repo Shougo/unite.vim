@@ -532,6 +532,17 @@ d		候補を選択している場合は|i_<Plug>(unite_do_delete_action)|
 						*unite-functions*
 関数
 
+unite#start({sources}, [, {context}])				*unite#start()*
+		uniteバッファを新しく生成する。現在uniteバッファに居る場合、絞
+		り込みテキストは保存される。{sources}はsource名のリストである。
+		{context}については、|unite-notation-{context}|を参照せよ。
+		値を省略すると、デフォルト値が使用される。
+
+unite#get_context()						*unite#get_context()*
+		現在のuniteバッファのコンテキスト情報を得る。
+		|unite#custom_action()|などで、|unite#start()|を内部で呼び出す
+		際に使用する。
+
 unite#mappings#do_action({action-name} [, {candidate-num}])	*unite#mappings#do_action()*
 		マークしている候補に対して{action-name}アクションを実行す
 		る。この関数はuniteが起動している時にのみ動作する。{action-name}が存

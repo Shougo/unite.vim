@@ -170,6 +170,9 @@ endfunction"}}}
 function! unite#get_unite_candidates()"{{{
   return s:get_unite().candidates
 endfunction"}}}
+function! unite#get_context()"{{{
+  return s:get_unite().context
+endfunction"}}}
 function! unite#available_sources_name()"{{{
   return map(unite#available_sources_list(), 'v:val.name')
 endfunction"}}}

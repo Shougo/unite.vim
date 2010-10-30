@@ -300,6 +300,7 @@ CHANGELOG					*unite-changelog*
 - :Unite command analyses source arguments.
 - Improved Japanese documentation.
 - Set hlsearch option.
+- Added unite#start() and unite#get_context().
 
 2010-10-29
 - Improved selectable action(experimental).
