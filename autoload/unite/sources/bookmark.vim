@@ -118,14 +118,31 @@ let s:source.action_table.directory = s:action_table
 "}}}
 
 " Add custom action table."{{{
-let s:bookmark_action = {
+let s:file_bookmark_action = {
       \ }
 function! s:bookmark_action.func(candidate)"{{{
   " Add to bookmark.
   call unite#sources#bookmark#_append(a:candidate.action__path)
 endfunction"}}}
 
-call unite#custom_action('file', 'bookmark', s:bookmark_action)
+let s:buffer_bookmark_action = {
+      \ }
+function! s:buffer_bookmark_action.func(candidate)"{{{
+  let l:filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
+  if l:filetype ==# 'vimfiler'
+    let l:filename = getbufvar(a:candidate.action__buffer_nr, 'vimfiler').current_dir
+  elseif l:filetype ==# 'vimshell'
+    let l:filename = getbufvar(a:candidate.action__buffer_nr, 'vimshell').save_dir
+  else
+    let l:filename = a:candidate.action__path
+  endif
+
+  " Add to bookmark.
+  call unite#sources#bookmark#_append(l:filename)
+endfunction"}}}
+
+call unite#custom_action('file', 'bookmark', s:file_bookmark_action)
+call unite#custom_action('buffer', 'bookmark', s:buffer_bookmark_action)
 "}}}
 
 " Misc

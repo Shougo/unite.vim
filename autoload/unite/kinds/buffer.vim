@@ -124,22 +124,6 @@ function! s:kind.action_table.lcd.func(candidate)"{{{
   execute g:unite_lcd_command '`=l:dir`'
 endfunction"}}}
 
-let s:kind.action_table.bookmark = {
-      \ }
-function! s:kind.action_table.bookmark.func(candidate)"{{{
-  let l:filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
-  if l:filetype ==# 'vimfiler'
-    let l:filename = getbufvar(a:candidate.action__buffer_nr, 'vimfiler').current_dir
-  elseif l:filetype ==# 'vimshell'
-    let l:filename = getbufvar(a:candidate.action__buffer_nr, 'vimshell').save_dir
-  else
-    let l:filename = a:candidate.action__path
-  endif
-
-  " Add to bookmark.
-  call unite#sources#bookmark#_append(l:filename)
-endfunction"}}}
-
 if exists(':VimShell')
   let s:kind.action_table.vimshell = {
         \ }
