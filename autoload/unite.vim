@@ -72,6 +72,13 @@ function! unite#custom_action(kind, name, action)"{{{
     let s:custom_actions[key][a:name] = a:action
   endfor
 endfunction"}}}
+function! unite#undef_custom_action(kind, name)"{{{
+  for key in split(a:kind, ',')
+    if has_key(s:custom_actions, key)
+      call remove(s:custom_actions, key)
+    endif
+  endfor
+endfunction"}}}
 
 function! unite#define_source(source)"{{{
   if type(a:source) == type([])

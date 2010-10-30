@@ -117,6 +117,17 @@ let s:source.action_table.jump_list = s:action_table
 let s:source.action_table.directory = s:action_table
 "}}}
 
+" Add custom action table."{{{
+let s:bookmark_action = {
+      \ }
+function! s:bookmark_action.func(candidate)"{{{
+  " Add to bookmark.
+  call unite#sources#bookmark#_append(a:candidate.action__path)
+endfunction"}}}
+
+call unite#custom_action('file', 'bookmark', s:bookmark_action)
+"}}}
+
 " Misc
 function! s:save()  "{{{
   call writefile([s:VERSION] + map(copy(s:bookmark_files), 'join(v:val, "\t")'),

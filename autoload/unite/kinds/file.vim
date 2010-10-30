@@ -90,13 +90,6 @@ function! s:kind.action_table.lcd.func(candidate)"{{{
   execute g:unite_lcd_command '`=l:dir`'
 endfunction"}}}
 
-let s:kind.action_table.bookmark = {
-      \ }
-function! s:kind.action_table.bookmark.func(candidate)"{{{
-  " Add to bookmark.
-  call unite#sources#bookmark#_append(a:candidate.action__path)
-endfunction"}}}
-
 let s:kind.action_table.narrow = {
       \ 'is_quit' : 0,
       \ }
