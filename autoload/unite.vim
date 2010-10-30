@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -192,16 +192,13 @@ function! unite#get_action_table(source_name, kind_name, ...)"{{{
   let l:source = unite#available_sources(a:source_name)
   let l:contains_custom_action = a:0 > 0 ? a:1 : 1
 
-  " Common actions.
-  let l:action_table = (a:kind_name != 'common')?
-        \ copy(unite#available_kinds('common').action_table) : {}
-  " Common custom actions.
-  if l:contains_custom_action && has_key(s:custom_actions, 'common')
-    let l:action_table = extend(l:action_table, s:custom_actions['common'])
-  endif
-  " Common custom aliases.
-  if l:contains_custom_action && has_key(s:custom_aliases, 'common')
-    call s:filter_alias_action(l:action_table, s:custom_aliases['common'])
+  let l:action_table = {}
+
+  " Parents actions.
+  if a:kind_name != 'common'
+    for l:parent in l:kind.parents
+      call extend(l:action_table, unite#get_action_table(a:source_name, l:parent, l:contains_custom_action))
+    endfor
   endif
 
   " Kind actions.
@@ -580,7 +577,14 @@ function! s:initialize_sources(sources)"{{{
   return l:sources
 endfunction"}}}
 function! s:initialize_kinds()"{{{
-  return extend(copy(s:default_kinds), s:custom_kinds)
+  let l:kinds = extend(copy(s:default_kinds), s:custom_kinds)
+  for l:kind in values(l:kinds)
+    if !has_key(l:kind, 'parents')
+      let l:kind.parents = ['common']
+    endif
+  endfor
+
+  return l:kinds
 endfunction"}}}
 function! s:gather_candidates(input, context)"{{{
   let l:context = a:context

@@ -301,6 +301,7 @@ CHANGELOG					*unite-changelog*
 - Improved Japanese documentation.
 - Set hlsearch option.
 - Added unite#start() and unite#get_context().
+- Implemented extend kinds.
 
 2010-10-29
 - Improved selectable action(experimental).

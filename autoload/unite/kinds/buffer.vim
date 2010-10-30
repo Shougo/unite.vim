@@ -32,11 +32,10 @@ let s:kind = {
       \ 'name' : 'buffer',
       \ 'default_action' : 'open',
       \ 'action_table': {},
+      \ 'parents': ['openable'],
       \}
 
 " Actions"{{{
-let s:kind.action_table = deepcopy(unite#kinds#openable#define().action_table)
-
 let s:kind.action_table.open = {
       \ 'is_selectable' : 1,
       \ }

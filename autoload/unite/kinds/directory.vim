@@ -32,11 +32,10 @@ let s:kind = {
       \ 'name' : 'directory',
       \ 'default_action' : 'narrow',
       \ 'action_table': {},
+      \ 'parents': ['file'],
       \}
 
 " Actions"{{{
-let s:kind.action_table = deepcopy(unite#kinds#file#define().action_table)
-
 let s:kind.action_table.narrow = {
       \ 'is_quit' : 0,
       \ }
