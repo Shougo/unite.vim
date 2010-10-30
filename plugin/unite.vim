@@ -127,7 +127,7 @@ function! s:parse_options(args)"{{{
   let l:args = []
   let l:options = {}
   for l:arg in split(a:args, '\\\@<! ')
-    let l:arg = substitute(l:arg, '\\\(.\)', '\1', 'g')
+    let l:arg = substitute(l:arg, '\\\( \)', '\1', 'g')
 
     if l:arg =~# '^-buffer-name='
       let l:options['buffer_name'] = matchstr(l:arg, '^-buffer-name=\zs.*')
@@ -140,7 +140,10 @@ function! s:parse_options(args)"{{{
     elseif l:arg =~# '^-start-insert'
       let l:options['start_insert'] = 1
     else
-      call add(l:args, [l:arg, []])
+      let l:source_name = matchstr(l:arg, '^[^:]*')
+      let l:source_args = map(split(l:arg[len(l:source_name) :], '\\\@<!:'),
+            \ 'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
+      call add(l:args, [l:source_name, l:source_args])
     endif
   endfor
 

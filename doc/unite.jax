@@ -135,10 +135,18 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		る。また、{sources} の指定順序がsourceの候補の表示順序となる。
 		sourceについては|unite-source|を参照。
 		現在uniteバッファに居る場合、絞り込みテキストは保存される。
+
+		source名の後ろに:で区切った文字列のリストを引数として渡すことが
+		できる。引数に含まれる:と\は\でエスケープしなければならない。引
+		数がどう解釈されるかは、sourceによって異なる。
+
+		例：
+		"file:hoge:piyo"の場合、source fileに与える引数は[hoge, piyo]である。
+		"file:hoge\:piyo"の場合、source fileに与える引数は[hoge:piyo]である。
+		
 		{options}とはuniteバッファに与えるオプションである。
 		オプションは、次のパラメータを取る。値にスペースが含まれるとき
 		は、\でエスケープしなければならない。
-		
 		-buffer-name={buffer-name}
 		uniteのバッファ名を指定する。同じ目的を持つuniteバッファに同じ
 		バッファ名を付けることで、|unite#set_substitute_pattern()|など

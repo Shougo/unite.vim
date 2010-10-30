@@ -297,6 +297,7 @@ CHANGELOG					*unite-changelog*
 - Improved substitute path separator.
 - Added unite#undef_custom_action().
 - Source bookmark uses unite#custom_action().
+- :Unite command analyses source arguments.
 
 2010-10-29
 - Improved selectable action(experimental).
