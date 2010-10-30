@@ -101,7 +101,7 @@ let s:kind.action_table.below = {
 function! s:kind.action_table.below.func(candidates)"{{{
   for l:candidate in a:candidates
     rightbelow split
-    call unite#take_action('open', l:candidate)
+    call unite#take_action('open', [l:candidate])
   endfor
 endfunction"}}}
 "}}}
