@@ -823,7 +823,10 @@ jump_list	open
 ==============================================================================
 sourceの作成					*unite-create-source*
 
-この項はまだ未完成である。
+autoload/unite/sources//に*.vimのファイルを置いておくと、自動的に読み込まれる。
+その際、unite#sources#{source_name}#define()が呼ばれ、戻り値がsourceと解釈される。
+戻り値はリストでもよく、その場合はsourceのリストと解釈される。
+独自のsourceを動的に追加するためには、|unite#define_source()|を使う。
 
 ------------------------------------------------------------------------------
 sourceの属性					*unite-source-attributes*
@@ -842,28 +845,130 @@ name			文字列		(必須)
 			- "BadOne", "!@#$%^&*()_[]{}-|" と "" は
 			  sourceの名前としては使えない。
 
+						*unite-source-attribute-gather_candidates*
+gather_candidates	関数		(必須)
+			uniteが候補を収集する際に呼ばれる。
+			この関数は{args}と{context}を引数に取り、{candidate}の
+			リストを返す。
+			{args}は|:Unite|コマンドを実行された際にsourceに渡され
+			た引数リスト、{context}はsourceが呼ばれたときのコンテキ
+			スト情報である。
+			{context}については|unite-notation-{context}|、
+			{candidate}については|unite-notation-{candidate}|を参照
+			せよ。
+
+						*unite-source-attribute-action_table*
+action_table		辞書		(任意)
+			source独自のaction_tableを追加するときに使用する。
+			キーはaction_tableを追加するkindで、値は追加するaction_tableである。
+			action_tableの詳細については、|unite-kind-attribute-action_table|
+			を参照せよ。
+
 						*unite-source-attribute-max_candidates*
 max_candidates		数値		(任意)
 			候補の最大数。
-
 			この属性は任意である。もしこれが与えられない場合、0がデ
 			フォルト値として使われる。この場合、最大数の制限はない。
 
 						*unite-source-attribute-required_pattern_length*
 required_pattern_length	数値		(任意)
 			候補を収集するのに必要な絞り込み文字列の長さ。
-
 			この属性は任意である。もしこれが与えられない場合、0がデ
 			フォルト値として使われる。この場合、常に候補が収集され
 			る。
 
+						*unite-source-attribute-is_volatile*
+is_volatile		数値		(任意)
+			入力が変化するごとに、sourceが毎回候補を再計算するかど
+			うか。
+			この属性は任意である。もしこれが与えられない場合、0がデ
+			フォルト値として使われる。この場合、候補はキャッシュさ
+			れ、毎回|unite-source-attribute-gather_candidates|が呼
+			ばれることはない。
+
+NOTATION					*unite-notation*
+
+{context}					*unite-notation-{context}*
+			コンテキスト情報を与えるディクショナリ変数。主に、次の
+			情報を持つ。
+
+			input			(文字列)
+				ユーザーの入力文字列。
+
+			buffer_name		(文字列)
+				uniteバッファの名前。
+
+			prompt			(文字列)
+				uniteバッファのプロンプト文字列。
+
+			is_insert		(数値)
+				uniteバッファが挿入モードから呼び出されたかどう
+				か。
+
+			source			(辞書)
+				現在候補を収集しているsourceの情報。
+
+{candidate}					*unite-notation-{candidate}*
+			候補を表すディクショナリ変数。
+			次の情報を持つ。
+
+			word			(文字列)
+				画面に表示される候補を表す文字列。候補の絞り込
+				みに使われる。
+
+			abbr			(文字列)	(任意)
+				画面に表示される候補を表す文字列。wordより優先
+				されるが、候補の絞り込みには使われない。
+
+			source			(文字列)
+				候補が所属するsource名。
+
+			kind			(文字列)
+				候補が所属するkind名。
+
+			source__{name}		(不定)		(任意)
+				source独自の付加情報。source側で自由に使用でき
+				る。
+
+			action__{name}		(不定)		(任意)
+				actionが使用する付加情報。例えば、
+				"action__path"はそのファイルが存在するパスを指
+				定する。実行するactionによって、その仕様は異な
+				る。
+
 ==============================================================================
 kindの作成					*unite-create-kind*
 
-この項はまだ未完成である。
+autoload/unite/kinds/に*.vimのファイルを置いておくと、自動的に読み込まれる。
+その際、unite#kinds#{kind_name}#define()が呼ばれ、戻り値がkindと解釈される。
+戻り値はリストでもよく、その場合はkindのリストと解釈される。
+独自のkindを動的に追加するためには、|unite#define_kind()|を使う。
 
 ------------------------------------------------------------------------------
 kindの属性					*unite-kind-attributes*
+
+						*unite-kind-attribute-name*
+name			文字列		(必須)
+			kindの名前。以下の文字で構成しなければならない。
+			文字:
+			- a-z
+			- 0-9
+			- _
+			- /
+
+			例:
+			- "buffer", "virw/git" と "file_mru" は正当。
+			- "BadOne", "!@#$%^&*()_[]{}-|" と "" は
+			  kindの名前としては使えない。
+
+						*unite-kind-attribute-default_action*
+default_action		文字列		(必須)
+			|<Plug>(unite_do_default_action)|を実行した際に呼ばれる
+			標準的なアクションの名前を指定する。
+
+						*unite-kind-attribute-action_table*
+action_table		辞書		(必須)
+			アクションテーブルを指定する。
 
 ==============================================================================
 設定例						*unite-examples*

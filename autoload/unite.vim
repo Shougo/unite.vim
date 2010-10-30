@@ -505,7 +505,7 @@ function! s:load_default_sources_and_kinds()"{{{
   let s:default_sources = {}
   let s:default_kinds = {}
 
-  for l:name in map(split(globpath(&runtimepath, 'autoload/unite/sources/**/*.vim'), '\n'),
+  for l:name in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'),
         \ 'fnamemodify(v:val, ":t:r")')
 
     if type({'unite#sources#' . l:name . '#define'}()) == type([])
@@ -523,7 +523,7 @@ function! s:load_default_sources_and_kinds()"{{{
     endif
   endfor
 
-  for l:name in map(split(globpath(&runtimepath, 'autoload/unite/kinds/**/*.vim'), '\n'),
+  for l:name in map(split(globpath(&runtimepath, 'autoload/unite/kinds/*.vim'), '\n'),
         \ 'fnamemodify(v:val, ":t:r")')
 
     if type({'unite#kinds#' . l:name . '#define'}()) == type([])
@@ -580,6 +580,8 @@ function! s:gather_candidates(input, context)"{{{
     if l:source.is_volatile
           \ || !has_key(b:unite.cached_candidates, l:source.name)
           \ || (l:context.is_force || l:source.unite__is_invalidate)
+
+      let l:context.source = l:source
 
       " Check required pattern length.
       let l:source_candidates =

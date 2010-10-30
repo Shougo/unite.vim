@@ -298,6 +298,7 @@ CHANGELOG					*unite-changelog*
 - Added unite#undef_custom_action().
 - Source bookmark uses unite#custom_action().
 - :Unite command analyses source arguments.
+- Improved Japanese documentation.
 
 2010-10-29
 - Improved selectable action(experimental).
