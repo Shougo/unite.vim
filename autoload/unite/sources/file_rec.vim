@@ -36,21 +36,21 @@ let s:source = {
 function! s:source.gather_candidates(args, context)"{{{
   if !empty(a:args)
     let l:directory = unite#substitute_path_separator(a:args[0])
-    if l:directory !~ '[\\/]$'
+    if l:directory !~ '/$'
       let l:directory .= '/'
     endif
 
     let l:input = l:directory
   elseif isdirectory(a:context.input)
     let l:directory = a:context.input
-    if l:directory !~ '[\\/]$'
+    if l:directory !~ '/$'
       let l:directory .= '/'
     endif
 
     let l:input = l:directory
   else
     let l:directory = unite#substitute_path_separator(getcwd())
-    if l:directory !~ '[\\/]$'
+    if l:directory !~ '/$'
       let l:directory .= '/'
     endif
 

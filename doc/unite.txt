@@ -292,6 +292,11 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-10-31
+- Fixed buffer action error.
+- Improved buffer actions.
+- Changed unite#start() specification.
+
 2010-10-30
 - Action specification is changed dramatically.
 - Improved substitute path separator.

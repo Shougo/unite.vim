@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2010
+" Last Modified: 31 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,26 +32,10 @@ let s:kind = {
       \ 'name' : 'buffer',
       \ 'default_action' : 'open',
       \ 'action_table': {},
-      \ 'parents': ['openable'],
+      \ 'parents': ['file'],
       \}
 
 " Actions"{{{
-let s:kind.action_table.open = {
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.open.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:open('', l:candidate)
-  endfor
-endfunction"}}}
-
-let s:kind.action_table.preview = {
-      \ 'is_quit' : 0,
-      \ }
-function! s:kind.action_table.preview.func(candidate)"{{{
-  pedit `=a:candidate.action__path`
-endfunction"}}}
-
 let s:kind.action_table.delete = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
@@ -60,15 +44,6 @@ let s:kind.action_table.delete = {
 function! s:kind.action_table.delete.func(candidates)"{{{
   for l:candidate in a:candidates
     call s:delete('bdelete', l:candidate)
-  endfor
-endfunction"}}}
-
-let s:kind.action_table.fopen = {
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.fopen.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:open('!', l:candidate)
   endfor
 endfunction"}}}
 
@@ -134,34 +109,8 @@ endif
 "}}}
 
 " Misc
-function! s:bufnr_from_candidate(candidate)"{{{
-  if has_key(a:candidate, 'action__buffer_nr')
-    return a:candidate.action__buffer_nr
-  else
-    let _ = bufnr(fnameescape(a:candidate.action__path))
-    if 1 <= _
-      return _
-    else
-      return ('There is no corresponding buffer to candidate: '
-      \       . string(a:candidate.action__path))
-    endif
-  endif
-endfunction"}}}
 function! s:delete(delete_command, candidate)"{{{
-  let _ = s:bufnr_from_candidate(a:candidate)
-  if type(_) == type(0)
-    execute s:bufnr_from_candidate(a:candidate) a:delete_command
-  else
-    let v:errmsg = _
-  endif
-endfunction"}}}
-function! s:open(bang, candidate)"{{{
-  let _ = s:bufnr_from_candidate(a:candidate)
-  if type(_) == type(0)
-    execute s:bufnr_from_candidate(a:candidate) 'buffer'.a:bang
-  else
-    let v:errmsg = _
-  endif
+  execute a:candidate.action__buffer_nr a:delete_command
 endfunction"}}}
 function! s:get_directory(candidate)"{{{
   let l:filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
@@ -170,9 +119,9 @@ function! s:get_directory(candidate)"{{{
   elseif l:filetype ==# 'vimshell'
     let l:dir = getbufvar(a:candidate.action__buffer_nr, 'vimshell').save_dir
   else
-    let l:dir = isdirectory(a:candidate.action__path) ? a:candidate.action__path : fnamemodify(a:candidate.action__path, ':p:h')
+    let l:dir = isdirectory(a:candidate.action__path) ? a:candidate.action__path : unite#substitute_path_separator(fnamemodify(a:candidate.action__path, ':p:h'))
   endif
-  
+
   return l:dir
 endfunction"}}}
 

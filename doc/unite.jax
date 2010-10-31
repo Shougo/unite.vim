@@ -536,8 +536,8 @@ unite#start({sources}, [, {context}])				*unite#start()*
 		uniteバッファを新しく生成する。現在uniteバッファに居る場合、絞
 		り込みテキストは保存される。
 		{sources}はリストであり、それぞれの要素は{source-name}または、
-		[{source-name}, {args}]という形式である。
-		{args}には{source-name}に渡す引数をリスト形式で指定する。
+		[{source-name}, [{args},...]]という形式である。
+		{args}には{source-name}に渡す引数を文字列形式で複数指定できる。
 		{context}については、|unite-notation-{context}|を参照せよ。値を
 		省略すると、デフォルト値が使用される。
 
@@ -777,11 +777,8 @@ file						*unite-action-file*
 			アクションである。
 
 buffer						*unite-action-buffer*
-このkindは|unite-action-openable|のアクションを継承している。
-	open		バッファを表示
-	preview		プレビューウィンドウにファイルを開く
+このkindは|unite-action-file|のアクションを継承している。
 	delete		バッファを削除
-	fopen		現在のバッファの変更を破棄して表示
 	fdelete		現在のバッファの変更を破棄して削除
 	narrow		ファイルのあるディレクトリ名で候補を絞り込む
 	cd		カレントディレクトリを変更
