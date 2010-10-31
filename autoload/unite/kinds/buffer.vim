@@ -32,7 +32,7 @@ let s:kind = {
       \ 'name' : 'buffer',
       \ 'default_action' : 'open',
       \ 'action_table': {},
-      \ 'parents': ['file', 'cdable'],
+      \ 'parents': ['file'],
       \}
 
 " Actions"{{{
