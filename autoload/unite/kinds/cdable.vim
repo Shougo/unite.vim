@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: common.vim
+" FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 31 Oct 2010
 " License: MIT license  {{{
@@ -24,37 +24,39 @@
 " }}}
 "=============================================================================
 
-function! unite#kinds#common#define()"{{{
+function! unite#kinds#cdable#define()"{{{
   return s:kind
 endfunction"}}}
 
 let s:kind = {
-      \ 'name' : 'common',
-      \ 'default_action' : 'nop',
+      \ 'name' : 'cdable',
       \ 'action_table': {},
       \ 'parents': [],
       \}
 
 " Actions"{{{
-let s:kind.action_table.nop = {
+let s:kind.action_table.narrow = {
+      \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.nop.func(candidate)"{{{
+function! s:kind.action_table.narrow.func(candidate)"{{{
+  let l:word = a:candidate.action__directory . (a:candidate.action__directory =~ '[\\/]$' ? '' : '/')
+  call unite#mappings#narrowing(l:word)
 endfunction"}}}
 
-let s:kind.action_table.yank = {
-      \ }
-function! s:kind.action_table.yank.func(candidate)"{{{
-  let @" = a:candidate.word
-endfunction"}}}
-
-let s:kind.action_table.ex = {
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.ex.func(candidates)"{{{
-  " Result is ':| {candidate}', here '|' means the cursor position.
-  call feedkeys(printf(": %s\<C-b>", join(map(map(copy(a:candidates), 'v:val.word'), 'escape(v:val, " *?[{`$\\%#''|!<")'))), 'n')
-endfunction"}}}
-
+if exists(':VimShell')
+  let s:kind.action_table.vimshell = {
+        \ }
+  function! s:kind.action_table.vimshell.func(candidate)"{{{
+    VimShellCreate `=a:candidate.action__directory`
+  endfunction"}}}
+endif
+if exists(':VimShellTab')
+  let s:kind.action_table.tabvimshell = {
+        \ }
+  function! s:kind.action_table.tabvimshell.func(candidate)"{{{
+    VimShellTab `=a:candidate.action__directory`
+  endfunction"}}}
+endif
 "}}}
 
 " vim: foldmethod=marker

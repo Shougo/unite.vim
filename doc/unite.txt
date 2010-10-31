@@ -296,6 +296,11 @@ CHANGELOG					*unite-changelog*
 - Fixed buffer action error.
 - Improved buffer actions.
 - Changed unite#start() specification.
+- Improved common parents.
+- Improved unite#take_action().
+- Added unite#take_parents_action().
+- Added cdable source.
+- Improved Japanese documentation.
 
 2010-10-30
 - Action specification is changed dramatically.

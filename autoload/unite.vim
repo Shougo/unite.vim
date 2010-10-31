@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2010
+" Last Modified: 31 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -159,10 +159,35 @@ function! unite#take_action(action_name, candidate)"{{{
         \ : a:action_name
 
   if !has_key(l:action_table, a:action_name)
-    return 'no such action ' . a:action_name
+    throw 'no such action ' . a:action_name
   endif
 
-  call l:action_table[a:action_name].func(a:candidate)
+  let l:action = l:action_table[a:action_name]
+  " Convert candidates.
+  call l:action.func(
+        \ (has_key(l:action, 'is_selectable') && l:action.is_selectable && type(a:candidate) != type([])) ?
+        \ [a:candidate] : a:candidate)
+endfunction"}}}
+function! unite#take_parents_action(action_name, candidate)"{{{
+  let l:candidate = type(a:candidate) == type([]) ?
+        \ a:candidate[0] : a:candidate
+
+  let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, 0, 1)
+
+  let l:action_name =
+        \ a:action_name ==# 'default' ?
+        \ unite#get_default_action(l:candidate.source, l:candidate.kind)
+        \ : a:action_name
+
+  if !has_key(l:action_table, a:action_name)
+    throw 'no such action ' . a:action_name
+  endif
+
+  let l:action = l:action_table[a:action_name]
+  " Convert candidates.
+  call l:action.func(
+        \ (has_key(l:action, 'is_selectable') && l:action.is_selectable && type(a:candidate) != type([])) ?
+        \ [a:candidate] : a:candidate)
 endfunction"}}}
 function! unite#is_win()"{{{
   return has('win16') || has('win32') || has('win64')
@@ -191,14 +216,16 @@ function! unite#get_action_table(source_name, kind_name, ...)"{{{
   let l:kind = unite#available_kinds(a:kind_name)
   let l:source = unite#available_sources(a:source_name)
   let l:contains_custom_action = a:0 > 0 ? a:1 : 1
+  let l:is_parents_action = a:0 > 1 ? a:2 : 0
 
   let l:action_table = {}
 
   " Parents actions.
-  if a:kind_name != 'common'
-    for l:parent in l:kind.parents
-      call extend(l:action_table, unite#get_action_table(a:source_name, l:parent, l:contains_custom_action))
-    endfor
+  for l:parent in l:kind.parents
+    call extend(l:action_table, unite#get_action_table(a:source_name, l:parent, l:contains_custom_action))
+  endfor
+  if l:is_parents_action
+    return filter(l:action_table, 'v:key !=# "nop"')
   endif
 
   " Kind actions.

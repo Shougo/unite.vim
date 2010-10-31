@@ -648,8 +648,13 @@ unite#take_action({action-name}, {candidate})
 		主に、unite#custom_action()などで用いる。
 		ただし、unite#custom_alias()やunite#custom_action()で定義された
 		アクションは呼び出せない。
-		is_selectableなアクションの場合は{candidate}にリストを渡さなけ
-		ればならない。
+		is_selectableなアクションの場合は{candidate}がリストに自動変換
+		される。
+
+unite#take_parents_action({action-name}, {candidate})
+						*unite#take_parents_action()*
+		|unite#take_action()|と同じだが、parentsのアクションテーブルの
+		みが検索される。親のアクションを再利用したいときに用いる。
 
 unite#define_source({source})			*unite#define_source()*
 		{source}を動的に追加する。sourceの仕様については、
@@ -714,6 +719,9 @@ common		共通アクション
 
 						*unite-kind-openable*
 openable	オープン可能インタフェース
+
+						*unite-kind-cdable*
+cdable		cd可能インタフェース
 
 						*unite-kind-file*
 file		ファイル
@@ -901,8 +909,7 @@ is_volatile		数値		(任意)
 NOTATION					*unite-notation*
 
 {context}					*unite-notation-{context}*
-			コンテキスト情報を与えるディクショナリ変数。主に、次の
-			情報を持つ。
+			コンテキスト情報を与える辞書変数。主に、次の情報を持つ。
 
 			input			(文字列)
 				ユーザーの入力文字列。
@@ -921,8 +928,7 @@ NOTATION					*unite-notation*
 				現在候補を収集しているsourceの情報。
 
 {candidate}					*unite-notation-{candidate}*
-			候補を表すディクショナリ変数。
-			次の情報を持つ。
+			候補を表す辞書変数。次の情報を持つ。
 
 			word			(文字列)
 				画面に表示される候補を表す文字列。候補の絞り込
@@ -976,11 +982,36 @@ name			文字列		(必須)
 						*unite-kind-attribute-default_action*
 default_action		文字列		(必須)
 			|<Plug>(unite_do_default_action)|を実行した際に呼ばれる
-			標準的なアクションの名前を指定する。
+			標準的なアクションの名前を指定する。これを省略した場合
+			は実行時にエラーになるが、それを逆手に取り、継承に使う
+			だけのインタフェースアクションではこれを定義しないとい
+			う手がある。
 
 						*unite-kind-attribute-action_table*
 action_table		辞書		(必須)
 			アクションテーブルを指定する。
+			アクションテーブルは辞書となっていて、キーとして、アク
+			ションの名前を取る。値として、次の辞書情報を持つ。
+			
+			func			(関数)
+				アクションの実行時に呼び出される関数。
+				{candidate}を引数に取る。アクションの
+				is_selectableが1の場合、{candidate}には候補のリ
+				ストが渡される。
+
+			is_quit			(数値)		(任意)
+				アクション実行後にuniteバッファを終了するかどう
+				か。省略すると1になり、uniteバッファを終了する。
+
+			is_selectable		(数値)		(任意)
+				このアクションが候補を複数選択可能した際に実行
+				可能かどうか。省略すると0になり、複数選択してい
+				るとエラーとなる。
+
+			is_invalidate_cache	(数値)		(任意)
+				このアクションを実行した際にキャッシュを無効化
+				するかどうか。省略すると1になり、キャッシュは無
+				効化されない。
 
 						*unite-kind-attribute-parents*
 parents			リスト		(任意)
