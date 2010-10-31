@@ -303,6 +303,7 @@ CHANGELOG					*unite-changelog*
 - Improved Japanese documentation.
 - Added rec action in cdable.
 - Improved tab source.
+- Setlocal cursorline.
 
 2010-10-30
 - Action specification is changed dramatically.

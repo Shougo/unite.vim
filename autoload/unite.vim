@@ -782,6 +782,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let s:last_unite_bufnr = bufnr('%')
 
   " Basic settings.
+  setlocal cursorline
   setlocal bufhidden=hide
   setlocal buftype=nofile
   setlocal nobuflisted
