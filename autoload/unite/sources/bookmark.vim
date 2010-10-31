@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2010
+" Last Modified: 31 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -91,8 +91,10 @@ function! s:source.gather_candidates(args, context)"{{{
         \ "source" : "bookmark",
         \ "kind" : (isdirectory(v:val[1]) ? "directory" : "jump_list"),
         \ "bookmark_name" : v:val[0],
-        \ "line" : v:val[2],
-        \ "pattern" : v:val[3],
+        \ "action__path" : v:val[1],
+        \ "action__line" : v:val[2],
+        \ "action__pattern" : v:val[3],
+        \ "action__directory" : unite#path2directory(v:val[1]),
         \   }')
 endfunction"}}}
 
@@ -115,6 +117,7 @@ endfunction"}}}
 
 let s:source.action_table.jump_list = s:action_table
 let s:source.action_table.directory = s:action_table
+unlet! s:action_table
 "}}}
 
 " Add custom action table."{{{
@@ -143,6 +146,8 @@ endfunction"}}}
 
 call unite#custom_action('file', 'bookmark', s:file_bookmark_action)
 call unite#custom_action('buffer', 'bookmark', s:buffer_bookmark_action)
+unlet! s:file_bookmark_action
+unlet! s:buffer_bookmark_action
 "}}}
 
 " Misc

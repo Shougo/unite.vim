@@ -651,10 +651,11 @@ unite#take_action({action-name}, {candidate})
 		is_selectableなアクションの場合は{candidate}がリストに自動変換
 		される。
 
-unite#take_parents_action({action-name}, {candidate})
+unite#take_parents_action({action-name}, {candidate}, {extend-candidate})
 						*unite#take_parents_action()*
-		|unite#take_action()|と同じだが、parentsのアクションテーブルの
-		みが検索される。親のアクションを再利用したいときに用いる。
+		|unite#take_action()|と同じだが、{candidate}に
+		{extend-candidate}が合成された上で、parentsのアクションテーブル
+		のみが検索される。親のアクションを再利用したいときに用いる。
 
 unite#define_source({source})			*unite#define_source()*
 		{source}を動的に追加する。sourceの仕様については、
@@ -757,7 +758,8 @@ common					*unite-action-common*
 
 openable					*unite-action-openable*
 オープン可能ファイルのインタフェースを定義している。
-openアクションは個別に定義する必要がある。
+内部でopenアクションを呼び出すので、openアクションは継承したkind側が個別に定義
+する必要がある。
 	tabopen		ファイルをタブで開く
 	split		ウィンドウを水平分割してファイルを開く
 	vsplit		ウィンドウを垂直分割してファイルを開く
@@ -766,31 +768,34 @@ openアクションは個別に定義する必要がある。
 	above		ウィンドウを水平分割して上側にファイルを開く
 	below		ウィンドウを水平分割して下側にファイルを開く
 
-file						*unite-action-file*
-ファイルはすべて別のバッファに開かれる。
-このkindは|unite-action-openable|のアクションを継承している。
-	open		ファイルを開く
-	fopen		現在のバッファの変更を破棄してファイルを開く。
-			force openの略語。
-	preview		プレビューウィンドウにファイルを開く
+cdable					*unite-action-cdable*
+cd可能ファイルのインタフェースを定義している。
+内部では、candidate.action__directoryを使う。
 	cd		カレントディレクトリを変更
 	lcd		現在のウィンドウのカレントディレクトリを変更
-	bookmark	候補をブックマークに追加する
-	narrow		ファイルのあるディレクトリ名で候補を絞り込む
+	narrow		ディレクトリ名で候補を絞り込む
 	vimshell	そのディレクトリで|vimshell|を起動する。これ
 			は|vimshell|がインストールされている場合にのみ有効なア
 			クションである。
 	tabvimshell	そのディレクトリで|:VimShellTab|を実行する。これは
 			|vimshell|がインストールされている場合にのみ有効な
 			アクションである。
+	rec		そのディレクトリで|unite-source-file_rec|を起動する。
+
+file						*unite-action-file*
+ファイルはすべて別のバッファに開かれる。
+このkindは|unite-action-openable|と|unite-action-cdable|のアクションを継承している。
+内部ではcandidate.action__pathとcandidate.action__directoryを使う。
+	open		ファイルを開く
+	fopen		現在のバッファの変更を破棄してファイルを開く。
+			force openの略語。
+	preview		プレビューウィンドウにファイルを開く
+	bookmark	候補をブックマークに追加する
 
 buffer						*unite-action-buffer*
 このkindは|unite-action-file|のアクションを継承している。
 	delete		バッファを削除
 	fdelete		現在のバッファの変更を破棄して削除
-	narrow		ファイルのあるディレクトリ名で候補を絞り込む
-	cd		カレントディレクトリを変更
-	lcd		現在のウィンドウのカレントディレクトリを変更
 	bookmark	候補をブックマークに追加する
 
 tab						*unite-action-tab*
@@ -803,12 +808,8 @@ tab						*unite-action-tab*
 	rename		タブのタイトルを変更
 
 directory					*unite-action-directory*
-このkindは|unite-action-file|のアクションを継承している。ここではdirectory独自
-のアクションについて解説する。
-	narrow		ディレクトリ名で候補を絞り込む
-	vimshell	そのディレクトリで|vimshell|を起動する。これは
-			|vimshell|がインストールされている場合にのみ有効なアク
-			ションである。
+このkindは|unite-action-file|のアクションを継承している。独自のアクションは存在
+しない。対象がdirectoryのとき、default_actionを変更したい場合に使われる。
 
 word						*unite-action-word*
 	insert		現在のバッファに文字列を挿入する
@@ -997,7 +998,9 @@ action_table		辞書		(必須)
 				アクションの実行時に呼び出される関数。
 				{candidate}を引数に取る。アクションの
 				is_selectableが1の場合、{candidate}には候補のリ
-				ストが渡される。
+				ストが渡される。{candidate}はキャッシュされてい
+				るので、中身を変更してはならない。変更する場合
+				は、|deepcopy()|を使うこと。
 
 			is_quit			(数値)		(任意)
 				アクション実行後にuniteバッファを終了するかどう
@@ -1017,9 +1020,9 @@ action_table		辞書		(必須)
 parents			リスト		(任意)
 			アクションを継承するkindの名前をリスト形式で指定する。
 			省略すると、["common"]となる。アクションの検索について
-			は、リストの順番で辿っていき、後から見つかったものは上
-			書きされる。アクションは親のkindを辿って再帰的に検索さ
-			れるので、無限ループに注意しなければならない。
+			は、リストの順番で辿っていき、後から見つかったものによ
+			って上書きされる。アクションは親のkindを辿って再帰的に
+			検索されるので、無限ループに注意しなければならない。
 
 ==============================================================================
 設定例						*unite-examples*

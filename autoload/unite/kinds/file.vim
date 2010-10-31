@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2010
+" Last Modified: 31 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,7 +32,7 @@ let s:kind = {
       \ 'name' : 'file',
       \ 'default_action' : 'open',
       \ 'action_table': {},
-      \ 'parents': ['openable'],
+      \ 'parents': ['openable', 'cdable'],
       \}
 
 " Actions"{{{
@@ -59,46 +59,6 @@ let s:kind.action_table.preview = {
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
   pedit `=a:candidate.action__path`
-endfunction"}}}
-
-let s:kind.action_table.cd = {
-      \ }
-function! s:kind.action_table.cd.func(candidate)"{{{
-  let l:dir = isdirectory(a:candidate.action__path) ? a:candidate.action__path : fnamemodify(a:candidate.action__path, ':p:h')
-
-  if &filetype ==# 'vimfiler'
-    call vimfiler#internal_commands#cd(l:dir)
-  elseif &filetype ==# 'vimshell'
-    call vimshell#switch_shell(0, l:dir)
-  endif
-
-  execute g:unite_cd_command '`=l:dir`'
-endfunction"}}}
-
-let s:kind.action_table.lcd = {
-      \ }
-function! s:kind.action_table.lcd.func(candidate)"{{{
-  let l:dir = isdirectory(a:candidate.action__path) ? a:candidate.action__path : fnamemodify(a:candidate.action__path, ':p:h')
-
-  if &filetype ==# 'vimfiler'
-    call vimfiler#internal_commands#cd(l:dir)
-  elseif &filetype ==# 'vimshell'
-    call vimshell#switch_shell(0, l:dir)
-  endif
-
-  execute g:unite_lcd_command '`=l:dir`'
-endfunction"}}}
-
-let s:kind.action_table.narrow = {
-      \ 'is_quit' : 0,
-      \ }
-function! s:kind.action_table.narrow.func(candidate)"{{{
-  let l:word = fnamemodify(a:candidate.action__path, ':h')
-  if l:word !~ '[\\/]$'
-    let l:word .= '/'
-  endif
-
-  call unite#mappings#narrowing(l:word)
 endfunction"}}}
 "}}}
 

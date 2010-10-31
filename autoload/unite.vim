@@ -148,14 +148,14 @@ function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
   endfor
 endfunction"}}}
 function! unite#take_action(action_name, candidate)"{{{
-  let l:candidate = type(a:candidate) == type([]) ?
+  let l:candidate_head = type(a:candidate) == type([]) ?
         \ a:candidate[0] : a:candidate
 
-  let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, 0)
+  let l:action_table = unite#get_action_table(l:candidate_head.source, l:candidate_head.kind, 0)
 
   let l:action_name =
         \ a:action_name ==# 'default' ?
-        \ unite#get_default_action(l:candidate.source, l:candidate.kind)
+        \ unite#get_default_action(l:candidate_head.source, l:candidate_head.kind)
         \ : a:action_name
 
   if !has_key(l:action_table, a:action_name)
@@ -168,15 +168,17 @@ function! unite#take_action(action_name, candidate)"{{{
         \ (has_key(l:action, 'is_selectable') && l:action.is_selectable && type(a:candidate) != type([])) ?
         \ [a:candidate] : a:candidate)
 endfunction"}}}
-function! unite#take_parents_action(action_name, candidate)"{{{
-  let l:candidate = type(a:candidate) == type([]) ?
-        \ a:candidate[0] : a:candidate
+function! unite#take_parents_action(action_name, candidate, extend_candidate)"{{{
+  let l:candidate = extend(deepcopy(a:candidate), a:extend_candidate)
 
-  let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, 0, 1)
+  let l:candidate_head = type(a:candidate) == type([]) ?
+        \ l:candidate[0] : l:candidate
+
+  let l:action_table = unite#get_action_table(l:candidate_head.source, l:candidate_head.kind, 0, 1)
 
   let l:action_name =
         \ a:action_name ==# 'default' ?
-        \ unite#get_default_action(l:candidate.source, l:candidate.kind)
+        \ unite#get_default_action(l:candidate_head.source, l:candidate_head.kind)
         \ : a:action_name
 
   if !has_key(l:action_table, a:action_name)
@@ -187,7 +189,7 @@ function! unite#take_parents_action(action_name, candidate)"{{{
   " Convert candidates.
   call l:action.func(
         \ (has_key(l:action, 'is_selectable') && l:action.is_selectable && type(a:candidate) != type([])) ?
-        \ [a:candidate] : a:candidate)
+        \ [l:candidate] : l:candidate)
 endfunction"}}}
 function! unite#is_win()"{{{
   return has('win16') || has('win32') || has('win64')
@@ -377,6 +379,9 @@ function! unite#print_error(message)"{{{
 endfunction"}}}
 function! unite#substitute_path_separator(path)"{{{
   return unite#is_win() ? substitute(a:path, '\\', '/', 'g') : a:path
+endfunction"}}}
+function! unite#path2directory(path)"{{{
+  return isdirectory(a:path) ? a:path : unite#substitute_path_separator(fnamemodify(a:path, ':p:h'))
 endfunction"}}}
 "}}}
 

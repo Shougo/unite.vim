@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2010
+" Last Modified: 31 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,30 +36,6 @@ let s:kind = {
       \}
 
 " Actions"{{{
-let s:kind.action_table.narrow = {
-      \ 'is_quit' : 0,
-      \ }
-function! s:kind.action_table.narrow.func(candidate)"{{{
-  let l:word = a:candidate.action__path . (a:candidate.action__path =~ '[\\/]$' ? '' : '/')
-  call unite#mappings#narrowing(l:word)
-endfunction"}}}
-
-if exists(':VimShell')
-  let s:kind.action_table.vimshell = {
-        \ }
-  function! s:kind.action_table.vimshell.func(candidate)"{{{
-    let l:dir = isdirectory(a:candidate.action__path) ? a:candidate.action__path : fnamemodify(a:candidate.action__path, ':p:h')
-    VimShellCreate `=l:dir`
-  endfunction"}}}
-endif
-if exists(':VimShellTab')
-  let s:kind.action_table.tabvimshell = {
-        \ }
-  function! s:kind.action_table.tabvimshell.func(candidate)"{{{
-    let l:dir = isdirectory(a:candidate.action__path) ? a:candidate.action__path : fnamemodify(a:candidate.action__path, ':p:h')
-    VimShellTab `=l:dir`
-  endfunction"}}}
-endif
 "}}}
 
 " vim: foldmethod=marker

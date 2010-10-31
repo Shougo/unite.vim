@@ -35,6 +35,30 @@ let s:kind = {
       \}
 
 " Actions"{{{
+let s:kind.action_table.cd = {
+      \ }
+function! s:kind.action_table.cd.func(candidate)"{{{
+  if &filetype ==# 'vimfiler'
+    call vimfiler#internal_commands#cd(a:candidate.action__directory)
+  elseif &filetype ==# 'vimshell'
+    call vimshell#switch_shell(0, a:candidate.action__directory)
+  endif
+
+  execute g:unite_cd_command '`=a:candidate.action__directory`'
+endfunction"}}}
+
+let s:kind.action_table.lcd = {
+      \ }
+function! s:kind.action_table.lcd.func(candidate)"{{{
+  if &filetype ==# 'vimfiler'
+    call vimfiler#internal_commands#cd(a:candidate.action__directory)
+  elseif &filetype ==# 'vimshell'
+    call vimshell#switch_shell(0, a:candidate.action__directory)
+  endif
+
+  execute g:unite_lcd_command '`=a:candidate.action__directory`'
+endfunction"}}}
+
 let s:kind.action_table.narrow = {
       \ 'is_quit' : 0,
       \ }

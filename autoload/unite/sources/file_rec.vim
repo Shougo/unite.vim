@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2010
+" Last Modified: 31 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -81,7 +81,19 @@ function! s:source.gather_candidates(args, context)"{{{
         \ "source" : "file_rec",
         \ "kind" : "file",
         \ "action__path" : v:val,
+        \ "action__directory" : unite#path2directory(v:val),
         \ }')
 endfunction"}}}
+
+" Add custom action table."{{{
+let s:cdable_action_rec = {}
+
+function! s:cdable_action_rec.func(candidate)
+  call unite#start([['file_rec', a:candidate.action__directory]])
+endfunction
+
+call unite#custom_action('cdable', 'rec', s:cdable_action_rec)
+unlet! s:cdable_action_rec
+"}}}
 
 " vim: foldmethod=marker

@@ -76,6 +76,7 @@ function! s:source_buffer_all.gather_candidates(args, context)"{{{
         \ "source" : "buffer",
         \ "action__path" : unite#substitute_path_separator(bufname(v:val.action__buffer_nr)),
         \ "action__buffer_nr" : v:val.action__buffer_nr,
+        \ "action__directory" : s:get_directory(v:val.action__buffer_nr),
         \}')
 
   return l:candidates
@@ -102,6 +103,7 @@ function! s:source_buffer_tab.gather_candidates(args, context)"{{{
         \ "source" : "buffer_tab",
         \ "action__path" : unite#substitute_path_separator(bufname(v:val.action__buffer_nr)),
         \ "action__buffer_nr" : v:val.action__buffer_nr,
+        \ "action__directory" : s:get_directory(v:val.action__buffer_nr),
         \}')
 
   return l:candidates
@@ -122,6 +124,19 @@ function! s:make_abbr(bufnr)"{{{
 endfunction"}}}
 function! s:compare(candidate_a, candidate_b)"{{{
   return a:candidate_b.source__time - a:candidate_a.source__time
+endfunction"}}}
+function! s:get_directory(bufnr)"{{{
+  let l:filetype = getbufvar(a:bufnr, '&filetype')
+  if l:filetype ==# 'vimfiler'
+    let l:dir = getbufvar(a:bufnr, 'vimfiler').current_dir
+  elseif l:filetype ==# 'vimshell'
+    let l:dir = getbufvar(a:bufnr, 'vimshell').save_dir
+  else
+    let l:path = unite#substitute_path_separator(bufname(a:bufnr))
+    let l:dir = unite#path2directory(l:path)
+  endif
+
+  return l:dir
 endfunction"}}}
 
 " vim: foldmethod=marker

@@ -301,6 +301,7 @@ CHANGELOG					*unite-changelog*
 - Added unite#take_parents_action().
 - Added cdable source.
 - Improved Japanese documentation.
+- Added rec action in cdable.
 
 2010-10-30
 - Action specification is changed dramatically.
