@@ -233,6 +233,12 @@ g:unite_winheight				*g:unite_winheight*
 		
 		初期値は20である。
 
+g:unite_winwidth				*g:unite_winwidth*
+		uniteのウィンドウが垂直分割されたときの幅を指定する。水平分割の
+		場合は無視される。
+		
+		初期値は90である。
+
 g:unite_cd_command				*g:unite_cd_command*
 		cdアクションで実行されるVimのコマンドを指定する。
 		

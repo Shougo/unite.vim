@@ -428,8 +428,11 @@ function! unite#start(sources, ...)"{{{
 
   call unite#force_redraw()
 
-  if !g:unite_enable_split_vertically
-    execute g:unite_winheight 'wincmd _'
+  " Window resize.
+  if g:unite_enable_split_vertically
+    execute 'vertical resize' g:unite_winwidth
+  else
+    execute 'resize' g:unite_winheight
   endif
 
   if g:unite_enable_start_insert
@@ -484,9 +487,13 @@ function! unite#resume(buffer_name)"{{{
 
   let s:unite = b:unite
 
-  if !g:unite_enable_split_vertically
-    execute g:unite_winheight 'wincmd _'
+  " Window resize.
+  if g:unite_enable_split_vertically
+    execute 'vertical resize' g:unite_winwidth
+  else
+    execute 'resize' g:unite_winheight
   endif
+
 
   setlocal modifiable
 

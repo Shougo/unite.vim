@@ -304,6 +304,7 @@ CHANGELOG					*unite-changelog*
 - Added rec action in cdable.
 - Improved tab source.
 - Setlocal cursorline.
+- Added g:unite_winwidth option.
 
 2010-10-30
 - Action specification is changed dramatically.
