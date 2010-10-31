@@ -789,7 +789,6 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let s:last_unite_bufnr = bufnr('%')
 
   " Basic settings.
-  setlocal cursorline
   setlocal bufhidden=hide
   setlocal buftype=nofile
   setlocal nobuflisted
@@ -819,7 +818,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   if exists('&redrawtime')
     " Save redrawtime
     let b:unite.redrawtime_save = &redrawtime
-    let &redrawtime = 500
+    let &redrawtime = 100
   endif
 
   " User's initialization.
@@ -910,7 +909,6 @@ function! s:on_insert_enter()  "{{{
     let &updatetime = g:unite_update_time
   endif
 
-  setlocal cursorline
   setlocal modifiable
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
@@ -923,7 +921,6 @@ function! s:on_insert_leave()  "{{{
     let &updatetime = b:unite.update_time_save
   endif
 
-  setlocal nocursorline
   setlocal nomodifiable
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
@@ -939,6 +936,8 @@ function! s:on_cursor_hold()  "{{{
 endfunction"}}}
 function! s:on_cursor_moved()  "{{{
   execute 'setlocal' line('.') == 2 ? 'modifiable' : 'nomodifiable'
+  " execute 'match' (line('.') <= 2 ? line('$') <=2 ? 'Error /\%2l/' : 'Function /\%3l/' : 'Function /\%'.line('.').'l/')
+  execute 'match' (line('.') <= 2 ? line('$') <=2 ? 'Error /\%2l/' : 'PmenuSel /\%3l/' : 'PmenuSel /\%'.line('.').'l/')
 endfunction"}}}
 
 " Internal helper functions."{{{

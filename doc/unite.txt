@@ -303,8 +303,8 @@ CHANGELOG					*unite-changelog*
 - Improved Japanese documentation.
 - Added rec action in cdable.
 - Improved tab source.
-- Setlocal cursorline.
 - Added g:unite_winwidth option.
+- Improved match line.
 
 2010-10-30
 - Action specification is changed dramatically.
