@@ -799,12 +799,12 @@ buffer						*unite-action-buffer*
 	bookmark	候補をブックマークに追加する
 
 tab						*unite-action-tab*
+このkindは|gettabvar()|が存在するときのみ、|unite-action-cdable|のアクションを
+継承する。
 	open		タブを表示
 	delete		タブを閉じる
 	
 	次のアクションは|gettabvar()|およびt:cwdが存在する必要がある。
-	cd		カレントディレクトリを変更
-	lcd		現在のウィンドウのカレントディレクトリを変更
 	rename		タブのタイトルを変更
 
 directory					*unite-action-directory*

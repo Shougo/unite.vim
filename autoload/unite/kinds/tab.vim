@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2010
+" Last Modified: 31 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,41 +53,8 @@ function! s:kind.action_table.delete.func(candidates)"{{{
 endfunction"}}}
 
 if exists('*gettabvar')
-  let s:kind.action_table.cd = {
-        \ }
-  function! s:kind.action_table.cd.func(candidate)"{{{
-    let l:dir = a:candidate.action__tab_cwd
-    if l:dir == ''
-      " Ignore.
-      return
-    endif
-
-    if &filetype ==# 'vimfiler'
-      call vimfiler#internal_commands#cd(l:dir)
-    elseif &filetype ==# 'vimshell'
-      call vimshell#switch_shell(0, l:dir)
-    endif
-
-    execute g:unite_cd_command '`=l:dir`'
-  endfunction"}}}
-
-  let s:kind.action_table.lcd = {
-        \ }
-  function! s:kind.action_table.lcd.func(candidate)"{{{
-    let l:dir = a:candidate.action__tab_cwd
-    if l:dir == ''
-      " Ignore.
-      return
-    endif
-
-    if &filetype ==# 'vimfiler'
-      call vimfiler#internal_commands#cd(l:dir)
-    elseif &filetype ==# 'vimshell'
-      call vimshell#switch_shell(0, l:dir)
-    endif
-
-    execute g:unite_lcd_command '`=l:dir`'
-  endfunction"}}}
+  " Enable cd action.
+  let s:kind.parents = ['cdable']
 
   let s:kind.action_table.rename = {
       \ 'is_selectable' : 1,

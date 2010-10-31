@@ -101,7 +101,7 @@ function! s:source.gather_candidates(args, context)"{{{
           \ 'kind' : 'tab',
           \ 'source' : 'tab',
           \ 'action__tab_nr' : i,
-          \ 'action__tab_cwd' : l:cwd,
+          \ 'action__directory' : l:cwd,
           \ })
   endfor
 
