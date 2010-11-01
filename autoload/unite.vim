@@ -426,14 +426,14 @@ function! unite#start(sources, ...)"{{{
   call setline(s:LNUM_PATTERN, b:unite.prompt . b:unite.context.input)
   execute s:LNUM_PATTERN
 
-  call unite#force_redraw()
-
   " Window resize.
   if g:unite_enable_split_vertically
     execute 'vertical resize' g:unite_winwidth
   else
     execute 'resize' g:unite_winheight
   endif
+
+  call unite#force_redraw()
 
   if g:unite_enable_start_insert
         \ || b:unite.context.start_insert || b:unite.context.is_insert
@@ -493,7 +493,6 @@ function! unite#resume(buffer_name)"{{{
   else
     execute 'resize' g:unite_winheight
   endif
-
 
   setlocal modifiable
 
@@ -804,7 +803,8 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   augroup plugin-unite
     autocmd InsertEnter <buffer>  call s:on_insert_enter()
     autocmd InsertLeave <buffer>  call s:on_insert_leave()
-    autocmd CursorHoldI <buffer>  call s:on_cursor_hold()
+    autocmd CursorHoldI <buffer>  call s:on_cursor_hold_i()
+    autocmd CursorHold <buffer>  call s:on_cursor_hold()
     autocmd CursorMoved,CursorMovedI <buffer>  call s:on_cursor_moved()
   augroup END
 
@@ -923,7 +923,7 @@ function! s:on_insert_leave()  "{{{
 
   setlocal nomodifiable
 endfunction"}}}
-function! s:on_cursor_hold()  "{{{
+function! s:on_cursor_hold_i()  "{{{
   if line('.') == 2
     " Redraw.
     call unite#redraw()
@@ -932,6 +932,12 @@ function! s:on_cursor_hold()  "{{{
     if col('.') <= len(b:unite.prompt)
       startinsert!
     endif
+  endif
+endfunction"}}}
+function! s:on_cursor_hold()  "{{{
+  if line('.') == 2
+    " Redraw.
+    call unite#redraw()
   endif
 endfunction"}}}
 function! s:on_cursor_moved()  "{{{
