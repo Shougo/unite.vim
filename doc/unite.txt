@@ -294,6 +294,7 @@ CHANGELOG					*unite-changelog*
 
 2010-11-01
 - Improved redraw.
+- Fixed parents.
 
 2010-10-31
 - Fixed buffer action error.
