@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2010
+" Last Modified: 02 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -115,7 +115,6 @@ let s:FALSE = 0
 let s:TRUE = !s:FALSE
 
 let s:LNUM_STATUS = 1
-let s:LNUM_PATTERN = 2
 "}}}
 
 " Variables  "{{{
@@ -315,7 +314,7 @@ function! unite#redraw() "{{{
 endfunction"}}}
 function! unite#redraw_line(...) "{{{
   let l:linenr = a:0 > 0 ? a:1 : line('.')
-  if l:linenr <= 2 || &filetype !=# 'unite'
+  if l:linenr <= b:unite.prompt_linenr || &filetype !=# 'unite'
     " Ignore.
     return
   endif
@@ -323,7 +322,7 @@ function! unite#redraw_line(...) "{{{
   let l:modifiable_save = &l:modifiable
   setlocal modifiable
 
-  let l:candidate = unite#get_unite_candidates()[l:linenr - 3]
+  let l:candidate = unite#get_unite_candidates()[l:linenr - (b:unite.prompt_linenr+1)]
   call setline(l:linenr, s:convert_line(l:candidate))
 
   let &l:modifiable = l:modifiable_save
@@ -332,7 +331,7 @@ function! unite#quick_match_redraw() "{{{
   let l:modifiable_save = &l:modifiable
   setlocal modifiable
 
-  call setline(3, s:convert_quick_match_lines(b:unite.candidates))
+  call setline(b:unite.prompt_linenr+1, s:convert_quick_match_lines(b:unite.candidates))
   redraw
 
   let &l:modifiable = l:modifiable_save
@@ -367,12 +366,12 @@ function! unite#keyword_filter(list, input)"{{{
 endfunction"}}}
 function! unite#get_input()"{{{
   " Prompt check.
-  if stridx(getline(2), b:unite.prompt) != 0
+  if stridx(getline(b:unite.prompt_linenr), b:unite.prompt) != 0
     " Restore prompt.
-    call setline(2, b:unite.prompt . getline(2))
+    call setline(b:unite.prompt_linenr, b:unite.prompt . getline(b:unite.prompt_linenr))
   endif
 
-  return getline(2)[len(b:unite.prompt):]
+  return getline(b:unite.prompt_linenr)[len(b:unite.prompt):]
 endfunction"}}}
 function! unite#print_error(message)"{{{
   echohl WarningMsg | echomsg a:message | echohl None
@@ -423,8 +422,8 @@ function! unite#start(sources, ...)"{{{
 
   silent % delete _
   call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(a:sources), 'v:val[0]'), ', '))
-  call setline(s:LNUM_PATTERN, b:unite.prompt . b:unite.context.input)
-  execute s:LNUM_PATTERN
+  call setline(b:unite.prompt_linenr, b:unite.prompt . b:unite.context.input)
+  execute b:unite.prompt_linenr
 
   " Window resize.
   if g:unite_enable_split_vertically
@@ -437,10 +436,10 @@ function! unite#start(sources, ...)"{{{
 
   if g:unite_enable_start_insert
         \ || b:unite.context.start_insert || b:unite.context.is_insert
-    2
+    execute b:unite.prompt_linenr
     startinsert!
   else
-    3
+    execute (b:unite.prompt_linenr+1)
     normal! 0z.
   endif
 
@@ -497,10 +496,11 @@ function! unite#resume(buffer_name)"{{{
   setlocal modifiable
 
   if g:unite_enable_start_insert
-    2
+        \ || b:unite.context.start_insert || b:unite.context.is_insert
+    execute b:unite.prompt_linenr
     startinsert!
   else
-    3
+    execute (b:unite.prompt_linenr+1)
     normal! 0z.
   endif
 
@@ -782,6 +782,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.last_input = l:context.input
   let b:unite.bufnr = bufnr('%')
   let b:unite.hlsearch_save = &hlsearch
+  let b:unite.prompt_linenr = 2
 
   let s:unite = b:unite
 
@@ -886,16 +887,16 @@ function! s:redraw(is_force) "{{{
 
   let l:lines = s:convert_lines(l:candidates)
   if len(l:lines) < len(b:unite.candidates)
-    if mode() !=# 'i' && line('.') == 2
-      silent! 3,$delete _
+    if mode() !=# 'i' && line('.') == b:unite.prompt_linenr
+      silent! execute (b:unite.prompt_linenr+1).',$delete _'
       startinsert!
     else
       let l:pos = getpos('.')
-      silent! 3,$delete _
+      silent! execute (b:unite.prompt_linenr+1).',$delete _'
       call setpos('.', l:pos)
     endif
   endif
-  call setline(3, l:lines)
+  call setline(b:unite.prompt_linenr+1, l:lines)
 
   let &l:modifiable = l:modifiable_save
 
@@ -912,7 +913,7 @@ function! s:on_insert_enter()  "{{{
   setlocal modifiable
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
-  if line('.') == 2
+  if line('.') == b:unite.prompt_linenr
     " Redraw.
     call unite#redraw()
   endif
@@ -924,7 +925,7 @@ function! s:on_insert_leave()  "{{{
   setlocal nomodifiable
 endfunction"}}}
 function! s:on_cursor_hold_i()  "{{{
-  if line('.') == 2
+  if line('.') == b:unite.prompt_linenr
     " Redraw.
     call unite#redraw()
 
@@ -935,15 +936,15 @@ function! s:on_cursor_hold_i()  "{{{
   endif
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
-  if line('.') == 2
+  if line('.') == b:unite.prompt_linenr
     " Redraw.
     call unite#redraw()
   endif
 endfunction"}}}
 function! s:on_cursor_moved()  "{{{
-  execute 'setlocal' line('.') == 2 ? 'modifiable' : 'nomodifiable'
-  " execute 'match' (line('.') <= 2 ? line('$') <=2 ? 'Error /\%2l/' : 'Function /\%3l/' : 'Function /\%'.line('.').'l/')
-  execute 'match' (line('.') <= 2 ? line('$') <=2 ? 'Error /\%2l/' : 'PmenuSel /\%3l/' : 'PmenuSel /\%'.line('.').'l/')
+  execute 'setlocal' line('.') == b:unite.prompt_linenr ? 'modifiable' : 'nomodifiable'
+  execute 'match' (line('.') <= b:unite.prompt_linenr ? line('$') <= b:unite.prompt_linenr ?
+        \ 'Error /\%'.b:unite.prompt_linenr.'l/' : 'PmenuSel /\%'.(b:unite.prompt_linenr+1).'l/' : 'PmenuSel /\%'.line('.').'l/')
 endfunction"}}}
 
 " Internal helper functions."{{{

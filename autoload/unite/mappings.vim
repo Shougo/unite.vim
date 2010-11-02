@@ -43,9 +43,9 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_search_next_source)  :<C-u>call <SID>search_source(1)<CR>
   nnoremap <silent><buffer> <Plug>(unite_search_previous_source)  :<C-u>call <SID>search_source(0)<CR>
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
-  nnoremap <buffer> <Plug>(unite_cursor_top)  2G0z.
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? '2G0z.' : 'j'
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= 2)? 'G' : 'k'
+  nnoremap <buffer><expr> <Plug>(unite_cursor_top)  b:unite.prompt_linenr.'G0z.'
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? b:unite.prompt_linenr.'G0z.' : 'j'
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= b:unite.prompt_linenr)? 'G' : 'k'
   nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  :<C-u>call <SID>quick_match()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
@@ -56,10 +56,10 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(b:unite.prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(b:unite.prompt)+1) ? '' : "\<C-w>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_path)  col('.') <= (len(b:unite.prompt)+1) ? '' : <SID>delete_backward_path()
-  inoremap <expr><buffer> <Plug>(unite_select_next_line)  pumvisible() ? "\<C-n>" : line('.') == line('$') ? "\<C-Home>\<End>\<Down>" 
-        \ : line('.') == 2 ?"\<Home>\<Down>\<Down>" : "\<Home>\<Down>"
-  inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : line('.') == 2 ? "\<C-End>\<Home>"
-        \ : line('.') == 4 ?"\<End>\<Up>\<Up>" : "\<Home>\<Up>"
+  inoremap <expr><buffer> <Plug>(unite_select_next_line)  pumvisible() ? "\<C-n>" : line('.') == line('$') ? "\<C-Home>\<End>".repeat("\<Down>", b:unite.prompt_linenr-1)
+        \ : line('.') == b:unite.prompt_linenr ? "\<Home>\<Down>\<Down>" : "\<Home>\<Down>"
+  inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : line('.') == b:unite.prompt_linenr ? "\<C-End>\<Home>"
+        \ : line('.') == (b:unite.prompt_linenr+2) ? "\<End>\<Up>\<Up>" : "\<Home>\<Up>"
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
   inoremap <silent><buffer> <Plug>(unite_do_default_action) <C-o>:call unite#mappings#do_action(b:unite.context.default_action)<CR>
@@ -127,17 +127,17 @@ endfunction"}}}
 
 function! unite#mappings#narrowing(word)"{{{
   setlocal modifiable
-  call setline(2, b:unite.prompt . escape(a:word, ' *'))
-  2
+  call setline(b:unite.prompt_linenr, b:unite.prompt . escape(a:word, ' *'))
+  execute b:unite.prompt_linenr
   startinsert!
 endfunction"}}}
 function! unite#mappings#do_action(action_name, ...)"{{{
   let l:candidates = unite#get_marked_candidates()
 
   if empty(l:candidates)
-    let l:num = a:0 > 0 ? a:1 : line('.') <= 2 ? 0 : line('.') - 3
+    let l:num = a:0 > 0 ? a:1 : line('.') <= b:unite.prompt_linenr ? 0 : line('.') - (b:unite.prompt_linenr+1)
 
-    if line('$')-3 < l:num
+    if line('$')-(b:unite.prompt_linenr+1) < l:num
       " Ignore.
       return
     endif
@@ -217,7 +217,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   endif
 endfunction"}}}
 function! unite#mappings#smart_map(narrow_map, select_map)"{{{
-  return (line('.') <= 2 && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
+  return (line('.') <= b:unite.prompt_linenr && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
 endfunction"}}}
 
 " key-mappings functions.
@@ -225,16 +225,16 @@ function! s:exit()"{{{
   call unite#quit_session()
 endfunction"}}}
 function! s:delete_backward_path()"{{{
-  let l:input = getline(2)[len(b:unite.prompt):]
+  let l:input = getline(b:unite.prompt_linenr)[len(b:unite.prompt):]
   return repeat("\<C-h>", len(matchstr(l:input, '[^/]*.$')))
 endfunction"}}}
 function! s:toggle_mark()"{{{
-  if line('.') <= 2
+  if line('.') <= b:unite.prompt_linenr
     " Ignore.
     return
   endif
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - 3]
+  let l:candidate = unite#get_unite_candidates()[line('.') - (b:unite.prompt_linenr+1)]
   let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
   let l:candidate.unite__marked_time = localtime()
   call unite#redraw_line()
@@ -242,14 +242,14 @@ function! s:toggle_mark()"{{{
   normal! j
 endfunction"}}}
 function! s:toggle_mark_candidates(start, end)"{{{
-  if a:start <= 2
+  if a:start <= b:unite.prompt_linenr
     " Ignore.
     return
   endif
 
   let l:cnt = a:start
   while l:cnt <= a:end
-    let l:candidate = unite#get_unite_candidates()[l:cnt - 3]
+    let l:candidate = unite#get_unite_candidates()[l:cnt - (b:unite.prompt_linenr+1)]
     let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
     let l:candidate.unite__marked_time = localtime()
 
@@ -259,14 +259,14 @@ function! s:toggle_mark_candidates(start, end)"{{{
   endwhile
 endfunction"}}}
 function! s:choose_action()"{{{
-  if line('$') < 3
+  if line('$') < (b:unite.prompt_linenr+1)
     " Ignore.
     return
   endif
 
   let l:candidates = unite#get_marked_candidates()
   if empty(l:candidates)
-    let l:num = line('.') <= 2 ? 0 : line('.') - 3
+    let l:num = line('.') <= b:unite.prompt_linenr ? 0 : line('.') - (b:unite.prompt_linenr+1)
 
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
@@ -342,8 +342,8 @@ function! s:choose_action()"{{{
   call unite#mappings#do_action(l:actions[0])
 endfunction"}}}
 function! s:insert_enter()"{{{
-  if line('.') != 2 || col('.') == 1
-    2
+  if line('.') != b:unite.prompt_linenr || col('.') == 1
+    execute b:unite.prompt_linenr
     startinsert!
   else
     startinsert
@@ -367,9 +367,9 @@ endfunction"}}}
 function! s:search_source(is_next)"{{{
   let l:new_pos = getpos('.')
 
-  let l:current_source = line('.') < 2 ? '' : matchstr(getline('.'), '[[:space:]]\zs[a-z_-]\+$')
+  let l:current_source = line('.') < b:unite.prompt_linenr ? '' : matchstr(getline('.'), '[[:space:]]\zs[a-z_-]\+$')
 
-  3
+  execute (b:unite.prompt_linenr+1)
   let l:poses = []
   let i = 0
   let l:current_pos = -1
@@ -402,25 +402,25 @@ function! s:search_source(is_next)"{{{
   normal! 0
 endfunction"}}}
 function! s:print_candidate()"{{{
-  if line('.') <= 2
+  if line('.') <= b:unite.prompt_linenr
     " Ignore.
     return
   endif
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - 3]
+  let l:candidate = unite#get_unite_candidates()[line('.') - (b:unite.prompt_linenr+1)]
   echo l:candidate.word
 endfunction"}}}
 function! s:insert_selected_candidate()"{{{
-  if line('.') <= 2
+  if line('.') <= b:unite.prompt_linenr
     " Ignore.
     return
   endif
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - 3]
+  let l:candidate = unite#get_unite_candidates()[line('.') - (b:unite.prompt_linenr+1)]
   call unite#mappings#narrowing(l:candidate.word)
 endfunction"}}}
 function! s:quick_match()"{{{
-  if line('$') < 3
+  if line('$') < (b:unite.prompt_linenr+1)
     call unite#print_error('Candidate is nothing.')
     return
   elseif !empty(unite#get_marked_candidates())
