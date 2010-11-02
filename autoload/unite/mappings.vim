@@ -164,8 +164,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     let l:action = l:action_table[l:action_name]
 
     " Check selectable flag.
-    if (!has_key(l:action, 'is_selectable') || !l:action.is_selectable)
-          \ && len(l:candidates) > 1
+    if !l:action.is_selectable && len(l:candidates) > 1
       call unite#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
       call unite#print_error('Not selectable action : ' . l:action_name)
       return
@@ -187,7 +186,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
       call add(l:action_tables, {
             \ 'action' : l:action,
             \ 'source_names' : [l:candidate.source],
-            \ 'candidates' : ((!has_key(l:action, 'is_selectable') || !l:action.is_selectable) ? l:candidate : [l:candidate]),
+            \ 'candidates' : (!l:action.is_selectable ? l:candidate : [l:candidate]),
             \ })
     endif
   endfor
@@ -196,14 +195,14 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   let l:is_redraw = 0
   for l:table in l:action_tables
     " Check quit flag.
-    if !has_key(l:table.action, 'is_quit') || l:table.action.is_quit
+    if l:table.action.is_quit
       call unite#quit_session()
     endif
 
     call l:table.action.func(l:table.candidates)
 
     " Check invalidate cache flag.
-    if has_key(l:table.action, 'is_invalidate_cache') && l:table.action.is_invalidate_cache
+    if l:table.action.is_invalidate_cache
       for l:source_name in l:table.source_names
         call unite#invalidate_cache(l:source_name)
       endfor
@@ -279,7 +278,6 @@ function! s:choose_action()"{{{
       let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
       " Filtering unique items and check selectable flag.
       call filter(s:actions, 'has_key(l:action_table, v:key)
-            \ && has_key(l:action_table[v:key], "is_selectable")
             \ && l:action_table[v:key].is_selectable')
     endfor
   endif

@@ -68,7 +68,6 @@ function! unite#custom_action(kind, name, action)"{{{
     if !has_key(s:custom_actions, key)
       let s:custom_actions[key] = {}
     endif
-
     let s:custom_actions[key][a:name] = a:action
   endfor
 endfunction"}}}
@@ -164,7 +163,7 @@ function! unite#take_action(action_name, candidate)"{{{
   let l:action = l:action_table[a:action_name]
   " Convert candidates.
   call l:action.func(
-        \ (has_key(l:action, 'is_selectable') && l:action.is_selectable && type(a:candidate) != type([])) ?
+        \ l:action.is_selectable && type(a:candidate) != type([])) ?
         \ [a:candidate] : a:candidate)
 endfunction"}}}
 function! unite#take_parents_action(action_name, candidate, extend_candidate)"{{{
@@ -187,7 +186,7 @@ function! unite#take_parents_action(action_name, candidate, extend_candidate)"{{
   let l:action = l:action_table[a:action_name]
   " Convert candidates.
   call l:action.func(
-        \ (has_key(l:action, 'is_selectable') && l:action.is_selectable && type(a:candidate) != type([])) ?
+        \ l:action.is_selectable && type(a:candidate) != type([])) ?
         \ [l:candidate] : l:candidate)
 endfunction"}}}
 function! unite#is_win()"{{{
@@ -225,35 +224,47 @@ function! unite#get_action_table(source_name, kind_name, ...)"{{{
   for l:parent in l:kind.parents
     call extend(l:action_table, unite#get_action_table(a:source_name, l:parent, l:contains_custom_action))
   endfor
-  if l:is_parents_action
-    return filter(l:action_table, 'v:key !=# "nop"')
+
+  if !l:is_parents_action
+    " Kind actions.
+    let l:action_table = extend(copy(l:action_table), l:kind.action_table)
+    " Kind custom actions.
+    if l:contains_custom_action && has_key(s:custom_actions, a:kind_name)
+      let l:action_table = extend(l:action_table, s:custom_actions[a:kind_name])
+    endif
+    " Kind custom aliases.
+    if l:contains_custom_action && has_key(s:custom_aliases, a:kind_name)
+      call s:filter_alias_action(l:action_table, s:custom_aliases[a:kind_name])
+    endif
+
+    " Source/kind actions.
+    if has_key(l:source, 'action_table')
+          \ && has_key(l:source.action_table, a:kind_name)
+      let l:action_table = extend(l:action_table, l:source.action_table[a:kind_name])
+    endif
+    let l:source_kind = a:source_name.'/'.a:kind_name
+    " Source/kind custom actions.
+    if l:contains_custom_action && has_key(s:custom_actions, l:source_kind)
+      let l:action_table = extend(l:action_table, s:custom_actions[a:kind_name])
+    endif
+    " Source/kind custom aliases.
+    if l:contains_custom_action && has_key(s:custom_aliases, l:source_kind)
+      call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind])
+    endif
   endif
 
-  " Kind actions.
-  let l:action_table = extend(copy(l:action_table), l:kind.action_table)
-  " Kind custom actions.
-  if l:contains_custom_action && has_key(s:custom_actions, a:kind_name)
-    let l:action_table = extend(l:action_table, s:custom_actions[a:kind_name])
-  endif
-  " Kind custom aliases.
-  if l:contains_custom_action && has_key(s:custom_aliases, a:kind_name)
-    call s:filter_alias_action(l:action_table, s:custom_aliases[a:kind_name])
-  endif
-
-  " Source/kind actions.
-  if has_key(l:source, 'action_table')
-        \ && has_key(l:source.action_table, a:kind_name)
-    let l:action_table = extend(l:action_table, l:source.action_table[a:kind_name])
-  endif
-  let l:source_kind = a:source_name.'/'.a:kind_name
-  " Source/kind custom actions.
-  if l:contains_custom_action && has_key(s:custom_actions, l:source_kind)
-    let l:action_table = extend(l:action_table, s:custom_actions[a:kind_name])
-  endif
-  " Source/kind custom aliases.
-  if l:contains_custom_action && has_key(s:custom_aliases, l:source_kind)
-    call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind])
-  endif
+  " Set default parameters.
+  for l:action in values(l:action_table)
+    if !has_key(l:action, 'is_quit')
+      let l:action.is_quit = 1
+    endif
+    if !has_key(l:action, 'is_selectable')
+      let l:action.is_selectable = 0
+    endif
+    if !has_key(l:action, 'is_invalidate_cache')
+      let l:action.is_invalidate_cache = 0
+    endif
+  endfor
 
   " Filtering nop action.
   return filter(l:action_table, 'v:key !=# "nop"')

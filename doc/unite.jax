@@ -1019,7 +1019,7 @@ action_table		辞書		(必須)
 
 			is_invalidate_cache	(数値)		(任意)
 				このアクションを実行した際にキャッシュを無効化
-				するかどうか。省略すると1になり、キャッシュは無
+				するかどうか。省略すると0になり、キャッシュは無
 				効化されない。
 
 						*unite-kind-attribute-parents*
