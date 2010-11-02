@@ -163,7 +163,7 @@ function! unite#take_action(action_name, candidate)"{{{
   let l:action = l:action_table[a:action_name]
   " Convert candidates.
   call l:action.func(
-        \ l:action.is_selectable && type(a:candidate) != type([])) ?
+        \ (l:action.is_selectable && type(a:candidate) != type([])) ?
         \ [a:candidate] : a:candidate)
 endfunction"}}}
 function! unite#take_parents_action(action_name, candidate, extend_candidate)"{{{
