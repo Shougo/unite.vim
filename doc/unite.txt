@@ -292,6 +292,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-02
+- Improved <Plug>(unite_select_next_line) and <Plug>(unite_select_previous_line).
+
 2010-11-01
 - Improved redraw.
 - Fixed parents.
