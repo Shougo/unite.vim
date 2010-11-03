@@ -2,6 +2,7 @@
 
 Version: 1.0
 Author : Shougo <Shougo.Matsu@gmail.com>
+Japanese Documentation Author: ujihisa
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
@@ -25,14 +26,21 @@ License: MIT license  {{{
 CONTENTS					*unite-contents*
 
 Introduction		|unite-introduction|
+Usage			|unite-usage|
 Install			|unite-install|
 Interface		|unite-interface|
   Commands		  |unite-commands|
   Variables		  |unite-variables|
     Sources variables	    |unite-sources-variables|
   Key mappings		  |unite-key-mappings|
-Examples		|unite-examples|
+  Functions		  |unite-functins|
+  source		  |unite-source|
+  kind			  |unite-kind|
+  Actions		  |unite-action|
+Configulation Examples	|unite-examples|
 Create source		|unite-create-source|
+Create kind		|unite-create-kind|
+User defined source	|unite-user-sources|
 ToDo			|unite-todo|
 Bugs			|unite-bugs|
 Changelog		|unite-changelog|
@@ -75,8 +83,8 @@ about the actions.
 You can narrow down the candidates with a keyword.  After opening a unite
 window, the cursor goes on the right side of > in the 2nd line by typing i.
 Then you can input a keyword to narrow down the candidates.  Each single
-characters you type narrows down the candidates.  You also can use a wild card * as an
-arbitrary character sequence.  For example
+characters you type narrows down the candidates.  You also can use a wild
+card * as an arbitrary character sequence.  For example
 >
 	*hisa
 <
@@ -100,10 +108,26 @@ You may specify negative conditions with !.
 <
 That matches foo but candidates that match bar will be rejected.
 
+	You may add wild cards automatically with / if you specify files on
+	-buffer-name option.  That's handy in case you select file with unite.
+
+	:Unite -buffer-name=files file
+
 See also |unite_default_key_mappings|for other actions.
 
 ==============================================================================
 INSTALL						*unite-install*
+
+Install the distributed files into Vim script directory which is usually
+~/.vim/, or $HOME/vimfiles on Windows.
+
+In future VimJolts the Vim plugin package manager will support unite, you can
+install unite just by `jolt install unite`.
+
+You may run unite with |:Unite| command with source as parameters if you
+succeeded in installing unite.  However, it's pain in ass to run the command
+explicitly every time, so I recommend you to set a key mapping for the
+command.
 
 ==============================================================================
 INTERFACE					*unite-interface*
@@ -111,11 +135,46 @@ INTERFACE					*unite-interface*
 ------------------------------------------------------------------------------
 COMMANDS 					*unite-commands*
 
-:Unite [-buffer-name={buffer-name}] [-input={input-text}] {sources}
-						*:Unite*
-		Unite all sources. Initial narrowing text is empty.
-		{buffer-name} is unite buffer name.
-		{input-text} is initial input text.
+:Unite [{options}] {sources}			*:Unite*
+		Shows the candidate window of {sources} with empty initial
+		narrowing text.  You may specify multiple {sources} with
+		spaces as a separator; the order of the {sources} will be the
+		order of candidates.  See |unite-source| also for sources.
+
+		In case you are already on unite buffer, the narrowing text
+		will be stored.
+
+		You may give a list of strings, separating with :, after the
+		name of sources. You must escape : and \ with \ for parameters
+		themselves.  It depends on the sources how the parameters will
+		be interpreted.
+
+		Examples:
+		"file:foo:bar": the parameters of source file are [foo, bar].
+		"file:foo\:bar": the parameters of source file are [foo:bar].
+
+		{options} are options for a unite buffer.  You may give the
+		following parameters for a option; you must escape with \ when
+		it contains spaces.
+
+		-buffer-name={buffer-name}
+		Specifies a buffer name. You can share a configuration of
+		functions like |unite#set_substitute_pattern()| by giving a
+		buffer name for unite buffers that have same purpose.
+		The default buffer name is 'default'.
+
+		-input={input-text}
+		Specifies an initial narrowing text. The default value is ''.
+
+		-prompt={prompt-text}
+		Specifies a prompt. The default value is '> '.
+
+		-default-action={default-action}
+		Specifies a default action. The default value is 'default'.
+
+		-start-insert
+		Opens unite with narrowing mode. Otherwise the initial mode
+		will be Normal mode.
 
 :UniteWithCurrentDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
 						*:UniteWithCurrentDir*
@@ -220,6 +279,9 @@ Normal mode mappings.
 	autoload/unite/mappings.vim.
 
 ==============================================================================
+FUNCTIONS					*unite-functions*
+
+==============================================================================
 SOURCE						*unite-source*
 
 ------------------------------------------------------------------------------
@@ -256,6 +318,18 @@ required_pattern_length	number		(optional)
 			collect candidates.
 
 ==============================================================================
+KIND						*unite-kind* *{kind}*
+
+==============================================================================
+ACTIONS						*unite-action* *{action}*
+
+==============================================================================
+CREATE SOURCE					*unite-create-source*
+
+==============================================================================
+CREATE KIND					*unite-create-kind*
+
+==============================================================================
 EXAMPLES					*unite-examples*
 >
 	
@@ -282,6 +356,9 @@ EXAMPLES					*unite-examples*
 	let g:unite_source_file_mru_limit = 200
 	
 >
+==============================================================================
+USER DEFINED SOURCES				*unite-user-sources*
+
 ==============================================================================
 TODO						*unite-todo*
 
