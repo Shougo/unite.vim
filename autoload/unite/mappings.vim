@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Nov 2010
+" Last Modified: 03 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,11 +28,6 @@
 function! unite#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_default_action)  :<C-u>call unite#mappings#do_action(b:unite.context.default_action)<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_delete_action)  :<C-u>call unite#mappings#do_action('delete')<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_bookmark_action)  :<C-u>call unite#mappings#do_action('bookmark')<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_preview_action)  :<C-u>call unite#mappings#do_action('preview')<CR>
-  nnoremap <silent><buffer> <Plug>(unite_do_narrow_action)  :<C-u>call unite#mappings#do_action('narrow')<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
@@ -48,6 +43,12 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= b:unite.prompt_linenr)? 'G' : 'k'
   nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  :<C-u>call <SID>quick_match()<CR>
 
+  nnoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(b:unite.context.default_action)
+  nnoremap <silent><buffer><expr> <Plug>(unite_do_delete_action)    unite#do_action('delete')
+  nnoremap <silent><buffer><expr> <Plug>(unite_do_narrow_action)    unite#do_action('narrow')
+  nnoremap <silent><buffer><expr> <Plug>(unite_do_bookmark_action)  unite#do_action('bookmark')
+  nnoremap <silent><buffer><expr> <Plug>(unite_do_preview_action)   unite#do_action('preview')
+
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
 
   inoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
@@ -62,13 +63,14 @@ function! unite#mappings#define_default_mappings()"{{{
         \ : line('.') == (b:unite.prompt_linenr+2) ? "\<End>\<Up>\<Up>" : "\<Home>\<Up>"
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
-  inoremap <silent><buffer> <Plug>(unite_do_default_action) <C-o>:call unite#mappings#do_action(b:unite.context.default_action)<CR>
-  inoremap <silent><buffer> <Plug>(unite_do_delete_action)  <C-o>:call unite#mappings#do_action('delete')<CR>
-  inoremap <silent><buffer> <Plug>(unite_do_narrow_action) <C-o>:call unite#mappings#do_action('narrow')<CR>
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <silent><buffer> <Plug>(unite_move_head)  <C-o>:<C-u>call <SID>insert_head()<CR>
   inoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  <C-o>:<C-u>call <SID>quick_match()<CR>
+
+  inoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(b:unite.context.default_action)
+  inoremap <silent><buffer><expr> <Plug>(unite_do_delete_action)    unite#do_action('delete')
+  inoremap <silent><buffer><expr> <Plug>(unite_do_narrow_action)    unite#do_action('narrow')
   "}}}
 
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings

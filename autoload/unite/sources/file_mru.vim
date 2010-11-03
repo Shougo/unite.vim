@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2010
+" Last Modified: 03 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -95,7 +95,7 @@ let s:action_table.delete = {
       \ }
 function! s:action_table.delete.func(candidates)"{{{
   for l:candidate in a:candidates
-    call filter(s:mru_files, 'v:val.action__path !=# a:candidate.action__path')
+    call filter(s:mru_files, 'v:val.action__path !=# l:candidate.action__path')
   endfor
 
   call s:save()

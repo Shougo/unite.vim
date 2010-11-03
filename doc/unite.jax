@@ -552,7 +552,7 @@ unite#get_context()						*unite#get_context()*
 		|unite#custom_action()|などで、|unite#start()|を内部で呼び出す
 		際に使用する。
 
-unite#mappings#do_action({action-name} [, {candidate-num}])	*unite#mappings#do_action()*
+unite#do_action({action-name})					*unite#do_action()*
 		マークしている候補に対して{action-name}アクションを実行す
 		る。この関数はuniteが起動している時にのみ動作する。{action-name}が存
 		在しない、もしくは不正な実行だった場合はエラーとなる。
@@ -561,8 +561,7 @@ unite#mappings#do_action({action-name} [, {candidate-num}])	*unite#mappings#do_a
 		{action-name}に"default"を指定すると、デフォルトのアクションが
 		実行される。
 		候補がマークされていない場合は、現在の行もしくは、一番上の候補
-		に対してアクションを実行する。ただし{candidate-num}が指定されて
-		いる時は、そちらを優先する。
+		に対してアクションを実行する。
 
 unite#mappings#smart_map({narrow-map}, {select-map})		*unite#mappings#smart_map()*
 		絞り込み時と選択時のマッピングを設定し、文脈によって切り換える。
@@ -1047,7 +1046,7 @@ parents			リスト		(任意)
 	" Overwrite settings.
 	
 	imap <buffer> jj      <Plug>(unite_insert_leave)
-	nnoremap <silent><buffer> <C-k> :<C-u>call unite#mappings#do_action('preview')<CR>
+	nnoremap <silent><buffer><expr> <C-k> unite#do_action('preview')
 	"imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
 	
 	" Start insert.

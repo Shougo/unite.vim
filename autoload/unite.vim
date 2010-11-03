@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Nov 2010
+" Last Modified: 03 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -107,6 +107,11 @@ function! unite#undef_kind(name)"{{{
     call remove(s:custom_kind, a:name)
   endif
 endfunction"}}}
+
+function! unite#do_action(action)
+  return printf("%s:\<C-u>call unite#mappings#do_action(%s)\<CR>",
+        \             (mode() ==# 'i' ? "\<ESC>" : ''), string(a:action))
+endfunction
 "}}}
 
 " Constants"{{{
