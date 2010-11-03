@@ -25,14 +25,21 @@ License: MIT license  {{{
 CONTENTS					*unite-contents*
 
 Introduction		|unite-introduction|
+Usage			|unite-usage|
 Install			|unite-install|
 Interface		|unite-interface|
   Commands		  |unite-commands|
   Variables		  |unite-variables|
     Sources variables	    |unite-sources-variables|
   Key mappings		  |unite-key-mappings|
-Examples		|unite-examples|
+  Functions		  |unite-functins|
+  source		  |unite-source|
+  kind			  |unite-kind|
+  Actions		  |unite-action|
+Configulation Examples	|unite-examples|
 Create source		|unite-create-source|
+Create kind		|unite-create-kind|
+User defined source	|unite-user-sources|
 ToDo			|unite-todo|
 Bugs			|unite-bugs|
 Changelog		|unite-changelog|
@@ -220,6 +227,9 @@ Normal mode mappings.
 	autoload/unite/mappings.vim.
 
 ==============================================================================
+FUNCTIONS					*unite-functions*
+
+==============================================================================
 SOURCE						*unite-source*
 
 ------------------------------------------------------------------------------
@@ -256,6 +266,18 @@ required_pattern_length	number		(optional)
 			collect candidates.
 
 ==============================================================================
+KIND						*unite-kind* *{kind}*
+
+==============================================================================
+ACTIONS						*unite-action* *{action}*
+
+==============================================================================
+CREATE SOURCE					*unite-create-source*
+
+==============================================================================
+CREATE KIND					*unite-create-kind*
+
+==============================================================================
 EXAMPLES					*unite-examples*
 >
 	
@@ -283,6 +305,9 @@ EXAMPLES					*unite-examples*
 	let g:unite_source_file_mru_limit = 200
 	
 >
+==============================================================================
+USER DEFINED SOURCES				*unite-user-sources*
+
 ==============================================================================
 TODO						*unite-todo*
 
