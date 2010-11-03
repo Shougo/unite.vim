@@ -2,7 +2,7 @@
 
 Version: 1.0
 Author : Shougo <Shougo.Matsu@gmail.com>
-Japanese Documentation Author : naoina
+Japanese Documentation Author: naoina
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
@@ -51,6 +51,7 @@ ToDo			|unite-todo|
 *unite* はファイル、バッファ、最近使用したファイル、レジスタといった、任意の情
 報源からの検索、表示を行う。表示された候補に対して、候補のkindごとに定義された
 アクションを実行することができる。
+
 似たプラグインとして、|fuzzyfinder|や|ku|があるが、|unite| はVimの補完インタフ
 ェースを使用しないということ、sourceの統合を行うことが違いとして挙げられる。
 
@@ -134,6 +135,7 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		絞込みテキストは空。{sources} はスペースで区切って複数指定でき
 		る。また、{sources} の指定順序がsourceの候補の表示順序となる。
 		sourceについては|unite-source|を参照。
+
 		現在uniteバッファに居る場合、絞り込みテキストは保存される。
 
 		source名の後ろに:で区切った文字列のリストを引数として渡すことが
@@ -141,24 +143,29 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		数がどう解釈されるかは、sourceによって異なる。
 
 		例：
-		"file:hoge:piyo"の場合、source fileに与える引数は[hoge, piyo]である。
-		"file:hoge\:piyo"の場合、source fileに与える引数は[hoge:piyo]である。
-		
+		"file:hoge:piyo": source fileに与える引数は[hoge, piyo]である。
+		"file:hoge\:piyo": source fileに与える引数は[hoge:piyo]である。
+
 		{options}とはuniteバッファに与えるオプションである。
 		オプションは、次のパラメータを取る。値にスペースが含まれるとき
 		は、\でエスケープしなければならない。
+
 		-buffer-name={buffer-name}
 		uniteのバッファ名を指定する。同じ目的を持つuniteバッファに同じ
 		バッファ名を付けることで、|unite#set_substitute_pattern()|など
 		の設定を共通化することができる。指定しないと、'default'が使われ
 		る。
+
 		-input={input-text}
 		初期の絞込みテキストを指定する。指定しないと、''が使われる。
+
 		-prompt={prompt-text}
 		プロンプトを指定する。指定しないと、'> 'が使われる。
+
 		-default-action={default-action}
 		デフォルトアクションを指定する。指定しないと、'default'が使われ
 		る。
+
 		-start-insert
 		初期状態が絞り込みモードになる。指定しないと、初期状態はNormal
 		modeになる。
