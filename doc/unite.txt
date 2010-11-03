@@ -272,7 +272,6 @@ EXAMPLES					*unite-examples*
 	" Overwrite settings.
 	
 	imap <buffer> jj      <Plug>(unite_insert_leave)
-	nnoremap <silent><buffer> <C-k> :<C-u>call unite#mappings#do_action('preview')<CR>
 	"imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
 	
 	" Start insert.
@@ -296,6 +295,7 @@ CHANGELOG					*unite-changelog*
 - Added unite#do_action().
 - Improved mappings.
 - Fixed file_mru error.
+- Deleted do action mappings.
 
 2010-11-02
 - Improved <Plug>(unite_select_next_line) and <Plug>(unite_select_previous_line).

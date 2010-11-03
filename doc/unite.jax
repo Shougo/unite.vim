@@ -326,32 +326,6 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		kindについては|unite-kind|を参照。
 		デフォルトのアクションについては|unite-default-action|を参照。
 
-<Plug>(unite_do_delete_action)			*<Plug>(unite_do_delete_action)*
-		選択している候補に対してdeleteアクションを実行する。アクショ
-		ンは候補のkindごとに定義されている。
-		kindについては|unite-kind|を参照。
-		deleteアクションについては|unite-action|を参照。
-		アクションが存在しないときはエラー。
-
-<Plug>(unite_do_bookmark_action)		*<Plug>(unite_do_bookmark_action)*
-		選択している候補に対してbookmarkアクションを実行する。アクショ
-		ンは候補のkindごとに定義されている。
-		kindについては|unite-kind|を参照。
-		bookmarkアクションについては|unite-action|を参照。
-		アクションが存在しないときはエラー。
-
-<Plug>(unite_do_preview_action)			*<Plug>(unite_do_preview_action)*
-		選択している候補に対してアクションを実行した結果を、プレビュー
-		ウィンドウに表示する。このマッピングは候補のkindがファイルの場
-		合のみ動作する。sourceがレジスタの場合のプレビューは
-		|<Plug>(unite_print_candidate)|が使用できる。
-		アクションが存在しないときはエラー。
-
-<Plug>(unite_do_narrow_action)			*<Plug>(unite_do_narrow_action)*
-		選択している候補のディレクトリを絞込みテキストとし、絞込みテキ
-		スト入力を開始する。
-		アクションが存在しないときはエラー。
-
 <Plug>(unite_choose_action)			*<Plug>(unite_choose_action)*
 		選択している候補に対して実行するアクションを選択する。アクショ
 		ンはkindごとに定義されている。複数の候補が選択されている場合は
@@ -452,12 +426,6 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 <Plug>(unite_do_default_action)			*i_<Plug>(unite_do_default_action)*
 		|<Plug>(unite_do_default_action)|と同じ。
 
-<Plug>(unite_do_delete_action)			*i_<Plug>(unite_do_delete_action)*
-		|<Plug>(unite_do_delete_action)|と同じ。
-
-<Plug>(unite_do_narrow_action)			*i_<Plug>(unite_do_narrow_action)*
-		|<Plug>(unite_do_narrow_action)|と同じ。
-
 <Plug>(unite_toggle_mark_current_candidate)	*i_<Plug>(unite_toggle_mark_current_candidate)*
 		|<Plug>(unite_toggle_mark_current_candidate)|と同じ。
 
@@ -487,23 +455,23 @@ I		|<Plug>(unite_insert_head)|
 a		|<Plug>(unite_append_enter)|
 A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
-<CR>		候補を選択している場合は|<Plug>(unite_do_default_action)|
-d		候補を選択している場合は|<Plug>(unite_do_delete_action)|
-b		候補を選択している場合は|<Plug>(unite_do_bookmark_action)|
-e		候補を選択している場合は|<Plug>(unite_do_narrow_action)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_search_next_source)|
 <C-p>		|<Plug>(unite_search_previous_source)|
-l		候補を選択している場合は|<Plug>(unite_do_default_action)|
 <C-g>		|<Plug>(unite_print_candidate)|
-p		候補を選択している場合は|<Plug>(unite_do_preview_action)|
 <C-l>		|<Plug>(unite_redraw)|
 gg		|<Plug>(unite_cursor_top)|
 j		|<Plug>(unite_loop_cursor_down)|
 <Down>		|<Plug>(unite_loop_cursor_down)|
 k		|<Plug>(unite_loop_cursor_up)|
 <Up>		|<Plug>(unite_loop_cursor_up)|
+<CR>		候補を選択している場合は default アクションの実行
+l		候補を選択している場合は default アクションの実行
+d		候補を選択している場合は delete アクションの実行
+b		候補を選択している場合は bookmark アクションの実行
+e		候補を選択している場合は narrow アクションの実行
+p		候補を選択している場合は preview アクションの実行
 x		候補を選択している場合は|<Plug>(unite_quick_match_default_action)|
 
 インサートモードマッピング
@@ -524,10 +492,10 @@ x		候補を選択している場合は|<Plug>(unite_quick_match_default_action)
 <C-w>		|i_<Plug>(unite_delete_backward_word)|
 <C-a>		|i_<Plug>(unite_move_head)|
 <Home>		|i_<Plug>(unite_move_head)|
+/		候補を選択している場合は narrow アクションの実行
+d		候補を選択している場合は delete アクションの実行
 <Space>		候補を選択している場合は|i_<Plug>(unite_toggle_mark_current_candidate)|
-/		候補を選択している場合は|i_<Plug>(unite_do_narrow_action)|
 x		候補を選択している場合は|i_<Plug>(unite_quick_match_default_action)|
-d		候補を選択している場合は|i_<Plug>(unite_do_delete_action)|
 
 ビジュアルモードマッピング
 {lhs}		{rhs}
@@ -557,18 +525,23 @@ unite#do_action({action-name})					*unite#do_action()*
 		る。この関数はuniteが起動している時にのみ動作する。{action-name}が存
 		在しない、もしくは不正な実行だった場合はエラーとなる。
 		ユーザー側で特定のアクションを実行するためのマッピングを定義す
-		る場合に便利である。|unite-examples|を参照。
+		る場合に便利である。
 		{action-name}に"default"を指定すると、デフォルトのアクションが
 		実行される。
 		候補がマークされていない場合は、現在の行もしくは、一番上の候補
 		に対してアクションを実行する。
-
-unite#mappings#smart_map({narrow-map}, {select-map})		*unite#mappings#smart_map()*
-		絞り込み時と選択時のマッピングを設定し、文脈によって切り換える。
 		inoremap <buffer><expr>やnnoremap <buffer><expr>で通常用いる。
 		例:
 >
-		inoremap <buffer><expr> ' unite#mappings#smart_map("'", "\<C-o>:\<C-u>call unite#mappings#do_action('default')\<CR>")
+		nnoremap <silent><buffer><expr> <C-k> unite#do_action('preview')
+>
+unite#smart_map({narrow-map}, {select-map})			*unite#smart_map()*
+		絞り込み時と選択時のマッピングを設定し、文脈によって切り換える。
+		|unite#do_action()|と組み合わせて使用すると良い。
+		inoremap <buffer><expr>やnnoremap <buffer><expr>で通常用いる。
+		例:
+>
+		inoremap <buffer><expr> ' unite#smart_map("'", unite#do_action('preview'))
 <
 unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 						*unite#set_substitute_pattern()*
@@ -1046,7 +1019,6 @@ parents			リスト		(任意)
 	" Overwrite settings.
 	
 	imap <buffer> jj      <Plug>(unite_insert_leave)
-	nnoremap <silent><buffer><expr> <C-k> unite#do_action('preview')
 	"imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
 	
 	" Start insert.

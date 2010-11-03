@@ -112,6 +112,9 @@ function! unite#do_action(action)
   return printf("%s:\<C-u>call unite#mappings#do_action(%s)\<CR>",
         \             (mode() ==# 'i' ? "\<ESC>" : ''), string(a:action))
 endfunction
+function! unite#smart_map(narrow_map, select_map)"{{{
+  return (line('.') <= b:unite.prompt_linenr && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
+endfunction"}}}
 "}}}
 
 " Constants"{{{

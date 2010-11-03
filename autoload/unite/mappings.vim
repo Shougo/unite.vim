@@ -42,17 +42,12 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? b:unite.prompt_linenr.'G0z.' : 'j'
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= b:unite.prompt_linenr)? 'G' : 'k'
   nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  :<C-u>call <SID>quick_match()<CR>
-
   nnoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(b:unite.context.default_action)
-  nnoremap <silent><buffer><expr> <Plug>(unite_do_delete_action)    unite#do_action('delete')
-  nnoremap <silent><buffer><expr> <Plug>(unite_do_narrow_action)    unite#do_action('narrow')
-  nnoremap <silent><buffer><expr> <Plug>(unite_do_bookmark_action)  unite#do_action('bookmark')
-  nnoremap <silent><buffer><expr> <Plug>(unite_do_preview_action)   unite#do_action('preview')
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
 
   inoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
-  inoremap <buffer><expr> <Plug>(unite_insert_leave)  unite#mappings#smart_map("\<ESC>j0", "\<ESC>0")
+  inoremap <buffer><expr> <Plug>(unite_insert_leave)  unite#smart_map("\<ESC>j0", "\<ESC>0")
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(b:unite.prompt)+1) ? "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(b:unite.prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(b:unite.prompt)+1) ? '' : "\<C-w>"
@@ -67,10 +62,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <silent><buffer> <Plug>(unite_move_head)  <C-o>:<C-u>call <SID>insert_head()<CR>
   inoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  <C-o>:<C-u>call <SID>quick_match()<CR>
-
   inoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(b:unite.context.default_action)
-  inoremap <silent><buffer><expr> <Plug>(unite_do_delete_action)    unite#do_action('delete')
-  inoremap <silent><buffer><expr> <Plug>(unite_do_narrow_action)    unite#do_action('narrow')
   "}}}
 
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -95,12 +87,13 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <Down>         <Plug>(unite_loop_cursor_down)
   nmap <buffer> k         <Plug>(unite_loop_cursor_up)
   nmap <buffer> <Up>         <Plug>(unite_loop_cursor_up)
-  nmap <buffer><expr> d   unite#mappings#smart_map('d', "\<Plug>(unite_do_delete_action)")
-  nmap <buffer><expr> b   unite#mappings#smart_map('b', "\<Plug>(unite_do_bookmark_action)")
-  nmap <buffer><expr> e   unite#mappings#smart_map('e', "\<Plug>(unite_do_narrow_action)")
-  nmap <buffer><expr> l   unite#mappings#smart_map('l', "\<Plug>(unite_do_default_action)")
-  nmap <buffer><expr> p   unite#mappings#smart_map('p', "\<Plug>(unite_do_preview_action)")
-  nmap <buffer><expr> x   unite#mappings#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
+
+  nnoremap <buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
+  nnoremap <buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
+  nnoremap <buffer><expr> e   unite#smart_map('e', unite#do_action('narrow'))
+  nnoremap <buffer><expr> l   unite#smart_map('l', unite#do_action(b:unite.context.default_action))
+  nnoremap <buffer><expr> p   unite#smart_map('p', unite#do_action('preview'))
+  nmap <buffer><expr> x       unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 
   " Visual mode key-mappings.
   xmap <buffer> <Space>   <Plug>(unite_toggle_mark_selected_candidates)
@@ -121,10 +114,11 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-w>     <Plug>(unite_delete_backward_word)
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>    <Plug>(unite_move_head)
-  imap <buffer><expr> <Space>   unite#mappings#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
-  imap <buffer><expr> d         unite#mappings#smart_map('d', "\<Plug>(unite_do_delete_action)")
-  imap <buffer><expr> /         unite#mappings#smart_map('/', "\<Plug>(unite_do_narrow_action)")
-  imap <buffer><expr> x         unite#mappings#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
+
+  inoremap <buffer><expr> d         unite#smart_map('d', unite#do_action('delete'))
+  inoremap <buffer><expr> /         unite#smart_map('/', unite#do_action('narrow'))
+  imap <buffer><expr> <Space>       unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
+  imap <buffer><expr> x             unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 endfunction"}}}
 
 function! unite#mappings#narrowing(word)"{{{
@@ -216,9 +210,6 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   if l:is_redraw
     call unite#force_redraw()
   endif
-endfunction"}}}
-function! unite#mappings#smart_map(narrow_map, select_map)"{{{
-  return (line('.') <= b:unite.prompt_linenr && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
 endfunction"}}}
 
 " key-mappings functions.
