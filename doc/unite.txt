@@ -368,6 +368,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-05
+- Improved syntax highlight.
+
 2010-11-03
 - Added unite#do_action().
 - Changed mappings.

@@ -725,14 +725,15 @@ function! s:convert_lines(candidates)"{{{
   let l:max_width = winwidth(0) - 20
 
   return map(copy(a:candidates),
-        \ '(v:val.unite__is_marked ? "* " : "- ") . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', 30, "..") . " " . v:val.source')
+        \ '(v:val.unite__is_marked ? "* " : "- ") . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', 30, "..")
+        \ . " " . unite#util#truncate(v:val.source, 15)')
 endfunction"}}}
 function! s:convert_line(candidate)"{{{
   let l:max_width = winwidth(0) - 20
 
   return (a:candidate.unite__is_marked ? '* ' : '- ')
         \ . unite#util#truncate_smart(a:candidate.abbr, l:max_width, 30, '..')
-        \ . " " . a:candidate.source
+        \ . " " . unite#util#truncate(a:candidate.source, 15)
 endfunction"}}}
 
 function! s:initialize_unite_buffer(sources, context)"{{{
