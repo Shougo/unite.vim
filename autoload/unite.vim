@@ -463,8 +463,6 @@ function! unite#start(sources, ...)"{{{
   endif
 
   setlocal nomodifiable
-
-  return s:TRUE
 endfunction"}}}
 function! unite#resume(buffer_name)"{{{
   if a:buffer_name == ''
@@ -497,6 +495,12 @@ function! unite#resume(buffer_name)"{{{
 
   silent execute l:bufnr 'buffer'
 
+  if g:unite_enable_split_vertically
+    execute 'vertical resize' g:unite_winwidth
+  else
+    execute 'resize' g:unite_winheight
+  endif
+
   " Set parameters.
   let b:unite.old_winnr = l:winnr
   let b:unite.win_rest_cmd = l:win_rest_cmd
@@ -517,6 +521,7 @@ function! unite#resume(buffer_name)"{{{
   if g:unite_enable_start_insert
         \ || b:unite.context.start_insert || b:unite.context.is_insert
     execute b:unite.prompt_linenr
+    normal! 0z.
     startinsert!
   else
     execute (b:unite.prompt_linenr+1)
