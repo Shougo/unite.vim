@@ -44,10 +44,10 @@ syntax match uniteMarkedLine /^\*.*/
 syntax match uniteNonMarkedLine /^-.*/
 
 highlight default link uniteSourceNames  Type
-highlight default link uniteSourcePrompt  Statement
+highlight default link uniteSourcePrompt  PreProc
 highlight default link uniteSourceSeparator  NONE
 
-highlight default link uniteMarkedLine  PreProc
+highlight default link uniteMarkedLine  Statement
 highlight default link uniteNonMarkedLine  Pmenu
 
 " The following definitions are for <Plug>(unite-choose-action).
