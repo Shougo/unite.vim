@@ -371,6 +371,7 @@ CHANGELOG					*unite-changelog*
 2010-11-05
 - Improved syntax highlight.
 - Setlocal nolist.
+- Open folds when jump_list open.
 
 2010-11-04
 - Improved g:unite_enable_start_insert.
