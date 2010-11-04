@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Nov 2010
+" Last Modified: 04 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -442,7 +442,6 @@ function! unite#start(sources, ...)"{{{
   silent % delete _
   call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(a:sources), 'v:val[0]'), ', '))
   call setline(b:unite.prompt_linenr, b:unite.prompt . b:unite.context.input)
-  execute b:unite.prompt_linenr
 
   " Window resize.
   if g:unite_enable_split_vertically
@@ -456,6 +455,7 @@ function! unite#start(sources, ...)"{{{
   if g:unite_enable_start_insert
         \ || b:unite.context.start_insert || b:unite.context.is_insert
     execute b:unite.prompt_linenr
+    normal! 0z.
     startinsert!
   else
     execute (b:unite.prompt_linenr+1)
@@ -463,8 +463,6 @@ function! unite#start(sources, ...)"{{{
   endif
 
   setlocal nomodifiable
-
-  return s:TRUE
 endfunction"}}}
 function! unite#resume(buffer_name)"{{{
   if a:buffer_name == ''
@@ -497,11 +495,18 @@ function! unite#resume(buffer_name)"{{{
 
   silent execute l:bufnr 'buffer'
 
+  if g:unite_enable_split_vertically
+    execute 'vertical resize' g:unite_winwidth
+  else
+    execute 'resize' g:unite_winheight
+  endif
+
   " Set parameters.
   let b:unite.old_winnr = l:winnr
   let b:unite.win_rest_cmd = l:win_rest_cmd
   let b:unite.redrawtime_save = &redrawtime
   let b:unite.hlsearch_save = &hlsearch
+  let b:unite.search_pattern_save = @/
 
   let s:unite = b:unite
 
@@ -517,6 +522,7 @@ function! unite#resume(buffer_name)"{{{
   if g:unite_enable_start_insert
         \ || b:unite.context.start_insert || b:unite.context.is_insert
     execute b:unite.prompt_linenr
+    normal! 0z.
     startinsert!
   else
     execute (b:unite.prompt_linenr+1)
@@ -535,7 +541,7 @@ function! unite#quit_session()  "{{{
   let s:unite = b:unite
 
   " Highlight off.
-  let @/ = ''
+  let @/ = s:unite.search_pattern_save
 
   " Restore options.
   if exists('&redrawtime')
@@ -802,6 +808,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.last_input = l:context.input
   let b:unite.bufnr = bufnr('%')
   let b:unite.hlsearch_save = &hlsearch
+  let b:unite.search_pattern_save = @/
   let b:unite.prompt_linenr = 2
 
   let s:unite = b:unite
