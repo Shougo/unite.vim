@@ -368,6 +368,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-04
+- Improved g:unite_enable_start_insert.
+
 2010-11-03
 - Added unite#do_action().
 - Changed mappings.
