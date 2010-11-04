@@ -818,6 +818,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   " Basic settings.
   setlocal bufhidden=hide
   setlocal buftype=nofile
+  setlocal nolist
   setlocal nobuflisted
   setlocal noswapfile
   setlocal noreadonly
