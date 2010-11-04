@@ -506,6 +506,7 @@ function! unite#resume(buffer_name)"{{{
   let b:unite.win_rest_cmd = l:win_rest_cmd
   let b:unite.redrawtime_save = &redrawtime
   let b:unite.hlsearch_save = &hlsearch
+  let b:unite.search_pattern_save = @/
 
   let s:unite = b:unite
 
@@ -540,7 +541,7 @@ function! unite#quit_session()  "{{{
   let s:unite = b:unite
 
   " Highlight off.
-  let @/ = ''
+  let @/ = s:unite.search_pattern_save
 
   " Restore options.
   if exists('&redrawtime')
@@ -806,6 +807,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.last_input = l:context.input
   let b:unite.bufnr = bufnr('%')
   let b:unite.hlsearch_save = &hlsearch
+  let b:unite.search_pattern_save = @/
   let b:unite.prompt_linenr = 2
 
   let s:unite = b:unite
