@@ -372,6 +372,7 @@ CHANGELOG					*unite-changelog*
 - Improved g:unite_enable_start_insert.
 - Improved unite#resume().
 - Save search pattern.
+- Added kind name description.
 
 2010-11-03
 - Added unite#do_action().
