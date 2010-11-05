@@ -38,7 +38,8 @@ let s:kind = {
 let s:kind.action_table = deepcopy(unite#kinds#file#define().action_table)
 
 let s:kind.action_table.open = {
-      \ 'is_selectable' : 1, 
+      \ 'description' : 'jump this position',
+      \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
   for l:candidate in a:candidates
@@ -61,6 +62,7 @@ function! s:kind.action_table.open.func(candidates)"{{{
 endfunction"}}}
 
 let s:kind.action_table.preview = {
+      \ 'description' : 'preview this position',
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{

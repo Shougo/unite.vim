@@ -89,6 +89,7 @@ endfunction"}}}
 let s:action_table = {}
 
 let s:action_table.delete = {
+      \ 'description' : 'delete from file_mru list',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,

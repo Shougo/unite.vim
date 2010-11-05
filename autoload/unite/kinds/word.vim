@@ -36,6 +36,7 @@ let s:kind = {
 
 " Actions"{{{
 let s:kind.action_table.insert = {
+      \ 'description' : 'insert word',
       \ }
 function! s:kind.action_table.insert.func(candidate)"{{{
   let [l:old_col, l:old_max_col] = [col('.'), col('$')]

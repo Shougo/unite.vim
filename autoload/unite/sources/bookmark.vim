@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2010
+" Last Modified: 05 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -102,9 +102,10 @@ endfunction"}}}
 let s:action_table = {}
 
 let s:action_table.delete = {
-      \ 'is_invalidate_cache' : 1, 
-      \ 'is_quit' : 0, 
-      \ 'is_selectable' : 1, 
+      \ 'description' : 'delete from bookmark list',
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+      \ 'is_selectable' : 1,
       \ }
 function! s:action_table.delete.func(candidates)"{{{
   for l:candidate in a:candidates
@@ -122,6 +123,7 @@ unlet! s:action_table
 
 " Add custom action table."{{{
 let s:file_bookmark_action = {
+      \ 'description' : 'append files to bookmark list',
       \ }
 function! s:file_bookmark_action.func(candidate)"{{{
   " Add to bookmark.
@@ -129,6 +131,7 @@ function! s:file_bookmark_action.func(candidate)"{{{
 endfunction"}}}
 
 let s:buffer_bookmark_action = {
+      \ 'description' : 'append buffers to bookmark list',
       \ }
 function! s:buffer_bookmark_action.func(candidate)"{{{
   let l:filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')

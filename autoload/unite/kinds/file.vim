@@ -37,6 +37,7 @@ let s:kind = {
 
 " Actions"{{{
 let s:kind.action_table.open = {
+      \ 'description' : 'open files or buffers',
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
@@ -46,6 +47,7 @@ function! s:kind.action_table.open.func(candidates)"{{{
 endfunction"}}}
 
 let s:kind.action_table.fopen = {
+      \ 'description' : 'force open files or buffers',
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.fopen.func(candidates)"{{{
@@ -55,6 +57,7 @@ function! s:kind.action_table.fopen.func(candidates)"{{{
 endfunction"}}}
 
 let s:kind.action_table.preview = {
+      \ 'description' : 'preview files or buffers',
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2010
+" Last Modified: 05 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -86,7 +86,9 @@ function! s:source.gather_candidates(args, context)"{{{
 endfunction"}}}
 
 " Add custom action table."{{{
-let s:cdable_action_rec = {}
+let s:cdable_action_rec = {
+      \ 'description' : 'open this directory by file_rec',
+      \}
 
 function! s:cdable_action_rec.func(candidate)
   call unite#start([['file_rec', a:candidate.action__directory]])

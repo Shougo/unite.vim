@@ -289,19 +289,14 @@ function! s:choose_action()"{{{
   endfor
 
   " Print action names.
-  let l:width = winwidth(0)
-  let l:max = l:width > 90 ? 6 : l:width > 75 ? 5 : l:width > 50 ? 4 : 3
-  let l:cnt = 0
-
-  echohl Identifier
-  echo ''
-  for l:action_name in keys(s:actions)
-    echon unite#util#truncate(l:action_name, 14) . ' '
-    let l:cnt += 1
-
-    if l:cnt >= l:max
-      echo ''
-      let l:cnt = 0
+  let l:max = max(map(keys(s:actions), 'len(v:val)'))
+  for [l:action_name, l:action] in items(s:actions)
+    echohl Identifier
+    echo unite#util#truncate(l:action_name, l:max)
+    if l:action.description != ''
+      echohl Special | echon ' -- '
+      echohl Comment
+      echon l:action.description
     endif
   endfor
   echohl None

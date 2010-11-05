@@ -263,6 +263,9 @@ function! unite#get_action_table(source_name, kind_name, ...)"{{{
 
   " Set default parameters.
   for l:action in values(l:action_table)
+    if !has_key(l:action, 'description')
+      let l:action.description = ''
+    endif
     if !has_key(l:action, 'is_quit')
       let l:action.is_quit = 1
     endif

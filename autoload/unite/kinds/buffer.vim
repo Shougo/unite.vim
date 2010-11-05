@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2010
+" Last Modified: 05 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,6 +37,7 @@ let s:kind = {
 
 " Actions"{{{
 let s:kind.action_table.delete = {
+      \ 'description' : 'delete from buffer list',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
@@ -48,6 +49,7 @@ function! s:kind.action_table.delete.func(candidates)"{{{
 endfunction"}}}
 
 let s:kind.action_table.fdelete = {
+      \ 'description' : 'force delete from buffer list',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,

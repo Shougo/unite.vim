@@ -36,12 +36,14 @@ let s:kind = {
 
 " Actions"{{{
 let s:kind.action_table.open = {
+      \ 'description' : 'open this tab',
       \ }
 function! s:kind.action_table.open.func(candidate)"{{{
   execute 'tabnext' a:candidate.action__tab_nr
 endfunction"}}}
 
 let s:kind.action_table.delete = {
+      \ 'description' : 'delete tabs',
       \ 'is_selectable' : 1,
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
@@ -57,6 +59,7 @@ if exists('*gettabvar')
   let s:kind.parents = ['cdable']
 
   let s:kind.action_table.rename = {
+      \ 'description' : 'rename tabs',
       \ 'is_selectable' : 1,
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,

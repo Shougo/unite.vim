@@ -376,6 +376,8 @@ CHANGELOG					*unite-changelog*
 - Improved buffer filtering.
 - Improved drawing candidates.
 - Fixed help tags.
+- Improved default quick match table.
+- Added description in action_table.
 
 2010-11-04
 - Improved g:unite_enable_start_insert.

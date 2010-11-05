@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Nov 2010
+" Last Modified: 05 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,6 +35,7 @@ let s:kind = {
 
 " Actions"{{{
 let s:kind.action_table.cd = {
+      \ 'description' : 'change current directory',
       \ }
 function! s:kind.action_table.cd.func(candidate)"{{{
   if &filetype ==# 'vimfiler'
@@ -47,6 +48,7 @@ function! s:kind.action_table.cd.func(candidate)"{{{
 endfunction"}}}
 
 let s:kind.action_table.lcd = {
+      \ 'description' : 'change window local current directory',
       \ }
 function! s:kind.action_table.lcd.func(candidate)"{{{
   if &filetype ==# 'vimfiler'
@@ -59,6 +61,7 @@ function! s:kind.action_table.lcd.func(candidate)"{{{
 endfunction"}}}
 
 let s:kind.action_table.narrow = {
+      \ 'description' : 'narrowing candidates by directory name',
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.narrow.func(candidate)"{{{
@@ -68,6 +71,7 @@ endfunction"}}}
 
 if exists(':VimShell')
   let s:kind.action_table.vimshell = {
+        \ 'description' : 'open vimshell buffer here',
         \ }
   function! s:kind.action_table.vimshell.func(candidate)"{{{
     VimShellCreate `=a:candidate.action__directory`
@@ -75,6 +79,7 @@ if exists(':VimShell')
 endif
 if exists(':VimShellTab')
   let s:kind.action_table.tabvimshell = {
+        \ 'description' : 'tabopen vimshell buffer here',
         \ }
   function! s:kind.action_table.tabvimshell.func(candidate)"{{{
     VimShellTab `=a:candidate.action__directory`
