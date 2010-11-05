@@ -366,11 +366,12 @@ function! unite#keyword_filter(list, input)"{{{
       " Exclusion.
       let l:input = unite#escape_match(l:input)
       call filter(a:list, 'v:val.word !~ ' . string(l:input[1:]))
-    elseif l:input =~ '[*]'
+    elseif l:input =~ '\\\@<!\*'
       " Wildcard.
       let l:input = unite#escape_match(l:input)
       call filter(a:list, 'v:val.word =~ ' . string(l:input))
     else
+      let l:input = substitute(l:input, '\\\(.\)', '\1', 'g')
       if &ignorecase
         let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:input)))
       else
