@@ -705,7 +705,7 @@ function! s:gather_candidates(input, context)"{{{
   return l:candidates
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
-  let l:max_width = winwidth(0) - 20
+  let l:max_width = winwidth(0) - b:unite.max_source_name - 6
   let l:candidates = []
 
   " Create key table.
@@ -721,7 +721,7 @@ function! s:convert_quick_match_lines(candidates)"{{{
           \ (has_key(l:keys, l:num) ? l:keys[l:num] : '   ')
           \ . (l:candidate.unite__is_marked ? '* ' : '- ')
           \ . unite#util#truncate_smart(l:candidate.abbr, l:max_width, 30, '..')
-          \ . ' ' . l:candidate.source)
+          \ . ' ' . unite#util#truncate(l:candidate.source, b:unite.max_source_name))
 
     let l:num += 1
   endfor
@@ -729,18 +729,18 @@ function! s:convert_quick_match_lines(candidates)"{{{
   return l:candidates
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
-  let l:max_width = winwidth(0) - 23
+  let l:max_width = winwidth(0) - b:unite.max_source_name - 3
 
   return map(copy(a:candidates),
         \ '(v:val.unite__is_marked ? "* " : "- ") . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', 30, "..")
-        \ . " " . unite#util#truncate(v:val.source, 15)')
+        \ . " " . unite#util#truncate(v:val.source, b:unite.max_source_name)')
 endfunction"}}}
 function! s:convert_line(candidate)"{{{
-  let l:max_width = winwidth(0) - 23
+  let l:max_width = winwidth(0) - b:unite.max_source_name - 3
 
   return (a:candidate.unite__is_marked ? '* ' : '- ')
         \ . unite#util#truncate_smart(a:candidate.abbr, l:max_width, 30, '..')
-        \ . " " . unite#util#truncate(a:candidate.source, 15)
+        \ . " " . unite#util#truncate(a:candidate.source, b:unite.max_source_name)
 endfunction"}}}
 
 function! s:initialize_unite_buffer(sources, context)"{{{
@@ -811,6 +811,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.hlsearch_save = &hlsearch
   let b:unite.search_pattern_save = @/
   let b:unite.prompt_linenr = 2
+  let b:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])'))
 
   let s:unite = b:unite
 
@@ -825,6 +826,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   setlocal noreadonly
   setlocal nofoldenable
   setlocal nomodeline
+  setlocal nonumber
   setlocal foldcolumn=0
   setlocal iskeyword+=-,+,\\,!,~
   set hlsearch

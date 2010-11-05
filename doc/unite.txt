@@ -374,6 +374,7 @@ CHANGELOG					*unite-changelog*
 - Open folds when jump_list open.
 - Improved keyword filter.
 - Improved buffer filtering.
+- Improved drawing candidates.
 
 2010-11-04
 - Improved g:unite_enable_start_insert.
