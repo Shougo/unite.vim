@@ -318,10 +318,10 @@ required_pattern_length	number		(optional)
 			collect candidates.
 
 ==============================================================================
-KIND						*unite-kind* *{kind}*
+KIND						*unite-kind*
 
 ==============================================================================
-ACTIONS						*unite-action* *{action}*
+ACTIONS						*unite-action*
 
 ==============================================================================
 CREATE SOURCE					*unite-create-source*
@@ -375,6 +375,7 @@ CHANGELOG					*unite-changelog*
 - Improved keyword filter.
 - Improved buffer filtering.
 - Improved drawing candidates.
+- Fixed help tags.
 
 2010-11-04
 - Improved g:unite_enable_start_insert.
