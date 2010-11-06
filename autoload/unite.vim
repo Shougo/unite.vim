@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Nov 2010
+" Last Modified: 06 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -447,13 +447,6 @@ function! unite#start(sources, ...)"{{{
   call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(a:sources), 'v:val[0]'), ', '))
   call setline(b:unite.prompt_linenr, b:unite.prompt . b:unite.context.input)
 
-  " Window resize.
-  if g:unite_enable_split_vertically
-    execute 'vertical resize' g:unite_winwidth
-  else
-    execute 'resize' g:unite_winheight
-  endif
-
   call unite#force_redraw()
 
   if g:unite_enable_start_insert
@@ -487,23 +480,12 @@ function! unite#resume(buffer_name)"{{{
       call unite#print_error('Invalid buffer name : ' . a:buffer_name)
       return
     endif
-    let l:bufnr = l:buffer_dict[a:buffer_name]
   endif
 
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
 
-  " Split window.
-  execute g:unite_split_rule
-        \ g:unite_enable_split_vertically ?  'vsplit' : 'split'
-
-  silent execute l:bufnr 'buffer'
-
-  if g:unite_enable_split_vertically
-    execute 'vertical resize' g:unite_winwidth
-  else
-    execute 'resize' g:unite_winheight
-  endif
+  call s:switch_unite_buffer(a:buffer_name)
 
   " Set parameters.
   let b:unite.old_winnr = l:winnr
@@ -513,13 +495,6 @@ function! unite#resume(buffer_name)"{{{
   let b:unite.search_pattern_save = @/
 
   let s:unite = b:unite
-
-  " Window resize.
-  if g:unite_enable_split_vertically
-    execute 'vertical resize' g:unite_winwidth
-  else
-    execute 'resize' g:unite_winheight
-  endif
 
   setlocal modifiable
 
@@ -776,26 +751,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
 
-  " Split window.
-  execute g:unite_split_rule
-        \ g:unite_enable_split_vertically ?
-        \        (bufexists(l:buffer_name) ? 'vsplit' : 'vnew')
-        \      : (bufexists(l:buffer_name) ? 'split' : 'new')
-
-  if bufexists(l:buffer_name)
-    " Search buffer name.
-    let l:bufnr = 1
-    let l:max = bufnr('$')
-    while l:bufnr <= l:max
-      if bufname(l:bufnr) ==# l:buffer_name
-        silent execute l:bufnr 'buffer'
-      endif
-
-      let l:bufnr += 1
-    endwhile
-  else
-    silent! file `=l:buffer_name`
-  endif
+  call s:switch_unite_buffer(l:buffer_name)
 
   " Set parameters.
   let b:unite = {}
@@ -864,6 +820,40 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let l:match_prompt = escape(b:unite.prompt, '\/*~.^$[]')
   syntax clear uniteInputPrompt
   execute 'syntax match uniteInputPrompt' '/^'.l:match_prompt.'/ contained'
+endfunction"}}}
+function! s:switch_unite_buffer(buffer_name)"{{{
+  " Search unite window.
+  if bufwinnr(a:buffer_name) > 0
+    silent execute bufwinnr(a:buffer_name) 'wincmd w'
+    return
+  endif
+
+  " Split window.
+  execute g:unite_split_rule
+        \ g:unite_enable_split_vertically ?
+        \        (bufexists(a:buffer_name) ? 'vsplit' : 'vnew')
+        \      : (bufexists(a:buffer_name) ? 'split' : 'new')
+
+  if bufexists(a:buffer_name)
+    " Search buffer name.
+    let l:bufnr = 1
+    let l:max = bufnr('$')
+    while l:bufnr <= l:max
+      if bufname(l:bufnr) ==# a:buffer_name
+        silent execute l:bufnr 'buffer'
+      endif
+
+      let l:bufnr += 1
+    endwhile
+  else
+    silent! file `=a:buffer_name`
+  endif
+
+  if g:unite_enable_split_vertically
+    execute 'vertical resize' g:unite_winwidth
+  else
+    execute 'resize' g:unite_winheight
+  endif
 endfunction"}}}
 
 function! s:redraw(is_force) "{{{

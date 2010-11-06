@@ -368,6 +368,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-06
+- Improved switch to unite buffer.
+
 2010-11-05
 - Improved syntax highlight.
 - Setlocal nolist.
