@@ -437,6 +437,12 @@ function! unite#start(sources, ...)"{{{
   if !has_key(l:context, 'default_action')
     let l:context.default_action = 'default'
   endif
+  if !has_key(l:context, 'winwidth')
+    let l:context.winwidth = g:unite_winwidth
+  endif
+  if !has_key(l:context, 'winheight')
+    let l:context.winheight = g:unite_winheight
+  endif
 
   try
     call s:initialize_unite_buffer(a:sources, l:context)
@@ -483,12 +489,13 @@ function! unite#resume(buffer_name)"{{{
       call unite#print_error('Invalid buffer name : ' . a:buffer_name)
       return
     endif
+    let l:bufnr = l:buffer_dict[a:buffer_name]
   endif
 
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
 
-  call s:switch_unite_buffer(a:buffer_name)
+  call s:switch_unite_buffer(a:buffer_name, getbufvar(l:bufnr, 'context')
 
   " Set parameters.
   let b:unite.old_winnr = l:winnr
@@ -695,6 +702,13 @@ function! s:gather_candidates(input, context)"{{{
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
   let l:max_width = winwidth(0) - b:unite.max_source_name - 6
+  if l:max_width < 20
+    let l:max_width = winwidth(0) - 6
+    let l:max_source_name = 0
+  else
+    let l:max_source_name = b:unite.max_source_name
+  endif
+
   let l:candidates = []
 
   " Create key table.
@@ -709,8 +723,8 @@ function! s:convert_quick_match_lines(candidates)"{{{
     call add(l:candidates,
           \ (has_key(l:keys, l:num) ? l:keys[l:num] : '   ')
           \ . (l:candidate.unite__is_marked ? '* ' : '- ')
-          \ . unite#util#truncate_smart(l:candidate.abbr, l:max_width, 30, '..')
-          \ . ' ' . unite#util#truncate(l:candidate.source, b:unite.max_source_name))
+          \ . unite#util#truncate_smart(l:candidate.abbr, l:max_width, l:max_width/3, '..')
+          \ . ' ' . unite#util#truncate(l:candidate.source, l:max_source_name))
 
     let l:num += 1
   endfor
@@ -719,17 +733,29 @@ function! s:convert_quick_match_lines(candidates)"{{{
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
   let l:max_width = winwidth(0) - b:unite.max_source_name - 3
+  if l:max_width < 20
+    let l:max_width = winwidth(0) - 3
+    let l:max_source_name = 0
+  else
+    let l:max_source_name = b:unite.max_source_name
+  endif
 
   return map(copy(a:candidates),
-        \ '(v:val.unite__is_marked ? "* " : "- ") . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', 30, "..")
-        \ . " " . unite#util#truncate(v:val.source, b:unite.max_source_name)')
+        \ '(v:val.unite__is_marked ? "* " : "- ") . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', l:max_width/3, "..")
+        \ . " " . unite#util#truncate(v:val.source, l:max_source_name)')
 endfunction"}}}
 function! s:convert_line(candidate)"{{{
   let l:max_width = winwidth(0) - b:unite.max_source_name - 3
+  if l:max_width < 20
+    let l:max_width = winwidth(0) - 3
+    let l:max_source_name = 0
+  else
+    let l:max_source_name = b:unite.max_source_name
+  endif
 
   return (a:candidate.unite__is_marked ? '* ' : '- ')
-        \ . unite#util#truncate_smart(a:candidate.abbr, l:max_width, 30, '..')
-        \ . " " . unite#util#truncate(a:candidate.source, b:unite.max_source_name)
+        \ . unite#util#truncate_smart(a:candidate.abbr, l:max_width, l:max_width/3, '..')
+        \ . " " . unite#util#truncate(a:candidate.source, l:max_source_name)
 endfunction"}}}
 
 function! s:initialize_unite_buffer(sources, context)"{{{
@@ -762,7 +788,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
 
-  call s:switch_unite_buffer(l:buffer_name)
+  call s:switch_unite_buffer(l:buffer_name, a:context)
 
   " Set parameters.
   let b:unite = {}
@@ -797,6 +823,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   setlocal nofoldenable
   setlocal nomodeline
   setlocal nonumber
+  setlocal nowrap
   setlocal foldcolumn=0
   setlocal iskeyword+=-,+,\\,!,~
   set hlsearch
@@ -832,7 +859,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   syntax clear uniteInputPrompt
   execute 'syntax match uniteInputPrompt' '/^'.l:match_prompt.'/ contained'
 endfunction"}}}
-function! s:switch_unite_buffer(buffer_name)"{{{
+function! s:switch_unite_buffer(buffer_name, context)"{{{
   " Search unite window.
   if bufwinnr(a:buffer_name) > 0
     silent execute bufwinnr(a:buffer_name) 'wincmd w'
@@ -860,9 +887,9 @@ function! s:switch_unite_buffer(buffer_name)"{{{
   endif
 
   if g:unite_enable_split_vertically
-    execute 'vertical resize' g:unite_winwidth
+    execute 'vertical resize' a:context.winwidth
   else
-    execute 'resize' g:unite_winheight
+    execute 'resize' a:context.winheight
   endif
 endfunction"}}}
 

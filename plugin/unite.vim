@@ -145,6 +145,10 @@ function! s:parse_options(args)"{{{
       let l:options['start_insert'] = 1
     elseif l:arg =~# '^-no-quit'
       let l:options['no_quit'] = 1
+    elseif l:arg =~# '^-winwidth'
+      let l:options['winwidth'] = matchstr(l:arg, '^-winwidth=\zs.*')
+    elseif l:arg =~# '^-winheight'
+      let l:options['winheight'] = matchstr(l:arg, '^-winheight=\zs.*')
     else
       let l:source_name = matchstr(l:arg, '^[^:]*')
       let l:source_args = map(split(l:arg[len(l:source_name) :], '\\\@<!:'),
