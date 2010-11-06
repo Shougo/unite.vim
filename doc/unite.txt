@@ -372,6 +372,7 @@ CHANGELOG					*unite-changelog*
 - Improved switch to unite buffer.
 - Added -no-quit option.
 - Improved drawing lines.
+- Added -winwidth and -winheight options.
 
 2010-11-05
 - Improved syntax highlight.
