@@ -425,6 +425,9 @@ function! unite#start(sources, ...)"{{{
   if !has_key(l:context, 'is_insert')
     let l:context.is_insert = 0
   endif
+  if !has_key(l:context, 'no_quit')
+    let l:context.no_quit = 0
+  endif
   if !has_key(l:context, 'buffer_name')
     let l:context.buffer_name = ''
   endif
@@ -511,7 +514,13 @@ function! unite#resume(buffer_name)"{{{
   setlocal nomodifiable
 endfunction"}}}
 
+function! unite#force_quit_session()  "{{{
+  call s:quit_session(1)
+endfunction"}}}
 function! unite#quit_session()  "{{{
+  call s:quit_session(0)
+endfunction"}}}
+function! s:quit_session(is_force)  "{{{
   if &filetype !=# 'unite'
     return
   endif
@@ -533,18 +542,20 @@ function! unite#quit_session()  "{{{
   " Close preview window.
   pclose
 
-  let l:cwd = getcwd()
   if winnr('$') != 1
-    close
-    execute s:unite.old_winnr . 'wincmd w'
+    if !a:is_force && s:unite.context.no_quit
+      if winnr('#') > 0
+        wincmd p
+      endif
+    else
+      close
+      execute s:unite.old_winnr . 'wincmd w'
 
-    if winnr('$') != 1
-      execute s:unite.win_rest_cmd
+      if winnr('$') != 1
+        execute s:unite.win_rest_cmd
+      endif
     endif
   endif
-
-  " Restore current directory.
-  execute g:unite_lcd_command '`=l:cwd`'
 
   if !s:unite.context.is_insert
     stopinsert
@@ -825,28 +836,27 @@ function! s:switch_unite_buffer(buffer_name)"{{{
   " Search unite window.
   if bufwinnr(a:buffer_name) > 0
     silent execute bufwinnr(a:buffer_name) 'wincmd w'
-    return
-  endif
-
-  " Split window.
-  execute g:unite_split_rule
-        \ g:unite_enable_split_vertically ?
-        \        (bufexists(a:buffer_name) ? 'vsplit' : 'vnew')
-        \      : (bufexists(a:buffer_name) ? 'split' : 'new')
-
-  if bufexists(a:buffer_name)
-    " Search buffer name.
-    let l:bufnr = 1
-    let l:max = bufnr('$')
-    while l:bufnr <= l:max
-      if bufname(l:bufnr) ==# a:buffer_name
-        silent execute l:bufnr 'buffer'
-      endif
-
-      let l:bufnr += 1
-    endwhile
   else
-    silent! file `=a:buffer_name`
+    " Split window.
+    execute g:unite_split_rule
+          \ g:unite_enable_split_vertically ?
+          \        (bufexists(a:buffer_name) ? 'vsplit' : 'vnew')
+          \      : (bufexists(a:buffer_name) ? 'split' : 'new')
+
+    if bufexists(a:buffer_name)
+      " Search buffer name.
+      let l:bufnr = 1
+      let l:max = bufnr('$')
+      while l:bufnr <= l:max
+        if bufname(l:bufnr) ==# a:buffer_name
+          silent execute l:bufnr 'buffer'
+        endif
+
+        let l:bufnr += 1
+      endwhile
+    else
+      silent! file `=a:buffer_name`
+    endif
   endif
 
   if g:unite_enable_split_vertically

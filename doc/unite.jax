@@ -170,6 +170,10 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		初期状態が絞り込みモードになる。指定しないと、初期状態はNormal
 		modeになる。
 
+		-no-quit
+		アクションを実行しても、uniteバッファを閉じない。指定しないと、
+		"is_quit"なアクションを実行するとuniteバッファは閉じられる。
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。

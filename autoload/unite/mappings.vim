@@ -214,7 +214,7 @@ endfunction"}}}
 
 " key-mappings functions.
 function! s:exit()"{{{
-  call unite#quit_session()
+  call unite#force_quit_session()
 endfunction"}}}
 function! s:delete_backward_path()"{{{
   let l:input = getline(b:unite.prompt_linenr)[len(b:unite.prompt):]

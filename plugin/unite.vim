@@ -143,6 +143,8 @@ function! s:parse_options(args)"{{{
       let l:options['default_action'] = matchstr(l:arg, '^-default-action=\zs.*')
     elseif l:arg =~# '^-start-insert'
       let l:options['start_insert'] = 1
+    elseif l:arg =~# '^-no-quit'
+      let l:options['no_quit'] = 1
     else
       let l:source_name = matchstr(l:arg, '^[^:]*')
       let l:source_args = map(split(l:arg[len(l:source_name) :], '\\\@<!:'),
