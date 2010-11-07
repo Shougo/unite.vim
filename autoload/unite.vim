@@ -279,19 +279,32 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
   endfor
 
   if !l:is_parents_action
+    " Kind aliases.
+    call s:filter_alias_action(l:action_table, l:kind.alias_table)
+
     " Kind custom aliases.
     if has_key(s:custom_aliases, a:kind_name)
       call s:filter_alias_action(l:action_table, s:custom_aliases[a:kind_name])
     endif
 
     " Source/* aliases.
+    if has_key(l:source.alias_table, '*')
+      call s:filter_alias_action(l:action_table, l:source.alias_table['*'])
+    endif
+
+    " Source/* custom aliases.
     if has_key(s:custom_aliases, l:source_kind_wild)
       call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind_wild])
     endif
 
-    " Source/kind custom aliases.
+    " Source/kind aliases.
     if has_key(s:custom_aliases, l:source_kind)
       call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind])
+    endif
+
+    " Source/kind custom aliases.
+    if has_key(l:source.alias_table, a:kind_name)
+      call s:filter_alias_action(l:action_table, l:source.alias_table[a:kind_name])
     endif
   endif
 
@@ -665,6 +678,9 @@ function! s:initialize_sources(sources)"{{{
     if !has_key(l:source, 'action_table')
       let l:source.action_table = {}
     endif
+    if !has_key(l:source, 'alias_table')
+      let l:source.alias_table = {}
+    endif
     let l:source.unite__is_invalidate = 1
 
     let l:source.unite__number = l:number
@@ -678,6 +694,9 @@ endfunction"}}}
 function! s:initialize_kinds()"{{{
   let l:kinds = extend(copy(s:default_kinds), s:custom_kinds)
   for l:kind in values(l:kinds)
+    if !has_key(l:kind, 'alias_table')
+      let l:kind.alias_table = {}
+    endif
     if !has_key(l:kind, 'parents')
       let l:kind.parents = ['common']
     endif

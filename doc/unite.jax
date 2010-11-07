@@ -879,11 +879,21 @@ gather_candidates	関数		(必須)
 
 						*unite-source-attribute-action_table*
 action_table		辞書		(任意)
-			source独自のaction_tableを追加するときに使用する。
-			キーはaction_tableを追加するkindで、値は追加するaction_tableである。
+			source独自のアクションテーブルを追加するときに使用する。
+			キーはアクションテーブルを追加するkindで、値は追加するアクションテーブルである。
 			キーに"*"を設定すると、どんなkindにもマッチするようになる。
-			action_tableの詳細については、|unite-kind-attribute-action_table|
+			アクションテーブルの詳細については、|unite-kind-attribute-action_table|
 			を参照せよ。もしこれが与えられない場合、空となる。
+
+						*unite-source-attribute-alias_table*
+alias_table		辞書		(任意)
+			source独自のエイリアステーブルを追加するときに使用す
+			る。キーはエイリアステーブルを追加するkindで、値は追
+			加するエイリアステーブルである。キーに"*"を設定する
+			と、どんなkindにもマッチするようになる。
+			エイリアステーブルの詳細については、
+			|unite-kind-attribute-action_table|を参照せよ。もし
+			これが与えられない場合、空となる。
 
 						*unite-source-attribute-max_candidates*
 max_candidates		数値		(任意)
@@ -1021,6 +1031,15 @@ action_table		辞書		(必須)
 				このアクションを実行した際にキャッシュを無効化
 				するかどうか。省略すると0になり、キャッシュは無
 				効化されない。
+
+						*unite-kind-attribute-alias_table*
+alias_table		辞書		(任意)
+			エイリアステーブルを指定する。
+			エイリアステーブルは辞書となっていて、キーとして、アク
+			ションの名前を取る。値として、エイリアスとなるアクショ
+			ン名を持つ。アクションに短縮名を付けたいときに便利で
+			ある。値を"nop"とすると、そのアクションを無効化でき
+			る。
 
 						*unite-kind-attribute-parents*
 parents			リスト		(任意)

@@ -373,6 +373,7 @@ CHANGELOG					*unite-changelog*
 - Changed unite#take_action().
 - Implemented source/* action_table.
 - Improved japanese documentation.
+- Implemented alias_table.
 
 2010-11-06
 - Improved switch to unite buffer.
