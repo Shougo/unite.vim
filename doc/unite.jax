@@ -618,7 +618,7 @@ unite#custom_action({kind}, {name}, {action})
 		\ 'is_selectable' : 1,
 		\ }
 		function! my_tabopen.func(candidates)
-		  call unite#take_action('tabopen', a:candidates)
+		  call unite#take_action('tabopen', a:candidates, self.func)
 		
 		  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
 		  execute g:unite_lcd_command '`=l:dir`'
@@ -641,12 +641,11 @@ unite#custom_alias({kind}, {name}, {action})
 >
 		call unite#custom_alias('file', 'h', 'left')
 <
-unite#take_action({action-name}, {candidate})
+unite#take_action({action-name}, {candidate}, {self-func})
 						*unite#take_action()*
 		{candidate}に対し、{action-name}という名前のアクションを実行する。
-		主に、unite#custom_action()などで用いる。
-		ただし、unite#custom_alias()やunite#custom_action()で定義された
-		アクションは呼び出せない。
+		{self-func}には無限ループを防ぐため、この関数を呼び出す
+		|Funcref|を渡す。主に、unite#custom_action()などで用いる。
 		is_selectableなアクションの場合は{candidate}がリストに自動変換
 		される。
 

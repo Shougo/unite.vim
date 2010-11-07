@@ -159,15 +159,15 @@ function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
     endif
   endfor
 endfunction"}}}
-function! unite#take_action(action_name, candidate)"{{{
+function! unite#take_action(action_name, candidate, self_func)"{{{
   let l:candidate_head = type(a:candidate) == type([]) ?
         \ a:candidate[0] : a:candidate
 
-  let l:action_table = unite#get_action_table(l:candidate_head.source, l:candidate_head.kind, 0)
+  let l:action_table = unite#get_action_table(l:candidate_head.source, l:candidate_head.kind, a:self_func)
 
   let l:action_name =
         \ a:action_name ==# 'default' ?
-        \ unite#get_default_action(l:candidate_head.source, l:candidate_head.kind)
+        \ unite#get_default_action(l:candidate_head.source, l:candidate_head.kind, a:self_func)
         \ : a:action_name
 
   if !has_key(l:action_table, a:action_name)
@@ -186,7 +186,7 @@ function! unite#take_parents_action(action_name, candidate, extend_candidate)"{{
   let l:candidate_head = type(a:candidate) == type([]) ?
         \ l:candidate[0] : l:candidate
 
-  let l:action_table = unite#get_action_table(l:candidate_head.source, l:candidate_head.kind, 0, 1)
+  let l:action_table = unite#get_action_table(l:candidate_head.source, l:candidate_head.kind, function('unite#take_parents_action'), 1)
 
   let l:action_name =
         \ a:action_name ==# 'default' ?
@@ -226,43 +226,46 @@ function! unite#available_kinds(...)"{{{
   let l:unite = s:get_unite()
   return a:0 == 0 ? l:unite.kinds : get(l:unite.kinds, a:1, {})
 endfunction"}}}
-function! unite#get_action_table(source_name, kind_name, ...)"{{{
+" function! unite#get_action_table(source_name, kind_name, self_func, [is_parent_action])
+function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
   let l:kind = unite#available_kinds(a:kind_name)
   let l:source = unite#available_sources(a:source_name)
-  let l:contains_custom_action = a:0 > 0 ? a:1 : 1
-  let l:is_parents_action = a:0 > 1 ? a:2 : 0
+  let l:is_parents_action = a:0 > 0 ? a:1 : 0
 
   let l:action_table = {}
 
   " Parents actions.
   for l:parent in l:kind.parents
-    call extend(l:action_table, unite#get_action_table(a:source_name, l:parent, l:contains_custom_action))
+    call extend(l:action_table, unite#get_action_table(a:source_name, l:parent, a:self_func))
   endfor
 
   if !l:is_parents_action
     " Kind actions.
-    let l:action_table = extend(copy(l:action_table), l:kind.action_table)
+    let l:action_table = extend(l:action_table,
+          \ s:filter_self_func(l:kind.action_table, a:self_func))
     " Kind custom actions.
-    if l:contains_custom_action && has_key(s:custom_actions, a:kind_name)
-      let l:action_table = extend(l:action_table, s:custom_actions[a:kind_name])
+    if has_key(s:custom_actions, a:kind_name)
+      let l:action_table = extend(l:action_table,
+            \ s:filter_self_func(s:custom_actions[a:kind_name], a:self_func))
     endif
     " Kind custom aliases.
-    if l:contains_custom_action && has_key(s:custom_aliases, a:kind_name)
+    if has_key(s:custom_aliases, a:kind_name)
       call s:filter_alias_action(l:action_table, s:custom_aliases[a:kind_name])
     endif
 
     " Source/kind actions.
-    if has_key(l:source, 'action_table')
-          \ && has_key(l:source.action_table, a:kind_name)
-      let l:action_table = extend(l:action_table, l:source.action_table[a:kind_name])
+    if has_key(l:source.action_table, a:kind_name)
+      let l:action_table = extend(l:action_table,
+            \ s:filter_self_func(l:source.action_table[a:kind_name], a:self_func))
     endif
     let l:source_kind = a:source_name.'/'.a:kind_name
     " Source/kind custom actions.
-    if l:contains_custom_action && has_key(s:custom_actions, l:source_kind)
-      let l:action_table = extend(l:action_table, s:custom_actions[a:kind_name])
+    if has_key(s:custom_actions, l:source_kind)
+      let l:action_table = extend(l:action_table,
+            \ s:filter_self_func(s:custom_actions[a:kind_name], a:self_func))
     endif
     " Source/kind custom aliases.
-    if l:contains_custom_action && has_key(s:custom_aliases, l:source_kind)
+    if has_key(s:custom_aliases, l:source_kind)
       call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind])
     endif
   endif
@@ -633,6 +636,9 @@ function! s:initialize_sources(sources)"{{{
     let l:source.args = l:args
     if !has_key(l:source, 'is_volatile')
       let l:source.is_volatile = 0
+    endif
+    if !has_key(l:source, 'action_table')
+      let l:source.action_table = {}
     endif
     let l:source.unite__is_invalidate = 1
 
@@ -1040,6 +1046,9 @@ function! s:filter_alias_action(action_table, alias_table)"{{{
       let a:action_table[l:alias_name] = a:action_table[l:alias_action]
     endif
   endfor
+endfunction"}}}
+function! s:filter_self_func(action_table, self_func)"{{{
+  return filter(copy(a:action_table), 'v:val.func != a:self_func')
 endfunction"}}}
 "}}}
 

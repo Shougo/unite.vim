@@ -144,7 +144,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   " Check action.
   let l:action_tables = []
   for l:candidate in l:candidates
-    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
+    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, function('unite#mappings#do_action'))
 
     let l:action_name =
           \ a:action_name ==# 'default' ?
@@ -265,7 +265,7 @@ function! s:choose_action()"{{{
 
   echohl Statement | echo 'Candidates:' | echohl None
 
-  let s:actions = unite#get_action_table(l:candidates[0].source, l:candidates[0].kind)
+  let s:actions = unite#get_action_table(l:candidates[0].source, l:candidates[0].kind, function('s:choose_action'))
   if len(l:candidates) > 1
     for l:candidate in l:candidates
       let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
