@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Nov 2010
+" Last Modified: 07 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -142,6 +142,12 @@ let s:custom_aliases = {}
 let s:substitute_pattern = {}
 call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
 call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
+
+let s:unite_options = [
+      \ '-buffer-name=', '-input=', '-prompt=',
+      \ '-default-action=', '-start-insert', '-no-quit',
+      \ '-winwidth=', '-winheight=',
+      \]
 "}}}
 
 
@@ -308,8 +314,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   endif
 
   let l:sources = extend(copy(s:default_sources), s:custom_sources)
-  let l:options = ['-buffer-name=', '-input=', '-prompt=',  '-default-action=', '-start-insert']
-  return filter(keys(l:sources)+l:options, 'stridx(v:val, a:arglead) == 0')
+  return filter(keys(l:sources)+s:unite_options, 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
 function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
   let l:buffer_list = map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite"'), 'getbufvar(v:val, "unite").buffer_name')
@@ -404,6 +409,9 @@ function! unite#substitute_path_separator(path)"{{{
 endfunction"}}}
 function! unite#path2directory(path)"{{{
   return isdirectory(a:path) ? a:path : unite#substitute_path_separator(fnamemodify(a:path, ':p:h'))
+endfunction"}}}
+function! unite#get_options()"{{{
+  return s:unite_options
 endfunction"}}}
 "}}}
 

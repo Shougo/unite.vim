@@ -368,6 +368,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-07
+- Improved analyse options.
+
 2010-11-06
 - Improved switch to unite buffer.
 - Added -no-quit option.

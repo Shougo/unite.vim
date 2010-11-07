@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Nov 2010
+" Last Modified: 07 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -133,23 +133,20 @@ function! s:parse_options(args)"{{{
   for l:arg in split(a:args, '\\\@<! ')
     let l:arg = substitute(l:arg, '\\\( \)', '\1', 'g')
 
-    if l:arg =~# '^-buffer-name='
-      let l:options['buffer_name'] = matchstr(l:arg, '^-buffer-name=\zs.*')
-    elseif l:arg =~# '^-input='
-      let l:options['input'] = matchstr(l:arg, '^-input=\zs.*')
-    elseif l:arg =~# '^-prompt='
-      let l:options['prompt'] = matchstr(l:arg, '^-prompt=\zs.*')
-    elseif l:arg =~# '^-default-action='
-      let l:options['default_action'] = matchstr(l:arg, '^-default-action=\zs.*')
-    elseif l:arg =~# '^-start-insert'
-      let l:options['start_insert'] = 1
-    elseif l:arg =~# '^-no-quit'
-      let l:options['no_quit'] = 1
-    elseif l:arg =~# '^-winwidth'
-      let l:options['winwidth'] = matchstr(l:arg, '^-winwidth=\zs.*')
-    elseif l:arg =~# '^-winheight'
-      let l:options['winheight'] = matchstr(l:arg, '^-winheight=\zs.*')
-    else
+    let l:found = 0
+    for l:option in unite#get_options()
+      if stridx(l:arg, l:option) == 0
+        let l:key = substitute(substitute(l:option, '-', '_', 'g'), '=$', '', '')[1:]
+        let l:options[l:key] = (l:option =~ '=$') ?
+              \ l:arg[len(l:option) :] : 1
+
+        let l:found = 1
+        break
+      endif
+    endfor
+
+    if !l:found
+      " Add source name.
       let l:source_name = matchstr(l:arg, '^[^:]*')
       let l:source_args = map(split(l:arg[len(l:source_name) :], '\\\@<!:'),
             \ 'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
