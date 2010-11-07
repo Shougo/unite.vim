@@ -195,7 +195,7 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		|:Unite|と同一である。
 
 :UniteWithInput [{options}] {sources}		*:UniteWithInput*
-		初期の絞込みテキストはユーザーが入力する他は|:Unite|と同一であ
+		初期の絞込みテキストをユーザーが入力する他は|:Unite|と同一であ
 		る。
 
 :UniteResume [{buffer-name}]			*:UniteResume*
@@ -522,8 +522,7 @@ x		候補を選択している場合は|i_<Plug>(unite_quick_match_default_actio
 <Space>		|v_<Plug>(unite_toggle_mark_selected_candidates)|
 
 ==============================================================================
-						*unite-functions*
-関数
+関数						*unite-functions*
 
 unite#start({sources}, [, {context}])				*unite#start()*
 		uniteバッファを新しく生成する。現在uniteバッファに居る場合、絞

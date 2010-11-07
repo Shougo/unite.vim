@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Nov 2010
+" Last Modified: 08 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -118,10 +118,7 @@ command! -nargs=+ -complete=customlist,unite#complete_source UniteWithInput call
 function! s:call_unite_input(args)"{{{
   let [l:args, l:options] = s:parse_options(a:args)
   if !has_key(l:options, 'input')
-    let l:path = unite#substitute_path_separator(input('Input narrowing text: ', '', 'dir'))
-    if l:path != ''
-      let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
-    endif
+    let l:path = escape(input('Input narrowing text: ', '', 'dir'), ' ')
   endif
 
   call unite#start(l:args, l:options)
