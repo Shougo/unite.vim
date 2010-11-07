@@ -118,7 +118,7 @@ command! -nargs=+ -complete=customlist,unite#complete_source UniteWithInput call
 function! s:call_unite_input(args)"{{{
   let [l:args, l:options] = s:parse_options(a:args)
   if !has_key(l:options, 'input')
-    let l:path = escape(input('Input narrowing text: ', '', 'dir'), ' ')
+    let l:options.input = escape(input('Input narrowing text: ', ''), ' ')
   endif
 
   call unite#start(l:args, l:options)
