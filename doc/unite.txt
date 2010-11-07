@@ -371,6 +371,8 @@ CHANGELOG					*unite-changelog*
 2010-11-07
 - Improved analyse options.
 - Changed unite#take_action().
+- Implemented source/* action_table.
+- Improved japanese documentation.
 
 2010-11-06
 - Improved switch to unite buffer.

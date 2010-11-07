@@ -234,36 +234,61 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
 
   let l:action_table = {}
 
-  " Parents actions.
-  for l:parent in l:kind.parents
-    call extend(l:action_table, unite#get_action_table(a:source_name, l:parent, a:self_func))
-  endfor
+  let l:source_kind = 'source/'.a:source_name.'/'.a:kind_name
+  let l:source_kind_wild = 'source/'.a:source_name.'/*'
 
   if !l:is_parents_action
-    " Kind actions.
-    let l:action_table = extend(l:action_table,
-          \ s:filter_self_func(l:kind.action_table, a:self_func))
-    " Kind custom actions.
-    if has_key(s:custom_actions, a:kind_name)
+    " Source/kind custom actions.
+    if has_key(s:custom_actions, l:source_kind)
       let l:action_table = extend(l:action_table,
-            \ s:filter_self_func(s:custom_actions[a:kind_name], a:self_func))
-    endif
-    " Kind custom aliases.
-    if has_key(s:custom_aliases, a:kind_name)
-      call s:filter_alias_action(l:action_table, s:custom_aliases[a:kind_name])
+            \ s:filter_self_func(s:custom_actions[l:source_kind], a:self_func), 'keep')
     endif
 
     " Source/kind actions.
     if has_key(l:source.action_table, a:kind_name)
       let l:action_table = extend(l:action_table,
-            \ s:filter_self_func(l:source.action_table[a:kind_name], a:self_func))
+            \ s:filter_self_func(l:source.action_table[a:kind_name], a:self_func), 'keep')
     endif
-    let l:source_kind = a:source_name.'/'.a:kind_name
-    " Source/kind custom actions.
-    if has_key(s:custom_actions, l:source_kind)
+
+    " Source/* custom actions.
+    if has_key(s:custom_actions, l:source_kind_wild)
       let l:action_table = extend(l:action_table,
-            \ s:filter_self_func(s:custom_actions[a:kind_name], a:self_func))
+            \ s:filter_self_func(s:custom_actions[l:source_kind_wild], a:self_func), 'keep')
     endif
+
+    " Source/* actions.
+    if has_key(l:source.action_table, '*')
+      let l:action_table = extend(l:action_table,
+            \ s:filter_self_func(l:source.action_table['*'], a:self_func), 'keep')
+    endif
+
+    " Kind custom actions.
+    if has_key(s:custom_actions, a:kind_name)
+      let l:action_table = extend(l:action_table,
+            \ s:filter_self_func(s:custom_actions[a:kind_name], a:self_func), 'keep')
+    endif
+
+    " Kind actions.
+    let l:action_table = extend(l:action_table,
+          \ s:filter_self_func(l:kind.action_table, a:self_func), 'keep')
+  endif
+
+  " Parents actions.
+  for l:parent in l:kind.parents
+    call extend(l:action_table, unite#get_action_table(a:source_name, l:parent, a:self_func), 'keep')
+  endfor
+
+  if !l:is_parents_action
+    " Kind custom aliases.
+    if has_key(s:custom_aliases, a:kind_name)
+      call s:filter_alias_action(l:action_table, s:custom_aliases[a:kind_name])
+    endif
+
+    " Source/* aliases.
+    if has_key(s:custom_aliases, l:source_kind_wild)
+      call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind_wild])
+    endif
+
     " Source/kind custom aliases.
     if has_key(s:custom_aliases, l:source_kind)
       call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind])

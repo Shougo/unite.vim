@@ -603,7 +603,7 @@ unite#get_substitute_pattern({buffer-name})
 unite#custom_default_action({kind}, {default-action})
 						*unite#custom_default_action()*
 		{kind}に対するデフォルトアクションを{default-action}に置き換え
-		る。
+		る。{kind}は","区切りで複数指定ができる。
 		例:
 >
 		call unite#custom_default_action('file', 'tabopen')
@@ -628,7 +628,7 @@ unite#custom_action({kind}, {name}, {action})
 <
 unite#undef_custom_action({kind}, {name})			*unite#undef_custom_action()*
 		|unite#custom_action()|で追加した、{kind}の{name}というactionを削
-		除する。
+		除する。{kind}は","区切りで複数指定ができる。
 		存在しないときは無視される。
 
 unite#custom_alias({kind}, {name}, {action})
@@ -644,8 +644,9 @@ unite#custom_alias({kind}, {name}, {action})
 unite#take_action({action-name}, {candidate}, {self-func})
 						*unite#take_action()*
 		{candidate}に対し、{action-name}という名前のアクションを実行する。
-		{self-func}には無限ループを防ぐため、この関数を呼び出す
-		|Funcref|を渡す。主に、unite#custom_action()などで用いる。
+		{self-func}には無限ループを防ぐため、この関数を呼び出してい
+		る関数の|Funcref|を渡す。主に、unite#custom_action()などで用
+		いる。
 		is_selectableなアクションの場合は{candidate}がリストに自動変換
 		される。
 
@@ -714,7 +715,7 @@ kind						*unite-kind*
 候補のkind
 
 						*unite-kind-common*
-common		共通アクション
+common		共通アクション。ほとんどのkindはcommonを暗黙的に継承する。
 
 						*unite-kind-openable*
 openable	オープン可能インタフェース
@@ -880,8 +881,9 @@ gather_candidates	関数		(必須)
 action_table		辞書		(任意)
 			source独自のaction_tableを追加するときに使用する。
 			キーはaction_tableを追加するkindで、値は追加するaction_tableである。
+			キーに"*"を設定すると、どんなkindにもマッチするようになる。
 			action_tableの詳細については、|unite-kind-attribute-action_table|
-			を参照せよ。
+			を参照せよ。もしこれが与えられない場合、空となる。
 
 						*unite-source-attribute-max_candidates*
 max_candidates		数値		(任意)
@@ -967,6 +969,7 @@ kindの属性					*unite-kind-attributes*
 						*unite-kind-attribute-name*
 name			文字列		(必須)
 			kindの名前。以下の文字で構成しなければならない。
+			ただし、"source"と"common"は予約されている。
 			文字:
 			- a-z
 			- 0-9
@@ -1026,6 +1029,39 @@ parents			リスト		(任意)
 			は、リストの順番で辿っていき、後から見つかったものによ
 			って上書きされる。アクションは親のkindを辿って再帰的に
 			検索されるので、無限ループに注意しなければならない。
+
+------------------------------------------------------------------------------
+sourceに特殊化されたkind			*unite-implicit-kind-for-a-source*
+
+uniteはある特定のsourceによって生成されたkindを認識し、アクションを特殊化す
+ることができる。特殊化されたkind名は、"source/{name}/{kind}"となる。{name}には
+source名を指定する。{kind}を"*"とすると、どんなkindにもマッチする。
+
+例えば、source "file"において"delete"アクションを追加するには以下のようにする。
+>
+	call unite#custom_action('source/file/*', 'delete', function('...'))
+<
+------------------------------------------------------------------------------
+actionの解決順序				*neoui-action-resolution-order*
+
+例えば、source "file"によって生成された、kind "file"(これは"openable",
+"cdable"を継承している)の候補に対してアクションを実行した場合、アクションの
+解決順序は次のようになる。
+
+(1) Custom action table for kind "source/file/file".
+(2) Default action table for kind "source/file/file".
+(3) Custom action table for kind "source/file/*".
+(4) Default action table for kind "source/file/*".
+(5) Custom action table for kind "file".
+(6) Default action table for kind "file".
+(7) Custom action table for kind "openable".
+(8) Default action table for kind "openable".
+(9) Custom action table for kind "cdable".
+(10) Default action table for kind "cdable".
+(11) Custom action table for kind "common".
+(12) Default action table for kind "common".
+
+|unite-action-table|も参照せよ。
 
 ==============================================================================
 設定例						*unite-examples*
