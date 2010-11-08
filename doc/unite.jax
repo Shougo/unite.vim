@@ -1116,7 +1116,13 @@ help						*unite-sources-help*
 		http://github.com/tsukkee/unite-help
 		ヘルプを検索するsourceである。
 		作者はtsukkee氏。
-
+		例:
+>
+		" Execute help.
+		nnoremap <C-h>  :<C-u>Unite -start-insert help<CR>
+		" Execute help by cursor keyword.
+		nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord help<CR>
+<
 tags						*unite-sources-tags*
 		http://github.com/tsukkee/unite-tags
 		タグファイルを検索するsourceである。
