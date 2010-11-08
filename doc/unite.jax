@@ -1112,15 +1112,20 @@ actionの解決順序				*neoui-action-resolution-order*
 
 ここでは、作者以外の手により作成されたsourceについて紹介を行う。
 
-help 						*unite-sources-help*
+help						*unite-sources-help*
 		http://github.com/tsukkee/unite-help
 		ヘルプを検索するsourceである。
 		作者はtsukkee氏。
 
-tags 						*unite-sources-tags*
+tags						*unite-sources-tags*
 		http://github.com/tsukkee/unite-tags
 		タグファイルを検索するsourceである。
 		作者はtsukkee氏。
+
+outline						*unite-sources-outline*
+		https://github.com/h1mesuke/unite-outline
+		ソースファイルを検索し、アウトラインを表示するsourceである。
+		作者はh1mesuke氏。
 
 ==============================================================================
 TODO						*unite-todo*

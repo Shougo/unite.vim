@@ -370,6 +370,7 @@ CHANGELOG					*unite-changelog*
 
 2010-11-08
 - Fixed :UniteWithInput.
+- Added outline source description.
 
 2010-11-07
 - Improved analyse options.
