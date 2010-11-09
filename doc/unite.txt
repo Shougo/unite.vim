@@ -372,6 +372,7 @@ CHANGELOG					*unite-changelog*
 - Improved display source name.
 - Added command kind.
 - Changed unite#take_action().
+- Fixed inifinite loop problem.
 
 2010-11-08
 - Fixed :UniteWithInput.
