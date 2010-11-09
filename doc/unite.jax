@@ -740,6 +740,9 @@ word		文字列
 						*unite-kind-jump_list*
 jump_list	ジャンプリスト
 
+						*unite-kind-command*
+command		VimのExコマンド
+
 ==============================================================================
 アクション					*unite-action*
 
@@ -817,6 +820,9 @@ jump_list					*unite-action-jump_list*
 のアクションについて解説する。
 	open		その候補の場所にジャンプする
 	preview		その候補の場所をプレビューする
+
+command						*unite-action-command*
+	execute		コマンドを実行する
 
 source別アクション
 
@@ -1113,7 +1119,7 @@ actionの解決順序				*neoui-action-resolution-order*
 ここでは、作者以外の手により作成されたsourceについて紹介を行う。
 
 help						*unite-sources-help*
-		http://github.com/tsukkee/unite-help
+		https://github.com/tsukkee/unite-help
 		ヘルプを検索するsourceである。
 		作者はtsukkee氏。
 		例:
@@ -1124,7 +1130,7 @@ help						*unite-sources-help*
 		nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord help<CR>
 <
 tags						*unite-sources-tags*
-		http://github.com/tsukkee/unite-tags
+		https://github.com/tsukkee/unite-tags
 		タグファイルを検索するsourceである。
 		作者はtsukkee氏。
 
@@ -1132,6 +1138,11 @@ outline						*unite-sources-outline*
 		https://github.com/h1mesuke/unite-outline
 		ソースファイルを検索し、アウトラインを表示するsourceである。
 		作者はh1mesuke氏。
+
+colorscheme					*unite-sources-colorscheme*
+		https://github.com/ujihisa/unite-colorscheme
+		colorschemeを変更するsourceである。
+		作者はujihisa氏。
 
 ==============================================================================
 TODO						*unite-todo*
