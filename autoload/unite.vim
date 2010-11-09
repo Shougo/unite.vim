@@ -159,22 +159,22 @@ function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
     endif
   endfor
 endfunction"}}}
-function! unite#take_action(action_name, candidate, self_func)"{{{
+function! unite#take_action(action_name, candidate)"{{{
   let l:candidate_head = type(a:candidate) == type([]) ?
         \ a:candidate[0] : a:candidate
 
-  let l:action_table = unite#get_action_table(l:candidate_head.source, l:candidate_head.kind, a:self_func)
+  let l:action_table = unite#get_action_table(l:candidate_head.source, l:candidate_head.kind)
 
   let l:action_name =
         \ a:action_name ==# 'default' ?
-        \ unite#get_default_action(l:candidate_head.source, l:candidate_head.kind, a:self_func)
+        \ unite#get_default_action(l:candidate_head.source, l:candidate_head.kind)
         \ : a:action_name
 
   if !has_key(l:action_table, a:action_name)
     throw 'no such action ' . a:action_name
   endif
 
-  let l:action = l:action_table[a:action_name]
+  let l:action = l:action_table[a:action_name][0]
   " Convert candidates.
   call l:action.func(
         \ (l:action.is_selectable && type(a:candidate) != type([])) ?
@@ -186,7 +186,7 @@ function! unite#take_parents_action(action_name, candidate, extend_candidate)"{{
   let l:candidate_head = type(a:candidate) == type([]) ?
         \ l:candidate[0] : l:candidate
 
-  let l:action_table = unite#get_action_table(l:candidate_head.source, l:candidate_head.kind, function('unite#take_parents_action'), 1)
+  let l:action_table = unite#get_action_table(l:candidate_head.source, l:candidate_head.kind, 1)
 
   let l:action_name =
         \ a:action_name ==# 'default' ?
@@ -197,7 +197,7 @@ function! unite#take_parents_action(action_name, candidate, extend_candidate)"{{
     throw 'no such action ' . a:action_name
   endif
 
-  let l:action = l:action_table[a:action_name]
+  let l:action = l:action_table[a:action_name][0]
   " Convert candidates.
   call l:action.func(
         \ l:action.is_selectable && type(a:candidate) != type([])) ?
@@ -226,8 +226,8 @@ function! unite#available_kinds(...)"{{{
   let l:unite = s:get_unite()
   return a:0 == 0 ? l:unite.kinds : get(l:unite.kinds, a:1, {})
 endfunction"}}}
-" function! unite#get_action_table(source_name, kind_name, self_func, [is_parent_action])
-function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
+" function! unite#get_action_table(source_name, kind_name, [is_parent_action])
+function! unite#get_action_table(source_name, kind_name, ...)"{{{
   let l:kind = unite#available_kinds(a:kind_name)
   let l:source = unite#available_sources(a:source_name)
   let l:is_parents_action = a:0 > 0 ? a:1 : 0
@@ -240,42 +240,36 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
   if !l:is_parents_action
     " Source/kind custom actions.
     if has_key(s:custom_actions, l:source_kind)
-      let l:action_table = extend(l:action_table,
-            \ s:filter_self_func(s:custom_actions[l:source_kind], a:self_func), 'keep')
+      let l:action_table = s:extend_actions(l:action_table, s:custom_actions[l:source_kind])
     endif
 
     " Source/kind actions.
     if has_key(l:source.action_table, a:kind_name)
-      let l:action_table = extend(l:action_table,
-            \ s:filter_self_func(l:source.action_table[a:kind_name], a:self_func), 'keep')
+      let l:action_table = s:extend_actions(l:action_table, l:source.action_table[a:kind_name])
     endif
 
     " Source/* custom actions.
     if has_key(s:custom_actions, l:source_kind_wild)
-      let l:action_table = extend(l:action_table,
-            \ s:filter_self_func(s:custom_actions[l:source_kind_wild], a:self_func), 'keep')
+      let l:action_table = s:extend_actions(l:action_table, s:custom_actions[l:source_kind_wild])
     endif
 
     " Source/* actions.
     if has_key(l:source.action_table, '*')
-      let l:action_table = extend(l:action_table,
-            \ s:filter_self_func(l:source.action_table['*'], a:self_func), 'keep')
+      let l:action_table = s:extend_actions(l:action_table, l:source.action_table['*'])
     endif
 
     " Kind custom actions.
     if has_key(s:custom_actions, a:kind_name)
-      let l:action_table = extend(l:action_table,
-            \ s:filter_self_func(s:custom_actions[a:kind_name], a:self_func), 'keep')
+      let l:action_table = s:extend_actions(l:action_table, s:custom_actions[a:kind_name])
     endif
 
     " Kind actions.
-    let l:action_table = extend(l:action_table,
-          \ s:filter_self_func(l:kind.action_table, a:self_func), 'keep')
+    let l:action_table = s:extend_actions(l:action_table, l:kind.action_table)
   endif
 
   " Parents actions.
   for l:parent in l:kind.parents
-    call extend(l:action_table, unite#get_action_table(a:source_name, l:parent, a:self_func), 'keep')
+    let l:action_table = s:extend_parent_actions(l:action_table, unite#get_action_table(a:source_name, l:parent))
   endfor
 
   if !l:is_parents_action
@@ -309,19 +303,21 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
   endif
 
   " Set default parameters.
-  for l:action in values(l:action_table)
-    if !has_key(l:action, 'description')
-      let l:action.description = ''
-    endif
-    if !has_key(l:action, 'is_quit')
-      let l:action.is_quit = 1
-    endif
-    if !has_key(l:action, 'is_selectable')
-      let l:action.is_selectable = 0
-    endif
-    if !has_key(l:action, 'is_invalidate_cache')
-      let l:action.is_invalidate_cache = 0
-    endif
+  for l:actions in values(l:action_table)
+    for l:action in l:actions
+      if !has_key(l:action, 'description')
+        let l:action.description = ''
+      endif
+      if !has_key(l:action, 'is_quit')
+        let l:action.is_quit = 1
+      endif
+      if !has_key(l:action, 'is_selectable')
+        let l:action.is_selectable = 0
+      endif
+      if !has_key(l:action, 'is_invalidate_cache')
+        let l:action.is_invalidate_cache = 0
+      endif
+    endfor
   endfor
 
   " Filtering nop action.
@@ -453,6 +449,9 @@ function! unite#path2directory(path)"{{{
 endfunction"}}}
 function! unite#get_options()"{{{
   return s:unite_options
+endfunction"}}}
+function! unite#get_self_functions()"{{{
+  return split(matchstr(expand('<sfile>'), '^function \zs.*$'), '\.\.')[: -2]
 endfunction"}}}
 "}}}
 
@@ -1078,6 +1077,30 @@ endfunction"}}}
 function! s:compare_marked_candidates(candidate_a, candidate_b)"{{{
   return a:candidate_a.unite__marked_time - a:candidate_b.unite__marked_time
 endfunction"}}}
+function! s:extend_actions(action_table1, action_table2)"{{{
+  let l:action_table = a:action_table1
+
+  for [action_name, action] in items(a:action_table2)
+    if !has_key(l:action_table, action_name)
+      let l:action_table[action_name] = []
+    endif
+    call add(l:action_table[action_name], action)
+  endfor
+
+  return l:action_table
+endfunction"}}}
+function! s:extend_parent_actions(action_table, parent_action_table)"{{{
+  let l:action_table = a:action_table
+
+  for [action_name, actions] in items(a:parent_action_table)
+    if !has_key(l:action_table, action_name)
+      let l:action_table[action_name] = []
+    endif
+    call extend(l:action_table[action_name], actions)
+  endfor
+
+  return l:action_table
+endfunction"}}}
 function! s:filter_alias_action(action_table, alias_table)"{{{
   for [l:alias_name, l:alias_action] in items(a:alias_table)
     if l:alias_action ==# 'nop'
@@ -1089,9 +1112,6 @@ function! s:filter_alias_action(action_table, alias_table)"{{{
       let a:action_table[l:alias_name] = a:action_table[l:alias_action]
     endif
   endfor
-endfunction"}}}
-function! s:filter_self_func(action_table, self_func)"{{{
-  return filter(copy(a:action_table), 'v:val.func != a:self_func')
 endfunction"}}}
 "}}}
 

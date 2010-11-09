@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Nov 2010
+" Last Modified: 09 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -143,8 +143,9 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
   " Check action.
   let l:action_tables = []
+  let l:Self_func = function(unite#get_self_functions()[-1])
   for l:candidate in l:candidates
-    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, function('unite#mappings#do_action'))
+    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
 
     let l:action_name =
           \ a:action_name ==# 'default' ?
@@ -157,7 +158,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
       return
     endif
 
-    let l:action = l:action_table[l:action_name]
+    let l:action = l:action_table[l:action_name][0]
 
     " Check selectable flag.
     if !l:action.is_selectable && len(l:candidates) > 1
@@ -265,13 +266,13 @@ function! s:choose_action()"{{{
 
   echohl Statement | echo 'Candidates:' | echohl None
 
-  let s:actions = unite#get_action_table(l:candidates[0].source, l:candidates[0].kind, function('s:choose_action'))
+  let s:actions = unite#get_action_table(l:candidates[0].source, l:candidates[0].kind)
   if len(l:candidates) > 1
     for l:candidate in l:candidates
       let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind)
       " Filtering unique items and check selectable flag.
       call filter(s:actions, 'has_key(l:action_table, v:key)
-            \ && l:action_table[v:key].is_selectable')
+            \ && l:action_table[v:key][0].is_selectable')
     endfor
   endif
 
@@ -293,10 +294,10 @@ function! s:choose_action()"{{{
   for [l:action_name, l:action] in items(s:actions)
     echohl Identifier
     echo unite#util#truncate(l:action_name, l:max)
-    if l:action.description != ''
+    if l:action[0].description != ''
       echohl Special | echon ' -- '
       echohl Comment
-      echon l:action.description
+      echon l:action[0].description
     endif
   endfor
   echohl None

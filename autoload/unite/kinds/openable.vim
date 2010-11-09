@@ -41,7 +41,7 @@ let s:kind.action_table.tabopen = {
 function! s:kind.action_table.tabopen.func(candidates)"{{{
   for l:candidate in a:candidates
     tabnew
-    call unite#take_action('open', l:candidate, self.func)
+    call unite#take_action('open', l:candidate)
   endfor
 endfunction"}}}
 
@@ -52,7 +52,7 @@ let s:kind.action_table.split = {
 function! s:kind.action_table.split.func(candidates)"{{{
   for l:candidate in a:candidates
     split
-    call unite#take_action('open', l:candidate, self.func)
+    call unite#take_action('open', l:candidate)
   endfor
 endfunction"}}}
 
@@ -63,7 +63,7 @@ let s:kind.action_table.vsplit = {
 function! s:kind.action_table.vsplit.func(candidates)"{{{
   for l:candidate in a:candidates
     vsplit
-    call unite#take_action('open', l:candidate, self.func)
+    call unite#take_action('open', l:candidate)
   endfor
 endfunction"}}}
 
@@ -74,7 +74,7 @@ let s:kind.action_table.left = {
 function! s:kind.action_table.left.func(candidates)"{{{
   for l:candidate in a:candidates
     leftabove vsplit
-    call unite#take_action('open', l:candidate, self.func)
+    call unite#take_action('open', l:candidate)
   endfor
 endfunction"}}}
 
@@ -85,7 +85,7 @@ let s:kind.action_table.right = {
 function! s:kind.action_table.right.func(candidates)"{{{
   for l:candidate in a:candidates
     rightbelow vsplit
-    call unite#take_action('open', l:candidate, self.func)
+    call unite#take_action('open', l:candidate)
   endfor
 endfunction"}}}
 
@@ -96,7 +96,7 @@ let s:kind.action_table.above = {
 function! s:kind.action_table.above.func(candidates)"{{{
   for l:candidate in a:candidates
     leftabove split
-    call unite#take_action('open', l:candidate, self.func)
+    call unite#take_action('open', l:candidate)
   endfor
 endfunction"}}}
 
@@ -107,7 +107,7 @@ let s:kind.action_table.below = {
 function! s:kind.action_table.below.func(candidates)"{{{
   for l:candidate in a:candidates
     rightbelow split
-    call unite#take_action('open', l:candidate, self.func)
+    call unite#take_action('open', l:candidate)
   endfor
 endfunction"}}}
 "}}}

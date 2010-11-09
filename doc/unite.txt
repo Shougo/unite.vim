@@ -371,6 +371,7 @@ CHANGELOG					*unite-changelog*
 2010-11-09
 - Improved display source name.
 - Added command kind.
+- Changed unite#take_action().
 
 2010-11-08
 - Fixed :UniteWithInput.
