@@ -368,6 +368,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-09
+- Improved display source name.
+
 2010-11-08
 - Fixed :UniteWithInput.
 - Added outline source description.
