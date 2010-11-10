@@ -786,15 +786,15 @@ file						*unite-action-file*
 このkindは|unite-action-openable|と|unite-action-cdable|のアクションを継承している。
 内部ではcandidate.action__pathとcandidate.action__directoryを使う。
 	open		ファイルを開く
-	fopen		現在のバッファの変更を破棄してファイルを開く。
-			force openの略語。
 	preview		プレビューウィンドウにファイルを開く
 	bookmark	候補をブックマークに追加する
 
 buffer						*unite-action-buffer*
 このkindは|unite-action-file|のアクションを継承している。
-	delete		バッファを削除
-	fdelete		現在のバッファの変更を破棄して削除
+	delete		バッファを|:bdelete|
+	fdelete		バッファを|:bdelete!|
+	wipeout		バッファを|:bwipeout|
+	unload		バッファを|:bunload|
 	bookmark	候補をブックマークに追加する
 
 tab						*unite-action-tab*
