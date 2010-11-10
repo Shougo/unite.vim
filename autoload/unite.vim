@@ -832,16 +832,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.search_pattern_save = @/
   let b:unite.prompt_linenr = 2
   let b:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])')) + 1
-
-  " Caching.
   let b:unite.cached_candidates = {}
-  let l:context.input = ''
-  for l:source in unite#available_sources_list()
-    if !l:source.is_volatile
-      let b:unite.cached_candidates[l:source.name] =
-            \ copy(l:source.gather_candidates(l:source.args, l:context))
-    endif
-  endfor
 
   let s:unite = b:unite
 
