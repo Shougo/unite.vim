@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Nov 2010
+" Last Modified: 10 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1046,7 +1046,7 @@ function! s:compare_marked_candidates(candidate_a, candidate_b)"{{{
   return a:candidate_a.unite__marked_time - a:candidate_b.unite__marked_time
 endfunction"}}}
 function! s:extend_actions(self_func, action_table1, action_table2)"{{{
-  return extend(a:action_table1, s:filter_self_func(a:action_table2, a:self_func))
+  return extend(a:action_table1, s:filter_self_func(a:action_table2, a:self_func), 'keep')
 endfunction"}}}
 function! s:filter_alias_action(action_table, alias_table)"{{{
   for [l:alias_name, l:alias_action] in items(a:alias_table)
@@ -1069,7 +1069,7 @@ function! s:take_action(action_name, candidate, is_parent_action)"{{{
 
   let l:action_table = unite#get_action_table(
         \ l:candidate_head.source, l:candidate_head.kind,
-        \ unite#get_self_functions()[-1], a:is_parent_action)
+        \ unite#get_self_functions()[-3], a:is_parent_action)
 
   let l:action_name =
         \ a:action_name ==# 'default' ?
