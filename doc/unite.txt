@@ -372,7 +372,8 @@ CHANGELOG					*unite-changelog*
 - Fixed unite#custom_action().
 - Fixed required_pattern_length.
 - Fixed buffer kind.
-- Deleted fopen action.
+- Added wipeout, unload action in buffer kind.
+- Deleted fopen action in file kind.
 
 2010-11-09
 - Improved display source name.
