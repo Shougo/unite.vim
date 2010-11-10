@@ -642,6 +642,12 @@ function! s:initialize_sources(sources)"{{{
     if !has_key(l:source, 'is_volatile')
       let l:source.is_volatile = 0
     endif
+    if !has_key(l:source, 'max_candidates')
+      let l:source.max_candidates = 0
+    endif
+    if !has_key(l:source, 'required_pattern_length')
+      let l:source.required_pattern_length = 0
+    endif
     if !has_key(l:source, 'action_table')
       let l:source.action_table = {}
     endif
@@ -675,21 +681,18 @@ function! s:gather_candidates(input, context)"{{{
   let l:context = a:context
   let l:input_list = filter(split(a:input, '\\\@<! ', 1), 'v:val !~ "!"')
   let l:context.input = empty(l:input_list) ? '' : l:input_list[0]
+  let l:input_len = unite#util#strchars(l:context.input)
 
   let l:candidates = []
   for l:source in unite#available_sources_list()
-    if l:source.is_volatile
-          \ || !has_key(b:unite.cached_candidates, l:source.name)
-          \ || (l:context.is_force || l:source.unite__is_invalidate)
+    " Check required pattern length.
+    if l:input_len < l:source.required_pattern_length
+      continue
+    endif
 
+    if l:source.is_volatile || l:context.is_force || l:source.unite__is_invalidate
       let l:context.source = l:source
-
-      " Check required pattern length.
-      let l:source_candidates =
-            \ (has_key(l:source, 'required_pattern_length')
-            \   && len(l:context.input) < l:source.required_pattern_length) ?
-            \ [] : copy(l:source.gather_candidates(l:source.args, l:context))
-
+      let l:source_candidates = copy(l:source.gather_candidates(l:source.args, l:context))
       let l:source.unite__is_invalidate = 0
 
       if !l:source.is_volatile
@@ -700,17 +703,11 @@ function! s:gather_candidates(input, context)"{{{
       let l:source_candidates = copy(b:unite.cached_candidates[l:source.name])
     endif
 
-    for l:candidate in l:source_candidates
-      if !has_key(l:candidate, 'abbr')
-        let l:candidate.abbr = l:candidate.word
-      endif
-    endfor
-
     if a:input != ''
       call unite#keyword_filter(l:source_candidates, a:input)
     endif
 
-    if has_key(l:source, 'max_candidates') && l:source.max_candidates != 0
+    if l:source.max_candidates != 0
       " Filtering too many candidates.
       let l:source_candidates = l:source_candidates[: l:source.max_candidates - 1]
     endif
@@ -719,6 +716,10 @@ function! s:gather_candidates(input, context)"{{{
   endfor
 
   for l:candidate in l:candidates
+    if !has_key(l:candidate, 'abbr')
+      let l:candidate.abbr = l:candidate.word
+    endif
+
     " Initialize.
     let l:candidate.unite__is_marked = 0
   endfor
@@ -820,7 +821,6 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.win_rest_cmd = l:win_rest_cmd
   let b:unite.context = l:context
   let b:unite.candidates = []
-  let b:unite.cached_candidates = {}
   let b:unite.sources = l:sources
   let b:unite.kinds = s:initialize_kinds()
   let b:unite.buffer_name = (l:context.buffer_name == '') ? 'default' : l:context.buffer_name
@@ -832,6 +832,16 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.search_pattern_save = @/
   let b:unite.prompt_linenr = 2
   let b:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])')) + 1
+
+  " Caching.
+  let b:unite.cached_candidates = {}
+  let l:context.input = ''
+  for l:source in unite#available_sources_list()
+    if !l:source.is_volatile
+      let b:unite.cached_candidates[l:source.name] =
+            \ copy(l:source.gather_candidates(l:source.args, l:context))
+    endif
+  endfor
 
   let s:unite = b:unite
 

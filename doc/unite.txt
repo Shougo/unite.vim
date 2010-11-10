@@ -370,6 +370,7 @@ CHANGELOG					*unite-changelog*
 
 2010-11-10
 - Fixed unite#custom_action().
+- Fixed required_pattern_length.
 
 2010-11-09
 - Improved display source name.
