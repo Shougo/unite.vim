@@ -720,6 +720,9 @@ function! s:gather_candidates(input, context)"{{{
     if !has_key(l:candidate, 'abbr')
       let l:candidate.abbr = l:candidate.word
     endif
+    if !has_key(l:candidate, 'kind')
+      let l:candidate.kind = 'common'
+    endif
 
     " Initialize.
     let l:candidate.unite__is_marked = 0

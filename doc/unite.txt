@@ -372,6 +372,7 @@ CHANGELOG					*unite-changelog*
 - Fixed :UniteResume.
 - Improved examples.
 - Added is_redraw in context.
+- Candidates key kind is an option.
 
 2010-11-10
 - Fixed unite#custom_action().

@@ -959,8 +959,8 @@ NOTATION					*unite-notation*
 			source			(文字列)
 				候補が所属するsource名。
 
-			kind			(文字列)
-				候補が所属するkind名。
+			kind			(文字列)	(任意)
+				候補が所属するkind名。省略すると"common"となる。
 
 			source__{name}		(不定)		(任意)
 				source独自の付加情報。source側で自由に使用でき
