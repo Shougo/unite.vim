@@ -198,6 +198,11 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		初期の絞込みテキストをユーザーが入力する他は|:Unite|と同一であ
 		る。
 
+:UniteWithInputDirectory [{options}] {sources}	
+						*:UniteWithInputDirectory*
+		|:UniteWithInput|と同じであるが、入力する文字列はデイレクトリと
+		みなされ、自動的に変換される。
+
 :UniteResume [{buffer-name}]			*:UniteResume*
 		以前開いた{buffer-name}という名前のuniteバッファを再利用する。
 		{buffer-name}を省略すると、以前使用したバッファを再利用する。

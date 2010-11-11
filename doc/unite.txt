@@ -374,6 +374,7 @@ CHANGELOG					*unite-changelog*
 - Added is_redraw in context.
 - Candidates key kind is an option.
 - Fixed highlight error.
+- Added :UniteWithInputDirectory command.
 
 2010-11-10
 - Fixed unite#custom_action().
