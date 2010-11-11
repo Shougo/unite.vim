@@ -371,6 +371,7 @@ CHANGELOG					*unite-changelog*
 2010-11-11
 - Fixed :UniteResume.
 - Improved examples.
+- Added is_redraw in context.
 
 2010-11-10
 - Fixed unite#custom_action().

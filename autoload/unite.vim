@@ -459,6 +459,7 @@ function! unite#start(sources, ...)"{{{
   if !has_key(l:context, 'winheight')
     let l:context.winheight = g:unite_winheight
   endif
+  let l:context.is_redraw = 0
 
   try
     call s:initialize_unite_buffer(a:sources, l:context)
@@ -962,6 +963,7 @@ function! s:redraw(is_force) "{{{
 
   let l:context = b:unite.context
   let l:context.is_force = a:is_force
+  let l:context.is_redraw = 1
 
   let l:candidates = s:gather_candidates(l:input, l:context)
 

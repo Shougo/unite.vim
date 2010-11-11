@@ -377,7 +377,7 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 
 <Plug>(unite_redraw)				*<Plug>(unite_redraw)*
 		|g:unite_update_time|で制御される更新間隔を待たずに、すぐに表
-		示を更新する。
+		示を更新する。uniteのキャッシュ更新に使われる。
 
 <Plug>(unite_search_next_source)		*<Plug>(unite_search_next_source)*
 		次のsourceの最初の候補にカーソルを移動する。
@@ -916,9 +916,10 @@ is_volatile		数値		(任意)
 			入力が変化するごとに、sourceが毎回候補を再計算するかど
 			うか。
 			この属性は任意である。もしこれが与えられない場合、0がデ
-			フォルト値として使われる。この場合、候補はキャッシュさ
-			れ、毎回|unite-source-attribute-gather_candidates|が呼
-			ばれることはない。
+			フォルト値として使われる。この場合、候補はuniteバッファ
+			によりキャッシュされ、毎回
+			|unite-source-attribute-gather_candidates|が呼ばれるこ
+			とはない。
 
 NOTATION					*unite-notation*
 
@@ -937,6 +938,9 @@ NOTATION					*unite-notation*
 			is_insert		(数値)
 				uniteバッファが挿入モードから呼び出されたかどう
 				か。
+
+			is_redraw		(数値)
+				<Plug>(unite_redraw)で呼び出されたかどうか。
 
 			source			(辞書)
 				現在候補を収集しているsourceの情報。
