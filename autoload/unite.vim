@@ -883,10 +883,12 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   setlocal nomodifiable
   setfiletype unite
 
-  " Set highlight.
-  let l:match_prompt = escape(b:unite.prompt, '\/*~.^$[]')
-  syntax clear uniteInputPrompt
-  execute 'syntax match uniteInputPrompt' '/^'.l:match_prompt.'/ contained'
+  if exists('b:current_syntax') && b:current_syntax == 'unite'
+    " Set highlight.
+    let l:match_prompt = escape(b:unite.prompt, '\/*~.^$[]')
+    syntax clear uniteInputPrompt
+    execute 'syntax match uniteInputPrompt' '/^'.l:match_prompt.'/ contained'
+  endif
 endfunction"}}}
 function! s:switch_unite_buffer(buffer_name, context)"{{{
   " Search unite window.
