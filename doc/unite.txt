@@ -189,9 +189,9 @@ COMMANDS 					*unite-commands*
 		Specifies the height of a unite buffer.  Unless you specify i
 		t, |g:unite_winheight| will be used.
 		
-:UniteWithCurrentDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
-						*:UniteWithCurrentDir*
-		Unite all sources. Initial narrowing text is current directory.
+:UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
+		Equivalent to |:Unite| except that the initial narrowing text
+		is the current directory.
 
 :UniteWithBufferDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
 						*:UniteWithBufferDir*
