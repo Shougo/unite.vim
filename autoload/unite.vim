@@ -968,7 +968,6 @@ function! s:redraw(is_force) "{{{
 
   let l:context = b:unite.context
   let l:context.is_force = a:is_force
-  let l:context.is_redraw = 1
 
   let l:candidates = s:gather_candidates(l:input, l:context)
 

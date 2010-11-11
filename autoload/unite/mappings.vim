@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Nov 2010
+" Last Modified: 11 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -350,7 +350,9 @@ function! s:append_end()"{{{
   startinsert!
 endfunction"}}}
 function! s:redraw()"{{{
+  let b:unite.context.is_redraw = 1
   call unite#force_redraw()
+  let b:unite.context.is_redraw = 0
 endfunction"}}}
 function! s:search_source(is_next)"{{{
   let l:new_pos = getpos('.')
