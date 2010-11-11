@@ -368,6 +368,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-11
+- Fixed :UniteResume.
+
 2010-11-10
 - Fixed unite#custom_action().
 - Fixed required_pattern_length.

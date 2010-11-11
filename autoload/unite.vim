@@ -511,7 +511,7 @@ function! unite#resume(buffer_name)"{{{
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
 
-  call s:switch_unite_buffer(a:buffer_name, getbufvar(l:bufnr, 'context')
+  call s:switch_unite_buffer(bufname(l:bufnr), getbufvar(l:bufnr, 'unite').context)
 
   " Set parameters.
   let b:unite.old_winnr = l:winnr
@@ -894,7 +894,6 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
           \ g:unite_enable_split_vertically ?
           \        (bufexists(a:buffer_name) ? 'vsplit' : 'vnew')
           \      : (bufexists(a:buffer_name) ? 'split' : 'new')
-
     if bufexists(a:buffer_name)
       " Search buffer name.
       let l:bufnr = 1
