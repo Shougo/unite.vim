@@ -113,7 +113,7 @@ That matches foo but candidates that match bar will be rejected.
 
 	:Unite -buffer-name=files file
 
-See also |unite_default_key_mappings|for other actions.
+See also |unite_default_key_mappings| for other actions.
 
 ==============================================================================
 INSTALL						*unite-install*
@@ -175,6 +175,11 @@ COMMANDS 					*unite-commands*
 		-start-insert
 		Opens unite with narrowing mode. Otherwise the initial mode
 		will be Normal mode.
+
+		-no-quit
+		Doesn't close the unite buffer after firing an action.  Unless
+		you specify it, a unite buffer will be closed when you
+		selected an action which is "is_quit".
 
 :UniteWithCurrentDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
 						*:UniteWithCurrentDir*
