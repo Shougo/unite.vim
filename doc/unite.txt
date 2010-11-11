@@ -181,6 +181,10 @@ COMMANDS 					*unite-commands*
 		you specify it, a unite buffer will be closed when you
 		selected an action which is "is_quit".
 
+		-winwidth={window-width}
+		Specifies the width of a unite buffer.  Unless you specify i
+		t, |g:unite_winwidth| will be used.
+		
 :UniteWithCurrentDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
 						*:UniteWithCurrentDir*
 		Unite all sources. Initial narrowing text is current directory.
