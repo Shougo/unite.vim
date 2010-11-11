@@ -919,7 +919,9 @@ is_volatile		数値		(任意)
 			フォルト値として使われる。この場合、候補はuniteバッファ
 			によりキャッシュされ、毎回
 			|unite-source-attribute-gather_candidates|が呼ばれるこ
-			とはない。
+			とはない。ただし、このキャッシュはそのuniteバッファが
+			閉じられるまで有効である。もっと長い時間キャッシュした
+			い場合はsourceが自前でキャッシュするほかない。
 
 NOTATION					*unite-notation*
 
@@ -941,6 +943,9 @@ NOTATION					*unite-notation*
 
 			is_redraw		(数値)
 				<Plug>(unite_redraw)で呼び出されたかどうか。
+				ユーザーが明示的にキャッシュを破棄しているので、
+				自前でキャッシュを管理するsourceにとっては重
+				要な情報となる。
 
 			source			(辞書)
 				現在候補を収集しているsourceの情報。
