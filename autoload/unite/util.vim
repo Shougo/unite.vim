@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Oct 2010
+" Last Modified: 12 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,13 +84,11 @@ if v:version >= 703
 
     return ret
   endfunction"}}}
-  
+
   function! unite#util#wcswidth(str)"{{{
     return strwidth(a:str)
   endfunction"}}}
-  
 else
-  
   function! unite#util#strwidthpart(str, width)"{{{
     let ret = a:str
     let width = unite#util#wcswidth(a:str)
@@ -113,7 +111,7 @@ else
 
     return ret
   endfunction"}}}
-  
+
   function! unite#util#wcswidth(str)"{{{
     let mx_first = '^\(.\)'
     let str = a:str
@@ -151,5 +149,9 @@ else
     return 1
   endfunction"}}}
 endif
+
+function! unite#util#smart_execute_command(action, word)
+  execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
+endfunction
 
 " vim: foldmethod=marker

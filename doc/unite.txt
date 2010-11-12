@@ -370,6 +370,7 @@ CHANGELOG					*unite-changelog*
 
 2010-11-12
 - Improved :UniteWithInputDirectory.
+- Improved file actions.
 
 2010-11-11
 - Fixed :UniteResume.
