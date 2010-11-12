@@ -368,6 +368,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-12
+- Improved :UniteWithInputDirectory.
+
 2010-11-11
 - Fixed :UniteResume.
 - Improved examples.
