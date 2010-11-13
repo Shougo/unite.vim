@@ -368,6 +368,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-13
+- Fixed :bwipeout command.
+
 2010-11-12
 - Improved :UniteWithInputDirectory.
 - Improved file actions.
