@@ -604,6 +604,13 @@ function! s:quit_session(is_force)  "{{{
   " Close preview window.
   pclose
 
+  " Call finalize functions.
+  for l:source in unite#available_sources_list()
+    if has_key(l:source, 'on_close')
+      call l:source.on_init(l:source.args, s:unite.context)
+    endif
+  endfor
+
   if winnr('$') != 1
     if !a:is_force && s:unite.context.no_quit
       if winnr('#') > 0
@@ -877,6 +884,13 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let s:unite = b:unite
 
   let s:last_unite_bufnr = bufnr('%')
+
+  " Call initialize functions.
+  for l:source in unite#available_sources_list()
+    if has_key(l:source, 'on_init')
+      call l:source.on_init(l:source.args, l:context)
+    endif
+  endfor
 
   " Basic settings.
   setlocal bufhidden=hide

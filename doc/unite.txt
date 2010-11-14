@@ -372,6 +372,7 @@ CHANGELOG					*unite-changelog*
 - Added <Plug>(unite_rotate_previous_source) and <Plug>(unite_rotate_next_source).
 - Improved input parse.
 - Added <Plug>(unite_input_directory) keymappings.
+- Added on_init and on_close attributes.
 
 2010-11-13
 - Fixed :bwipeout command.
