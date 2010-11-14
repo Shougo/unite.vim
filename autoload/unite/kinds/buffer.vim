@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Nov 2010
+" Last Modified: 13 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -78,7 +78,7 @@ let s:kind.action_table.wipeout = {
       \ }
 function! s:kind.action_table.wipeout.func(candidates)"{{{
   for l:candidate in a:candidates
-    call s:delete('wipeout', l:candidate)
+    call s:delete('bwipeout', l:candidate)
   endfor
 endfunction"}}}
 
