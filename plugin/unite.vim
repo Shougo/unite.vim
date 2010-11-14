@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Nov 2010
+" Last Modified: 14 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -87,7 +87,10 @@ function! s:call_unite_current_dir(args)"{{{
   let [l:args, l:options] = s:parse_options(a:args)
   if !has_key(l:options, 'input')
     let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : unite#substitute_path_separator(fnamemodify(getcwd(), ':p'))
-    let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
+    if l:path !~ '/$'
+      let l:path .= '/'
+    endif
+    let l:options.input = escape(l:path, ' ')
   endif
 
   call unite#start(l:args, l:options)
@@ -98,7 +101,10 @@ function! s:call_unite_buffer_dir(args)"{{{
   let [l:args, l:options] = s:parse_options(a:args)
   if !has_key(l:options, 'input')
     let l:path = &filetype ==# 'vimfiler' ? b:vimfiler.current_dir : unite#substitute_path_separator(fnamemodify(bufname('%'), ':p:h'))
-    let l:options.input = escape(l:path.(l:path =~ '/$' ? '' : '/'), ' ')
+    if l:path !~ '/$'
+      let l:path .= '/'
+    endif
+    let l:options.input = escape(l:path, ' ')
   endif
 
   call unite#start(l:args, l:options)
@@ -129,7 +135,10 @@ function! s:call_unite_input_directory(args)"{{{
   let [l:args, l:options] = s:parse_options(a:args)
   if !has_key(l:options, 'input')
     let l:path = unite#substitute_path_separator(input('Input narrowing directory: ', '', 'dir'))
-    let l:options.input = l:path.(l:path =~ '/$' ? '' : '/')
+    if l:path !~ '/$'
+      let l:path .= '/'
+    endif
+    let l:options.input = l:path
   endif
 
   call unite#start(l:args, l:options)
