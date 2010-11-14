@@ -407,7 +407,7 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		クイックマッチを行い、選択した候補のデフォルトアクションを実行
 		する。マークしている候補がある場合は無効となる。
 
-<Plug>(unite_input_directory)			*i_<Plug>(unite_input_directory)*
+<Plug>(unite_input_directory)			*<Plug>(unite_input_directory)*
 		ディレクトリ名を入力して絞り込みを行う。
 
 インサートモードマッピング
