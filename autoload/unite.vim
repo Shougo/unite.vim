@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Nov 2010
+" Last Modified: 14 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -368,6 +368,36 @@ function! unite#quick_match_redraw() "{{{
 
   let &l:modifiable = l:modifiable_save
 endfunction"}}}
+function! unite#redraw_status() "{{{
+  let l:modifiable_save = &l:modifiable
+  setlocal modifiable
+
+  call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(unite#available_sources_list()), 'v:val.name'), ', '))
+
+  let &l:modifiable = l:modifiable_save
+endfunction"}}}
+function! unite#redraw_candidates() "{{{
+  let l:candidates = unite#gather_candidates()
+
+  let l:modifiable_save = &l:modifiable
+  setlocal modifiable
+
+  let l:lines = s:convert_lines(l:candidates)
+  if len(l:lines) < len(b:unite.candidates)
+    if mode() !=# 'i' && line('.') == b:unite.prompt_linenr
+      silent! execute (b:unite.prompt_linenr+1).',$delete _'
+      startinsert!
+    else
+      let l:pos = getpos('.')
+      silent! execute (b:unite.prompt_linenr+1).',$delete _'
+      call setpos('.', l:pos)
+    endif
+  endif
+  call setline(b:unite.prompt_linenr+1, l:lines)
+
+  let &l:modifiable = l:modifiable_save
+  let b:unite.candidates = l:candidates
+endfunction"}}}
 function! unite#get_marked_candidates() "{{{
   return sort(filter(copy(unite#get_unite_candidates()), 'v:val.unite__is_marked'), 's:compare_marked_candidates')
 endfunction"}}}
@@ -421,6 +451,14 @@ endfunction"}}}
 function! unite#get_self_functions()"{{{
   return split(matchstr(expand('<sfile>'), '^function \zs.*$'), '\.\.')[: -2]
 endfunction"}}}
+function! unite#gather_candidates()"{{{
+  let l:candidates = []
+  for l:source in unite#available_sources_list()
+    let l:candidates += b:unite.sources_candidates[l:source.name]
+  endfor
+
+  return l:candidates
+endfunction"}}}
 "}}}
 
 " Command functions.
@@ -470,7 +508,7 @@ function! unite#start(sources, ...)"{{{
   setlocal modifiable
 
   silent % delete _
-  call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(a:sources), 'v:val[0]'), ', '))
+  call unite#redraw_status()
   call setline(b:unite.prompt_linenr, b:unite.prompt . b:unite.context.input)
 
   call unite#force_redraw()
@@ -678,13 +716,12 @@ function! s:initialize_kinds()"{{{
 
   return l:kinds
 endfunction"}}}
-function! s:gather_candidates(input, context)"{{{
+function! s:recache_candidates(input, context)"{{{
   let l:context = a:context
   let l:input_list = filter(split(a:input, '\\\@<! ', 1), 'v:val !~ "!"')
   let l:context.input = empty(l:input_list) ? '' : l:input_list[0]
   let l:input_len = unite#util#strchars(l:context.input)
 
-  let l:candidates = []
   for l:source in unite#available_sources_list()
     " Check required pattern length.
     if l:input_len < l:source.required_pattern_length
@@ -713,22 +750,20 @@ function! s:gather_candidates(input, context)"{{{
       let l:source_candidates = l:source_candidates[: l:source.max_candidates - 1]
     endif
 
-    let l:candidates += l:source_candidates
+    for l:candidate in l:source_candidates
+      if !has_key(l:candidate, 'abbr')
+        let l:candidate.abbr = l:candidate.word
+      endif
+      if !has_key(l:candidate, 'kind')
+        let l:candidate.kind = 'common'
+      endif
+
+      " Initialize.
+      let l:candidate.unite__is_marked = 0
+    endfor
+
+    let b:unite.sources_candidates[l:source.name] = l:source_candidates
   endfor
-
-  for l:candidate in l:candidates
-    if !has_key(l:candidate, 'abbr')
-      let l:candidate.abbr = l:candidate.word
-    endif
-    if !has_key(l:candidate, 'kind')
-      let l:candidate.kind = 'common'
-    endif
-
-    " Initialize.
-    let l:candidate.unite__is_marked = 0
-  endfor
-
-  return l:candidates
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
   let l:max_width = winwidth(0) - b:unite.max_source_name - 6
@@ -837,6 +872,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.prompt_linenr = 2
   let b:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])')) + 1
   let b:unite.cached_candidates = {}
+  let b:unite.sources_candidates = {}
 
   let s:unite = b:unite
 
@@ -969,29 +1005,13 @@ function! s:redraw(is_force) "{{{
   let l:context = b:unite.context
   let l:context.is_force = a:is_force
 
-  let l:candidates = s:gather_candidates(l:input, l:context)
+  " Recaching.
+  call s:recache_candidates(l:input, l:context)
 
   let &ignorecase = l:ignorecase_save
 
-  let l:modifiable_save = &l:modifiable
-  setlocal modifiable
-
-  let l:lines = s:convert_lines(l:candidates)
-  if len(l:lines) < len(b:unite.candidates)
-    if mode() !=# 'i' && line('.') == b:unite.prompt_linenr
-      silent! execute (b:unite.prompt_linenr+1).',$delete _'
-      startinsert!
-    else
-      let l:pos = getpos('.')
-      silent! execute (b:unite.prompt_linenr+1).',$delete _'
-      call setpos('.', l:pos)
-    endif
-  endif
-  call setline(b:unite.prompt_linenr+1, l:lines)
-
-  let &l:modifiable = l:modifiable_save
-
-  let b:unite.candidates = l:candidates
+  " Redraw.
+  call unite#redraw_candidates()
 endfunction"}}}
 
 " Autocmd events.

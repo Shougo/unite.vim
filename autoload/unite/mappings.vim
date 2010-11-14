@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Nov 2010
+" Last Modified: 14 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,8 +35,8 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_append_end)  :<C-u>call <SID>append_end()<CR>
   nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  :<C-u>call <SID>toggle_mark()<CR>
   nnoremap <silent><buffer> <Plug>(unite_redraw)  :<C-u>call <SID>redraw()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_search_next_source)  :<C-u>call <SID>search_source(1)<CR>
-  nnoremap <silent><buffer> <Plug>(unite_search_previous_source)  :<C-u>call <SID>search_source(0)<CR>
+  nnoremap <silent><buffer> <Plug>(unite_rotate_next_source)  :<C-u>call <SID>rotate_source(1)<CR>
+  nnoremap <silent><buffer> <Plug>(unite_rotate_previous_source)  :<C-u>call <SID>rotate_source(0)<CR>
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)  b:unite.prompt_linenr.'G0z.'
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? b:unite.prompt_linenr.'G0z.' : 'j'
@@ -78,8 +78,8 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <CR>      <Plug>(unite_do_default_action)
   nmap <buffer> <Space>   <Plug>(unite_toggle_mark_current_candidate)
   nmap <buffer> <Tab>     <Plug>(unite_choose_action)
-  nmap <buffer> <C-n>     <Plug>(unite_search_next_source)
-  nmap <buffer> <C-p>     <Plug>(unite_search_previous_source)
+  nmap <buffer> <C-n>     <Plug>(unite_rotate_next_source)
+  nmap <buffer> <C-p>     <Plug>(unite_rotate_previous_source)
   nmap <buffer> <C-g>     <Plug>(unite_print_candidate)
   nmap <buffer> <C-l>     <Plug>(unite_redraw)
   nmap <buffer> gg        <Plug>(unite_cursor_top)
@@ -354,42 +354,20 @@ function! s:redraw()"{{{
   call unite#force_redraw()
   let b:unite.context.is_redraw = 0
 endfunction"}}}
-function! s:search_source(is_next)"{{{
-  let l:new_pos = getpos('.')
-
-  let l:current_source = line('.') < b:unite.prompt_linenr ? '' : matchstr(getline('.'), '[[:space:]]\zs[a-z_-]\+$')
-
-  execute (b:unite.prompt_linenr+1)
-  let l:poses = []
-  let i = 0
-  let l:current_pos = -1
-  for l:source in unite#available_sources_name()
-    let l:pos = searchpos(l:source . '$', 'W')
-    if l:pos[0] != 0
-      if l:current_source ==# l:source
-        let l:current_pos = len(l:poses)
-      endif
-
-      call add(l:poses, l:pos)
+function! s:rotate_source(is_next)"{{{
+  let l:max = len(unite#available_sources_list()) - 1
+  for l:source in unite#available_sources_list()
+    let l:source.unite__number = a:is_next ?
+          \ (l:source.unite__number - 1) : (l:source.unite__number + 1)
+    if l:source.unite__number < 0
+      let l:source.unite__number = l:max
+    elseif l:source.unite__number > l:max
+      let l:source.unite__number = 0
     endif
-
-    let i += 1
   endfor
 
-  if a:is_next
-    if l:current_pos + 1 < len(l:poses)
-      let l:new_pos[1] = l:poses[l:current_pos + 1][0]
-      let l:new_pos[2] = l:poses[l:current_pos + 1][1]
-    endif
-  else
-    if l:current_pos >= 1
-      let l:new_pos[1] = l:poses[l:current_pos - 1][0]
-      let l:new_pos[2] = l:poses[l:current_pos - 1][1]
-    endif
-  endif
-
-  call setpos('.', l:new_pos)
-  normal! 0
+  call unite#redraw_status()
+  call unite#redraw_candidates()
 endfunction"}}}
 function! s:print_candidate()"{{{
   if line('.') <= b:unite.prompt_linenr

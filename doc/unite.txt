@@ -368,6 +368,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-14
+- Added <Plug>(unite_rotate_previous_source) and <Plug>(unite_rotate_next_source).
+
 2010-11-12
 - Improved :UniteWithInputDirectory.
 - Improved file actions.

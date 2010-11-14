@@ -384,11 +384,11 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		|g:unite_update_time|で制御される更新間隔を待たずに、すぐに表
 		示を更新する。uniteのキャッシュ更新に使われる。
 
-<Plug>(unite_search_next_source)		*<Plug>(unite_search_next_source)*
-		次のsourceの最初の候補にカーソルを移動する。
+<Plug>(unite_rotate_next_source)		*<Plug>(unite_rotate_next_source)*
+		sourceの順番を順方向に並び変える。
 
-<Plug>(unite_search_previous_source)		*<Plug>(unite_serch_previous_source)*
-		前のsourceの最初の候補にカーソルを移動する。
+<Plug>(unite_rotate_previous_source)		*<Plug>(unite_rotate_previous_source)*
+		sourceの順番を逆方向に並び変える。
 
 <Plug>(unite_print_candidate)			*<Plug>(unite_print_candidate)*
 		選択している候補に対するアクションの対象を表示する。例えば、選
@@ -481,8 +481,8 @@ A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 <Tab>		|<Plug>(unite_choose_action)|
-<C-n>		|<Plug>(unite_search_next_source)|
-<C-p>		|<Plug>(unite_search_previous_source)|
+<C-n>		|<Plug>(unite_rotate_next_source)|
+<C-p>		|<Plug>(unite_rotate_previous_source)|
 <C-g>		|<Plug>(unite_print_candidate)|
 <C-l>		|<Plug>(unite_redraw)|
 gg		|<Plug>(unite_cursor_top)|
