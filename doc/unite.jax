@@ -956,6 +956,8 @@ NOTATION					*unite-notation*
 
 {context}					*unite-notation-{context}*
 			コンテキスト情報を与える辞書変数。主に、次の情報を持つ。
+			システムで共有されているので、これを書き換えてはいけな
+			い。
 
 			input			(文字列)
 				ユーザーの入力文字列。
