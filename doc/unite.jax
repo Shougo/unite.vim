@@ -893,16 +893,21 @@ gather_candidates	関数		(必須)
 
 						*unite-source-attribute-on_init*
 on_init			関数		(任意)
-			uniteバッファが初期化された際に呼ばれる。
+			|:Unite|系のコマンドを実行した際や|unite#start()|を呼ん
+			だ際に、uniteバッファに移る前に呼ばれる。|:UniteResume|
+			では呼ばれない。
 			この関数は{args}と{context}を引数に取る。
+			この関数が呼ばれた際、まだuniteバッファは初期化されてい
+			ないので呼び出す関数には注意しなければならない。
 
 						*unite-source-attribute-on_close*
 on_close		関数		(任意)
-			uniteバッファが閉じられる際に呼ばれる。
+			<Plug>(unite_exit)を実行したときや、コマンドの実行後に
+			uniteバッファが閉じられる前に呼ばれる。
 			この関数は{args}と{context}を引数に取る。
-			この関数が呼ばれたとしても、-no-quitオプションが指定
-			された場合など、まだuniteバッファが残っている可能性
-			があるので、内部で使用する変数は解放しないほうがよい。
+			この関数が呼ばれたとしても、まだuniteバッファが残ってい
+			る可能性があるので、内部で使用する変数は解放しないほう
+			がよい。
 
 						*unite-source-attribute-action_table*
 action_table		辞書		(任意)

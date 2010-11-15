@@ -859,6 +859,13 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
 
+  " Call initialize functions.
+  for l:source in l:sources
+    if has_key(l:source, 'on_init')
+      call l:source.on_init(l:source.args, l:context)
+    endif
+  endfor
+
   call s:switch_unite_buffer(l:buffer_name, a:context)
 
   " Set parameters.
@@ -884,13 +891,6 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let s:unite = b:unite
 
   let s:last_unite_bufnr = bufnr('%')
-
-  " Call initialize functions.
-  for l:source in unite#available_sources_list()
-    if has_key(l:source, 'on_init')
-      call l:source.on_init(l:source.args, l:context)
-    endif
-  endfor
 
   " Basic settings.
   setlocal bufhidden=hide

@@ -370,6 +370,7 @@ CHANGELOG					*unite-changelog*
 
 2010-11-15
 - Escape buffer name.
+- Fixed on_init timing.
 
 2010-11-14
 - Added <Plug>(unite_rotate_previous_source) and <Plug>(unite_rotate_next_source).
