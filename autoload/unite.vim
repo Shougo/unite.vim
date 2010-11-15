@@ -860,7 +860,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let l:win_rest_cmd = winrestcmd()
 
   " Call initialize functions.
-  for l:source in l:sources
+  for l:source in values(l:sources)
     if has_key(l:source, 'on_init')
       call l:source.on_init(l:source.args, l:context)
     endif
