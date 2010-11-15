@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Nov 2010
+" Last Modified: 15 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -607,7 +607,7 @@ function! s:quit_session(is_force)  "{{{
   " Call finalize functions.
   for l:source in unite#available_sources_list()
     if has_key(l:source, 'on_close')
-      call l:source.on_init(l:source.args, s:unite.context)
+      call l:source.on_close(l:source.args, s:unite.context)
     endif
   endfor
 
