@@ -1207,7 +1207,7 @@ font						*unite-sources-font*
 		作者はujihisa氏。
 		まだMac OS Xにしか対応していない。
 
-everything					*unite-sources-font*
+everything					*unite-sources-everything*
 		https://github.com/sgur/unite-everything
 		everythingを用いて検索するsourceである。
 		作者はsgur氏。
