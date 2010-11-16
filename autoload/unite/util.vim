@@ -150,6 +150,10 @@ else
   endfunction"}}}
 endif
 
+function! unite#util#is_win()"{{{
+  return has('win16') || has('win32') || has('win64')
+endfunction"}}}
+
 function! unite#util#print_error(message)"{{{
   echohl WarningMsg | echomsg a:message | echohl None
 endfunction"}}}
@@ -175,10 +179,10 @@ function! unite#util#set_dictionary_helper(variable, keys, pattern)"{{{
   endfor
 endfunction"}}}
 function! unite#util#substitute_path_separator(path)"{{{
-  return unite#is_win() ? substitute(a:path, '\\', '/', 'g') : a:path
+  return unite#util#is_win() ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
 function! unite#util#path2directory(path)"{{{
-  return unite#substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
+  return unite#util#substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
 endfunction"}}}
 
 " vim: foldmethod=marker
