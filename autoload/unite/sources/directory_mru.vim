@@ -86,12 +86,17 @@ let s:source = {
 function! s:source.gather_candidates(args, context)"{{{
   call s:load()
 
-  for l:directory in s:mru_dirs
-    let l:directory.abbr = strftime(g:unite_source_directory_mru_time_format, l:directory.source__time)
-          \ . unite#substitute_path_separator(l:directory.action__path)
-    if l:directory.abbr !~ '/$'
-      let l:directory.abbr .= '/'
+  for l:mru in s:mru_dirs
+    let l:relative_path = unite#substitute_path_separator(fnamemodify(l:mru.action__path, ':~:.'))
+    if l:relative_path == ''
+      let l:relative_path = l:mru.action__path
     endif
+    if l:relative_path !~ '/$'
+      let l:relative_path .= '/'
+    endif
+
+    let l:mru.abbr = strftime(g:unite_source_directory_mru_time_format, l:mru.source__time)
+          \ . l:relative_path
   endfor
 
   return s:mru_dirs
