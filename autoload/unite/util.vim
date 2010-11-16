@@ -158,4 +158,23 @@ function! unite#util#escape_file_searching(buffer_name)"{{{
   return escape(a:buffer_name, '*[]?{},')
 endfunction"}}}
 
+function! unite#util#set_default(var, val)  "{{{
+  if !exists(a:var) || type({a:var}) != type(a:val)
+    let {a:var} = a:val
+  endif
+endfunction"}}}
+function! unite#util#set_dictionary_helper(variable, keys, pattern)"{{{
+  for key in split(a:keys, ',')
+    if !has_key(a:variable, key)
+      let a:variable[key] = a:pattern
+    endif
+  endfor
+endfunction"}}}
+function! unite#util#substitute_path_separator(path)"{{{
+  return unite#is_win() ? substitute(a:path, '\\', '/', 'g') : a:path
+endfunction"}}}
+function! unite#util#path2directory(path)"{{{
+  return unite#substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
+endfunction"}}}
+
 " vim: foldmethod=marker

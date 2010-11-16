@@ -25,7 +25,7 @@
 "=============================================================================
 
 " Variables  "{{{
-call unite#set_default('g:unite_source_file_ignore_pattern', 
+call unite#util#set_default('g:unite_source_file_ignore_pattern', 
       \'\%(^\|/\)\.$\|\~$\|\.\%(o|exe|dll|bak|sw[po]\)$')
 "}}}
 

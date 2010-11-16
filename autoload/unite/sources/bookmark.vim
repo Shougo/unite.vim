@@ -33,7 +33,7 @@ let s:bookmark_file_mtime = 0  " the last modified time of the bookmark file.
 " [ [ name, full_path, linenr, search pattern ], ... ]
 let s:bookmark_files = []
 
-call unite#set_default('g:unite_source_bookmark_file',  g:unite_data_directory . '/.bookmark')
+call unite#util#set_default('g:unite_source_bookmark_file',  g:unite_data_directory . '/.bookmark')
 "}}}
 
 function! unite#sources#bookmark#define()"{{{

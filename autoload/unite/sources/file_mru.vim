@@ -33,10 +33,10 @@ let s:mru_files = []
 
 let s:mru_file_mtime = 0  " the last modified time of the mru file.
 
-call unite#set_default('g:unite_source_file_mru_time_format', '(%c)')
-call unite#set_default('g:unite_source_file_mru_file',  g:unite_data_directory . '/.file_mru')
-call unite#set_default('g:unite_source_file_mru_limit', 100)
-call unite#set_default('g:unite_source_file_mru_ignore_pattern', 
+call unite#util#set_default('g:unite_source_file_mru_time_format', '(%c)')
+call unite#util#set_default('g:unite_source_file_mru_file',  g:unite_data_directory . '/.file_mru')
+call unite#util#set_default('g:unite_source_file_mru_limit', 100)
+call unite#util#set_default('g:unite_source_file_mru_ignore_pattern', 
       \'\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|^\%(\\\\\|/mnt/\|/media/\|/Volumes/\)')
 "}}}
 

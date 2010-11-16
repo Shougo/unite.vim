@@ -433,26 +433,6 @@ endfunction"}}}
 function! unite#get_self_functions()"{{{
   return split(matchstr(expand('<sfile>'), '^function \zs.*$'), '\.\.')[: -2]
 endfunction"}}}
-
-" Utils.
-function! unite#set_default(var, val)  "{{{
-  if !exists(a:var) || type({a:var}) != type(a:val)
-    let {a:var} = a:val
-  endif
-endfunction"}}}
-function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
-  for key in split(a:keys, ',')
-    if !has_key(a:variable, key)
-      let a:variable[key] = a:pattern
-    endif
-  endfor
-endfunction"}}}
-function! unite#substitute_path_separator(path)"{{{
-  return unite#is_win() ? substitute(a:path, '\\', '/', 'g') : a:path
-endfunction"}}}
-function! unite#path2directory(path)"{{{
-  return unite#substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
-endfunction"}}}
 function! unite#gather_candidates()"{{{
   let l:candidates = []
   for l:source in unite#available_sources_list()
@@ -460,6 +440,14 @@ function! unite#gather_candidates()"{{{
   endfor
 
   return l:candidates
+endfunction"}}}
+
+" Utils.
+function! unite#substitute_path_separator(path)"{{{
+  return unite#util#substitute_path_separator(a:path)
+endfunction"}}}
+function! unite#path2directory(path)"{{{
+  return unite#util#path2directory(a:path)
 endfunction"}}}
 "}}}
 

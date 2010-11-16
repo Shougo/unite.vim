@@ -388,6 +388,8 @@ CHANGELOG					*unite-changelog*
 - Improved file_mru.
 - Implemented directory_mru.
 - Improved highlight abbr.
+- Improved util functions.
+- Fixed tags.
 
 2010-11-15
 - Escape buffer name.
