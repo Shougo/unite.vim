@@ -847,11 +847,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   endif
 
   " The current buffer is initialized.
-  if unite#is_win()
-    let l:buffer_name = '[unite]'
-  else
-    let l:buffer_name = '*unite*'
-  endif
+  let l:buffer_name = unite#is_win() ? '[unite]' : '*unite*'
   if l:context.buffer_name != ''
     let l:buffer_name .= ' - ' . l:context.buffer_name
   endif

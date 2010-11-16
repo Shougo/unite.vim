@@ -860,6 +860,7 @@ sourceの作成					*unite-create-source*
 autoload/unite/sources//に*.vimのファイルを置いておくと、自動的に読み込まれる。
 その際、unite#sources#{source_name}#define()が呼ばれ、戻り値がsourceと解釈される。
 戻り値はリストでもよく、その場合はsourceのリストと解釈される。
+sourceを追加したくない場合は、空リストを返せば良い。
 独自のsourceを動的に追加するためには、|unite#define_source()|を使う。
 
 ------------------------------------------------------------------------------
@@ -1014,6 +1015,7 @@ kindの作成					*unite-create-kind*
 autoload/unite/kinds/に*.vimのファイルを置いておくと、自動的に読み込まれる。
 その際、unite#kinds#{kind_name}#define()が呼ばれ、戻り値がkindと解釈される。
 戻り値はリストでもよく、その場合はkindのリストと解釈される。
+kindを追加したくない場合は、空リストを返せば良い。
 独自のkindを動的に追加するためには、|unite#define_kind()|を使う。
 
 ------------------------------------------------------------------------------
@@ -1182,6 +1184,21 @@ colorscheme					*unite-sources-colorscheme*
 		https://github.com/ujihisa/unite-colorscheme
 		colorschemeを変更するsourceである。
 		作者はujihisa氏。
+
+font						*unite-sources-font*
+		https://github.com/ujihisa/unite-font
+		fontを変更するsourceである。
+		作者はujihisa氏。
+		まだMac OS Xにしか対応していない。
+
+everything					*unite-sources-font*
+		https://github.com/sgur/unite-everything
+		everythingを用いて検索するsourceである。
+		作者はsgur氏。
+		当然Windowsでしか動作しない。
+		
+		導入記事(日本語)：
+		http://sgur.posterous.com/vimuniteeverythingsource
 
 ==============================================================================
 TODO						*unite-todo*

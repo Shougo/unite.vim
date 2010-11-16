@@ -368,6 +368,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-16
+- Improved Japanese documentation.
+- Some Improvements.
+
 2010-11-15
 - Escape buffer name.
 - Fixed on_init timing.
