@@ -154,4 +154,8 @@ function! unite#util#smart_execute_command(action, word)
   execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
 endfunction
 
+function! unite#util#escape_file_searching(buffer_name)"{{{
+  return escape(a:buffer_name, '*[]?{},')
+endfunction"}}}
+
 " vim: foldmethod=marker

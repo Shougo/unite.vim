@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Nov 2010
+" Last Modified: 16 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,7 +44,9 @@ function! s:kind.action_table.cd.func(candidate)"{{{
     call vimshell#switch_shell(0, a:candidate.action__directory)
   endif
 
-  execute g:unite_cd_command '`=a:candidate.action__directory`'
+  if a:candidate.action__directory != ''
+    execute g:unite_cd_command '`=a:candidate.action__directory`'
+  endif
 endfunction"}}}
 
 let s:kind.action_table.lcd = {
@@ -57,7 +59,53 @@ function! s:kind.action_table.lcd.func(candidate)"{{{
     call vimshell#switch_shell(0, a:candidate.action__directory)
   endif
 
-  execute g:unite_lcd_command '`=a:candidate.action__directory`'
+  if a:candidate.action__directory != ''
+    execute g:unite_lcd_command '`=a:candidate.action__directory`'
+  endif
+endfunction"}}}
+
+let s:kind.action_table.project_cd = {
+      \ 'description' : 'change current directory to project directory',
+      \ }
+function! s:kind.action_table.project_cd.func(candidate)"{{{
+  if a:candidate.action__directory == ''
+    " Ignore.
+    return
+  endif
+
+  let l:directory = ''
+  let l:buftype = getbufvar('#', '&buftype')
+  if l:buftype ==# 'help'
+    let l:directory = a:candidate.action__directory
+  endif
+
+  if l:directory == ''
+    for d in ['.git', '.bzr', '.hg']
+      let d = finddir(d, unite#util#escape_file_searching(a:candidate.action__directory) . ';')
+      if d != ''
+        let l:directory = fnamemodify(d, ':p:h:h')
+        break
+      endif
+    endfor
+  endif
+
+  if l:directory == ''
+    let l:base = unite#substitute_path_separator(a:candidate.action__directory)
+    if l:base =~# '/src/'
+      let l:directory = l:base[: strridx(l:base, '/src/') + 3]
+    endif
+  endif
+
+  if l:directory == ''
+    let l:directory = a:candidate.action__directory
+  endif
+
+  let l:directory = unite#substitute_path_separator(l:directory)
+  if isdirectory(l:directory)
+    let l:candidate = copy(a:candidate)
+    let l:candidate.action__directory = l:directory
+    call s:kind.action_table.cd.func(l:candidate)
+  endif
 endfunction"}}}
 
 let s:kind.action_table.narrow = {

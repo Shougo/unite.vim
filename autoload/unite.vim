@@ -939,8 +939,8 @@ endfunction"}}}
 function! s:switch_unite_buffer(buffer_name, context)"{{{
   " Search unite window.
   " Note: must escape file-pattern.
-  if bufwinnr(s:escape_buffer_name(a:buffer_name)) > 0
-    silent execute bufwinnr(s:escape_buffer_name(a:buffer_name)) 'wincmd w'
+  if bufwinnr(unite#util#escape_file_searching(a:buffer_name)) > 0
+    silent execute bufwinnr(unite#util#escape_file_searching(a:buffer_name)) 'wincmd w'
   else
     " Split window.
     execute g:unite_split_rule
@@ -1122,9 +1122,6 @@ function! s:take_action(action_name, candidate, is_parent_action)"{{{
   call l:action.func(
         \ (l:action.is_selectable && type(a:candidate) != type([])) ?
         \ [a:candidate] : a:candidate)
-endfunction"}}}
-function! s:escape_buffer_name(buffer_name)"{{{
-  return escape(a:buffer_name, '*[]?{},')
 endfunction"}}}
 "}}}
 

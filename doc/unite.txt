@@ -371,6 +371,7 @@ CHANGELOG					*unite-changelog*
 2010-11-16
 - Improved Japanese documentation.
 - Some Improvements.
+- Implemented project_cd action.
 
 2010-11-15
 - Escape buffer name.
