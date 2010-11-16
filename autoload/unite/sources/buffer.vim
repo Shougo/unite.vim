@@ -111,14 +111,14 @@ endfunction"}}}
 function! s:make_abbr(bufnr)"{{{
   let l:filetype = getbufvar(a:bufnr, '&filetype')
   if l:filetype ==# 'vimfiler'
-    let l:bufvar = getbufvar(a:bufnr, 'vimfiler')
-    return '*vimfiler* - ' . l:bufvar.current_dir
+    let l:path = '*vimfiler* - ' . getbufvar(a:bufnr, 'vimfiler').current_dir
   elseif l:filetype ==# 'vimshell'
-    let l:bufvar = getbufvar(a:bufnr, 'vimshell')
-    return '*vimshell* - ' . l:bufvar.save_dir
+    let l:path = '*vimshell* - ' . getbufvar(a:bufnr, 'vimshell').save_dir
   else
-    return unite#substitute_path_separator(bufname(a:bufnr)) . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
+    return bufname(a:bufnr) . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
   endif
+
+  let l:path = unite#substitute_path_separator(simplify(l:path))
 endfunction"}}}
 function! s:compare(candidate_a, candidate_b)"{{{
   return a:candidate_b.source__time - a:candidate_a.source__time

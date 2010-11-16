@@ -159,13 +159,6 @@ let s:unite_options = [
 
 
 " Helper functions."{{{
-function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
-  for key in split(a:keys, ',')
-    if !has_key(a:variable, key)
-      let a:variable[key] = a:pattern
-    endif
-  endfor
-endfunction"}}}
 function! unite#is_win()"{{{
   return has('win16') || has('win32') || has('win64')
 endfunction"}}}
@@ -326,11 +319,6 @@ function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
 
   return filter(l:buffer_list, printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
-function! unite#set_default(var, val)  "{{{
-  if !exists(a:var) || type({a:var}) != type(a:val)
-    let {a:var} = a:val
-  endif
-endfunction"}}}
 function! unite#invalidate_cache(source_name)  "{{{
   let l:unite = s:get_unite()
 
@@ -439,17 +427,31 @@ endfunction"}}}
 function! unite#print_error(message)"{{{
   echohl WarningMsg | echomsg a:message | echohl None
 endfunction"}}}
-function! unite#substitute_path_separator(path)"{{{
-  return unite#is_win() ? substitute(a:path, '\\', '/', 'g') : a:path
-endfunction"}}}
-function! unite#path2directory(path)"{{{
-  return isdirectory(a:path) ? a:path : unite#substitute_path_separator(fnamemodify(a:path, ':p:h'))
-endfunction"}}}
 function! unite#get_options()"{{{
   return s:unite_options
 endfunction"}}}
 function! unite#get_self_functions()"{{{
   return split(matchstr(expand('<sfile>'), '^function \zs.*$'), '\.\.')[: -2]
+endfunction"}}}
+
+" Utils.
+function! unite#set_default(var, val)  "{{{
+  if !exists(a:var) || type({a:var}) != type(a:val)
+    let {a:var} = a:val
+  endif
+endfunction"}}}
+function! unite#set_dictionary_helper(variable, keys, pattern)"{{{
+  for key in split(a:keys, ',')
+    if !has_key(a:variable, key)
+      let a:variable[key] = a:pattern
+    endif
+  endfor
+endfunction"}}}
+function! unite#substitute_path_separator(path)"{{{
+  return unite#is_win() ? substitute(a:path, '\\', '/', 'g') : a:path
+endfunction"}}}
+function! unite#path2directory(path)"{{{
+  return unite#substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
 endfunction"}}}
 function! unite#gather_candidates()"{{{
   let l:candidates = []
