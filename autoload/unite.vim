@@ -870,7 +870,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.hlsearch_save = &hlsearch
   let b:unite.search_pattern_save = @/
   let b:unite.prompt_linenr = 2
-  let b:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])')) + 1
+  let b:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])')) + 2
   let b:unite.cached_candidates = {}
   let b:unite.sources_candidates = {}
 
@@ -925,7 +925,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
     syntax clear uniteInputPrompt
     execute 'syntax match uniteInputPrompt' '/^'.l:match_prompt.'/ contained'
 
-    execute 'syntax match uniteCandidateAbbr' '/\%'.(b:unite.max_source_name+3).'c.*/ contained'
+    execute 'syntax match uniteCandidateAbbr' '/\%'.(b:unite.max_source_name+2).'c.*/ contained'
   endif
 endfunction"}}}
 function! s:switch_unite_buffer(buffer_name, context)"{{{
