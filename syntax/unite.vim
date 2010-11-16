@@ -40,14 +40,16 @@ syntax match uniteInputLine /\%2l.*/ contains=uniteInputPrompt,uniteInputPromptE
 syntax match uniteInputSpecial /\\\@<![*!,]/ contained
 
 syntax match uniteMarkedLine /^\*.*/
-syntax match uniteNonMarkedLine /^-.*/
+syntax match uniteNonMarkedLine /^-.*/     contains=uniteCandidateSourceName,uniteCandidateAbbr
+syntax match uniteCandidateSourceName /^- \zs[a-z_/-]\+/ contained
 
 highlight default link uniteSourceNames  Type
 highlight default link uniteSourcePrompt  PreProc
 highlight default link uniteSourceSeparator  NONE
 
 highlight default link uniteMarkedLine  Statement
-highlight default link uniteNonMarkedLine  Pmenu
+highlight default link uniteCandidateSourceName  Type
+highlight default link uniteCandidateAbbr  Pmenu
 
 " The following definitions are for <Plug>(unite-choose-action).
 highlight default link uniteChooseAction  NONE

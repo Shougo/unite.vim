@@ -936,6 +936,8 @@ function! s:initialize_unite_buffer(sources, context)"{{{
     let l:match_prompt = escape(b:unite.prompt, '\/*~.^$[]')
     syntax clear uniteInputPrompt
     execute 'syntax match uniteInputPrompt' '/^'.l:match_prompt.'/ contained'
+
+    execute 'syntax match uniteCandidateAbbr' '/\%'.(b:unite.max_source_name+3).'c.*/ contained'
   endif
 endfunction"}}}
 function! s:switch_unite_buffer(buffer_name, context)"{{{
