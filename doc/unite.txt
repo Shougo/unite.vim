@@ -392,6 +392,7 @@ CHANGELOG					*unite-changelog*
 - Fixed tags.
 - Improved autoload.
 - Improved file and file_rec sources.
+- Make directory in dummy file.
 
 2010-11-15
 - Escape buffer name.
