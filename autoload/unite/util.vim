@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Nov 2010
+" Last Modified: 16 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -149,6 +149,10 @@ else
     return 1
   endfunction"}}}
 endif
+
+function! unite#util#print_error(message)"{{{
+  echohl WarningMsg | echomsg a:message | echohl None
+endfunction"}}}
 
 function! unite#util#smart_execute_command(action, word)
   execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')

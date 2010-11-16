@@ -155,8 +155,8 @@ function! unite#mappings#do_action(action_name, ...)"{{{
           \ : a:action_name
 
     if !has_key(l:action_table, l:action_name)
-      call unite#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
-      call unite#print_error('No such action : ' . l:action_name)
+      call unite#util#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
+      call unite#util#print_error('No such action : ' . l:action_name)
       return
     endif
 
@@ -164,8 +164,8 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
     " Check selectable flag.
     if !l:action.is_selectable && len(l:candidates) > 1
-      call unite#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
-      call unite#print_error('Not selectable action : ' . l:action_name)
+      call unite#util#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
+      call unite#util#print_error('Not selectable action : ' . l:action_name)
       return
     endif
 
@@ -280,7 +280,7 @@ function! s:choose_action()"{{{
   endif
 
   if empty(s:actions)
-    call unite#print_error('No actions.')
+    call unite#util#print_error('No actions.')
     return
   endif
 
@@ -391,10 +391,10 @@ function! s:insert_selected_candidate()"{{{
 endfunction"}}}
 function! s:quick_match()"{{{
   if line('$') < (b:unite.prompt_linenr+1)
-    call unite#print_error('Candidate is nothing.')
+    call unite#util#print_error('Candidate is nothing.')
     return
   elseif !empty(unite#get_marked_candidates())
-    call unite#print_error('Marked candidates is detected.')
+    call unite#util#print_error('Marked candidates is detected.')
     return
   endif
 
@@ -419,7 +419,7 @@ function! s:quick_match()"{{{
     call unite#mappings#do_action(b:unite.context.default_action,
           \ g:unite_quick_match_table[l:char])
   else
-    call unite#print_error('Invalid quick match key.')
+    call unite#util#print_error('Invalid quick match key.')
   endif
 endfunction"}}}
 function! s:input_directory()"{{{

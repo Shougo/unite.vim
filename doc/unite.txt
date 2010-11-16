@@ -390,6 +390,7 @@ CHANGELOG					*unite-changelog*
 - Improved highlight abbr.
 - Improved util functions.
 - Fixed tags.
+- Improved autoload.
 
 2010-11-15
 - Escape buffer name.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Nov 2010
+" Last Modified: 16 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,7 +52,7 @@ function! unite#sources#file_mru#_append()"{{{
   else
     let l:path = expand('%:p')
   endif
-  let l:path = unite#substitute_path_separator(simplify(l:path))
+  let l:path = unite#util#substitute_path_separator(simplify(l:path))
 
   " Append the current buffer to the mru list.
   if !s:is_exists_path(path) || &l:buftype =~ 'help'
@@ -126,7 +126,7 @@ function! s:load()  "{{{
     let [ver; s:mru_files] = readfile(g:unite_source_file_mru_file)
 
     if ver !=# s:VERSION
-      call unite#print_error('Sorry, the version of MRU file is old.  Clears the MRU list.')
+      call unite#util#print_error('Sorry, the version of MRU file is old.  Clears the MRU list.')
       let s:mru_files = []
       return
     endif
@@ -144,12 +144,12 @@ function! s:is_exists_path(path)  "{{{
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
   return {
-        \ 'word' : unite#substitute_path_separator(a:list[0]),
+        \ 'word' : unite#util#substitute_path_separator(a:list[0]),
         \ 'source' : 'file_mru',
         \ 'kind' : (isdirectory(a:list[0]) ? 'directory' : 'file'),
         \ 'source__time' : a:list[1],
-        \ 'action__path' : unite#substitute_path_separator(a:list[0]),
-        \ 'action__directory' : unite#path2directory(unite#substitute_path_separator(a:list[0])),
+        \ 'action__path' : unite#util#substitute_path_separator(a:list[0]),
+        \ 'action__directory' : unite#util#path2directory(unite#util#substitute_path_separator(a:list[0])),
         \   }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{

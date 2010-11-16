@@ -424,9 +424,6 @@ function! unite#get_input()"{{{
 
   return getline(b:unite.prompt_linenr)[len(b:unite.prompt):]
 endfunction"}}}
-function! unite#print_error(message)"{{{
-  echohl WarningMsg | echomsg a:message | echohl None
-endfunction"}}}
 function! unite#get_options()"{{{
   return s:unite_options
 endfunction"}}}
@@ -443,6 +440,9 @@ function! unite#gather_candidates()"{{{
 endfunction"}}}
 
 " Utils.
+function! unite#print_error(message)"{{{
+  echohl WarningMsg | echomsg a:message | echohl None
+endfunction"}}}
 function! unite#substitute_path_separator(path)"{{{
   return unite#util#substitute_path_separator(a:path)
 endfunction"}}}
@@ -519,7 +519,7 @@ function! unite#resume(buffer_name)"{{{
   if a:buffer_name == ''
     " Use last unite buffer.
     if !bufexists(s:last_unite_bufnr)
-      call unite#print_error('No unite buffer.')
+      call unite#util#print_error('No unite buffer.')
       return
     endif
 
@@ -531,7 +531,7 @@ function! unite#resume(buffer_name)"{{{
     endfor
 
     if !has_key(l:buffer_dict, a:buffer_name)
-      call unite#print_error('Invalid buffer name : ' . a:buffer_name)
+      call unite#util#print_error('Invalid buffer name : ' . a:buffer_name)
       return
     endif
     let l:bufnr = l:buffer_dict[a:buffer_name]
@@ -669,7 +669,7 @@ function! s:initialize_sources(sources)"{{{
   let l:number = 0
   for [l:source_name, l:args] in map(a:sources, '[v:val[0], v:val[1:]]')
     if !has_key(l:all_sources, l:source_name)
-      call unite#print_error('Invalid source name "' . l:source_name . '" is detected.')
+      call unite#util#print_error('Invalid source name "' . l:source_name . '" is detected.')
       throw 'Invalid source'
     endif
 

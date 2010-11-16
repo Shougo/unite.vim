@@ -53,7 +53,7 @@ function! unite#sources#directory_mru#_append()"{{{
     let l:path = getcwd()
   endif
 
-  let l:path = unite#substitute_path_separator(simplify(l:path))
+  let l:path = unite#util#substitute_path_separator(simplify(l:path))
   if l:path !~ '^\%(\a\+:\)\?/$'
     " Chomp last /.
     let l:path = l:path[: -2]
@@ -87,7 +87,7 @@ function! s:source.gather_candidates(args, context)"{{{
   call s:load()
 
   for l:mru in s:mru_dirs
-    let l:relative_path = unite#substitute_path_separator(fnamemodify(l:mru.action__path, ':~:.'))
+    let l:relative_path = unite#util#substitute_path_separator(fnamemodify(l:mru.action__path, ':~:.'))
     if l:relative_path == ''
       let l:relative_path = l:mru.action__path
     endif
@@ -134,7 +134,7 @@ function! s:load()  "{{{
     let [ver; s:mru_dirs] = readfile(g:unite_source_directory_mru_file)
 
     if ver !=# s:VERSION
-      call unite#print_error('Sorry, the version of MRU file is old.  Clears the MRU list.')
+      call unite#util#print_error('Sorry, the version of MRU file is old.  Clears the MRU list.')
       let s:mru_dirs = []
       return
     endif
@@ -149,12 +149,12 @@ function! s:load()  "{{{
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
   return {
-        \ 'word' : unite#substitute_path_separator(a:list[0]),
+        \ 'word' : unite#util#substitute_path_separator(a:list[0]),
         \ 'source' : 'directory_mru',
         \ 'kind' : 'directory',
         \ 'source__time' : a:list[1],
-        \ 'action__path' : unite#substitute_path_separator(a:list[0]),
-        \ 'action__directory' : unite#substitute_path_separator(a:list[0]),
+        \ 'action__path' : unite#util#substitute_path_separator(a:list[0]),
+        \ 'action__directory' : unite#util#substitute_path_separator(a:list[0]),
         \   }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{

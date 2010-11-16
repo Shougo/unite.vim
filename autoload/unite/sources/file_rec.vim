@@ -59,13 +59,13 @@ function! s:source.gather_candidates(args, context)"{{{
 
   if l:directory =~ '^\%(\a\+:\)\?/$' ||
         \ unite#substitute_path_separator(expand(l:directory)) ==# unite#substitute_path_separator($HOME . '/')
-    call unite#print_error('file_rec: Too many candidates.')
+    call unite#util#print_error('file_rec: Too many candidates.')
     return []
   endif
   let l:candidates = split(unite#substitute_path_separator(glob(l:input . '**')), '\n')
 
   if len(l:candidates) > 10000
-    call unite#print_error('file_rec: Too many candidates.')
+    call unite#util#print_error('file_rec: Too many candidates.')
     return []
   endif
 
