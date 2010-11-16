@@ -73,23 +73,17 @@ function! s:kind.action_table.project_cd.func(candidate)"{{{
     return
   endif
 
-  let l:directory = ''
-  let l:buftype = getbufvar('#', '&buftype')
-  if l:buftype ==# 'help'
-    let l:directory = a:candidate.action__directory
-  endif
+  " Search VCS directory.
+  for d in ['.git', '.bzr', '.hg']
+    let d = finddir(d, unite#util#escape_file_searching(a:candidate.action__directory) . ';')
+    if d != ''
+      let l:directory = fnamemodify(d, ':p:h:h')
+      break
+    endif
+  endfor
 
   if l:directory == ''
-    for d in ['.git', '.bzr', '.hg']
-      let d = finddir(d, unite#util#escape_file_searching(a:candidate.action__directory) . ';')
-      if d != ''
-        let l:directory = fnamemodify(d, ':p:h:h')
-        break
-      endif
-    endfor
-  endif
-
-  if l:directory == ''
+    " Search /src/ directory.
     let l:base = unite#substitute_path_separator(a:candidate.action__directory)
     if l:base =~# '/src/'
       let l:directory = l:base[: strridx(l:base, '/src/') + 3]
