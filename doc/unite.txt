@@ -384,6 +384,7 @@ CHANGELOG					*unite-changelog*
 2010-11-17
 - Improved view.
 - Don't make directory in dummy file.
+- Fixed option parse.
 
 2010-11-16
 - Improved Japanese documentation.
