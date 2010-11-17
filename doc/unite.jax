@@ -1179,7 +1179,7 @@ help						*unite-sources-help*
 		https://github.com/tsukkee/unite-help
 		ヘルプを検索するsourceである。
 		作者はtsukkee氏。
-		例:
+		設定例:
 >
 		" Execute help.
 		nnoremap <C-h>  :<C-u>Unite -start-insert help<CR>
@@ -1193,7 +1193,9 @@ tags						*unite-sources-tags*
 
 outline						*unite-sources-outline*
 		https://github.com/h1mesuke/unite-outline
-		ソースファイルを検索し、アウトラインを表示するsourceである。
+		ソースファイルを解析し、アウトラインを表示するsourceである。
+		標準で多数のファイルタイプに対応しており、ユーザーが自由に拡張
+		できる。
 		作者はh1mesuke氏。
 
 colorscheme					*unite-sources-colorscheme*
@@ -1206,11 +1208,17 @@ font						*unite-sources-font*
 		fontを変更するsourceである。
 		作者はujihisa氏。
 
+locate						*unite-sources-locate*
+		https://github.com/ujihisa/unite-locate
+		locateコマンドを用いてファイルを検索するsourceである。
+		locateコマンドがインストールされていない場合、動作しない。
+		作者はujihisa氏。
+
 everything					*unite-sources-everything*
 		https://github.com/sgur/unite-everything
 		everythingを用いて検索するsourceである。
-		作者はsgur氏。
 		当然Windowsでしか動作しない。
+		作者はsgur氏。
 		
 		導入記事(日本語)：
 		http://sgur.posterous.com/vimuniteeverythingsource

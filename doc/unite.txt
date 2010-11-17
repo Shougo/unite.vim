@@ -385,6 +385,7 @@ CHANGELOG					*unite-changelog*
 - Improved view.
 - Don't make directory in dummy file.
 - Fixed option parse.
+- Added user sources description.
 
 2010-11-16
 - Improved Japanese documentation.
