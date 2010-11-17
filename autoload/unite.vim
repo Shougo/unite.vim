@@ -763,9 +763,9 @@ function! s:recache_candidates(input, context)"{{{
   endfor
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
-  let l:max_width = winwidth(0) - b:unite.max_source_name - 6
+  let l:max_width = winwidth(0) - b:unite.max_source_name - 5
   if l:max_width < 20
-    let l:max_width = winwidth(0) - 6
+    let l:max_width = winwidth(0) - 5
     let l:max_source_name = 0
   else
     let l:max_source_name = b:unite.max_source_name
@@ -792,9 +792,9 @@ function! s:convert_quick_match_lines(candidates)"{{{
   return l:candidates
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
-  let l:max_width = winwidth(0) - b:unite.max_source_name - 3
+  let l:max_width = winwidth(0) - b:unite.max_source_name - 2
   if l:max_width < 20
-    let l:max_width = winwidth(0) - 3
+    let l:max_width = winwidth(0) - 2
     let l:max_source_name = 0
   else
     let l:max_source_name = b:unite.max_source_name
@@ -806,9 +806,9 @@ function! s:convert_lines(candidates)"{{{
         \ . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', l:max_width/3, "..")')
 endfunction"}}}
 function! s:convert_line(candidate)"{{{
-  let l:max_width = winwidth(0) - b:unite.max_source_name - 3
+  let l:max_width = winwidth(0) - b:unite.max_source_name - 2
   if l:max_width < 20
-    let l:max_width = winwidth(0) - 3
+    let l:max_width = winwidth(0) - 2
     let l:max_source_name = 0
   else
     let l:max_source_name = b:unite.max_source_name

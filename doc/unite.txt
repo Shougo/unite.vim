@@ -381,6 +381,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-17
+- Improved view.
+
 2010-11-16
 - Improved Japanese documentation.
 - Some Improvements.

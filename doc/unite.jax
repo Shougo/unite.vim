@@ -1205,7 +1205,6 @@ font						*unite-sources-font*
 		https://github.com/ujihisa/unite-font
 		fontを変更するsourceである。
 		作者はujihisa氏。
-		まだMac OS Xにしか対応していない。
 
 everything					*unite-sources-everything*
 		https://github.com/sgur/unite-everything
