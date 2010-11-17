@@ -383,6 +383,7 @@ CHANGELOG					*unite-changelog*
 
 2010-11-17
 - Improved view.
+- Don't make directory in dummy file.
 
 2010-11-16
 - Improved Japanese documentation.

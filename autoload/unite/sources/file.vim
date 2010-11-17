@@ -55,7 +55,7 @@ function! s:source.gather_candidates(args, context)"{{{
 
   if a:context.input != ''
     let l:dummy = substitute(a:context.input, '[*\\]', '', 'g')
-    if (!filereadable(l:dummy) && !isdirectory(l:dummy))
+    if (!filereadable(l:dummy) && !isdirectory(l:dummy) && isdirectory(fnamemodify(l:dummy, ':h')))
           \ || l:dummy =~ '^\%(/\|\a\+:/\)$'
       " Add dummy candidate.
       call add(l:candidates, l:dummy)
