@@ -26,7 +26,7 @@
 
 " Variables  "{{{
 if !exists('g:unite_kind_jump_list_search_range')
-  let g:unite_kind_jump_list_search_range = 100
+  let g:unite_kind_jump_list_search_range = 400
 endif
 "}}}
 
