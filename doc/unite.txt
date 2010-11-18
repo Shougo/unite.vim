@@ -406,6 +406,8 @@ CHANGELOG					*unite-changelog*
 2010-11-18
 - Improved narrowing.
 - Added insert action in common kind.
+- Added g:unite_kind_jump_list_search_range variable.
+- Improved jump_list.
 
 2010-11-17
 - Improved view.

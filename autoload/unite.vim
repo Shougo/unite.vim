@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Nov 2010
+" Last Modified: 18 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -616,7 +616,7 @@ function! s:quit_session(is_force)  "{{{
     endif
   endif
 
-  if !s:unite.context.is_insert
+  if !s:unite.context.is_insert && mode() ==# 'i'
     stopinsert
   endif
 endfunction"}}}

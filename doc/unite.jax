@@ -343,6 +343,14 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		
 		初期値は |g:unite_data_directory| . '/.bookmark' である。
 
+kindの変数					*unite-kinds-variables*
+
+g:unite_kind_jump_list_search_range		*g:unite_kind_jump_list_search_range*
+		|unite-kind-jump_list|において、uniteがパターンを検索する範囲を
+		指定する。
+		
+		初期値は100である。
+
 ------------------------------------------------------------------------------
 キーマッピング 					*unite-key-mappings*
 

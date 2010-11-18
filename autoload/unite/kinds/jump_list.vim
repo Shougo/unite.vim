@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Nov 2010
+" Last Modified: 18 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,6 +24,12 @@
 " }}}
 "=============================================================================
 
+" Variables  "{{{
+if !exists('g:unite_kind_jump_list_search_range')
+  let g:unite_kind_jump_list_search_range = 100
+endif
+"}}}
+
 function! unite#kinds#jump_list#define()"{{{
   return s:kind
 endfunction"}}}
@@ -43,18 +49,8 @@ let s:kind.action_table.open = {
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
   for l:candidate in a:candidates
-    edit `=l:candidate.action__path`
-
-    let l:linenr = (has_key(l:candidate, 'action__line') && l:candidate.action__line != '') ? l:candidate.action__line : 1
-
-    if has_key(l:candidate, 'action__pattern') && l:candidate.action__pattern != ''
-          \ && getline(l:linenr) !~ l:candidate.action__pattern
-      " Search pattern.
-      call search(l:candidate.action__pattern, 'w')
-    else
-      " Jump to a:candidate.line.
-      execute l:linenr
-    endif
+    let l:linenr = s:get_match_linenr(l:candidate)
+    execute 'edit' (l:linenr > 0 ? '+'.l:linenr : '') '`=l:candidate.action__path`'
 
     " Open folds.
     normal! zv
@@ -66,11 +62,37 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
-  execute 'pedit'
-        \ (has_key(a:candidate, 'action__line') && a:candidate.action__line != '' ? '+'.a:candidate.action__line : '')
-        \ .(has_key(a:candidate, 'action__pattern') && a:candidate.action__pattern != '' ? '+/'.escape(a:candidate.action__pattern, "\t /") : '')
-        \ '`=a:candidate.action__path`'
+  let l:linenr = s:get_match_linenr(a:candidate)
+  execute 'edit' (l:linenr > 0 ? '+'.l:linenr : '') '`=l:candidate.action__path`'
 endfunction"}}}
 "}}}
+
+" Misc.
+function! s:get_match_linenr(candidate)"{{{
+  if !has_key(a:candidate, 'action__line') && !has_key(a:candidate, 'action__pattern')
+    return 0
+  endif
+
+  if !has_key(a:candidate, 'action__pattern')
+    return a:candidate.action__line
+  endif
+
+  let l:lines = readfile(a:candidate.action__path)
+  let l:max = len(l:lines)
+  let l:start = has_key(a:candidate, 'action__line') ?
+        \ min([a:candidate.action__line - 1, l:max]) : l:max
+
+  " Search pattern.
+  for [l1, l2] in map(range(0, g:unite_kind_jump_list_search_range),
+        \ '[l:start + v:val, l:start - v:val]')
+    if l1 >= 0 && l:lines[l1] =~# a:candidate.action__pattern
+      return l1+1
+    elseif l2 <= l:max && l:lines[l2] =~# a:candidate.action__pattern
+      return l2+1
+    endif
+  endfor
+
+  return l:start
+endfunction"}}}
 
 " vim: foldmethod=marker
