@@ -405,6 +405,7 @@ CHANGELOG					*unite-changelog*
 
 2010-11-18
 - Improved narrowing.
+- Added insert action in common kind.
 
 2010-11-17
 - Improved view.

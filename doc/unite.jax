@@ -773,9 +773,11 @@ kind別アクション
 
 common					*unite-action-common*
 全てのkindに共通なインタフェースを定義している。
+内部では、candidate.wordを使う。
 	nop		何もしない
 	yank		ヤンクする
 	ex		候補をコマンドラインに入力した状態にする
+	insert		現在のバッファに文字列を挿入する
 
 openable					*unite-action-openable*
 オープン可能ファイルのインタフェースを定義している。
@@ -835,7 +837,8 @@ directory					*unite-action-directory*
 しない。対象がdirectoryのとき、default_actionを変更したい場合に使われる。
 
 word						*unite-action-word*
-	insert		現在のバッファに文字列を挿入する
+このkindに独自のアクションは存在しない。対象がwordのとき、default_actionを変更
+したい場合に使われる。
 
 jump_list					*unite-action-jump_list*
 このkindは|unite-action-file|のアクションを継承している。ここではjump_list独自
