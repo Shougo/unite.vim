@@ -403,6 +403,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-18
+- Improved narrowing.
+
 2010-11-17
 - Improved view.
 - Don't make directory in dummy file.

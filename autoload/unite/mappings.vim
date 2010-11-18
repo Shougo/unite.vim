@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Nov 2010
+" Last Modified: 18 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,7 +125,8 @@ endfunction"}}}
 
 function! unite#mappings#narrowing(word)"{{{
   setlocal modifiable
-  call setline(b:unite.prompt_linenr, b:unite.prompt . escape(a:word, ' *'))
+  let b:unite.input = escape(a:word, ' *')
+  call setline(b:unite.prompt_linenr, b:unite.prompt . b:unite.input)
   execute b:unite.prompt_linenr
   startinsert!
 endfunction"}}}
