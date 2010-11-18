@@ -182,12 +182,12 @@ COMMANDS 					*unite-commands*
 		selected an action which is "is_quit".
 
 		-winwidth={window-width}
-		Specifies the width of a unite buffer.  Unless you specify i
-		t, |g:unite_winwidth| will be used.
+		Specifies the width of a unite buffer.  Unless you specify
+		it, |g:unite_winwidth| will be used.
 
 		-winheight={window-height}
-		Specifies the height of a unite buffer.  Unless you specify i
-		t, |g:unite_winheight| will be used.
+		Specifies the height of a unite buffer.  Unless you specify
+		it, |g:unite_winheight| will be used.
 
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
