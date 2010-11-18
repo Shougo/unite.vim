@@ -255,7 +255,6 @@ g:unite_winwidth					*g:unite_winwidth*
 g:unite_cd_command					*g:unite_cd_command*
 g:unite_lcd_command					*g:unite_lcd_command*
 g:unite_quick_match_table				*g:unite_quick_match_table*
-g:unite_data_directory					*g:unite_data_directory*
 g:unite_no_default_keymappings				*g:unite_no_default_keymappings*
 		TODO
 
