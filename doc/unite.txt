@@ -201,6 +201,19 @@ COMMANDS 					*unite-commands*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the word on the cursor.
 
+:UniteResume [{buffer-name}]name		*:UniteResume*
+		Reuses the unite buffer previously opened named {buffer-name}.
+		Reuses the last unite buffer you used if you skipped
+		specifying {buffer-name}.  Narrowing texts or candidates are
+		same to them.
+
+A command of source				*:unite-sources-command*
+
+:UniteBookmarkAdd [{file}]			*:UniteBookmarkAdd*
+		Adds the file into the bookmark list. Unless you specify the
+		parameter, the current position of the current file will be
+		stored.
+
 ------------------------------------------------------------------------------
 VARIABLES 					*unite-variables*
 
