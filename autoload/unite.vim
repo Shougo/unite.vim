@@ -722,6 +722,7 @@ function! s:recache_candidates(input, context)"{{{
   for l:source in unite#available_sources_list()
     " Check required pattern length.
     if l:input_len < l:source.required_pattern_length
+      let b:unite.sources_candidates[l:source.name] = []
       continue
     endif
 

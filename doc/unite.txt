@@ -408,6 +408,7 @@ CHANGELOG					*unite-changelog*
 - Added insert action in common kind.
 - Added g:unite_kind_jump_list_search_range variable.
 - Improved jump_list.
+- Fixed required_pattern_length bug (Thanks ujihisa!)
 
 2010-11-17
 - Improved view.
@@ -774,7 +775,7 @@ Ver.0.5
 2010-09-20
 - Added :UniteWithCursorWord command.
 - Improved initialization.
-- Added Japanese help(Thanks naoina!).
+- Added Japanese help (Thanks naoina!)
 - Added <Plug>(unite_toggle_mark_selected_candidates) keymapping.
 - Changed some keymappings name.
 - Refactoringed file_mru.
