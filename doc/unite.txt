@@ -110,9 +110,9 @@ That matches foo but candidates that match bar will be rejected.
 
 	You may add wild cards automatically with / if you specify files on
 	-buffer-name option.  That's handy in case you select file with unite.
-
+>
 	:Unite -buffer-name=files file
-
+<
 See also |unite_default_key_mappings| for other actions.
 
 ==============================================================================
