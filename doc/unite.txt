@@ -218,35 +218,46 @@ A command of source				*:unite-sources-command*
 VARIABLES 					*unite-variables*
 
 g:unite_update_time				*g:unite_update_time*
-		
-		
+		Update time interval of candidates for each input of narrowing
+		text.  In Msec.
+
 		Default value is 200.
 
 g:unite_enable_start_insert			*g:unite_enable_start_insert*
-		If this variable is enabled, unite.vim will
-		execute|:startinsert| automatically.
-		
+		If this variable is 1, unite buffer will be Insert Mode
+		immediately.
+
 		Default value is 0.
 
 g:unite_enable_ignore_case			*g:unite_enable_ignore_case*
-		
-		
-		Default value is same to 'ignorecase'.
+		Ignores case when the value is 1.
+
+		Default value is same to 'ignorecase' option.
 
 g:unite_enable_smart_case			*g:unite_enable_smart_case*
-		
+		Distinguish capitals from smalls when the narrowing text has a
+		capital letter if this variable is 1.
 		
 		Default value is same to 'infercase'.
 
 g:unite_split_rule				*g:unite_split_rule*
-		Define split position rule.
-		
+		Defines split position rule.
+
 		Default value is "topleft".
 
 g:unite_enable_split_vertically				*g:unite_enable_split_vertically*
-		If this option is true, split unite window vertically.
-		
-		Default value is 0.
+		If this option is 1, splits unite window vertically.
+
+		Default value is 0; unite window will be splat horizontally.
+
+g:unite_winheight					*g:unite_winheight*
+g:unite_winwidth					*g:unite_winwidth*
+g:unite_cd_command					*g:unite_cd_command*
+g:unite_lcd_command					*g:unite_lcd_command*
+g:unite_quick_match_table				*g:unite_quick_match_table*
+g:unite_data_directory					*g:unite_data_directory*
+g:unite_no_default_keymappings				*g:unite_no_default_keymappings*
+		TODO
 
 g:unite_data_directory					*g:unite_data_directory*
 		
