@@ -188,19 +188,18 @@ COMMANDS 					*unite-commands*
 		-winheight={window-height}
 		Specifies the height of a unite buffer.  Unless you specify i
 		t, |g:unite_winheight| will be used.
-		
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
 
-:UniteWithBufferDir [-buffer-name={buffer-name}] [-input={input-text}] {sources}
-						*:UniteWithBufferDir*
-		Unite all sources. Initial narrowing text is current buffer
-		directory.
+:UniteWithBufferDir [{options}] {sources}	*:UniteWithBufferDir*
+		Equivalent to |:Unite| except that the initial narrowing text
+		is the buffer's directory.
 
-:UniteWithCursorWord [-buffer-name={buffer-name}] [-input={input-text}] {sources}
-						*:UniteWithCursorWord*
-		Unite all sources. Initial narrowing text is cursor word.
+:UniteWithCursorWord [{options}] {sources}	*:UniteWithCursorWord*
+		Equivalent to |:Unite| except that the initial narrowing text
+		is the word on the cursor.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*unite-variables*
