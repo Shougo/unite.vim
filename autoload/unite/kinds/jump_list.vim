@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Nov 2010
+" Last Modified: 20 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,11 +38,10 @@ let s:kind = {
       \ 'name' : 'jump_list',
       \ 'default_action' : 'open',
       \ 'action_table': {},
+      \ 'parents': ['openable'],
       \}
 
 " Actions"{{{
-let s:kind.action_table = deepcopy(unite#kinds#file#define().action_table)
-
 let s:kind.action_table.open = {
       \ 'description' : 'jump this position',
       \ 'is_selectable' : 1,
@@ -83,16 +82,32 @@ function! s:get_match_linenr(candidate)"{{{
         \ min([a:candidate.action__line - 1, l:max]) : l:max
 
   " Search pattern.
+  let l:signature_lines = !has_key(a:candidate, 'action__signature_lines') ?
+        \ [] : a:candidate.action__signature
+  let l:signature_len = !has_key(a:candidate, 'action__signature_len') ?
+        \ 0 : a:candidate.action__signature_len
   for [l1, l2] in map(range(0, g:unite_kind_jump_list_search_range),
         \ '[l:start + v:val, l:start - v:val]')
     if l1 >= 0 && l:lines[l1] =~# a:candidate.action__pattern
+          \ && s:check_signature(l1, l:signature, l:signature_len)
       return l1+1
     elseif l2 <= l:max && l:lines[l2] =~# a:candidate.action__pattern
+          \ && s:check_signature(l2, l:signature_lines, l:signature_len)
       return l2+1
     endif
   endfor
 
   return l:start
 endfunction"}}}
+
+function! s:check_signature(lnum, signature_lines, signature_len)
+  if empty(a:signature)
+    return 1
+  endif
+
+  let l:from = max([1, a:lnum - a:signature_len])
+  let l:to   = min([a:lnum + a:signature_len, line('$')])
+  return join(getline(l:from, l:to)) ==# a:signature_lines
+endfunction
 
 " vim: foldmethod=marker

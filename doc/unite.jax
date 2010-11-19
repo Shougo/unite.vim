@@ -849,7 +849,7 @@ word						*unite-action-word*
 したい場合に使われる。
 
 jump_list					*unite-action-jump_list*
-このkindは|unite-action-file|のアクションを継承している。ここではjump_list独自
+このkindは|unite-action-openable|のアクションを継承している。ここではjump_list独自
 のアクションについて解説する。
 	open		その候補の場所にジャンプする
 	preview		その候補の場所をプレビューする
