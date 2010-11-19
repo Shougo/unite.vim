@@ -407,6 +407,7 @@ CHANGELOG					*unite-changelog*
 - Changed file_rec specification.
 - Fixed source file.
 - Improved narrowing.
+- Added mark source description.
 
 2010-11-18
 - Improved narrowing.

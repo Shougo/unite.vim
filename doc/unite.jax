@@ -1228,11 +1228,16 @@ locate						*unite-sources-locate*
 everything					*unite-sources-everything*
 		https://github.com/sgur/unite-everything
 		everythingを用いて検索するsourceである。
-		当然Windowsでしか動作しない。
+		当然Windows環境でしか動作しない。
 		作者はsgur氏。
 		
 		導入記事(日本語)：
 		http://sgur.posterous.com/vimuniteeverythingsource
+
+mark						*unite-sources-mark*
+		https://github.com/tacroe/unite-mark
+		対象のmarkにジャンプするsource。
+		作者はtacroe氏。
 
 ==============================================================================
 TODO						*unite-todo*
