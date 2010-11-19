@@ -62,7 +62,7 @@ let s:kind.action_table.preview = {
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
   let l:linenr = s:get_match_linenr(a:candidate)
-  execute 'edit' (l:linenr > 0 ? '+'.l:linenr : '') '`=l:candidate.action__path`'
+  execute 'pedit' (l:linenr > 0 ? '+'.l:linenr : '') '`=l:candidate.action__path`'
 endfunction"}}}
 "}}}
 
