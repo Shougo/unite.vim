@@ -101,7 +101,7 @@ function! s:get_match_linenr(candidate)"{{{
 endfunction"}}}
 
 function! s:check_signature(lnum, signature_lines, signature_len)
-  if empty(a:signature)
+  if empty(a:signature_lines)
     return 1
   endif
 

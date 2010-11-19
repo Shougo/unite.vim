@@ -403,6 +403,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-20
+- Improved jump_list.
+
 2010-11-19
 - Changed file_rec specification.
 - Fixed source file.
