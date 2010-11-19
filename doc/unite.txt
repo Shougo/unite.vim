@@ -405,6 +405,8 @@ CHANGELOG					*unite-changelog*
 
 2010-11-19
 - Changed file_rec specification.
+- Fixed source file.
+- Improved narrowing.
 
 2010-11-18
 - Improved narrowing.

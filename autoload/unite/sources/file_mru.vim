@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Nov 2010
+" Last Modified: 19 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -83,7 +83,7 @@ function! s:source.gather_candidates(args, context)"{{{
 
   " Create abbr.
   for l:mru in s:mru_files
-    let l:relative_path = unite#substitute_path_separator(fnamemodify(l:mru.action__path, ':~:.'))
+    let l:relative_path = unite#util#substitute_path_separator(fnamemodify(l:mru.action__path, ':~:.'))
     if l:relative_path == ''
       let l:relative_path = l:mru.action__path
     endif

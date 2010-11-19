@@ -71,7 +71,7 @@ function! s:source.gather_candidates(args, context)"{{{
   for l:file in l:candidates
     let l:file_path = unite#util#substitute_path_separator(fnamemodify(l:file, ':p'))
     let l:dict = {
-          \ 'word' : l:file_path, 'abbr' : l:file, 'source' : 'file', 'action__path' : l:file_path,
+          \ 'word' : l:file, 'abbr' : l:file, 'source' : 'file', 'action__path' : l:file_path,
           \ 'action__directory' : unite#path2directory(l:file_path),
           \}
 
