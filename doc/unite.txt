@@ -403,6 +403,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-19
+- Changed file_rec specification.
+
 2010-11-18
 - Improved narrowing.
 - Added insert action in common kind.
