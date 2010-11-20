@@ -2,7 +2,7 @@
 
 Version: 1.0
 Author : Shougo <Shougo.Matsu@gmail.com>
-Japanese Documentation Author: ujihisa
+Documentation Author: ujihisa <ujihisa at gmail com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
