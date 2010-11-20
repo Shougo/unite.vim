@@ -251,24 +251,58 @@ g:unite_enable_split_vertically				*g:unite_enable_split_vertically*
 		Default value is 0; unite window will be splat horizontally.
 
 g:unite_winheight					*g:unite_winheight*
+		The height of unite window when it's split horizontally.  It's
+		ignored in splitting vertically.
+
+		The default value is 20.
+
 g:unite_winwidth					*g:unite_winwidth*
+		The width of unite window when it's split vertically.  It's
+		ignored in splitting horizontally.
+
+		The default value is 90.
+
 g:unite_cd_command					*g:unite_cd_command*
+		Specifies the Vim command for cd action.
+
+		The default value is "cd".
+
 g:unite_lcd_command					*g:unite_lcd_command*
+		Specifies the Vim command for lcd action.
+
+		The default value is "lcd".
+
 g:unite_quick_match_table				*g:unite_quick_match_table*
-g:unite_no_default_keymappings				*g:unite_no_default_keymappings*
-		TODO
+		The table of completion candidates of quick mtch list,
+		corresponding the narrowing text.
+
+		The default value is complex; so see plugin/unite.vim.
 
 g:unite_data_directory					*g:unite_data_directory*
+		Specifies directories for configurations internally used in
+		unite itself or its sources.  If the directory doesn't exist
+		the directory will be automatically generated.  For example source
+		of file_mru saves the information of the most recent used
+		files on the directory.
 		
-		
-		Default value is expand('~/.unite').
+		Default value is expand('~/.unite'); the absolute path of it.
+
+g:unite_no_default_keymappings			*g:unite_no_default_keymappings*
+		If it's 1, unite doesn't map any defauilt key mappings.  You
+		shouldn't enable this option without any strong reasons.
+
+		This variable doesn't exist unless you define explicitly.
 
 SOURCES VARIABLES 					*unite-sources-variables*
 
 g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
-		
-		
-		Default value is refer to autoload/unite/sources/file.vim.
+		Specifies a regex pattern for ignoring some specific
+		candidates in which source is file.  This matches on the full
+		path of each files.  If the variable isn't empty string, unite
+		filters with the regex pattern on the results.  It depends on
+		'ignorecase' to distinguish cases or not.
+
+		Refer autoload/unite/sources/file.vim about the default value.
 
 g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 		
