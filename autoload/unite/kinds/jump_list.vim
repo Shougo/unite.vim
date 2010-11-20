@@ -62,7 +62,7 @@ let s:kind.action_table.preview = {
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
   let l:linenr = s:get_match_linenr(a:candidate)
-  execute 'pedit' (l:linenr > 0 ? '+'.l:linenr : '') '`=l:candidate.action__path`'
+  execute 'pedit' (l:linenr > 0 ? '+'.l:linenr : '') '`=a:candidate.action__path`'
 endfunction"}}}
 "}}}
 
@@ -77,27 +77,27 @@ function! s:get_match_linenr(candidate)"{{{
   endif
 
   let l:lines = readfile(a:candidate.action__path)
-  let l:max = len(l:lines)
+  let l:max = len(l:lines) - 1
   let l:start = has_key(a:candidate, 'action__line') ?
         \ min([a:candidate.action__line - 1, l:max]) : l:max
 
   " Search pattern.
   let l:signature_lines = !has_key(a:candidate, 'action__signature_lines') ?
-        \ [] : a:candidate.action__signature
+        \ [] : a:candidate.action__signature_lines
   let l:signature_len = !has_key(a:candidate, 'action__signature_len') ?
         \ 0 : a:candidate.action__signature_len
   for [l1, l2] in map(range(0, g:unite_kind_jump_list_search_range),
-        \ '[l:start + v:val, l:start - v:val]')
+        \ '[l:start - v:val, l:start + v:val]')
     if l1 >= 0 && l:lines[l1] =~# a:candidate.action__pattern
-          \ && s:check_signature(l1, l:signature, l:signature_len)
-      return l1+1
+          \ && s:check_signature(l1 + 1, l:signature_lines, l:signature_len)
+      return l1 + 1
     elseif l2 <= l:max && l:lines[l2] =~# a:candidate.action__pattern
-          \ && s:check_signature(l2, l:signature_lines, l:signature_len)
-      return l2+1
+          \ && s:check_signature(l2 + 1, l:signature_lines, l:signature_len)
+      return l2 + 1
     endif
   endfor
 
-  return l:start
+  return l:start + 1
 endfunction"}}}
 
 function! s:check_signature(lnum, signature_lines, signature_len)
