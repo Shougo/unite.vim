@@ -25,8 +25,12 @@
 "=============================================================================
 
 " Variables  "{{{
-if !exists('g:unite_kind_jump_list_search_range')
-  let g:unite_kind_jump_list_search_range = 400
+if !exists('g:unite_kind_jump_list_after_jump_scroll')
+  let g:unite_kind_jump_list_after_jump_scroll = 0.25
+else
+  " 0.0 <= x <= 1.0
+  let g:unite_kind_jump_list_after_jump_scroll =
+        \ min([max([0.0, g:unite_kind_jump_list_after_jump_scroll]), 1.0])
 endif
 "}}}
 
@@ -43,71 +47,114 @@ let s:kind = {
 
 " Actions"{{{
 let s:kind.action_table.open = {
-      \ 'description' : 'jump this position',
-      \ 'is_selectable' : 1,
+      \ 'description': 'jump to this position',
+      \ 'is_selectable': 1,
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
   for l:candidate in a:candidates
-    let l:linenr = s:get_match_linenr(l:candidate)
-    execute 'edit' (l:linenr > 0 ? '+'.l:linenr : '') '`=l:candidate.action__path`'
-
-    " Open folds.
-    normal! zv
+    " work around `scroll-to-top' problem on :edit %
+    if l:candidate.action__path !=# expand('%:p')
+      edit `=l:candidate.action__path`
+    endif
+    call s:jump(l:candidate)
   endfor
 endfunction"}}}
 
 let s:kind.action_table.preview = {
-      \ 'description' : 'preview this position',
+      \ 'description': 'preview this position',
+      \ 'is_selectable': 0,
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
-  let l:linenr = s:get_match_linenr(a:candidate)
-  execute 'pedit' (l:linenr > 0 ? '+'.l:linenr : '') '`=a:candidate.action__path`'
+  execute unite#context_winnr() . 'wincmd w'
+  let l:save_pos  = getpos('.')
+  let l:save_winl = winline()
+  wincmd p
+  pedit `=a:candidate.action__path`
+  wincmd p
+  call s:jump(a:candidate)
+  wincmd p
+  " work around `scroll-to-top' problem on :pedit %
+  execute unite#context_winnr() . 'wincmd w'
+  let l:pos  = getpos('.')
+  if l:pos != l:save_pos
+    call setpos('.', l:save_pos)
+    call s:adjust_scroll(l:save_winl)
+  endif
+  wincmd p
+endfunction"}}}
+
+function! s:jump(candidate)"{{{
+  if has_key(a:candidate, 'action__pattern') && a:candidate.action__pattern != ""
+    " Jump by search()
+    call search(a:candidate.action__pattern, 'w')
+    if !has_key(a:candidate, 'action__signature')
+      return
+    endif
+    let l:lnum0 = line('.')
+    call search(a:candidate.action__pattern, 'w')
+    let l:lnum = line('.')
+    if l:lnum != l:lnum0
+      " same pattern lines detected!!
+      let l:source = unite#available_sources(a:candidate.source)
+      let l:start_lnum = l:lnum
+      while 1
+        if l:source.signature(lnum) ==# a:candidate.action__signature
+          " found
+          break
+        endif
+        call search(a:candidate.action__pattern, 'w')
+        let l:lnum = line('.')
+        if l:lnum == l:start_lnum
+          " not found
+          call unite#print_error("unite: jump_list: target position not found")
+          0
+          return
+        endif
+      endwhile
+    endif
+  elseif has_key(a:candidate, 'action__line')
+    " Jump to the line number.
+    execute a:candidate.action__line
+  else
+    0
+  endif
+  normal! zv
+  let l:best = max([1, float2nr(winheight(0) * g:unite_kind_jump_list_after_jump_scroll)])
+  call s:adjust_scroll(l:best)
+endfunction"}}}
+
+function! s:adjust_scroll(best)"{{{
+  normal! zz
+  let l:save_pos = getpos('.')
+  let l:winl = winline()
+  let l:delta = l:winl - a:best
+  let l:prev_winl = l:winl
+  if l:delta > 0
+    " scroll up
+    while 1
+      execute "normal! \<C-e>"
+      let l:winl = winline()
+      if l:winl < a:best || l:winl == l:prev_winl
+        break
+      end
+      let l:prev_winl = l:winl
+    endwhile
+    execute "normal! \<C-y>"
+  elseif l:delta < 0
+    " scroll down
+    while 1
+      execute "normal! \<C-y>"
+      let l:winl = winline()
+      if l:winl > a:best || l:winl == l:prev_winl
+        break
+      end
+      let l:prev_winl = l:winl
+    endwhile
+    execute "normal! \<C-e>"
+  endif
+  call setpos('.', l:save_pos)
 endfunction"}}}
 "}}}
-
-" Misc.
-function! s:get_match_linenr(candidate)"{{{
-  if !has_key(a:candidate, 'action__line') && !has_key(a:candidate, 'action__pattern')
-    return 0
-  endif
-
-  if !has_key(a:candidate, 'action__pattern')
-    return a:candidate.action__line
-  endif
-
-  let l:lines = readfile(a:candidate.action__path)
-  let l:max = len(l:lines) - 1
-  let l:start = has_key(a:candidate, 'action__line') ?
-        \ min([a:candidate.action__line - 1, l:max]) : l:max
-
-  " Search pattern.
-  let l:signature_lines = !has_key(a:candidate, 'action__signature_lines') ?
-        \ [] : a:candidate.action__signature_lines
-  let l:signature_len = !has_key(a:candidate, 'action__signature_len') ?
-        \ 0 : a:candidate.action__signature_len
-  for [l1, l2] in map(range(0, g:unite_kind_jump_list_search_range),
-        \ '[l:start - v:val, l:start + v:val]')
-    if l1 >= 0 && l:lines[l1] =~# a:candidate.action__pattern
-          \ && s:check_signature(l1 + 1, l:signature_lines, l:signature_len)
-      return l1 + 1
-    elseif l2 <= l:max && l:lines[l2] =~# a:candidate.action__pattern
-          \ && s:check_signature(l2 + 1, l:signature_lines, l:signature_len)
-      return l2 + 1
-    endif
-  endfor
-
-  return l:start + 1
-endfunction"}}}
-
-function! s:check_signature(lnum, signature_lines, signature_len)
-  if empty(a:signature_lines)
-    return 1
-  endif
-
-  let l:from = max([1, a:lnum - a:signature_len])
-  let l:to   = min([a:lnum + a:signature_len, line('$')])
-  return join(getline(l:from, l:to)) ==# a:signature_lines
-endfunction
 
 " vim: foldmethod=marker

@@ -135,6 +135,7 @@ let s:LNUM_STATUS = 1
 " buffer number of the unite buffer
 let s:last_unite_bufnr = -1
 let s:unite = {}
+let s:unite_session = 0
 
 let s:default_sources = {}
 let s:default_kinds = {}
@@ -161,6 +162,15 @@ let s:unite_options = [
 " Helper functions."{{{
 function! unite#is_win()"{{{
   return unite#util#is_win()
+endfunction"}}}
+function! unite#context_winnr()"{{{
+  let l:nr = 1
+  while l:nr <= winnr('$')
+    if getwinvar(l:nr, 'unite_session') == s:unite_session
+      return l:nr
+    endif
+    let l:nr += 1
+  endwhile
 endfunction"}}}
 function! unite#get_unite_candidates()"{{{
   return s:get_unite().candidates
@@ -453,6 +463,9 @@ endfunction"}}}
 
 " Command functions.
 function! unite#start(sources, ...)"{{{
+  let s:unite_session += 1
+  let w:unite_session = s:unite_session
+
   if empty(s:default_sources)
     " Initialize load.
     call s:load_default_sources_and_kinds()
