@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Nov 2010
+" Last Modified: 21 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,6 +24,12 @@
 " }}}
 "=============================================================================
 
+" Variables  "{{{
+if !exists('g:unite_source_file_rec_max_level')
+  let g:unite_source_file_rec_max_level = 10
+endif
+"}}}
+
 function! unite#sources#file_rec#define()"{{{
   return s:source
 endfunction"}}}
@@ -36,41 +42,18 @@ let s:source = {
 function! s:source.gather_candidates(args, context)"{{{
   if !empty(a:args)
     let l:directory = unite#substitute_path_separator(a:args[0])
-    if l:directory !~ '/$'
-      let l:directory .= '/'
-    endif
-
-    let l:input = l:directory
   elseif isdirectory(a:context.input)
     let l:directory = a:context.input
-    if l:directory !~ '/$'
-      let l:directory .= '/'
-    endif
-
-    let l:input = l:directory
   else
     let l:directory = unite#substitute_path_separator(getcwd())
-    if l:directory !~ '/$'
-      let l:directory .= '/'
-    endif
-
-    let l:input = ''
   endif
 
-  if l:directory =~ '^\%(\a\+:\)\?/$' ||
-        \ unite#substitute_path_separator(expand(l:directory)) ==# unite#substitute_path_separator($HOME . '/')
-    call unite#util#print_error('file_rec: Too many candidates.')
-    return []
-  endif
-  let l:candidates = split(unite#substitute_path_separator(glob(l:input . '**')), '\n')
-
-  if len(l:candidates) > 10000
-    call unite#util#print_error('file_rec: Too many candidates.')
-    return []
+  if l:directory =~ '/$'
+    let l:directory = l:directory[: -2]
   endif
 
-  " Remove directories.
-  call filter(l:candidates, '!isdirectory(v:val)')
+  let s:start_time = has('reltime') ? reltime() : 0
+  let l:candidates = s:get_files(1, l:directory, [])
 
   if g:unite_source_file_ignore_pattern != ''
     call filter(l:candidates, 'v:val !~ ' . string(g:unite_source_file_ignore_pattern))
@@ -97,5 +80,25 @@ endfunction
 call unite#custom_action('cdable', 'rec', s:cdable_action_rec)
 unlet! s:cdable_action_rec
 "}}}
+
+function! s:get_files(level, directory, files)"{{{
+  if a:level > g:unite_source_file_rec_max_level
+        \ || (has('reltime') && str2nr(split(reltimestr(reltime(s:start_time)))[0]) >= 2)
+    return []
+  endif
+
+  let l:directory_files = split(unite#substitute_path_separator(glob(a:directory . '/*')), '\n')
+  let l:files = a:files
+  for l:file in l:directory_files
+    if isdirectory(l:file)
+      " Get files in a directory.
+      let l:files += s:get_files(a:level + 1, l:file, [])
+    else
+      call add(l:files, l:file)
+    endif
+  endfor
+
+  return l:files
+endfunction"}}}
 
 " vim: foldmethod=marker

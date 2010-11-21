@@ -410,6 +410,8 @@ CHANGELOG					*unite-changelog*
 - Added unite-alias description.
 - Improved unite kind descriptions.
 - Changed core functions.
+- Improved file_rec.
+- Added g:unite_source_file_rec_max_level option.
 
 2010-11-20
 - Improved jump_list.
