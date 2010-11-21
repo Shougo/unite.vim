@@ -543,7 +543,7 @@ function! unite#resume(buffer_name)"{{{
   call s:switch_unite_buffer(bufname(l:bufnr), getbufvar(l:bufnr, 'unite').context)
 
   " Set parameters.
-  let b:unite.old_winnr = l:winnr
+  let b:unite.winnr = l:winnr
   let b:unite.win_rest_cmd = l:win_rest_cmd
   let b:unite.redrawtime_save = &redrawtime
   let b:unite.hlsearch_save = &hlsearch
@@ -608,7 +608,7 @@ function! s:quit_session(is_force)  "{{{
       endif
     else
       close
-      execute s:unite.old_winnr . 'wincmd w'
+      execute s:unite.winnr . 'wincmd w'
 
       if winnr('$') != 1
         execute s:unite.win_rest_cmd
@@ -857,7 +857,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
 
   " Set parameters.
   let b:unite = {}
-  let b:unite.old_winnr = l:winnr
+  let b:unite.winnr = l:winnr
   let b:unite.win_rest_cmd = l:win_rest_cmd
   let b:unite.context = l:context
   let b:unite.candidates = []

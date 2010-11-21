@@ -984,8 +984,8 @@ NOTATION					*unite-notation*
 
 {context}					*unite-notation-{context}*
 			コンテキスト情報を与える辞書変数。主に、次の情報を持つ。
-			システムで共有されているので、これを書き換えてはいけな
-			い。
+			|unite#get_context()|で取得できる。システムで共有さ
+			れているので、これを書き換えてはいけない。
 
 			input			(文字列)
 				ユーザーの入力文字列。
@@ -1008,6 +1008,9 @@ NOTATION					*unite-notation*
 
 			source			(辞書)
 				現在候補を収集しているsourceの情報。
+
+			winnr			(数値)
+				uniteを呼び出したウインドウの番号。
 
 {candidate}					*unite-notation-{candidate}*
 			候補を表す辞書変数。次の情報を持つ。
