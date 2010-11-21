@@ -403,6 +403,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-21
+- Added unite#util#system().
+
 2010-11-20
 - Improved jump_list.
 

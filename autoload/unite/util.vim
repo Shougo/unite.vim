@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Nov 2010
+" Last Modified: 21 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -183,6 +183,44 @@ function! unite#util#substitute_path_separator(path)"{{{
 endfunction"}}}
 function! unite#util#path2directory(path)"{{{
   return unite#util#substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
+endfunction"}}}
+
+" Check vimproc."{{{
+try
+  let s:exists_vimproc_version = vimproc#version()
+catch
+  echoerr v:throwpoint
+  echoerr v:exception
+  echoerr 'Error occured while loading vimproc.'
+  echoerr 'Please install vimproc Ver.5.0 or above.'
+  finish
+endtry
+if s:exists_vimproc_version < 500
+  echoerr 'Your vimproc is too old.'
+  echoerr 'Please install vimproc Ver.5.0 or above.'
+  finish
+endif"}}}
+function! unite#util#system(str, ...)"{{{
+  let l:command = a:str
+  let l:input = a:0 >= 1 ? a:1 : ''
+  if &termencoding != '' && &termencoding != &encoding
+    let l:command = iconv(l:command, &encoding, &termencoding)
+    let l:input = iconv(l:input, &encoding, &termencoding)
+  endif
+
+  if a:0 == 0
+    let l:output = vimproc#system(l:command)
+  elseif a:0 == 1
+    let l:output = vimproc#system(l:command, l:input)
+  else
+    let l:output = vimproc#system(l:command, l:input, a:2)
+  endif
+
+  if &termencoding != '' && &termencoding != &encoding
+    let l:output = iconv(l:output, &termencoding, &encoding)
+  endif
+
+  return l:output
 endfunction"}}}
 
 " vim: foldmethod=marker
