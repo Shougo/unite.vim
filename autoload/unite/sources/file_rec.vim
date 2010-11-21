@@ -25,8 +25,8 @@
 "=============================================================================
 
 " Variables  "{{{
-if !exists('g:unite_source_file_rec_max_level')
-  let g:unite_source_file_rec_max_level = 10
+if !exists('g:unite_source_file_rec_max_depth')
+  let g:unite_source_file_rec_max_depth = 10
 endif
 "}}}
 
@@ -81,8 +81,8 @@ call unite#custom_action('cdable', 'rec', s:cdable_action_rec)
 unlet! s:cdable_action_rec
 "}}}
 
-function! s:get_files(level, directory, files)"{{{
-  if a:level > g:unite_source_file_rec_max_level
+function! s:get_files(depth, directory, files)"{{{
+  if a:depth > g:unite_source_file_rec_max_depth
         \ || (has('reltime') && str2nr(split(reltimestr(reltime(s:start_time)))[0]) >= 2)
     return []
   endif
@@ -92,7 +92,7 @@ function! s:get_files(level, directory, files)"{{{
   for l:file in l:directory_files
     if isdirectory(l:file)
       " Get files in a directory.
-      let l:files += s:get_files(a:level + 1, l:file, [])
+      let l:files += s:get_files(a:depth + 1, l:file, [])
     else
       call add(l:files, l:file)
     endif

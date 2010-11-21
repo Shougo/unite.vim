@@ -411,7 +411,7 @@ CHANGELOG					*unite-changelog*
 - Improved unite kind descriptions.
 - Changed core functions.
 - Improved file_rec.
-- Added g:unite_source_file_rec_max_level option.
+- Added g:unite_source_file_rec_max_depth option.
 
 2010-11-20
 - Improved jump_list.
