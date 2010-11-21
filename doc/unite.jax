@@ -726,6 +726,8 @@ unite#undef_kind({name})			*unite#undef_kind()*
 ==============================================================================
 source						*unite-source*
 
+ここでは、標準で実装されているsourceの仕様を解説する。
+
 						*unite-source-file*
 file		入力されたファイルを候補とする。
 
@@ -765,37 +767,78 @@ bookmark	ブックマークされたファイルやディレクトリを候補�
 ==============================================================================
 kind						*unite-kind*
 
-候補のkind
+ここでは、標準で実装されているkindの仕様と、内部で使用する属性について解説する。
 
 						*unite-kind-common*
-common		共通アクション。ほとんどのkindはcommonを暗黙的に継承する。
+common		共通アクション
+		ほとんどのkindはcommonを暗黙的に継承する。
+		必須となるキーはwordのみ。
 
 						*unite-kind-openable*
 openable	オープン可能インタフェース
+		必須となるキーは存在しないが、これを継承したkindにはopenアク
+		ションが必須である。
 
 						*unite-kind-cdable*
 cdable		cd可能インタフェース
 
+			action__directory	(文字列)		(必須)
+				対象となるディレクトリ
+
 						*unite-kind-file*
 file		ファイル
+		このkindはcdable, openableを継承しているため、それらのkindが
+		使用する属性も必要である。
+
+			action__path		(文字列)		(必須)
+				対象となるファイルのパス
 
 						*unite-kind-buffer*
 buffer		バッファ
+		このkindはfileを継承しているため、それらのkindが
+		使用する属性も必要である。
+
+			action__buffer_nr	(文字列)		(必須)
+				対象となるバッファの番号
 
 						*unite-kind-tab*
 tab		タブ
+		|gettabvar()|が使用可能な場合、このkindはcdableを継承するた
+		め、それらのkindが使用する属性も必要である。
+
+			action__tab_nr		(文字列)		(必須)
+				対象となるバッファの番号
 
 						*unite-kind-directory*
 directory	ディレクトリ
+		このkindはfileを継承しているため、それらのkindが
+		使用する属性も必要である。
 
 						*unite-kind-word*
-word		文字列
+word		挿入可能文字列
+
+			word			(文字列)		(必須)
+				挿入する文字列
 
 						*unite-kind-jump_list*
 jump_list	ジャンプリスト
+		このkindはopenableを継承しているため、それらのkindが
+		使用する属性も必要である。
+
+			action__path		(文字列)		(必須)
+				ジャンプするファイルのパス
+
+			action__line		(数値)			(任意)
+				ジャンプするファイルの行番号
+
+			action__pattern		(文字列)		(任意)
+				ファイルを開いた後に検索するパターン
 
 						*unite-kind-command*
 command		VimのExコマンド
+
+			action__command		(文字列)		(必須)
+				実行するコマンド
 
 ==============================================================================
 アクション					*unite-action*
@@ -827,7 +870,6 @@ openable					*unite-action-openable*
 
 cdable					*unite-action-cdable*
 cd可能ファイルのインタフェースを定義している。
-内部では、candidate.action__directoryを使う。
 	cd		カレントディレクトリを変更
 	lcd		現在のウィンドウのカレントディレクトリを変更
 	project_cd	プロジェクトのディレクトリを探し出し、そこにカレントデ
@@ -844,7 +886,6 @@ cd可能ファイルのインタフェースを定義している。
 file						*unite-action-file*
 ファイルはすべて別のバッファに開かれる。
 このkindは|unite-action-openable|と|unite-action-cdable|のアクションを継承している。
-内部ではcandidate.action__pathとcandidate.action__directoryを使う。
 	open		ファイルを開く
 	preview		プレビューウィンドウにファイルを開く
 	bookmark	候補をブックマークに追加する
@@ -1063,7 +1104,8 @@ NOTATION					*unite-notation*
 				actionが使用する付加情報。例えば、
 				"action__path"はそのファイルが存在するパスを指
 				定する。実行するactionによって、その仕様は異な
-				る。
+				る。標準で定義されるkindの仕様については、
+				|unite-kind|を参照せよ。
 
 ==============================================================================
 kindの作成					*unite-create-kind*

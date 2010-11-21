@@ -408,6 +408,7 @@ CHANGELOG					*unite-changelog*
 - Added context winnr.
 - Added unite-functions-core description.
 - Added unite-alias description.
+- Improved unite kind descriptions.
 
 2010-11-20
 - Improved jump_list.
