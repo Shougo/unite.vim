@@ -407,6 +407,7 @@ CHANGELOG					*unite-changelog*
 - Added unite#util#system().
 - Added context winnr.
 - Added unite-functions-core description.
+- Added unite-alias description.
 
 2010-11-20
 - Improved jump_list.

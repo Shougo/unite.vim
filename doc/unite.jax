@@ -1265,7 +1265,13 @@ everything					*unite-sources-everything*
 
 mark						*unite-sources-mark*
 		https://github.com/tacroe/unite-mark
-		対象のmarkにジャンプするsource。
+		対象のmarkにジャンプするsourceである。
+		作者はtacroe氏。
+
+alias						*unite-sources-alias*
+		https://github.com/tacroe/unite-alias
+		sourceのargsを固定化したものをsourceとして登録する、特殊な
+		sourceである。
 		作者はtacroe氏。
 
 ==============================================================================
