@@ -550,6 +550,32 @@ x		候補を選択している場合は|i_<Plug>(unite_quick_match_default_actio
 ==============================================================================
 関数						*unite-functions*
 
+CORE						*unite-functions-core*
+
+unite#available_kind_names()			*unite#available_kind_names()*
+			使用可能なkind名のリストを取得する。
+
+unite#available_kinds([{kind-name}])		*unite#available_kinds()*
+			{kind-name}に指定されたkindを取得する。
+			kindが存在しない場合は空のディクショナリを返す。
+			{kind-name}を省略した場合、キーがkind名、値がそれぞ
+			れのkindとしたディクショナリを返す。
+
+			この戻り値を変更してはいけない。
+
+unite#available_source_names()			*unite#available_source_names()*
+			使用可能なsource名のリストを取得する。
+
+unite#available_sources([{source-name}])	*unite#available_sources()*
+			{source-name}に指定されたsourceを取得する。
+			sourceが存在しない場合は空のディクショナリを返す。
+			{source-name}を省略した場合、キーがsource名、値がそ
+			れぞれのsourceとしたディクショナリを返す。
+
+			この戻り値を変更してはいけない。
+
+CUSTOMS						*unite-functions-customs*
+
 unite#start({sources}, [, {context}])				*unite#start()*
 		uniteバッファを新しく生成する。現在uniteバッファに居る場合、絞
 		り込みテキストは保存される。
@@ -1136,7 +1162,7 @@ source名を指定する。{kind}を"*"とすると、どんなkindにもマッ�
 	call unite#custom_action('source/file/*', 'delete', function('...'))
 <
 ------------------------------------------------------------------------------
-actionの解決順序				*neoui-action-resolution-order*
+actionの解決順序				*unite-action-resolution-order*
 
 例えば、source "file"によって生成された、kind "file"(これは"openable",
 "cdable"を継承している)の候補に対してアクションを実行した場合、アクションの

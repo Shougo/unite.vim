@@ -157,6 +157,26 @@ let s:unite_options = [
       \]
 "}}}
 
+" Core functions."{{{
+function! unite#available_kind_names()"{{{
+  return map(values(unite#available_kinds(), 'v:val.name')
+endfunction"}}}
+function! unite#available_kinds(...)"{{{
+  let l:unite = s:get_unite()
+  return a:0 == 0 ? l:unite.kinds : get(l:unite.kinds, a:1, {})
+endfunction"}}}
+function! unite#available_source_names()"{{{
+  return map(unite#available_sources_list(), 'v:val.name')
+endfunction"}}}
+function! unite#available_sources(...)"{{{
+  let l:unite = s:get_unite()
+  return a:0 == 0 ? l:unite.sources : get(l:unite.sources, a:1, {})
+endfunction"}}}
+
+function! unite#available_sources_list()"{{{
+  return sort(values(unite#available_sources()), 's:compare_sources')
+endfunction"}}}
+"}}}
 
 " Helper functions."{{{
 function! unite#is_win()"{{{
@@ -167,20 +187,6 @@ function! unite#get_unite_candidates()"{{{
 endfunction"}}}
 function! unite#get_context()"{{{
   return s:get_unite().context
-endfunction"}}}
-function! unite#available_sources_name()"{{{
-  return map(unite#available_sources_list(), 'v:val.name')
-endfunction"}}}
-function! unite#available_sources_list()"{{{
-  return sort(values(unite#available_sources()), 's:compare_sources')
-endfunction"}}}
-function! unite#available_sources(...)"{{{
-  let l:unite = s:get_unite()
-  return a:0 == 0 ? l:unite.sources : get(l:unite.sources, a:1, {})
-endfunction"}}}
-function! unite#available_kinds(...)"{{{
-  let l:unite = s:get_unite()
-  return a:0 == 0 ? l:unite.kinds : get(l:unite.kinds, a:1, {})
 endfunction"}}}
 " function! unite#get_action_table(source_name, kind_name, self_func, [is_parent_action])
 function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{

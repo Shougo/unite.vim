@@ -406,6 +406,7 @@ CHANGELOG					*unite-changelog*
 2010-11-21
 - Added unite#util#system().
 - Added context winnr.
+- Added unite-functions-core description.
 
 2010-11-20
 - Improved jump_list.
@@ -780,7 +781,7 @@ CHANGELOG					*unite-changelog*
 
 ------------------------------------------------------------------------------
 Ver.0.5
-2010-09-21 
+2010-09-21
 - Ver.0.5 is released.
 - Fixed japanese documentation.
 - Improved unite buffer detect.
