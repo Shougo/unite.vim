@@ -765,6 +765,11 @@ register	レジスタに保存されている文字列を候補とする。
 						*unite-source-bookmark*
 bookmark	ブックマークされたファイルやディレクトリを候補とする。
 
+						*unite-source-source*
+source		uniteのsource名そのものを候補とする。
+		選択されたsource名を|unite#start()|で起動する。contextは現在
+		のuniteバッファのものを受け継ぐ。
+
 ==============================================================================
 kind						*unite-kind*
 
@@ -1013,6 +1018,13 @@ action_table		辞書		(任意)
 			アクションテーブルの詳細については、|unite-kind-attribute-action_table|
 			を参照せよ。もしこれが与えられない場合、空となる。
 
+						*unite-source-attribute-default_action*
+default_action		文字列		(任意)
+			source独自の標準的なアクションを追加するときに使用する。
+			キーはアクションテーブルを追加するkindで、値は標準ア
+			クションである。これを省略した場合はkindの
+			default_actionを使用する。
+
 						*unite-source-attribute-alias_table*
 alias_table		辞書		(任意)
 			source独自のエイリアステーブルを追加するときに使用す
@@ -1234,9 +1246,11 @@ actionの解決順序				*unite-action-resolution-order*
 	nnoremap    [unite]   <Nop>
 	nmap    f [unite]
 	
-	nnoremap [unite]u  :<C-u>Unite<Space>
-	nnoremap <silent> [unite]f  :<C-u>UniteWithCurrentDir -buffer-name=files buffer file_mru bookmark file<CR>
-	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
+	nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir -buffer-name=files buffer file_mru bookmark file<CR>
+	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files -prompt=%\  buffer file_mru bookmark file<CR>
+	nnoremap <silent> [unite]r  :<C-u>Unite -buffer-name=register register<CR>
+	nnoremap <silent> [unite]o  :<C-u>Unite outline<CR>
+	nnoremap  [unite]f  :<C-u>Unite source<CR>
 	
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{

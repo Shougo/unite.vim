@@ -372,9 +372,11 @@ EXAMPLES					*unite-examples*
 	nnoremap    [unite]   <Nop>
 	nmap    f [unite]
 	
-	nnoremap [unite]u  :<C-u>Unite<Space>
-	nnoremap <silent> [unite]f  :<C-u>UniteWithCurrentDir -buffer-name=files buffer file_mru bookmark file<CR>
-	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
+	nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir -buffer-name=files buffer file_mru bookmark file<CR>
+	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir -buffer-name=files -prompt=%\  buffer file_mru bookmark file<CR>
+	nnoremap <silent> [unite]r  :<C-u>Unite -buffer-name=register register<CR>
+	nnoremap <silent> [unite]o  :<C-u>Unite outline<CR>
+	nnoremap  [unite]f  :<C-u>Unite source<CR>
 	
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{
@@ -412,6 +414,8 @@ CHANGELOG					*unite-changelog*
 - Changed core functions.
 - Improved file_rec.
 - Added g:unite_source_file_rec_max_depth option.
+- Added source source.
+- Fixed unite#start() bug.
 
 2010-11-20
 - Improved jump_list.
