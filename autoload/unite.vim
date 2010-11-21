@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Nov 2010
+" Last Modified: 21 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -158,23 +158,24 @@ let s:unite_options = [
 "}}}
 
 " Core functions."{{{
-function! unite#available_kind_names()"{{{
-  return map(values(unite#available_kinds(), 'v:val.name')
-endfunction"}}}
 function! unite#available_kinds(...)"{{{
   let l:unite = s:get_unite()
   return a:0 == 0 ? l:unite.kinds : get(l:unite.kinds, a:1, {})
 endfunction"}}}
-function! unite#available_source_names()"{{{
-  return map(unite#available_sources_list(), 'v:val.name')
-endfunction"}}}
 function! unite#available_sources(...)"{{{
+  let l:all_sources = s:initialize_sources()
+  return a:0 == 0 ? l:all_sources : get(l:all_sources, a:1, {})
+endfunction"}}}
+
+function! unite#available_loaded_sources(...)"{{{
   let l:unite = s:get_unite()
   return a:0 == 0 ? l:unite.sources : get(l:unite.sources, a:1, {})
 endfunction"}}}
-
-function! unite#available_sources_list()"{{{
-  return sort(values(unite#available_sources()), 's:compare_sources')
+function! unite#loaded_source_names()"{{{
+  return map(unite#loaded_sources_list(), 'v:val.name')
+endfunction"}}}
+function! unite#loaded_sources_list()"{{{
+  return sort(values(unite#available_loaded_sources()), 's:compare_sources')
 endfunction"}}}
 "}}}
 
@@ -191,7 +192,7 @@ endfunction"}}}
 " function! unite#get_action_table(source_name, kind_name, self_func, [is_parent_action])
 function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
   let l:kind = unite#available_kinds(a:kind_name)
-  let l:source = unite#available_sources(a:source_name)
+  let l:source = unite#available_loaded_sources(a:source_name)
   let l:is_parents_action = a:0 > 0 ? a:1 : 0
 
   let l:action_table = {}
@@ -291,7 +292,7 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
   return filter(l:action_table, 'v:key !=# "nop"')
 endfunction"}}}
 function! unite#get_default_action(source_name, kind_name)"{{{
-  let l:source = unite#available_sources(a:source_name)
+  let l:source = unite#available_loaded_sources(a:source_name)
 
   if has_key(s:custom_default_actions, a:source_name.'/'.a:kind_name)
     " Source/kind custom actions.
@@ -366,7 +367,7 @@ function! unite#redraw_status() "{{{
   let l:modifiable_save = &l:modifiable
   setlocal modifiable
 
-  call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(unite#available_sources_list()), 'v:val.name'), ', '))
+  call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(unite#loaded_sources_list()), 'v:val.name'), ', '))
 
   let &l:modifiable = l:modifiable_save
 endfunction"}}}
@@ -438,7 +439,7 @@ function! unite#get_self_functions()"{{{
 endfunction"}}}
 function! unite#gather_candidates()"{{{
   let l:candidates = []
-  for l:source in unite#available_sources_list()
+  for l:source in unite#loaded_sources_list()
     let l:candidates += b:unite.sources_candidates[l:source.name]
   endfor
 
@@ -601,7 +602,7 @@ function! s:quit_session(is_force)  "{{{
   pclose
 
   " Call finalize functions.
-  for l:source in unite#available_sources_list()
+  for l:source in unite#loaded_sources_list()
     if has_key(l:source, 'on_close')
       call l:source.on_close(l:source.args, s:unite.context)
     endif
@@ -668,8 +669,8 @@ function! s:load_default_sources_and_kinds()"{{{
     endif
   endfor
 endfunction"}}}
-function! s:initialize_sources(sources)"{{{
-  let l:all_sources = extend(copy(s:default_sources), s:custom_sources)
+function! s:initialize_loaded_sources(sources)"{{{
+  let l:all_sources = s:initialize_sources()
   let l:sources = {}
 
   let l:number = 0
@@ -681,6 +682,20 @@ function! s:initialize_sources(sources)"{{{
 
     let l:source = l:all_sources[l:source_name]
     let l:source.args = l:args
+    let l:source.unite__is_invalidate = 1
+
+    let l:source.unite__number = l:number
+    let l:number += 1
+
+    let l:sources[l:source_name] = l:source
+  endfor
+
+  return l:sources
+endfunction"}}}
+function! s:initialize_sources()"{{{
+  let l:all_sources = extend(copy(s:default_sources), s:custom_sources)
+
+  for l:source in values(l:all_sources)
     if !has_key(l:source, 'is_volatile')
       let l:source.is_volatile = 0
     endif
@@ -696,15 +711,9 @@ function! s:initialize_sources(sources)"{{{
     if !has_key(l:source, 'alias_table')
       let l:source.alias_table = {}
     endif
-    let l:source.unite__is_invalidate = 1
-
-    let l:source.unite__number = l:number
-    let l:number += 1
-
-    let l:sources[l:source_name] = l:source
   endfor
 
-  return l:sources
+  return l:all_sources
 endfunction"}}}
 function! s:initialize_kinds()"{{{
   let l:kinds = extend(copy(s:default_kinds), s:custom_kinds)
@@ -725,7 +734,7 @@ function! s:recache_candidates(input, context)"{{{
   let l:context.input = empty(l:input_list) ? '' : l:input_list[0]
   let l:input_len = unite#util#strchars(l:context.input)
 
-  for l:source in unite#available_sources_list()
+  for l:source in unite#loaded_sources_list()
     " Check required pattern length.
     if l:input_len < l:source.required_pattern_length
       let b:unite.sources_candidates[l:source.name] = []
@@ -828,7 +837,7 @@ endfunction"}}}
 
 function! s:initialize_unite_buffer(sources, context)"{{{
   " Check sources.
-  let l:sources = s:initialize_sources(a:sources)
+  let l:sources = s:initialize_loaded_sources(a:sources)
 
   let l:context = a:context
 

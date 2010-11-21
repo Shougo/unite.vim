@@ -358,8 +358,8 @@ function! s:redraw()"{{{
   let b:unite.context.is_redraw = 0
 endfunction"}}}
 function! s:rotate_source(is_next)"{{{
-  let l:max = len(unite#available_sources_list()) - 1
-  for l:source in unite#available_sources_list()
+  let l:max = len(unite#loaded_sources_list()) - 1
+  for l:source in unite#loaded_sources_list()
     let l:source.unite__number = a:is_next ?
           \ (l:source.unite__number - 1) : (l:source.unite__number + 1)
     if l:source.unite__number < 0

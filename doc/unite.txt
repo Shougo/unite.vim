@@ -409,6 +409,7 @@ CHANGELOG					*unite-changelog*
 - Added unite-functions-core description.
 - Added unite-alias description.
 - Improved unite kind descriptions.
+- Changed core functions.
 
 2010-11-20
 - Improved jump_list.
