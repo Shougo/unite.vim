@@ -175,6 +175,9 @@ endfunction"}}}
 function! unite#loaded_source_names()"{{{
   return map(unite#loaded_sources_list(), 'v:val.name')
 endfunction"}}}
+function! unite#loaded_sources_list()"{{{
+  return sort(values(s:get_loaded_sources()), 's:compare_sources')
+endfunction"}}}
 function! unite#get_unite_candidates()"{{{
   return s:get_unite().candidates
 endfunction"}}}
@@ -358,7 +361,7 @@ function! unite#redraw_status() "{{{
   let l:modifiable_save = &l:modifiable
   setlocal modifiable
 
-  call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(s:get_loaded_sources_list()), 'v:val.name'), ', '))
+  call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(unite#loaded_sources_list()), 'v:val.name'), ', '))
 
   let &l:modifiable = l:modifiable_save
 endfunction"}}}
@@ -430,7 +433,7 @@ function! unite#get_self_functions()"{{{
 endfunction"}}}
 function! unite#gather_candidates()"{{{
   let l:candidates = []
-  for l:source in s:get_loaded_sources_list()
+  for l:source in unite#loaded_sources_list()
     let l:candidates += b:unite.sources_candidates[l:source.name]
   endfor
 
@@ -593,7 +596,7 @@ function! s:quit_session(is_force)  "{{{
   pclose
 
   " Call finalize functions.
-  for l:source in s:get_loaded_sources_list()
+  for l:source in unite#loaded_sources_list()
     if has_key(l:source.hooks, 'on_close')
       call l:source.hooks.on_close(l:source.args, s:unite.context)
     endif
@@ -731,7 +734,7 @@ function! s:recache_candidates(input, context)"{{{
   let l:context.input = empty(l:input_list) ? '' : l:input_list[0]
   let l:input_len = unite#util#strchars(l:context.input)
 
-  for l:source in s:get_loaded_sources_list()
+  for l:source in unite#loaded_sources_list()
     " Check required pattern length.
     if l:input_len < l:source.required_pattern_length
       let b:unite.sources_candidates[l:source.name] = []
@@ -1131,9 +1134,6 @@ endfunction"}}}
 function! s:get_loaded_sources(...)"{{{
   let l:unite = s:get_unite()
   return a:0 == 0 ? l:unite.sources : get(l:unite.sources, a:1, {})
-endfunction"}}}
-function! s:get_loaded_sources_list()"{{{
-  return sort(values(s:get_loaded_sources()), 's:compare_sources')
 endfunction"}}}
 "}}}
 
