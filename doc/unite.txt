@@ -442,6 +442,8 @@ CHANGELOG					*unite-changelog*
 2010-11-22
 - Fixed bookmark error.
 - Improved jump_list.
+- Fixed unite#util#system().
+- Added unite#util#get_last_status().
 
 2010-11-21
 - Added unite#util#system().

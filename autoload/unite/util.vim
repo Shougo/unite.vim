@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Nov 2010
+" Last Modified: 22 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -189,17 +189,9 @@ endfunction"}}}
 try
   let s:exists_vimproc_version = vimproc#version()
 catch
-  echoerr v:throwpoint
-  echoerr v:exception
-  echoerr 'Error occured while loading vimproc.'
-  echoerr 'Please install vimproc Ver.5.0 or above.'
-  finish
+  let s:exists_vimproc_version = 0
 endtry
-if s:exists_vimproc_version < 500
-  echoerr 'Your vimproc is too old.'
-  echoerr 'Please install vimproc Ver.5.0 or above.'
-  finish
-endif"}}}
+"}}}
 function! unite#util#system(str, ...)"{{{
   let l:command = a:str
   let l:input = a:0 >= 1 ? a:1 : ''
@@ -209,11 +201,11 @@ function! unite#util#system(str, ...)"{{{
   endif
 
   if a:0 == 0
-    let l:output = vimproc#system(l:command)
-  elseif a:0 == 1
-    let l:output = vimproc#system(l:command, l:input)
+    let l:output = s:exists_vimproc_version ?
+          \ vimproc#system(l:command) : system(l:command)
   else
-    let l:output = vimproc#system(l:command, l:input, a:2)
+    let l:output = s:exists_vimproc_version ?
+          \ vimproc#system(l:command, l:input) : system(l:command, l:input)
   endif
 
   if &termencoding != '' && &termencoding != &encoding
@@ -221,6 +213,10 @@ function! unite#util#system(str, ...)"{{{
   endif
 
   return l:output
+endfunction"}}}
+function! unite#util#get_last_status()"{{{
+  return s:exists_vimproc_version ?
+        \ vimproc#get_last_status() : v:shell_error
 endfunction"}}}
 
 " vim: foldmethod=marker
