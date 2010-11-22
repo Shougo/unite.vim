@@ -289,8 +289,7 @@ function! unite#get_default_action(source_name, kind_name)"{{{
   if has_key(s:custom_default_actions, a:source_name.'/'.a:kind_name)
     " Source/kind custom actions.
     return s:custom_default_actions[a:source_name.'/'.a:kind_name]
-  elseif has_key(l:source, 'default_action')
-        \ && has_key(l:source.default_action, a:kind_name)
+  elseif has_key(l:source.default_action, a:kind_name)
     " Source custom default actions.
     return l:source.default_action[a:kind_name]
   elseif has_key(s:custom_default_actions, a:kind_name)
@@ -699,6 +698,9 @@ function! s:initialize_sources()"{{{
     endif
     if !has_key(l:source, 'action_table')
       let l:source.action_table = {}
+    endif
+    if !has_key(l:source, 'default_action')
+      let l:source.default_action = {}
     endif
     if !has_key(l:source, 'alias_table')
       let l:source.alias_table = {}

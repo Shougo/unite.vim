@@ -445,6 +445,7 @@ CHANGELOG					*unite-changelog*
 - Fixed unite#util#system().
 - Added unite#util#get_last_status().
 - Changed hooks specification.
+- Improved source default_action.
 
 2010-11-21
 - Added unite#util#system().
