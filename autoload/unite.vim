@@ -619,6 +619,7 @@ function! s:quit_session(is_force)  "{{{
 
   if !s:unite.context.is_insert
     stopinsert
+    redraw!
   endif
 endfunction"}}}
 
