@@ -42,7 +42,10 @@ let s:kind.action_table.open = {
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
   for l:candidate in a:candidates
-    execute 'edit' '+call\ s:jump(l:candidate)' '`=l:candidate.action__path`'
+    if bufnr(unite#util#escape_file_searching(l:candidate.action__path)) != bufnr('%')
+      edit `=l:candidate.action__path`
+    endif
+    call s:jump(l:candidate)
 
     " Open folds.
     normal! zv
@@ -54,7 +57,7 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
-  execute 'pedit' '+call\ s:jump(a:candidate)' '`=a:candidate.action__path`'
+  pedit +call\ s:jump(a:candidate) `=a:candidate.action__path`
 endfunction"}}}
 "}}}
 
