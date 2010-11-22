@@ -617,7 +617,7 @@ function! s:quit_session(is_force)  "{{{
     endif
   endif
 
-  if !s:unite.context.is_insert && mode() ==# 'i'
+  if !s:unite.context.is_insert
     stopinsert
   endif
 endfunction"}}}
