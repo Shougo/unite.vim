@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Nov 2010
+" Last Modified: 22 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -61,39 +61,44 @@ endfunction"}}}
 " Misc.
 function! s:jump(candidate)"{{{
   if !has_key(a:candidate, 'action__line') && !has_key(a:candidate, 'action__pattern')
+    " Move to head.
     0
     return
   endif
 
   if !has_key(a:candidate, 'action__pattern')
-    " Jump to the line number
+    " Jump to the line number.
     execute a:candidate.action__line
     return
   endif
 
-  " Jump by search()
-  call search(a:candidate.action__pattern, 'w')
+  " Jump by search().
   if !(has_key(a:candidate, 'action__signature_lines') && has_key(a:candidate, 'action__signature_len'))
+    " Not found signature.
+    if getline(a:candidate.action__line) =~# a:candidate.action__pattern
+      execute a:candidate.action__line
+    else
+      call search(a:candidate.action__pattern, 'w')
+    endif
     return
   endif
-  let l:lnum0 = line('.')
+
+  call search(a:candidate.action__pattern, 'w')
+
+  let l:lnum_prev = line('.')
   call search(a:candidate.action__pattern, 'w')
   let l:lnum = line('.')
-  if l:lnum != l:lnum0
-    " same pattern lines detected!!
+  if l:lnum != l:lnum_prev
+    " Detected same pattern lines!!
     let l:signature_lines = a:candidate.action__signature_lines
     let l:signature_len = a:candidate.action__signature_len
     let l:start_lnum = l:lnum
-    while 1
-      if s:check_signature(l:lnum, l:signature_lines, l:signature_len)
-        " found
-        break
-      endif
+    while !s:check_signature(l:lnum, l:signature_lines, l:signature_len)
       call search(a:candidate.action__pattern, 'w')
       let l:lnum = line('.')
       if l:lnum == l:start_lnum
-        " not found
-        call unite#print_error("unite: jump_list: target position not found")
+        " Not found.
+        call unite#print_error("unite: jump_list: Target position is not found.")
         0
         return
       endif

@@ -439,6 +439,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-22
+- Fixed bookmark error.
+- Improved jump_list.
+
 2010-11-21
 - Added unite#util#system().
 - Added context winnr.
