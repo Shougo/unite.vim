@@ -444,6 +444,7 @@ CHANGELOG					*unite-changelog*
 - Improved jump_list.
 - Fixed unite#util#system().
 - Added unite#util#get_last_status().
+- Changed hooks specification.
 
 2010-11-21
 - Added unite#util#system().

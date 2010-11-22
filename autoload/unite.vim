@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Nov 2010
+" Last Modified: 22 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -595,8 +595,8 @@ function! s:quit_session(is_force)  "{{{
 
   " Call finalize functions.
   for l:source in s:get_loaded_sources_list()
-    if has_key(l:source, 'on_close')
-      call l:source.on_close(l:source.args, s:unite.context)
+    if has_key(l:source.hooks, 'on_close')
+      call l:source.hooks.on_close(l:source.args, s:unite.context)
     endif
   endfor
 
@@ -702,6 +702,9 @@ function! s:initialize_sources()"{{{
     endif
     if !has_key(l:source, 'alias_table')
       let l:source.alias_table = {}
+    endif
+    if !has_key(l:source, 'hooks')
+      let l:source.hooks = {}
     endif
   endfor
 
@@ -855,8 +858,8 @@ function! s:initialize_unite_buffer(sources, context)"{{{
 
   " Call initialize functions.
   for l:source in values(l:sources)
-    if has_key(l:source, 'on_init')
-      call l:source.on_init(l:source.args, l:context)
+    if has_key(l:source.hooks, 'on_init')
+      call l:source.hooks.on_init(l:source.args, l:context)
     endif
   endfor
 

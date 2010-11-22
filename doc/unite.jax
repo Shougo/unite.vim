@@ -986,8 +986,13 @@ gather_candidates	関数		(必須)
 			{candidate}については|unite-notation-{candidate}|を参照
 			せよ。
 
-						*unite-source-attribute-on_init*
-on_init			関数		(任意)
+						*unite-source-attribute-hooks*
+hooks			辞書		(任意)
+			uniteへのフック関数を指定する。キーはフックする位置、値
+			は呼び出す関数へのリファレンスである。
+			標準では、次のようなフックが定義されている。
+
+			on_init			*unite-source-attribute-hooks-on_init*
 			|:Unite|系のコマンドを実行した際や|unite#start()|を呼ん
 			だ際に、uniteバッファに移る前に呼ばれる。|:UniteResume|
 			では呼ばれない。
@@ -995,8 +1000,7 @@ on_init			関数		(任意)
 			この関数が呼ばれた際、まだuniteバッファは初期化されてい
 			ないので呼び出す関数には注意しなければならない。
 
-						*unite-source-attribute-on_close*
-on_close		関数		(任意)
+			on_close		*unite-source-attribute-hooks-on_close*
 			<Plug>(unite_exit)を実行したときや、コマンドの実行後に
 			uniteバッファが閉じられる前に呼ばれる。
 			この関数は{args}と{context}を引数に取る。
