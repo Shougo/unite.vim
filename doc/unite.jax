@@ -352,12 +352,6 @@ g:unite_source_file_rec_max_depth		*g:unite_source_file_rec_max_depth*
 
 kindの変数					*unite-kinds-variables*
 
-g:unite_kind_jump_list_search_range		*g:unite_kind_jump_list_search_range*
-		|unite-kind-jump_list|において、uniteがパターンを検索する範囲を
-		指定する。0にすると無効化される。
-		
-		初期値は400である。
-
 ------------------------------------------------------------------------------
 キーマッピング 					*unite-key-mappings*
 

@@ -24,12 +24,6 @@
 " }}}
 "=============================================================================
 
-" Variables  "{{{
-if !exists('g:unite_kind_jump_list_search_range')
-  let g:unite_kind_jump_list_search_range = 400
-endif
-"}}}
-
 function! unite#kinds#jump_list#define()"{{{
   return s:kind
 endfunction"}}}
@@ -48,8 +42,7 @@ let s:kind.action_table.open = {
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
   for l:candidate in a:candidates
-    let l:linenr = s:get_match_linenr(l:candidate)
-    execute 'edit' (l:linenr > 0 ? '+'.l:linenr : '') '`=l:candidate.action__path`'
+    execute 'edit' '+call\ s:jump(l:candidate)' '`=l:candidate.action__path`'
 
     " Open folds.
     normal! zv
@@ -61,43 +54,51 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
-  let l:linenr = s:get_match_linenr(a:candidate)
-  execute 'pedit' (l:linenr > 0 ? '+'.l:linenr : '') '`=a:candidate.action__path`'
+  execute 'pedit' '+call\ s:jump(a:candidate)' '`=a:candidate.action__path`'
 endfunction"}}}
 "}}}
 
 " Misc.
-function! s:get_match_linenr(candidate)"{{{
+function! s:jump(candidate)"{{{
   if !has_key(a:candidate, 'action__line') && !has_key(a:candidate, 'action__pattern')
-    return 0
+    0
+    return
   endif
 
   if !has_key(a:candidate, 'action__pattern')
-    return a:candidate.action__line
+    " Jump to the line number
+    execute a:candidate.action__line
+    return
   endif
 
-  let l:lines = readfile(a:candidate.action__path)
-  let l:max = len(l:lines) - 1
-  let l:start = has_key(a:candidate, 'action__line') ?
-        \ min([a:candidate.action__line - 1, l:max]) : l:max
-
-  " Search pattern.
-  let l:signature_lines = !has_key(a:candidate, 'action__signature_lines') ?
-        \ [] : a:candidate.action__signature_lines
-  let l:signature_len = !has_key(a:candidate, 'action__signature_len') ?
-        \ 0 : a:candidate.action__signature_len
-  for [l1, l2] in map(range(0, g:unite_kind_jump_list_search_range),
-        \ '[l:start - v:val, l:start + v:val]')
-    if l1 >= 0 && l:lines[l1] =~# a:candidate.action__pattern
-          \ && s:check_signature(l1 + 1, l:signature_lines, l:signature_len)
-      return l1 + 1
-    elseif l2 <= l:max && l:lines[l2] =~# a:candidate.action__pattern
-          \ && s:check_signature(l2 + 1, l:signature_lines, l:signature_len)
-      return l2 + 1
-    endif
-  endfor
-
-  return l:start + 1
+  " Jump by search()
+  call search(a:candidate.action__pattern, 'w')
+  if !(has_key(a:candidate, 'action__signature_lines') && has_key(a:candidate, 'action__signature_len'))
+    return
+  endif
+  let l:lnum0 = line('.')
+  call search(a:candidate.action__pattern, 'w')
+  let l:lnum = line('.')
+  if l:lnum != l:lnum0
+    " same pattern lines detected!!
+    let l:signature_lines = a:candidate.action__signature_lines
+    let l:signature_len = a:candidate.action__signature_len
+    let l:start_lnum = l:lnum
+    while 1
+      if s:check_signature(l:lnum, l:signature_lines, l:signature_len)
+        " found
+        break
+      endif
+      call search(a:candidate.action__pattern, 'w')
+      let l:lnum = line('.')
+      if l:lnum == l:start_lnum
+        " not found
+        call unite#print_error("unite: jump_list: target position not found")
+        0
+        return
+      endif
+    endwhile
+  endif
 endfunction"}}}
 
 function! s:check_signature(lnum, signature_lines, signature_len)
