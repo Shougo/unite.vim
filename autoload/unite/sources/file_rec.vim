@@ -35,9 +35,9 @@ function! unite#sources#file_rec#define()"{{{
 endfunction"}}}
 
 let s:source = {
-      \ 'name' : 'file_rec',
+      \ 'name': 'file_rec',
       \ 'max_candidates': 30,
-      \}
+      \ }
 
 function! s:source.gather_candidates(args, context)"{{{
   if !empty(a:args)
@@ -88,6 +88,7 @@ function! s:get_files(depth, directory, files)"{{{
   endif
 
   let l:directory_files = split(unite#substitute_path_separator(glob(a:directory . '/*')), '\n')
+  echo l:directory_files
   let l:files = a:files
   for l:file in l:directory_files
     if isdirectory(l:file)
