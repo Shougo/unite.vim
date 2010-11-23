@@ -58,6 +58,7 @@ function! s:source.gather_candidates(args, context)"{{{
   if g:unite_source_file_ignore_pattern != ''
     call filter(l:candidates, 'v:val !~ ' . string(g:unite_source_file_ignore_pattern))
   endif
+  call map(l:candidates, 'fnamemodify(v:val, ":.")')
 
   return map(l:candidates, '{
         \ "word" : v:val,
@@ -88,7 +89,6 @@ function! s:get_files(depth, directory, files)"{{{
   endif
 
   let l:directory_files = split(unite#substitute_path_separator(glob(a:directory . '/*')), '\n')
-  echo l:directory_files
   let l:files = a:files
   for l:file in l:directory_files
     if isdirectory(l:file)
