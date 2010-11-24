@@ -439,6 +439,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-24
+- Fixed file_rec.
+
 2010-11-22
 - Fixed bookmark error.
 - Improved jump_list.

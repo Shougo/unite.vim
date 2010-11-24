@@ -79,7 +79,7 @@ endfunction"}}}
 
 let s:source = {
       \ 'name' : 'bookmark',
-      \ 'action_table': {},
+      \ 'action_table' : {},
       \}
 
 function! s:source.gather_candidates(args, context)"{{{

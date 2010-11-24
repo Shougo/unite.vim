@@ -31,8 +31,8 @@ endfunction"}}}
 let s:kind = {
       \ 'name' : 'file',
       \ 'default_action' : 'open',
-      \ 'action_table': {},
-      \ 'parents': ['openable', 'cdable'],
+      \ 'action_table' : {},
+      \ 'parents' : ['openable', 'cdable'],
       \}
 
 " Actions"{{{

@@ -30,7 +30,7 @@ endfunction"}}}
 
 let s:kind = {
       \ 'name' : 'cdable',
-      \ 'action_table': {},
+      \ 'action_table' : {},
       \}
 
 " Actions"{{{
