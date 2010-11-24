@@ -834,6 +834,29 @@ jump_list	ジャンプリスト
 			action__pattern		(文字列)		(任意)
 				ファイルを開いた後に検索するパターン
 
+			action__signature	(文字列)		(任意)
+				action__patternに設定したパターンがバッファ内
+				で複数の行にマッチする場合に、同じパターンをも
+				つ行どうしを区別するためのユニークな文字列（詳
+				細は以下を参照せよ）
+
+		action__pattern と action__signature について
+
+		action__patternに設定するパターンが、バッファ内で複数行にマッ
+		チする可能性がある場合、 sourceはaction__signature属性を設定す
+		るべきである。また、その場合、sourceはバッファの行番号から
+		signatureを計算するためのsignature()関数を定義する必要がある。
+		jump_listはその関数を呼び出してsignatureの比較を行う。
+
+		以下にその例を示す。
+>
+		function! s:source.signature(lnum)
+		  let range = 2
+		  let from = max([1, a:lnum - range])
+		  let to   = min([a:lnum + range, line('$')])
+		  return join(getline(from, to))
+		endfunction
+<
 						*unite-kind-command*
 command		VimのExコマンド
 
