@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Nov 2010
+" Last Modified: 24 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -780,14 +780,7 @@ function! s:recache_candidates(input, context)"{{{
   endfor
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
-  let l:max_width = winwidth(0) - b:unite.max_source_name - 5
-  if l:max_width < 20
-    let l:max_width = winwidth(0) - 5
-    let l:max_source_name = 0
-  else
-    let l:max_source_name = b:unite.max_source_name
-  endif
-
+  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), b:unite.max_source_name, 5)
   let l:candidates = []
 
   " Create key table.
@@ -809,13 +802,7 @@ function! s:convert_quick_match_lines(candidates)"{{{
   return l:candidates
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
-  let l:max_width = winwidth(0) - b:unite.max_source_name - 2
-  if l:max_width < 20
-    let l:max_width = winwidth(0) - 2
-    let l:max_source_name = 0
-  else
-    let l:max_source_name = b:unite.max_source_name
-  endif
+  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), b:unite.max_source_name, 2)
 
   return map(copy(a:candidates),
         \ '(v:val.unite__is_marked ? "* " : "- ")
@@ -823,13 +810,7 @@ function! s:convert_lines(candidates)"{{{
         \ . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', l:max_width/3, "..")')
 endfunction"}}}
 function! s:convert_line(candidate)"{{{
-  let l:max_width = winwidth(0) - b:unite.max_source_name - 2
-  if l:max_width < 20
-    let l:max_width = winwidth(0) - 2
-    let l:max_source_name = 0
-  else
-    let l:max_source_name = b:unite.max_source_name
-  endif
+  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), b:unite.max_source_name, 2)
 
   return (a:candidate.unite__is_marked ? '* ' : '- ')
         \ . unite#util#truncate(a:candidate.source, l:max_source_name)
@@ -1079,6 +1060,16 @@ function! s:on_cursor_moved()  "{{{
 endfunction"}}}
 
 " Internal helper functions."{{{
+function! s:adjustments(currentwinwidth, the_max_source_name, size)"{{{
+  let l:max_width = a:currentwinwidth - a:the_max_source_name - a:size
+  if l:max_width < 20
+    let l:max_width = a:currentwinwidth - a:size
+    let l:max_source_name = 0
+  else
+    let l:max_source_name = a:the_max_source_name
+  endif
+  return [l:max_width, l:max_source_name]
+endfunction"}}}
 function! s:get_unite() "{{{
   return exists('b:unite') ? b:unite : s:unite
 endfunction"}}}

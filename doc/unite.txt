@@ -445,6 +445,7 @@ CHANGELOG					*unite-changelog*
 - Improved open action of jump_list kind.
 - Added yank_escape action of common kind.
 - Added unite#util#has_vimproc() function.
+- Refactored internal functions.
 
 2010-11-22
 - Fixed bookmark error.
