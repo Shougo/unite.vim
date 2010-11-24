@@ -1329,6 +1329,17 @@ alias						*unite-sources-alias*
 		sourceである。
 		作者はtacroe氏。
 
+script						*unite-sources-script*
+		https://github.com/
+		Vim script以外のスクリプト言語で簡単なuniteのsourceを作成し、そ
+		れを呼び出すことができるsourceである。
+		作者はhakobe氏。
+
+git_grep					*unite-sources-git_grep*
+		https://github.com/sgur/unite-git_grep
+		git-grepでの検索をuniteで行うsourceである。
+		作者はsgur氏。
+
 ==============================================================================
 TODO						*unite-todo*
 
