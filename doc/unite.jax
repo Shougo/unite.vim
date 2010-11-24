@@ -1331,7 +1331,7 @@ alias						*unite-sources-alias*
 		作者はtacroe氏。
 
 script						*unite-sources-script*
-		https://github.com/
+		https://github.com/hakobe/unite-script
 		Vim script以外のスクリプト言語で簡単なuniteのsourceを作成し、そ
 		れを呼び出すことができるsourceである。
 		作者はhakobe氏。
