@@ -53,7 +53,7 @@ let s:kind.action_table.yank_escape = {
       \ 'description' : 'yank escaped text',
       \ }
 function! s:kind.action_table.yank_escape.func(candidate)"{{{
-  let @" = escape(a:candidate.word, " *?[{`$\\%#''|!<>")
+  let @" = escape(a:candidate.word, " *?[{`$\\%#\"|!<>")
 endfunction"}}}
 
 let s:kind.action_table.ex = {
@@ -62,7 +62,7 @@ let s:kind.action_table.ex = {
       \ }
 function! s:kind.action_table.ex.func(candidates)"{{{
   " Result is ':| {candidate}', here '|' means the cursor position.
-  call feedkeys(printf(": %s\<C-b>", join(map(map(copy(a:candidates), 'v:val.word'), 'escape(v:val, " *?[{`$\\%#''|!<>")'))), 'n')
+  call feedkeys(printf(": %s\<C-b>", join(map(map(copy(a:candidates), 'v:val.word'), 'escape(v:val, " *?[{`$\\%#\"|!<>")'))), 'n')
 endfunction"}}}
 
 let s:kind.action_table.insert = {
