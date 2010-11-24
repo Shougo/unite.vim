@@ -442,6 +442,7 @@ CHANGELOG					*unite-changelog*
 2010-11-24
 - Fixed file_rec.
 - Added user sources.
+- Improved open action of jump_list kind.
 
 2010-11-22
 - Fixed bookmark error.
