@@ -37,7 +37,7 @@ let s:kind = {
 
 " Actions"{{{
 let s:kind.action_table.open = {
-      \ 'description' : 'jump this position',
+      \ 'description' : 'jump to this position',
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
@@ -76,7 +76,8 @@ function! s:jump(candidate)"{{{
   endif
 
   " Jump by search().
-  if !(has_key(a:candidate, 'action__signature_lines') && has_key(a:candidate, 'action__signature_len'))
+  let l:source = unite#available_sources(a:candidate.source)
+  if !(has_key(a:candidate, 'action__signature') && has_key(l:source, 'signature'))
     " Not found signature.
     if getline(a:candidate.action__line) =~# a:candidate.action__pattern
       execute a:candidate.action__line
@@ -93,10 +94,8 @@ function! s:jump(candidate)"{{{
   let l:lnum = line('.')
   if l:lnum != l:lnum_prev
     " Detected same pattern lines!!
-    let l:signature_lines = a:candidate.action__signature_lines
-    let l:signature_len = a:candidate.action__signature_len
     let l:start_lnum = l:lnum
-    while !s:check_signature(l:lnum, l:signature_lines, l:signature_len)
+    while l:source.signature(l:lnum) !=# a:candidate.action__signature
       call search(a:candidate.action__pattern, 'w')
       let l:lnum = line('.')
       if l:lnum == l:start_lnum
@@ -108,15 +107,5 @@ function! s:jump(candidate)"{{{
     endwhile
   endif
 endfunction"}}}
-
-function! s:check_signature(lnum, signature_lines, signature_len)
-  if empty(a:signature_lines)
-    return 1
-  endif
-
-  let l:from = max([1, a:lnum - a:signature_len])
-  let l:to   = min([a:lnum + a:signature_len, line('$')])
-  return join(getline(l:from, l:to)) ==# a:signature_lines
-endfunction
 
 " vim: foldmethod=marker
