@@ -852,7 +852,7 @@ Ver.0.5
 - Added Japanese help (Thanks naoina!)
 - Added <Plug>(unite_toggle_mark_selected_candidates) keymapping.
 - Changed some keymappings name.
-- Refactoringed file_mru.
+- Refactored file_mru.
 - Added bookmark source.
 - Added jump_list kind.
 - Added <Plug>(unite_do_bookmark_action)
@@ -869,7 +869,7 @@ Ver.0.5
 2010-09-18
 - Display modified flag in source buffer.
 - Fixed multiple unite buffer bug.
-- Refactoringed.
+- Refactored.
 - Fixed :UniteWithBufferDir and :UniteWithCurrentDir.
 - Improved multiple unite buffer.
 - Set nomodeline.
