@@ -1063,12 +1063,10 @@ endfunction"}}}
 function! s:adjustments(currentwinwidth, the_max_source_name, size)"{{{
   let l:max_width = a:currentwinwidth - a:the_max_source_name - a:size
   if l:max_width < 20
-    let l:max_width = a:currentwinwidth - a:size
-    let l:max_source_name = 0
+    return [a:currentwinwidth - a:size, 0]
   else
-    let l:max_source_name = a:the_max_source_name
+    return [l:max_width, a:the_max_source_name]
   endif
-  return [l:max_width, l:max_source_name]
 endfunction"}}}
 function! s:get_unite() "{{{
   return exists('b:unite') ? b:unite : s:unite
