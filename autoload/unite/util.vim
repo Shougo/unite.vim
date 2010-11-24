@@ -113,6 +113,9 @@ else
   endfunction"}}}
 
   function! unite#util#wcswidth(str)"{{{
+    if s:is_ascii(a:str)
+      return strlen(a:str)
+    end
     let mx_first = '^\(.\)'
     let str = a:str
     let width = 0
@@ -125,6 +128,10 @@ else
       let str = substitute(str, mx_first, '', '')
     endwhile
     return width
+  endfunction"}}}
+
+  function! s:is_ascii(str)"{{{
+    return (a:str =~# '^[\x00-\x7f]*$')
   endfunction"}}}
 
   " UTF-8 only.
