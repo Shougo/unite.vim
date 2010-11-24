@@ -443,6 +443,7 @@ CHANGELOG					*unite-changelog*
 - Fixed file_rec.
 - Added user sources.
 - Improved open action of jump_list kind.
+- Added yank_escape action of common kind.
 
 2010-11-22
 - Fixed bookmark error.

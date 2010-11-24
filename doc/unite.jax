@@ -853,6 +853,7 @@ common					*unite-action-common*
 内部では、candidate.wordを使う。
 	nop		何もしない
 	yank		ヤンクする
+	yank_escape	エスケープした候補文字列をヤンクする
 	ex		候補をコマンドラインに入力した状態にする
 	insert		現在のバッファに文字列を挿入する
 
