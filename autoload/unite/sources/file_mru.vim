@@ -74,8 +74,9 @@ endfunction"}}}
 
 let s:source = {
       \ 'name' : 'file_mru',
-      \ 'max_candidates': 30,
-      \ 'action_table': {},
+      \ 'description' : 'candidates from file MRU list',
+      \ 'max_candidates' : 30,
+      \ 'action_table' : {},
       \}
 
 function! s:source.gather_candidates(args, context)"{{{

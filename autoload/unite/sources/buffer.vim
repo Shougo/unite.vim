@@ -58,6 +58,7 @@ endfunction"}}}
 
 let s:source_buffer_all = {
       \ 'name' : 'buffer',
+      \ 'description' : 'candidates from buffer list',
       \}
 
 function! s:source_buffer_all.gather_candidates(args, context)"{{{
@@ -83,6 +84,7 @@ endfunction"}}}
 
 let s:source_buffer_tab = {
       \ 'name' : 'buffer_tab',
+      \ 'description' : 'candidates from buffer list in current tab',
       \}
 
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{

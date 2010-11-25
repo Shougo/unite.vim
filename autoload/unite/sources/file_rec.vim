@@ -36,6 +36,7 @@ endfunction"}}}
 
 let s:source = {
       \ 'name' : 'file_rec',
+      \ 'description' : 'candidates from directory by recursive',
       \ 'max_candidates' : 30,
       \ }
 

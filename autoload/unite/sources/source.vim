@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: source.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Nov 2010
+" Last Modified: 25 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,15 +30,17 @@ endfunction"}}}
 
 let s:source = {
       \ 'name' : 'source',
-      \ 'action_table': {},
+      \ 'description' : 'candidates from sources list',
+      \ 'action_table' : {},
       \ 'default_action' : { 'common' : 'start' },
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
-  return map(sort(map(values(unite#available_sources()), 'v:val.name')), '{
-        \ "word" : v:val,
+  return map(sort(values(unite#available_sources()), 's:compare_sources'), '{
+        \ "word" : v:val.name,
+        \ "abbr" : unite#util#truncate(v:val.name, 25) . (v:val.description != "" ? " -- " . v:val.description : ""),
         \ "source" : "source",
-        \ "action__source_name" : v:val,
+        \ "action__source_name" : v:val.name,
         \}')
 endfunction"}}}
 
@@ -55,5 +57,9 @@ endfunction"}}}
 
 let s:source.action_table['*'] = s:action_table
 "}}}
+
+function! s:compare_sources(source_a, source_b) "{{{
+  return a:source_a.name - a:source_b.name
+endfunction"}}}
 
 " vim: foldmethod=marker

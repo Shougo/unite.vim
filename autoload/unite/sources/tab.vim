@@ -36,6 +36,7 @@ endfunction"}}}
 
 let s:source = {
       \ 'name' : 'tab',
+      \ 'description' : 'candidates from tab list',
       \}
 
 function! s:source.gather_candidates(args, context)"{{{

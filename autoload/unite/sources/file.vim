@@ -35,6 +35,7 @@ endfunction"}}}
 
 let s:source = {
       \ 'name' : 'file',
+      \ 'description' : 'candidates from file list',
       \ 'is_volatile' : 1,
       \}
 

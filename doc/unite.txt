@@ -445,6 +445,7 @@ CHANGELOG					*unite-changelog*
 2010-11-25
 - Improved util functions.
 - Added wiki page.
+- Implemented source description.
 
 2010-11-24
 - Fixed file_rec.

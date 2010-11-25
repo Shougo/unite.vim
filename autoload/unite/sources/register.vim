@@ -30,6 +30,7 @@ endfunction"}}}
 
 let s:source = {
       \ 'name' : 'register',
+      \ 'description' : 'candidates from register',
       \}
 
 function! s:source.gather_candidates(args, context)"{{{

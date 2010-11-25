@@ -712,6 +712,9 @@ function! s:initialize_sources()"{{{
     if !has_key(l:source, 'hooks')
       let l:source.hooks = {}
     endif
+    if !has_key(l:source, 'description')
+      let l:source.description = ''
+    endif
   endfor
 
   return l:all_sources

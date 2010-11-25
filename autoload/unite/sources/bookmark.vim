@@ -79,6 +79,7 @@ endfunction"}}}
 
 let s:source = {
       \ 'name' : 'bookmark',
+      \ 'description' : 'candidates from bookmark list',
       \ 'action_table' : {},
       \}
 
