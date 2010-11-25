@@ -92,7 +92,7 @@ if v:version >= 703
   endfunction"}}}
 else
   function! unite#util#wcswidth(str)"{{{
-    if a:str !~# '[[:cntrl:]]'
+    if a:str !~# '[\x80-\xff]'
       return strlen(a:str)
     end
 
