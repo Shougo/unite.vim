@@ -1269,77 +1269,8 @@ actionの解決順序				*unite-action-resolution-order*
 ==============================================================================
 ユーザーのsource				*unite-user-sources*
 
-ここでは、作者以外の手により作成されたsourceについて紹介を行う。
-
-help						*unite-sources-help*
-		https://github.com/tsukkee/unite-help
-		ヘルプを検索するsourceである。
-		作者はtsukkee氏。
-		設定例:
->
-		" Execute help.
-		nnoremap <C-h>  :<C-u>Unite -start-insert help<CR>
-		" Execute help by cursor keyword.
-		nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord help<CR>
-<
-tags						*unite-sources-tags*
-		https://github.com/tsukkee/unite-tags
-		タグファイルを検索するsourceである。
-		作者はtsukkee氏。
-
-outline						*unite-sources-outline*
-		https://github.com/h1mesuke/unite-outline
-		ソースファイルを解析し、アウトラインを表示するsourceである。
-		標準で多数のファイルタイプに対応しており、ユーザーが自由に拡張
-		できる。
-		作者はh1mesuke氏。
-
-colorscheme					*unite-sources-colorscheme*
-		https://github.com/ujihisa/unite-colorscheme
-		colorschemeを変更するsourceである。
-		作者はujihisa氏。
-
-font						*unite-sources-font*
-		https://github.com/ujihisa/unite-font
-		fontを変更するsourceである。
-		作者はujihisa氏。
-
-locate						*unite-sources-locate*
-		https://github.com/ujihisa/unite-locate
-		locateコマンドを用いてファイルを検索するsourceである。
-		locateコマンドがインストールされていない場合、動作しない。
-		作者はujihisa氏。
-
-everything					*unite-sources-everything*
-		https://github.com/sgur/unite-everything
-		everythingを用いて検索するsourceである。
-		当然Windows環境でしか動作しない。
-		作者はsgur氏。
-		
-		導入記事(日本語)：
-		http://sgur.posterous.com/vimuniteeverythingsource
-
-mark						*unite-sources-mark*
-		https://github.com/tacroe/unite-mark
-		対象のmarkにジャンプするsourceである。
-		作者はtacroe氏。
-
-alias						*unite-sources-alias*
-		https://github.com/tacroe/unite-alias
-		sourceのargsを固定化したものをsourceとして登録する、特殊な
-		sourceである。
-		作者はtacroe氏。
-
-script						*unite-sources-script*
-		https://github.com/hakobe/unite-script
-		Vim script以外のスクリプト言語で簡単なuniteのsourceを作成し、そ
-		れを呼び出すことができるsourceである。
-		作者はhakobe氏。
-
-git_grep					*unite-sources-git_grep*
-		https://github.com/sgur/unite-git_grep
-		git-grepでの検索をuniteで行うsourceである。
-		作者はsgur氏。
+作者以外の手により作成されたsourceについては、Wikiのページを参照せよ。
+https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 TODO						*unite-todo*

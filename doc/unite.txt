@@ -430,6 +430,9 @@ EXAMPLES					*unite-examples*
 ==============================================================================
 USER DEFINED SOURCES				*unite-user-sources*
 
+See Wiki page(Japanese).
+https://github.com/Shougo/unite.vim/wiki/unite-plugins
+
 ==============================================================================
 TODO						*unite-todo*
 
@@ -441,6 +444,7 @@ CHANGELOG					*unite-changelog*
 
 2010-11-25
 - Improved util functions.
+- Added wiki page.
 
 2010-11-24
 - Fixed file_rec.
