@@ -85,14 +85,14 @@ endfunction"}}}
 if v:version >= 703
   " Use builtin function.
   function! unite#util#wcswidth(str)"{{{
-    return a:str !~# '[[:cntrl:]]' ? strlen(a:str) : strwidth(a:str)
+    return strwidth(a:str)
   endfunction"}}}
   function! s:wcwidth(str)"{{{
-    return a:str !~# '[[:cntrl:]]' ? strlen(a:str) : strwidth(a:str)
+    return strwidth(a:str)
   endfunction"}}}
 else
   function! unite#util#wcswidth(str)"{{{
-    if a:str !~# '[\x80-\xff]'
+    if a:str =~# '^[\x00-\x7f]*$'
       return strlen(a:str)
     end
 
