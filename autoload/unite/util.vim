@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Nov 2010
+" Last Modified: 25 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,63 +59,43 @@ function! unite#util#strchars(str)"{{{
   return len(substitute(a:str, '.', 'x', 'g'))
 endfunction"}}}
 
+  function! unite#util#strwidthpart(str, width)"{{{
+    let ret = a:str
+    let width = unite#util#wcswidth(a:str)
+    while width > a:width
+      let char = matchstr(ret, '.$')
+      let ret = ret[: -1 - len(char)]
+      let width -= s:wcwidth(char)
+    endwhile
+
+    return ret
+  endfunction"}}}
+  function! unite#util#strwidthpart_reverse(str, width)"{{{
+    let ret = a:str
+    let width = unite#util#wcswidth(a:str)
+    while width > a:width
+      let char = matchstr(ret, '^.')
+      let ret = ret[len(char) :]
+      let width -= s:wcwidth(char)
+    endwhile
+
+    return ret
+  endfunction"}}}
+
 if v:version >= 703
   " Use builtin function.
-
-  function! unite#util#strwidthpart(str, width)"{{{
-    let ret = a:str
-    let width = strwidth(a:str)
-    while width > a:width
-      let char = matchstr(ret, '.$')
-      let ret = ret[: -1 - len(char)]
-      let width -= strwidth(char)
-    endwhile
-
-    return ret
-  endfunction"}}}
-  function! unite#util#strwidthpart_reverse(str, width)"{{{
-    let ret = a:str
-    let width = strwidth(a:str)
-    while width > a:width
-      let char = matchstr(ret, '^.')
-      let ret = ret[len(char) :]
-      let width -= strwidth(char)
-    endwhile
-
-    return ret
-  endfunction"}}}
-
   function! unite#util#wcswidth(str)"{{{
-    return strwidth(a:str)
+    return a:str !~# '[[:cntrl:]]' ? strlen(a:str) : strwidth(a:str)
+  endfunction"}}}
+  function! s:wcwidth(str)"{{{
+    return a:str !~# '[[:cntrl:]]' ? strlen(a:str) : strwidth(a:str)
   endfunction"}}}
 else
-  function! unite#util#strwidthpart(str, width)"{{{
-    let ret = a:str
-    let width = unite#util#wcswidth(a:str)
-    while width > a:width
-      let char = matchstr(ret, '.$')
-      let ret = ret[: -1 - len(char)]
-      let width -= s:wcwidth(char)
-    endwhile
-
-    return ret
-  endfunction"}}}
-  function! unite#util#strwidthpart_reverse(str, width)"{{{
-    let ret = a:str
-    let width = unite#util#wcswidth(a:str)
-    while width > a:width
-      let char = matchstr(ret, '^.')
-      let ret = ret[len(char) :]
-      let width -= s:wcwidth(char)
-    endwhile
-
-    return ret
-  endfunction"}}}
-
   function! unite#util#wcswidth(str)"{{{
-    if s:is_ascii(a:str)
+    if a:str !~# '[[:cntrl:]]'
       return strlen(a:str)
     end
+
     let mx_first = '^\(.\)'
     let str = a:str
     let width = 0
@@ -128,10 +108,6 @@ else
       let str = substitute(str, mx_first, '', '')
     endwhile
     return width
-  endfunction"}}}
-
-  function! s:is_ascii(str)"{{{
-    return (a:str =~# '^[\x00-\x7f]*$')
   endfunction"}}}
 
   " UTF-8 only.

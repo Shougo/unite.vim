@@ -439,6 +439,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-11-25
+- Improved util functions.
+
 2010-11-24
 - Fixed file_rec.
 - Added user sources.
