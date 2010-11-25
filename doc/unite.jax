@@ -834,6 +834,31 @@ jump_list	ジャンプリスト
 			action__pattern		(文字列)		(任意)
 				ファイルを開いた後に検索するパターン
 
+			action__signature	(文字列)		(任意)
+				action__patternに設定するパターンや
+				action__lineだけではジャンプ位置の一意性を保証
+				できない場合に、同じパターンにマッチする行どう
+				しを区別するための一意な文字列
+
+		action__signatureとcalc_signature()関数
+
+		action__signatureを設定するsourceは、バッファの行番号から
+		signatureを計算するためのcalc_signature()関数を定義しなければ
+		ならない。
+		calc_signature()関数は{lnum}を引数に取り、signatureとなる文字
+		列を返す。
+		{lnum}は行番号である。
+		jump_listはこの関数を呼び出してsignatureの比較を行う。
+
+		以下にその例を示す。
+>
+		function! s:source.calc_signature(lnum)
+		  let range = 2
+		  let from = max([1, a:lnum - range])
+		  let to   = min([a:lnum + range, line('$')])
+		  return join(getline(from, to))
+		endfunction
+<
 						*unite-kind-command*
 command		VimのExコマンド
 
