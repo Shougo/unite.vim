@@ -77,7 +77,7 @@ function! s:jump(candidate)"{{{
 
   " Jump by search().
   let l:source = unite#available_sources(a:candidate.source)
-  if !(has_key(a:candidate, 'action__signature') && has_key(l:source, 'signature'))
+  if !(has_key(a:candidate, 'action__signature') && has_key(l:source, 'calc_signature'))
     " Not found signature.
     if getline(a:candidate.action__line) =~# a:candidate.action__pattern
       execute a:candidate.action__line
@@ -95,7 +95,7 @@ function! s:jump(candidate)"{{{
   if l:lnum != l:lnum_prev
     " Detected same pattern lines!!
     let l:start_lnum = l:lnum
-    while l:source.signature(l:lnum) !=# a:candidate.action__signature
+    while l:source.calc_signature(l:lnum) !=# a:candidate.action__signature
       call search(a:candidate.action__pattern, 'w')
       let l:lnum = line('.')
       if l:lnum == l:start_lnum
