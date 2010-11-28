@@ -305,24 +305,52 @@ g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
 		Refer autoload/unite/sources/file.vim about the default value.
 
 g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
-		
-		
+		Specifies the output format of the last access time of
+		|unite-source-file_mru|.  The format is same to |strftime()|.
+
 		Default value is "(%c)".
 
 g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
-		
-		
-		Default value is |g:unite_data_directory| . '/.file_mru'.
+		Specifies the file to write the information of most recent
+		used files.
+
+		Default value is |g:unite_data_directory|; '/.file_mru'
 
 g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
-		
-		
+		The maximum number of most recent files to save.
+
 		Default value is 100.
 
 g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
-		
-		
-		Default value is refer to autoload/unite/sources/file_mru.vim.
+		Specifies the regexp pattern to ignore candidates of
+		|unite-source-file_mru|.  This applies on the full path of
+		each files.  Unless this variable value is an empty string,
+		Unite filters out the result with the regexp.  Regardless of
+		'ignorecase' value, it's case sensitive.
+
+		Refer autoload/unite/sources/file_mru.vim about the default
+		value.
+
+g:unite_source_directory_mru_time_format	*g:unite_source_directory_mru_time_format*
+g:unite_source_directory_mru_directory		*g:unite_source_directory_mru_directory*
+g:unite_source_directory_mru_limit		*g:unite_source_directory_mru_limit*
+g:unite_source_directory_mru_ignore_pattern	*g:unite_source_directory_mru_ignore_pattern*
+		They are same to |unite-source-file_mru| except for the
+		targets are |unite-source-directory_mru|.
+
+g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
+		Specifies the file that |unite-source-bookmark| writes its
+		bookmarks.
+
+		Default value is |g:unite_data_directory|; '/.bookmark'. 
+
+g:unite_source_file_rec_max_depth		*g:unite_source_file_rec_max_depth*
+		Specifies the maximum directory depth that 
+		|unite-source-file_rec| searches.
+
+		Default is 10.
+
+kindの変数					*unite-kinds-variables*
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*unite-key-mappings*
