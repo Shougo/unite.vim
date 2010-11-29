@@ -358,7 +358,76 @@ KEY MAPPINGS 					*unite-key-mappings*
 Normal mode mappings.
 
 <Plug>(unite_exit)				*<Plug>(unite_exit)*
-		Exit unite.
+		Exits unite.
+
+<Plug>(unite_do_default_action)			*<Plug>(unite_do_default_action)*
+		Runs the default action of the default candidates.  The kinds
+		of each candidates have their own defined actions.  See also
+		|unite-kind| about kinds.  Refer |unite-default-action| about
+		default actions.
+
+<Plug>(unite_choose_action)			*<Plug>(unite_choose_action)*
+		Runs the default action of the selected candidates.  The kinds
+		of each candidates have their own defined actions.  Refer
+		|unite-kind| about kinds.
+
+<Plug>(unite_insert_enter)			*<Plug>(unite_insert_enter)*
+		Starts inputting narrowing text by the cursor position.  In
+		case when the cursor is not on prompt line, this moves the
+		cursor into the prompt line automatically.
+
+<Plug>(unite_insert_head)			*<Plug>(unite_insert_head)*
+		Starts inputting narrowing text by the head of the line.  In
+		case when the cursor is not on prompt line, this moves the
+		cursor into the prompt line automatically.
+
+<Plug>(unite_append_enter)			*<Plug>(unite_append_enter)*
+		Starts inputting narrowing text by the head of the line.  In
+		case when the cursor is not on prompt line, this moves the
+		cursor into the prompt line automatically.
+
+<Plug>(unite_append_end)			*<Plug>(unite_append_end)*
+		Starts inputting narrowing text by the end of the line.  In
+		case when the cursor is not on prompt line, this moves the
+		cursor into the prompt line automatically.
+
+<Plug>(unite_toggle_mark_current_candidate)	*<Plug>(unite_toggle_mark_current_candidate)*
+		Toggles the mark of the candidate in the current line.  You may
+		run an action on multiple candidates at the same time by
+		marking multiple candidates.
+
+<Plug>(unite_redraw)				*<Plug>(unite_redraw)*
+		Without waiting for the update time defined in 
+		|g:unite_update_time|, Unite updates its view immediately.
+		This is also used internally for updating the cache.
+
+<Plug>(unite_rotate_next_source)		*<Plug>(unite_rotate_next_source)*
+		sourceの順番を順方向に並び変える。
+
+<Plug>(unite_rotate_previous_source)		*<Plug>(unite_rotate_previous_source)*
+		Changes the order of source reversely.
+
+<Plug>(unite_print_candidate)			*<Plug>(unite_print_candidate)*
+		Shows the target of the action of the selected candiate.  For
+		example this shows the content of the candidate when the
+		kind of the candidate you selected is |word|.
+
+<Plug>(unite_cursor_top)			*<Plug>(unite_cursor_top)*
+		Moves the cursor to the top of the Unite buffer.
+
+<Plug>(unite_loop_cursor_down)			*<Plug>(unite_loop_cursor_down)*
+		Goes to the next line.  Goes up to top when you are on bottom.
+
+<Plug>(unite_loop_cursor_up)			*<Plug>(unite_loop_cursor_up)*
+		Goes to the previous line.  Goes bottom when you are on top.
+
+<Plug>(unite_quick_match_default_action)	*<Plug>(unite_quick_match_default_action)*
+		Runs the default action of the selected candidate with using
+		quick match.   This doesn't work when there are marked
+		candidates.
+
+<Plug>(unite_input_directory)			*<Plug>(unite_input_directory)*
+		Narrows with inputting directory name.
 
 Visual mode mappings.
 
