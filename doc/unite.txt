@@ -402,7 +402,7 @@ Normal mode mappings.
 		This is also used internally for updating the cache.
 
 <Plug>(unite_rotate_next_source)		*<Plug>(unite_rotate_next_source)*
-		sourceの順番を順方向に並び変える。
+		Changes the order of source normally.
 
 <Plug>(unite_rotate_previous_source)		*<Plug>(unite_rotate_previous_source)*
 		Changes the order of source reversely.
@@ -428,6 +428,63 @@ Normal mode mappings.
 
 <Plug>(unite_input_directory)			*<Plug>(unite_input_directory)*
 		Narrows with inputting directory name.
+
+Insert mode mappings.
+
+<Plug>(unite_exit)				*i_<Plug>(unite_exit)*
+		Exits Unite.
+
+<Plug>(unite_insert_leave)			*i_<Plug>(unite_insert_leave)*
+		Changes the mode into Normal mode.
+
+<Plug>(unite_delete_backward_char)		*i_<Plug>(unite_delete_backward_char)*
+		Deletes a char just before the cursor, otherwise quits the Unite.
+
+<Plug>(unite_delete_backward_line)		*i_<Plug>(unite_delete_backward_line)*
+		Deletes all chars after the cursor until the end of the line.
+
+<Plug>(unite_delete_backward_word)		*i_<Plug>(unite_delete_backward_word)*
+		Deletes a word just before the cursor.
+
+<Plug>(unite_delete_backward_path)		*i_<Plug>(unite_delete_backward_path)*
+		Deletes a path upward. For example doing
+		<Plug>(unite_delete_backward_path) on >
+		/Users/ujihisa/Desktop
+<		or >
+		/Users/ujihisa/Desktop/
+<		this changes into >
+		/Users/ujihisa
+<		This is handy for changing file paths.
+
+<Plug>(unite_select_next_line)			*i_<Plug>(unite_select_next_line)*
+		Goes to the next candidate.  Goes to the top from bottom.
+
+<Plug>(unite_select_previous_line)		*i_<Plug>(unite_select_previous_line)*
+		Goes to the previous candidate.  Goes to the bottom from top.
+
+<Plug>(unite_select_next_page)			*i_<Plug>(unite_select_next_page)*
+		Shows the next candidate page.
+
+<Plug>(unite_select_previous_page)		*i_<Plug>(unite_select_previous_page)*
+		Shows the previous candidate page.
+
+<Plug>(unite_do_default_action)			*i_<Plug>(unite_do_default_action)*
+		Same to |<Plug>(unite_do_default_action)|.
+
+<Plug>(unite_toggle_mark_current_candidate)	*i_<Plug>(unite_toggle_mark_current_candidate)*
+		Same to |<Plug>(unite_toggle_mark_current_candidate)|.
+
+<Plug>(unite_choose_action)			*i_<Plug>(unite_choose_action)*
+		Same to |<Plug>(unite_choose_action)|.
+
+<Plug>(unite_move_head)				*i_<Plug>(unite_move_head)*
+		Goes to the top of the line.
+
+<Plug>(unite_quick_match_default_action)	*i_<Plug>(unite_quick_match_default_action)*
+		Same to |<Plug>(unite_quick_match_default_action)|.
+
+<Plug>(unite_input_directory)			*i_<Plug>(unite_input_directory)*
+		Same to |<Plug>(unite_input_directory)|.
 
 Visual mode mappings.
 

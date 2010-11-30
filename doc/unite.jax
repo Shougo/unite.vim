@@ -445,8 +445,7 @@ kindの変数					*unite-kinds-variables*
 		カーソル直前の単語を削除する。
 
 <Plug>(unite_delete_backward_path)		*i_<Plug>(unite_delete_backward_path)*
-		一つ上のパスまで削除する。
-		たとえば >
+		一つ上のパスまで削除する。たとえば >
 		/home/Shougo/Desktop
 <		や >
 		/home/Shougo/Desktop/
@@ -476,7 +475,7 @@ kindの変数					*unite-kinds-variables*
 		|<Plug>(unite_choose_action)|と同じ。
 
 <Plug>(unite_move_head)				*i_<Plug>(unite_move_head)*
-		カーソルを先頭に移動する。
+		カーソルを行の先頭に移動する。
 
 <Plug>(unite_quick_match_default_action)	*i_<Plug>(unite_quick_match_default_action)*
 		|<Plug>(unite_quick_match_default_action)|と同じ。
