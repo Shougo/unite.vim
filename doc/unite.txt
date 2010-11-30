@@ -488,18 +488,69 @@ Insert mode mappings.
 
 Visual mode mappings.
 
-<Plug>(unite_toggle_mark_selected_candidates)	*<Plug>(unite_toggle_selected_candidates)*
-		Toggle marks in selected candidates.
+<Plug>(unite_toggle_mark_selected_candidates)	*v_<Plug>(unite_toggle_selected_candidates)*
+		Toggle marks in visual selected candidates.
 
-						*g:unite_default_key_mappings*
-Following keymappings are default keymappings.
+						*unite_default_key_mappings*
+Following keymappings are the default keymappings.
 
 Normal mode mappings.
-{lhs}			{rhs}
---------		-----------------------------
+{lhs}		{rhs}
+--------	-----------------------------
+i		|<Plug>(unite_insert_enter)|
+I		|<Plug>(unite_insert_head)|
+a		|<Plug>(unite_append_enter)|
+A		|<Plug>(unite_append_end)|
+q		|<Plug>(unite_exit)|
+<Space>		|<Plug>(unite_toggle_mark_current_candidate)|
+<Tab>		|<Plug>(unite_choose_action)|
+<C-n>		|<Plug>(unite_rotate_next_source)|
+<C-p>		|<Plug>(unite_rotate_previous_source)|
+<C-g>		|<Plug>(unite_print_candidate)|
+<C-l>		|<Plug>(unite_redraw)|
+gg		|<Plug>(unite_cursor_top)|
+j		|<Plug>(unite_loop_cursor_down)|
+<Down>		|<Plug>(unite_loop_cursor_down)|
+k		|<Plug>(unite_loop_cursor_up)|
+<Up>		|<Plug>(unite_loop_cursor_up)|
+<CR>		In case when you selected a candidate, runs default action
+l		In case when you selected a candidate, runs default action
+d		In case when you selected a candidate, runs delete action
+b		In case when you selected a candidate, runs bookmark action
+e		In case when you selected a candidate, runs narrow action
+p		In case when you selected a candidate, runs preview action
+x		In case when you selected a candidate, runs
+		|<Plug>(unite_quick_match_default_action)|
 
-	Please refer to unite#mappings#define_default_mappings() in
-	autoload/unite/mappings.vim.
+Insert mode mappings.
+{lhs}		{rhs}
+--------	-----------------------------
+<ESC>		|i_<Plug>(unite_insert_leave)|
+<Tab>		|i_<Plug>(unite_choose_action)|
+<C-n>		|i_<Plug>(unite_select_next_line)|
+<Down>		|i_<Plug>(unite_select_next_line)|
+<C-p>		|i_<Plug>(unite_select_previous_line)|
+<Up>		|i_<Plug>(unite_select_previous_line)|
+<C-f>		|i_<Plug>(unite_select_next_page)|
+<C-b>		|i_<Plug>(unite_select_previous_page)|
+<CR>		|i_<Plug>(unite_do_default_action)|
+<C-h>		|i_<Plug>(unite_delete_backward_char)|
+<BS>		|i_<Plug>(unite_delete_backward_char)|
+<C-u>		|i_<Plug>(unite_delete_backward_line)|
+<C-w>		|i_<Plug>(unite_delete_backward_word)|
+<C-a>		|i_<Plug>(unite_move_head)|
+<Home>		|i_<Plug>(unite_move_head)|
+/		In case when you selected a candidate, runs narrow action
+d		In case when you selected a candidate, runs delete action
+<Space>		In case when you selected a candidate,
+		|i_<Plug>(unite_toggle_mark_current_candidate)|
+x		In case when you selected a candidate,
+		|i_<Plug>(unite_quick_match_default_action)|
+
+Visual mode mappings.
+{lhs}		{rhs}
+--------	-----------------------------
+<Space>		|v_<Plug>(unite_toggle_mark_selected_candidates)|
 
 ==============================================================================
 FUNCTIONS					*unite-functions*
