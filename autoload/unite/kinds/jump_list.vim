@@ -24,6 +24,15 @@
 " }}}
 "=============================================================================
 
+" Variables  "{{{
+if !exists('g:unite_kind_jump_list_after_jump_scroll')
+  let g:unite_kind_jump_list_after_jump_scroll = 25
+else
+  let g:unite_kind_jump_list_after_jump_scroll =
+        \ min([max([0, g:unite_kind_jump_list_after_jump_scroll]), 100])
+endif
+"}}}
+
 function! unite#kinds#jump_list#define()"{{{
   return s:kind
 endfunction"}}}
@@ -49,6 +58,7 @@ function! s:kind.action_table.open.func(candidates)"{{{
 
     " Open folds.
     normal! zv
+    call s:adjust_scroll(s:best_winline())
   endfor
 endfunction"}}}
 
@@ -106,6 +116,30 @@ function! s:jump(candidate)"{{{
       endif
     endwhile
   endif
+endfunction"}}}
+
+function! s:best_winline()"{{{
+  return max([1, winheight(0) * g:unite_kind_jump_list_after_jump_scroll / 100])
+endfunction"}}}
+
+function! s:adjust_scroll(best_winline)"{{{
+  normal! zt
+  let l:save_cursor = getpos('.')
+  let l:winl = 1
+  " Scroll the cursor line down.
+  while l:winl <= a:best_winline
+    let l:winl_prev = l:winl
+    execute "normal! \<C-y>"
+    let l:winl = winline()
+    if l:winl == l:winl_prev
+      break
+    end
+    let l:winl_prev = l:winl
+  endwhile
+  if l:winl > a:best_winline
+    execute "normal! \<C-e>"
+  endif
+  call setpos('.', l:save_cursor)
 endfunction"}}}
 
 " vim: foldmethod=marker
