@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Nov 2010
+" Last Modified: 02 Dec 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -321,8 +321,14 @@ function! s:choose_action()"{{{
     if empty(l:actions)
       echohl Error | echo 'Invalid action.' | echohl None
     elseif len(l:actions) > 1
+      if has_key(s:actions, l:input)
+        let l:selected_action = l:input
+        break
+      endif
+
       echohl Error | echo 'Too match action.' | echohl None
     else
+      let l:selected_action = l:actions[0]
       break
     endif
 
@@ -330,7 +336,7 @@ function! s:choose_action()"{{{
   endwhile
 
   " Execute action.
-  call unite#mappings#do_action(l:actions[0])
+  call unite#mappings#do_action(l:selected_action)
 endfunction"}}}
 function! s:insert_enter()"{{{
   if line('.') != b:unite.prompt_linenr || col('.') == 1

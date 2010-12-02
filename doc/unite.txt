@@ -664,6 +664,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-12-02
+- Fixed select actions.
+
 2010-11-25
 - Improved util functions.
 - Added wiki page.
