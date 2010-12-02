@@ -350,7 +350,7 @@ g:unite_source_file_rec_max_depth		*g:unite_source_file_rec_max_depth*
 
 		Default is 10.
 
-kindの変数					*unite-kinds-variables*
+KINDS VARIABLES					*unite-kinds-variables*
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*unite-key-mappings*
@@ -572,6 +572,46 @@ unite#available_sources([{source-name}])	*unite#available_sources()*
 			the sources when you skipped giving {source-name}.
 
 			Changing the return value is not allowed.
+
+CUSTOMS						*unite-functions-customs*
+
+unite#start({sources}, [, {context}])				*unite#start()*
+		Creates a new Unite buffer.  In case when you are already on a
+		Unite buffer, the narrowing text will be preserved.
+
+		{sources} is a list which elements are formatted as
+		{source-name} or [{source-name}, [{args}, ...]].  You may
+		specify multiple string arguments in {args} for {source-name}.
+
+
+		Refer |unite-notation-{context}| about {context}.  If you
+		skipped it will use the default value.
+
+unite#get_context()						*unite#get_context()*
+		Gets the context information of the current Unite buffer.
+		This is used by functions like |unite#custom_action()| to call
+		|unite#start()| internally.
+
+unite#do_action({action-name})					*unite#do_action()*
+		Returns the key sequence for running {action-name} action for
+		the marked candidates.  This function works only when Unite is
+		already activated.  This causes a runtime error if
+		{action-name} doesn't exist or the action is invalid.
+
+		This is handy for defining a key mapping to run an action by
+		yourself.
+
+		This runs the default action when you specify "default" on
+		{action-name}.
+
+		This runs an action on the candidates of the current line or
+		the top of the candidates when none of the candidates are marked.
+
+		This is usually used as inoremap <buffer><expr> or
+		nnoremap <buffer><expr>.  For example,
+>
+		nnoremap <silent><buffer><expr> <C-k> unite#do_action('preview')
+>
 ==============================================================================
 SOURCE						*unite-source*
 
