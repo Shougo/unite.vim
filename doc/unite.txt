@@ -555,6 +555,23 @@ Visual mode mappings.
 ==============================================================================
 FUNCTIONS					*unite-functions*
 
+CORE						*unite-functions-core*
+
+unite#available_kinds([{kind-name}])		*unite#available_kinds()*
+			Gets the kinds of {kind-name}.  Unless they exist this
+			returns an empty dictionary.  This returns a
+			dictionary which keys are kind names and values are
+			the kinds when you skipped giving {kind-name}.
+
+			Changing the return value is not allowed.
+
+unite#available_sources([{source-name}])	*unite#available_sources()*
+			Gets the source of {source-name}. Unless they exist
+			this returns an empty dictionary.  This returns a
+			dictionary which keys are source names and values are
+			the sources when you skipped giving {source-name}.
+
+			Changing the return value is not allowed.
 ==============================================================================
 SOURCE						*unite-source*
 

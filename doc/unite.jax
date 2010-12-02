@@ -566,18 +566,18 @@ x		候補を選択している場合は|i_<Plug>(unite_quick_match_default_actio
 CORE						*unite-functions-core*
 
 unite#available_kinds([{kind-name}])		*unite#available_kinds()*
-			{kind-name}に指定されたkindを取得する。
-			kindが存在しない場合は空のディクショナリを返す。
-			{kind-name}を省略した場合、キーがkind名、値がそれぞ
-			れのkindとしたディクショナリを返す。
+			{kind-name}に指定されたkindを取得する。kindが存在しな
+			い場合は空のディクショナリを返す。{kind-name}を省略し
+			た場合、キーがkind名、値がそれぞれのkindとしたディク
+			ショナリを返す。
 
 			この戻り値を変更してはいけない。
 
 unite#available_sources([{source-name}])	*unite#available_sources()*
-			{source-name}に指定されたsourceを取得する。
-			sourceが存在しない場合は空のディクショナリを返す。
-			{source-name}を省略した場合、キーがsource名、値がそ
-			れぞれのsourceとしたディクショナリを返す。
+			{source-name}に指定されたsourceを取得する。sourceが存
+			在しない場合は空のディクショナリを返す。{source-name}
+			を省略した場合、キーがsource名、値がそれぞれのsourceと
+			したディクショナリを返す。
 
 			この戻り値を変更してはいけない。
 
