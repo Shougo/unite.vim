@@ -586,11 +586,14 @@ CUSTOMS						*unite-functions-customs*
 unite#start({sources}, [, {context}])				*unite#start()*
 		uniteバッファを新しく生成する。現在uniteバッファに居る場合、絞
 		り込みテキストは保存される。
-		{sources}はリストであり、それぞれの要素は{source-name}または、
-		[{source-name}, [{args},...]]という形式である。
-		{args}には{source-name}に渡す引数を文字列形式で複数指定できる。
-		{context}については、|unite-notation-{context}|を参照せよ。値を
-		省略すると、デフォルト値が使用される。
+
+		{sources}はリストであり、それぞれ
+		の要素は{source-name}または、[{source-name}, [{args},...]]とい
+		う形式である。{args}には{source-name}に渡す引数を文字列形式で
+		複数指定できる。
+
+		{context}については、 |unite-notation-{context}|
+		を参照せよ。値を省略すると、デフォルト値が使用される。
 
 unite#get_context()						*unite#get_context()*
 		現在のuniteバッファのコンテキスト情報を得る。
@@ -602,12 +605,16 @@ unite#do_action({action-name})					*unite#do_action()*
 		るためのキーシーケンスを返す。この関数はuniteが起動している時に
 		のみ動作する。{action-name}が存在しない、もしくは不正な実行だっ
 		た場合は実行時エラーとなる。
+
 		ユーザー側で特定のアクションを実行するためのマッピングを定義す
 		る場合に便利である。
+
 		{action-name}に"default"を指定すると、デフォルトのアクションが
 		実行される。
+
 		候補がマークされていない場合は、現在の行もしくは、一番上の候補
 		に対してアクションを実行することになる。
+
 		inoremap <buffer><expr>やnnoremap <buffer><expr>で通常用いる。
 		例:
 >
@@ -617,6 +624,7 @@ unite#smart_map({narrow-map}, {select-map})			*unite#smart_map()*
 		絞り込み時と選択時のマッピングを設定し、文脈によって切り換える
 		キーシーケンスを返す。|unite#do_action()|と組み合わせて使用する
 		と良い。
+
 		inoremap <buffer><expr>やnnoremap <buffer><expr>で通常用いる。
 		例:
 >
