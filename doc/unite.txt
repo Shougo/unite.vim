@@ -569,8 +569,7 @@ unite#available_sources([{source-name}])	*unite#available_sources()*
 			Gets the source of {source-name}. Unless they exist
 			this returns an empty dictionary.  This returns a
 			dictionary which keys are source names and values are
-			the sources when you skipped giving {source-name}
-			sourceが存在しない場合は空のディクショナリを返す。
+			the sources when you skipped giving {source-name}.
 
 			Changing the return value is not allowed.
 ==============================================================================
