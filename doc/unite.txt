@@ -729,6 +729,7 @@ CHANGELOG					*unite-changelog*
 
 2010-12-03
 - Improved help tags.
+- Fixed <Plug>(unite_move_head).
 
 2010-12-02
 - Fixed select actions.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Dec 2010
+" Last Modified: 03 Dec 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,7 +31,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
   nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
-  nnoremap <silent><buffer><expr> <Plug>(unite_append_enter)  col('.') == col('$') ? "\:<C-u>call \<SID>append_enter()\<CR>" : ":\<C-u>call \<SID>append_end()\<CR>"
+  nnoremap <silent><buffer> <Plug>(unite_append_enter)  :<C-u>call <SID>append_enter()<CR>
   nnoremap <silent><buffer> <Plug>(unite_append_end)  :<C-u>call <SID>append_end()<CR>
   nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  :<C-u>call <SID>toggle_mark()<CR>
   nnoremap <silent><buffer> <Plug>(unite_redraw)  :<C-u>call <SID>redraw()<CR>
@@ -339,20 +339,31 @@ function! s:choose_action()"{{{
   call unite#mappings#do_action(l:selected_action)
 endfunction"}}}
 function! s:insert_enter()"{{{
-  if line('.') != b:unite.prompt_linenr || col('.') == 1
+  if line('.') != b:unite.prompt_linenr
     execute b:unite.prompt_linenr
     startinsert!
+  elseif col('.') <= len(b:unite.prompt)+1
+    startinsert
+    let l:pos = getpos('.')
+    let l:pos[2] = len(b:unite.prompt)+1
+    call setpos('.', l:pos)
   else
     startinsert
   endif
 endfunction"}}}
 function! s:insert_head()"{{{
-  normal! 0l
+  let l:pos = getpos('.')
+  let l:pos[2] = len(b:unite.prompt)+1
+  call setpos('.', l:pos)
   call s:insert_enter()
 endfunction"}}}
 function! s:append_enter()"{{{
   call s:insert_enter()
-  normal! l
+  if col('.')+1 == col('$')
+    startinsert!
+  elseif col('$') != len(b:unite.prompt)+1
+    normal! l
+  endif
 endfunction"}}}
 function! s:append_end()"{{{
   call s:insert_enter()
