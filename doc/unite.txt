@@ -153,38 +153,47 @@ COMMANDS 					*unite-commands*
 		"file:foo:bar": the parameters of source file are [foo, bar].
 		"file:foo\:bar": the parameters of source file are [foo:bar].
 
+						*unite-options*
 		{options} are options for a unite buffer.  You may give the
 		following parameters for a option; you must escape with \ when
 		it contains spaces.
 
+						*unite-options-buffer-name*
 		-buffer-name={buffer-name}
 		Specifies a buffer name. You can share a configuration of
 		functions like |unite#set_substitute_pattern()| by giving a
 		buffer name for unite buffers that have same purpose.
 		The default buffer name is 'default'.
 
+						*unite-options-input*
 		-input={input-text}
 		Specifies an initial narrowing text. The default value is ''.
 
+						*unite-options-prompt*
 		-prompt={prompt-text}
-		Specifies a prompt. The default value is '> '.
+		Specifies a prompt. The default value is '>'.
 
+						*unite-options-default-action*
 		-default-action={default-action}
 		Specifies a default action. The default value is 'default'.
 
+						*unite-options-start-insert*
 		-start-insert
 		Opens unite with narrowing mode. Otherwise the initial mode
 		will be Normal mode.
 
+						*unite-options-no-quit*
 		-no-quit
 		Doesn't close the unite buffer after firing an action.  Unless
 		you specify it, a unite buffer will be closed when you
 		selected an action which is "is_quit".
 
+						*unite-options-winwidth*
 		-winwidth={window-width}
 		Specifies the width of a unite buffer.  Unless you specify
 		it, |g:unite_winwidth| will be used.
 
+						*unite-options-winheight*
 		-winheight={window-height}
 		Specifies the height of a unite buffer.  Unless you specify
 		it, |g:unite_winheight| will be used.
@@ -717,6 +726,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2010-12-03
+- Improved help tags.
 
 2010-12-02
 - Fixed select actions.

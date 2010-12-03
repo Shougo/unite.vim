@@ -146,38 +146,47 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 		"file:hoge:piyo": source fileに与える引数は[hoge, piyo]である。
 		"file:hoge\:piyo": source fileに与える引数は[hoge:piyo]である。
 
+						*unite-options*
 		{options}とはuniteバッファに与えるオプションである。
 		オプションは、次のパラメータを取る。値にスペースが含まれるとき
 		は、\でエスケープしなければならない。
 
+						*unite-options-buffer-name*
 		-buffer-name={buffer-name}
 		uniteのバッファ名を指定する。同じ目的を持つuniteバッファに同じ
 		バッファ名を付けることで、|unite#set_substitute_pattern()|など
 		の設定を共通化することができる。指定しないと、'default'が使われ
 		る。
 
+						*unite-options-input*
 		-input={input-text}
 		初期の絞込みテキストを指定する。指定しないと、''が使われる。
 
+						*unite-options-prompt*
 		-prompt={prompt-text}
-		プロンプトを指定する。指定しないと、'> 'が使われる。
+		プロンプトを指定する。指定しないと、'>'が使われる。
 
+						*unite-options-default-action*
 		-default-action={default-action}
 		デフォルトアクションを指定する。指定しないと、'default'が使われ
 		る。
 
+						*unite-options-start-insert*
 		-start-insert
 		初期状態が絞り込みモードになる。指定しないと、初期状態はNormal
 		modeになる。
 
+						*unite-options-no-quit*
 		-no-quit
 		アクションを実行しても、uniteバッファを閉じない。指定しないと、
 		"is_quit"なアクションを実行するとuniteバッファは閉じられる。
 
+						*unite-options-winwidth*
 		-winwidth={window-width}
 		uniteバッファの幅を指定する。指定しないと、|g:unite_winwidth|が
 		使われる。
 
+						*unite-options-winheight*
 		-winheight={window-height}
 		uniteバッファの高さを指定する。指定しないと、
 		|g:unite_winheight|が使われる。
