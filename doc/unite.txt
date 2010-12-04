@@ -635,6 +635,45 @@ unite#do_action({action-name})					*unite#do_action()*
 >
 		nnoremap <silent><buffer><expr> <C-k> unite#do_action('preview')
 >
+unite#smart_map({narrow-map}, {select-map})			*unite#smart_map()*
+		Returns the key sequence which works both modes of narrowing
+		and selecting with respect to the given narrow-map and select-map.
+		Use this with |unite#do_action()|.  This will be used with
+		inoremap <buffer><expr> or nnoremap <buffer><expr> usually.
+		Example:
+>
+		inoremap <buffer><expr> ' unite#smart_map("'", unite#do_action('preview'))
+<
+unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
+						*unite#set_substitute_pattern()*
+		Specifies a replace pattern of narrowing text for a Unite
+		buffer which name is {buffer-name}.  "" is regarded as
+		"default" and is equivalent to the case when |:Unite| without
+		-buffer-name= option.  You may specify multiple {buffer-name}
+		with breaking with ",".  {pattern} is the replace target
+		regexp and {subst} is the substitute string.  If you specify a
+		same {pattern} again, the setting will just be updated.  You
+		may defeat {pattern} with giving {subst} as "".  {priority}
+		prioritizes how this replaces.  If you skipped giving
+		{priority} it'll be 0.  Give bigger number for a {pattern}
+		which must be done earlier.  Note that the initial text of
+		Unite buffer will not be replaced with these values.
+
+		You may mimic ambiguous matching with using this function.
+>
+		call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0', 100)
+		call unite#set_substitute_pattern('files', '[[:alnum:]]', ' \0', 100)
+<
+		The former does ambiguous search within / while the latter
+		does over the /.
+
+		The initial value is defined as the following; on a buffer
+		which buffer_name is files, it adds a wildcard in order to
+		match ~ as $HOME and to match partially /.
+>
+		call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
+		call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
+<
 ==============================================================================
 SOURCE						*unite-source*
 

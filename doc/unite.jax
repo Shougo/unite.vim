@@ -647,11 +647,10 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		じになる。{buffer-name}は","区切りで複数指定ができる。
 		{pattern}は置換対象の正規表現、{subst}は置換する文字列である。
 		同じ{pattern}を複数回指定すると、設定は上書きされる。
-		{subst}を""とすると、{pattern}は無効化される。
-		{priority}とは置換処理の優先度である。{pattern}は{priority}でソ
-		ートされた上で、{priority}が大きい順に適用される。{priority}を
-		省略すると0になる。先に処理されるべき{pattern}は{priority}を大
-		きくすると良い。
+		{subst}を""とすると、{pattern}は無効化される。{priority}とは置
+		換処理の優先度である。{pattern}は{priority}でソートされた上で、
+		{priority}が大きい順に適用される。{priority}を省略すると0にな
+		る。先に処理されるべき{pattern}は{priority}を大きくすると良い。
 		ちなみに、uniteバッファの初期文字列は置換の対象とならない。
 		
 		この関数を使うと、曖昧マッチを模倣することができる。
