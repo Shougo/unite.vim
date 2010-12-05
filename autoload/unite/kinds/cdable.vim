@@ -45,7 +45,7 @@ function! s:kind.action_table.cd.func(candidate)"{{{
   endif
 
   if a:candidate.action__directory != ''
-    execute g:unite_cd_command '`=a:candidate.action__directory`'
+    execute g:unite_cd_command a:candidate.action__directory
   endif
 endfunction"}}}
 
@@ -60,7 +60,7 @@ function! s:kind.action_table.lcd.func(candidate)"{{{
   endif
 
   if a:candidate.action__directory != ''
-    execute g:unite_lcd_command '`=a:candidate.action__directory`'
+    execute g:unite_lcd_command a:candidate.action__directory
   endif
 endfunction"}}}
 

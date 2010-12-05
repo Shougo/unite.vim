@@ -766,6 +766,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-12-04
+- Fixed kind/cdable cd and lcd action bugs.
+
 2010-12-03
 - Improved help tags.
 - Fixed <Plug>(unite_move_head).
