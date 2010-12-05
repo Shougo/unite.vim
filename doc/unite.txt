@@ -115,6 +115,9 @@ That matches foo but candidates that match bar will be rejected.
 <
 See also |unite_default_key_mappings| for other actions.
 
+Screencast is available. Thanks ujihisa!
+http://www.ustream.tv/recorded/11240673
+
 ==============================================================================
 INSTALL						*unite-install*
 
@@ -766,8 +769,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
-2010-12-04
+2010-12-05
 - Fixed kind/cdable cd and lcd action bugs.
+- Added screencast.
 
 2010-12-03
 - Improved help tags.

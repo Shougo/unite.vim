@@ -114,6 +114,9 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 <
 その他の操作については|unite_default_key_mappings|を参照。
 
+参考：ujihisa氏の作成したScreencast
+http://www.ustream.tv/recorded/11240673
+
 ==============================================================================
 インストール					*unite-install*
 
