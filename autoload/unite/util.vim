@@ -167,6 +167,44 @@ endfunction"}}}
 function! unite#util#path2directory(path)"{{{
   return unite#util#substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
 endfunction"}}}
+function! unite#util#path2project_directory(path)"{{{
+  let l:search_directory = unite#util#path2directory(a:path)
+  let l:directory = ''
+
+  " Search VCS directory.
+  for d in ['.git', '.bzr', '.hg']
+    let d = finddir(d, unite#util#escape_file_searching(l:search_directory) . ';')
+    if d != ''
+      let l:directory = fnamemodify(d, ':p:h:h')
+      break
+    endif
+  endfor
+
+  " Search project file.
+  if l:directory == ''
+    for d in ['build.xml', 'prj.el', '.project', 'pom.xml', 'Makefile', 'configure', 'Rakefile', 'NAnt.build', 'tags', 'gtags']
+      let d = findfile(d, unite#util#escape_file_searching(l:search_directory) . ';')
+      if d != ''
+        let l:directory = fnamemodify(d, ':p:h')
+        break
+      endif
+    endfor
+  endif
+
+  if l:directory == ''
+    " Search /src/ directory.
+    let l:base = unite#substitute_path_separator(l:search_directory)
+    if l:base =~# '/src/'
+      let l:directory = l:base[: strridx(l:base, '/src/') + 3]
+    endif
+  endif
+
+  if l:directory == ''
+    let l:directory = l:search_directory
+  endif
+
+  return unite#substitute_path_separator(l:directory)
+endfunction"}}}
 
 " Check vimproc."{{{
 try

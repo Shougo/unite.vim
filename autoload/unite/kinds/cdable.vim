@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Nov 2010
+" Last Modified: 05 Dec 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,28 +73,8 @@ function! s:kind.action_table.project_cd.func(candidate)"{{{
     return
   endif
 
-  " Search VCS directory.
-  for d in ['.git', '.bzr', '.hg']
-    let d = finddir(d, unite#util#escape_file_searching(a:candidate.action__directory) . ';')
-    if d != ''
-      let l:directory = fnamemodify(d, ':p:h:h')
-      break
-    endif
-  endfor
+  let l:directory = unite#util#path2project_directory(a:candidate.action__directory)
 
-  if l:directory == ''
-    " Search /src/ directory.
-    let l:base = unite#substitute_path_separator(a:candidate.action__directory)
-    if l:base =~# '/src/'
-      let l:directory = l:base[: strridx(l:base, '/src/') + 3]
-    endif
-  endif
-
-  if l:directory == ''
-    let l:directory = a:candidate.action__directory
-  endif
-
-  let l:directory = unite#substitute_path_separator(l:directory)
   if isdirectory(l:directory)
     let l:candidate = copy(a:candidate)
     let l:candidate.action__directory = l:directory

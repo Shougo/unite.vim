@@ -772,6 +772,7 @@ CHANGELOG					*unite-changelog*
 2010-12-05
 - Fixed kind/cdable cd and lcd action bugs.
 - Added screencast.
+- Improved project_cd.
 
 2010-12-03
 - Improved help tags.
