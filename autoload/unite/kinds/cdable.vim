@@ -88,11 +88,10 @@ let s:kind.action_table.narrow = {
       \ }
 function! s:kind.action_table.narrow.func(candidate)"{{{
   let l:word = a:candidate.action__directory . (a:candidate.action__directory =~ '[\\/]$' ? '' : '/')
-  let l:relative_path = unite#util#substitute_path_separator(fnamemodify(l:word, ':.'))
-  if l:relative_path == ''
-    let l:relative_path = l:word
+  if l:word =~ '^/\|\a\+:[/\\]'
+    let l:word = unite#util#substitute_path_separator(fnamemodify(l:word, ':.'))
   endif
-  call unite#mappings#narrowing(l:relative_path)
+  call unite#mappings#narrowing(l:word)
 endfunction"}}}
 
 if exists(':VimShell')
