@@ -277,11 +277,13 @@ g:unite_winwidth				*g:unite_winwidth*
 
 g:unite_cd_command				*g:unite_cd_command*
 		cdアクションで実行されるVimのコマンドを指定する。
+		|`=|を解釈するコマンドでなければならない。
 		
 		初期値は"cd"である。
 
 g:unite_lcd_command				*g:unite_lcd_command*
 		lcdアクションで実行されるVimのコマンドを指定する。
+		|`=|を解釈するコマンドでなければならない。
 		
 		初期値は"lcd"である。
 

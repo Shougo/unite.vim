@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Dec 2010
+" Last Modified: 08 Dec 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,7 +45,7 @@ function! s:kind.action_table.cd.func(candidate)"{{{
   endif
 
   if a:candidate.action__directory != ''
-    execute g:unite_cd_command escape(expand(a:candidate.action__directory), " \t\n*?[{`$\\%#'\"|!<")
+    execute g:unite_cd_command '`=a:candidate.action__directory`'
   endif
 endfunction"}}}
 
@@ -60,7 +60,7 @@ function! s:kind.action_table.lcd.func(candidate)"{{{
   endif
 
   if a:candidate.action__directory != ''
-    execute g:unite_lcd_command escape(expand(a:candidate.action__directory), " \t\n*?[{`$\\%#'\"|!<")
+    execute g:unite_cd_command '`=a:candidate.action__directory`'
   endif
 endfunction"}}}
 

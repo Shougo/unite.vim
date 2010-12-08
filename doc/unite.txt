@@ -276,11 +276,13 @@ g:unite_winwidth					*g:unite_winwidth*
 
 g:unite_cd_command					*g:unite_cd_command*
 		Specifies the Vim command for cd action.
+		This command must interpret |`=|.
 
 		The default value is "cd".
 
 g:unite_lcd_command					*g:unite_lcd_command*
 		Specifies the Vim command for lcd action.
+		This command must interpret |`=|.
 
 		The default value is "lcd".
 
@@ -768,6 +770,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2010-12-08
+- Changed cd action behavior.
 
 2010-12-06
 - Improved narrowing.
