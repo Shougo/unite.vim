@@ -679,6 +679,87 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
 		call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
 <
+unite#get_substitute_pattern({buffer-name})
+						*unite#get_substitute_pattern()*
+		Gets the substitute pattern for narrowing text of a Unite buffer
+		name {buffer-name}.  This causes an error if the substitute
+		pattern of {buffer-name}.  This is for debugging.
+
+unite#custom_default_action({kind}, {default-action})
+						*unite#custom_default_action()*
+		Changes the default action of {kind} into {default-action}.
+		You may specify multiple {kind} with separating ",".  For
+		example:
+>
+		call unite#custom_default_action('file', 'tabopen')
+<
+unite#custom_action({kind}, {name}, {action})
+						*unite#custom_action()*
+		Adds an {action} which name is {name} for {kind}.
+		You may specify multiple {kind} with separating ",".  For
+		example:
+>
+		let my_tabopen = {
+		\ 'is_selectable' : 1,
+		\ }
+		function! my_tabopen.func(candidates)
+		  call unite#take_action('tabopen', a:candidates)
+		
+		  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+		  execute g:unite_lcd_command '`=l:dir`'
+		endfunction
+		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
+		unlet my_tabopen
+<
+unite#undef_custom_action({kind}, {name})			*unite#undef_custom_action()*
+		Deletes an action which name is {name} of {kind} that you
+		added with using |unite#custom_action()|.  You may specify
+		multiple {kind} with separating ",".  This function doesn't do
+		anything if the function doesn't exist.
+
+unite#custom_alias({kind}, {name}, {action})
+						*unite#custom_alias()*
+		{kind}に対する{action}の別名である、{name}というアクションを定
+		義する。アクションに短縮名を付けたい場合に便利。
+		{kind}は","区切りで複数指定ができる。
+		{action}を"nop"とすると、そのアクションは無効化される。
+		例:
+>
+		call unite#custom_alias('file', 'h', 'left')
+<
+unite#take_action({action-name}, {candidate})
+						*unite#take_action()*
+		Runs an action {action-name} against {candidate}.  This will
+		be mainly used in |unite#custom_action()|.  When the action is
+		is_selectable, the {candidate} will be automatically converted
+		into a list.
+
+unite#take_parents_action({action-name}, {candidate}, {extend-candidate})
+						*unite#take_parents_action()*
+		Same to |unite#take_action()| but searches the parents' action
+		table with combining {extend-candiate} on {candidate}.  This
+		is handy for reusing parents' actions.
+
+unite#define_source({source})			*unite#define_source()*
+		Adds {source} dinamically.  See also |unite-create-source|
+		about the detail of source.  If a source which name is same,
+		that will be overwritten.
+
+unite#define_kind({kind})			*unite#define_kind()*
+		Adds {kind} dinamically.  See also |unite-create-kind|
+		about the detail of kind.  If a kind which name is same,
+		that will be overwritten.
+
+unite#undef_source({name})			*unite#undef_source()*
+		Removes the source which name is {name} that was added by
+		|unite#define_source()|.  If such a source doesn't exist, this
+		function doesn't do anything.
+
+unite#undef_kind({name})			*unite#undef_kind()*
+		Removes the kind which name is {name} that was added by
+		|unite#define_kind()|.  If such a kind doesn't exist, this
+		function doesn't do anything.
+
 ==============================================================================
 SOURCE						*unite-source*
 

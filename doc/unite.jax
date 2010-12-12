@@ -723,7 +723,7 @@ unite#custom_alias({kind}, {name}, {action})
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
 		{candidate}に対し、{action-name}という名前のアクションを実行する。
-		主に、unite#custom_action()などで用いる。
+		主に、|unite#custom_action()|などで用いる。
 		is_selectableなアクションの場合は{candidate}がリストに自動変換
 		される。
 
