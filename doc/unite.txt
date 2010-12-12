@@ -763,6 +763,15 @@ unite#undef_kind({name})			*unite#undef_kind()*
 ==============================================================================
 SOURCE						*unite-source*
 
+==============================================================================
+KIND						*unite-kind*
+
+==============================================================================
+ACTIONS						*unite-action*
+
+==============================================================================
+CREATE SOURCE					*unite-create-source*
+
 ------------------------------------------------------------------------------
 SOURCE ATTRIBUTES				*unite-source-attributes*
 
@@ -795,15 +804,6 @@ required_pattern_length	number		(optional)
 			This attribute is optional; if it is not given, 0 is
 			used as the default value. This means that always
 			collect candidates.
-
-==============================================================================
-KIND						*unite-kind*
-
-==============================================================================
-ACTIONS						*unite-action*
-
-==============================================================================
-CREATE SOURCE					*unite-create-source*
 
 ==============================================================================
 CREATE KIND					*unite-create-kind*
