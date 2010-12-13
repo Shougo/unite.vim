@@ -96,8 +96,14 @@ function! s:source.gather_candidates(args, context)"{{{
     endif
     let l:abbr .= getbufvar(bufnr('%'), '&modified') ? '[+]' : ''
 
+    if exists('*gettabvar')
+        let l:word = gettabvar(i, 'title') != '' ? gettabvar(i, 'title') : l:bufname
+    else
+        let l:word = l:bufname
+    endif
+
     call add(l:candidates, {
-          \ 'word' : l:bufname,
+          \ 'word' : l:word,
           \ 'abbr' : l:abbr,
           \ 'kind' : 'tab',
           \ 'source' : 'tab',
