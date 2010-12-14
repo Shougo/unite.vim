@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Nov 2010
+" Last Modified: 14 Dec 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -63,7 +63,7 @@ let s:source_buffer_all = {
 
 function! s:source_buffer_all.gather_candidates(args, context)"{{{
   let l:list = sort(values(filter(copy(s:buffer_list), '
-        \ bufexists(v:val.action__buffer_nr) && buflisted(v:val.action__buffer_nr) && v:val.action__buffer_nr != ' . bufnr('#'))), 's:compare')
+        \ buflisted(v:val.action__buffer_nr) && v:val.action__buffer_nr != ' . bufnr('#'))), 's:compare')
 
   if buflisted(bufnr('#'))
     " Add current buffer.
@@ -89,7 +89,7 @@ let s:source_buffer_tab = {
 
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{
   let l:list = sort(values(filter(copy(s:buffer_list), '
-        \ bufexists(v:val.action__buffer_nr) && buflisted(v:val.action__buffer_nr)
+        \ buflisted(v:val.action__buffer_nr)
         \ && exists("t:unite_buffer_dictionary") && has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr) && v:val.action__buffer_nr != ' . bufnr('#'))), 's:compare')
 
   if buflisted(bufnr('#'))
