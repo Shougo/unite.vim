@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Dec 2010
+" Last Modified: 14 Dec 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -90,12 +90,12 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> k         <Plug>(unite_loop_cursor_up)
   nmap <buffer> <Up>         <Plug>(unite_loop_cursor_up)
 
-  nnoremap <buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
-  nnoremap <buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
-  nnoremap <buffer><expr> e   unite#smart_map('e', unite#do_action('narrow'))
-  nnoremap <buffer><expr> l   unite#smart_map('l', unite#do_action(b:unite.context.default_action))
-  nnoremap <buffer><expr> p   unite#smart_map('p', unite#do_action('preview'))
-  nmap <buffer><expr> x       unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
+  nnoremap <silent><buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
+  nnoremap <silent><buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
+  nnoremap <silent><buffer><expr> e   unite#smart_map('e', unite#do_action('narrow'))
+  nnoremap <silent><buffer><expr> l   unite#smart_map('l', unite#do_action(b:unite.context.default_action))
+  nnoremap <silent><buffer><expr> p   unite#smart_map('p', unite#do_action('preview'))
+  nmap <silent><buffer><expr> x       unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 
   " Visual mode key-mappings.
   xmap <buffer> <Space>   <Plug>(unite_toggle_mark_selected_candidates)
@@ -117,10 +117,10 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>    <Plug>(unite_move_head)
 
-  inoremap <buffer><expr> d         unite#smart_map('d', unite#do_action('delete'))
-  inoremap <buffer><expr> /         unite#smart_map('/', unite#do_action('narrow'))
-  imap <buffer><expr> <Space>       unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
-  imap <buffer><expr> x             unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
+  inoremap <silent><buffer><expr> d         unite#smart_map('d', unite#do_action('delete'))
+  inoremap <silent><buffer><expr> /         unite#smart_map('/', unite#do_action('narrow'))
+  imap <silent><buffer><expr> <Space>       unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
+  imap <silent><buffer><expr> x             unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 endfunction"}}}
 
 function! unite#mappings#narrowing(word)"{{{
