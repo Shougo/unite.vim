@@ -898,6 +898,7 @@ CHANGELOG					*unite-changelog*
 2010-12-14
 - Gather no buflisted buffers in source buffer.
 - silent mappings.
+- Improved tab source.
 
 2010-12-09
 - Added unite.vim tag.

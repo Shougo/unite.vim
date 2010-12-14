@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2010
+" Last Modified: 14 Dec 2010.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,11 +48,10 @@ function! s:source.gather_candidates(args, context)"{{{
   " Add current tab.
   call add(l:list, tabpagenr())
 
-
   let l:candidates = []
   for i in l:list
     let l:bufnrs = tabpagebuflist(i)
-    let l:bufnr = l:bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
+    let l:bufnr = l:bufnrs[tabpagewinnr(i) - 1]  " Get current window buffer in tabs.
 
     let l:bufname = unite#substitute_path_separator(fnamemodify((i == tabpagenr() ? bufname('#') : bufname(l:bufnr)), ':p'))
     if l:bufname == ''
