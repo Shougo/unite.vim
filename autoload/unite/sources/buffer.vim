@@ -62,10 +62,9 @@ let s:source_buffer_all = {
       \}
 
 function! s:source_buffer_all.gather_candidates(args, context)"{{{
-  let l:list = sort(values(filter(copy(s:buffer_list), '
-        \ buflisted(v:val.action__buffer_nr) && v:val.action__buffer_nr != ' . bufnr('#'))), 's:compare')
+  let l:list = s:get_buffer_list()
 
-  if buflisted(bufnr('#'))
+  if buflisted(bufnr('#')) && has_key(s:buffer_list, bufnr('#'))
     " Add current buffer.
     let l:list = add(l:list, s:buffer_list[bufnr('#')])
   endif
@@ -88,9 +87,11 @@ let s:source_buffer_tab = {
       \}
 
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{
-  let l:list = sort(values(filter(copy(s:buffer_list), '
-        \ buflisted(v:val.action__buffer_nr)
-        \ && exists("t:unite_buffer_dictionary") && has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr) && v:val.action__buffer_nr != ' . bufnr('#'))), 's:compare')
+  if !exists('t:unite_buffer_dictionary')
+    let t:unite_buffer_dictionary = {}
+  endif
+
+  let l:list = filter(s:get_buffer_list(), 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
 
   if buflisted(bufnr('#'))
     " Add current buffer.
@@ -140,6 +141,24 @@ function! s:get_directory(bufnr)"{{{
   endif
 
   return l:dir
+endfunction"}}}
+function! s:get_buffer_list()"{{{
+  " Make buffer list.
+  let l:list = []
+  let l:bufnr = 1
+  while l:bufnr <= bufnr('$')
+    if buflisted(l:bufnr) && l:bufnr != bufnr('#')
+      if has_key(s:buffer_list, l:bufnr)
+        call add(l:list, s:buffer_list[l:bufnr])
+      else
+        call add(l:list,
+              \ { 'action__buffer_nr' : l:bufnr, 'source__time' : 0 })
+      endif
+    endif
+    let l:bufnr += 1
+  endwhile
+
+  return sort(l:list, 's:compare')
 endfunction"}}}
 
 " vim: foldmethod=marker
