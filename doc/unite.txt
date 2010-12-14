@@ -763,6 +763,49 @@ unite#undef_kind({name})			*unite#undef_kind()*
 ==============================================================================
 SOURCE						*unite-source*
 
+						*unite-source-file*
+file		Nominates an input file as a candidate.
+
+						*unite-source-file_mru*
+file_mru	Nominates files you used recently as candidates, ordering
+		by time series.
+
+						*unite-source-directory_mru*
+directory_mru	Nominates directories you used recently as candidates,
+		ordering by time series.
+
+						*unite-source-file_rec*
+file_rec	Nominates all directory or file names of input narrowing text
+		under the current directly as candidates.  This may get Vim
+		frozen when there are too many candidates.
+
+		You may pass the narrowing text as an argument of sourc e.
+
+						*unite-source-buffer*
+buffer		Nominates opened buffers as candidates, ordering by time
+		series.
+
+						*unite-source-buffer_tab*
+buffer_tab	Nominates opened buffers only in the current tab as
+		candidates, ordering by time series.
+
+						*unite-source-tab*
+tab		Nominates opened tabs as candidates, regarding t:cwd as the
+		current directory and t:title as the title of the tab.  This
+		requires |gettabvar()|.
+
+						*unite-source-register*
+register	Nominates the strings stored in registers as candidates.
+
+						*unite-source-bookmark*
+bookmark	Nominates files or directories you bookmarked as candidates.
+
+						*unite-source-source*
+source		Nominates Unite source names themselves as candidates.
+
+		Runs |unite#start()| with the selected source name, using the
+		current Unite buffer context.
+
 ==============================================================================
 KIND						*unite-kind*
 
