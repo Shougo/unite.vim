@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: source.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Nov 2010
+" Last Modified: 16 Dec 2010.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,7 +59,7 @@ let s:source.action_table['*'] = s:action_table
 "}}}
 
 function! s:compare_sources(source_a, source_b) "{{{
-  return a:source_a.name - a:source_b.name
+  return a:source_a.name > a:source_b.name
 endfunction"}}}
 
 " vim: foldmethod=marker

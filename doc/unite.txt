@@ -895,6 +895,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-12-16
+- Fixed unite source compare.
+
 2010-12-14
 - Gather no buflisted buffers in source buffer.
 - silent mappings.
