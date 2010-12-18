@@ -794,6 +794,9 @@ tab		Nominates opened tabs as candidates, regarding t:cwd as the
 		current directory and t:title as the title of the tab.  This
 		requires |gettabvar()|.
 
+		If t:title exists, this will be used as "word" for narrowing.
+		Otherwise, the buffer name of the current tab will be used.
+
 						*unite-source-register*
 register	Nominates the strings stored in registers as candidates.
 
