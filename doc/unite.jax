@@ -802,6 +802,10 @@ source		uniteのsource名そのものを候補とする。
 		選択されたsource名を|unite#start()|で起動する。contextは現在
 		のuniteバッファのものを受け継ぐ。
 
+						*unite-source-window*
+window		開いているウィンドウを候補とする。ウィンドウは移動した順番に
+		整列される。
+
 ==============================================================================
 kind						*unite-kind*
 
@@ -903,6 +907,14 @@ command		VimのExコマンド
 			action__command		(文字列)		(必須)
 				実行するコマンド
 
+						*unite-kind-window*
+window		ウィンドウ
+		このkindはcdableを継承するため、それらのkindが使用する属性も
+		必要である。
+
+			action__window_nr	(文字列)		(必須)
+				対象となるウィンドウの番号
+
 ==============================================================================
 アクション					*unite-action*
 
@@ -987,6 +999,12 @@ jump_list					*unite-action-jump_list*
 
 command						*unite-action-command*
 	execute		コマンドを実行する
+
+window						*unite-action-window*
+このkindは|unite-action-cdable|のアクションを継承する。
+	open		ウィンドウへ移動
+	delete		ウィンドウを閉じる
+	only		そのウィンドウ以外すべて閉じる
 
 source別アクション
 
@@ -1156,7 +1174,7 @@ NOTATION					*unite-notation*
 				現在候補を収集しているsourceの情報。
 
 			winnr			(数値)
-				uniteを呼び出したウインドウの番号。
+				uniteを呼び出したウィンドウの番号。
 
 {candidate}					*unite-notation-{candidate}*
 			候補を表す辞書変数。次の情報を持つ。

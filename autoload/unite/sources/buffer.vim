@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Dec 2010
+" Last Modified: 19 Dec 2010.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -93,7 +93,7 @@ function! s:source_buffer_tab.gather_candidates(args, context)"{{{
 
   let l:list = filter(s:get_buffer_list(), 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
 
-  if buflisted(bufnr('#'))
+  if buflisted(bufnr('#')) && has_key(s:buffer_list, bufnr('#'))
     " Add current buffer.
     let l:list = add(l:list, s:buffer_list[bufnr('#')])
   endif

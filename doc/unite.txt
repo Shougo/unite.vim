@@ -806,6 +806,10 @@ bookmark	Nominates files or directories you bookmarked as candidates.
 						*unite-source-source*
 source		Nominates Unite source names themselves as candidates.
 
+						*unite-source-window*
+window		Nominates opend windows as candidates, ordering by time
+		series.
+
 		Runs |unite#start()| with the selected source name, using the
 		current Unite buffer context.
 
@@ -900,6 +904,8 @@ CHANGELOG					*unite-changelog*
 
 2010-12-19
 - Fixed directory_mru.
+- Fixed buffer_tab source error.
+- Added kind window.
 
 2010-12-16
 - Fixed unite source compare.

@@ -1,0 +1,100 @@
+"=============================================================================
+" FILE: window.vim
+" AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 19 Dec 2010.
+" License: MIT license  {{{
+"     Permission is hereby granted, free of charge, to any person obtaining
+"     a copy of this software and associated documentation files (the
+"     "Software"), to deal in the Software without restriction, including
+"     without limitation the rights to use, copy, modify, merge, publish,
+"     distribute, sublicense, and/or sell copies of the Software, and to
+"     permit persons to whom the Software is furnished to do so, subject to
+"     the following conditions:
+"
+"     The above copyright notice and this permission notice shall be included
+"     in all copies or substantial portions of the Software.
+"
+"     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+"     OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+"     MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+"     IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+"     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+"     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+"     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+" }}}
+"=============================================================================
+
+function! unite#sources#window#define()"{{{
+  return s:source
+endfunction"}}}
+function! unite#sources#window#_append()"{{{
+  if &filetype == 'unite'
+    " Ignore unite window.
+    return
+  endif
+
+  " Save unite window information.
+  let w:unite_window = {
+        \ 'time' : localtime(),
+        \ 'cwd' : getcwd(),
+        \}
+endfunction"}}}
+
+let s:source = {
+      \ 'name' : 'window',
+      \ 'description' : 'candidates from window list',
+      \}
+
+function! s:source.gather_candidates(args, context)"{{{
+  let l:list = range(1, winnr('$'))
+  for i in l:list
+    if type(getwinvar(i, 'unite_window')) == type('')
+      " Set default value.
+      call setwinvar(i, 'unite_window', {
+            \ 'time' : 0,
+            \ 'cwd' : getcwd(),
+            \ })
+    endif
+  endfor
+
+  if winnr('#') != 0
+    unlet l:list[winnr('#')-1]
+  endif
+  call sort(l:list, 's:compare')
+  if winnr('#') != 0
+    " Add previous window.
+    call add(l:list, winnr('#'))
+  endif
+
+  let l:candidates = []
+  for i in l:list
+    if winbufnr(i) == bufnr('%')
+      " Ignore.
+      continue
+    endif
+
+    let l:window = getwinvar(i, 'unite_window')
+    let l:bufname = bufname(winbufnr(i))
+    if empty(l:bufname)
+      let l:bufname = '[No Name]'
+    endif
+
+    call add(l:candidates, {
+          \ 'word' : l:bufname,
+          \ 'abbr' : '['.(i-1).'/'.(winnr('$')-1).'] ' . l:bufname . ' (' . l:window.cwd . ')',
+          \ 'kind' : 'window',
+          \ 'source' : 'window',
+          \ 'action__window_nr' : i,
+          \ 'action__directory' : l:window.cwd,
+          \ })
+  endfor
+
+  return l:candidates
+endfunction"}}}
+
+" Misc
+function! s:compare(candidate_a, candidate_b)"{{{
+  return get(getwinvar(a:candidate_a, 'unite_window'), 'time', 0) - get(getwinvar(a:candidate_b, 'unite_window'), 'time', 0)
+endfunction"}}}
+
+" vim: foldmethod=marker
