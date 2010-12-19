@@ -898,6 +898,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-12-19
+- Fixed directory_mru.
+
 2010-12-16
 - Fixed unite source compare.
 

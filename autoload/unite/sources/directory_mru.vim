@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Nov 2010
+" Last Modified: 19 Dec 2010.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,10 +54,8 @@ function! unite#sources#directory_mru#_append()"{{{
   endif
 
   let l:path = unite#util#substitute_path_separator(simplify(l:path))
-  if l:path !~ '^\%(\a\+:\)\?/$'
-    " Chomp last /.
-    let l:path = l:path[: -2]
-  endif
+  " Chomp last /.
+  let l:path = substitute(l:path, '/$', '', '')
 
   " Append the current buffer to the mru list.
   if !isdirectory(path) || &l:buftype =~ 'help'
