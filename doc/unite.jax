@@ -799,6 +799,7 @@ bookmark	ブックマークされたファイルやディレクトリを候補�
 
 						*unite-source-source*
 source		uniteのsource名そのものを候補とする。
+
 		選択されたsource名を|unite#start()|で起動する。contextは現在
 		のuniteバッファのものを受け継ぐ。
 

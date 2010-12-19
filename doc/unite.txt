@@ -806,12 +806,12 @@ bookmark	Nominates files or directories you bookmarked as candidates.
 						*unite-source-source*
 source		Nominates Unite source names themselves as candidates.
 
+		Runs |unite#start()| with the selected source name, using the
+		current Unite buffer context.
+
 						*unite-source-window*
 window		Nominates opend windows as candidates, ordering by time
 		series.
-
-		Runs |unite#start()| with the selected source name, using the
-		current Unite buffer context.
 
 ==============================================================================
 KIND						*unite-kind*
