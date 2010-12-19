@@ -28,7 +28,7 @@ if exists('g:loaded_unite_source_window')
   finish
 endif
 
-augroup plugin-unite-source-buffer
+augroup plugin-unite-source-window
   autocmd!
   autocmd BufWinEnter * call unite#sources#window#_append()
 augroup END

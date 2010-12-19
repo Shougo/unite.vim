@@ -906,6 +906,7 @@ CHANGELOG					*unite-changelog*
 - Fixed directory_mru.
 - Fixed buffer_tab source error.
 - Added kind window.
+- Fixed buffer bug.
 
 2010-12-16
 - Fixed unite source compare.

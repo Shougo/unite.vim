@@ -64,11 +64,6 @@ let s:source_buffer_all = {
 function! s:source_buffer_all.gather_candidates(args, context)"{{{
   let l:list = s:get_buffer_list()
 
-  if buflisted(bufnr('#')) && has_key(s:buffer_list, bufnr('#'))
-    " Add current buffer.
-    let l:list = add(l:list, s:buffer_list[bufnr('#')])
-  endif
-
   let l:candidates = map(l:list, '{
         \ "word" : s:make_abbr(v:val.action__buffer_nr),
         \ "kind" : "buffer",
@@ -92,11 +87,6 @@ function! s:source_buffer_tab.gather_candidates(args, context)"{{{
   endif
 
   let l:list = filter(s:get_buffer_list(), 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
-
-  if buflisted(bufnr('#')) && has_key(s:buffer_list, bufnr('#'))
-    " Add current buffer.
-    let l:list = add(l:list, s:buffer_list[bufnr('#')])
-  endif
 
   let l:candidates = map(l:list, '{
         \ "word" : s:make_abbr(v:val.action__buffer_nr),
@@ -158,7 +148,19 @@ function! s:get_buffer_list()"{{{
     let l:bufnr += 1
   endwhile
 
-  return sort(l:list, 's:compare')
+  call sort(l:list, 's:compare')
+
+  if buflisted(bufnr('#'))
+    " Add current buffer.
+    if has_key(s:buffer_list, bufnr('#'))
+      call add(l:list, s:buffer_list[bufnr('#')])
+    else
+      call add(l:list,
+            \ { 'action__buffer_nr' : bufnr('#'), 'source__time' : 0 })
+    endif
+  endif
+
+  return l:list
 endfunction"}}}
 
 " vim: foldmethod=marker
