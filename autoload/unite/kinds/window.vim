@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Dec 2010.
+" Last Modified: 22 Dec 2010.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,7 +32,7 @@ let s:kind = {
       \ 'name' : 'window',
       \ 'default_action' : 'open',
       \ 'action_table': {},
-      \ 'parents' : 'cdable',
+      \ 'parents' : ['cdable'],
       \}
 
 " Actions"{{{

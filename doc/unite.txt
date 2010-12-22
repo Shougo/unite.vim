@@ -902,6 +902,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-12-22
+- Fixed unite window error.
+- Improved unite window.
+
 2010-12-19
 - Fixed directory_mru.
 - Fixed buffer_tab source error.
