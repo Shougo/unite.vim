@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Dec 2010.
+" Last Modified: 23 Dec 2010.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,46 +43,40 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'window',
       \ 'description' : 'candidates from window list',
+      \ 'hooks' : {},
       \}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.hooks.on_init(args, context)"{{{
   let l:list = range(1, winnr('$'))
   for i in l:list
-    if type(getwinvar(i, 'unite_window')) == type('')
-      " Set default value.
-      call setwinvar(i, 'unite_window', {
-            \ 'time' : 0,
-            \ 'cwd' : getcwd(),
-            \ })
-    endif
+    " Set default value.
+    call setwinvar(i, 'unite_window', {
+          \ 'time' : 0,
+          \ 'cwd' : getcwd(),
+          \ })
   endfor
 
-  if winnr('#') != 0
-    unlet l:list[winnr('#')-1]
+  if winnr() != 0
+    unlet l:list[winnr()-1]
   endif
   call sort(l:list, 's:compare')
-  if winnr('#') != 0
+  if winnr() != 0
     " Add previous window.
-    call add(l:list, winnr('#'))
+    call add(l:list, winnr())
   endif
 
-  let l:candidates = []
+  let s:candidates = []
   for i in l:list
-    if winbufnr(i) == bufnr('%')
-      " Ignore.
-      continue
-    endif
-
     let l:window = getwinvar(i, 'unite_window')
     let l:bufname = bufname(winbufnr(i))
     if empty(l:bufname)
       let l:bufname = '[No Name]'
     endif
 
-    call add(l:candidates, {
+    call add(s:candidates, {
           \ 'word' : l:bufname,
-          \ 'abbr' : printf('[%d/%d] %s %s(%s)', i-1, winnr('$')-1,
-          \      (i == winnr('#') ? '%' : ' '),
+          \ 'abbr' : printf('[%d/%d] %s %s(%s)', i, winnr('$'),
+          \      (i == winnr() ? '%' : i == winnr('#') ? '#' : ' '),
           \      l:bufname, l:window.cwd),
           \ 'kind' : 'window',
           \ 'source' : 'window',
@@ -90,8 +84,9 @@ function! s:source.gather_candidates(args, context)"{{{
           \ 'action__directory' : l:window.cwd,
           \ })
   endfor
-
-  return l:candidates
+endfunction"}}}
+function! s:source.gather_candidates(args, context)"{{{
+  return s:candidates
 endfunction"}}}
 
 " Misc
