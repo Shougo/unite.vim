@@ -91,7 +91,7 @@ endfunction"}}}
 
 " Misc
 function! s:compare(candidate_a, candidate_b)"{{{
-  return get(getwinvar(a:candidate_a, 'unite_window'), 'time', 0) - get(getwinvar(a:candidate_b, 'unite_window'), 'time', 0)
+  return getwinvar(a:candidate_b, 'unite_window').time - getwinvar(a:candidate_a, 'unite_window').time
 endfunction"}}}
 
 " vim: foldmethod=marker

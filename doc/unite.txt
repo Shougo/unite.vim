@@ -902,6 +902,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-12-24
+- Fixed window sort.
+
 2010-12-23
 - Fixed unite window error.
 - Improved unite window.
