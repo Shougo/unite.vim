@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Dec 2010.
+" Last Modified: 27 Dec 2010.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,10 +50,12 @@ function! s:source.hooks.on_init(args, context)"{{{
   let l:list = range(1, winnr('$'))
   for i in l:list
     " Set default value.
-    call setwinvar(i, 'unite_window', {
-          \ 'time' : 0,
-          \ 'cwd' : getcwd(),
-          \ })
+    if type(getwinvar(i, 'unite_window')) == type('')
+      call setwinvar(i, 'unite_window', {
+            \ 'time' : 0,
+            \ 'cwd' : getcwd(),
+            \ })
+    endif
   endfor
 
   if winnr() != 0

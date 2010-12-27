@@ -30,7 +30,7 @@ endif
 
 augroup plugin-unite-source-window
   autocmd!
-  autocmd WinEnter,BufEnter,BufWinEnter * call unite#sources#window#_append()
+  autocmd WinEnter,BufWinEnter * call unite#sources#window#_append()
 augroup END
 
 let g:loaded_unite_source_window = 1
