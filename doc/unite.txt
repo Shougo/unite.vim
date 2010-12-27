@@ -902,6 +902,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2010-12-27
+- Improved autocmd timing.
+
 2010-12-24
 - Fixed window sort.
 
