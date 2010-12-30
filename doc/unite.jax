@@ -850,7 +850,7 @@ tab		タブ
 		め、それらのkindが使用する属性も必要である。
 
 			action__tab_nr		(文字列)		(必須)
-				対象となるバッファの番号
+				対象となるタブの番号
 
 						*unite-kind-directory*
 directory	ディレクトリ
