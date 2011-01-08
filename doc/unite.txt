@@ -324,6 +324,14 @@ g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 
 		Default value is "(%c)".
 
+g:unite_source_file_mru_filename_format		*g:unite_source_file_mru_filename_format*
+		Specifies the output format of the filename of
+		|unite-source-file_mru|.  The format is same to
+		|fnamemodify()|.  If this variable is empty, drawing speed
+		is faster.
+
+		Default value is ":~:.".
+
 g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		Specifies the file to write the information of most recent
 		used files.
@@ -901,6 +909,10 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-01-08
+- Optimized file_mru.
+- Added g:unite_source_file_mru_filename_format option.
 
 2010-12-27
 - Improved autocmd timing.

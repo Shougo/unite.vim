@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Nov 2010
+" Last Modified: 08 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,9 +34,10 @@ let s:mru_files = []
 let s:mru_file_mtime = 0  " the last modified time of the mru file.
 
 call unite#util#set_default('g:unite_source_file_mru_time_format', '(%c)')
+call unite#util#set_default('g:unite_source_file_mru_filename_format', ':~:.')
 call unite#util#set_default('g:unite_source_file_mru_file',  g:unite_data_directory . '/.file_mru')
 call unite#util#set_default('g:unite_source_file_mru_limit', 100)
-call unite#util#set_default('g:unite_source_file_mru_ignore_pattern', 
+call unite#util#set_default('g:unite_source_file_mru_ignore_pattern',
       \'\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|^\%(\\\\\|/mnt/\|/media/\|/Volumes/\)')
 "}}}
 
@@ -84,12 +85,13 @@ function! s:source.gather_candidates(args, context)"{{{
 
   " Create abbr.
   for l:mru in s:mru_files
-    let l:relative_path = unite#util#substitute_path_separator(fnamemodify(l:mru.action__path, ':~:.'))
-    if l:relative_path == ''
-      let l:relative_path = l:mru.action__path
+    let l:path = (g:unite_source_file_mru_filename_format == '') ? '' :
+          \ unite#util#substitute_path_separator(fnamemodify(l:mru.action__path, g:unite_source_file_mru_filename_format))
+    if l:path == ''
+      let l:path = l:mru.action__path
     endif
 
-    let l:mru.abbr = strftime(g:unite_source_file_mru_time_format, l:mru.source__time) . l:relative_path
+    let l:mru.abbr = strftime(g:unite_source_file_mru_time_format, l:mru.source__time) . l:path
   endfor
 
   return s:mru_files
@@ -144,13 +146,14 @@ function! s:is_exists_path(path)  "{{{
   return isdirectory(a:path) || filereadable(a:path)
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
+  let l:path = unite#util#substitute_path_separator(a:list[0])
   return {
-        \ 'word' : unite#util#substitute_path_separator(a:list[0]),
+        \ 'word' : l:path,
         \ 'source' : 'file_mru',
-        \ 'kind' : (isdirectory(a:list[0]) ? 'directory' : 'file'),
+        \ 'kind' : (isdirectory(l:path) ? 'directory' : 'file'),
         \ 'source__time' : a:list[1],
-        \ 'action__path' : unite#util#substitute_path_separator(a:list[0]),
-        \ 'action__directory' : unite#util#path2directory(unite#util#substitute_path_separator(a:list[0])),
+        \ 'action__path' : l:path,
+        \ 'action__directory' : unite#util#path2directory(l:path),
         \   }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{

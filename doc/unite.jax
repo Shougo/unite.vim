@@ -326,6 +326,13 @@ g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 		
 		初期値は"(%c)"である。
 
+g:unite_source_file_mru_filename_format		*g:unite_source_file_mru_filename_format*
+		|unite-source-file_mru|のファイル名の表示フォーマットを指定
+		する。フォーマットは|fnamemodify()|で指定できるものと同じで
+		ある。もしこの変数の値が空だと、表示スピードが高速化される。
+
+		初期値は":~:."である。
+
 g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		最近使用したファイルの情報を書き出すファイルを指定する。
 		
