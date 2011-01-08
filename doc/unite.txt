@@ -824,6 +824,105 @@ window		Nominates opend windows as candidates, ordering by time
 ==============================================================================
 KIND						*unite-kind*
 
+						*unite-kind-common*
+common		A kind for common actions.  Almost all kinds inherit this
+		common implicitly. This only requires word key.
+
+						*unite-kind-openable*
+openable	An interface that can open.  This doesn't require any keys,
+		but a kind that inherits this requires open action.
+
+						*unite-kind-cdable*
+cdable		An interface that can cd.
+
+			action__directory	(String)	(Required)
+				The target directory
+
+						*unite-kind-file*
+file		An inteface for files.  This kind is inheriting cdable and
+		openable, so this requries kinds that they require.
+
+			action__path		(String)	(Required)
+				The path of the target directory
+
+						*unite-kind-buffer*
+buffer		An interface for buffers.  This kind is inheriting file, so
+		this requires keys that it requires.
+
+			action__buffer_nr	(String		(Required)
+				The number of the target buffer
+
+						*unite-kind-tab*
+tab		An interface for tabs.  If you can use |gettabvar()|, since this
+		kind inherits cdable, this requires keys that those kind
+		require.
+
+			action__tab_nr		(String)	(Required)
+				The number of the tab
+
+						*unite-kind-directory*
+directory	An interface for directories.  This kind is inheriting file,
+		this requires keys it requries.
+
+						*unite-kind-word*
+word		A String that you can insert
+
+			word			(String)	(Required)
+				The string you want to insert
+
+						*unite-kind-jump_list*
+jump_list	An interface for jump lists.  This kind is inheriting
+		openable, so this requires that it requires.
+
+			action__path		(String)	(Required)
+				The path of the file that you'll jump into.
+
+			action__line		(Number)	(Optional)
+				The line number in the file you'll jump into.
+
+			action__pattern		(String)	(Optional)
+				The search pattern that you'll search after
+				you open the file.
+
+			action__signature	(String)	(Optional)
+				In case you cannot assume the uniqueness where
+				you'll jump into only by the pattern of
+				action__pattern and action__line, a unique
+				String to distinguish lines that match same
+				pattern.
+
+		About action__signature and calc_signature() function
+
+		A source which specifies action__signature must define
+		cals_signatre() function for calculating the signature by the
+		line number of the buffer.  calc_signature() receives {lnum}
+		as the first argument and returns a signature in String, where
+		{lnum} is a line number.  jump_list compares signatures with
+		calling this function.
+
+		The below is an example.
+>
+		function! s:source.calc_signature(lnum)
+		  let range = 2
+		  let from = max([1, a:lnum - range])
+		  let to   = min([a:lnum + range, line('$')])
+		  return join(getline(from, to))
+		endfunction
+<
+						*unite-kind-command*
+command		An interface for Ex commands of Vim
+
+			action__command		(String)	(Required)
+				The command to run
+
+						*unite-kind-window*
+window		An interface for Windows of Vim
+		This kind is inheriting cdable, so this requires keys that it
+		requires.
+
+			action__window_nr	(String)	(Required)
+				The target window number
+
 ==============================================================================
 ACTIONS						*unite-action*
 
