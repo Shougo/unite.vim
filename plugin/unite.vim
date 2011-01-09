@@ -67,6 +67,12 @@ endif
 if !exists('g:unite_lcd_command')
   let g:unite_lcd_command = 'lcd'
 endif
+if !exists('g:unite_abbr_highlight')
+  let g:unite_abbr_highlight = 'Pmenu'
+endif
+if !exists('g:unite_cursor_line_highlight')
+  let g:unite_cursor_line_highlight = 'PmenuSel'
+endif
 if !exists('g:unite_data_directory')
   let g:unite_data_directory = expand('~/.unite')
 endif

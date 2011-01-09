@@ -286,6 +286,16 @@ g:unite_lcd_command					*g:unite_lcd_command*
 
 		The default value is "lcd".
 
+g:unite_cursor_line_highlight			*g:unite_cursor_line_highlight*
+		Specifies the cursor line highlight.
+		
+		The default value is "PmenuSel".
+
+g:unite_abbr_highlight				*g:unite_abbr_highlight*
+		Specifies candidates abbr highlight.
+		
+		The default value is "Pmenu".
+
 g:unite_quick_match_table				*g:unite_quick_match_table*
 		The table of completion candidates of quick mtch list,
 		corresponding the narrowing text.
@@ -987,11 +997,19 @@ EXAMPLES					*unite-examples*
 	  imap <buffer> jj      <Plug>(unite_insert_leave)
 	  "imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
 	
+	  " <C-l>: manual neocomplcache completion.
+	  inoremap <buffer> <C-l>  <C-x><C-u><C-p><Down>
+	
 	  " Start insert.
 	  "let g:unite_enable_start_insert = 1
 	endfunction"}}}
 	
 	let g:unite_source_file_mru_limit = 200
+	let g:unite_cursor_line_highlight = 'TabLineSel'
+	let g:unite_abbr_highlight = 'TabLine'
+	
+	" For optimize.
+	let g:unite_source_file_mru_filename_format = ''
 	
 >
 ==============================================================================
@@ -1011,6 +1029,9 @@ CHANGELOG					*unite-changelog*
 
 2011-01-09
 - Ver.1.1 development is started.
+- Improved insert leave.
+- Supported neocomplcache manual completion.
+- Added g:unite_cursor_line_highlight and g:unite_abbr_highlight options.
 
 ------------------------------------------------------------------------------
 ChangeLog unite.vim Ver.1.0:

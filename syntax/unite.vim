@@ -49,7 +49,7 @@ highlight default link uniteSourceSeparator  NONE
 
 highlight default link uniteMarkedLine  Statement
 highlight default link uniteCandidateSourceName  Type
-highlight default link uniteCandidateAbbr  Pmenu
+execute 'highlight default link uniteCandidateAbbr'  g:unite_abbr_highlight
 
 " The following definitions are for <Plug>(unite-choose-action).
 highlight default link uniteChooseAction  NONE

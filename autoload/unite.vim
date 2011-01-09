@@ -908,6 +908,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   if exists(':NeoComplCacheLock')
     " Lock neocomplcache.
     NeoComplCacheLock
+    NeoComplCacheCachingBuffer
   endif
 
   if exists('&redrawtime')
@@ -1016,6 +1017,11 @@ function! s:redraw(is_force) "{{{
 
   " Redraw.
   call unite#redraw_candidates()
+
+  if exists(':NeoComplCacheLock')
+    " Caching unite buffer.
+    NeoComplCacheCachingBuffer
+  endif
 endfunction"}}}
 
 " Autocmd events.
@@ -1059,7 +1065,7 @@ endfunction"}}}
 function! s:on_cursor_moved()  "{{{
   execute 'setlocal' line('.') == b:unite.prompt_linenr ? 'modifiable' : 'nomodifiable'
   execute 'match' (line('.') <= b:unite.prompt_linenr ? line('$') <= b:unite.prompt_linenr ?
-        \ 'Error /\%'.b:unite.prompt_linenr.'l/' : 'PmenuSel /\%'.(b:unite.prompt_linenr+1).'l/' : 'PmenuSel /\%'.line('.').'l/')
+        \ 'Error /\%'.b:unite.prompt_linenr.'l/' : g:unite_cursor_line_highlight.' /\%'.(b:unite.prompt_linenr+1).'l/' : g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
 endfunction"}}}
 
 " Internal helper functions."{{{
