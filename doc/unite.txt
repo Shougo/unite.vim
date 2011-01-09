@@ -1,6 +1,6 @@
 *unite.txt*	Unite all sources
 
-Version: 1.0
+Version: 1.1
 Author : Shougo <Shougo.Matsu@gmail.com>
 Documentation Author: ujihisa <ujihisa at gmail com>
 License: MIT license  {{{
@@ -1009,6 +1009,12 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-01-09
+- Ver.1.1 development is started.
+
+------------------------------------------------------------------------------
+ChangeLog unite.vim Ver.1.0:
+
 2011-01-08
 - Optimized file_mru.
 - Added g:unite_source_file_mru_filename_format option.
@@ -1464,7 +1470,7 @@ CHANGELOG					*unite-changelog*
 - Fixed unite buffer restore bug.
 
 ------------------------------------------------------------------------------
-Ver.0.5
+ChangeLog unite.vim Ver.0.5
 2010-09-21
 - Ver.0.5 is released.
 - Fixed japanese documentation.
@@ -1546,7 +1552,7 @@ Ver.0.5
 - Improved caching.
 
 ------------------------------------------------------------------------------
-Ver.0.1
+ChangeLog unite.vim Ver.0.1
 2010-09-10
 - Improved UniteWithBufferDir and UniteWithCurrentDir.
 
