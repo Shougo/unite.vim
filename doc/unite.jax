@@ -34,9 +34,9 @@ License: MIT license  {{{
     sourceの変数	    |unite-sources-variables|
   キーマッピング	  |unite-key-mappings|
   関数			  |unite-functions|
-  source		  |unite-source|
-  kind			  |unite-kind|
-  アクション		  |unite-action|
+  source		  |unite-sources|
+  kind			  |unite-kinds|
+  アクション		  |unite-actions|
 設定例			|unite-examples|
 sourceの作成		|unite-create-source|
 kindの作成		|unite-create-kind|
@@ -769,7 +769,7 @@ unite#undef_kind({name})			*unite#undef_kind()*
 		存在しないときは無視される。
 
 ==============================================================================
-source						*unite-source*
+source						*unite-sources*
 
 ここでは、標準で実装されているsourceの仕様を解説する。
 
@@ -824,8 +824,11 @@ source		uniteのsource名そのものを候補とする。
 window		開いているウィンドウを候補とする。ウィンドウは移動した順番に
 		整列される。
 
+						*unite-source-output*
+output		実行したVimコマンドの出力を候補とする。
+
 ==============================================================================
-kind						*unite-kind*
+kind						*unite-kinds*
 
 ここでは、標準で実装されているkindの仕様と、内部で使用する属性について解説する。
 
@@ -934,7 +937,7 @@ window		ウィンドウ
 				対象となるウィンドウの番号
 
 ==============================================================================
-アクション					*unite-action*
+アクション					*unite-actions*
 
 |<Plug>(unite_choose_action)|で選択するときは、アクション名を補完したり、曖昧で
 なければ先頭文字で省略することができる。
@@ -1117,7 +1120,7 @@ action_table		辞書		(任意)
 			を参照せよ。もしこれが与えられない場合、空となる。
 
 						*unite-source-attribute-default_action*
-default_action		文字列		(任意)
+default_action		辞書		(任意)
 			source独自の標準的なアクションを追加するときに使用する。
 			キーはアクションテーブルを追加するkindで、値は標準ア
 			クションである。これを省略した場合はkindの

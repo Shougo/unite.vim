@@ -34,9 +34,9 @@ Interface		|unite-interface|
     Sources variables	    |unite-sources-variables|
   Key mappings		  |unite-key-mappings|
   Functions		  |unite-functins|
-  source		  |unite-source|
-  kind			  |unite-kind|
-  Actions		  |unite-action|
+  Sources		  |unite-sources|
+  Kinds			  |unite-kinds|
+  Actions		  |unite-actions|
 Configulation Examples	|unite-examples|
 Create source		|unite-create-source|
 Create kind		|unite-create-kind|
@@ -779,7 +779,7 @@ unite#undef_kind({name})			*unite#undef_kind()*
 		function doesn't do anything.
 
 ==============================================================================
-SOURCE						*unite-source*
+SOURCES						*unite-sources*
 
 						*unite-source-file*
 file		Nominates an input file as a candidate.
@@ -831,8 +831,11 @@ source		Nominates Unite source names themselves as candidates.
 window		Nominates opend windows as candidates, ordering by time
 		series.
 
+						*unite-source-output*
+output		Nominates executed Vim command as candidates.
+
 ==============================================================================
-KIND						*unite-kind*
+KINDS						*unite-kinds*
 
 						*unite-kind-common*
 common		A kind for common actions.  Almost all kinds inherit this
@@ -934,7 +937,7 @@ window		An interface for Windows of Vim
 				The target window number
 
 ==============================================================================
-ACTIONS						*unite-action*
+ACTIONS						*unite-actions*
 
 ==============================================================================
 CREATE SOURCE					*unite-create-source*
@@ -1026,6 +1029,11 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-01-10
+- Changed yank action.
+- Added output source.
+- Fixed help typo.
 
 2011-01-09
 - Ver.1.1 development is started.

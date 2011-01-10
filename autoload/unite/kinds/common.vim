@@ -44,9 +44,13 @@ endfunction"}}}
 
 let s:kind.action_table.yank = {
       \ 'description' : 'yank text',
+      \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.yank.func(candidate)"{{{
-  let @" = a:candidate.word
+function! s:kind.action_table.yank.func(candidates)"{{{
+  let @" = join(map(copy(a:candidates), 'v:val.word'), "\n")
+  if has('clipboard')
+    let @* = @"
+  endif
 endfunction"}}}
 
 let s:kind.action_table.yank_escape = {
