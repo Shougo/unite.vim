@@ -797,7 +797,8 @@ file_rec	Nominates all directory or file names of input narrowing text
 		under the current directly as candidates.  This may get Vim
 		frozen when there are too many candidates.
 
-		You may pass the narrowing text as an argument of sourc e.
+		Source arguments:
+		1. the narrowing text.
 
 						*unite-source-buffer*
 buffer		Nominates opened buffers as candidates, ordering by time
@@ -833,6 +834,9 @@ window		Nominates opend windows as candidates, ordering by time
 
 						*unite-source-output*
 output		Nominates executed Vim command as candidates.
+
+		Source arguments:
+		1. Vim command.
 
 ==============================================================================
 KINDS						*unite-kinds*
@@ -1034,6 +1038,7 @@ CHANGELOG					*unite-changelog*
 - Changed yank action.
 - Added output source.
 - Fixed help typo.
+- Improved source arguments description.
 
 2011-01-09
 - Ver.1.1 development is started.
