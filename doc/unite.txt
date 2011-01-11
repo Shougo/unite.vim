@@ -1034,6 +1034,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-01-11
+- Changed :UniteWithInputDirectory behavior.
+
 2011-01-10
 - Changed yank action.
 - Added output source.
