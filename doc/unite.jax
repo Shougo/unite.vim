@@ -1345,8 +1345,6 @@ actionの解決順序				*unite-action-resolution-order*
 (11) Custom action table for kind "common".
 (12) Default action table for kind "common".
 
-|unite-action-table|も参照せよ。
-
 ==============================================================================
 設定例						*unite-examples*
 >
