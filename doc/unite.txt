@@ -737,11 +737,10 @@ unite#undef_custom_action({kind}, {name})			*unite#undef_custom_action()*
 
 unite#custom_alias({kind}, {name}, {action})
 						*unite#custom_alias()*
-		{kind}に対する{action}の別名である、{name}というアクションを定
-		義する。アクションに短縮名を付けたい場合に便利。
-		{kind}は","区切りで複数指定ができる。
-		{action}を"nop"とすると、そのアクションは無効化される。
-		例:
+		Define action {kind} is another name of {name} in {kind}.  You
+		may specify multiple {kind} with separating ",".  If {action}
+		is "nop", such action is disabled.
+		example:
 >
 		call unite#custom_alias('file', 'h', 'left')
 <
