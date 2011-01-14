@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jan 2011.
+" Last Modified: 14 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -289,19 +289,36 @@ endfunction"}}}
 function! unite#get_default_action(source_name, kind_name)"{{{
   let l:source = s:get_loaded_sources(a:source_name)
 
-  if has_key(s:custom_default_actions, a:source_name.'/'.a:kind_name)
-    " Source/kind custom actions.
-    return s:custom_default_actions[a:source_name.'/'.a:kind_name]
-  elseif has_key(l:source.default_action, a:kind_name)
-    " Source custom default actions.
-    return l:source.default_action[a:kind_name]
-  elseif has_key(s:custom_default_actions, a:kind_name)
-    " Kind custom default actions.
-    return s:custom_default_actions[a:kind_name]
-  else
-    " Kind default actions.
-    return unite#available_kinds(a:kind_name).default_action
+  let l:source_kind = 'source/'.a:source_name.'/'.a:kind_name
+  let l:source_kind_wild = 'source/'.a:source_name.'/*'
+
+  " Source/kind custom default actions.
+  if has_key(s:custom_default_actions, l:source_kind)
+    return s:custom_default_actions[l:source_kind]
   endif
+
+  " Source custom default actions.
+  if has_key(l:source.default_action, a:kind_name)
+    return l:source.default_action[a:kind_name]
+  endif
+
+  " Source/* custom default actions.
+  if has_key(s:custom_default_actions, l:source_kind_wild)
+    return s:custom_default_actions[l:source_kind_wild]
+  endif
+
+  " Source/* default actions.
+  if has_key(l:source.default_action, '*')
+    return l:source.default_action['*']
+  endif
+
+  " Kind custom default actions.
+  if has_key(s:custom_default_actions, a:kind_name)
+    return s:custom_default_actions[a:kind_name]
+  endif
+
+  " Kind default actions.
+  return unite#available_kinds(a:kind_name).default_action
 endfunction"}}}
 function! unite#escape_match(str)"{{{
   return substitute(substitute(escape(a:str, '~"\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
