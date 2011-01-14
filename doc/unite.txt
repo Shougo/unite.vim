@@ -1034,6 +1034,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-01-14
+- Fixed escape jump_list.
+
 2011-01-11
 - Changed :UniteWithInputDirectory behavior.
 - Deleted unused tag.

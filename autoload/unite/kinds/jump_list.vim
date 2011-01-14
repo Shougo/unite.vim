@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Nov 2010
+" Last Modified: 14 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -79,34 +79,42 @@ function! s:jump(candidate)"{{{
     return
   endif
 
+  if has_key(a:candidate, 'action__line') && a:candidate.action__line !~ '^\d\+$'
+    call unite#print_error('unite: jump_list: Invalid action__line format.')
+    return
+  endif
+
   if !has_key(a:candidate, 'action__pattern')
     " Jump to the line number.
     execute a:candidate.action__line
     return
   endif
 
+  let l:pattern = escape(a:candidate.action__pattern, '~"\.^$[]*')
+
   " Jump by search().
   let l:source = unite#available_sources(a:candidate.source)
   if !(has_key(a:candidate, 'action__signature') && has_key(l:source, 'calc_signature'))
     " Not found signature.
-    if getline(a:candidate.action__line) =~# a:candidate.action__pattern
+    if has_key(a:candidate, 'action__line') &&
+          \ getline(a:candidate.action__line) =~# l:pattern
       execute a:candidate.action__line
     else
-      call search(a:candidate.action__pattern, 'w')
+      call search(l:pattern, 'w')
     endif
     return
   endif
 
-  call search(a:candidate.action__pattern, 'w')
+  call search(l:pattern, 'w')
 
   let l:lnum_prev = line('.')
-  call search(a:candidate.action__pattern, 'w')
+  call search(l:pattern, 'w')
   let l:lnum = line('.')
   if l:lnum != l:lnum_prev
     " Detected same pattern lines!!
     let l:start_lnum = l:lnum
     while l:source.calc_signature(l:lnum) !=# a:candidate.action__signature
-      call search(a:candidate.action__pattern, 'w')
+      call search(l:pattern, 'w')
       let l:lnum = line('.')
       if l:lnum == l:start_lnum
         " Not found.
