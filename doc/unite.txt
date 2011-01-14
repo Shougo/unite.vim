@@ -1038,6 +1038,7 @@ CHANGELOG					*unite-changelog*
 - Fixed escape jump_list.
 - Fixed unite#get_default_action().
 - Improved unite-output.
+- Added edit action in command kind.
 
 2011-01-11
 - Changed :UniteWithInputDirectory behavior.

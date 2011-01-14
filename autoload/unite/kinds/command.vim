@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Nov 2010
+" Last Modified: 14 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,6 +32,7 @@ let s:kind = {
       \ 'name' : 'command',
       \ 'default_action' : 'execute',
       \ 'action_table': {},
+      \ 'alias_table' : { 'ex' : 'nop' },
       \}
 
 " Actions"{{{
@@ -40,6 +41,12 @@ let s:kind.action_table.execute = {
       \ }
 function! s:kind.action_table.execute.func(candidate)"{{{
   execute a:candidate.action__command
+endfunction"}}}
+let s:kind.action_table.edit = {
+      \ 'description' : 'edit command',
+      \ }
+function! s:kind.action_table.edit.func(candidate)"{{{
+  call feedkeys(':' . a:candidate.word, 'n')
 endfunction"}}}
 "}}}
 

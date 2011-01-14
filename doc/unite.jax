@@ -954,7 +954,7 @@ common					*unite-action-common*
 	nop		何もしない
 	yank		ヤンクする
 	yank_escape	エスケープした候補文字列をヤンクする
-	ex		候補をコマンドラインに入力した状態にする
+	ex		候補をエスケープして、コマンドラインに入力した状態にする
 	insert		現在のバッファに文字列を挿入する
 
 openable					*unite-action-openable*
@@ -1024,6 +1024,7 @@ jump_list					*unite-action-jump_list*
 
 command						*unite-action-command*
 	execute		コマンドを実行する
+	edit		コマンドを編集する
 
 window						*unite-action-window*
 このkindは|unite-action-cdable|のアクションを継承する。
