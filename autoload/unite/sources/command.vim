@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jan 2011.
+" Last Modified: 16 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,6 +35,8 @@ let s:source = {
       \ 'name' : 'command',
       \ 'description' : 'candidates from Ex command',
       \ 'default_action' : { 'command' : 'edit' },
+      \ 'required_pattern_length' : 1,
+      \ 'max_candidates' : 30,
       \ }
 
 let s:cached_result = []
