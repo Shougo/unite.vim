@@ -24,30 +24,65 @@
 " }}}
 "=============================================================================
 
-function! unite#kinds#command#define()"{{{
-  return s:kind
-endfunction"}}}
-
-let s:kind = {
-      \ 'name' : 'command',
-      \ 'default_action' : 'execute',
-      \ 'action_table': {},
-      \ 'alias_table' : { 'ex' : 'nop' },
-      \}
-
-" Actions"{{{
-let s:kind.action_table.execute = {
-      \ 'description' : 'execute command',
-      \ }
-function! s:kind.action_table.execute.func(candidate)"{{{
-  execute a:candidate.action__command
-endfunction"}}}
-let s:kind.action_table.edit = {
-      \ 'description' : 'edit command',
-      \ }
-function! s:kind.action_table.edit.func(candidate)"{{{
-  call feedkeys(':' . a:candidate.action__command, 'n')
-endfunction"}}}
+" Variables  "{{{
 "}}}
+
+function! unite#sources#command#define()"{{{
+  return s:source
+endfunction"}}}
+
+let s:source = {
+      \ 'name' : 'command',
+      \ 'description' : 'candidates from Ex command',
+      \ 'default_action' : { 'command' : 'edit' },
+      \ }
+
+let s:cached_result = []
+function! s:source.gather_candidates(args, context)"{{{
+  if !a:context.is_redraw && !empty(s:cached_result)
+    return s:cached_result
+  endif
+
+  " Get command list.
+  redir => l:result
+  silent! command
+  redir END
+
+  let s:cached_result = []
+  for line in split(l:result, '\n')[1:]
+    let l:word = matchstr(line, '\a\w*')
+
+    " Analyze prototype.
+    let l:end = matchend(line, '\a\w*')
+    let l:args = matchstr(line, '[[:digit:]?+*]', l:end)
+    if l:args != '0'
+      let l:prototype = matchstr(line, '\a\w*', l:end)
+
+      if l:prototype == ''
+        let l:prototype = 'arg'
+      endif
+
+      if l:args == '*'
+        let l:prototype = '[' . l:prototype . '] ...'
+      elseif l:args == '?'
+        let l:prototype = '[' . l:prototype . ']'
+      elseif l:args == '+'
+        let l:prototype = l:prototype . ' ...'
+      endif
+    else
+      let l:prototype = ''
+    endif
+
+    call add(s:cached_result, {
+          \ 'word' : l:word,
+          \ 'abbr' : printf('%-16s %s', l:word, l:prototype),
+          \ 'kind' : 'command',
+          \ 'source' : 'command',
+          \ 'action__command' : l:word,
+          \})
+  endfor
+
+  return s:cached_result
+endfunction"}}}
 
 " vim: foldmethod=marker

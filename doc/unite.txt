@@ -837,6 +837,9 @@ output		Nominates executed Vim command as candidates.
 		Source arguments:
 		1. Vim command.
 
+						*unite-source-command*
+command		Nominates Vim Ex commands as candidates.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1032,6 +1035,10 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-01-15
+- Improved command action.
+- Added command source.
 
 2011-01-14
 - Fixed escape jump_list.
