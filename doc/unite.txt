@@ -1038,6 +1038,7 @@ CHANGELOG					*unite-changelog*
 
 2011-01-16
 - Improved command source.
+- Fixed jump_list escape.
 
 2011-01-15
 - Improved command action.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jan 2011.
+" Last Modified: 16 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -147,6 +147,9 @@ endfunction
 
 function! unite#util#escape_file_searching(buffer_name)"{{{
   return escape(a:buffer_name, '*[]?{},')
+endfunction"}}}
+function! unite#util#escape_pattern(str)"{{{
+  return escape(a:str, '~"\.^$[]*')
 endfunction"}}}
 
 function! unite#util#set_default(var, val)  "{{{
