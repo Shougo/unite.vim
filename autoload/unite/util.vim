@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jan 2011.
+" Last Modified: 17 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -85,7 +85,7 @@ endfunction"}}}
 if v:version >= 703
   " Use builtin function.
   function! unite#util#wcswidth(str)"{{{
-    return strwidth(a:str)
+    return strdisplaywidth(a:str)
   endfunction"}}}
   function! s:wcwidth(str)"{{{
     return strwidth(a:str)

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jan 2011.
+" Last Modified: 17 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -83,8 +83,32 @@ function! s:source.gather_candidates(args, context)"{{{
           \ 'action__command' : l:word,
           \})
   endfor
+  let s:cached_result += s:caching_from_neocomplcache_dict()
 
   return s:cached_result
+endfunction"}}}
+
+function! s:caching_from_neocomplcache_dict()"{{{
+  let l:dict_files = split(globpath(&runtimepath, 'autoload/neocomplcache/sources/vim_complete/commands.dict'), '\n')
+  if empty(l:dict_files)
+    return []
+  endif
+
+  let l:keyword_pattern =
+        \'^\%(-\h\w*\%(=\%(\h\w*\|[01*?+%]\)\?\)\?\|<\h[[:alnum:]_-]*>\?\|\h[[:alnum:]_:#\[]*\%([!\]]\+\|()\?\)\?\)'
+  let l:keyword_list = []
+  for line in readfile(l:dict_files[0])
+    let l:word = substitute(matchstr(line, l:keyword_pattern), '[\[\]]', '', 'g')
+    call add(l:keyword_list, {
+          \ 'word' : l:word,
+          \ 'abbr' : line,
+          \ 'kind' : 'command',
+          \ 'source' : 'command',
+          \ 'action__command' : l:word,
+          \})
+  endfor
+
+  return l:keyword_list
 endfunction"}}}
 
 " vim: foldmethod=marker
