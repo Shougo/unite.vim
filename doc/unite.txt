@@ -1041,6 +1041,7 @@ CHANGELOG					*unite-changelog*
 - Improved command narrow action.
 - Use strdisplaywidth().
 - Add history in kind command.
+- Fixed :NeoComplCacheCachingBuffer error.
 
 2011-01-16
 - Improved command source.
