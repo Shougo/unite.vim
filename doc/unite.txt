@@ -1040,6 +1040,7 @@ CHANGELOG					*unite-changelog*
 - Improved unite-command.
 - Improved command narrow action.
 - Use strdisplaywidth().
+- Add history in kind command.
 
 2011-01-16
 - Improved command source.

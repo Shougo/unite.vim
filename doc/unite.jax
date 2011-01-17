@@ -935,6 +935,11 @@ command		VimのExコマンド
 			action__command		(文字列)		(必須)
 				実行するコマンド
 
+			action__type		(文字列)		(任意)
+				実行するコマンドの型。省略すると"cmd"となる。
+				指定できる型については、|histadd()|を参照せ
+				よ。
+
 						*unite-kind-window*
 window		ウィンドウ
 		このkindはcdableを継承するため、それらのkindが使用する属性も

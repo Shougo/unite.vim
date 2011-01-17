@@ -40,6 +40,13 @@ let s:kind.action_table.execute = {
       \ 'description' : 'execute command',
       \ }
 function! s:kind.action_table.execute.func(candidate)"{{{
+  " Add history.
+  let l:type = has_key(a:candidate, 'action__type') ? a:candidate.action__type : 'cmd'
+  call histadd(l:type, a:candidate.action__command)
+  if l:type ==# '/' || l:type ==# 'search'
+    let @/ = string(a:candidate.action__command)
+  endif
+
   execute a:candidate.action__command
 endfunction"}}}
 let s:kind.action_table.edit = {
