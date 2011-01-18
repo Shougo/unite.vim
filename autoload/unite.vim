@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jan 2011.
+" Last Modified: 18 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -615,7 +615,7 @@ function! s:quit_session(is_force)  "{{{
   " Call finalize functions.
   for l:source in unite#loaded_sources_list()
     if has_key(l:source.hooks, 'on_close')
-      call l:source.hooks.on_close(l:source.args, s:unite.context)
+      call l:source.hooks.on_close(l:source.args, l:source.unite__context)
     endif
   endfor
 
@@ -681,7 +681,7 @@ function! s:load_default_sources_and_kinds()"{{{
     endif
   endfor
 endfunction"}}}
-function! s:initialize_loaded_sources(sources)"{{{
+function! s:initialize_loaded_sources(sources, context)"{{{
   let l:all_sources = s:initialize_sources()
   let l:sources = {}
 
@@ -696,6 +696,7 @@ function! s:initialize_loaded_sources(sources)"{{{
     let l:source.args = l:args
     let l:source.unite__is_invalidate = 1
 
+    let l:source.unite__context = deepcopy(a:context)
     let l:source.unite__number = l:number
     let l:number += 1
 
@@ -749,11 +750,10 @@ function! s:initialize_kinds()"{{{
 
   return l:kinds
 endfunction"}}}
-function! s:recache_candidates(input, context)"{{{
-  let l:context = a:context
+function! s:recache_candidates(input, is_force)"{{{
   let l:input_list = filter(split(a:input, '\\\@<! ', 1), 'v:val !~ "!"')
-  let l:context.input = empty(l:input_list) ? '' : l:input_list[0]
-  let l:input_len = unite#util#strchars(l:context.input)
+  let l:input = empty(l:input_list) ? '' : l:input_list[0]
+  let l:input_len = unite#util#strchars(l:input)
 
   for l:source in unite#loaded_sources_list()
     " Check required pattern length.
@@ -762,9 +762,12 @@ function! s:recache_candidates(input, context)"{{{
       continue
     endif
 
-    if l:source.is_volatile || l:context.is_force || l:source.unite__is_invalidate
-      let l:context.source = l:source
-      let l:source_candidates = copy(l:source.gather_candidates(l:source.args, l:context))
+    if l:source.is_volatile || a:is_force || l:source.unite__is_invalidate
+      let l:source.unite__context.source = l:source
+      let l:source.unite__context.is_force = a:is_force
+      let l:source.unite__context.input = l:input
+
+      let l:source_candidates = copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
       let l:source.unite__is_invalidate = 0
 
       if !l:source.is_volatile
@@ -838,9 +841,6 @@ function! s:convert_line(candidate)"{{{
 endfunction"}}}
 
 function! s:initialize_unite_buffer(sources, context)"{{{
-  " Check sources.
-  let l:sources = s:initialize_loaded_sources(a:sources)
-
   let l:context = a:context
 
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
@@ -863,10 +863,13 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
 
+  " Check sources.
+  let l:sources = s:initialize_loaded_sources(a:sources, a:context)
+
   " Call initialize functions.
   for l:source in values(l:sources)
     if has_key(l:source.hooks, 'on_init')
-      call l:source.hooks.on_init(l:source.args, l:context)
+      call l:source.hooks.on_init(l:source.args, l:source.unite__context)
     endif
   endfor
 
@@ -1026,11 +1029,8 @@ function! s:redraw(is_force) "{{{
     let l:input .= l:subst
   endif
 
-  let l:context = b:unite.context
-  let l:context.is_force = a:is_force
-
   " Recaching.
-  call s:recache_candidates(l:input, l:context)
+  call s:recache_candidates(l:input, a:is_force)
 
   let &ignorecase = l:ignorecase_save
 

@@ -1182,8 +1182,10 @@ NOTATION					*unite-notation*
 
 {context}					*unite-notation-{context}*
 			コンテキスト情報を与える辞書変数。主に、次の情報を持つ。
-			|unite#get_context()|で取得できる。システムで共有さ
-			れているので、これを書き換えてはいけない。
+			グローバルなコンテキスト情報は|unite#get_context()|で取
+			得できる。コンテキスト情報は、source毎に独立して持って
+			いるため、ここにsource__で始まるキーを格納することで、
+			source独自の情報を格納することができる。
 
 			input			(文字列)
 				ユーザーの入力文字列。
@@ -1209,6 +1211,12 @@ NOTATION					*unite-notation*
 
 			winnr			(数値)
 				uniteを呼び出したウィンドウの番号。
+
+			source__{name}		(不定)		(任意)
+				source独自の付加情報。source側で自由に使用でき
+				る。複数回同じsourceを呼び出せるようにするため
+				s:変数ではなく、ここに情報を格納することが推
+				奨される。
 
 {candidate}					*unite-notation-{candidate}*
 			候補を表す辞書変数。次の情報を持つ。
