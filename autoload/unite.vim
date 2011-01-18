@@ -173,10 +173,10 @@ function! unite#is_win()"{{{
   return unite#util#is_win()
 endfunction"}}}
 function! unite#loaded_source_names()"{{{
-  return map(unite#loaded_sources_list(), 'v:val.name')
+  return map(copy(unite#loaded_sources_list()), 'v:val.name')
 endfunction"}}}
 function! unite#loaded_sources_list()"{{{
-  return sort(values(s:get_loaded_sources()), 's:compare_sources')
+  return s:get_loaded_sources()
 endfunction"}}}
 function! unite#get_unite_candidates()"{{{
   return s:get_unite().candidates
@@ -338,11 +338,11 @@ function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
   return filter(l:buffer_list, printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 function! unite#invalidate_cache(source_name)  "{{{
-  let l:unite = s:get_unite()
-
-  if has_key(l:unite.sources, a:source_name)
-    let l:unite.sources[a:source_name].unite__is_invalidate = 1
-  endif
+  for l:source in s:get_unite().sources
+    if l:source.name ==# a:source_name
+      let l:source.unite__is_invalidate = 1
+    endif
+  endfor
 endfunction"}}}
 function! unite#force_redraw() "{{{
   call s:redraw(1)
@@ -378,7 +378,7 @@ function! unite#redraw_status() "{{{
   let l:modifiable_save = &l:modifiable
   setlocal modifiable
 
-  call setline(s:LNUM_STATUS, 'Sources: ' . join(map(copy(unite#loaded_sources_list()), 'v:val.name'), ', '))
+  call setline(s:LNUM_STATUS, 'Sources: ' . join(unite#loaded_source_names(), ', '))
 
   let &l:modifiable = l:modifiable_save
 endfunction"}}}
@@ -451,7 +451,7 @@ endfunction"}}}
 function! unite#gather_candidates()"{{{
   let l:candidates = []
   for l:source in unite#loaded_sources_list()
-    let l:candidates += b:unite.sources_candidates[l:source.name]
+    let l:candidates += l:source.unite__candidates
   endfor
 
   return l:candidates
@@ -683,7 +683,7 @@ function! s:load_default_sources_and_kinds()"{{{
 endfunction"}}}
 function! s:initialize_loaded_sources(sources, context)"{{{
   let l:all_sources = s:initialize_sources()
-  let l:sources = {}
+  let l:sources = []
 
   let l:number = 0
   for [l:source_name, l:args] in map(a:sources, 'type(v:val) == type([]) ? [v:val[0], v:val[1:]] : [v:val, []]')
@@ -697,10 +697,12 @@ function! s:initialize_loaded_sources(sources, context)"{{{
     let l:source.unite__is_invalidate = 1
 
     let l:source.unite__context = deepcopy(a:context)
+    let l:source.unite__candidates = []
+    let l:source.unite__cached_candidates = []
     let l:source.unite__number = l:number
     let l:number += 1
 
-    let l:sources[l:source_name] = l:source
+    call add(l:sources, l:source)
   endfor
 
   return l:sources
@@ -758,7 +760,7 @@ function! s:recache_candidates(input, is_force)"{{{
   for l:source in unite#loaded_sources_list()
     " Check required pattern length.
     if l:input_len < l:source.required_pattern_length
-      let b:unite.sources_candidates[l:source.name] = []
+      let l:source.unite__candidates = []
       continue
     endif
 
@@ -772,10 +774,10 @@ function! s:recache_candidates(input, is_force)"{{{
 
       if !l:source.is_volatile
         " Recaching.
-        let b:unite.cached_candidates[l:source.name] = l:source_candidates
+        let l:source.unite__cached_candidates = l:source_candidates
       endif
     else
-      let l:source_candidates = copy(b:unite.cached_candidates[l:source.name])
+      let l:source_candidates = copy(l:source.unite__cached_candidates)
     endif
 
     if a:input != ''
@@ -799,7 +801,7 @@ function! s:recache_candidates(input, is_force)"{{{
       let l:candidate.unite__is_marked = 0
     endfor
 
-    let b:unite.sources_candidates[l:source.name] = l:source_candidates
+    let l:source.unite__candidates = l:source_candidates
   endfor
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
@@ -867,7 +869,7 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let l:sources = s:initialize_loaded_sources(a:sources, a:context)
 
   " Call initialize functions.
-  for l:source in values(l:sources)
+  for l:source in l:sources
     if has_key(l:source.hooks, 'on_init')
       call l:source.hooks.on_init(l:source.args, l:source.unite__context)
     endif
@@ -892,8 +894,6 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   let b:unite.search_pattern_save = @/
   let b:unite.prompt_linenr = 2
   let b:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])')) + 2
-  let b:unite.cached_candidates = {}
-  let b:unite.sources_candidates = {}
 
   let s:unite = b:unite
 
@@ -1098,9 +1098,6 @@ function! s:adjustments(currentwinwidth, the_max_source_name, size)"{{{
 endfunction"}}}
 function! s:get_unite() "{{{
   return exists('b:unite') ? b:unite : s:unite
-endfunction"}}}
-function! s:compare_sources(source_a, source_b) "{{{
-  return a:source_a.unite__number - a:source_b.unite__number
 endfunction"}}}
 function! s:compare_substitute_patterns(pattern_a, pattern_b)"{{{
   return a:pattern_b.priority - a:pattern_a.priority

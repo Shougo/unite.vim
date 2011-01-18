@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jan 2011.
+" Last Modified: 18 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -381,14 +381,13 @@ function! s:redraw()"{{{
   let b:unite.context.is_redraw = 0
 endfunction"}}}
 function! s:rotate_source(is_next)"{{{
-  let l:max = len(unite#loaded_sources_list()) - 1
   for l:source in unite#loaded_sources_list()
-    let l:source.unite__number = a:is_next ?
-          \ (l:source.unite__number - 1) : (l:source.unite__number + 1)
-    if l:source.unite__number < 0
-      let l:source.unite__number = l:max
-    elseif l:source.unite__number > l:max
-      let l:source.unite__number = 0
+    let b:unite.sources = a:is_next ?
+          \ add(b:unite.sources[1:], b:unite.sources[0]) :
+          \ insert(b:unite.sources[: -2], b:unite.sources[-1])
+
+    if !empty(b:unite.sources[0].unite__candidates)
+      break
     endif
   endfor
 
