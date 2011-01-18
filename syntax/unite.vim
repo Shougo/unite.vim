@@ -46,8 +46,8 @@ syntax match uniteCandidateSourceName /^- \zs[a-z_/-]\+/ contained
 
 highlight default link uniteSourcePrompt  Statement
 highlight default link uniteSeparator  NONE
-highlight default link uniteSourceNames  Function
-highlight default link uniteSourceArgs  Type
+highlight default link uniteSourceNames  Type
+highlight default link uniteSourceArgs  Function
 
 highlight default link uniteMarkedLine  Statement
 highlight default link uniteCandidateSourceName  Type
