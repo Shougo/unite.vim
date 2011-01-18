@@ -175,6 +175,9 @@ endfunction"}}}
 function! unite#loaded_source_names()"{{{
   return map(copy(unite#loaded_sources_list()), 'v:val.name')
 endfunction"}}}
+function! unite#loaded_source_names_with_args()"{{{
+  return map(copy(unite#loaded_sources_list()), 'join(insert(copy(v:val.args), v:val.name), ":")')
+endfunction"}}}
 function! unite#loaded_sources_list()"{{{
   return s:get_loaded_sources()
 endfunction"}}}
@@ -378,7 +381,7 @@ function! unite#redraw_status() "{{{
   let l:modifiable_save = &l:modifiable
   setlocal modifiable
 
-  call setline(s:LNUM_STATUS, 'Sources: ' . join(unite#loaded_source_names(), ', '))
+  call setline(s:LNUM_STATUS, 'Sources: ' . join(unite#loaded_source_names_with_args(), ', '))
 
   let &l:modifiable = l:modifiable_save
 endfunction"}}}
@@ -692,7 +695,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
       throw 'Invalid source'
     endif
 
-    let l:source = l:all_sources[l:source_name]
+    let l:source = deepcopy(l:all_sources[l:source_name])
     let l:source.args = l:args
     let l:source.unite__is_invalidate = 1
 

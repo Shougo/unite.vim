@@ -1044,6 +1044,8 @@ CHANGELOG					*unite-changelog*
 - Fixed :NeoComplCacheCachingBuffer error.
 - Improved context.
 - Improved rotate sources.
+- Improved args.
+- Improved syntax.
 
 2011-01-16
 - Improved command source.
