@@ -257,30 +257,30 @@ g:unite_split_rule				*g:unite_split_rule*
 
 		Default value is "topleft".
 
-g:unite_enable_split_vertically				*g:unite_enable_split_vertically*
+g:unite_enable_split_vertically			*g:unite_enable_split_vertically*
 		If this option is 1, splits unite window vertically.
 
 		Default value is 0; unite window will be splat horizontally.
 
-g:unite_winheight					*g:unite_winheight*
+g:unite_winheight				*g:unite_winheight*
 		The height of unite window when it's split horizontally.  It's
 		ignored in splitting vertically.
 
 		The default value is 20.
 
-g:unite_winwidth					*g:unite_winwidth*
+g:unite_winwidth				*g:unite_winwidth*
 		The width of unite window when it's split vertically.  It's
 		ignored in splitting horizontally.
 
 		The default value is 90.
 
-g:unite_cd_command					*g:unite_cd_command*
+g:unite_cd_command				*g:unite_cd_command*
 		Specifies the Vim command for cd action.
 		This command must interpret |`=|.
 
 		The default value is "cd".
 
-g:unite_lcd_command					*g:unite_lcd_command*
+g:unite_lcd_command				*g:unite_lcd_command*
 		Specifies the Vim command for lcd action.
 		This command must interpret |`=|.
 
@@ -296,13 +296,13 @@ g:unite_abbr_highlight				*g:unite_abbr_highlight*
 		
 		The default value is "Pmenu".
 
-g:unite_quick_match_table				*g:unite_quick_match_table*
+g:unite_quick_match_table			*g:unite_quick_match_table*
 		The table of completion candidates of quick mtch list,
 		corresponding the narrowing text.
 
 		The default value is complex; so see plugin/unite.vim.
 
-g:unite_data_directory					*g:unite_data_directory*
+g:unite_data_directory				*g:unite_data_directory*
 		Specifies directories for configurations internally used in
 		unite itself or its sources.  If the directory doesn't exist
 		the directory will be automatically generated.  For example source
@@ -317,7 +317,7 @@ g:unite_no_default_keymappings			*g:unite_no_default_keymappings*
 
 		This variable doesn't exist unless you define explicitly.
 
-SOURCES VARIABLES 					*unite-sources-variables*
+SOURCES VARIABLES 				*unite-sources-variables*
 
 g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
 		Specifies a regex pattern for ignoring some specific
