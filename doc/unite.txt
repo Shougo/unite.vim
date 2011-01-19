@@ -1036,6 +1036,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-01-19
+- Added unite#version().
+
 2011-01-17
 - Improved unite-command.
 - Improved command narrow action.

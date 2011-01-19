@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jan 2011.
+" Last Modified: 19 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,6 +24,10 @@
 " }}}
 " Version: 1.1, for Vim 7.0
 "=============================================================================
+
+function! unite#version()"{{{
+  return str2nr(printf('%02d%02d%03d', 1, 1, 0))
+endfunction"}}}
 
 " User functions."{{{
 function! unite#get_substitute_pattern(buffer_name)"{{{
