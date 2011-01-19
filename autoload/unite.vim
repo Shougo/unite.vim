@@ -682,7 +682,7 @@ function! s:load_default_sources_and_kinds()"{{{
     else
       let l:kind = {'unite#kinds#' . l:name . '#define'}()
 
-      if !has_key(s:default_kinds, l:kind.name)
+      if !empty(l:source) && !has_key(s:default_kinds, l:kind.name)
         let s:default_kinds[l:kind.name] = l:kind
       endif
     endif
