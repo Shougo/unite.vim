@@ -1039,6 +1039,7 @@ CHANGELOG					*unite-changelog*
 2011-01-19
 - Added unite#version().
 - Fixed context.
+- Improved initialize.
 
 2011-01-17
 - Improved unite-command.

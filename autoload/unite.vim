@@ -55,30 +55,30 @@ function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
 endfunction"}}}
 function! unite#custom_alias(kind, name, action)"{{{
   for key in split(a:kind, ',')
-    if !has_key(s:custom_aliases, key)
-      let s:custom_aliases[key] = {}
+    if !has_key(s:custom.aliases, key)
+      let s:custom.aliases[key] = {}
     endif
 
-    let s:custom_aliases[key][a:name] = a:action
+    let s:custom.aliases[key][a:name] = a:action
   endfor
 endfunction"}}}
 function! unite#custom_default_action(kind, default_action)"{{{
   for key in split(a:kind, ',')
-    let s:custom_default_actions[key] = a:default_action
+    let s:custom.default_actions[key] = a:default_action
   endfor
 endfunction"}}}
 function! unite#custom_action(kind, name, action)"{{{
   for key in split(a:kind, ',')
-    if !has_key(s:custom_actions, key)
-      let s:custom_actions[key] = {}
+    if !has_key(s:custom.actions, key)
+      let s:custom.actions[key] = {}
     endif
-    let s:custom_actions[key][a:name] = a:action
+    let s:custom.actions[key][a:name] = a:action
   endfor
 endfunction"}}}
 function! unite#undef_custom_action(kind, name)"{{{
   for key in split(a:kind, ',')
-    if has_key(s:custom_actions, key)
-      call remove(s:custom_actions, key)
+    if has_key(s:custom.actions, key)
+      call remove(s:custom.actions, key)
     endif
   endfor
 endfunction"}}}
@@ -86,29 +86,29 @@ endfunction"}}}
 function! unite#define_source(source)"{{{
   if type(a:source) == type([])
     for l:source in a:source
-      let s:custom_sources[l:source.name] = l:source
+      let s:custom.sources[l:source.name] = l:source
     endfor
   else
-    let s:custom_sources[a:source.name] = a:source
+    let s:custom.sources[a:source.name] = a:source
   endif
 endfunction"}}}
 function! unite#define_kind(kind)"{{{
   if type(a:kind) == type([])
     for l:kind in a:kind
-      let s:custom_kinds[l:kind.name] = l:kind
+      let s:custom.kinds[l:kind.name] = l:kind
     endfor
   else
-    let s:custom_kinds[a:kind.name] = a:kind
+    let s:custom.kinds[a:kind.name] = a:kind
   endif
 endfunction"}}}
 function! unite#undef_source(name)"{{{
-  if has_key(s:custom_sources, a:name)
-    call remove(s:custom_sources, a:name)
+  if has_key(s:custom.sources, a:name)
+    call remove(s:custom.sources, a:name)
   endif
 endfunction"}}}
 function! unite#undef_kind(name)"{{{
-  if has_key(s:custom_kind, a:name)
-    call remove(s:custom_kind, a:name)
+  if has_key(s:custom.kind, a:name)
+    call remove(s:custom.kind, a:name)
   endif
 endfunction"}}}
 
@@ -140,15 +140,16 @@ let s:LNUM_STATUS = 1
 let s:last_unite_bufnr = -1
 let s:unite = {}
 
-let s:default_sources = {}
-let s:default_kinds = {}
+let s:default = {}
+let s:default.sources = {}
+let s:default.kinds = {}
 
-let s:custom_sources = {}
-let s:custom_kinds = {}
-
-let s:custom_actions = {}
-let s:custom_default_actions = {}
-let s:custom_aliases = {}
+let s:custom = {}
+let s:custom.sources = {}
+let s:custom.kinds = {}
+let s:custom.actions = {}
+let s:custom.default_actions = {}
+let s:custom.aliases = {}
 
 let s:substitute_pattern = {}
 call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
@@ -204,9 +205,9 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
 
   if !l:is_parents_action
     " Source/kind custom actions.
-    if has_key(s:custom_actions, l:source_kind)
+    if has_key(s:custom.actions, l:source_kind)
       let l:action_table = s:extend_actions(a:self_func, l:action_table,
-            \ s:custom_actions[l:source_kind])
+            \ s:custom.actions[l:source_kind])
     endif
 
     " Source/kind actions.
@@ -216,9 +217,9 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
     endif
 
     " Source/* custom actions.
-    if has_key(s:custom_actions, l:source_kind_wild)
+    if has_key(s:custom.actions, l:source_kind_wild)
       let l:action_table = s:extend_actions(a:self_func, l:action_table,
-            \ s:custom_actions[l:source_kind_wild])
+            \ s:custom.actions[l:source_kind_wild])
     endif
 
     " Source/* actions.
@@ -228,9 +229,9 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
     endif
 
     " Kind custom actions.
-    if has_key(s:custom_actions, a:kind_name)
+    if has_key(s:custom.actions, a:kind_name)
       let l:action_table = s:extend_actions(a:self_func, l:action_table,
-            \ s:custom_actions[a:kind_name])
+            \ s:custom.actions[a:kind_name])
     endif
 
     " Kind actions.
@@ -249,8 +250,8 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
     call s:filter_alias_action(l:action_table, l:kind.alias_table)
 
     " Kind custom aliases.
-    if has_key(s:custom_aliases, a:kind_name)
-      call s:filter_alias_action(l:action_table, s:custom_aliases[a:kind_name])
+    if has_key(s:custom.aliases, a:kind_name)
+      call s:filter_alias_action(l:action_table, s:custom.aliases[a:kind_name])
     endif
 
     " Source/* aliases.
@@ -259,13 +260,13 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
     endif
 
     " Source/* custom aliases.
-    if has_key(s:custom_aliases, l:source_kind_wild)
-      call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind_wild])
+    if has_key(s:custom.aliases, l:source_kind_wild)
+      call s:filter_alias_action(l:action_table, s:custom.aliases[l:source_kind_wild])
     endif
 
     " Source/kind aliases.
-    if has_key(s:custom_aliases, l:source_kind)
-      call s:filter_alias_action(l:action_table, s:custom_aliases[l:source_kind])
+    if has_key(s:custom.aliases, l:source_kind)
+      call s:filter_alias_action(l:action_table, s:custom.aliases[l:source_kind])
     endif
 
     " Source/kind custom aliases.
@@ -300,8 +301,8 @@ function! unite#get_default_action(source_name, kind_name)"{{{
   let l:source_kind_wild = 'source/'.a:source_name.'/*'
 
   " Source/kind custom default actions.
-  if has_key(s:custom_default_actions, l:source_kind)
-    return s:custom_default_actions[l:source_kind]
+  if has_key(s:custom.default_actions, l:source_kind)
+    return s:custom.default_actions[l:source_kind]
   endif
 
   " Source custom default actions.
@@ -310,8 +311,8 @@ function! unite#get_default_action(source_name, kind_name)"{{{
   endif
 
   " Source/* custom default actions.
-  if has_key(s:custom_default_actions, l:source_kind_wild)
-    return s:custom_default_actions[l:source_kind_wild]
+  if has_key(s:custom.default_actions, l:source_kind_wild)
+    return s:custom.default_actions[l:source_kind_wild]
   endif
 
   " Source/* default actions.
@@ -320,8 +321,8 @@ function! unite#get_default_action(source_name, kind_name)"{{{
   endif
 
   " Kind custom default actions.
-  if has_key(s:custom_default_actions, a:kind_name)
-    return s:custom_default_actions[a:kind_name]
+  if has_key(s:custom.default_actions, a:kind_name)
+    return s:custom.default_actions[a:kind_name]
   endif
 
   " Kind default actions.
@@ -331,12 +332,12 @@ function! unite#escape_match(str)"{{{
   return substitute(substitute(escape(a:str, '~"\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
-  if empty(s:default_sources)
+  if empty(s:default.sources)
     " Initialize load.
     call s:load_default_sources_and_kinds()
   endif
 
-  let l:sources = extend(copy(s:default_sources), s:custom_sources)
+  let l:sources = extend(copy(s:default.sources), s:custom.sources)
   return filter(keys(l:sources)+s:unite_options, 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
 function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
@@ -478,7 +479,7 @@ endfunction"}}}
 
 " Command functions.
 function! unite#start(sources, ...)"{{{
-  if empty(s:default_sources)
+  if empty(s:default.sources)
     " Initialize load.
     call s:load_default_sources_and_kinds()
   endif
@@ -649,43 +650,21 @@ endfunction"}}}
 
 function! s:load_default_sources_and_kinds()"{{{
   " Gathering all sources and kind name.
-  let s:default_sources = {}
-  let s:default_kinds = {}
+  let s:default.sources = {}
+  let s:default.kinds = {}
 
-  for l:name in map(split(globpath(&runtimepath, 'autoload/unite/sources/*.vim'), '\n'),
-        \ 'fnamemodify(v:val, ":t:r")')
+  for l:key in ['sources', 'kinds']
+    for l:name in map(split(globpath(&runtimepath, 'autoload/unite/' . l:key . '/*.vim'), '\n'),
+          \ 'fnamemodify(v:val, ":t:r")')
 
-    if type({'unite#sources#' . l:name . '#define'}()) == type([])
-      for l:source in {'unite#sources#' . l:name . '#define'}()
-        if !has_key(s:default_sources, l:source.name)
-          let s:default_sources[l:source.name] = l:source
+      let l:define = {'unite#' . l:key . '#' . l:name . '#define'}()
+      for l:dict in (type(l:define) == type([]) ? l:define : [l:define])
+        if !empty(l:dict) && !has_key(s:default[l:key], l:dict.name)
+          let s:default[l:key][l:dict.name] = l:dict
         endif
       endfor
-    else
-      let l:source = {'unite#sources#' . l:name . '#define'}()
-
-      if !empty(l:source) && !has_key(s:default_sources, l:source.name)
-        let s:default_sources[l:source.name] = l:source
-      endif
-    endif
-  endfor
-
-  for l:name in map(split(globpath(&runtimepath, 'autoload/unite/kinds/*.vim'), '\n'),
-        \ 'fnamemodify(v:val, ":t:r")')
-
-    if type({'unite#kinds#' . l:name . '#define'}()) == type([])
-      for l:kind in {'unite#kinds#' . l:name . '#define'}()
-        if !has_key(s:default_kinds, l:kind.name)
-          let s:default_kinds[l:kind.name] = l:kind
-        endif
-      endfor
-    else
-      let l:kind = {'unite#kinds#' . l:name . '#define'}()
-
-      if !empty(l:source) && !has_key(s:default_kinds, l:kind.name)
-        let s:default_kinds[l:kind.name] = l:kind
-      endif
-    endif
+      unlet l:define
+    endfor
   endfor
 endfunction"}}}
 function! s:initialize_loaded_sources(sources, context)"{{{
@@ -715,7 +694,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
   return l:sources
 endfunction"}}}
 function! s:initialize_sources()"{{{
-  let l:all_sources = extend(copy(s:default_sources), s:custom_sources)
+  let l:all_sources = extend(copy(s:default.sources), s:custom.sources)
 
   for l:source in values(l:all_sources)
     if !has_key(l:source, 'is_volatile')
@@ -747,7 +726,7 @@ function! s:initialize_sources()"{{{
   return l:all_sources
 endfunction"}}}
 function! s:initialize_kinds()"{{{
-  let l:kinds = extend(copy(s:default_kinds), s:custom_kinds)
+  let l:kinds = extend(copy(s:default.kinds), s:custom.kinds)
   for l:kind in values(l:kinds)
     if !has_key(l:kind, 'alias_table')
       let l:kind.alias_table = {}
