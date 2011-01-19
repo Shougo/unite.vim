@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Dec 2010.
+" Last Modified: 19 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -67,7 +67,7 @@ function! s:source.hooks.on_init(args, context)"{{{
     call add(l:list, winnr())
   endif
 
-  let s:candidates = []
+  let a:context.source__candidates = []
   for i in l:list
     let l:window = getwinvar(i, 'unite_window')
     let l:bufname = bufname(winbufnr(i))
@@ -75,7 +75,7 @@ function! s:source.hooks.on_init(args, context)"{{{
       let l:bufname = '[No Name]'
     endif
 
-    call add(s:candidates, {
+    call add(a:context.source__candidates, {
           \ 'word' : l:bufname,
           \ 'abbr' : printf('[%d/%d] %s %s(%s)', i, winnr('$'),
           \      (i == winnr() ? '%' : i == winnr('#') ? '#' : ' '),
@@ -88,7 +88,7 @@ function! s:source.hooks.on_init(args, context)"{{{
   endfor
 endfunction"}}}
 function! s:source.gather_candidates(args, context)"{{{
-  return s:candidates
+  return a:context.source__candidates
 endfunction"}}}
 
 " Misc
