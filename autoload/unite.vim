@@ -664,7 +664,7 @@ function! s:load_default_sources_and_kinds()"{{{
     else
       let l:source = {'unite#sources#' . l:name . '#define'}()
 
-      if !has_key(s:default_sources, l:source.name)
+      if !empty(l:source) && !has_key(s:default_sources, l:source.name)
         let s:default_sources[l:source.name] = l:source
       endif
     endif
