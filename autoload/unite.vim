@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jan 2011.
+" Last Modified: 20 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -754,6 +754,7 @@ function! s:recache_candidates(input, is_force)"{{{
       let l:source.unite__context.source = l:source
       let l:source.unite__context.is_force = a:is_force
       let l:source.unite__context.input = l:input
+      let l:source.unite__context.is_redraw = s:get_unite().context.is_redraw
 
       let l:source_candidates = copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
       let l:source.unite__is_invalidate = 0

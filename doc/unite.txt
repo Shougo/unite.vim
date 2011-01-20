@@ -1036,6 +1036,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-01-20
+- Fixed is_redraw bug.
+
 2011-01-19
 - Added unite#version().
 - Fixed context.
