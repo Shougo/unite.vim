@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jan 2011.
+" Last Modified: 24 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -157,7 +157,7 @@ call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
 
 let s:unite_options = [
       \ '-buffer-name=', '-input=', '-prompt=',
-      \ '-default-action=', '-start-insert', '-no-quit',
+      \ '-default-action=', '-start-insert','-no-start-insert', '-no-quit',
       \ '-winwidth=', '-winheight=',
       \]
 "}}}
@@ -490,6 +490,11 @@ function! unite#start(sources, ...)"{{{
     let l:context.input = ''
   endif
   if !has_key(l:context, 'start_insert')
+    let l:context.start_insert = g:unite_enable_start_insert
+  endif
+  if has_key(l:context, 'no_start_insert')
+        \ && l:context.no_start_insert
+    " Disable start insert.
     let l:context.start_insert = 0
   endif
   if !has_key(l:context, 'is_insert')
@@ -529,8 +534,7 @@ function! unite#start(sources, ...)"{{{
 
   call unite#force_redraw()
 
-  if g:unite_enable_start_insert
-        \ || b:unite.context.start_insert || b:unite.context.is_insert
+  if b:unite.context.start_insert || b:unite.context.is_insert
     execute b:unite.prompt_linenr
     normal! 0z.
     startinsert!

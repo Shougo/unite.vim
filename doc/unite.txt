@@ -181,9 +181,16 @@ COMMANDS 					*unite-commands*
 		Specifies a default action. The default value is 'default'.
 
 						*unite-options-start-insert*
+						*unite-options-no-start-insert*
 		-start-insert
-		Opens unite with narrowing mode. Otherwise the initial mode
-		will be Normal mode.
+		Opens unite buffer with narrowing mode.
+		
+		-no-start-insert
+		Opens unite buffer with normal mode.
+		
+		When both options is undefined, will be depend on
+		|g:unite_enable_start_insert|option.
+		When both options is defined, will be undefined.
 
 						*unite-options-no-quit*
 		-no-quit
@@ -1035,6 +1042,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-01-24
+- Added --no-start-insert option.
 
 2011-01-21
 - Fixed unite-register freeze bug.
