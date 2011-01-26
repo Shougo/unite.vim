@@ -1043,6 +1043,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-01-26
+- Deleted :NeoComplCacheCachingBuffer.
+
 2011-01-24
 - Added --no-start-insert option.
 

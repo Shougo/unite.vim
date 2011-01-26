@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jan 2011.
+" Last Modified: 26 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -919,9 +919,6 @@ function! s:initialize_unite_buffer(sources, context)"{{{
   if exists(':NeoComplCacheLock')
     " Lock neocomplcache.
     NeoComplCacheLock
-    if exists(':NeoComplCacheCachingBuffer')
-      NeoComplCacheCachingBuffer
-    endif
   endif
 
   if exists('&redrawtime')
@@ -1027,11 +1024,6 @@ function! s:redraw(is_force) "{{{
 
   " Redraw.
   call unite#redraw_candidates()
-
-  if exists(':NeoComplCacheLock') && exists(':NeoComplCacheCachingBuffer')
-    " Caching unite buffer.
-    NeoComplCacheCachingBuffer
-  endif
 endfunction"}}}
 
 " Autocmd events.
