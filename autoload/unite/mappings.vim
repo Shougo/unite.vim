@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jan 2011.
+" Last Modified: 26 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -442,7 +442,7 @@ function! s:quick_match()"{{{
     call unite#mappings#do_action(b:unite.context.default_action,
           \ g:unite_quick_match_table[l:char])
   else
-    call unite#util#print_error('Invalid quick match key.')
+    call unite#util#print_error('Canceled.')
   endif
 endfunction"}}}
 function! s:input_directory()"{{{
