@@ -1046,6 +1046,7 @@ CHANGELOG					*unite-changelog*
 2011-01-26
 - Deleted :NeoComplCacheCachingBuffer.
 - Improved quick match message.
+- Chomp last /.
 
 2011-01-24
 - Added --no-start-insert option.

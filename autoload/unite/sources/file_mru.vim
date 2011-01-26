@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jan 2011.
+" Last Modified: 26 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,10 @@ function! unite#sources#file_mru#_append()"{{{
   else
     let l:path = expand('%:p')
   endif
+
   let l:path = unite#util#substitute_path_separator(simplify(l:path))
+  " Chomp last /.
+  let l:path = substitute(l:path, '/$', '', '')
 
   " Append the current buffer to the mru list.
   if !s:is_exists_path(path) || &l:buftype =~ 'help'
