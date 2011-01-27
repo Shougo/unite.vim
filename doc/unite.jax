@@ -178,10 +178,10 @@ http://www.ustream.tv/recorded/11240673
 						*unite-options-no-start-insert*
 		-start-insert
 		初期状態が絞り込みモードになる。
-		
+
 		-no-start-insert
 		初期状態がNormal modeになる。
-		
+
 		両方のオプションを指定しないと、初期状態は
 		|g:unite_enable_start_insert|に依存する。
 		両方のオプションが指定されたときの動作は未定義である。
