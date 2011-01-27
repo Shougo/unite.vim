@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jan 2011.
+" Last Modified: 27 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -79,7 +79,9 @@ function! s:jump(candidate)"{{{
     return
   endif
 
-  if has_key(a:candidate, 'action__line') && a:candidate.action__line !~ '^\d\+$'
+  if has_key(a:candidate, 'action__line')
+        \ && a:candidate.action__line != ''
+        \ && a:candidate.action__line !~ '^\d\+$'
     call unite#print_error('unite: jump_list: Invalid action__line format.')
     return
   endif
@@ -96,8 +98,9 @@ function! s:jump(candidate)"{{{
   let l:source = unite#available_sources(a:candidate.source)
   if !(has_key(a:candidate, 'action__signature') && has_key(l:source, 'calc_signature'))
     " Not found signature.
-    if has_key(a:candidate, 'action__line') &&
-          \ getline(a:candidate.action__line) =~# l:pattern
+    if has_key(a:candidate, 'action__line')
+          \ && a:candidate.action__line != ''
+          \ && getline(a:candidate.action__line) =~# l:pattern
       execute a:candidate.action__line
     else
       call search(l:pattern, 'w')
