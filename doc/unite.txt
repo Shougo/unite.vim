@@ -1043,6 +1043,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-01-28
+- Improved unite-register.
+
 2011-01-27
 - Improved jump_list.
 

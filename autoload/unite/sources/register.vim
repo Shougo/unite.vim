@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: register.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Jan 2011.
+" Last Modified: 28 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,16 +37,26 @@ function! s:source.gather_candidates(args, context)"{{{
   let l:candidates = []
 
   let l:max_width = winwidth(0) - 41
-  for [l:reg, l:register] in [['"', @"], ['*', @*], ['+', @+],
+  for [l:reg, l:register] in [['"', @"],
         \ ['0', @0], ['1', @1], ['2', @2], ['3', @3], ['4', @4],
-        \ ['5', @5], ['6', @6], ['7', @7], ['8', @8], ['9', @9]]
+        \ ['5', @5], ['6', @6], ['7', @7], ['8', @8], ['9', @9],
+        \ ['a', @a], ['b', @b], ['c', @c], ['d', @d], ['e', @e],
+        \ ['f', @f], ['g', @g], ['h', @h], ['i', @i], ['j', @j],
+        \ ['k', @k], ['l', @l], ['m', @m], ['n', @n], ['o', @o],
+        \ ['p', @p], ['q', @q], ['r', @r], ['s', @s], ['t', @t],
+        \ ['u', @u], ['v', @v], ['w', @w], ['x', @x], ['y', @y], ['z', @z],
+        \ ['-', @-], ['*', @*], ['+', @+], ['.', @.], [':', @:],
+        \ ['%', @%], ['#', @#], ['/', @/], ['=', @=],
+        \ ]
 
-    call add(l:candidates, {
-          \ 'word' : l:register,
-          \ 'abbr' : printf('register%s - %-' . l:max_width . 's', l:reg, l:register[ : l:max_width]),
-          \ 'source' : 'register',
-          \ 'kind' : 'word',
-          \ })
+    if l:register != ''
+      call add(l:candidates, {
+            \ 'word' : l:register,
+            \ 'abbr' : printf('"%s - %-' . l:max_width . 's', l:reg, l:register[ : l:max_width]),
+            \ 'source' : 'register',
+            \ 'kind' : 'word',
+            \ })
+    endif
   endfor
 
   return l:candidates
