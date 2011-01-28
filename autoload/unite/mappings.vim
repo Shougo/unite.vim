@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jan 2011.
+" Last Modified: 28 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -127,8 +127,14 @@ function! unite#mappings#narrowing(word)"{{{
   setlocal modifiable
   let b:unite.input = escape(a:word, ' *')
   call setline(b:unite.prompt_linenr, b:unite.prompt . b:unite.input)
-  execute b:unite.prompt_linenr
-  startinsert!
+  call unite#force_redraw()
+  if b:unite.is_insert
+    execute b:unite.prompt_linenr
+    startinsert!
+  else
+    execute b:unite.prompt_linenr+1
+    normal! 0
+  endif
 endfunction"}}}
 function! unite#mappings#do_action(action_name, ...)"{{{
   let l:candidates = unite#get_marked_candidates()
@@ -343,6 +349,8 @@ function! s:insert_leave()"{{{
   if line('.') != b:unite.prompt_linenr
     normal! 0
   endif
+
+  let b:unite.is_insert = 0
 endfunction"}}}
 function! s:insert_enter()"{{{
   if line('.') != b:unite.prompt_linenr
@@ -356,6 +364,8 @@ function! s:insert_enter()"{{{
   else
     startinsert
   endif
+
+  let b:unite.is_insert = 1
 endfunction"}}}
 function! s:insert_head()"{{{
   let l:pos = getpos('.')
