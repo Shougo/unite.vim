@@ -184,13 +184,13 @@ COMMANDS 					*unite-commands*
 						*unite-options-no-start-insert*
 		-start-insert
 		Opens unite buffer with narrowing mode.
-		
+
 		-no-start-insert
 		Opens unite buffer with normal mode.
-		
-		When both options is undefined, will be depend on
-		|g:unite_enable_start_insert|option.
-		When both options is defined, will be undefined.
+
+		When both options are undefined, this will depend on
+		|g:unite_enable_start_insert| option.
+		The behavior when both options are defined is undefined.
 
 						*unite-options-no-quit*
 		-no-quit
