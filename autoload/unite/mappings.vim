@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2011.
+" Last Modified: 30 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,6 +44,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  :<C-u>call <SID>quick_match()<CR>
   nnoremap <silent><buffer> <Plug>(unite_input_directory)   :<C-u>call <SID>input_directory()<CR>
   nnoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(b:unite.context.default_action)
+  nnoremap <silent><buffer> <Plug>(unite_delete_backward_path)  :<C-u>call <SID>normal_delete_backward_path()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
 
@@ -89,6 +90,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <Down>         <Plug>(unite_loop_cursor_down)
   nmap <buffer> k         <Plug>(unite_loop_cursor_up)
   nmap <buffer> <Up>         <Plug>(unite_loop_cursor_up)
+  nmap <buffer> <C-h>     <Plug>(unite_delete_backward_path)
 
   nnoremap <silent><buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
   nnoremap <silent><buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
@@ -229,6 +231,15 @@ endfunction"}}}
 function! s:delete_backward_path()"{{{
   let l:input = getline(b:unite.prompt_linenr)[len(b:unite.prompt):]
   return repeat("\<C-h>", len(matchstr(l:input, '[^/]*.$')))
+endfunction"}}}
+function! s:normal_delete_backward_path()"{{{
+  let l:modifiable_save = &l:modifiable
+  setlocal modifiable
+  call setline(b:unite.prompt_linenr,
+        \ substitute(getline(b:unite.prompt_linenr)[len(b:unite.prompt):],
+        \                 '[^/]*.$', '', ''))
+  call unite#redraw()
+  let &l:modifiable = l:modifiable_save
 endfunction"}}}
 function! s:toggle_mark()"{{{
   if line('.') <= b:unite.prompt_linenr

@@ -482,6 +482,9 @@ Normal mode mappings.
 <Plug>(unite_input_directory)			*<Plug>(unite_input_directory)*
 		Narrows with inputting directory name.
 
+<Plug>(unite_delete_backward_path)		*<Plug>(unite_delete_backward_path)*
+		Deletes a path upward. Refer to |i_<Plug>(unite_delete_backward_path)|.
+
 Insert mode mappings.
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -561,6 +564,7 @@ q		|<Plug>(unite_exit)|
 <C-p>		|<Plug>(unite_rotate_previous_source)|
 <C-g>		|<Plug>(unite_print_candidate)|
 <C-l>		|<Plug>(unite_redraw)|
+<C-h>		|<Plug>(unite_delete_backward_path)|
 gg		|<Plug>(unite_cursor_top)|
 j		|<Plug>(unite_loop_cursor_down)|
 <Down>		|<Plug>(unite_loop_cursor_down)|
@@ -1051,6 +1055,8 @@ CHANGELOG					*unite-changelog*
 
 2011-01-30
 - Added no-current option in window and tab source.
+- Added <Plug>(unite_delete_backward_path) keymapping.
+- Improved normal mode redraw.
 
 2011-01-28
 - Improved unite-register.
