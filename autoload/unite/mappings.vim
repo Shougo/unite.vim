@@ -38,26 +38,26 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_rotate_next_source)  :<C-u>call <SID>rotate_source(1)<CR>
   nnoremap <silent><buffer> <Plug>(unite_rotate_previous_source)  :<C-u>call <SID>rotate_source(0)<CR>
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
-  nnoremap <buffer><expr> <Plug>(unite_cursor_top)  b:unite.prompt_linenr.'G0z.'
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? b:unite.prompt_linenr.'G0z.' : 'j'
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= b:unite.prompt_linenr)? 'G' : 'k'
+  nnoremap <buffer><expr> <Plug>(unite_cursor_top)  unite#get_current_unite().prompt_linenr.'G0z.'
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? unite#get_current_unite().prompt_linenr.'G0z.' : 'j'
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= unite#get_current_unite().prompt_linenr)? 'G' : 'k'
   nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  :<C-u>call <SID>quick_match()<CR>
   nnoremap <silent><buffer> <Plug>(unite_input_directory)   :<C-u>call <SID>input_directory()<CR>
-  nnoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(b:unite.context.default_action)
+  nnoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(unite#get_current_unite().context.default_action)
   nnoremap <silent><buffer> <Plug>(unite_delete_backward_path)  :<C-u>call <SID>normal_delete_backward_path()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
 
   inoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
   inoremap <silent><buffer> <Plug>(unite_insert_leave)  <C-o>:<C-u>call <SID>insert_leave()<CR>
-  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(b:unite.prompt)+1) ? "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
-  inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(b:unite.prompt)+1))
-  inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(b:unite.prompt)+1) ? '' : "\<C-w>"
-  inoremap <expr><buffer> <Plug>(unite_delete_backward_path)  col('.') <= (len(b:unite.prompt)+1) ? '' : <SID>delete_backward_path()
-  inoremap <expr><buffer> <Plug>(unite_select_next_line)  pumvisible() ? "\<C-n>" : line('.') == line('$') ? "\<C-Home>\<End>".repeat("\<Down>", b:unite.prompt_linenr-1)
-        \ : line('.') == b:unite.prompt_linenr ? "\<Home>\<Down>\<Down>" : "\<Home>\<Down>"
-  inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : line('.') == b:unite.prompt_linenr ? "\<C-End>\<Home>"
-        \ : line('.') == (b:unite.prompt_linenr+2) ? "\<End>\<Up>\<Up>" : "\<Home>\<Up>"
+  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
+  inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(unite#get_current_unite().prompt)+1))
+  inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : "\<C-w>"
+  inoremap <expr><buffer> <Plug>(unite_delete_backward_path)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : <SID>delete_backward_path()
+  inoremap <expr><buffer> <Plug>(unite_select_next_line)  pumvisible() ? "\<C-n>" : line('.') == line('$') ? "\<C-Home>\<End>".repeat("\<Down>", unite#get_current_unite().prompt_linenr-1)
+        \ : line('.') == unite#get_current_unite().prompt_linenr ? "\<Home>\<Down>\<Down>" : "\<Home>\<Down>"
+  inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : line('.') == unite#get_current_unite().prompt_linenr ? "\<C-End>\<Home>"
+        \ : line('.') == (unite#get_current_unite().prompt_linenr+2) ? "\<End>\<Up>\<Up>" : "\<Home>\<Up>"
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
@@ -65,7 +65,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <silent><buffer> <Plug>(unite_move_head)  <C-o>:<C-u>call <SID>insert_head()<CR>
   inoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  <C-o>:<C-u>call <SID>quick_match()<CR>
   inoremap <silent><buffer> <Plug>(unite_input_directory)   <C-o>:<C-u>call <SID>input_directory()<CR>
-  inoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(b:unite.context.default_action)
+  inoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(unite#get_current_unite().context.default_action)
   "}}}
 
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -95,7 +95,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
   nnoremap <silent><buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
   nnoremap <silent><buffer><expr> e   unite#smart_map('e', unite#do_action('narrow'))
-  nnoremap <silent><buffer><expr> l   unite#smart_map('l', unite#do_action(b:unite.context.default_action))
+  nnoremap <silent><buffer><expr> l   unite#smart_map('l', unite#do_action(unite#get_current_unite().context.default_action))
   nnoremap <silent><buffer><expr> p   unite#smart_map('p', unite#do_action('preview'))
   nmap <silent><buffer><expr> x       unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 
@@ -127,14 +127,15 @@ endfunction"}}}
 
 function! unite#mappings#narrowing(word)"{{{
   setlocal modifiable
-  let b:unite.input = escape(a:word, ' *')
-  call setline(b:unite.prompt_linenr, b:unite.prompt . b:unite.input)
+  let l:unite = unite#get_current_unite()
+  let l:unite.input = escape(a:word, ' *')
+  call setline(unite#get_current_unite().prompt_linenr, unite#get_current_unite().prompt . unite#get_current_unite().input)
   call unite#force_redraw()
-  if b:unite.is_insert
-    execute b:unite.prompt_linenr
+  if unite#get_current_unite().is_insert
+    execute unite#get_current_unite().prompt_linenr
     startinsert!
   else
-    execute b:unite.prompt_linenr+1
+    execute unite#get_current_unite().prompt_linenr+1
     normal! 0
   endif
 endfunction"}}}
@@ -142,9 +143,9 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   let l:candidates = unite#get_marked_candidates()
 
   if empty(l:candidates)
-    let l:num = a:0 > 0 ? a:1 : line('.') <= b:unite.prompt_linenr ? 0 : line('.') - (b:unite.prompt_linenr+1)
+    let l:num = a:0 > 0 ? a:1 : line('.') <= unite#get_current_unite().prompt_linenr ? 0 : line('.') - (unite#get_current_unite().prompt_linenr+1)
 
-    if line('$')-(b:unite.prompt_linenr+1) < l:num
+    if line('$')-(unite#get_current_unite().prompt_linenr+1) < l:num
       " Ignore.
       return
     endif
@@ -229,25 +230,25 @@ function! s:exit()"{{{
   call unite#force_quit_session()
 endfunction"}}}
 function! s:delete_backward_path()"{{{
-  let l:input = getline(b:unite.prompt_linenr)[len(b:unite.prompt):]
+  let l:input = getline(unite#get_current_unite().prompt_linenr)[len(unite#get_current_unite().prompt):]
   return repeat("\<C-h>", len(matchstr(l:input, '[^/]*.$')))
 endfunction"}}}
 function! s:normal_delete_backward_path()"{{{
   let l:modifiable_save = &l:modifiable
   setlocal modifiable
-  call setline(b:unite.prompt_linenr,
-        \ substitute(getline(b:unite.prompt_linenr)[len(b:unite.prompt):],
+  call setline(unite#get_current_unite().prompt_linenr,
+        \ substitute(getline(unite#get_current_unite().prompt_linenr)[len(unite#get_current_unite().prompt):],
         \                 '[^/]*.$', '', ''))
   call unite#redraw()
   let &l:modifiable = l:modifiable_save
 endfunction"}}}
 function! s:toggle_mark()"{{{
-  if line('.') <= b:unite.prompt_linenr
+  if line('.') <= unite#get_current_unite().prompt_linenr
     " Ignore.
     return
   endif
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - (b:unite.prompt_linenr+1)]
+  let l:candidate = unite#get_unite_candidates()[line('.') - (unite#get_current_unite().prompt_linenr+1)]
   let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
   let l:candidate.unite__marked_time = localtime()
   call unite#redraw_line()
@@ -255,14 +256,14 @@ function! s:toggle_mark()"{{{
   normal! j
 endfunction"}}}
 function! s:toggle_mark_candidates(start, end)"{{{
-  if a:start <= b:unite.prompt_linenr
+  if a:start <= unite#get_current_unite().prompt_linenr
     " Ignore.
     return
   endif
 
   let l:cnt = a:start
   while l:cnt <= a:end
-    let l:candidate = unite#get_unite_candidates()[l:cnt - (b:unite.prompt_linenr+1)]
+    let l:candidate = unite#get_unite_candidates()[l:cnt - (unite#get_current_unite().prompt_linenr+1)]
     let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
     let l:candidate.unite__marked_time = localtime()
 
@@ -272,14 +273,14 @@ function! s:toggle_mark_candidates(start, end)"{{{
   endwhile
 endfunction"}}}
 function! s:choose_action()"{{{
-  if line('$') < (b:unite.prompt_linenr+1)
+  if line('$') < (unite#get_current_unite().prompt_linenr+1)
     " Ignore.
     return
   endif
 
   let l:candidates = unite#get_marked_candidates()
   if empty(l:candidates)
-    let l:num = line('.') <= b:unite.prompt_linenr ? 0 : line('.') - (b:unite.prompt_linenr+1)
+    let l:num = line('.') <= unite#get_current_unite().prompt_linenr ? 0 : line('.') - (unite#get_current_unite().prompt_linenr+1)
 
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
@@ -356,31 +357,35 @@ function! s:choose_action()"{{{
   call unite#mappings#do_action(l:selected_action)
 endfunction"}}}
 function! s:insert_leave()"{{{
+  let l:unite = unite#get_current_unite()
+
   stopinsert
-  if line('.') != b:unite.prompt_linenr
+  if line('.') != l:unite.prompt_linenr
     normal! 0
   endif
 
-  let b:unite.is_insert = 0
+  let l:unite.is_insert = 0
 endfunction"}}}
 function! s:insert_enter()"{{{
-  if line('.') != b:unite.prompt_linenr
-    execute b:unite.prompt_linenr
+  let l:unite = unite#get_current_unite()
+
+  if line('.') != l:unite.prompt_linenr
+    execute l:unite.prompt_linenr
     startinsert!
-  elseif col('.') <= len(b:unite.prompt)+1
+  elseif col('.') <= len(l:unite.prompt)+1
     startinsert
     let l:pos = getpos('.')
-    let l:pos[2] = len(b:unite.prompt)+1
+    let l:pos[2] = len(l:unite.prompt)+1
     call setpos('.', l:pos)
   else
     startinsert
   endif
 
-  let b:unite.is_insert = 1
+  let l:unite.is_insert = 1
 endfunction"}}}
 function! s:insert_head()"{{{
   let l:pos = getpos('.')
-  let l:pos[2] = len(b:unite.prompt)+1
+  let l:pos[2] = len(unite#get_current_unite().prompt)+1
   call setpos('.', l:pos)
   call s:insert_enter()
 endfunction"}}}
@@ -388,7 +393,7 @@ function! s:append_enter()"{{{
   call s:insert_enter()
   if col('.')+1 == col('$')
     startinsert!
-  elseif col('$') != len(b:unite.prompt)+1
+  elseif col('$') != len(unite#get_current_unite().prompt)+1
     normal! l
   endif
 endfunction"}}}
@@ -397,17 +402,20 @@ function! s:append_end()"{{{
   startinsert!
 endfunction"}}}
 function! s:redraw()"{{{
-  let b:unite.context.is_redraw = 1
+  let l:unite = unite#get_current_unite()
+  let l:unite.context.is_redraw = 1
   call unite#force_redraw()
-  let b:unite.context.is_redraw = 0
+  let l:unite.context.is_redraw = 0
 endfunction"}}}
 function! s:rotate_source(is_next)"{{{
-  for l:source in unite#loaded_sources_list()
-    let b:unite.sources = a:is_next ?
-          \ add(b:unite.sources[1:], b:unite.sources[0]) :
-          \ insert(b:unite.sources[: -2], b:unite.sources[-1])
+  let l:unite = unite#get_current_unite()
 
-    if !empty(b:unite.sources[0].unite__candidates)
+  for l:source in unite#loaded_sources_list()
+    let l:unite.sources = a:is_next ?
+          \ add(l:unite.sources[1:], l:unite.sources[0]) :
+          \ insert(l:unite.sources[: -2], l:unite.sources[-1])
+
+    if !empty(l:unite.sources[0].unite__candidates)
       break
     endif
   endfor
@@ -416,25 +424,25 @@ function! s:rotate_source(is_next)"{{{
   call unite#redraw_candidates()
 endfunction"}}}
 function! s:print_candidate()"{{{
-  if line('.') <= b:unite.prompt_linenr
+  if line('.') <= unite#get_current_unite().prompt_linenr
     " Ignore.
     return
   endif
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - (b:unite.prompt_linenr+1)]
+  let l:candidate = unite#get_unite_candidates()[line('.') - (unite#get_current_unite().prompt_linenr+1)]
   echo l:candidate.word
 endfunction"}}}
 function! s:insert_selected_candidate()"{{{
-  if line('.') <= b:unite.prompt_linenr
+  if line('.') <= unite#get_current_unite().prompt_linenr
     " Ignore.
     return
   endif
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - (b:unite.prompt_linenr+1)]
+  let l:candidate = unite#get_unite_candidates()[line('.') - (unite#get_current_unite().prompt_linenr+1)]
   call unite#mappings#narrowing(l:candidate.word)
 endfunction"}}}
 function! s:quick_match()"{{{
-  if line('$') < (b:unite.prompt_linenr+1)
+  if line('$') < (unite#get_current_unite().prompt_linenr+1)
     call unite#util#print_error('Candidate is nothing.')
     return
   elseif !empty(unite#get_marked_candidates())
@@ -459,8 +467,8 @@ function! s:quick_match()"{{{
   call unite#force_redraw()
 
   if has_key(g:unite_quick_match_table, l:char)
-        \ && g:unite_quick_match_table[l:char] < len(b:unite.candidates)
-    call unite#mappings#do_action(b:unite.context.default_action,
+        \ && g:unite_quick_match_table[l:char] < len(unite#get_current_unite().candidates)
+    call unite#mappings#do_action(unite#get_current_unite().context.default_action,
           \ g:unite_quick_match_table[l:char])
   else
     call unite#util#print_error('Canceled.')

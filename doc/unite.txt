@@ -1057,6 +1057,7 @@ CHANGELOG					*unite-changelog*
 - Added no-current option in window and tab source.
 - Added <Plug>(unite_delete_backward_path) keymapping.
 - Improved normal mode redraw.
+- Refactored.
 
 2011-01-28
 - Improved unite-register.
