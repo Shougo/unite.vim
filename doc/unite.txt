@@ -192,6 +192,11 @@ COMMANDS 					*unite-commands*
 		|g:unite_enable_start_insert| option.
 		The behavior when both options are defined is undefined.
 
+						*unite-options-immediately*
+		-immediately
+		If candidate is one, do default action immediately. If
+		candidate is empty, don't open unite buffer.
+
 						*unite-options-no-quit*
 		-no-quit
 		Doesn't close the unite buffer after firing an action.  Unless
@@ -1058,6 +1063,7 @@ CHANGELOG					*unite-changelog*
 - Added <Plug>(unite_delete_backward_path) keymapping.
 - Improved normal mode redraw.
 - Refactored.
+- Added -immediately option.
 
 2011-01-28
 - Improved unite-register.

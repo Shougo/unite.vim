@@ -159,6 +159,7 @@ let s:unite_options = [
       \ '-buffer-name=', '-input=', '-prompt=',
       \ '-default-action=', '-start-insert','-no-start-insert', '-no-quit',
       \ '-winwidth=', '-winheight=',
+      \ '-immediately',
       \]
 "}}}
 
@@ -523,32 +524,54 @@ function! unite#start(sources, ...)"{{{
   if !has_key(l:context, 'winheight')
     let l:context.winheight = g:unite_winheight
   endif
+  if !has_key(l:context, 'immediately')
+    let l:context.immediately = 0
+  endif
   let l:context.is_redraw = 0
 
   try
-    call s:initialize_unite_buffer(a:sources, l:context)
+    call s:initialize_current_unite(a:sources, l:context)
   catch /^Invalid source/
     return
   endtry
 
+  " Force caching.
+  let s:current_unite.last_input = l:context.input
+  call s:recache_candidates(l:context.input, 1)
+
+  if l:context.immediately
+    let l:candidates = unite#gather_candidates()
+
+    " Immediately action.
+    if empty(l:candidates)
+      " Ignore.
+      return
+    elseif len(l:candidates) == 1
+      " Default action.
+      call unite#mappings#do_action(l:context.default_action, l:candidates[0])
+      return
+    endif
+  endif
+
+  call s:initialize_unite_buffer()
+
   setlocal modifiable
-
-  silent % delete _
-  call unite#redraw_status()
-  call setline(unite#get_current_unite().prompt_linenr, unite#get_current_unite().prompt . unite#get_current_unite().context.input)
-
-  call unite#force_redraw()
 
   let l:unite = unite#get_current_unite()
 
-  if unite#get_current_unite().context.start_insert || unite#get_current_unite().context.is_insert
+  silent % delete _
+  call unite#redraw_status()
+  call setline(l:unite.prompt_linenr, l:unite.prompt . l:unite.context.input)
+  call unite#redraw_candidates()
+
+  if l:unite.context.start_insert || l:unite.context.is_insert
     let l:unite.is_insert = 1
-    execute unite#get_current_unite().prompt_linenr
+    execute l:unite.prompt_linenr
     normal! 0z.
     startinsert!
   else
     let l:unite.is_insert = 0
-    execute (unite#get_current_unite().prompt_linenr+1)
+    execute (l:unite.prompt_linenr+1)
     normal! 0z.
   endif
 
@@ -755,7 +778,17 @@ function! s:initialize_kinds()"{{{
   return l:kinds
 endfunction"}}}
 function! s:recache_candidates(input, is_force)"{{{
-  let l:input_list = filter(split(a:input, '\\\@<! ', 1), 'v:val !~ "!"')
+  " Save options.
+  let l:ignorecase_save = &ignorecase
+
+  if g:unite_enable_smart_case && a:input =~ '\u'
+    let &ignorecase = 0
+  else
+    let &ignorecase = g:unite_enable_ignore_case
+  endif
+
+  let l:input_list = filter(split(s:get_substitute_input(a:input),
+        \                     '\\\@<! ', 1), 'v:val !~ "!"')
   let l:input = empty(l:input_list) ? '' : l:input_list[0]
   let l:input_len = unite#util#strchars(l:input)
 
@@ -806,6 +839,8 @@ function! s:recache_candidates(input, is_force)"{{{
 
     let l:source.unite__candidates = l:source_candidates
   endfor
+
+  let &ignorecase = l:ignorecase_save
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
   let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), unite#get_current_unite().max_source_name, 5)
@@ -845,7 +880,7 @@ function! s:convert_line(candidate)"{{{
         \ . unite#util#truncate_smart(a:candidate.abbr, l:max_width, l:max_width/3, '..')
 endfunction"}}}
 
-function! s:initialize_unite_buffer(sources, context)"{{{
+function! s:initialize_current_unite(sources, context)"{{{
   let l:context = a:context
 
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
@@ -878,27 +913,30 @@ function! s:initialize_unite_buffer(sources, context)"{{{
     endif
   endfor
 
-  call s:switch_unite_buffer(l:buffer_name, a:context)
-
   " Set parameters.
-  let b:unite = {}
-  let b:unite.winnr = l:winnr
-  let b:unite.win_rest_cmd = l:win_rest_cmd
-  let b:unite.context = l:context
-  let b:unite.candidates = []
-  let b:unite.sources = l:sources
-  let b:unite.kinds = s:initialize_kinds()
-  let b:unite.buffer_name = (l:context.buffer_name == '') ? 'default' : l:context.buffer_name
-  let b:unite.prompt = l:context.prompt
-  let b:unite.input = l:context.input
-  let b:unite.last_input = l:context.input
-  let b:unite.bufnr = bufnr('%')
-  let b:unite.hlsearch_save = &hlsearch
-  let b:unite.search_pattern_save = @/
-  let b:unite.prompt_linenr = 2
-  let b:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])')) + 2
+  let l:unite = {}
+  let l:unite.winnr = l:winnr
+  let l:unite.win_rest_cmd = l:win_rest_cmd
+  let l:unite.context = l:context
+  let l:unite.candidates = []
+  let l:unite.sources = l:sources
+  let l:unite.kinds = s:initialize_kinds()
+  let l:unite.buffer_name = (l:context.buffer_name == '') ? 'default' : l:context.buffer_name
+  let l:unite.prompt = l:context.prompt
+  let l:unite.input = l:context.input
+  let l:unite.last_input = l:context.input
+  let l:unite.bufnr = bufnr('%')
+  let l:unite.hlsearch_save = &hlsearch
+  let l:unite.search_pattern_save = @/
+  let l:unite.prompt_linenr = 2
+  let l:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])')) + 2
 
-  let s:current_unite = b:unite
+  let s:current_unite = l:unite
+endfunction"}}}
+function! s:initialize_unite_buffer()"{{{
+  call s:switch_unite_buffer(s:current_unite.buffer_name, s:current_unite.context)
+
+  let b:unite = s:current_unite
 
   let s:last_unite_bufnr = bufnr('%')
 
@@ -1003,38 +1041,8 @@ function! s:redraw(is_force) "{{{
   let l:unite = unite#get_current_unite()
   let l:unite.last_input = l:input
 
-  " Save options.
-  let l:ignorecase_save = &ignorecase
-
-  if g:unite_enable_smart_case && l:input =~ '\u'
-    let &ignorecase = 0
-  else
-    let &ignorecase = g:unite_enable_ignore_case
-  endif
-
-  if has_key(s:substitute_pattern, unite#get_current_unite().buffer_name)
-    if unite#get_current_unite().input != '' && stridx(l:input, unite#get_current_unite().input) == 0
-      " Substitute after input.
-      let l:input_save = l:input
-      let l:subst = l:input_save[len(unite#get_current_unite().input) :]
-      let l:input = l:input_save[: len(unite#get_current_unite().input)-1]
-    else
-      " Substitute all input.
-      let l:subst = l:input
-      let l:input = ''
-    endif
-
-    for l:pattern in sort(values(s:substitute_pattern[unite#get_current_unite().buffer_name]), 's:compare_substitute_patterns')
-      let l:subst = substitute(l:subst, l:pattern.pattern, l:pattern.subst, 'g')
-    endfor
-
-    let l:input .= l:subst
-  endif
-
   " Recaching.
   call s:recache_candidates(l:input, a:is_force)
-
-  let &ignorecase = l:ignorecase_save
 
   " Redraw.
   call unite#redraw_candidates()
@@ -1142,6 +1150,30 @@ endfunction"}}}
 function! s:get_loaded_sources(...)"{{{
   let l:unite = unite#get_current_unite()
   return a:0 == 0 ? l:unite.sources : get(l:unite.sources, a:1, {})
+endfunction"}}}
+function! s:get_substitute_input(input)"{{{
+  let l:input = a:input
+
+  if has_key(s:substitute_pattern, unite#get_current_unite().buffer_name)
+    if unite#get_current_unite().input != '' && stridx(l:input, unite#get_current_unite().input) == 0
+      " Substitute after input.
+      let l:input_save = l:input
+      let l:subst = l:input_save[len(unite#get_current_unite().input) :]
+      let l:input = l:input_save[: len(unite#get_current_unite().input)-1]
+    else
+      " Substitute all input.
+      let l:subst = l:input
+      let l:input = ''
+    endif
+
+    for l:pattern in sort(values(s:substitute_pattern[unite#get_current_unite().buffer_name]), 's:compare_substitute_patterns')
+      let l:subst = substitute(l:subst, l:pattern.pattern, l:pattern.subst, 'g')
+    endfor
+
+    let l:input .= l:subst
+  endif
+
+  return l:input
 endfunction"}}}
 "}}}
 

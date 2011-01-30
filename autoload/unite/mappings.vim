@@ -142,15 +142,20 @@ endfunction"}}}
 function! unite#mappings#do_action(action_name, ...)"{{{
   let l:candidates = unite#get_marked_candidates()
 
-  if empty(l:candidates)
-    let l:num = a:0 > 0 ? a:1 : line('.') <= unite#get_current_unite().prompt_linenr ? 0 : line('.') - (unite#get_current_unite().prompt_linenr+1)
+  if a:0 > 0 || empty(l:candidates)
+    let l:num = a:0 > 0 ? a:1 :
+          \ (line('.') <= unite#get_current_unite().prompt_linenr) ? 0 :
+          \ (line('.') - (unite#get_current_unite().prompt_linenr + 1))
+    if type(l:num) == type(0)
+      if line('$') - (unite#get_current_unite().prompt_linenr + 1) < l:num
+        " Ignore.
+        return
+      endif
 
-    if line('$')-(unite#get_current_unite().prompt_linenr+1) < l:num
-      " Ignore.
-      return
+      let l:candidates = [ unite#get_unite_candidates()[l:num] ]
+    else
+      let l:candidates = [ l:num ]
     endif
-
-    let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
 
   " Check action.

@@ -201,6 +201,11 @@ http://www.ustream.tv/recorded/11240673
 		uniteバッファの高さを指定する。指定しないと、
 		|g:unite_winheight|が使われる。
 
+						*unite-options-immediately*
+		-immediately
+		候補が一つしかないとき、即座にアクションを実行する。候補がな
+		いときにはuniteバッファを開かない。
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。
