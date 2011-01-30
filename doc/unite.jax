@@ -816,6 +816,9 @@ tab		開いているタブを候補とする。t:cwdをカレントディレク�
 		使用される。)存在していなかったら、代わりにタブの中での現在の
 		バッファ名が使われる。
 
+		source引数：
+		1. no-currentを指定すると、カレントタブを除外する。
+
 						*unite-source-register*
 register	レジスタに保存されている文字列を候補とする。
 
@@ -831,6 +834,9 @@ source		uniteのsource名そのものを候補とする。
 						*unite-source-window*
 window		開いているウィンドウを候補とする。ウィンドウは移動した順番に
 		整列される。
+
+		source引数：
+		1. no-currentを指定すると、カレントウインドウを除外する。
 
 						*unite-source-output*
 output		実行したVimコマンドの出力を候補とする。

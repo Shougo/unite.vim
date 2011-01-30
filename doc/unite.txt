@@ -822,6 +822,9 @@ tab		Nominates opened tabs as candidates, regarding t:cwd as the
 		If t:title exists, this will be used as "word" for narrowing.
 		Otherwise, the buffer name of the current tab will be used.
 
+		Source arguments:
+		1. "no-current" remove current tab from candidates.
+
 						*unite-source-register*
 register	Nominates the strings stored in registers as candidates.
 
@@ -837,6 +840,9 @@ source		Nominates Unite source names themselves as candidates.
 						*unite-source-window*
 window		Nominates opend windows as candidates, ordering by time
 		series.
+
+		Source arguments:
+		1. "no-current" remove current window from candidates.
 
 						*unite-source-output*
 output		Nominates executed Vim command as candidates.
@@ -1042,6 +1048,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-01-30
+- Added no-current option in window and tab source.
 
 2011-01-28
 - Improved unite-register.

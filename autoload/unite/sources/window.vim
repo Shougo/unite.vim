@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jan 2011.
+" Last Modified: 30 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,12 +58,10 @@ function! s:source.hooks.on_init(args, context)"{{{
     endif
   endfor
 
-  if winnr() != 0
-    unlet l:list[winnr()-1]
-  endif
+  unlet l:list[winnr()-1]
   call sort(l:list, 's:compare')
-  if winnr() != 0
-    " Add previous window.
+  if empty(a:args) || a:args[0] !=# 'no-current'
+    " Add current window.
     call add(l:list, winnr())
   endif
 
