@@ -1058,6 +1058,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-01-31
+- Fixed substitute input.
+
 2011-01-30
 - Added no-current option in window and tab source.
 - Added <Plug>(unite_delete_backward_path) keymapping.
