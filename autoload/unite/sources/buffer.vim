@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Dec 2010.
+" Last Modified: 31 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,12 +59,15 @@ endfunction"}}}
 let s:source_buffer_all = {
       \ 'name' : 'buffer',
       \ 'description' : 'candidates from buffer list',
+      \ 'hooks' : {},
       \}
 
-function! s:source_buffer_all.gather_candidates(args, context)"{{{
-  let l:list = s:get_buffer_list()
+function! s:source_buffer_all.hooks.on_init(args, context)"{{{
+  let a:context.source__buffer_list = s:get_buffer_list()
+endfunction"}}}
 
-  let l:candidates = map(l:list, '{
+function! s:source_buffer_all.gather_candidates(args, context)"{{{
+  let l:candidates = map(copy(a:context.source__buffer_list), '{
         \ "word" : s:make_abbr(v:val.action__buffer_nr),
         \ "kind" : "buffer",
         \ "source" : "buffer",
@@ -79,14 +82,19 @@ endfunction"}}}
 let s:source_buffer_tab = {
       \ 'name' : 'buffer_tab',
       \ 'description' : 'candidates from buffer list in current tab',
+      \ 'hooks' : {},
       \}
+
+function! s:source_buffer_tab.hooks.on_init(args, context)"{{{
+  let a:context.source__buffer_list = s:get_buffer_list()
+endfunction"}}}
 
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{
   if !exists('t:unite_buffer_dictionary')
     let t:unite_buffer_dictionary = {}
   endif
 
-  let l:list = filter(s:get_buffer_list(), 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
+  let l:list = filter(copy(a:context.source__buffer_list), 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
 
   let l:candidates = map(l:list, '{
         \ "word" : s:make_abbr(v:val.action__buffer_nr),
@@ -137,7 +145,7 @@ function! s:get_buffer_list()"{{{
   let l:list = []
   let l:bufnr = 1
   while l:bufnr <= bufnr('$')
-    if buflisted(l:bufnr) && l:bufnr != bufnr('#')
+    if buflisted(l:bufnr) && l:bufnr != bufnr('%')
       if has_key(s:buffer_list, l:bufnr)
         call add(l:list, s:buffer_list[l:bufnr])
       else
@@ -150,13 +158,13 @@ function! s:get_buffer_list()"{{{
 
   call sort(l:list, 's:compare')
 
-  if buflisted(bufnr('#'))
+  if buflisted(bufnr('%'))
     " Add current buffer.
-    if has_key(s:buffer_list, bufnr('#'))
-      call add(l:list, s:buffer_list[bufnr('#')])
+    if has_key(s:buffer_list, bufnr('%'))
+      call add(l:list, s:buffer_list[bufnr('%')])
     else
       call add(l:list,
-            \ { 'action__buffer_nr' : bufnr('#'), 'source__time' : 0 })
+            \ { 'action__buffer_nr' : bufnr('%'), 'source__time' : 0 })
     endif
   endif
 
