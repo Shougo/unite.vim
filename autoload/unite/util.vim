@@ -36,7 +36,7 @@ function! unite#util#truncate_smart(str, max, footer_width, separator)"{{{
     let ret = unite#util#strwidthpart(a:str, header_width) . a:separator
           \ . unite#util#strwidthpart_reverse(a:str, a:footer_width)
   endif
-   
+
   return unite#util#truncate(ret, a:max)
 endfunction"}}}
 
@@ -59,28 +59,28 @@ function! unite#util#strchars(str)"{{{
   return len(substitute(a:str, '.', 'x', 'g'))
 endfunction"}}}
 
-  function! unite#util#strwidthpart(str, width)"{{{
-    let ret = a:str
-    let width = unite#util#wcswidth(a:str)
-    while width > a:width
-      let char = matchstr(ret, '.$')
-      let ret = ret[: -1 - len(char)]
-      let width -= s:wcwidth(char)
-    endwhile
+function! unite#util#strwidthpart(str, width)"{{{
+  let ret = a:str
+  let width = unite#util#wcswidth(a:str)
+  while width > a:width
+    let char = matchstr(ret, '.$')
+    let ret = ret[: -1 - len(char)]
+    let width -= s:wcwidth(char)
+  endwhile
 
-    return ret
-  endfunction"}}}
-  function! unite#util#strwidthpart_reverse(str, width)"{{{
-    let ret = a:str
-    let width = unite#util#wcswidth(a:str)
-    while width > a:width
-      let char = matchstr(ret, '^.')
-      let ret = ret[len(char) :]
-      let width -= s:wcwidth(char)
-    endwhile
+  return ret
+endfunction"}}}
+function! unite#util#strwidthpart_reverse(str, width)"{{{
+  let ret = a:str
+  let width = unite#util#wcswidth(a:str)
+  while width > a:width
+    let char = matchstr(ret, '^.')
+    let ret = ret[len(char) :]
+    let width -= s:wcwidth(char)
+  endwhile
 
-    return ret
-  endfunction"}}}
+  return ret
+endfunction"}}}
 
 if v:version >= 703
   " Use builtin function.
