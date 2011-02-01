@@ -206,6 +206,10 @@ http://www.ustream.tv/recorded/11240673
 		候補が一つしかないとき、即座にアクションを実行する。候補がな
 		いときにはuniteバッファを開かない。
 
+						*unite-options-auto-preview*
+		-auto-preview
+		候補を選択した際、自動的に"preview"アクションを実行する。
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。

@@ -192,11 +192,6 @@ COMMANDS 					*unite-commands*
 		|g:unite_enable_start_insert| option.
 		The behavior when both options are defined is undefined.
 
-						*unite-options-immediately*
-		-immediately
-		If candidate is one, do default action immediately. If
-		candidate is empty, don't open unite buffer.
-
 						*unite-options-no-quit*
 		-no-quit
 		Doesn't close the unite buffer after firing an action.  Unless
@@ -212,6 +207,15 @@ COMMANDS 					*unite-commands*
 		-winheight={window-height}
 		Specifies the height of a unite buffer.  Unless you specify
 		it, |g:unite_winheight| will be used.
+
+						*unite-options-immediately*
+		-immediately
+		If candidate is one, do default action immediately. If
+		candidate is empty, don't open unite buffer.
+
+						*unite-options-auto-preview*
+		-auto-preview
+		When you selected candidate, do "preview" action automatically.
 
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
@@ -1060,6 +1064,8 @@ CHANGELOG					*unite-changelog*
 
 2011-02-01
 - Don't save directory in file_mru.
+- Fixed unite-command.
+- Implemented -auto-preview option.
 
 2011-01-31
 - Fixed substitute input.

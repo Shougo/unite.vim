@@ -51,7 +51,9 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
-  call unite#util#smart_execute_command('pedit', l:candidate.action__path)
+  if filereadable(a:candidate.action__path)
+    silent call unite#util#smart_execute_command('pedit', a:candidate.action__path)
+  endif
 endfunction"}}}
 
 let s:kind.action_table.tabopen = {

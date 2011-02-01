@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2011.
+" Last Modified: 01 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -159,7 +159,7 @@ let s:unite_options = [
       \ '-buffer-name=', '-input=', '-prompt=',
       \ '-default-action=', '-start-insert','-no-start-insert', '-no-quit',
       \ '-winwidth=', '-winheight=',
-      \ '-immediately',
+      \ '-immediately', '-auto-preview'
       \]
 "}}}
 
@@ -526,6 +526,9 @@ function! unite#start(sources, ...)"{{{
   endif
   if !has_key(l:context, 'immediately')
     let l:context.immediately = 0
+  endif
+  if !has_key(l:context, 'auto_preview')
+    let l:context.auto_preview = 0
   endif
   let l:context.is_redraw = 0
 
@@ -1090,6 +1093,10 @@ function! s:on_cursor_moved()  "{{{
   execute 'setlocal' line('.') == unite#get_current_unite().prompt_linenr ? 'modifiable' : 'nomodifiable'
   execute 'match' (line('.') <= unite#get_current_unite().prompt_linenr ? line('$') <= unite#get_current_unite().prompt_linenr ?
         \ 'Error /\%'.unite#get_current_unite().prompt_linenr.'l/' : g:unite_cursor_line_highlight.' /\%'.(unite#get_current_unite().prompt_linenr+1).'l/' : g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+  if unite#get_current_unite().context.auto_preview
+        \ && line('.') != unite#get_current_unite().prompt_linenr
+    call unite#mappings#do_action('preview')
+  endif
 endfunction"}}}
 
 " Internal helper functions."{{{
