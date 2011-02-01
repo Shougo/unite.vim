@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jan 2011.
+" Last Modified: 01 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,18 +45,7 @@ function! unite#sources#file_mru#define()"{{{
   return s:source
 endfunction"}}}
 function! unite#sources#file_mru#_append()"{{{
-  let l:filetype = getbufvar(bufnr('%'), '&filetype')
-  if l:filetype ==# 'vimfiler'
-    let l:path = getbufvar(bufnr('%'), 'vimfiler').current_dir
-  elseif l:filetype ==# 'vimshell'
-    let l:path = getbufvar(bufnr('%'), 'vimshell').save_dir
-  else
-    let l:path = expand('%:p')
-  endif
-
-  let l:path = unite#util#substitute_path_separator(simplify(l:path))
-  " Chomp last /.
-  let l:path = substitute(l:path, '/$', '', '')
+  let l:path = unite#util#substitute_path_separator(simplify(expand('%:p')))
 
   " Append the current buffer to the mru list.
   if !s:is_exists_path(path) || &l:buftype =~ 'help'
@@ -146,7 +135,7 @@ function! s:load()  "{{{
   endif
 endfunction"}}}
 function! s:is_exists_path(path)  "{{{
-  return isdirectory(a:path) || filereadable(a:path)
+  return filereadable(a:path)
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
   let l:path = unite#util#substitute_path_separator(a:list[0])
