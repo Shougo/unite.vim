@@ -1094,8 +1094,9 @@ function! s:on_cursor_moved()  "{{{
   execute 'match' (line('.') <= unite#get_current_unite().prompt_linenr ? line('$') <= unite#get_current_unite().prompt_linenr ?
         \ 'Error /\%'.unite#get_current_unite().prompt_linenr.'l/' : g:unite_cursor_line_highlight.' /\%'.(unite#get_current_unite().prompt_linenr+1).'l/' : g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
   if unite#get_current_unite().context.auto_preview
-        \ && line('.') != unite#get_current_unite().prompt_linenr
+    pclose
     call unite#mappings#do_action('preview')
+    normal! z.
   endif
 endfunction"}}}
 
