@@ -1062,6 +1062,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-02-02
+- Improved syntax.
+
 2011-02-01
 - Don't save directory in file_mru.
 - Fixed unite-command.
