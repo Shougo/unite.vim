@@ -1064,6 +1064,7 @@ CHANGELOG					*unite-changelog*
 
 2011-02-02
 - Improved syntax.
+- Improved highlight off.
 
 2011-02-01
 - Don't save directory in file_mru.
