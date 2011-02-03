@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: common.vim
+" FILE: completion.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 03 Feb 2011.
 " License: MIT license  {{{
@@ -24,60 +24,38 @@
 " }}}
 "=============================================================================
 
-function! unite#kinds#common#define()"{{{
+function! unite#kinds#completion#define()"{{{
   return s:kind
 endfunction"}}}
 
 let s:kind = {
-      \ 'name' : 'common',
-      \ 'default_action' : 'nop',
+      \ 'name' : 'completion',
+      \ 'default_action' : 'insert',
       \ 'action_table': {},
-      \ 'parents': [],
       \}
 
 " Actions"{{{
-let s:kind.action_table.nop = {
-      \ 'description' : 'no operation',
-      \ }
-function! s:kind.action_table.nop.func(candidate)"{{{
-endfunction"}}}
-
-let s:kind.action_table.yank = {
-      \ 'description' : 'yank text',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.yank.func(candidates)"{{{
-  let @" = join(map(copy(a:candidates), 'v:val.word'), "\n")
-  if has('clipboard')
-    let @* = @"
-  endif
-endfunction"}}}
-
-let s:kind.action_table.yank_escape = {
-      \ 'description' : 'yank escaped text',
-      \ }
-function! s:kind.action_table.yank_escape.func(candidate)"{{{
-  let @" = escape(a:candidate.word, " *?[{`$\\%#\"|!<>")
-endfunction"}}}
-
-let s:kind.action_table.ex = {
-      \ 'description' : 'insert candidates into command line',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.ex.func(candidates)"{{{
-  " Result is ':| {candidate}', here '|' means the cursor position.
-  call feedkeys(printf(": %s\<C-b>", join(map(map(copy(a:candidates), 'v:val.word'), 'escape(v:val, " *?[{`$\\%#\"|!<>")'))), 'n')
-endfunction"}}}
-
 let s:kind.action_table.insert = {
       \ 'description' : 'insert word',
       \ }
 function! s:kind.action_table.insert.func(candidate)"{{{
-  " Paste.
-  let l:old_reg = @"
-  let @" = a:candidate.word
-  normal! ""p
-  let @" = l:old_reg
+  let l:col = a:candidate.action__complete_pos
+  let l:cur_text = matchstr(getline('.'), '^.*\%' . l:col . 'c')
+  let l:word = a:candidate.action__complete_word
+
+  " Insert word.
+  let l:next_line = getline('.')[unite#get_current_unite().context.col :]
+  call setline(line('.'), l:cur_text . l:word . l:next_line)
+  let l:pos = getpos('.')
+  let l:pos[2] = len(l:cur_text)+len(l:word)+1
+  call setpos('.', l:pos)
+  let l:next_col = len(l:cur_text)+len(l:word)+1
+
+  if l:next_col < col('$')
+    startinsert
+  else
+    startinsert!
+  endif
 endfunction"}}}
 "}}}
 

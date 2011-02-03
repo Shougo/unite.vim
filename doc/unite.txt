@@ -217,6 +217,15 @@ COMMANDS 					*unite-commands*
 		-auto-preview
 		When you selected candidate, do "preview" action automatically.
 
+						*unite-options-completion*
+		-completion
+		Use unite completion interface. |unite-options-col| is also
+		required.
+
+						*unite-options-col*
+		-col={column-number}
+		Specifies the called unite buffer position.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
@@ -968,6 +977,15 @@ window		An interface for Windows of Vim
 			action__window_nr	(String)	(Required)
 				The target window number
 
+						*unite-kind-completion*
+completion	An interface for completion
+
+			action__complete_word	(String)	(Required)
+				The completion word
+
+			action__complete_pos	(Number)	(Required)
+				The completion position
+
 ==============================================================================
 ACTIONS						*unite-actions*
 
@@ -1064,6 +1082,8 @@ CHANGELOG					*unite-changelog*
 
 2011-02-03
 - Fixed filtering bug.
+- Added completion kind.
+- Added col and completion option.
 
 2011-02-02
 - Improved syntax.

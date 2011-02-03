@@ -503,8 +503,11 @@ function! unite#start(sources, ...)"{{{
     " Disable start insert.
     let l:context.start_insert = 0
   endif
-  if !has_key(l:context, 'is_insert')
-    let l:context.is_insert = 0
+  if !has_key(l:context, 'complete')
+    let l:context.complete = 0
+  endif
+  if !has_key(l:context, 'col')
+    let l:context.col = col('.')
   endif
   if !has_key(l:context, 'no_quit')
     let l:context.no_quit = 0
@@ -568,13 +571,11 @@ function! unite#start(sources, ...)"{{{
   call setline(l:unite.prompt_linenr, l:unite.prompt . l:unite.context.input)
   call unite#redraw_candidates()
 
-  if l:unite.context.start_insert || l:unite.context.is_insert
-    let l:unite.is_insert = 1
+  if l:unite.context.start_insert || l:unite.context.complete
     execute l:unite.prompt_linenr
     normal! 0z.
     startinsert!
   else
-    let l:unite.is_insert = 0
     execute (l:unite.prompt_linenr+1)
     normal! 0z.
   endif
@@ -621,13 +622,11 @@ function! unite#resume(buffer_name)"{{{
   setlocal modifiable
 
   if g:unite_enable_start_insert
-        \ || l:unite.context.start_insert || l:unite.context.is_insert
-    let l:unite.is_insert = 1
+        \ || l:unite.context.start_insert || l:unite.context.complete
     execute l:unite.prompt_linenr
     normal! 0z.
     startinsert!
   else
-    let l:unite.is_insert = 0
     execute (l:unite.prompt_linenr+1)
     normal! 0z.
   endif
@@ -686,7 +685,13 @@ function! s:quit_session(is_force)  "{{{
     endif
   endif
 
-  if !s:current_unite.context.is_insert
+  if s:current_unite.context.complete
+    if s:current_unite.context.col < col('$')
+      startinsert
+    else
+      startinsert!
+    endif
+  else
     stopinsert
     redraw!
   endif

@@ -210,6 +210,15 @@ http://www.ustream.tv/recorded/11240673
 		-auto-preview
 		候補を選択した際、自動的に"preview"アクションを実行する。
 
+						*unite-options-completion*
+		-completion
+		uniteの補完インタフェースを使用する。|unite-options-col|を同
+		時に設定しなければならない。
+
+						*unite-options-col*
+		-col={column-number}
+		uniteを開始した位置を指定する。
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。
@@ -974,6 +983,15 @@ window		ウィンドウ
 
 			action__window_nr	(文字列)		(必須)
 				対象となるウィンドウの番号
+
+						*unite-kind-completion*
+completion	補完
+
+			action__complete_word	(String)	(Required)
+				補完する文字列
+
+			action__complete_pos	(Number)	(Required)
+				補完する位置
 
 ==============================================================================
 アクション					*unite-actions*
