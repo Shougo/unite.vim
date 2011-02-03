@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2011.
+" Last Modified: 03 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -792,10 +792,11 @@ function! s:recache_candidates(input, is_force)"{{{
     let &ignorecase = g:unite_enable_ignore_case
   endif
 
-  let l:input_list = filter(split(s:get_substitute_input(a:input),
+  let l:input = s:get_substitute_input(a:input)
+  let l:input_list = filter(split(l:input,
         \                     '\\\@<! ', 1), 'v:val !~ "!"')
-  let l:input = empty(l:input_list) ? '' : l:input_list[0]
-  let l:input_len = unite#util#strchars(l:input)
+  let l:context_input = empty(l:input_list) ? '' : l:input_list[0]
+  let l:input_len = unite#util#strchars(l:context_input)
 
   for l:source in unite#loaded_sources_list()
     " Check required pattern length.
@@ -807,7 +808,7 @@ function! s:recache_candidates(input, is_force)"{{{
     if l:source.is_volatile || a:is_force || l:source.unite__is_invalidate
       let l:source.unite__context.source = l:source
       let l:source.unite__context.is_force = a:is_force
-      let l:source.unite__context.input = l:input
+      let l:source.unite__context.input = l:context_input
       let l:source.unite__context.is_redraw = unite#get_current_unite().context.is_redraw
 
       let l:source_candidates = copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
