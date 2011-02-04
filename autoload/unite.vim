@@ -159,7 +159,7 @@ let s:unite_options = [
       \ '-buffer-name=', '-input=', '-prompt=',
       \ '-default-action=', '-start-insert','-no-start-insert', '-no-quit',
       \ '-winwidth=', '-winheight=',
-      \ '-immediately', '-auto-preview'
+      \ '-immediately', '-auto-preview', '-complete'
       \]
 "}}}
 
@@ -1111,7 +1111,9 @@ function! s:on_cursor_moved()  "{{{
   if unite#get_current_unite().context.auto_preview
     pclose
     call unite#mappings#do_action('preview')
-    normal! z.
+    if line('.') != unite#get_current_unite().prompt_linenr
+      normal! z.
+    endif
   endif
 endfunction"}}}
 

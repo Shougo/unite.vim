@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Jan 2011.
+" Last Modified: 04 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -361,6 +361,24 @@ function! s:choose_action()"{{{
   " Execute action.
   call unite#mappings#do_action(l:selected_action)
 endfunction"}}}
+function! s:insert_enter()"{{{
+  let l:unite = unite#get_current_unite()
+
+  if line('.') != l:unite.prompt_linenr
+    execute l:unite.prompt_linenr
+    startinsert!
+  else
+    startinsert
+
+    if col('.') <= len(l:unite.prompt)+1
+      let l:pos = getpos('.')
+      let l:pos[2] = len(l:unite.prompt)+1
+      call setpos('.', l:pos)
+    endif
+  endif
+
+  let l:unite.is_insert = 1
+endfunction"}}}
 function! s:insert_leave()"{{{
   let l:unite = unite#get_current_unite()
 
@@ -370,23 +388,6 @@ function! s:insert_leave()"{{{
   endif
 
   let l:unite.is_insert = 0
-endfunction"}}}
-function! s:insert_enter()"{{{
-  let l:unite = unite#get_current_unite()
-
-  if line('.') != l:unite.prompt_linenr
-    execute l:unite.prompt_linenr
-    startinsert!
-  elseif col('.') <= len(l:unite.prompt)+1
-    startinsert
-    let l:pos = getpos('.')
-    let l:pos[2] = len(l:unite.prompt)+1
-    call setpos('.', l:pos)
-  else
-    startinsert
-  endif
-
-  let l:unite.is_insert = 1
 endfunction"}}}
 function! s:insert_head()"{{{
   let l:pos = getpos('.')

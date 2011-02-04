@@ -987,11 +987,14 @@ window		ウィンドウ
 						*unite-kind-completion*
 completion	補完
 
-			action__complete_word	(String)	(Required)
+			action__complete_word	(String)	(必須)
 				補完する文字列
 
-			action__complete_pos	(Number)	(Required)
+			action__complete_pos	(Number)	(必須)
 				補完する位置
+
+			action__complete_info	(String)	(任意)
+				補完候補の追加情報
 
 ==============================================================================
 アクション					*unite-actions*
@@ -1085,6 +1088,10 @@ window						*unite-action-window*
 	delete		ウィンドウを閉じる
 	only		そのウィンドウ以外すべて閉じる
 
+completion					*unite-action-completion*
+	insert		候補の挿入
+	preview		候補の情報を表示
+
 source別アクション
 
 file_mru					*unite-action-file_mru*
@@ -1112,7 +1119,7 @@ jump_list	open
 ==============================================================================
 sourceの作成					*unite-create-source*
 
-autoload/unite/sources//に*.vimのファイルを置いておくと、自動的に読み込まれる。
+autoload/unite/sources/に*.vimのファイルを置いておくと、自動的に読み込まれる。
 その際、unite#sources#{source_name}#define()が呼ばれ、戻り値がsourceと解釈される。
 戻り値はリストでもよく、その場合はsourceのリストと解釈される。
 sourceを追加したくない場合は、空リストを返せば良い。

@@ -57,6 +57,19 @@ function! s:kind.action_table.insert.func(candidate)"{{{
     startinsert!
   endif
 endfunction"}}}
+
+let s:kind.action_table.preview = {
+      \ 'description' : 'preview word in echo area',
+      \ 'is_quit' : 0,
+      \ }
+function! s:kind.action_table.preview.func(candidate)"{{{
+  echo ''
+  redraw
+
+  if has_key(a:candidate, 'action__complete_info')
+    echo join(split(a:candidate.action__complete_info, '\n\|\r\n')[: &cmdheight-1], '\n')
+  endif
+endfunction"}}}
 "}}}
 
 " vim: foldmethod=marker
