@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: completion.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2011.
+" Last Modified: 04 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,12 +40,12 @@ let s:kind.action_table.insert = {
       \ }
 function! s:kind.action_table.insert.func(candidate)"{{{
   let l:col = a:candidate.action__complete_pos
-  let l:cur_text = matchstr(getline('.'), '^.*\%' . l:col . 'c')
+  let l:cur_text = matchstr(getline('.'), '^.*\%' . l:col . 'c.')
   let l:word = a:candidate.action__complete_word
 
   " Insert word.
-  let l:next_line = getline('.')[unite#get_current_unite().context.col :]
-  call setline(line('.'), l:cur_text . l:word . l:next_line)
+  let l:next_line = getline('.')[unite#get_current_unite().context.col-1 :]
+  call setline(line('.'), split(l:cur_text . l:word . l:next_line, '\n\|\r\n'))
   let l:pos = getpos('.')
   let l:pos[2] = len(l:cur_text)+len(l:word)+1
   call setpos('.', l:pos)
