@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2011.
+" Last Modified: 04 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -572,10 +572,12 @@ function! unite#start(sources, ...)"{{{
   call unite#redraw_candidates()
 
   if l:unite.context.start_insert || l:unite.context.complete
+    let l:unite.is_insert = 1
     execute l:unite.prompt_linenr
     normal! 0z.
     startinsert!
   else
+    let l:unite.is_insert = 0
     execute (l:unite.prompt_linenr+1)
     normal! 0z.
   endif
@@ -623,10 +625,12 @@ function! unite#resume(buffer_name)"{{{
 
   if g:unite_enable_start_insert
         \ || l:unite.context.start_insert || l:unite.context.complete
+    let l:unite.is_insert = 1
     execute l:unite.prompt_linenr
     normal! 0z.
     startinsert!
   else
+    let l:unite.is_insert = 0
     execute (l:unite.prompt_linenr+1)
     normal! 0z.
   endif

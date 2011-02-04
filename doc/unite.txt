@@ -1080,6 +1080,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-02-04
+- Fixed is_insert error.
+
 2011-02-03
 - Fixed filtering bug.
 - Added completion kind.
