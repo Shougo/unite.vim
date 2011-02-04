@@ -136,7 +136,7 @@ function! unite#mappings#narrowing(word)"{{{
     startinsert!
   else
     execute unite#get_current_unite().prompt_linenr+1
-    normal! 0
+    normal! 0z.
   endif
 endfunction"}}}
 function! unite#mappings#do_action(action_name, ...)"{{{

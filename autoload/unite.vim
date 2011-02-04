@@ -410,6 +410,19 @@ function! unite#redraw_candidates() "{{{
   endif
   call setline(unite#get_current_unite().prompt_linenr+1, l:lines)
 
+  " Resize.
+  if !g:unite_enable_split_vertically
+    let l:height = len(l:lines) + unite#get_current_unite().prompt_linenr
+    if l:height > g:unite_winheight
+      let l:height = g:unite_winheight
+    endif
+    execute 'resize' l:height
+
+    if line('.') != unite#get_current_unite().prompt_linenr
+      normal! 0z.
+    endif
+  endif
+
   let &l:modifiable = l:modifiable_save
 
   let l:unite = unite#get_current_unite()
@@ -1112,7 +1125,7 @@ function! s:on_cursor_moved()  "{{{
     pclose
     call unite#mappings#do_action('preview')
     if line('.') != unite#get_current_unite().prompt_linenr
-      normal! z.
+      normal! 0z.
     endif
   endif
 endfunction"}}}
