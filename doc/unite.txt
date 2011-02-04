@@ -1087,6 +1087,7 @@ CHANGELOG					*unite-changelog*
 - Fixed is_insert error.
 - Fixed completion kind.
 - Improved completion kind.
+- Improved resize window.
 
 2011-02-03
 - Fixed filtering bug.
