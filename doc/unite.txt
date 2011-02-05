@@ -1083,6 +1083,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-02-05
+- Fixed unite buffer name.
+
 2011-02-04
 - Fixed is_insert error.
 - Fixed completion kind.

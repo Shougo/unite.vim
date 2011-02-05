@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Feb 2011.
+" Last Modified: 05 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -680,7 +680,7 @@ function! s:quit_session(is_force)  "{{{
         wincmd p
       endif
     else
-      close
+      close!
       execute s:current_unite.winnr . 'wincmd w'
 
       if winnr('$') != 1
@@ -937,6 +937,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.sources = l:sources
   let l:unite.kinds = s:initialize_kinds()
   let l:unite.buffer_name = (l:context.buffer_name == '') ? 'default' : l:context.buffer_name
+  let l:unite.real_buffer_name = l:buffer_name
   let l:unite.prompt = l:context.prompt
   let l:unite.input = l:context.input
   let l:unite.last_input = l:context.input
@@ -949,7 +950,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let s:current_unite = l:unite
 endfunction"}}}
 function! s:initialize_unite_buffer()"{{{
-  call s:switch_unite_buffer(s:current_unite.buffer_name, s:current_unite.context)
+  call s:switch_unite_buffer(s:current_unite.real_buffer_name, s:current_unite.context)
 
   let b:unite = s:current_unite
 
