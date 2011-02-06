@@ -431,6 +431,9 @@ Normal mode mappings.
 <Plug>(unite_exit)				*<Plug>(unite_exit)*
 		Exits unite.
 
+<Plug>(unite_restart)				*<Plug>(unite_restart)*
+		Restarts unite.
+
 <Plug>(unite_do_default_action)			*<Plug>(unite_do_default_action)*
 		Runs the default action of the default candidates.  The kinds
 		of each candidates have their own defined actions.  See also
@@ -576,6 +579,7 @@ I		|<Plug>(unite_insert_head)|
 a		|<Plug>(unite_append_enter)|
 A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
+<C-r>		|<Plug>(unite_restart)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_rotate_next_source)|
@@ -1085,6 +1089,7 @@ CHANGELOG					*unite-changelog*
 
 2011-02-06
 - Fixed redraw buffer source bug.
+- Added <Plug>(unite_restart) keymapping.
 
 2011-02-05
 - Fixed unite buffer name.

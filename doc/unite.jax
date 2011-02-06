@@ -429,6 +429,9 @@ g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scro
 <Plug>(unite_exit)				*<Plug>(unite_exit)*
 		uniteを終了する。
 
+<Plug>(unite_restart)				*<Plug>(unite_restart)*
+		unitを再起動する。
+
 <Plug>(unite_do_default_action)			*<Plug>(unite_do_default_action)*
 		選択している候補に対してデフォルトのアクションを実行する。アク
 		ションは候補のkindごとに定義されている。kindについては
@@ -573,6 +576,7 @@ I		|<Plug>(unite_insert_head)|
 a		|<Plug>(unite_append_enter)|
 A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
+<C-r>		|<Plug>(unite_restart)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_rotate_next_source)|
