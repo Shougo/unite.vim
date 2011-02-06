@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2011.
+" Last Modified: 06 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -67,6 +67,11 @@ function! s:source_buffer_all.hooks.on_init(args, context)"{{{
 endfunction"}}}
 
 function! s:source_buffer_all.gather_candidates(args, context)"{{{
+  if a:context.is_redraw
+    " Recaching.
+    let a:context.source__buffer_list = s:get_buffer_list()
+  endif
+
   let l:candidates = map(copy(a:context.source__buffer_list), '{
         \ "word" : s:make_abbr(v:val.action__buffer_nr),
         \ "kind" : "buffer",
@@ -90,6 +95,11 @@ function! s:source_buffer_tab.hooks.on_init(args, context)"{{{
 endfunction"}}}
 
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{
+  if a:context.is_redraw
+    " Recaching.
+    let a:context.source__buffer_list = s:get_buffer_list()
+  endif
+
   if !exists('t:unite_buffer_dictionary')
     let t:unite_buffer_dictionary = {}
   endif
