@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Feb 2011.
+" Last Modified: 07 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -831,6 +831,10 @@ function! s:recache_candidates(input, is_force)"{{{
       let l:source_candidates = copy(l:source.unite__cached_candidates)
     endif
 
+    if has_key(l:source, 'async_gather_candidates')
+      let l:source.unite__cached_candidates += l:source.async_gather_candidates(l:source.args, l:source.unite__context)
+    endif
+
     if l:input != ''
       call unite#keyword_filter(l:source_candidates, l:input)
     endif
@@ -946,6 +950,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.search_pattern_save = @/
   let l:unite.prompt_linenr = 2
   let l:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])')) + 2
+  let l:unite.is_async =
+        \ len(filter(copy(l:sources), 'has_key(v:val, "async_gather_candidates")')) > 0
 
   let s:current_unite = l:unite
 endfunction"}}}
@@ -1046,15 +1052,16 @@ function! s:redraw(is_force) "{{{
     return
   endif
 
+  let l:unite = unite#get_current_unite()
   let l:input = unite#get_input()
-  if !a:is_force && l:input ==# unite#get_current_unite().last_input
+  if !a:is_force && l:input ==# l:unite.last_input
+        \ && !l:unite.is_async
     return
   endif
 
   " Highlight off.
   let @/ = ''
 
-  let l:unite = unite#get_current_unite()
   let l:unite.last_input = l:input
   let l:unite.context.is_redraw = 1
 
@@ -1098,10 +1105,20 @@ function! s:on_cursor_hold_i()  "{{{
       startinsert!
     endif
   endif
+
+  if unite#get_current_unite().is_async
+    " Ignore key sequences.
+    call feedkeys("\<C-r>\<ESC>", 'n')
+  endif
 endfunction"}}}
 function! s:on_cursor_hold()  "{{{
   " Redraw.
   call unite#redraw()
+
+  if unite#get_current_unite().is_async
+    " Ignore key sequences.
+    call feedkeys("g\<ESC>", 'n')
+  endif
 endfunction"}}}
 function! s:on_cursor_moved()  "{{{
   execute 'setlocal' line('.') == unite#get_current_unite().prompt_linenr ? 'modifiable' : 'nomodifiable'

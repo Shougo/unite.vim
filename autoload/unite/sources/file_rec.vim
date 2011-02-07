@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Nov 2010
+" Last Modified: 07 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,12 +24,6 @@
 " }}}
 "=============================================================================
 
-" Variables  "{{{
-if !exists('g:unite_source_file_rec_max_depth')
-  let g:unite_source_file_rec_max_depth = 10
-endif
-"}}}
-
 function! unite#sources#file_rec#define()"{{{
   return s:source
 endfunction"}}}
@@ -37,7 +31,7 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'file_rec',
       \ 'description' : 'candidates from directory by recursive',
-      \ 'max_candidates' : 30,
+      \ 'max_candidates' : 50,
       \ }
 
 function! s:source.gather_candidates(args, context)"{{{
@@ -53,15 +47,21 @@ function! s:source.gather_candidates(args, context)"{{{
     let l:directory = l:directory[: -2]
   endif
 
-  let s:start_time = has('reltime') ? reltime() : 0
-  let l:candidates = s:get_files(1, l:directory, [])
+  " Initialize continuation.
+  let a:context.source__continuation = {
+        \ 'files' : [l:directory],
+        \ }
 
-  if g:unite_source_file_ignore_pattern != ''
-    call filter(l:candidates, 'v:val !~ ' . string(g:unite_source_file_ignore_pattern))
+  return []
+endfunction"}}}
+
+function! s:source.async_gather_candidates(args, context)"{{{
+  if empty(a:context.source__continuation.files)
+    return []
   endif
 
-  " Convert to relative path.
-  call map(l:candidates, 'fnamemodify(v:val, ":.")')
+  let [a:context.source__continuation.files, l:candidates] =
+        \ s:get_files(a:context.source__continuation.files)
 
   return map(l:candidates, '{
         \ "word" : v:val,
@@ -85,24 +85,46 @@ call unite#custom_action('cdable', 'rec', s:cdable_action_rec)
 unlet! s:cdable_action_rec
 "}}}
 
-function! s:get_files(depth, directory, files)"{{{
-  if a:depth > g:unite_source_file_rec_max_depth
-        \ || (has('reltime') && str2nr(split(reltimestr(reltime(s:start_time)))[0]) >= 2)
-    return []
-  endif
-
-  let l:directory_files = split(unite#substitute_path_separator(glob(a:directory . '/*')), '\n')
-  let l:files = a:files
-  for l:file in l:directory_files
-    if isdirectory(l:file)
-      " Get files in a directory.
-      let l:files += s:get_files(a:depth + 1, l:file, [])
-    else
-      call add(l:files, l:file)
+function! s:get_files(files)"{{{
+  let l:continuation_files = []
+  let l:ret_files = []
+  let l:max_len = 20
+  let l:files_index = 0
+  let l:ret_files_len = 0
+  for l:file in a:files
+    if g:unite_source_file_ignore_pattern != '' &&
+          \ l:file =~ g:unite_source_file_ignore_pattern
+      continue
     endif
+
+    if isdirectory(l:file)
+      let l:child_index = 0
+      let l:childs = split(unite#substitute_path_separator(glob(l:file . '/*')), '\n')
+      for l:child in l:childs
+        " Convert to relative path.
+        if l:ret_files_len > l:max_len
+          let l:continuation_files += l:childs[l:child_index :]
+          break
+        endif
+
+        call add(isdirectory(l:child) ? l:continuation_files : l:ret_files, fnamemodify(l:child, ':.'))
+        let l:ret_files_len += 1
+        let l:child_index += 1
+      endfor
+    else
+      call add(l:ret_files, fnamemodify(l:file, ':.'))
+      let l:ret_files_len += 1
+    endif
+
+    if l:ret_files_len > l:max_len
+      break
+    endif
+
+    let l:files_index += 1
   endfor
 
-  return l:files
+  let l:continuation_files += a:files[l:files_index :]
+  return [l:continuation_files, l:ret_files]
 endfunction"}}}
 
 " vim: foldmethod=marker
