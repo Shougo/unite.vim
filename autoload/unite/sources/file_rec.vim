@@ -101,26 +101,25 @@ function! s:get_files(files)"{{{
       let l:child_index = 0
       let l:childs = split(unite#substitute_path_separator(glob(l:file . '/*')), '\n')
       for l:child in l:childs
-        " Convert to relative path.
+        call add(isdirectory(l:child) ? l:continuation_files : l:ret_files, fnamemodify(l:child, ':.'))
+        let l:ret_files_len += 1
+        let l:child_index += 1
+
         if l:ret_files_len > l:max_len
           let l:continuation_files += l:childs[l:child_index :]
           break
         endif
-
-        call add(isdirectory(l:child) ? l:continuation_files : l:ret_files, fnamemodify(l:child, ':.'))
-        let l:ret_files_len += 1
-        let l:child_index += 1
       endfor
     else
       call add(l:ret_files, fnamemodify(l:file, ':.'))
       let l:ret_files_len += 1
     endif
 
+    let l:files_index += 1
+
     if l:ret_files_len > l:max_len
       break
     endif
-
-    let l:files_index += 1
   endfor
 
   let l:continuation_files += a:files[l:files_index :]
