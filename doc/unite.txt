@@ -1081,6 +1081,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-02-08
+- Fixed file_rec index.
+
 2011-02-07
 - Implemented asynchronous get candidates.
 - Improved file_rec.

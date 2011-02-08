@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Feb 2011.
+" Last Modified: 08 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,6 +92,8 @@ function! s:get_files(files)"{{{
   let l:files_index = 0
   let l:ret_files_len = 0
   for l:file in a:files
+    let l:files_index += 1
+
     if g:unite_source_file_ignore_pattern != '' &&
           \ l:file =~ g:unite_source_file_ignore_pattern
       continue
@@ -101,9 +103,15 @@ function! s:get_files(files)"{{{
       let l:child_index = 0
       let l:childs = split(unite#substitute_path_separator(glob(l:file . '/*')), '\n')
       for l:child in l:childs
+        let l:child_index += 1
+
+        if g:unite_source_file_ignore_pattern != '' &&
+              \ l:child =~ g:unite_source_file_ignore_pattern
+          continue
+        endif
+
         call add(isdirectory(l:child) ? l:continuation_files : l:ret_files, fnamemodify(l:child, ':.'))
         let l:ret_files_len += 1
-        let l:child_index += 1
 
         if l:ret_files_len > l:max_len
           let l:continuation_files += l:childs[l:child_index :]
@@ -114,8 +122,6 @@ function! s:get_files(files)"{{{
       call add(l:ret_files, fnamemodify(l:file, ':.'))
       let l:ret_files_len += 1
     endif
-
-    let l:files_index += 1
 
     if l:ret_files_len > l:max_len
       break
