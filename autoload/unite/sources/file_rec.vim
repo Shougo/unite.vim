@@ -24,6 +24,11 @@
 " }}}
 "=============================================================================
 
+" Variables  "{{{
+call unite#util#set_default('g:unite_source_file_rec_ignore_pattern', 
+      \'\%(^\|/\)\.$\|\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)')
+"}}}
+
 function! unite#sources#file_rec#define()"{{{
   return s:source
 endfunction"}}}
@@ -44,10 +49,6 @@ function! s:source.gather_candidates(args, context)"{{{
   endif
   let l:directory = unite#util#substitute_path_separator(
         \ substitute(l:directory, '^\~', unite#util#substitute_path_separator($HOME), ''))
-
-  if l:directory != '/' && l:directory =~ '/$'
-    let l:directory = l:directory[: -2]
-  endif
 
   " Initialize continuation.
   let a:context.source__continuation = {
@@ -96,20 +97,25 @@ function! s:get_files(files)"{{{
   for l:file in a:files
     let l:files_index += 1
 
-    if g:unite_source_file_ignore_pattern != '' &&
-          \ l:file =~ g:unite_source_file_ignore_pattern
+    if g:unite_source_file_rec_ignore_pattern != '' &&
+          \ l:file =~ g:unite_source_file_rec_ignore_pattern
       continue
     endif
 
     if isdirectory(l:file)
+      if l:file != '/' && l:file =~ '/$'
+        let l:file = l:file[: -2]
+      endif
+
       let l:child_index = 0
       let l:childs = split(unite#util#substitute_path_separator(glob(l:file . '/*')), '\n')
             \ + split(unite#util#substitute_path_separator(glob(l:file . '/.*')), '\n')
       for l:child in l:childs
         let l:child_index += 1
 
-        if g:unite_source_file_ignore_pattern != '' &&
-              \ l:child =~ g:unite_source_file_ignore_pattern
+        if l:child =~ '/\.\%(\.\|$\)'
+              \ ||(g:unite_source_file_rec_ignore_pattern != '' &&
+              \     l:child =~ g:unite_source_file_rec_ignore_pattern)
           continue
         endif
 

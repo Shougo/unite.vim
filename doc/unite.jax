@@ -400,6 +400,15 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 		
 		初期値は |g:unite_data_directory| . '/.bookmark' である。
 
+g:unite_source_file_rec_ignore_pattern		*g:unite_source_file_rec_ignore_pattern*
+		|unite-source-file_rec|の候補に表示しないファイルの正規表現
+		パターンを指定する。マッチングはファイルのフルパスに対して行
+		われる。この変数が空文字列以外であれば、指定した正規表現で結
+		果をフィルタリングする。正規表現の大文字・小文字は
+		'ignorecase'の設定に関わらず、明確に区別される。
+		
+		初期値は autoload/unite/sources/file_rec.vim を参照。
+
 kindの変数					*unite-kinds-variables*
 
 g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scroll*

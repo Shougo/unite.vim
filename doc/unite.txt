@@ -401,6 +401,16 @@ g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
 
 		Default value is |g:unite_data_directory|; '/.bookmark'. 
 
+g:unite_source_file_rec_ignore_pattern		*g:unite_source_file_rec_ignore_pattern*
+		Specifies the regexp pattern to ignore candidates of
+		|unite-source-file_rec|.  This applies on the full path of
+		each files.  Unless this variable value is an empty string,
+		Unite filters out the result with the regexp.  Regardless of
+		'ignorecase' value, it's case sensitive.
+
+		Refer autoload/unite/sources/file_rec.vim about the default
+		value.
+
 KINDS VARIABLES					*unite-kinds-variables*
 
 g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scroll*
@@ -1080,6 +1090,10 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-02-09
+- Improved file_rec source.
+- Added g:unite_source_file_rec_ignore_pattern option.
 
 2011-02-08
 - Fixed file_rec index.
