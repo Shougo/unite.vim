@@ -94,6 +94,8 @@ function! s:get_files(files)"{{{
   let l:files_index = 0
   let l:ret_files_len = 0
   for l:file in a:files
+    let l:files_index += 1
+
     if g:unite_source_file_ignore_pattern != '' &&
           \ l:file =~ g:unite_source_file_ignore_pattern
       continue
@@ -104,9 +106,15 @@ function! s:get_files(files)"{{{
       let l:childs = split(unite#util#substitute_path_separator(glob(l:file . '/*')), '\n')
             \ + split(unite#util#substitute_path_separator(glob(l:file . '/.*')), '\n')
       for l:child in l:childs
+        let l:child_index += 1
+
+        if g:unite_source_file_ignore_pattern != '' &&
+              \ l:child =~ g:unite_source_file_ignore_pattern
+          continue
+        endif
+
         call add(isdirectory(l:child) ? l:continuation_files : l:ret_files, fnamemodify(l:child, ':.'))
         let l:ret_files_len += 1
-        let l:child_index += 1
 
         if l:ret_files_len > l:max_len
           let l:continuation_files += l:childs[l:child_index :]
@@ -117,8 +125,6 @@ function! s:get_files(files)"{{{
       call add(l:ret_files, fnamemodify(l:file, ':.'))
       let l:ret_files_len += 1
     endif
-
-    let l:files_index += 1
 
     if l:ret_files_len > l:max_len
       break
