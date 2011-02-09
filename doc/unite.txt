@@ -210,16 +210,18 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-immediately*
 		-immediately
-		If candidate is one, do default action immediately. If
-		candidate is empty, don't open unite buffer.
+		If the number of candidates is exactly one, it runs default
+		action immediately. If candidate is empty, it doesn't open
+		unite buffer.
 
 						*unite-options-auto-preview*
 		-auto-preview
-		When you selected candidate, do "preview" action automatically.
+		When you selected candidate, it runs "preview" action
+		automatically.
 
 						*unite-options-completion*
 		-completion
-		Use unite completion interface. |unite-options-col| is also
+		Uses unite completion interface. |unite-options-col| is also
 		required.
 
 						*unite-options-col*
