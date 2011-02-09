@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Feb 2011.
+" Last Modified: 09 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,14 +36,16 @@ let s:source = {
 
 function! s:source.gather_candidates(args, context)"{{{
   if !empty(a:args)
-    let l:directory = unite#substitute_path_separator(a:args[0])
+    let l:directory = a:args[0]
   elseif isdirectory(a:context.input)
     let l:directory = a:context.input
   else
-    let l:directory = unite#substitute_path_separator(getcwd())
+    let l:directory = getcwd()
   endif
+  let l:directory = unite#util#substitute_path_separator(
+        \ substitute(l:directory, '^\~', unite#util#substitute_path_separator($HOME), ''))
 
-  if l:directory =~ '/$'
+  if l:directory != '/' && l:directory =~ '/$'
     let l:directory = l:directory[: -2]
   endif
 
@@ -99,7 +101,8 @@ function! s:get_files(files)"{{{
 
     if isdirectory(l:file)
       let l:child_index = 0
-      let l:childs = split(unite#substitute_path_separator(glob(l:file . '/*')), '\n')
+      let l:childs = split(unite#util#substitute_path_separator(glob(l:file . '/*')), '\n')
+            \ + split(unite#util#substitute_path_separator(glob(l:file . '/.*')), '\n')
       for l:child in l:childs
         call add(isdirectory(l:child) ? l:continuation_files : l:ret_files, fnamemodify(l:child, ':.'))
         let l:ret_files_len += 1
