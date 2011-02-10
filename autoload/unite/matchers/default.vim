@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: default.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Feb 2011.
+" Last Modified: 11 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,13 +30,14 @@ endfunction"}}}
 
 let s:matcher = {
       \ 'name' : 'glob',
+      \ 'description' : 'glob matcher',
       \ 'hooks' : {},
       \}
 
 function! s:matcher.hooks.on_init(args, context)"{{{
 endfunction"}}}
 
-function! matcher.match(canididates, context)"{{{
+function! s:matcher.match(canididates, context)"{{{
   let l:candidates = copy(a:canididates)
 
   for l:input in split(a:context.input, '\\\@<! ')
@@ -58,7 +59,7 @@ function! matcher.match(canididates, context)"{{{
         let l:expr = printf('stridx(v:val.word, %s) != -1', string(l:input))
       endif
 
-      call filter(l:canididates, l:expr)
+      let l:candidates = filter(l:candidates, l:expr)
     endif
   endfor
 

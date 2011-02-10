@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Feb 2011.
+" Last Modified: 11 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,23 +30,32 @@ function! unite#version()"{{{
 endfunction"}}}
 
 " User functions."{{{
+function! s:initialize_buffer_name_settings(buffer_name)"{{{
+  let s:buffer_name_settings[a:buffer_name] = {}
+  let l:setting = s:buffer_name_settings[a:buffer_name]
+  let l:setting.substitute_patterns = {}
+  let l:setting.matchers = []
+  let l:setting.sorter = []
+endfunction"}}}
 function! unite#get_substitute_pattern(buffer_name)"{{{
-  return s:substitute_pattern[a:buffer_name]
+  return has_key(s:buffer_name_settings, a:buffer_name) ?
+        \ s:buffer_name_settings[a:buffer_name].substitute_patterns : ''
 endfunction"}}}
 function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
   let l:priority = a:0 > 0 ? a:1 : 0
   let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
 
   for key in split(l:buffer_name, ',')
-    if !has_key(s:substitute_pattern, key)
-      let s:substitute_pattern[key] = {}
+    if !has_key(s:buffer_name_settings, key)
+      call s:initialize_buffer_name_settings(key)
     endif
+    let l:substitute_patterns = s:buffer_name_settings[key].substitute_patterns
 
-    if has_key(s:substitute_pattern[key], a:pattern)
+    if has_key(l:substitute_patterns, a:pattern)
           \ && a:pattern == ''
-      call remove(s:substitute_pattern[key], a:pattern)
+      call remove(l:substitute_patterns, a:pattern)
     else
-      let s:substitute_pattern[key][a:pattern] = {
+      let l:substitute_patterns[a:pattern] = {
             \ 'pattern' : a:pattern,
             \ 'subst' : a:subst, 'priority' : l:priority
             \ }
@@ -141,19 +150,21 @@ let s:last_unite_bufnr = -1
 let s:current_unite = {}
 
 let s:default = {}
-let s:default.sources = {}
-let s:default.kinds = {}
 
 let s:custom = {}
 let s:custom.sources = {}
 let s:custom.kinds = {}
+let s:custom.matchers = {}
+let s:custom.sorters = {}
 let s:custom.actions = {}
 let s:custom.default_actions = {}
 let s:custom.aliases = {}
 
-let s:substitute_pattern = {}
+let s:buffer_name_settings = {}
+let s:buffer_name_settings.substitute_pattern = {}
 call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
 call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
+let s:buffer_name_settings.matchers = {}
 
 let s:unite_options = [
       \ '-buffer-name=', '-input=', '-prompt=',
@@ -339,9 +350,9 @@ function! unite#escape_match(str)"{{{
   return substitute(substitute(escape(a:str, '~"\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
-  if empty(s:default.sources)
+  if empty(s:default)
     " Initialize load.
-    call s:load_default_sources_and_kinds()
+    call s:load_default_scripts()
   endif
 
   let l:sources = extend(copy(s:default.sources), s:custom.sources)
@@ -424,32 +435,6 @@ endfunction"}}}
 function! unite#get_marked_candidates() "{{{
   return sort(filter(copy(unite#get_unite_candidates()), 'v:val.unite__is_marked'), 's:compare_marked_candidates')
 endfunction"}}}
-function! unite#keyword_filter(list, input)"{{{
-  for l:input in split(a:input, '\\\@<! ')
-    let l:input = substitute(l:input, '\\ ', ' ', 'g')
-
-    if l:input =~ '^!'
-      " Exclusion.
-      let l:input = unite#escape_match(l:input)
-      call filter(a:list, 'v:val.word !~ ' . string(l:input[1:]))
-    elseif l:input =~ '\\\@<!\*'
-      " Wildcard.
-      let l:input = unite#escape_match(l:input)
-      call filter(a:list, 'v:val.word =~ ' . string(l:input))
-    else
-      let l:input = substitute(l:input, '\\\(.\)', '\1', 'g')
-      if &ignorecase
-        let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:input)))
-      else
-        let l:expr = printf('stridx(v:val.word, %s) != -1', string(l:input))
-      endif
-
-      call filter(a:list, l:expr)
-    endif
-  endfor
-
-  return a:list
-endfunction"}}}
 function! unite#get_input()"{{{
   " Prompt check.
   if stridx(getline(unite#get_current_unite().prompt_linenr), unite#get_current_unite().prompt) != 0
@@ -491,9 +476,9 @@ endfunction"}}}
 
 " Command functions.
 function! unite#start(sources, ...)"{{{
-  if empty(s:default.sources)
+  if empty(s:default)
     " Initialize load.
-    call s:load_default_sources_and_kinds()
+    call s:load_default_scripts()
   endif
 
   " Save context.
@@ -707,12 +692,14 @@ function! s:quit_session(is_force)  "{{{
   endif
 endfunction"}}}
 
-function! s:load_default_sources_and_kinds()"{{{
+function! s:load_default_scripts()"{{{
   " Gathering all sources and kind name.
   let s:default.sources = {}
   let s:default.kinds = {}
+  let s:default.matchers = {}
+  let s:default.sorters = {}
 
-  for l:key in ['sources', 'kinds']
+  for l:key in ['sources', 'kinds', 'matchers', 'sorters']
     for l:name in map(split(globpath(&runtimepath, 'autoload/unite/' . l:key . '/*.vim'), '\n'),
           \ 'fnamemodify(v:val, ":t:r")')
 
@@ -753,9 +740,9 @@ function! s:initialize_loaded_sources(sources, context)"{{{
   return l:sources
 endfunction"}}}
 function! s:initialize_sources()"{{{
-  let l:all_sources = extend(copy(s:default.sources), s:custom.sources)
+  let l:sources = extend(copy(s:default.sources), s:custom.sources)
 
-  for l:source in values(l:all_sources)
+  for l:source in values(l:sources)
     if !has_key(l:source, 'is_volatile')
       let l:source.is_volatile = 0
     endif
@@ -782,7 +769,7 @@ function! s:initialize_sources()"{{{
     endif
   endfor
 
-  return l:all_sources
+  return l:sources
 endfunction"}}}
 function! s:initialize_kinds()"{{{
   let l:kinds = extend(copy(s:default.kinds), s:custom.kinds)
@@ -796,6 +783,20 @@ function! s:initialize_kinds()"{{{
   endfor
 
   return l:kinds
+endfunction"}}}
+function! s:initialize_matchers()"{{{
+  let l:matchers = extend(copy(s:default.matchers), s:custom.matchers)
+  for l:matcher in values(l:matchers)
+  endfor
+
+  return l:matcher
+endfunction"}}}
+function! s:initialize_sorters()"{{{
+  let l:sorters = extend(copy(s:default.sorters), s:custom.sorters)
+  for l:sorter in values(l:sorters)
+  endfor
+
+  return l:sorters
 endfunction"}}}
 function! s:recache_candidates(input, is_force)"{{{
   " Save options.
@@ -817,29 +818,28 @@ function! s:recache_candidates(input, is_force)"{{{
       continue
     endif
 
+    let l:source.unite__context.input = l:input
+
     if l:source.is_volatile || a:is_force || l:source.unite__is_invalidate
+      " Recaching.
       let l:source.unite__context.source = l:source
       let l:source.unite__context.is_force = a:is_force
-      let l:source.unite__context.input = l:input
       let l:source.unite__context.is_redraw = unite#get_current_unite().context.is_redraw
 
-      let l:source_candidates = copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
+      let l:source.unite__cached_candidates = copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
       let l:source.unite__is_invalidate = 0
-
-      if !l:source.is_volatile
-        " Recaching.
-        let l:source.unite__cached_candidates = copy(l:source_candidates)
-      endif
-    else
-      let l:source_candidates = copy(l:source.unite__cached_candidates)
     endif
 
     if has_key(l:source, 'async_gather_candidates')
       let l:source.unite__cached_candidates += l:source.async_gather_candidates(l:source.args, l:source.unite__context)
     endif
 
+    let l:source_candidates = copy(l:source.unite__cached_candidates)
+
     if l:input != ''
-      call unite#keyword_filter(l:source_candidates, l:input)
+      for l:matcher in values(s:default.matchers)
+        let l:source_candidates = l:matcher.match(l:source_candidates, l:source.unite__context)
+      endfor
     endif
 
     if l:source.max_candidates != 0
@@ -943,6 +943,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.candidates = []
   let l:unite.sources = l:sources
   let l:unite.kinds = s:initialize_kinds()
+  let l:unite.matchers = s:initialize_matchers()
+  let l:unite.sorters = s:initialize_sorters()
   let l:unite.buffer_name = (l:context.buffer_name == '') ? 'default' : l:context.buffer_name
   let l:unite.real_buffer_name = l:buffer_name
   let l:unite.prompt = l:context.prompt
@@ -1212,19 +1214,23 @@ endfunction"}}}
 function! s:get_substitute_input(input)"{{{
   let l:input = a:input
 
-  if has_key(s:substitute_pattern, unite#get_current_unite().buffer_name)
-    if unite#get_current_unite().input != '' && stridx(l:input, unite#get_current_unite().input) == 0
+  let l:unite = unite#get_current_unite()
+  if has_key(s:buffer_name_settings, l:unite.buffer_name)
+    let l:substitute_patterns =
+          \ s:buffer_name_settings[l:unite.buffer_name].substitute_patterns
+    if l:unite.input != '' && stridx(l:input, l:unite.input) == 0
       " Substitute after input.
       let l:input_save = l:input
-      let l:subst = l:input_save[len(unite#get_current_unite().input) :]
-      let l:input = l:input_save[: len(unite#get_current_unite().input)-1]
+      let l:subst = l:input_save[len(l:unite.input) :]
+      let l:input = l:input_save[: len(l:unite.input)-1]
     else
       " Substitute all input.
       let l:subst = l:input
       let l:input = ''
     endif
 
-    for l:pattern in sort(values(s:substitute_pattern[unite#get_current_unite().buffer_name]), 's:compare_substitute_patterns')
+    for l:pattern in sort(values(l:substitute_patterns),
+          \ 's:compare_substitute_patterns')
       let l:subst = substitute(l:subst, l:pattern.pattern, l:pattern.subst, 'g')
     endfor
 
