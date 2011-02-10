@@ -1000,11 +1000,17 @@ completion	An interface for completion
 ==============================================================================
 ACTIONS						*unite-actions*
 
+TODO
+
 ==============================================================================
 CREATE SOURCE					*unite-create-source*
 
+TODO
+
 ------------------------------------------------------------------------------
 SOURCE ATTRIBUTES				*unite-source-attributes*
+
+TODO
 
 						*unite-source-attribute-name*
 name			string		(requried)
@@ -1038,6 +1044,8 @@ required_pattern_length	number		(optional)
 
 ==============================================================================
 CREATE KIND					*unite-create-kind*
+
+TODO
 
 ==============================================================================
 EXAMPLES					*unite-examples*
