@@ -40,6 +40,9 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
+  let l:input_list = filter(split(a:context.input,
+        \                     '\\\@<! ', 1), 'v:val !~ "!"')
+  let l:input = empty(l:input_list) ? '' : l:input_list[0]
   let l:input = substitute(substitute(a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
 
   " Substitute *. -> .* .

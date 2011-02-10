@@ -1099,6 +1099,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-02-10
+-Changed volatile source.
+
 2011-02-09
 - Improved file_rec source.
 - Added g:unite_source_file_rec_ignore_pattern option.
