@@ -1100,7 +1100,9 @@ BUGS						*unite-bugs*
 CHANGELOG					*unite-changelog*
 
 2011-02-10
--Changed volatile source.
+- Changed volatile source.
+- Added default matcher.
+- Added from field in action.
 
 2011-02-09
 - Improved file_rec source.

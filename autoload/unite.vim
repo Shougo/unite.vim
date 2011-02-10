@@ -208,36 +208,36 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
     " Source/kind custom actions.
     if has_key(s:custom.actions, l:source_kind)
       let l:action_table = s:extend_actions(a:self_func, l:action_table,
-            \ s:custom.actions[l:source_kind])
+            \ s:custom.actions[l:source_kind], 'custom/'.l:source.name.'/'.l:kind.name)
     endif
 
     " Source/kind actions.
     if has_key(l:source.action_table, a:kind_name)
       let l:action_table = s:extend_actions(a:self_func, l:action_table,
-            \ l:source.action_table[a:kind_name])
+            \ l:source.action_table[a:kind_name], l:source.name.'/'.l:kind.name)
     endif
 
     " Source/* custom actions.
     if has_key(s:custom.actions, l:source_kind_wild)
       let l:action_table = s:extend_actions(a:self_func, l:action_table,
-            \ s:custom.actions[l:source_kind_wild])
+            \ s:custom.actions[l:source_kind_wild], 'custom/source/'.l:source.name)
     endif
 
     " Source/* actions.
     if has_key(l:source.action_table, '*')
       let l:action_table = s:extend_actions(a:self_func, l:action_table,
-            \ l:source.action_table['*'])
+            \ l:source.action_table['*'], 'source/'.l:source.name)
     endif
 
     " Kind custom actions.
     if has_key(s:custom.actions, a:kind_name)
       let l:action_table = s:extend_actions(a:self_func, l:action_table,
-            \ s:custom.actions[a:kind_name])
+            \ s:custom.actions[a:kind_name], 'custom/'.l:kind.name)
     endif
 
     " Kind actions.
     let l:action_table = s:extend_actions(a:self_func, l:action_table,
-          \ l:kind.action_table)
+          \ l:kind.action_table, l:kind.name)
   endif
 
   " Parents actions.
@@ -248,31 +248,37 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
 
   if !l:is_parents_action
     " Kind aliases.
-    call s:filter_alias_action(l:action_table, l:kind.alias_table)
+    call s:filter_alias_action(l:action_table, l:kind.alias_table,
+          \ l:kind.name)
 
     " Kind custom aliases.
     if has_key(s:custom.aliases, a:kind_name)
-      call s:filter_alias_action(l:action_table, s:custom.aliases[a:kind_name])
+      call s:filter_alias_action(l:action_table, s:custom.aliases[a:kind_name],
+            \ 'custom/'.l:kind.name)
     endif
 
     " Source/* aliases.
     if has_key(l:source.alias_table, '*')
-      call s:filter_alias_action(l:action_table, l:source.alias_table['*'])
+      call s:filter_alias_action(l:action_table, l:source.alias_table['*'],
+            \ 'source/'.l:source.name)
     endif
 
     " Source/* custom aliases.
     if has_key(s:custom.aliases, l:source_kind_wild)
-      call s:filter_alias_action(l:action_table, s:custom.aliases[l:source_kind_wild])
+      call s:filter_alias_action(l:action_table, s:custom.aliases[l:source_kind_wild],
+            \ 'custom/source/'.l:source.name)
     endif
 
     " Source/kind aliases.
     if has_key(s:custom.aliases, l:source_kind)
-      call s:filter_alias_action(l:action_table, s:custom.aliases[l:source_kind])
+      call s:filter_alias_action(l:action_table, s:custom.aliases[l:source_kind],
+            \ 'source/'.l:source.name.'/'.l:kind.name)
     endif
 
     " Source/kind custom aliases.
     if has_key(l:source.alias_table, a:kind_name)
-      call s:filter_alias_action(l:action_table, l:source.alias_table[a:kind_name])
+      call s:filter_alias_action(l:action_table, l:source.alias_table[a:kind_name],
+            \ 'custom/source/'.l:source.name.'/'.l:kind.name)
     endif
   endif
 
@@ -1149,10 +1155,18 @@ endfunction"}}}
 function! s:compare_marked_candidates(candidate_a, candidate_b)"{{{
   return a:candidate_a.unite__marked_time - a:candidate_b.unite__marked_time
 endfunction"}}}
-function! s:extend_actions(self_func, action_table1, action_table2)"{{{
-  return extend(a:action_table1, s:filter_self_func(a:action_table2, a:self_func), 'keep')
+function! s:extend_actions(self_func, action_table1, action_table2, ...)"{{{
+  let l:filterd_table = s:filter_self_func(a:action_table2, a:self_func)
+
+  if a:0 > 0
+    for l:action in values(l:filterd_table)
+      let l:action.from = a:1
+    endfor
+  endif
+
+  return extend(a:action_table1, l:filterd_table, 'keep')
 endfunction"}}}
-function! s:filter_alias_action(action_table, alias_table)"{{{
+function! s:filter_alias_action(action_table, alias_table, from)"{{{
   for [l:alias_name, l:alias_action] in items(a:alias_table)
     if l:alias_action ==# 'nop'
       if has_key(a:action_table, l:alias_name)
@@ -1161,6 +1175,7 @@ function! s:filter_alias_action(action_table, alias_table)"{{{
       endif
     else
       let a:action_table[l:alias_name] = a:action_table[l:alias_action]
+      let a:action_table[l:alias_name].from = a:from
     endif
   endfor
 endfunction"}}}
