@@ -785,6 +785,12 @@ unite#custom_alias({kind}, {name}, {action})
 >
 		call unite#custom_alias('file', 'h', 'left')
 <
+unite#custom_matcher({source-name}, {matchers})	*unite#custom_matcher()*
+		TODO
+
+unite#custom_sorter({source-name}, {sorters})	*unite#custom_sorter()*
+		TODO
+
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
 		Runs an action {action-name} against {candidate}.  This will
@@ -837,12 +843,6 @@ unite#undef_sorter({name})			*unite#undef_sorter()*
 		Removes the sorter which name is {name} that was added by
 		|unite#define_sorter()|.  If such a sorter doesn't exist,
 		this function doesn't do anything.
-
-unite#set_matcher({source-name}, {matchers})	*unite#set_matcher()*
-		TODO
-
-unite#set_sorter({source-name}, {sorters})	*unite#set_sorter()*
-		TODO
 
 ==============================================================================
 SOURCES						*unite-sources*

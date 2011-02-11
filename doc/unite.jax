@@ -778,6 +778,16 @@ unite#custom_alias({kind}, {name}, {action})
 >
 		call unite#custom_alias('file', 'h', 'left')
 <
+unite#custom_matcher({source-name}, {matchers})	*unite#custom_matcher()*
+		{source-name}のmatcherを{matchers}に変更する。
+		{source-name}は","区切りで複数指定ができる。
+		{matchers}は使用するmatcherの名前、もしくは名前のリストである。
+
+unite#custom_sorter({source-name}, {sorters})	*unite#custom_sorter()*
+		{source-name}のsorterを{sorters}に変更する。
+		{source-name}は","区切りで複数指定ができる。
+		{sorters}は使用するsorterの名前、もしくは名前のリストである。
+
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
 		{candidate}に対し、{action-name}という名前のアクションを実行する。
@@ -829,16 +839,6 @@ unite#undef_sorter({name})			*unite#undef_sorter()*
 		|unite#define_sorter()|で追加した{name}というsorterを
 		削除する。
 		存在しないときは無視される。
-
-unite#set_matcher({source-name}, {matchers})	*unite#set_matcher()*
-		{source-name}のmatcherを{matchers}に変更する。
-		{source-name}は","区切りで複数指定ができる。
-		{matchers}は使用するmatcherの名前、もしくは名前のリストである。
-
-unite#set_sorter({source-name}, {sorters})	*unite#set_sorter()*
-		{source-name}のsorterを{sorters}に変更する。
-		{source-name}は","区切りで複数指定ができる。
-		{sorters}は使用するsorterの名前、もしくは名前のリストである。
 
 ==============================================================================
 source						*unite-sources*
