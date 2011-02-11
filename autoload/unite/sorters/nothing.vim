@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: default.vim
+" FILE: nothing.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 11 Feb 2011.
 " License: MIT license  {{{
@@ -24,17 +24,19 @@
 " }}}
 "=============================================================================
 
-function! unite#matchers#default#define()"{{{
-  " Dummy.
-  return []
+function! unite#sorters#nothing#define()"{{{
+  return s:sorter
 endfunction"}}}
 
-let s:default = ['glob']
-function! unite#matchers#default#get()"{{{
-  return s:default
-endfunction"}}}
-function! unite#matchers#default#use(matchers)"{{{
-  let s:default = a:matchers
+let s:sorter = {
+      \ 'name' : 'nothing',
+      \ 'description' : 'nothing sorter',
+      \ 'hooks' : {},
+      \}
+
+function! s:sorter.sort(candidates, context)"{{{
+  " Nothing.
+  return a:candidates
 endfunction"}}}
 
 " vim: foldmethod=marker

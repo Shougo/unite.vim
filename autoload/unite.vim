@@ -31,11 +31,13 @@ endfunction"}}}
 
 " User functions."{{{
 function! s:initialize_buffer_name_settings(buffer_name)"{{{
-  let s:buffer_name_settings[a:buffer_name] = {}
+  if !has_key(s:buffer_name_settings, a:buffer_name)
+    let s:buffer_name_settings[a:buffer_name] = {}
+  endif
   let l:setting = s:buffer_name_settings[a:buffer_name]
-  let l:setting.substitute_patterns = {}
-  let l:setting.matchers = []
-  let l:setting.sorter = []
+  if !has_key(l:setting, 'substitute_patterns')
+    let l:setting.substitute_patterns = {}
+  endif
 endfunction"}}}
 function! unite#get_substitute_pattern(buffer_name)"{{{
   return has_key(s:buffer_name_settings, a:buffer_name) ?
@@ -47,8 +49,13 @@ function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
 
   for key in split(l:buffer_name, ',')
     if !has_key(s:buffer_name_settings, key)
-      call s:initialize_buffer_name_settings(key)
+      let s:buffer_name_settings[key] = {}
     endif
+
+    if !has_key(s:buffer_name_settings[key], 'substitute_patterns')
+      let s:buffer_name_settings[key].substitute_patterns = {}
+    endif
+
     let l:substitute_patterns = s:buffer_name_settings[key].substitute_patterns
 
     if has_key(l:substitute_patterns, a:pattern)
@@ -60,6 +67,28 @@ function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
             \ 'subst' : a:subst, 'priority' : l:priority
             \ }
     endif
+  endfor
+endfunction"}}}
+function! unite#set_matcher(source_name, matchers)"{{{
+  let l:matchers = type(a:matchers) == type([]) ?
+        \ a:matchers : [a:matchers]
+  for key in split(a:source_name, ',')
+    if !has_key(s:custom.sources, key)
+      let s:custom.source[key] = {}
+    endif
+
+    let s:custom.source[key].matchers = l:matchers
+  endfor
+endfunction"}}}
+function! unite#set_sorter(source_name, sorters)"{{{
+  let l:sorters = type(a:sorters) == type([]) ?
+        \ a:sorters : [a:sorters]
+  for key in split(a:source_name, ',')
+    if !has_key(s:custom.sources, key)
+      let s:custom.source[key] = {}
+    endif
+
+    let s:custom.source.[key].sorters = l:sorters
   endfor
 endfunction"}}}
 function! unite#custom_alias(kind, name, action)"{{{
@@ -110,14 +139,42 @@ function! unite#define_kind(kind)"{{{
     let s:custom.kinds[a:kind.name] = a:kind
   endif
 endfunction"}}}
+function! unite#define_matcher(matcher)"{{{
+  if type(a:matcher) == type([])
+    for l:matcher in a:matcher
+      let s:custom.matchers[l:matcher.name] = l:matcher
+    endfor
+  else
+    let s:custom.matchers[a:matcher.name] = a:matcher
+  endif
+endfunction"}}}
+function! unite#define_sorter(sorter)"{{{
+  if type(a:sorter) == type([])
+    for l:sorter in a:sorter
+      let s:custom.sorters[l:sorter.name] = l:sorter
+    endfor
+  else
+    let s:custom.sorters[a:sorter.name] = a:sorter
+  endif
+endfunction"}}}
 function! unite#undef_source(name)"{{{
   if has_key(s:custom.sources, a:name)
     call remove(s:custom.sources, a:name)
   endif
 endfunction"}}}
 function! unite#undef_kind(name)"{{{
-  if has_key(s:custom.kind, a:name)
-    call remove(s:custom.kind, a:name)
+  if has_key(s:custom.kinds, a:name)
+    call remove(s:custom.kinds, a:name)
+  endif
+endfunction"}}}
+function! unite#undef_matcher(name)"{{{
+  if has_key(s:custom.matchers, a:name)
+    call remove(s:custom.matchers, a:name)
+  endif
+endfunction"}}}
+function! unite#undef_sorter(name)"{{{
+  if has_key(s:custom.sorters, a:name)
+    call remove(s:custom.sorters, a:name)
   endif
 endfunction"}}}
 
@@ -159,12 +216,11 @@ let s:custom.sorters = {}
 let s:custom.actions = {}
 let s:custom.default_actions = {}
 let s:custom.aliases = {}
+let s:custom.source = {}
 
 let s:buffer_name_settings = {}
-let s:buffer_name_settings.substitute_pattern = {}
 call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
 call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
-let s:buffer_name_settings.matchers = {}
 
 let s:unite_options = [
       \ '-buffer-name=', '-input=', '-prompt=',
@@ -642,15 +698,16 @@ function! s:quit_session(is_force)  "{{{
 
   " Save unite value.
   let s:current_unite = b:unite
+  let l:unite = s:current_unite
 
   " Highlight off.
-  let @/ = s:current_unite.search_pattern_save
+  let @/ = l:unite.search_pattern_save
 
   " Restore options.
   if exists('&redrawtime')
-    let &redrawtime = s:current_unite.redrawtime_save
+    let &redrawtime = l:unite.redrawtime_save
   endif
-  let &hlsearch = s:current_unite.hlsearch_save
+  let &hlsearch = l:unite.hlsearch_save
 
   nohlsearch
   match
@@ -666,22 +723,22 @@ function! s:quit_session(is_force)  "{{{
   endfor
 
   if winnr('$') != 1
-    if !a:is_force && s:current_unite.context.no_quit
+    if !a:is_force && l:unite.context.no_quit
       if winnr('#') > 0
         wincmd p
       endif
     else
       close!
-      execute s:current_unite.winnr . 'wincmd w'
+      execute l:unite.winnr . 'wincmd w'
 
       if winnr('$') != 1
-        execute s:current_unite.win_rest_cmd
+        execute l:unite.win_rest_cmd
       endif
     endif
   endif
 
-  if s:current_unite.context.complete
-    if s:current_unite.context.col < col('$')
+  if l:unite.context.complete
+    if l:unite.context.col < col('$')
       startinsert
     else
       startinsert!
@@ -767,6 +824,18 @@ function! s:initialize_sources()"{{{
     if !has_key(l:source, 'description')
       let l:source.description = ''
     endif
+    if !has_key(l:source, 'matcher')
+      let l:source.matcher = unite#matchers#default#get()
+    endif
+    if type(l:source.matcher) != type([])
+      let l:source.matcher = [l:source.matcher]
+    endif
+    if !has_key(l:source, 'sorter')
+      let l:source.sorter = unite#sorters#default#get()
+    endif
+    if type(l:source.sorter) != type([])
+      let l:source.sorter = [l:source.sorter]
+    endif
   endfor
 
   return l:sources
@@ -787,9 +856,12 @@ endfunction"}}}
 function! s:initialize_matchers()"{{{
   let l:matchers = extend(copy(s:default.matchers), s:custom.matchers)
   for l:matcher in values(l:matchers)
+    if !has_key(l:matcher, 'hooks')
+      let l:matcher.hooks = {}
+    endif
   endfor
 
-  return l:matcher
+  return l:matchers
 endfunction"}}}
 function! s:initialize_sorters()"{{{
   let l:sorters = extend(copy(s:default.sorters), s:custom.sorters)
@@ -810,6 +882,7 @@ function! s:recache_candidates(input, is_force)"{{{
 
   let l:input = s:get_substitute_input(a:input)
   let l:input_len = unite#util#strchars(l:input)
+  let l:unite = unite#get_current_unite()
 
   for l:source in unite#loaded_sources_list()
     " Check required pattern length.
@@ -824,7 +897,7 @@ function! s:recache_candidates(input, is_force)"{{{
       " Recaching.
       let l:source.unite__context.source = l:source
       let l:source.unite__context.is_force = a:is_force
-      let l:source.unite__context.is_redraw = unite#get_current_unite().context.is_redraw
+      let l:source.unite__context.is_redraw = l:unite.context.is_redraw
 
       let l:source.unite__cached_candidates = copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
       let l:source.unite__is_invalidate = 0
@@ -836,11 +909,28 @@ function! s:recache_candidates(input, is_force)"{{{
 
     let l:source_candidates = copy(l:source.unite__cached_candidates)
 
+    let l:custom_source = has_key(s:custom.source, l:source.name) ?
+          \ s:custom.source[l:source.name] : {}
     if l:input != ''
-      for l:matcher in values(s:default.matchers)
-        let l:source_candidates = l:matcher.match(l:source_candidates, l:source.unite__context)
+      let l:matcher_names = has_key(l:custom_source, 'matchers') ?
+            \ l:custom_source.matchers : l:source.matcher
+      for l:matcher_name in l:matcher_names
+        if has_key(l:unite.matchers, l:matcher_name)
+          let l:source_candidates =
+                \ l:unite.matchers[l:matcher_name].match(l:source_candidates, l:source.unite__context)
+        endif
       endfor
     endif
+
+    " Sort.
+    let l:sorter_names = has_key(l:custom_source, 'sorters') ?
+          \ l:custom_source.sorters : l:source.sorter
+    for l:sorter_name in l:sorter_names
+      if has_key(l:unite.sorters, l:sorter_name)
+        let l:source_candidates =
+              \ l:unite.sorters[l:sorter_name].sort(l:source_candidates, l:source.unite__context)
+      endif
+    endfor
 
     if l:source.max_candidates != 0
       " Filtering too many candidates.
@@ -946,6 +1036,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.matchers = s:initialize_matchers()
   let l:unite.sorters = s:initialize_sorters()
   let l:unite.buffer_name = (l:context.buffer_name == '') ? 'default' : l:context.buffer_name
+  let l:unite.buffer_settings =
+        \ s:initialize_buffer_name_settings(l:unite.buffer_name)
   let l:unite.real_buffer_name = l:buffer_name
   let l:unite.prompt = l:context.prompt
   let l:unite.input = l:context.input
@@ -964,6 +1056,7 @@ function! s:initialize_unite_buffer()"{{{
   call s:switch_unite_buffer(s:current_unite.real_buffer_name, s:current_unite.context)
 
   let b:unite = s:current_unite
+  let l:unite = unite#get_current_unite()
 
   let s:last_unite_bufnr = bufnr('%')
 
@@ -1000,7 +1093,6 @@ function! s:initialize_unite_buffer()"{{{
 
   if exists('&redrawtime')
     " Save redrawtime
-    let l:unite = unite#get_current_unite()
     let l:unite.redrawtime_save = &redrawtime
     let &redrawtime = 100
   endif
@@ -1011,7 +1103,7 @@ function! s:initialize_unite_buffer()"{{{
 
   if exists('b:current_syntax') && b:current_syntax == 'unite'
     " Set highlight.
-    let l:match_prompt = escape(unite#get_current_unite().prompt, '\/*~.^$[]')
+    let l:match_prompt = escape(l:unite.prompt, '\/*~.^$[]')
     syntax clear uniteInputPrompt
     execute 'syntax match uniteInputPrompt' '/^'.l:match_prompt.'/ contained'
 

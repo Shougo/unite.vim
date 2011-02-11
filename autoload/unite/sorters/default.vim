@@ -24,17 +24,17 @@
 " }}}
 "=============================================================================
 
-function! unite#matchers#default#define()"{{{
+function! unite#sorters#default#define()"{{{
   " Dummy.
   return []
 endfunction"}}}
 
-let s:default = ['glob']
-function! unite#matchers#default#get()"{{{
+let s:default = ['nothing']
+function! unite#sorters#default#get()"{{{
   return s:default
 endfunction"}}}
-function! unite#matchers#default#use(matchers)"{{{
-  let s:default = a:matchers
+function! unite#sorters#default#use(sorters)"{{{
+  let s:default = a:sorters
 endfunction"}}}
 
 " vim: foldmethod=marker

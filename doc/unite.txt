@@ -37,9 +37,13 @@ Interface		|unite-interface|
   Sources		  |unite-sources|
   Kinds			  |unite-kinds|
   Actions		  |unite-actions|
+  Matchers		  |unite-matchers|
+  Sorters		  |unite-sorters|
 Configulation Examples	|unite-examples|
 Create source		|unite-create-source|
 Create kind		|unite-create-kind|
+Create matcher		|unite-create-matcher|
+Create sorter		|unite-create-sorter|
 User defined source	|unite-user-sources|
 ToDo			|unite-todo|
 Bugs			|unite-bugs|
@@ -658,7 +662,7 @@ unite#available_sources([{source-name}])	*unite#available_sources()*
 
 CUSTOMS						*unite-functions-customs*
 
-unite#start({sources}, [, {context}])				*unite#start()*
+unite#start({sources}, [, {context}])		*unite#start()*
 		Creates a new Unite buffer.  In case when you are already on a
 		Unite buffer, the narrowing text will be preserved.
 
@@ -670,12 +674,12 @@ unite#start({sources}, [, {context}])				*unite#start()*
 		Refer |unite-notation-{context}| about {context}.  If you
 		skipped it will use the default value.
 
-unite#get_context()						*unite#get_context()*
+unite#get_context()				*unite#get_context()*
 		Gets the context information of the current Unite buffer.
 		This is used by functions like |unite#custom_action()| to call
 		|unite#start()| internally.
 
-unite#do_action({action-name})					*unite#do_action()*
+unite#do_action({action-name})			*unite#do_action()*
 		Returns the key sequence for running {action-name} action for
 		the marked candidates.  This function works only when Unite is
 		already activated.  This causes a runtime error if
@@ -695,7 +699,7 @@ unite#do_action({action-name})					*unite#do_action()*
 >
 		nnoremap <silent><buffer><expr> <C-k> unite#do_action('preview')
 >
-unite#smart_map({narrow-map}, {select-map})			*unite#smart_map()*
+unite#smart_map({narrow-map}, {select-map})	*unite#smart_map()*
 		Returns the key sequence which works both modes of narrowing
 		and selecting with respect to the given narrow-map and select-map.
 		Use this with |unite#do_action()|.  This will be used with
@@ -766,7 +770,7 @@ unite#custom_action({kind}, {name}, {action})
 		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen
 <
-unite#undef_custom_action({kind}, {name})			*unite#undef_custom_action()*
+unite#undef_custom_action({kind}, {name})	*unite#undef_custom_action()*
 		Deletes an action which name is {name} of {kind} that you
 		added with using |unite#custom_action()|.  You may specify
 		multiple {kind} with separating ",".  This function doesn't do
@@ -804,6 +808,16 @@ unite#define_kind({kind})			*unite#define_kind()*
 		about the detail of kind.  If a kind which name is same,
 		that will be overwritten.
 
+unite#define_matcher({matcher})			*unite#define_matcher()*
+		Adds {matcher} dinamically.  See also |unite-create-matcher|
+		about the detail of matcher.  If a kind which name is same,
+		that will be overwritten.
+
+unite#define_sorter({sorter})			*unite#define_sorter()*
+		Adds {sorter} dinamically.  See also |unite-create-sorter|
+		about the detail of sorter.  If a kind which name is same,
+		that will be overwritten.
+
 unite#undef_source({name})			*unite#undef_source()*
 		Removes the source which name is {name} that was added by
 		|unite#define_source()|.  If such a source doesn't exist, this
@@ -813,6 +827,22 @@ unite#undef_kind({name})			*unite#undef_kind()*
 		Removes the kind which name is {name} that was added by
 		|unite#define_kind()|.  If such a kind doesn't exist, this
 		function doesn't do anything.
+
+unite#undef_matcher({name})			*unite#undef_matcher()*
+		Removes the matcher which name is {name} that was added by
+		|unite#define_matcher()|.  If such a matcher doesn't exist,
+		this function doesn't do anything.
+
+unite#undef_sorter({name})			*unite#undef_sorter()*
+		Removes the sorter which name is {name} that was added by
+		|unite#define_sorter()|.  If such a sorter doesn't exist,
+		this function doesn't do anything.
+
+unite#set_matcher({source-name}, {matchers})	*unite#set_matcher()*
+		TODO
+
+unite#set_sorter({source-name}, {sorters})	*unite#set_sorter()*
+		TODO
 
 ==============================================================================
 SOURCES						*unite-sources*
@@ -1003,6 +1033,16 @@ ACTIONS						*unite-actions*
 TODO
 
 ==============================================================================
+MATCHERS					*unite-matchers*
+
+TODO
+
+==============================================================================
+SORTERS						*unite-sorters*
+
+TODO
+
+==============================================================================
 CREATE SOURCE					*unite-create-source*
 
 TODO
@@ -1044,6 +1084,16 @@ required_pattern_length	number		(optional)
 
 ==============================================================================
 CREATE KIND					*unite-create-kind*
+
+TODO
+
+==============================================================================
+CREATE SORTER					*unite-create-sorter*
+
+TODO
+
+==============================================================================
+CREATE MATCHER					*unite-create-matcher*
 
 TODO
 
@@ -1098,6 +1148,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-02-11
+- Implemented sorter and matcher.
 
 2011-02-10
 - Changed volatile source.
