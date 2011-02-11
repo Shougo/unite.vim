@@ -1151,6 +1151,7 @@ CHANGELOG					*unite-changelog*
 
 2011-02-11
 - Implemented sorter and matcher.
+- Implemented unite#print_message().
 
 2011-02-10
 - Changed volatile source.

@@ -494,13 +494,20 @@ function! unite#get_marked_candidates() "{{{
   return sort(filter(copy(unite#get_unite_candidates()), 'v:val.unite__is_marked'), 's:compare_marked_candidates')
 endfunction"}}}
 function! unite#get_input()"{{{
+  let l:unite = unite#get_current_unite()
   " Prompt check.
-  if stridx(getline(unite#get_current_unite().prompt_linenr), unite#get_current_unite().prompt) != 0
+  if stridx(getline(l:unite.prompt_linenr), l:unite.prompt) != 0
+    let l:modifiable_save = &l:modifiable
+    setlocal modifiable
+
     " Restore prompt.
-    call setline(unite#get_current_unite().prompt_linenr, unite#get_current_unite().prompt . getline(unite#get_current_unite().prompt_linenr))
+    call setline(l:unite.prompt_linenr, l:unite.prompt
+          \ . getline(l:unite.prompt_linenr))
+
+    let &l:modifiable = l:modifiable_save
   endif
 
-  return getline(unite#get_current_unite().prompt_linenr)[len(unite#get_current_unite().prompt):]
+  return getline(l:unite.prompt_linenr)[len(l:unite.prompt):]
 endfunction"}}}
 function! unite#get_options()"{{{
   return s:unite_options
@@ -523,6 +530,20 @@ endfunction"}}}
 " Utils.
 function! unite#print_error(message)"{{{
   echohl WarningMsg | echomsg a:message | echohl None
+endfunction"}}}
+function! unite#print_message(message)"{{{
+  let l:modifiable_save = &l:modifiable
+  setlocal modifiable
+  let l:unite = unite#get_current_unite()
+  call append(l:unite.prompt_linenr-1, a:message)
+  let l:unite.prompt_linenr += 1
+  let &l:modifiable = l:modifiable_save
+  call s:on_cursor_moved()
+
+  syntax clear uniteInputLine
+  execute 'syntax match uniteInputLine'
+        \ '/\%'.l:unite.prompt_linenr.'l.*/'
+        \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
 endfunction"}}}
 function! unite#substitute_path_separator(path)"{{{
   return unite#util#substitute_path_separator(a:path)
@@ -1220,17 +1241,18 @@ function! s:on_cursor_hold()  "{{{
   endif
 endfunction"}}}
 function! s:on_cursor_moved()  "{{{
-  execute 'setlocal' line('.') == unite#get_current_unite().prompt_linenr ? 'modifiable' : 'nomodifiable'
-  execute 'match' (line('.') <= unite#get_current_unite().prompt_linenr ?
-        \ line('$') <= unite#get_current_unite().prompt_linenr ?
-        \ 'Error /\%'.unite#get_current_unite().prompt_linenr.'l/' :
-        \ g:unite_cursor_line_highlight.' /\%'.(unite#get_current_unite().prompt_linenr+1).'l/' :
+  let l:prompt_linenr = unite#get_current_unite().prompt_linenr
+  execute 'setlocal' line('.') == l:prompt_linenr ? 'modifiable' : 'nomodifiable'
+  execute 'match' (line('.') <= l:prompt_linenr ?
+        \ line('$') <= l:prompt_linenr ?
+        \ 'Error /\%'.l:prompt_linenr.'l/' :
+        \ g:unite_cursor_line_highlight.' /\%'.(l:prompt_linenr+1).'l/' :
         \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
 
   if unite#get_current_unite().context.auto_preview
     pclose
     call unite#mappings#do_action('preview')
-    if line('.') != unite#get_current_unite().prompt_linenr
+    if line('.') != l:prompt_linenr
       normal! 0z.
     endif
   endif

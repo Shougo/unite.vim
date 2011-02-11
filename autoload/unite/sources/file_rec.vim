@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Feb 2011.
+" Last Modified: 11 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,6 +65,10 @@ function! s:source.async_gather_candidates(args, context)"{{{
 
   let [a:context.source__continuation.files, l:candidates] =
         \ s:get_files(a:context.source__continuation.files)
+
+  if empty(a:context.source__continuation.files)
+    call unite#print_message('file_rec: Caching is completed.')
+  endif
 
   return map(l:candidates, '{
         \ "word" : v:val,
