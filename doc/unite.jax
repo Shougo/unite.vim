@@ -817,7 +817,7 @@ unite#define_matcher({matcher})			*unite#define_matcher()*
 		すでにその名前のmatcherが存在する場合は上書きされる。
 
 unite#define_sorter({sorter})			*unite#define_sorter()*
-		{sorter}を動的に追加する。matcherの仕様については、
+		{sorter}を動的に追加する。sorterの仕様については、
 		|unite-create-sorter|を参照せよ。
 		すでにその名前のsorterが存在する場合は上書きされる。
 
