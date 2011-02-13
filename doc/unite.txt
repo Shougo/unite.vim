@@ -1153,6 +1153,7 @@ CHANGELOG					*unite-changelog*
 
 2011-02-13
 - Implemented preview window check.
+- Improved initialize sources.
 
 2011-02-11
 - Implemented sorter and matcher.

@@ -822,7 +822,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
   return l:sources
 endfunction"}}}
 function! s:initialize_sources()"{{{
-  let l:sources = extend(copy(s:static.sources), s:dynamic.sources)
+  let l:sources = deepcopy(s:static.sources) + deepcopy(s:dynamic.sources)
 
   for l:source in values(l:sources)
     if !has_key(l:source, 'is_volatile')
