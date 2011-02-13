@@ -807,24 +807,24 @@ unite#take_parents_action({action-name}, {candidate}, {extend-candidate})
 		is handy for reusing parents' actions.
 
 unite#define_source({source})			*unite#define_source()*
-		Adds {source} dinamically.  See also |unite-create-source|
-		about the detail of source.  If a source which name is same,
-		that will be overwritten.
+		Adds {source} dynamically.  See also |unite-create-source|
+		about the detail of source.  If a source which name is same
+		exists, that will be overwritten.
 
 unite#define_kind({kind})			*unite#define_kind()*
-		Adds {kind} dinamically.  See also |unite-create-kind|
-		about the detail of kind.  If a kind which name is same,
-		that will be overwritten.
+		Adds {kind} dynamically.  See also |unite-create-kind|
+		about the detail of kind.  If a kind which name is same
+		exists, that will be overwritten.
 
 unite#define_matcher({matcher})			*unite#define_matcher()*
-		Adds {matcher} dinamically.  See also |unite-create-matcher|
-		about the detail of matcher.  If a kind which name is same,
-		that will be overwritten.
+		Adds {matcher} dynamically.  See also |unite-create-matcher|
+		about the detail of matcher.  If a matcher which name is same
+		exists, that will be overwritten.
 
 unite#define_sorter({sorter})			*unite#define_sorter()*
-		Adds {sorter} dinamically.  See also |unite-create-sorter|
-		about the detail of sorter.  If a kind which name is same,
-		that will be overwritten.
+		Adds {sorter} dynamically.  See also |unite-create-sorter|
+		about the detail of sorter.  If a sorter which name is same
+		exists, that will be overwritten.
 
 unite#undef_source({name})			*unite#undef_source()*
 		Removes the source which name is {name} that was added by
