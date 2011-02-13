@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2011.
+" Last Modified: 13 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -735,8 +735,10 @@ function! s:quit_session(is_force)  "{{{
   nohlsearch
   match
 
-  " Close preview window.
-  pclose
+  if !l:unite.has_preview_window
+    " Close preview window.
+    pclose!
+  endif
 
   " Call finalize functions.
   for l:source in unite#loaded_sources_list()
@@ -1073,6 +1075,10 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.is_async =
         \ len(filter(copy(l:sources), 'has_key(v:val, "async_gather_candidates")')) > 0
 
+  " Preview windows check.
+  let l:unite.has_preview_window =
+   \ len(filter(range(1, winnr('$')), 'getwinvar(v:val, "&previewwindow")')) > 0
+
   let s:current_unite = l:unite
 endfunction"}}}
 function! s:initialize_unite_buffer()"{{{
@@ -1250,7 +1256,10 @@ function! s:on_cursor_moved()  "{{{
         \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
 
   if unite#get_current_unite().context.auto_preview
-    pclose
+    if !unite#get_current_unite().has_preview_window
+      pclose!
+    endif
+
     call unite#mappings#do_action('preview')
     if line('.') != l:prompt_linenr
       normal! 0z.
