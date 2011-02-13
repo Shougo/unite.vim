@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Feb 2011.
+" Last Modified: 14 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -822,7 +822,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
   return l:sources
 endfunction"}}}
 function! s:initialize_sources()"{{{
-  let l:sources = deepcopy(s:static.sources) + deepcopy(s:dynamic.sources)
+  let l:sources = extend(deepcopy(s:static.sources), deepcopy(s:dynamic.sources))
 
   for l:source in values(l:sources)
     if !has_key(l:source, 'is_volatile')
