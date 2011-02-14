@@ -232,6 +232,23 @@ COMMANDS 					*unite-commands*
 		-col={column-number}
 		Specifies the called unite buffer position.
 
+						*unite-options-vertical*
+		-vertical
+		Splits unite window vertically.
+
+						*unite-options-horizontal*
+		-horizontal
+		Splits unite window horizontally.
+		
+		When both options are undefined, this will depend on
+		|g:unite_enable_split_vertically| option.
+		The behavior when both options are defined is undefined.
+
+						*unite-options-direction*
+		-direction={direction}
+		Defines split position rule. The default value is same to
+		|g:unite_split_rule|.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
@@ -1150,6 +1167,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-02-14
+- Added -vertical, -horizontal, -direction options.
 
 2011-02-13
 - Implemented preview window check.

@@ -223,6 +223,23 @@ http://www.ustream.tv/recorded/11240673
 		-col={column-number}
 		uniteを開始した位置を指定する。
 
+						*unite-options-vertical*
+		-vertical
+		uniteバッファを垂直分割する。
+
+						*unite-options-horizontal*
+		-horizontal
+		uniteバッファを水平分割する。
+		
+		両方のオプションを指定しないと、初期状態は
+		|g:unite_enable_split_vertically|に依存する。両方のオプションが
+		指定されたときの動作は未定義である。
+
+						*unite-options-direction*
+		-direction={direction}
+		Defines split position rule. The default value is same to
+		|g:unite_split_rule|.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。
@@ -1196,7 +1213,9 @@ name			文字列		(必須)
 
 						*unite-source-attribute-gather_candidates*
 gather_candidates	関数		(必須)
-			uniteが候補を収集する際に呼ばれる。
+			uniteが候補を収集する際に一度だけ呼ばれる。
+			sourceが|unite-source-attribute-is_volatile|の場合は、
+			入力文字列が変化すると呼ばれる。
 			この関数は{args}と{context}を引数に取り、{candidate}の
 			リストを返す。
 			{args}は|:Unite|コマンドを実行された際にsourceに渡され
@@ -1209,6 +1228,7 @@ gather_candidates	関数		(必須)
 						*unite-source-attribute-async-gather_candidates*
 async_gather_candidates	関数		(任意)
 			uniteが候補を収集する際に、非同期に呼ばれる。
+			デフォルトのタイミングは、|g:unite_update_time|である。
 			この関数は{args}と{context}を引数に取り、{candidate}の
 			リストを返す。
 			引数や戻り値の仕様は

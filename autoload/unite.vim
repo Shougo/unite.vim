@@ -228,7 +228,8 @@ let s:unite_options = [
       \ '-buffer-name=', '-input=', '-prompt=',
       \ '-default-action=', '-start-insert','-no-start-insert', '-no-quit',
       \ '-winwidth=', '-winheight=',
-      \ '-immediately', '-auto-preview', '-complete'
+      \ '-immediately', '-auto-preview', '-complete',
+      \ '-vertical', '-horizontal', '-direction=',
       \]
 "}}}
 
@@ -602,6 +603,16 @@ function! unite#start(sources, ...)"{{{
   endif
   if !has_key(l:context, 'auto_preview')
     let l:context.auto_preview = 0
+  endif
+  if !has_key(l:context, 'vertical')
+    let l:context.vertical = g:unite_enable_split_vertically
+  endif
+  if has_key(l:context, 'horizontal')
+    " Disable vertically.
+    let l:context.vertical = 0
+  endif
+  if !has_key(l:context, 'direction')
+    let l:context.direction = g:unite_split_rule
   endif
   let l:context.is_redraw = 0
 
@@ -1146,8 +1157,8 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
     silent execute bufwinnr(unite#util#escape_file_searching(a:buffer_name)) 'wincmd w'
   else
     " Split window.
-    execute g:unite_split_rule
-          \ g:unite_enable_split_vertically ?
+    execute a:context.direction
+          \ a:context.vertical ?
           \        (bufexists(a:buffer_name) ? 'vsplit' : 'vnew')
           \      : (bufexists(a:buffer_name) ? 'split' : 'new')
     if bufexists(a:buffer_name)
@@ -1166,7 +1177,7 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
     endif
   endif
 
-  if g:unite_enable_split_vertically
+  if a:context.vertical
     execute 'vertical resize' a:context.winwidth
   else
     execute 'resize' a:context.winheight
