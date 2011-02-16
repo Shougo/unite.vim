@@ -1168,6 +1168,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-02-16
+- Fixed source register max width.
+- Improved syntax.
+
 2011-02-14
 - Added -vertical, -horizontal, -direction options.
 

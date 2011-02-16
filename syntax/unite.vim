@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2011.
+" Last Modified: 16 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,14 +34,13 @@ syntax match uniteStatusLine /\%1l.*/
 \            contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
 syntax match uniteSourcePrompt /^Sources/ contained nextgroup=uniteSourceSeparator
 syntax match uniteSeparator /: / contained nextgroup=uniteSourceNames
-syntax match uniteSourceNames /[[:alnum:]_/-]\+/ contained nextgroup=uniteSourceArgs
+syntax match uniteSourceNames /[[:alnum:]_\/-]\+/ contained nextgroup=uniteSourceArgs
 syntax match uniteSourceArgs /:\S\+/ contained
 
 syntax match uniteInputLine /\%2l.*/ contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial
 
 syntax match uniteMarkedLine /^\*.*/
 syntax match uniteNonMarkedLine /^-.*/     contains=uniteCandidateSourceName,uniteCandidateAbbr
-syntax match uniteCandidateSourceName /^- \zs[a-z_/-]\+/ contained
 
 highlight default link uniteSourcePrompt  Statement
 highlight default link uniteSeparator  NONE
@@ -50,7 +49,6 @@ highlight default link uniteSourceArgs  Function
 
 highlight default link uniteMarkedLine  Statement
 highlight default link uniteCandidateSourceName  Type
-execute 'highlight default link uniteCandidateAbbr'  g:unite_abbr_highlight
 
 " The following definitions are for <Plug>(unite-choose-action).
 highlight default link uniteChooseAction  NONE

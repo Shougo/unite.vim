@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Feb 2011.
+" Last Modified: 16 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1082,7 +1082,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.hlsearch_save = &hlsearch
   let l:unite.search_pattern_save = @/
   let l:unite.prompt_linenr = 2
-  let l:unite.max_source_name = max(map(copy(a:sources), 'len(v:val[0])')) + 2
+  let l:unite.max_source_name = len(a:sources) > 1 ?
+        \ max(map(copy(a:sources), 'len(v:val[0])')) + 2 : 0
   let l:unite.is_async =
         \ len(filter(copy(l:sources), 'has_key(v:val, "async_gather_candidates")')) > 0
 
@@ -1147,7 +1148,17 @@ function! s:initialize_unite_buffer()"{{{
     syntax clear uniteInputPrompt
     execute 'syntax match uniteInputPrompt' '/^'.l:match_prompt.'/ contained'
 
-    execute 'syntax match uniteCandidateAbbr' '/\%'.(unite#get_current_unite().max_source_name+2).'c.*/ contained'
+    syntax clear uniteCandidateSourceName
+    if l:unite.max_source_name > 0
+      syntax match uniteCandidateSourceName /^- \zs[[:alnum:]_\/-]\+/ contained
+      let l:source_padding = 2
+    else
+      syntax match uniteCandidateSourceName /^-/ contained
+      let l:source_padding = 3
+    endif
+    execute 'syntax match uniteCandidateAbbr' '/\%'.(l:unite.max_source_name+l:source_padding).'c.*/ contained'
+
+    execute 'highlight default link uniteCandidateAbbr'  g:unite_abbr_highlight
   endif
 endfunction"}}}
 function! s:switch_unite_buffer(buffer_name, context)"{{{
