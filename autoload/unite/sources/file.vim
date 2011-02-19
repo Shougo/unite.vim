@@ -74,8 +74,8 @@ function! s:source.gather_candidates(args, context)"{{{
   let l:candidates_file = []
   for l:file in l:candidates
     let l:dict = {
-          \ 'word' : l:file, 'abbr' : l:file, 'source' : 'file', 'action__path' : l:file,
-          \ 'action__directory' : unite#path2directory(l:file),
+          \ 'word' : fnamemodify(l:file, ':p'), 'abbr' : l:file, 'source' : 'file', 'action__path' : fnamemodify(l:file, ':p'),
+          \ 'action__directory' : unite#path2directory(fnamemodify(l:file, ':p')),
           \}
 
     if isdirectory(l:file)
