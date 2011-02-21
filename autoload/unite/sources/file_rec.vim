@@ -67,15 +67,16 @@ function! s:source.async_gather_candidates(args, context)"{{{
         \ s:get_files(a:context.source__continuation.files)
 
   if empty(a:context.source__continuation.files)
-    call unite#print_message('file_rec: Traverse was completed.')
+    call unite#print_message('file_rec: Directory traverse was completed.')
   endif
 
   return map(l:candidates, '{
         \ "word" : v:val,
+        \ "abbr" : unite#util#substitute_path_separator(fnamemodify(v:val, ":.")),
         \ "source" : "file_rec",
         \ "kind" : "file",
-        \ "action__path" : unite#util#substitute_path_separator(fnamemodify(v:val, ":p")),
-        \ "action__directory" : unite#util#path2directory(fnamemodify(v:val, ":p")),
+        \ "action__path" : v:val,
+        \ "action__directory" : v:val,
         \ }')
 endfunction"}}}
 
@@ -123,7 +124,8 @@ function! s:get_files(files)"{{{
           continue
         endif
 
-        call add(isdirectory(l:child) ? l:continuation_files : l:ret_files, fnamemodify(l:child, ':.'))
+        call add(isdirectory(l:child) ? l:continuation_files : l:ret_files,
+              \ unite#util#substitute_path_separator(fnamemodify(l:child, ':p')))
         let l:ret_files_len += 1
 
         if l:ret_files_len > l:max_len
@@ -132,7 +134,8 @@ function! s:get_files(files)"{{{
         endif
       endfor
     else
-      call add(l:ret_files, fnamemodify(l:file, ':.'))
+      call add(l:ret_files,
+            \ unite#util#substitute_path_separator(fnamemodify(l:file, ':p')))
       let l:ret_files_len += 1
     endif
 
