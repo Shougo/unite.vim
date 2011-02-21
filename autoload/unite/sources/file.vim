@@ -55,7 +55,7 @@ function! s:source.gather_candidates(args, context)"{{{
 
   " Glob by directory name.
   let l:input = substitute(l:input, '[^/.]*$', '', '')
-  let l:candidates = split(unite#substitute_path_separator(glob(l:input . (l:input =~ '\*$' ? '' : '*'))), '\n')
+  let l:candidates = split(unite#util#substitute_path_separator(glob(l:input . (l:input =~ '\*$' ? '' : '*'))), '\n')
 
   if a:context.input != ''
     let l:dummy = substitute(a:context.input, '[*\\]', '', 'g')
@@ -74,10 +74,10 @@ function! s:source.gather_candidates(args, context)"{{{
   let l:candidates_file = []
   for l:file in l:candidates
     let l:dict = {
-          \ 'word' : unite#path2directory(fnamemodify(l:file, ':p')),
+          \ 'word' : unite#util#substitute_path_separator(fnamemodify(l:file, ':p')),
           \ 'abbr' : l:file, 'source' : 'file',
-          \ 'action__path' : unite#path2directory(fnamemodify(l:file, ':p')),
-          \ 'action__directory' : unite#path2directory(fnamemodify(l:file, ':p')),
+          \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(l:file, ':p')),
+          \ 'action__directory' : unite#util#path2directory(fnamemodify(l:file, ':p')),
           \}
 
     if isdirectory(l:file)
