@@ -805,10 +805,16 @@ unite#custom_alias({kind}, {name}, {action})
 		call unite#custom_alias('file', 'h', 'left')
 <
 unite#custom_matcher({source-name}, {matchers})	*unite#custom_matcher()*
-		TODO
+		Changes the matchers of {source-name} into {matchers}.  You
+		may specify multiple souces with separating "," in
+		{source-name}.  {matchers} is a name of matcher or a list of
+		the names.
 
 unite#custom_sorter({source-name}, {sorters})	*unite#custom_sorter()*
-		TODO
+		Changes the sourters of {source-name} into {sorters}.  You
+		may specify multiple souces with separating "," in
+		{source-name}.  {sorters} is a name of sorter or a list of
+		the names.
 
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
