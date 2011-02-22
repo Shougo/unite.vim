@@ -1174,6 +1174,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-02-22
+- Fixed narrowing bugs.
+
 2011-02-21
 - Fixed fnamemodify().
 - Improved traverse message in file_rec source.

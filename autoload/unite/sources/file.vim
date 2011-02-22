@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Feb 2011.
+" Last Modified: 22 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,7 +74,7 @@ function! s:source.gather_candidates(args, context)"{{{
   let l:candidates_file = []
   for l:file in l:candidates
     let l:dict = {
-          \ 'word' : unite#util#substitute_path_separator(fnamemodify(l:file, ':p')),
+          \ 'word' : l:file,
           \ 'abbr' : l:file, 'source' : 'file',
           \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(l:file, ':p')),
           \ 'action__directory' : unite#util#path2directory(fnamemodify(l:file, ':p')),
