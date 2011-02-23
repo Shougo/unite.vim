@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Feb 2011.
+" Last Modified: 24 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,6 +42,14 @@ syntax match uniteInputLine /\%2l.*/ contains=uniteInputPrompt,uniteInputPromptE
 syntax match uniteMarkedLine /^\*.*/
 syntax match uniteNonMarkedLine /^-.*/     contains=uniteCandidateSourceName,uniteCandidateAbbr
 
+syntax region   uniteError   start=+!!!+ end=+!!!+ contains=uniteErrorHidden oneline
+if has('conceal')
+  " Supported conceal features.
+  syntax match   uniteErrorHidden            '!!!' contained conceal
+else
+  syntax match   uniteErrorHidden            '!!!' contained
+endif
+
 highlight default link uniteSourcePrompt  Statement
 highlight default link uniteSeparator  NONE
 highlight default link uniteSourceNames  Type
@@ -61,5 +69,8 @@ highlight default link uniteChooseSource  uniteSourceNames
 highlight default link uniteInputPrompt  Identifier
 highlight default link uniteInputPromptError  Error
 highlight default link uniteInputSpecial  Special
+
+highlight default link uniteError Error
+highlight default link uniteErrorHidden Ignore
 
 let b:current_syntax = 'unite'

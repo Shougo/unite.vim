@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Feb 2011.
+" Last Modified: 24 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -534,27 +534,38 @@ endfunction"}}}
 
 " Utils.
 function! unite#print_error(message)"{{{
+  call s:print_buffer('!!!' . a:message . '!!!')
+
   echohl WarningMsg | echomsg a:message | echohl None
 endfunction"}}}
 function! unite#print_message(message)"{{{
-  let l:modifiable_save = &l:modifiable
-  setlocal modifiable
-  let l:unite = unite#get_current_unite()
-  call append(l:unite.prompt_linenr-1, a:message)
-  let l:unite.prompt_linenr += 1
-  let &l:modifiable = l:modifiable_save
-  call s:on_cursor_moved()
-
-  syntax clear uniteInputLine
-  execute 'syntax match uniteInputLine'
-        \ '/\%'.l:unite.prompt_linenr.'l.*/'
-        \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+  if &filetype ==# 'unite'
+    call s:print_buffer(a:message)
+  else
+    echomsg a:message
+  endif
 endfunction"}}}
 function! unite#substitute_path_separator(path)"{{{
   return unite#util#substitute_path_separator(a:path)
 endfunction"}}}
 function! unite#path2directory(path)"{{{
   return unite#util#path2directory(a:path)
+endfunction"}}}
+function! s:print_buffer(message)"{{{
+  if &filetype ==# 'unite'
+    let l:modifiable_save = &l:modifiable
+    setlocal modifiable
+    let l:unite = unite#get_current_unite()
+    call append(l:unite.prompt_linenr-1, a:message)
+    let l:unite.prompt_linenr += 1
+    let &l:modifiable = l:modifiable_save
+    call s:on_cursor_moved()
+
+    syntax clear uniteInputLine
+    execute 'syntax match uniteInputLine'
+          \ '/\%'.l:unite.prompt_linenr.'l.*/'
+          \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+  endif
 endfunction"}}}
 "}}}
 
@@ -1119,6 +1130,10 @@ function! s:initialize_unite_buffer()"{{{
   setlocal foldcolumn=0
   setlocal iskeyword+=-,+,\\,!,~
   set hlsearch
+  if has('conceal')
+    setlocal conceallevel=3
+    setlocal concealcursor=n
+  endif
 
   " Autocommands.
   augroup plugin-unite

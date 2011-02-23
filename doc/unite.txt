@@ -1174,6 +1174,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-02-24
+- Improved unite#print_error() and unite#print_message().
+
 2011-02-23
 - Fixed auto_preview.
 - Fixed set search pattern.
