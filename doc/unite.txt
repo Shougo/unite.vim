@@ -1176,6 +1176,8 @@ CHANGELOG					*unite-changelog*
 
 2011-02-23
 - Fixed auto_preview.
+- Fixed set search pattern.
+- Deleted highlight off.
 
 2011-02-22
 - Fixed narrowing bugs.

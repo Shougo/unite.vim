@@ -527,6 +527,10 @@ endfunction"}}}
 function! unite#get_current_unite() "{{{
   return exists('b:unite') ? b:unite : s:current_unite
 endfunction"}}}
+function! unite#set_search_pattern(pattern) "{{{
+  let l:unite = unite#get_current_unite()
+  let l:unite.search_pattern_save = a:pattern
+endfunction"}}}
 
 " Utils.
 function! unite#print_error(message)"{{{
@@ -1206,9 +1210,6 @@ function! s:redraw(is_force) "{{{
         \ && !l:unite.is_async
     return
   endif
-
-  " Highlight off.
-  let @/ = ''
 
   let l:unite.last_input = l:input
   let l:unite.context.is_redraw = 1
