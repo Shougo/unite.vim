@@ -1174,6 +1174,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-02-23
+- Fixed auto_preview.
+
 2011-02-22
 - Fixed narrowing bugs.
 
