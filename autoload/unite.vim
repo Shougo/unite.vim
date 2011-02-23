@@ -1284,7 +1284,7 @@ function! s:on_cursor_moved()  "{{{
 
     call unite#mappings#do_action('preview')
     if line('.') != l:prompt_linenr
-      normal! z.
+      normal! zz
     endif
   endif
 endfunction"}}}
