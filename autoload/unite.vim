@@ -205,6 +205,7 @@ let s:LNUM_STATUS = 1
 " buffer number of the unite buffer
 let s:last_unite_bufnr = -1
 let s:current_unite = {}
+let s:unite_cached_message = []
 
 let s:static = {}
 
@@ -543,6 +544,8 @@ function! unite#print_message(message)"{{{
     call s:print_buffer(a:message)
   else
     echomsg a:message
+
+    call add(s:unite_cached_message, a:message)
   endif
 endfunction"}}}
 function! unite#substitute_path_separator(path)"{{{
@@ -665,6 +668,9 @@ function! unite#start(sources, ...)"{{{
   silent % delete _
   call unite#redraw_status()
   call setline(l:unite.prompt_linenr, l:unite.prompt . l:unite.context.input)
+  for message in s:unite_cached_message
+    call s:print_buffer(message)
+  endfor
   call unite#redraw_candidates()
 
   if l:unite.context.start_insert || l:unite.context.complete
@@ -1116,6 +1122,8 @@ function! s:initialize_current_unite(sources, context)"{{{
    \ len(filter(range(1, winnr('$')), 'getwinvar(v:val, "&previewwindow")')) > 0
 
   let s:current_unite = l:unite
+
+  let s:unite_cached_message = []
 endfunction"}}}
 function! s:initialize_unite_buffer()"{{{
   call s:switch_unite_buffer(s:current_unite.real_buffer_name, s:current_unite.context)

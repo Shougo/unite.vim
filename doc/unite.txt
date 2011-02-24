@@ -1180,6 +1180,7 @@ CHANGELOG					*unite-changelog*
 - Fixed narrowing bug.
 - Changed input_gather_candidates() to change_candidates().
 - gather_candidates attribute is optional.
+- Changed file_rec message format.
 
 2011-02-23
 - Fixed auto_preview.

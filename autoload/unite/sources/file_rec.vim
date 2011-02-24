@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Feb 2011.
+" Last Modified: 24 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,6 +50,8 @@ function! s:source.gather_candidates(args, context)"{{{
   let l:directory = unite#util#substitute_path_separator(
         \ substitute(l:directory, '^\~', unite#util#substitute_path_separator($HOME), ''))
 
+  call unite#print_message('[file_rec] directory: ' . l:directory)
+
   " Initialize continuation.
   let a:context.source__continuation = {
         \ 'files' : [l:directory],
@@ -67,7 +69,7 @@ function! s:source.async_gather_candidates(args, context)"{{{
         \ s:get_files(a:context.source__continuation.files)
 
   if empty(a:context.source__continuation.files)
-    call unite#print_message('file_rec: Directory traverse was completed.')
+    call unite#print_message('[file_rec] Directory traverse was completed.')
   endif
 
   return map(l:candidates, '{
