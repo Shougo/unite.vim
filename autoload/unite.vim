@@ -416,7 +416,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   endif
 
   let l:sources = extend(copy(s:static.sources), s:dynamic.sources)
-  return filter(keys(l:sources)+s:unite_options, 'stridx(v:val, a:arglead) == 0')
+  return filter(sort(keys(l:sources))+s:unite_options, 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
 function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
   let l:buffer_list = map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite"'), 'getbufvar(v:val, "unite").buffer_name')
