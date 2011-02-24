@@ -59,7 +59,8 @@ let s:source.action_table['*'] = s:action_table
 "}}}
 
 function! s:compare_sources(source_a, source_b) "{{{
-  return a:source_a.name > a:source_b.name
+  return a:source_a.name ==# a:source_b.name ? 0 :
+  \      a:source_a.name >#  a:source_b.name ? 1 : -1
 endfunction"}}}
 
 " vim: foldmethod=marker
