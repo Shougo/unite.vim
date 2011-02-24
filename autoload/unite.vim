@@ -971,6 +971,10 @@ function! s:recache_candidates(input, is_force)"{{{
                 \ l:unite.matchers[l:matcher_name].match(l:source_candidates, l:source.unite__context)
         endif
       endfor
+
+      if has_key(l:source, 'input_gather_candidates')
+        let l:source_candidates += l:source.input_gather_candidates(l:source.args, l:source.unite__context)
+      endif
     endif
 
     " Sort.

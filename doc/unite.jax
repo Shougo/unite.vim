@@ -1225,9 +1225,21 @@ gather_candidates	関数		(必須)
 			{candidate}については|unite-notation-{candidate}|を参照
 			せよ。
 
-						*unite-source-attribute-async-gather_candidates*
+						*unite-source-attribute-input_gather_candidates*
+input_gather_candidates	関数		(任意)
+			uniteが候補を収集する際に、一文字以上の入力があり、入力
+			文字列が変化すると呼ばれる。入力文字列から候補を生成す
+			るときに便利である。
+			この関数は{args}と{context}を引数に取り、{candidate}の
+			リストを返す。
+			引数や戻り値の仕様は
+			|unite-source-attribute-gather_candidates|と同一であ
+			る。
+
+						*unite-source-attribute-async_gather_candidates*
 async_gather_candidates	関数		(任意)
-			uniteが候補を収集する際に、非同期に呼ばれる。
+			uniteが候補を収集する際に、非同期に呼ばれる。時間のかか
+			る処理を細切れで行う際に便利である。
 			デフォルトのタイミングは、|g:unite_update_time|である。
 			この関数は{args}と{context}を引数に取り、{candidate}の
 			リストを返す。
