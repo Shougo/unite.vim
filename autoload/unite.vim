@@ -1059,6 +1059,8 @@ function! s:convert_line(candidate)"{{{
 endfunction"}}}
 
 function! s:initialize_current_unite(sources, context)"{{{
+  let s:unite_cached_message = []
+
   let l:context = a:context
 
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
@@ -1122,8 +1124,6 @@ function! s:initialize_current_unite(sources, context)"{{{
    \ len(filter(range(1, winnr('$')), 'getwinvar(v:val, "&previewwindow")')) > 0
 
   let s:current_unite = l:unite
-
-  let s:unite_cached_message = []
 endfunction"}}}
 function! s:initialize_unite_buffer()"{{{
   call s:switch_unite_buffer(s:current_unite.real_buffer_name, s:current_unite.context)

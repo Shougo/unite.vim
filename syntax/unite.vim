@@ -31,10 +31,13 @@ elseif exists('b:current_syntax')
 endif
 
 syntax match uniteStatusLine /\%1l.*/
-\            contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
+      \  contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
 syntax match uniteSourcePrompt /^Sources/ contained nextgroup=uniteSourceSeparator
-syntax match uniteSeparator /: / contained nextgroup=uniteSourceNames
-syntax match uniteSourceNames /[[:alnum:]_\/-]\+/ contained nextgroup=uniteSourceArgs
+syntax match uniteSeparator /:/ contained nextgroup=uniteSourceNames
+syntax match uniteSourceNames / [[:alnum:]_\/-]\+/ contained nextgroup=uniteSourceArgs
+syntax match uniteMessage /^\[.*\].*$/
+      \  contains=uniteMessageSource
+syntax match uniteMessageSource /^\[.*\]/ contained
 syntax match uniteSourceArgs /:\S\+/ contained
 
 syntax match uniteInputLine /\%2l.*/ contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial
@@ -54,6 +57,8 @@ highlight default link uniteSourcePrompt  Statement
 highlight default link uniteSeparator  NONE
 highlight default link uniteSourceNames  Type
 highlight default link uniteSourceArgs  Function
+highlight default link uniteMessage Comment
+highlight default link uniteMessageSource Constant
 
 highlight default link uniteMarkedLine  Statement
 highlight default link uniteCandidateSourceName  Type
