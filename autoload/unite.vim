@@ -887,6 +887,10 @@ function! s:initialize_sources()"{{{
     if type(l:source.sorter) != type([])
       let l:source.sorter = [l:source.sorter]
     endif
+    if l:source.is_volatile
+          \ && !has_key(l:source, 'change_candidates')
+      let l:source.change_candidates = l:source.gather_candidates
+    endif
   endfor
 
   return l:sources
@@ -944,7 +948,7 @@ function! s:recache_candidates(input, is_force)"{{{
 
     let l:source.unite__context.input = l:input
 
-    if l:source.is_volatile || a:is_force || l:source.unite__is_invalidate
+    if !l:source.is_volatile && (a:is_force || l:source.unite__is_invalidate)
       " Recaching.
       let l:source.unite__context.source = l:source
       let l:source.unite__context.is_force = a:is_force
@@ -962,6 +966,11 @@ function! s:recache_candidates(input, is_force)"{{{
 
     let l:custom_source = has_key(s:custom.source, l:source.name) ?
           \ s:custom.source[l:source.name] : {}
+
+    if has_key(l:source, 'change_candidates')
+      let l:source_candidates += l:source.change_candidates(l:source.args, l:source.unite__context)
+    endif
+
     if l:input != ''
       let l:matcher_names = has_key(l:custom_source, 'matchers') ?
             \ l:custom_source.matchers : l:source.matcher
@@ -971,10 +980,6 @@ function! s:recache_candidates(input, is_force)"{{{
                 \ l:unite.matchers[l:matcher_name].match(l:source_candidates, l:source.unite__context)
         endif
       endfor
-
-      if has_key(l:source, 'input_gather_candidates')
-        let l:source_candidates += l:source.input_gather_candidates(l:source.args, l:source.unite__context)
-      endif
     endif
 
     " Sort.

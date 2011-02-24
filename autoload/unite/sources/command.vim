@@ -86,7 +86,7 @@ function! s:source.gather_candidates(args, context)"{{{
 
   return s:cached_result
 endfunction"}}}
-function! s:source.input_gather_candidates(args, context)"{{{
+function! s:source.change_candidates(args, context)"{{{
   let l:dummy = substitute(a:context.input, '[*\\]', '', 'g')
   if len(split(l:dummy)) > 1
     " Add dummy result.

@@ -1225,8 +1225,8 @@ gather_candidates	関数		(必須)
 			{candidate}については|unite-notation-{candidate}|を参照
 			せよ。
 
-						*unite-source-attribute-input_gather_candidates*
-input_gather_candidates	関数		(任意)
+						*unite-source-attribute-change_candidates*
+change_candidates	関数		(任意)
 			uniteが候補を収集する際に、一文字以上の入力があり、入力
 			文字列が変化すると呼ばれる。入力文字列から候補を生成す
 			るときに便利である。
