@@ -948,7 +948,7 @@ function! s:recache_candidates(input, is_force)"{{{
 
     let l:source.unite__context.input = l:input
 
-    if !l:source.is_volatile && (a:is_force || l:source.unite__is_invalidate)
+    if !l:source.is_volatile && has_key(l:source, 'gather_candidates') && (a:is_force || l:source.unite__is_invalidate)
       " Recaching.
       let l:source.unite__context.source = l:source
       let l:source.unite__context.is_force = a:is_force

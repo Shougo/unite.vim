@@ -36,10 +36,9 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'file',
       \ 'description' : 'candidates from file list',
-      \ 'is_volatile' : 1,
       \}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.change_candidates(args, context)"{{{
   let l:input_list = filter(split(a:context.input,
         \                     '\\\@<! ', 1), 'v:val !~ "!"')
   let l:input = empty(l:input_list) ? '' : l:input_list[0]

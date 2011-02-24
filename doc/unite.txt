@@ -1179,6 +1179,7 @@ CHANGELOG					*unite-changelog*
 - Implemented input_gather_candidates().
 - Fixed narrowing bug.
 - Changed input_gather_candidates() to change_candidates().
+- gather_candidates attribute is optional.
 
 2011-02-23
 - Fixed auto_preview.
