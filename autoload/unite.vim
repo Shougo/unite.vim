@@ -543,8 +543,6 @@ function! unite#print_message(message)"{{{
   if &filetype ==# 'unite'
     call s:print_buffer(a:message)
   else
-    echomsg a:message
-
     call add(s:unite_cached_message, a:message)
   endif
 endfunction"}}}
