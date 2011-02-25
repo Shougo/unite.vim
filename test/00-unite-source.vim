@@ -46,7 +46,7 @@ function! s:run()
   Ok unite#define_source(l:source) == 0, "defind source"
 
   let candidate = {
-  \   'ku__source': unite#available_sources('hoge'),
+  \   'ku__source': unite#get_sources('hoge'),
   \   'word': 'EMPRESS',
   \ }
 

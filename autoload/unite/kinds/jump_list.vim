@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jan 2011.
+" Last Modified: 25 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -95,7 +95,7 @@ function! s:jump(candidate)"{{{
   let l:pattern = a:candidate.action__pattern
 
   " Jump by search().
-  let l:source = unite#available_sources(a:candidate.source)
+  let l:source = unite#get_sources(a:candidate.source)
   if !(has_key(a:candidate, 'action__signature') && has_key(l:source, 'calc_signature'))
     " Not found signature.
     if has_key(a:candidate, 'action__line')

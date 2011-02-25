@@ -235,11 +235,11 @@ let s:unite_options = [
 "}}}
 
 " Core functions."{{{
-function! unite#available_kinds(...)"{{{
+function! unite#get_kinds(...)"{{{
   let l:unite = unite#get_current_unite()
   return a:0 == 0 ? l:unite.kinds : get(l:unite.kinds, a:1, {})
 endfunction"}}}
-function! unite#available_sources(...)"{{{
+function! unite#get_sources(...)"{{{
   let l:all_sources = s:initialize_sources()
   return a:0 == 0 ? l:all_sources : get(l:all_sources, a:1, {})
 endfunction"}}}
@@ -266,7 +266,7 @@ function! unite#get_context()"{{{
 endfunction"}}}
 " function! unite#get_action_table(source_name, kind_name, self_func, [is_parent_action])
 function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
-  let l:kind = unite#available_kinds(a:kind_name)
+  let l:kind = unite#get_kinds(a:kind_name)
   let l:source = s:get_loaded_sources(a:source_name)
   let l:is_parents_action = a:0 > 0 ? a:1 : 0
 
@@ -404,7 +404,7 @@ function! unite#get_default_action(source_name, kind_name)"{{{
   endif
 
   " Kind default actions.
-  return unite#available_kinds(a:kind_name).default_action
+  return unite#get_kinds(a:kind_name).default_action
 endfunction"}}}
 function! unite#escape_match(str)"{{{
   return substitute(substitute(escape(a:str, '~"\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
