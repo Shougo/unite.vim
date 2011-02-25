@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Feb 2011.
+" Last Modified: 25 Feb 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -950,14 +950,14 @@ function! s:recache_candidates(input, is_force)"{{{
       continue
     endif
 
+    " Set context.
     let l:source.unite__context.input = l:input
+    let l:source.unite__context.source = l:source
+    let l:source.unite__context.is_force = a:is_force
+    let l:source.unite__context.is_redraw = l:unite.context.is_redraw
 
     if !l:source.is_volatile && has_key(l:source, 'gather_candidates') && (a:is_force || l:source.unite__is_invalidate)
       " Recaching.
-      let l:source.unite__context.source = l:source
-      let l:source.unite__context.is_force = a:is_force
-      let l:source.unite__context.is_redraw = l:unite.context.is_redraw
-
       let l:source.unite__cached_candidates = copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
       let l:source.unite__is_invalidate = 0
     endif
