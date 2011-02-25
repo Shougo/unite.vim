@@ -1177,6 +1177,7 @@ CHANGELOG					*unite-changelog*
 2011-02-25
 - Fixed context bug.
 - Fixed narrowing.
+- Added unite-source-attribute-source__ description.
 
 2011-02-24
 - Improved unite#print_error() and unite#print_message().

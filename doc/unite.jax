@@ -1320,9 +1320,15 @@ is_volatile		数値		(任意)
 			閉じられるまで有効である。もっと長い時間キャッシュした
 			い場合はsourceが自前でキャッシュするほかない。
 
+						*unite-source-attribute-description*
 description		文字列		(任意)
 			sourceを説明する文字列。省略すると""になる。
 			|unite-source-source|において表示に使われる。
+
+						*unite-source-attribute-source__*
+source__		不定		(任意)
+			source毎の独自属性。unite側の属性と被らないように、
+			source__プレフィクスを追加しなければならない。
 
 NOTATION					*unite-notation*
 
