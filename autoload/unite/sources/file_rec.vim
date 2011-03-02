@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Feb 2011.
+" Last Modified: 02 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,12 +73,12 @@ function! s:source.async_gather_candidates(args, context)"{{{
   endif
 
   return map(l:candidates, '{
-        \ "word" : v:val,
+        \ "word" : unite#util#substitute_path_separator(fnamemodify(v:val, ":p")),
         \ "abbr" : unite#util#substitute_path_separator(fnamemodify(v:val, ":.")),
         \ "source" : "file_rec",
         \ "kind" : "file",
-        \ "action__path" : v:val,
-        \ "action__directory" : v:val,
+        \ "action__path" : unite#util#substitute_path_separator(fnamemodify(v:val, ":p")),
+        \ "action__directory" : unite#util#path2directory(v:val),
         \ }')
 endfunction"}}}
 
@@ -126,8 +126,7 @@ function! s:get_files(files)"{{{
           continue
         endif
 
-        call add(isdirectory(l:child) ? l:continuation_files : l:ret_files,
-              \ unite#util#substitute_path_separator(fnamemodify(l:child, ':p')))
+        call add(isdirectory(l:child) ? l:continuation_files : l:ret_files, l:child)
         let l:ret_files_len += 1
 
         if l:ret_files_len > l:max_len
@@ -136,8 +135,7 @@ function! s:get_files(files)"{{{
         endif
       endfor
     else
-      call add(l:ret_files,
-            \ unite#util#substitute_path_separator(fnamemodify(l:file, ':p')))
+      call add(l:ret_files, l:file)
       let l:ret_files_len += 1
     endif
 

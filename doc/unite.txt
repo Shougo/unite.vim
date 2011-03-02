@@ -1174,6 +1174,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-03-02
+- Improved file_rec path.
+
 2011-02-25
 - Fixed context bug.
 - Fixed narrowing.
