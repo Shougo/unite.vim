@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Feb 2011.
+" Last Modified: 02 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -123,10 +123,12 @@ function! s:make_abbr(bufnr)"{{{
   let l:filetype = getbufvar(a:bufnr, '&filetype')
   if l:filetype ==# 'vimfiler'
     let l:path = getbufvar(a:bufnr, 'vimfiler').current_dir
-    let l:path = '*vimfiler* - ' . unite#substitute_path_separator(simplify(l:path))
+    let l:path = printf('*vimfiler* [%s]', unite#substitute_path_separator(simplify(l:path)))
   elseif l:filetype ==# 'vimshell'
-    let l:path = getbufvar(a:bufnr, 'vimshell').save_dir
-    let l:path = '*vimshell* - ' . unite#substitute_path_separator(simplify(l:path))
+    let l:vimshell = getbufvar(a:bufnr, 'vimshell')
+    let l:path = printf('*vimshell*: %s [%s]',
+          \ (has_key(l:vimshell, 'cmdline') ? l:vimshell.cmdline : ''),
+          \ unite#substitute_path_separator(simplify(l:vimshell.save_dir)))
   else
     let l:path = bufname(a:bufnr) . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
     let l:path = unite#substitute_path_separator(simplify(l:path))

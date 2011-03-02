@@ -1176,6 +1176,7 @@ CHANGELOG					*unite-changelog*
 
 2011-03-02
 - Improved file_rec path.
+- Improved buffer abbr.
 
 2011-02-25
 - Fixed context bug.
