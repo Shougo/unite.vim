@@ -498,6 +498,16 @@ function! unite#gather_candidates()"{{{
     let l:candidates += l:source.unite__candidates
   endfor
 
+  " Post filter.
+  let l:unite = unite#get_current_unite()
+  for l:filter_name in unite#get_buffer_name_option(
+        \ l:unite.buffer_name, 'filters')
+    if has_key(l:unite.filters, l:filter_name)
+      let l:candidates =
+            \ l:unite.filters[l:filter_name].filter(l:candidates, l:unite.context)
+    endif
+  endfor
+
   return l:candidates
 endfunction"}}}
 function! unite#get_current_unite() "{{{
@@ -893,7 +903,7 @@ function! s:initialize_buffer_name_options(buffer_name)"{{{
     let l:setting.substitute_patterns = {}
   endif
   if !has_key(l:setting, 'filters')
-    let l:setting.filters = {}
+    let l:setting.filters = []
   endif
 endfunction"}}}
 
@@ -911,6 +921,10 @@ function! s:recache_candidates(input, is_force)"{{{
   let l:input_len = unite#util#strchars(l:input)
   let l:unite = unite#get_current_unite()
 
+
+  let l:unite.context.input = l:input
+  let l:unite.context.is_force = a:is_force
+
   for l:source in unite#loaded_sources_list()
     " Check required pattern length.
     if l:input_len < l:source.required_pattern_length
@@ -919,9 +933,9 @@ function! s:recache_candidates(input, is_force)"{{{
     endif
 
     " Set context.
-    let l:source.unite__context.input = l:input
+    let l:source.unite__context.input = l:unite.context.input
     let l:source.unite__context.source = l:source
-    let l:source.unite__context.is_force = a:is_force
+    let l:source.unite__context.is_force = l:unite.context.is_force
     let l:source.unite__context.is_redraw = l:unite.context.is_redraw
 
     if !l:source.is_volatile && has_key(l:source, 'gather_candidates') && (a:is_force || l:source.unite__is_invalidate)
