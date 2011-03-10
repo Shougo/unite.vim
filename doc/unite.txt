@@ -1148,6 +1148,7 @@ CHANGELOG					*unite-changelog*
 
 2011-03-10
 - Implemented filters.
+- Refactored buffer name options.
 
 2011-03-02
 - Improved file_rec path.

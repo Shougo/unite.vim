@@ -30,44 +30,45 @@ function! unite#version()"{{{
 endfunction"}}}
 
 " User functions."{{{
-function! s:initialize_buffer_name_settings(buffer_name)"{{{
-  if !has_key(s:buffer_name_settings, a:buffer_name)
-    let s:buffer_name_settings[a:buffer_name] = {}
-  endif
-  let l:setting = s:buffer_name_settings[a:buffer_name]
-  if !has_key(l:setting, 'substitute_patterns')
-    let l:setting.substitute_patterns = {}
-  endif
-endfunction"}}}
 function! unite#get_substitute_pattern(buffer_name)"{{{
-  return has_key(s:buffer_name_settings, a:buffer_name) ?
-        \ s:buffer_name_settings[a:buffer_name].substitute_patterns : ''
+  let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
+
+  return has_key(s:buffer_name_options, l:buffer_name) ?
+        \ s:buffer_name_options[l:buffer_name].substitute_patterns : ''
 endfunction"}}}
 function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
-  let l:priority = a:0 > 0 ? a:1 : 0
+  let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
+
+  let l:substitute_patterns = has_key(s:buffer_name_options, l:buffer_name) ?
+        \ unite#get_buffer_name_option(l:buffer_name, 'substitute_patterns') : {}
+
+  if has_key(l:substitute_patterns, a:pattern)
+        \ && a:pattern == ''
+    call remove(l:substitute_patterns, a:pattern)
+  else
+    let l:substitute_patterns[a:pattern] = {
+            \ 'pattern' : a:pattern,
+            \ 'subst' : a:subst, 'priority' : (a:0 > 0 ? a:1 : 0),
+            \ }
+  endif
+
+  call unite#set_buffer_name_option(a:buffer_name, 'substitute_patterns', l:substitute_patterns)
+endfunction"}}}
+function! unite#set_buffer_name_option(buffer_name, option_name, value)"{{{
   let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
 
   for key in split(l:buffer_name, ',')
-    if !has_key(s:buffer_name_settings, key)
-      let s:buffer_name_settings[key] = {}
+    if !has_key(s:buffer_name_options, key)
+      let s:buffer_name_options[key] = {}
     endif
 
-    if !has_key(s:buffer_name_settings[key], 'substitute_patterns')
-      let s:buffer_name_settings[key].substitute_patterns = {}
-    endif
-
-    let l:substitute_patterns = s:buffer_name_settings[key].substitute_patterns
-
-    if has_key(l:substitute_patterns, a:pattern)
-          \ && a:pattern == ''
-      call remove(l:substitute_patterns, a:pattern)
-    else
-      let l:substitute_patterns[a:pattern] = {
-            \ 'pattern' : a:pattern,
-            \ 'subst' : a:subst, 'priority' : l:priority
-            \ }
-    endif
+    let s:buffer_name_options[key][a:option_name] = a:value
   endfor
+endfunction"}}}
+function! unite#get_buffer_name_option(buffer_name, option_name)"{{{
+  let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
+
+  return s:buffer_name_options[a:buffer_name][a:option_name]
 endfunction"}}}
 function! unite#custom_filter(source_name, filters)"{{{
   let l:filters = type(a:filters) == type([]) ?
@@ -195,7 +196,7 @@ let s:custom.default_actions = {}
 let s:custom.aliases = {}
 let s:custom.source = {}
 
-let s:buffer_name_settings = {}
+let s:buffer_name_options = {}
 call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
 call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
 
@@ -852,8 +853,8 @@ function! s:initialize_sources()"{{{
     if !has_key(l:source, 'description')
       let l:source.description = ''
     endif
-    if !has_key(l:source, 'filter')
-      let l:source.filter = unite#filters#default#get()
+    if !has_key(l:source, 'filters')
+      let l:source.filters = unite#filters#default#get()
     endif
     if l:source.is_volatile
           \ && !has_key(l:source, 'change_candidates')
@@ -883,6 +884,19 @@ function! s:initialize_filters()"{{{
 
   return l:filters
 endfunction"}}}
+function! s:initialize_buffer_name_options(buffer_name)"{{{
+  if !has_key(s:buffer_name_options, a:buffer_name)
+    let s:buffer_name_options[a:buffer_name] = {}
+  endif
+  let l:setting = s:buffer_name_options[a:buffer_name]
+  if !has_key(l:setting, 'substitute_patterns')
+    let l:setting.substitute_patterns = {}
+  endif
+  if !has_key(l:setting, 'filters')
+    let l:setting.filters = {}
+  endif
+endfunction"}}}
+
 function! s:recache_candidates(input, is_force)"{{{
   " Save options.
   let l:ignorecase_save = &ignorecase
@@ -931,7 +945,7 @@ function! s:recache_candidates(input, is_force)"{{{
 
     " Filter.
     for l:filter_name in has_key(l:custom_source, 'filters') ?
-          \ l:custom_source.filters : l:source.filter
+          \ l:custom_source.filters : l:source.filters
       if has_key(l:unite.filters, l:filter_name)
         let l:source_candidates =
               \ l:unite.filters[l:filter_name].filter(l:source_candidates, l:source.unite__context)
@@ -1043,8 +1057,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.kinds = s:initialize_kinds()
   let l:unite.filters = s:initialize_filters()
   let l:unite.buffer_name = (l:context.buffer_name == '') ? 'default' : l:context.buffer_name
-  let l:unite.buffer_settings =
-        \ s:initialize_buffer_name_settings(l:unite.buffer_name)
+  let l:unite.buffer_options =
+        \ s:initialize_buffer_name_options(l:unite.buffer_name)
   let l:unite.real_buffer_name = l:buffer_name
   let l:unite.prompt = l:context.prompt
   let l:unite.input = l:context.input
@@ -1334,27 +1348,25 @@ function! s:get_substitute_input(input)"{{{
   let l:input = a:input
 
   let l:unite = unite#get_current_unite()
-  if has_key(s:buffer_name_settings, l:unite.buffer_name)
-    let l:substitute_patterns =
-          \ s:buffer_name_settings[l:unite.buffer_name].substitute_patterns
-    if l:unite.input != '' && stridx(l:input, l:unite.input) == 0
-      " Substitute after input.
-      let l:input_save = l:input
-      let l:subst = l:input_save[len(l:unite.input) :]
-      let l:input = l:input_save[: len(l:unite.input)-1]
-    else
-      " Substitute all input.
-      let l:subst = l:input
-      let l:input = ''
-    endif
-
-    for l:pattern in sort(values(l:substitute_patterns),
-          \ 's:compare_substitute_patterns')
-      let l:subst = substitute(l:subst, l:pattern.pattern, l:pattern.subst, 'g')
-    endfor
-
-    let l:input .= l:subst
+  let l:substitute_patterns =
+        \ unite#get_buffer_name_option(l:unite.buffer_name, 'substitute_patterns')
+  if l:unite.input != '' && stridx(l:input, l:unite.input) == 0
+    " Substitute after input.
+    let l:input_save = l:input
+    let l:subst = l:input_save[len(l:unite.input) :]
+    let l:input = l:input_save[: len(l:unite.input)-1]
+  else
+    " Substitute all input.
+    let l:subst = l:input
+    let l:input = ''
   endif
+
+  for l:pattern in sort(values(l:substitute_patterns),
+        \ 's:compare_substitute_patterns')
+    let l:subst = substitute(l:subst, l:pattern.pattern, l:pattern.subst, 'g')
+  endfor
+
+  let l:input .= l:subst
 
   return l:input
 endfunction"}}}
