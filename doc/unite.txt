@@ -1,6 +1,6 @@
 *unite.txt*	Unite all sources
 
-Version: 1.1
+Version: 1.5
 Author : Shougo <Shougo.Matsu@gmail.com>
 Documentation Author: ujihisa <ujihisa at gmail com>
 License: MIT license  {{{
@@ -1150,6 +1150,7 @@ CHANGELOG					*unite-changelog*
 - Implemented filters.
 - Refactored buffer name options.
 - Implemented buffer name filters.
+- Fixed version number.
 
 2011-03-02
 - Improved file_rec path.

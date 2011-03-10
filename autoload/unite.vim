@@ -22,7 +22,7 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 1.1, for Vim 7.0
+" Version: 1.5, for Vim 7.0
 "=============================================================================
 
 function! unite#version()"{{{
@@ -39,20 +39,22 @@ endfunction"}}}
 function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
   let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
 
-  let l:substitute_patterns = has_key(s:buffer_name_options, l:buffer_name) ?
-        \ unite#get_buffer_name_option(l:buffer_name, 'substitute_patterns') : {}
+  for key in split(l:buffer_name, ',')
+    let l:substitute_patterns = has_key(s:buffer_name_options, key) ?
+          \ unite#get_buffer_name_option(key, 'substitute_patterns') : {}
 
-  if has_key(l:substitute_patterns, a:pattern)
-        \ && a:pattern == ''
-    call remove(l:substitute_patterns, a:pattern)
-  else
-    let l:substitute_patterns[a:pattern] = {
+    if has_key(l:substitute_patterns, a:pattern)
+          \ && a:pattern == ''
+      call remove(l:substitute_patterns, a:pattern)
+    else
+      let l:substitute_patterns[a:pattern] = {
             \ 'pattern' : a:pattern,
             \ 'subst' : a:subst, 'priority' : (a:0 > 0 ? a:1 : 0),
             \ }
-  endif
+    endif
 
-  call unite#set_buffer_name_option(a:buffer_name, 'substitute_patterns', l:substitute_patterns)
+    call unite#set_buffer_name_option(key, 'substitute_patterns', l:substitute_patterns)
+  endfor
 endfunction"}}}
 function! unite#set_buffer_name_option(buffer_name, option_name, value)"{{{
   let l:buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
