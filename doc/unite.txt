@@ -37,13 +37,11 @@ Interface		|unite-interface|
   Sources		  |unite-sources|
   Kinds			  |unite-kinds|
   Actions		  |unite-actions|
-  Matchers		  |unite-matchers|
-  Sorters		  |unite-sorters|
+  Filters		  |unite-filters|
 Configulation Examples	|unite-examples|
 Create source		|unite-create-source|
 Create kind		|unite-create-kind|
-Create matcher		|unite-create-matcher|
-Create sorter		|unite-create-sorter|
+Create filter		|unite-create-filter|
 User defined source	|unite-user-sources|
 ToDo			|unite-todo|
 Bugs			|unite-bugs|
@@ -804,16 +802,10 @@ unite#custom_alias({kind}, {name}, {action})
 >
 		call unite#custom_alias('file', 'h', 'left')
 <
-unite#custom_matcher({source-name}, {matchers})	*unite#custom_matcher()*
-		Changes the matchers of {source-name} into {matchers}.  You
+unite#custom_filter({source-name}, {filters})	*unite#custom_filter()*
+		Changes the filters of {source-name} into {filters}.  You
 		may specify multiple souces with separating "," in
-		{source-name}.  {matchers} is a name of matcher or a list of
-		the names.
-
-unite#custom_sorter({source-name}, {sorters})	*unite#custom_sorter()*
-		Changes the sourters of {source-name} into {sorters}.  You
-		may specify multiple souces with separating "," in
-		{source-name}.  {sorters} is a name of sorter or a list of
+		{source-name}.  {filters} is a name of filter or a list of
 		the names.
 
 unite#take_action({action-name}, {candidate})
@@ -839,14 +831,9 @@ unite#define_kind({kind})			*unite#define_kind()*
 		about the detail of kind.  If a kind which name is same
 		exists, that will be overwritten.
 
-unite#define_matcher({matcher})			*unite#define_matcher()*
-		Adds {matcher} dynamically.  See also |unite-create-matcher|
-		about the detail of matcher.  If a matcher which name is same
-		exists, that will be overwritten.
-
-unite#define_sorter({sorter})			*unite#define_sorter()*
-		Adds {sorter} dynamically.  See also |unite-create-sorter|
-		about the detail of sorter.  If a sorter which name is same
+unite#define_filter({filter})			*unite#define_filter()*
+		Adds {filter} dynamically.  See also |unite-create-filter|
+		about the detail of filter.  If a filter which name is same
 		exists, that will be overwritten.
 
 unite#undef_source({name})			*unite#undef_source()*
@@ -859,14 +846,9 @@ unite#undef_kind({name})			*unite#undef_kind()*
 		|unite#define_kind()|.  If such a kind doesn't exist, this
 		function doesn't do anything.
 
-unite#undef_matcher({name})			*unite#undef_matcher()*
-		Removes the matcher which name is {name} that was added by
-		|unite#define_matcher()|.  If such a matcher doesn't exist,
-		this function doesn't do anything.
-
-unite#undef_sorter({name})			*unite#undef_sorter()*
-		Removes the sorter which name is {name} that was added by
-		|unite#define_sorter()|.  If such a sorter doesn't exist,
+unite#undef_filter({name})			*unite#undef_filter()*
+		Removes the filter which name is {name} that was added by
+		|unite#define_filter()|.  If such a filter doesn't exist,
 		this function doesn't do anything.
 
 ==============================================================================
@@ -1058,12 +1040,7 @@ ACTIONS						*unite-actions*
 TODO
 
 ==============================================================================
-MATCHERS					*unite-matchers*
-
-TODO
-
-==============================================================================
-SORTERS						*unite-sorters*
+FILTERS						*unite-filters*
 
 TODO
 
@@ -1113,12 +1090,7 @@ CREATE KIND					*unite-create-kind*
 TODO
 
 ==============================================================================
-CREATE SORTER					*unite-create-sorter*
-
-TODO
-
-==============================================================================
-CREATE MATCHER					*unite-create-matcher*
+CREATE FILTER					*unite-create-filter*
 
 TODO
 
@@ -1173,6 +1145,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-03-10
+- Implemented filters.
 
 2011-03-02
 - Improved file_rec path.

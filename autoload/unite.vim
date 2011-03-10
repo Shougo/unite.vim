@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Feb 2011.
+" Last Modified: 10 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -69,26 +69,15 @@ function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
     endif
   endfor
 endfunction"}}}
-function! unite#custom_matcher(source_name, matchers)"{{{
-  let l:matchers = type(a:matchers) == type([]) ?
-        \ a:matchers : [a:matchers]
+function! unite#custom_filter(source_name, filters)"{{{
+  let l:filters = type(a:filters) == type([]) ?
+        \ a:filters : [a:filters]
   for key in split(a:source_name, ',')
     if !has_key(s:dynamic.sources, key)
       let s:dynamic.source[key] = {}
     endif
 
-    let s:dynamic.source[key].matchers = l:matchers
-  endfor
-endfunction"}}}
-function! unite#custom_sorter(source_name, sorters)"{{{
-  let l:sorters = type(a:sorters) == type([]) ?
-        \ a:sorters : [a:sorters]
-  for key in split(a:source_name, ',')
-    if !has_key(s:dynamic.sources, key)
-      let s:dynamic.source[key] = {}
-    endif
-
-    let s:dynamic.source.[key].sorters = l:sorters
+    let s:dynamic.source.[key].filters = l:filters
   endfor
 endfunction"}}}
 function! unite#custom_alias(kind, name, action)"{{{
@@ -139,22 +128,13 @@ function! unite#define_kind(kind)"{{{
     let s:dynamic.kinds[a:kind.name] = a:kind
   endif
 endfunction"}}}
-function! unite#define_matcher(matcher)"{{{
-  if type(a:matcher) == type([])
-    for l:matcher in a:matcher
-      let s:dynamic.matchers[l:matcher.name] = l:matcher
+function! unite#define_filter(filter)"{{{
+  if type(a:filter) == type([])
+    for l:filter in a:filter
+      let s:dynamic.filters[l:filter.name] = l:filter
     endfor
   else
-    let s:dynamic.matchers[a:matcher.name] = a:matcher
-  endif
-endfunction"}}}
-function! unite#define_sorter(sorter)"{{{
-  if type(a:sorter) == type([])
-    for l:sorter in a:sorter
-      let s:dynamic.sorters[l:sorter.name] = l:sorter
-    endfor
-  else
-    let s:dynamic.sorters[a:sorter.name] = a:sorter
+    let s:dynamic.filters[a:filter.name] = a:filter
   endif
 endfunction"}}}
 function! unite#undef_source(name)"{{{
@@ -167,14 +147,9 @@ function! unite#undef_kind(name)"{{{
     call remove(s:dynamic.kinds, a:name)
   endif
 endfunction"}}}
-function! unite#undef_matcher(name)"{{{
-  if has_key(s:dynamic.matchers, a:name)
-    call remove(s:dynamic.matchers, a:name)
-  endif
-endfunction"}}}
-function! unite#undef_sorter(name)"{{{
-  if has_key(s:dynamic.sorters, a:name)
-    call remove(s:dynamic.sorters, a:name)
+function! unite#undef_filter(name)"{{{
+  if has_key(s:dynamic.filters, a:name)
+    call remove(s:dynamic.filters, a:name)
   endif
 endfunction"}}}
 
@@ -212,8 +187,7 @@ let s:static = {}
 let s:dynamic = {}
 let s:dynamic.sources = {}
 let s:dynamic.kinds = {}
-let s:dynamic.matchers = {}
-let s:dynamic.sorters = {}
+let s:dynamic.filters = {}
 
 let s:custom = {}
 let s:custom.actions = {}
@@ -808,10 +782,9 @@ function! s:load_default_scripts()"{{{
   " Gathering all sources and kind name.
   let s:static.sources = {}
   let s:static.kinds = {}
-  let s:static.matchers = {}
-  let s:static.sorters = {}
+  let s:static.filters = {}
 
-  for l:key in ['sources', 'kinds', 'matchers', 'sorters']
+  for l:key in ['sources', 'kinds', 'filters']
     for l:name in map(split(globpath(&runtimepath, 'autoload/unite/' . l:key . '/*.vim'), '\n'),
           \ 'fnamemodify(v:val, ":t:r")')
 
@@ -879,17 +852,8 @@ function! s:initialize_sources()"{{{
     if !has_key(l:source, 'description')
       let l:source.description = ''
     endif
-    if !has_key(l:source, 'matcher')
-      let l:source.matcher = unite#matchers#default#get()
-    endif
-    if type(l:source.matcher) != type([])
-      let l:source.matcher = [l:source.matcher]
-    endif
-    if !has_key(l:source, 'sorter')
-      let l:source.sorter = unite#sorters#default#get()
-    endif
-    if type(l:source.sorter) != type([])
-      let l:source.sorter = [l:source.sorter]
+    if !has_key(l:source, 'filter')
+      let l:source.filter = unite#filters#default#get()
     endif
     if l:source.is_volatile
           \ && !has_key(l:source, 'change_candidates')
@@ -912,22 +876,12 @@ function! s:initialize_kinds()"{{{
 
   return l:kinds
 endfunction"}}}
-function! s:initialize_matchers()"{{{
-  let l:matchers = extend(copy(s:static.matchers), s:dynamic.matchers)
-  for l:matcher in values(l:matchers)
-    if !has_key(l:matcher, 'hooks')
-      let l:matcher.hooks = {}
-    endif
+function! s:initialize_filters()"{{{
+  let l:filters = extend(copy(s:static.filters), s:dynamic.filters)
+  for l:filter in values(l:filters)
   endfor
 
-  return l:matchers
-endfunction"}}}
-function! s:initialize_sorters()"{{{
-  let l:sorters = extend(copy(s:static.sorters), s:dynamic.sorters)
-  for l:sorter in values(l:sorters)
-  endfor
-
-  return l:sorters
+  return l:filters
 endfunction"}}}
 function! s:recache_candidates(input, is_force)"{{{
   " Save options.
@@ -975,24 +929,12 @@ function! s:recache_candidates(input, is_force)"{{{
       let l:source_candidates += l:source.change_candidates(l:source.args, l:source.unite__context)
     endif
 
-    if l:input != ''
-      let l:matcher_names = has_key(l:custom_source, 'matchers') ?
-            \ l:custom_source.matchers : l:source.matcher
-      for l:matcher_name in l:matcher_names
-        if has_key(l:unite.matchers, l:matcher_name)
-          let l:source_candidates =
-                \ l:unite.matchers[l:matcher_name].match(l:source_candidates, l:source.unite__context)
-        endif
-      endfor
-    endif
-
-    " Sort.
-    let l:sorter_names = has_key(l:custom_source, 'sorters') ?
-          \ l:custom_source.sorters : l:source.sorter
-    for l:sorter_name in l:sorter_names
-      if has_key(l:unite.sorters, l:sorter_name)
+    " Filter.
+    for l:filter_name in has_key(l:custom_source, 'filters') ?
+          \ l:custom_source.filters : l:source.filter
+      if has_key(l:unite.filters, l:filter_name)
         let l:source_candidates =
-              \ l:unite.sorters[l:sorter_name].sort(l:source_candidates, l:source.unite__context)
+              \ l:unite.filters[l:filter_name].filter(l:source_candidates, l:source.unite__context)
       endif
     endfor
 
@@ -1099,8 +1041,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.candidates = []
   let l:unite.sources = l:sources
   let l:unite.kinds = s:initialize_kinds()
-  let l:unite.matchers = s:initialize_matchers()
-  let l:unite.sorters = s:initialize_sorters()
+  let l:unite.filters = s:initialize_filters()
   let l:unite.buffer_name = (l:context.buffer_name == '') ? 'default' : l:context.buffer_name
   let l:unite.buffer_settings =
         \ s:initialize_buffer_name_settings(l:unite.buffer_name)

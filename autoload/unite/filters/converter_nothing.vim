@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: default.vim
+" FILE: converter_nothing.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2011.
+" Last Modified: 10 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,17 +24,18 @@
 " }}}
 "=============================================================================
 
-function! unite#sorters#default#define()"{{{
-  " Dummy.
-  return []
+function! unite#filters#converter_nothing#define()"{{{
+  return s:converter
 endfunction"}}}
 
-let s:default = ['nothing']
-function! unite#sorters#default#get()"{{{
-  return s:default
-endfunction"}}}
-function! unite#sorters#default#use(sorters)"{{{
-  let s:default = a:sorters
+let s:converter = {
+      \ 'name' : 'converter_nothing',
+      \ 'description' : 'nothing converter',
+      \}
+
+function! s:converter.filter(candidates, context)"{{{
+  " Nothing.
+  return a:candidates
 endfunction"}}}
 
 " vim: foldmethod=marker

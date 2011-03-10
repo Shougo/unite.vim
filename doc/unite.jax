@@ -37,13 +37,11 @@ License: MIT license  {{{
   source		  |unite-sources|
   kind			  |unite-kinds|
   アクション		  |unite-actions|
-  matcher		  |unite-matchers|
-  sorter		  |unite-sorters|
+  filter		  |unite-filters|
 設定例			|unite-examples|
 sourceの作成		|unite-create-source|
 kindの作成		|unite-create-kind|
-matcherの作成		|unite-create-matcher|
-sorterの作成		|unite-create-sorter|
+filterの作成		|unite-create-filter|
 ユーザーのsource	|unite-user-sources|
 ToDo			|unite-todo|
 既知のバグ			|unite-bugs|
@@ -795,15 +793,10 @@ unite#custom_alias({kind}, {name}, {action})
 >
 		call unite#custom_alias('file', 'h', 'left')
 <
-unite#custom_matcher({source-name}, {matchers})	*unite#custom_matcher()*
-		{source-name}のmatcherを{matchers}に変更する。
+unite#custom_filters({source-name}, {filters})	*unite#custom_filter()*
+		{source-name}のfilterを{filters}に変更する。
 		{source-name}は","区切りで複数指定ができる。
-		{matchers}は使用するmatcherの名前、もしくは名前のリストである。
-
-unite#custom_sorter({source-name}, {sorters})	*unite#custom_sorter()*
-		{source-name}のsorterを{sorters}に変更する。
-		{source-name}は","区切りで複数指定ができる。
-		{sorters}は使用するsorterの名前、もしくは名前のリストである。
+		{filters}は使用するfilterの名前、もしくは名前のリストである。
 
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
@@ -828,15 +821,10 @@ unite#define_kind({kind})			*unite#define_kind()*
 		|unite-create-kind|を参照せよ。
 		すでにその名前のkindが存在する場合は上書きされる。
 
-unite#define_matcher({matcher})			*unite#define_matcher()*
-		{matcher}を動的に追加する。matcherの仕様については、
-		|unite-create-matcher|を参照せよ。
-		すでにその名前のmatcherが存在する場合は上書きされる。
-
-unite#define_sorter({sorter})			*unite#define_sorter()*
-		{sorter}を動的に追加する。sorterの仕様については、
-		|unite-create-sorter|を参照せよ。
-		すでにその名前のsorterが存在する場合は上書きされる。
+unite#define_filter({filter})			*unite#define_filter()*
+		{filter}を動的に追加する。filterの仕様については、
+		|unite-create-filter|を参照せよ。
+		すでにその名前のfilterが存在する場合は上書きされる。
 
 unite#undef_source({name})			*unite#undef_source()*
 		|unite#define_source()|で追加した{name}というsourceを削除
@@ -847,13 +835,8 @@ unite#undef_kind({name})			*unite#undef_kind()*
 		|unite#define_kind()|で追加した{name}というkindを削除する。
 		存在しないときは無視される。
 
-unite#undef_matcher({name})			*unite#undef_matcher()*
-		|unite#define_matcher()|で追加した{name}というmatcherを
-		削除する。
-		存在しないときは無視される。
-
-unite#undef_sorter({name})			*unite#undef_sorter()*
-		|unite#define_sorter()|で追加した{name}というsorterを
+unite#undef_filter({name})			*unite#undef_filter()*
+		|unite#define_filter()|で追加した{name}というfilterを
 		削除する。
 		存在しないときは無視される。
 
@@ -1056,12 +1039,7 @@ completion	補完
 				補完候補の追加情報
 
 ==============================================================================
-matcher						*unite-matchers*
-
-TODO
-
-==============================================================================
-sorter						*unite-sorters*
+filter						*unite-filter*
 
 TODO
 
@@ -1515,12 +1493,7 @@ actionの解決順序				*unite-action-resolution-order*
 (12) Default action table for kind "common".
 
 ==============================================================================
-matcherの作成					*unite-create-matcher*
-
-ToDo
-
-==============================================================================
-sorterの作成					*unite-create-sorter*
+filterの作成					*unite-create-filter*
 
 TODO
 

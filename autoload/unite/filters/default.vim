@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: nothing.vim
+" FILE: default.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2011.
+" Last Modified: 10 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,19 +24,17 @@
 " }}}
 "=============================================================================
 
-function! unite#sorters#nothing#define()"{{{
-  return s:sorter
+function! unite#filters#default#define()"{{{
+  " Dummy.
+  return []
 endfunction"}}}
 
-let s:sorter = {
-      \ 'name' : 'nothing',
-      \ 'description' : 'nothing sorter',
-      \ 'hooks' : {},
-      \}
-
-function! s:sorter.sort(candidates, context)"{{{
-  " Nothing.
-  return a:candidates
+let s:default = ['matcher_glob', 'sorter_nothing', 'converter_nothing']
+function! unite#filters#default#get()"{{{
+  return s:default
+endfunction"}}}
+function! unite#filters#default#use(filters)"{{{
+  let s:default = a:filters
 endfunction"}}}
 
 " vim: foldmethod=marker
