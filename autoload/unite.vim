@@ -80,7 +80,7 @@ function! unite#custom_filter(source_name, filters)"{{{
       let s:dynamic.sources[key] = {}
     endif
 
-    let s:dynamic.sources.[key].filters = l:filters
+    let s:dynamic.sources[key].filters = l:filters
   endfor
 endfunction"}}}
 function! unite#custom_alias(kind, name, action)"{{{
