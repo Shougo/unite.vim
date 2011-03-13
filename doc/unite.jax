@@ -752,6 +752,23 @@ unite#get_substitute_pattern({buffer-name})
 		ーンを取得する。{buffer-name}に置換パターンが定義されていない
 		と、エラーになる。デバッグ用である。
 
+unite#unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
+						*unite#set_buffer_name_option()*
+		uniteのバッファ名{buffer-name}における{option-name}のオプショ
+		ンを{value}に設定する。
+		
+		現在、次のオプション名が有効である。
+		
+		substitute_patterns		(辞書)
+		置換文字列のパターンを指定する。辞書のkeyは"pattern",
+		"subst", "priority"である。詳しい仕様は
+		|unite#set_substitute_pattern()|を参照せよ。
+		
+		filters				(リスト)
+		filter名のリストを指定する。ここで指定したfilterは、source毎
+		に呼び出される普通のfilterとは異なり、全候補を結合した後に呼
+		び出される。
+
 unite#custom_default_action({kind}, {default-action})
 						*unite#custom_default_action()*
 		{kind}に対するデフォルトアクションを{default-action}に置き換え
