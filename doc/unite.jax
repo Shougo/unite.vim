@@ -797,6 +797,10 @@ unite#custom_filters({source-name}, {filters})	*unite#custom_filters()*
 		{source-name}のfilterを{filters}に変更する。
 		{source-name}は","区切りで複数指定ができる。
 		{filters}は使用するfilterの名前、もしくは名前のリストである。
+		filterは指定したリストの順番で呼び出される。
+		{filters}は"matcher", "sorter", "converter"の名前のリストで
+		指定することに注意しなければならない。特にmatcherの指定を忘
+		れると、絞り込みができなくなるであろう。
 
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
@@ -839,6 +843,11 @@ unite#undef_filter({name})			*unite#undef_filter()*
 		|unite#define_filter()|で追加した{name}というfilterを
 		削除する。
 		存在しないときは無視される。
+
+unite#filters#default#use({filters})		*unite#filters#default#use(()*
+		|unite-filter-default|が使用するデフォルトのfilterを
+		{filters}に変更する。{filters}には、filter名のリストを指定す
+		る。
 
 ==============================================================================
 source						*unite-sources*
@@ -915,7 +924,8 @@ command		VimのExコマンドを候補とする。
 ==============================================================================
 kind						*unite-kinds*
 
-ここでは、標準で実装されているkindの仕様と、内部で使用する属性について解説する。
+ここでは、標準で実装されているkindの仕様と、内部で使用する属性について解説す
+る。
 
 						*unite-kind-common*
 common		共通アクション
@@ -1041,7 +1051,33 @@ completion	補完
 ==============================================================================
 filter						*unite-filter*
 
-TODO
+ここでは、標準で実装されているfilterの仕様と、内部で使用する属性について解説
+する。
+
+filterには大まかに分けて、"matcher", "sorter", "converter"の三種類が存在する。
+matcherは入力に合う候補を取り出し、sorterは候補の並べ換えを行い、converterは
+候補の見ためを変更する。
+filterはデフォルトで、|unite-filter-default|にあるものが使用される。
+だが、|unite#custom_filters()|で変更することも可能である。
+
+						*unite-filter-default*
+default		特にfilterが指定されていないときに呼び出される、デフォルトの
+		filter。
+		初期状態では、["matcher_glob", "sorter_nothing",
+		"converter_nothing"]のfilterを呼び出す。
+		|unite#filters#default#use()|を呼び出すことで、デフォルトの
+		filterを変更することができる。
+
+						*unite-filter-matcher_glob*
+matcher_glob	ユーザーが入力したglobパターンにより候補をフィルタリングする
+		matcher。
+
+						*unite-filter-sorter_nothing*
+sorter_nothing	何もsortをしないsorter。source側のsortがそのまま反映される。
+
+						*unite-filter-converter_nothing*
+converter_nothing
+		候補を何も変更しないconverter。
 
 ==============================================================================
 アクション					*unite-actions*
@@ -1495,7 +1531,38 @@ actionの解決順序				*unite-action-resolution-order*
 ==============================================================================
 filterの作成					*unite-create-filter*
 
-TODO
+autoload/unite/filters/に*.vimのファイルを置いておくと、自動的に読み込まれる。
+その際、unite#filters#{filter_name}#define()が呼ばれ、戻り値がfilterと解釈される。
+戻り値はリストでもよく、その場合はfilterのリストと解釈される。
+filterを追加したくない場合は、空リストを返せば良い。
+独自のfilterを動的に追加するためには、|unite#define_filter()|を使う。
+
+------------------------------------------------------------------------------
+filterの属性					*unite-filter-attributes*
+
+						*unite-filter-attribute-name*
+name			文字列		(必須)
+			filterの名前。
+
+						*unite-filter-attribute-filter*
+filter			関数		(必須)
+			uniteが候補を収集した後、フィルタリングする際に呼ばれる。
+			この関数は{candidates}と{context}を引数に取り、
+			{candidate}のリストを返す。
+			{candidate}はsourceが
+			|unite-source-attribute-gather_candidates|で収集した
+			候補リスト、{context}はsourceが呼ばれたときのコンテ
+			キスト情報である。
+			{context}については|unite-notation-{context}|、
+			{candidate}については|unite-notation-{candidate}|を参照
+			せよ。
+
+						*unite-filter-attribute-name*
+name			文字列		(必須)
+
+						*unite-filter-attribute-description*
+description		文字列		(任意)
+			filterを説明する文字列。省略すると""になる。
 
 ==============================================================================
 設定例						*unite-examples*

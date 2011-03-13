@@ -1151,6 +1151,7 @@ CHANGELOG					*unite-changelog*
 - Fixed unite#custom_filters() error.
 - Fixed help typo.
 - Renamed unite#custom_filter() to unite#custom_filters().
+- Added filter help.
 
 2011-03-10
 - Implemented filters.
