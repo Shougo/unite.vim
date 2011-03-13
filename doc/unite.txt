@@ -33,7 +33,7 @@ Interface		|unite-interface|
   Variables		  |unite-variables|
     Sources variables	    |unite-sources-variables|
   Key mappings		  |unite-key-mappings|
-  Functions		  |unite-functins|
+  Functions		  |unite-functions|
   Sources		  |unite-sources|
   Kinds			  |unite-kinds|
   Actions		  |unite-actions|
@@ -343,7 +343,7 @@ g:unite_abbr_highlight				*g:unite_abbr_highlight*
 		The default value is "Pmenu".
 
 g:unite_quick_match_table			*g:unite_quick_match_table*
-		The table of completion candidates of quick mtch list,
+		The table of completion candidates of quick match list,
 		corresponding the narrowing text.
 
 		The default value is complex; so see plugin/unite.vim.
@@ -358,7 +358,7 @@ g:unite_data_directory				*g:unite_data_directory*
 		Default value is expand('~/.unite'); the absolute path of it.
 
 g:unite_no_default_keymappings			*g:unite_no_default_keymappings*
-		If it's 1, unite doesn't map any defauilt key mappings.  You
+		If it's 1, unite doesn't map any default key mappings.  You
 		shouldn't enable this option without any strong reasons.
 
 		This variable doesn't exist unless you define explicitly.
@@ -507,7 +507,7 @@ Normal mode mappings.
 		Changes the order of source reversely.
 
 <Plug>(unite_print_candidate)			*<Plug>(unite_print_candidate)*
-		Shows the target of the action of the selected candiate.  For
+		Shows the target of the action of the selected candidate.  For
 		example this shows the content of the candidate when the
 		kind of the candidate you selected is |word|.
 
@@ -804,7 +804,7 @@ unite#custom_alias({kind}, {name}, {action})
 <
 unite#custom_filters({source-name}, {filters})	*unite#custom_filters()*
 		Changes the filters of {source-name} into {filters}.  You
-		may specify multiple souces with separating "," in
+		may specify multiple sources with separating "," in
 		{source-name}.  {filters} is a name of filter or a list of
 		the names.
 
@@ -818,7 +818,7 @@ unite#take_action({action-name}, {candidate})
 unite#take_parents_action({action-name}, {candidate}, {extend-candidate})
 						*unite#take_parents_action()*
 		Same to |unite#take_action()| but searches the parents' action
-		table with combining {extend-candiate} on {candidate}.  This
+		table with combining {extend-candidate} on {candidate}.  This
 		is handy for reusing parents' actions.
 
 unite#define_source({source})			*unite#define_source()*
@@ -905,7 +905,7 @@ source		Nominates Unite source names themselves as candidates.
 		current Unite buffer context.
 
 						*unite-source-window*
-window		Nominates opend windows as candidates, ordering by time
+window		Nominates opened windows as candidates, ordering by time
 		series.
 
 		Source arguments:
@@ -938,8 +938,8 @@ cdable		An interface that can cd.
 				The target directory
 
 						*unite-kind-file*
-file		An inteface for files.  This kind is inheriting cdable and
-		openable, so this requries kinds that they require.
+file		An interface for files.  This kind is inheriting cdable and
+		openable, so this requires kinds that they require.
 
 			action__path		(String)	(Required)
 				The path of the target directory
@@ -961,7 +961,7 @@ tab		An interface for tabs.  If you can use |gettabvar()|, since this
 
 						*unite-kind-directory*
 directory	An interface for directories.  This kind is inheriting file,
-		this requires keys it requries.
+		this requires keys it requires.
 
 						*unite-kind-word*
 word		A String that you can insert
@@ -1055,7 +1055,7 @@ SOURCE ATTRIBUTES				*unite-source-attributes*
 TODO
 
 						*unite-source-attribute-name*
-name			string		(requried)
+name			string		(required)
 			The name of a source. It must consist of the following
 			characters:
 			- a-z
