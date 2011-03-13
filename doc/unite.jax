@@ -1574,9 +1574,6 @@ filter			関数		(必須)
 			{candidate}については|unite-notation-{candidate}|を参照
 			せよ。
 
-						*unite-filter-attribute-name*
-name			文字列		(必須)
-
 						*unite-filter-attribute-description*
 description		文字列		(任意)
 			filterを説明する文字列。省略すると""になる。
