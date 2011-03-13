@@ -802,7 +802,7 @@ unite#custom_alias({kind}, {name}, {action})
 >
 		call unite#custom_alias('file', 'h', 'left')
 <
-unite#custom_filter({source-name}, {filters})	*unite#custom_filter()*
+unite#custom_filters({source-name}, {filters})	*unite#custom_filters()*
 		Changes the filters of {source-name} into {filters}.  You
 		may specify multiple souces with separating "," in
 		{source-name}.  {filters} is a name of filter or a list of
@@ -1148,8 +1148,9 @@ CHANGELOG					*unite-changelog*
 
 2011-03-13
 - Improved delete buffer action.
-- Fixed unite#custom_filter() error.
+- Fixed unite#custom_filters() error.
 - Fixed help typo.
+- Renamed unite#custom_filter() to unite#custom_filters().
 
 2011-03-10
 - Implemented filters.

@@ -72,7 +72,7 @@ function! unite#get_buffer_name_option(buffer_name, option_name)"{{{
 
   return s:buffer_name_options[a:buffer_name][a:option_name]
 endfunction"}}}
-function! unite#custom_filter(source_name, filters)"{{{
+function! unite#custom_filters(source_name, filters)"{{{
   let l:filters = type(a:filters) == type([]) ?
         \ a:filters : [a:filters]
   for key in split(a:source_name, ',')
