@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Mar 2011.
+" Last Modified: 13 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -77,10 +77,10 @@ function! unite#custom_filter(source_name, filters)"{{{
         \ a:filters : [a:filters]
   for key in split(a:source_name, ',')
     if !has_key(s:dynamic.sources, key)
-      let s:dynamic.source[key] = {}
+      let s:dynamic.sources[key] = {}
     endif
 
-    let s:dynamic.source.[key].filters = l:filters
+    let s:dynamic.sources.[key].filters = l:filters
   endfor
 endfunction"}}}
 function! unite#custom_alias(kind, name, action)"{{{
