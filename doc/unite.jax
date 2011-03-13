@@ -793,7 +793,7 @@ unite#custom_alias({kind}, {name}, {action})
 >
 		call unite#custom_alias('file', 'h', 'left')
 <
-unite#custom_filters({source-name}, {filters})	*unite#custom_filter()*
+unite#custom_filter({source-name}, {filters})	*unite#custom_filter()*
 		{source-name}のfilterを{filters}に変更する。
 		{source-name}は","区切りで複数指定ができる。
 		{filters}は使用するfilterの名前、もしくは名前のリストである。

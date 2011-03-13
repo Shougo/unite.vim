@@ -1149,6 +1149,7 @@ CHANGELOG					*unite-changelog*
 2011-03-13
 - Improved delete buffer action.
 - Fixed unite#custom_filter() error.
+- Fixed help typo.
 
 2011-03-10
 - Implemented filters.
