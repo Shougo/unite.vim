@@ -1146,6 +1146,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-03-13
+- Improved delete buffer action.
+
 2011-03-10
 - Implemented filters.
 - Refactored buffer name options.

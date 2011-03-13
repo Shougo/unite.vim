@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Nov 2010
+" Last Modified: 13 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -97,7 +97,45 @@ endfunction"}}}
 
 " Misc
 function! s:delete(delete_command, candidate)"{{{
+  " Not to close window, move to alternate buffer.
+  let l:winnr = 1
+  while l:winnr <= winnr('$')
+    if winbufnr(l:winnr) == a:candidate.action__buffer_nr
+      execute l:winnr . 'wincmd w'
+      call s:alternate_buffer()
+      wincmd p
+    endif
+
+    let l:winnr += 1
+  endwhile
+
   execute a:candidate.action__buffer_nr a:delete_command
+endfunction"}}}
+function! s:alternate_buffer()"{{{
+  if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
+    buffer #
+  else
+    let l:cnt = 0
+    let l:pos = 1
+    let l:current = 0
+    while l:pos <= bufnr('$')
+      if buflisted(l:pos)
+        if l:pos == bufnr('%')
+          let l:current = l:cnt
+        endif
+
+        let l:cnt += 1
+      endif
+
+      let l:pos += 1
+    endwhile
+
+    if l:current > l:cnt / 2
+      bprevious
+    else
+      bnext
+    endif
+  endif
 endfunction"}}}
 
 " vim: foldmethod=marker
