@@ -1146,6 +1146,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-03-16
+- Added matcher_default, sorter_default, converter_default.
+
 2011-03-13
 - Improved delete buffer action.
 - Fixed unite#custom_filters() error.

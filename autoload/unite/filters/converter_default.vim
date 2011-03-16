@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: default.vim
+" FILE: converter_default.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 16 Mar 2011.
 " License: MIT license  {{{
@@ -24,17 +24,34 @@
 " }}}
 "=============================================================================
 
-function! unite#filters#default#define()"{{{
-  " Dummy.
-  return []
+function! unite#filters#converter_default#define()"{{{
+  return s:converter
 endfunction"}}}
 
-let s:default = ['matcher_default', 'sorter_default', 'converter_default']
-function! unite#filters#default#get()"{{{
-  return s:default
+let s:converter = {
+      \ 'name' : 'converter_default',
+      \ 'description' : 'default converter',
+      \}
+
+function! s:converter.filter(candidates, context)"{{{
+  let l:candidates = a:candidates
+  for l:default in s:default_converters
+    let l:filter = unite#get_filters(l:default)
+    if !empty(l:filter)
+      let l:candidates = l:filter.filter(l:candidates, a:context)
+    endif
+  endfor
+
+  return l:candidates
 endfunction"}}}
-function! unite#filters#default#use(filters)"{{{
-  let s:default = a:filters
+
+
+let s:default_converters = ['converter_nothing']
+function! unite#filters#converter_default#get()"{{{
+  return s:default_converters
+endfunction"}}}
+function! unite#filters#converter_default#use(converters)"{{{
+  let s:default_converters = a:converters
 endfunction"}}}
 
 " vim: foldmethod=marker

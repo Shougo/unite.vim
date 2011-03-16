@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: default.vim
+" FILE: sorter_default.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 16 Mar 2011.
 " License: MIT license  {{{
@@ -24,17 +24,34 @@
 " }}}
 "=============================================================================
 
-function! unite#filters#default#define()"{{{
-  " Dummy.
-  return []
+function! unite#filters#sorter_default#define()"{{{
+  return s:sorter
 endfunction"}}}
 
-let s:default = ['matcher_default', 'sorter_default', 'converter_default']
-function! unite#filters#default#get()"{{{
-  return s:default
+let s:sorter = {
+      \ 'name' : 'sorter_default',
+      \ 'description' : 'default sorter',
+      \}
+
+function! s:sorter.filter(candidates, context)"{{{
+  let l:candidates = a:candidates
+  for l:default in s:default_sorters
+    let l:filter = unite#get_filters(l:default)
+    if !empty(l:filter)
+      let l:candidates = l:filter.filter(l:candidates, a:context)
+    endif
+  endfor
+
+  return l:candidates
 endfunction"}}}
-function! unite#filters#default#use(filters)"{{{
-  let s:default = a:filters
+
+
+let s:default_sorters = ['sorter_nothing']
+function! unite#filters#sorter_default#get()"{{{
+  return s:default_sorters
+endfunction"}}}
+function! unite#filters#sorter_default#use(sorters)"{{{
+  let s:default_sorters = a:sorters
 endfunction"}}}
 
 " vim: foldmethod=marker

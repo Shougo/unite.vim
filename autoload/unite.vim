@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Mar 2011.
+" Last Modified: 16 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -219,6 +219,10 @@ endfunction"}}}
 function! unite#get_sources(...)"{{{
   let l:all_sources = s:initialize_sources()
   return a:0 == 0 ? l:all_sources : get(l:all_sources, a:1, {})
+endfunction"}}}
+function! unite#get_filters(...)"{{{
+  let l:all_filters = s:initialize_filters()
+  return a:0 == 0 ? l:all_filters : get(l:all_filters, a:1, {})
 endfunction"}}}
 "}}}
 
@@ -962,9 +966,9 @@ function! s:recache_candidates(input, is_force)"{{{
     " Filter.
     for l:filter_name in has_key(l:custom_source, 'filters') ?
           \ l:custom_source.filters : l:source.filters
-      if has_key(l:unite.filters, l:filter_name)
-        let l:source_candidates =
-              \ l:unite.filters[l:filter_name].filter(l:source_candidates, l:source.unite__context)
+      let l:filter = unite#get_filters(l:filter_name)
+      if !empty(l:filter)
+        let l:source_candidates = l:filter.filter(l:source_candidates, l:source.unite__context)
       endif
     endfor
 

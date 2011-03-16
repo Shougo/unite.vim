@@ -866,6 +866,22 @@ unite#filters#default#use({filters})		*unite#filters#default#use(()*
 		{filters}に変更する。{filters}には、filter名のリストを指定す
 		る。
 
+unite#filters#matcher_default#use({matchers})	*unite#filters#matcher_default#use(()*
+		|unite-filter-matcher_default|が使用するデフォルトのmatcher
+		を{matchers}に変更する。{matchers}には、matcher名のリストを
+		指定する。
+
+unite#filters#sorter_default#use({sorters})	*unite#filters#sorter_default#use(()*
+		|unite-filter-sorter_default|が使用するデフォルトのsorterを
+		{sorters}に変更する。{sorters}には、sorter名のリストを指定す
+		る。
+
+						*unite#filters#converter_default#use(()*
+unite#filters#converter_default#use({converters})
+		|unite-filter-converter_default|が使用するデフォルトの
+		converterを{converters}に変更する。{converters}には、
+		converter名のリストを指定する。
+
 ==============================================================================
 source						*unite-sources*
 
@@ -1075,22 +1091,42 @@ filterには大まかに分けて、"matcher", "sorter", "converter"の三種類
 matcherは入力に合う候補を取り出し、sorterは候補の並べ換えを行い、converterは
 候補の見ためを変更する。
 filterはデフォルトで、|unite-filter-default|にあるものが使用される。
-だが、|unite#custom_filters()|で変更することも可能である。
+だが、|unite#custom_filters()|でsource毎に変更することも可能である。
 
 						*unite-filter-default*
 default		特にfilterが指定されていないときに呼び出される、デフォルトの
-		filter。
+		filter。このfilterは登録用のダミーである。
 		初期状態では、["matcher_glob", "sorter_nothing",
 		"converter_nothing"]のfilterを呼び出す。
 		|unite#filters#default#use()|を呼び出すことで、デフォルトの
 		filterを変更することができる。
 
+						*unite-filter-matcher_default*
+matcher_default	|unite-filter-default|により呼び出される、デフォルトのmatcher。
+		初期状態では、["matcher_glob"]のmatcherを呼び出す。
+		|unite#filters#matcher_default#use()|を呼び出すことで、デフォルトの
+		matcherを変更することができる。
+
 						*unite-filter-matcher_glob*
 matcher_glob	ユーザーが入力したglobパターンにより候補をフィルタリングする
 		matcher。
+		絞り込みにはwordを使用する。
+
+						*unite-filter-sorter_default*
+sorter_default	|unite-filter-default|により呼び出される、デフォルトのsorter。
+		初期状態では、["sorter_nothing"]のsorterを呼び出す。
+		|unite#filters#sorter_default#use()|を呼び出すことで、デフォルトの
+		sorterを変更することができる。
 
 						*unite-filter-sorter_nothing*
 sorter_nothing	何もsortをしないsorter。source側のsortがそのまま反映される。
+
+						*unite-filter-converter_default*
+converter_default
+		|unite-filter-default|により呼び出される、デフォルトのconverter。
+		初期状態では、["converter_nothing"]のconverterを呼び出す。
+		|unite#filters#converter_default#use()|を呼び出すことで、デフォルトの
+		converterを変更することができる。
 
 						*unite-filter-converter_nothing*
 converter_nothing
