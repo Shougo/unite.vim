@@ -1201,10 +1201,12 @@ function! s:initialize_unite_buffer()"{{{
     " Set syntax.
     for l:source in l:unite.sources
       if l:source.syntax != ''
-        execute printf('syntax region %s start="^[-*] %s\>" end="$" contains=uniteCandidateSourceName,uniteCandidateAbbr',
-              \ l:source.syntax,
-              \ (len(l:unite.sources) > 1 ? l:source.name : ''),
+        let l:name = len(l:unite.sources) > 1 ? l:source.name : ''
+        execute printf('syntax region %s start="^[-*] %s\>"hs=s+%d end="$"',
+              \ l:source.syntax, l:name, (l:unite.max_source_name+l:source_padding-1),
               \ )
+
+        execute 'highlight default link' l:source.syntax g:unite_abbr_highlight
 
         if has_key(l:source.hooks, 'on_syntax')
           call l:source.hooks.on_syntax(l:source.args, l:source.unite__context)

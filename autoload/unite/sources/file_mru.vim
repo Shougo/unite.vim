@@ -71,12 +71,12 @@ let s:source = {
       \ 'max_candidates' : 30,
       \ 'hooks' : {},
       \ 'action_table' : {},
-      \ 'syntax' : 'uniteSourceFileMru',
+      \ 'syntax' : 'uniteSource__FileMru',
       \}
 
 function! s:source.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSourceFileMru_Time /(.*)/ containedin=uniteSourceFileMru
-  highlight default link uniteSourceFileMru_Time Statement
+  syntax match uniteSource__FileMru_Time /(.*)/ containedin=uniteSource__FileMru
+  highlight default link uniteSource__FileMru_Time Statement
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{

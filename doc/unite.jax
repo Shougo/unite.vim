@@ -378,7 +378,7 @@ g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 		を指定する。フォーマットは|strftime()|で指定できるものと同じ
 		である。
 		
-		初期値は"(%c)"である。
+		初期値は"(%c) "である。
 
 g:unite_source_file_mru_filename_format		*g:unite_source_file_mru_filename_format*
 		|unite-source-file_mru|のファイル名の表示フォーマットを指定
@@ -1338,8 +1338,8 @@ hooks			辞書		(任意)
 
 			ハイライトの設定例：
 >
-			syntax match uniteSourceFileMru_Time /(.*)/ containedin=uniteSourceFileMru
-			highlight default link uniteSourceFileMru_Time Statement
+			syntax match uniteSource_FileMru_Time /(.*)/ containedin=uniteSource_FileMru
+			highlight default link uniteSource_FileMru_Time Statement
 <
 			|unite-source-attribute-syntax|で設定したsyntax名を
 			containedinで指定することに注意しなければならない。
@@ -1412,6 +1412,8 @@ syntax			文字列		(任意)
 			source内で使用するsyntax名。ここで設定したsyntax名は
 			uniteによって自動的に定義される。省略すると""になる。
 			source独自のハイライトを設定する際に使用される。
+			他のsyntaxと被らないようにするため、
+			"uniteSource__(source名)"とする慣習となっている。
 			ハイライトの設定自体は、
 			|unite-source-attribute-hooks-on_syntax|を使用しなけ
 			ればならない。

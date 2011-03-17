@@ -81,12 +81,12 @@ let s:source = {
       \ 'max_candidates' : 30,
       \ 'hooks' : {},
       \ 'action_table' : {},
-      \ 'syntax' : 'uniteSourceDirectoryMru',
+      \ 'syntax' : 'uniteSource__DirectoryMru',
       \}
 
 function! s:source.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSourceDirectoryMru_Time /(.*)/ containedin=uniteSourceDirectoryMru
-  highlight default link uniteSourceDirectoryMru_Time Statement
+  syntax match uniteSource__DirectoryMru_Time /(.*)/ containedin=uniteSource__DirectoryMru
+  highlight default link uniteSource__DirectoryMru_Time Statement
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{

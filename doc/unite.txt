@@ -378,7 +378,7 @@ g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 		Specifies the output format of the last access time of
 		|unite-source-file_mru|.  The format is same to |strftime()|.
 
-		Default value is "(%c)".
+		Default value is "(%c) ".
 
 g:unite_source_file_mru_filename_format		*g:unite_source_file_mru_filename_format*
 		Specifies the output format of the filename of
@@ -1262,7 +1262,7 @@ CHANGELOG					*unite-changelog*
 2011-03-17
 - Implemented unite#clear_message().
 - Added README.
-- Implemented source highlight.
+- Implemented source highlight(experimental).
 
 2011-03-16
 - Added matcher_default, sorter_default, converter_default.
