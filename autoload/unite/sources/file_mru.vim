@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Feb 2011.
+" Last Modified: 17 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,7 +33,7 @@ let s:mru_files = []
 
 let s:mru_file_mtime = 0  " the last modified time of the mru file.
 
-call unite#util#set_default('g:unite_source_file_mru_time_format', '(%c)')
+call unite#util#set_default('g:unite_source_file_mru_time_format', '(%c) ')
 call unite#util#set_default('g:unite_source_file_mru_filename_format', ':~:.')
 call unite#util#set_default('g:unite_source_file_mru_file',  g:unite_data_directory . '/.file_mru')
 call unite#util#set_default('g:unite_source_file_mru_limit', 100)
@@ -69,8 +69,15 @@ let s:source = {
       \ 'name' : 'file_mru',
       \ 'description' : 'candidates from file MRU list',
       \ 'max_candidates' : 30,
+      \ 'hooks' : {},
       \ 'action_table' : {},
+      \ 'syntax' : 'uniteSourceFileMru',
       \}
+
+function! s:source.hooks.on_syntax(args, context)"{{{
+  syntax match uniteSourceFileMru_Time /(.*)/ containedin=uniteSourceFileMru,uniteCandidateAbbr
+  highlight default link uniteSourceFileMru_Time Statement
+endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{
   call s:load()

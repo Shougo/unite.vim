@@ -1262,6 +1262,7 @@ CHANGELOG					*unite-changelog*
 2011-03-17
 - Implemented unite#clear_message().
 - Added README.
+- Implemented source highlight.
 
 2011-03-16
 - Added matcher_default, sorter_default, converter_default.

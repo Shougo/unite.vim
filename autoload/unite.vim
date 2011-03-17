@@ -895,6 +895,9 @@ function! s:initialize_sources()"{{{
     if !has_key(l:source, 'description')
       let l:source.description = ''
     endif
+    if !has_key(l:source, 'syntax')
+      let l:source.syntax = ''
+    endif
     if !has_key(l:source, 'filters')
       let l:source.filters = unite#filters#default#get()
     endif
@@ -1194,6 +1197,20 @@ function! s:initialize_unite_buffer()"{{{
     execute 'syntax match uniteCandidateAbbr' '/\%'.(l:unite.max_source_name+l:source_padding).'c.*/ contained'
 
     execute 'highlight default link uniteCandidateAbbr'  g:unite_abbr_highlight
+
+    " Set syntax.
+    for l:source in l:unite.sources
+      if l:source.syntax != ''
+        execute printf('syntax region %s start="^[-*] %s\>" end="$" contains=uniteCandidateSourceName,uniteCandidateAbbr',
+              \ l:source.syntax,
+              \ (len(l:unite.sources) > 1 ? l:source.name : ''),
+              \ )
+
+        if has_key(l:source.hooks, 'on_syntax')
+          call l:source.hooks.on_syntax(l:source.args, l:source.unite__context)
+        endif
+      endif
+    endfor
   endif
 endfunction"}}}
 function! s:switch_unite_buffer(buffer_name, context)"{{{

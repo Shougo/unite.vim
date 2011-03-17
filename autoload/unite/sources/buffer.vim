@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Mar 2011.
+" Last Modified: 17 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,11 +59,16 @@ endfunction"}}}
 let s:source_buffer_all = {
       \ 'name' : 'buffer',
       \ 'description' : 'candidates from buffer list',
+      \ 'syntax' : 'uniteSourceBuffer',
       \ 'hooks' : {},
       \}
 
 function! s:source_buffer_all.hooks.on_init(args, context)"{{{
   let a:context.source__buffer_list = s:get_buffer_list()
+endfunction"}}}
+function! s:source_buffer_all.hooks.on_syntax(args, context)"{{{
+  syntax match uniteSourceBuffer_Directory /\[.*\]/ containedin=uniteSourceBuffer
+  highlight default link uniteSourceBuffer_Directory PreProc
 endfunction"}}}
 
 function! s:source_buffer_all.gather_candidates(args, context)"{{{
@@ -87,11 +92,16 @@ endfunction"}}}
 let s:source_buffer_tab = {
       \ 'name' : 'buffer_tab',
       \ 'description' : 'candidates from buffer list in current tab',
+      \ 'syntax' : 'uniteSourceBufferTab',
       \ 'hooks' : {},
       \}
 
 function! s:source_buffer_tab.hooks.on_init(args, context)"{{{
   let a:context.source__buffer_list = s:get_buffer_list()
+endfunction"}}}
+function! s:source_buffer_tab.hooks.on_syntax(args, context)"{{{
+  syntax match uniteSourceBufferTab_Directory /\[.*\]/ containedin=uniteSourceBufferTab,uniteCandidateAbbr
+  highlight default link uniteSourceBufferTab_Directory PreProc
 endfunction"}}}
 
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{
