@@ -100,7 +100,7 @@ function! s:source_buffer_tab.hooks.on_init(args, context)"{{{
   let a:context.source__buffer_list = s:get_buffer_list()
 endfunction"}}}
 function! s:source_buffer_tab.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSourceBufferTab_Directory /\[.*\]/ containedin=uniteSourceBufferTab,uniteCandidateAbbr
+  syntax match uniteSourceBufferTab_Directory /\[.*\]/ containedin=uniteSourceBufferTab
   highlight default link uniteSourceBufferTab_Directory PreProc
 endfunction"}}}
 

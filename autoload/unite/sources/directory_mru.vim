@@ -85,7 +85,7 @@ let s:source = {
       \}
 
 function! s:source.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSourceDirectoryMru_Time /(.*)/ containedin=uniteSourceDirectoryMru,uniteCandidateAbbr
+  syntax match uniteSourceDirectoryMru_Time /(.*)/ containedin=uniteSourceDirectoryMru
   highlight default link uniteSourceDirectoryMru_Time Statement
 endfunction"}}}
 
