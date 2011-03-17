@@ -1144,15 +1144,14 @@ common					*unite-action-common*
 全てのkindに共通なインタフェースを定義している。
 内部では、candidate.wordを使う。
 	nop		何もしない
-	yank		ヤンクする
+	yank		候補文字列をヤンクする
 	yank_escape	エスケープした候補文字列をヤンクする
 	ex		候補をエスケープして、コマンドラインに入力した状態にする
 	insert		現在のバッファに文字列を挿入する
 
 openable					*unite-action-openable*
-オープン可能ファイルのインタフェースを定義している。
-内部でopenアクションを呼び出すので、openアクションは継承したkind側が個別に定義
-する必要がある。
+オープン可能ファイルのインタフェースを定義している。内部でopenアクションを呼
+び出すので、openアクションは継承したkind側が個別に定義する必要がある。
 	tabopen		ファイルをタブで開く
 	split		ウィンドウを水平分割してファイルを開く
 	vsplit		ウィンドウを垂直分割してファイルを開く
@@ -1216,7 +1215,7 @@ jump_list					*unite-action-jump_list*
 
 command						*unite-action-command*
 	execute		コマンドを実行する
-	edit		コマンドを編集する
+	edit		コマンドをコマンドラインに入力する
 
 window						*unite-action-window*
 このkindは|unite-action-cdable|のアクションを継承する。

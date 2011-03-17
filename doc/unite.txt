@@ -1037,7 +1037,120 @@ completion	An interface for completion
 ==============================================================================
 ACTIONS						*unite-actions*
 
-TODO
+When you select an action with |<Plug>(unite_choose_action)|, you can complete
+action names or skip just by the first letters.
+
+Actions of each kinds
+
+common					*unite-action-common*
+Defines the common interface for all kinds.  This uses condidate.word
+internally.
+	nop		Do nothing
+	yank		Yank the candidate text
+	yank_escape	Yank the escaped candidate text
+	ex		Input the escaped candidate text into command line
+	insert		Input the candidate text into the current buffer
+
+openable					*unite-action-openable*
+Defines an interface for files you can open.  This requires an inheriting kind
+to define open action.
+	tabopen		Open the file in a new tab
+	split		Open the file, splitting horizontally
+	vsplit		Open the file, splitting vertically
+	left		Open the file in the left, splitting vertically
+	right		Open the file in the right, splitting vertically
+	above		Open the file in the top, splitting horizontally
+	below		Open the file in the bottom, splitting horizontally
+
+cdable					*unite-action-cdable*
+Defines an interface for files you can move to with cd command.
+	cd		Change the current directory.
+	lcd		Change the current directory of the current window.
+	project_cd	Look for the project directory, and changes the
+			current directory there.
+	narrow		Narrow down candidates by the directory name
+	vimshell	Run |vimshell| on the directory.  This is available
+			only when you already installed |vimshell|.
+	tabvimshell	Run |:VimShellTab| on the directory.  This is
+			available only when you already installed |vimshell|.
+	rec		Run |unite-source-file_rec| on the directory.
+
+file						*unite-action-file*
+Opens a file into a new buffer.  This kind extends |unite-action-openable| and
+|unite-action-cdable|.
+	open		Open the file
+	preview		Open the file into preview window
+	bookmark	Add the file into your bookmark
+
+buffer						*unite-action-buffer*
+This kind extends |unite-action-file|.
+	delete		|:bdelete| the buffer
+	fdelete		|:bdelete!| the buffer
+	wipeout		|:bwipeout| the buffer
+	unload		|:bunload| the buffer
+	bookmark	Add the candidate into your bookmark
+
+tab						*unite-action-tab*
+This kind extends actions of |unite-action-cdable| only when |gettabvar()|
+exists.
+	open		Show the tab
+	delete		Close the tab
+	
+	The following action requires |gettabvar()| and t:cwd.
+	rename		Change the title of the tab
+
+directory					*unite-action-directory*
+This kind extends actions of |unite-action-file|.  This doesn't have any
+additional actions.  You may want to use this to change the default_action
+when the target is a directory.
+
+word						*unite-action-word*
+This kind doesn't have any additional actions.  You may want to use this to
+change the default_action when the target is a word.
+
+jump_list					*unite-action-jump_list*
+This kind extends actions of |unite-action-openable|.  Let me explain about
+the additional actions defined in this.
+	open		Jump to the location of the candidate
+	preview		Preview around the location of the candidate
+
+command						*unite-action-command*
+	execute		Execute the command
+	edit		Input the command into command line
+
+window						*unite-action-window*
+This kind extends ctions of |unite-action-cdable|.
+	open		Move to the window
+	delete		Close the window
+	only		Close all windows besides the window
+
+completion					*unite-action-completion*
+	insert		Insert the candidate
+	preview		Show the information of the candidate
+
+Actions of each sources
+
+file_mru					*unite-action-file_mru*
+	delete		Delete from most recent used file candidates
+
+directory_mru					*unite-action-directory_mru*
+	delete		Delete from most recent used directory candidates
+
+bookmark					*unite-action-bookmark*
+	delete		Delete from bookmark file candidates
+
+						*unite-default-action*
+Default actions
+
+kind		action
+{kind}		{action}
+----------	----------
+file		open
+buffer		open
+tab		open
+directory	narrow
+word		insert
+jump_list	open
 
 ==============================================================================
 FILTERS						*unite-filters*
