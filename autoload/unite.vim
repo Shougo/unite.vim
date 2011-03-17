@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Mar 2011.
+" Last Modified: 17 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -537,6 +537,27 @@ function! unite#print_message(message)"{{{
     call add(s:unite_cached_message, a:message)
   endif
 endfunction"}}}
+function! unite#clear_message()"{{{
+  if &filetype ==# 'unite'
+    let l:unite = unite#get_current_unite()
+    if l:unite.prompt_linenr > 2
+      let l:modifiable_save = &l:modifiable
+      setlocal modifiable
+
+      silent! execute '2,'.(l:unite.prompt_linenr-1).'delete _'
+      let l:unite.prompt_linenr = 2
+
+      let &l:modifiable = l:modifiable_save
+      call s:on_cursor_moved()
+
+      syntax clear uniteInputLine
+      execute 'syntax match uniteInputLine'
+            \ '/\%'.l:unite.prompt_linenr.'l.*/'
+            \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+    endif
+  endif
+  let s:unite_cached_message = []
+endfunction"}}}
 function! unite#substitute_path_separator(path)"{{{
   return unite#util#substitute_path_separator(a:path)
 endfunction"}}}
@@ -547,9 +568,13 @@ function! s:print_buffer(message)"{{{
   if &filetype ==# 'unite'
     let l:modifiable_save = &l:modifiable
     setlocal modifiable
+
     let l:unite = unite#get_current_unite()
     call append(l:unite.prompt_linenr-1, a:message)
-    let l:unite.prompt_linenr += 1
+    let l:len = type(a:message) == type([]) ?
+          \ len(a:message) : 1
+    let l:unite.prompt_linenr += l:len
+
     let &l:modifiable = l:modifiable_save
     call s:on_cursor_moved()
 
@@ -659,6 +684,7 @@ function! unite#start(sources, ...)"{{{
   call setline(l:unite.prompt_linenr, l:unite.prompt . l:unite.context.input)
   for message in s:unite_cached_message
     call s:print_buffer(message)
+    unlet message
   endfor
   call unite#redraw_candidates()
 
