@@ -1207,8 +1207,8 @@ function! s:initialize_unite_buffer()"{{{
 
         execute 'highlight default link' l:source.syntax g:unite_abbr_highlight
 
-        execute printf('syntax region %s start="^- %s\>" end="$" contains=uniteSourceNames,%s',
-              \ 'uniteSourceLine__'.l:source.syntax, l:name, l:source.syntax
+        execute printf('syntax region %s start="^- %s" end="$" contains=uniteSourceNames,%s',
+              \ 'uniteSourceLine__'.l:source.syntax, l:name == '' ? '' : l:name . '\>', l:source.syntax
               \ )
 
         if has_key(l:source.hooks, 'on_syntax')
