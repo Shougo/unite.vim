@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: source.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Feb 2011.
+" Last Modified: 22 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,7 +39,6 @@ function! s:source.gather_candidates(args, context)"{{{
   return map(sort(values(unite#get_sources()), 's:compare_sources'), '{
         \ "word" : v:val.name,
         \ "abbr" : unite#util#truncate(v:val.name, 25) . (v:val.description != "" ? " -- " . v:val.description : ""),
-        \ "source" : "source",
         \ "action__source_name" : v:val.name,
         \}')
 endfunction"}}}

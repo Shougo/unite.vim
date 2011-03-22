@@ -89,7 +89,6 @@ function! s:source.gather_candidates(args, context)"{{{
         \ "abbr" : (v:val[0] != "" ? "[" . v:val[0] . "] " : "") .  
         \          (fnamemodify(v:val[1], ":~:.") != "" ? fnamemodify(v:val[1], ":~:.") : v:val[1]),
         \ "word" : v:val[1],
-        \ "source" : "bookmark",
         \ "kind" : (isdirectory(v:val[1]) ? "directory" : "jump_list"),
         \ "source_bookmark_name" : v:val[0],
         \ "action__path" : v:val[1],

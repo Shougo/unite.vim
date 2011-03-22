@@ -1012,6 +1012,9 @@ function! s:recache_candidates(input, is_force)"{{{
       if !has_key(l:candidate, 'kind')
         let l:candidate.kind = 'common'
       endif
+      if !has_key(l:candidate, 'source')
+        let l:candidate.source = l:source.name
+      endif
 
       " Initialize.
       let l:candidate.unite__is_marked = 0
