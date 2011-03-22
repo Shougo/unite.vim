@@ -1259,6 +1259,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-03-22
+- Fixed unite#custom_filters() bug.
+
 2011-03-17
 - Implemented unite#clear_message().
 - Added README.

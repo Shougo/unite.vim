@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Mar 2011.
+" Last Modified: 22 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -76,11 +76,7 @@ function! unite#custom_filters(source_name, filters)"{{{
   let l:filters = type(a:filters) == type([]) ?
         \ a:filters : [a:filters]
   for key in split(a:source_name, ',')
-    if !has_key(s:dynamic.sources, key)
-      let s:dynamic.sources[key] = {}
-    endif
-
-    let s:dynamic.sources[key].filters = l:filters
+    let s:custom.filters[key] = l:filters
   endfor
 endfunction"}}}
 function! unite#custom_alias(kind, name, action)"{{{
@@ -196,6 +192,7 @@ let s:custom = {}
 let s:custom.actions = {}
 let s:custom.default_actions = {}
 let s:custom.aliases = {}
+let s:custom.filters = {}
 let s:custom.source = {}
 
 let s:buffer_name_options = {}
@@ -899,7 +896,9 @@ function! s:initialize_sources()"{{{
       let l:source.syntax = ''
     endif
     if !has_key(l:source, 'filters')
-      let l:source.filters = unite#filters#default#get()
+      let l:source.filters = has_key(s:custom.filters, l:source.name) ?
+            \ s:custom.filters[l:source.name] :
+            \ unite#filters#default#get()
     endif
     if l:source.is_volatile
           \ && !has_key(l:source, 'change_candidates')
