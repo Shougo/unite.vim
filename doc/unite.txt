@@ -1259,6 +1259,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-03-23
+- Fixed kind completion bug.
+
 2011-03-22
 - Fixed unite#custom_filters() bug.
 - Ommitable candidates source name.
