@@ -1265,6 +1265,7 @@ CHANGELOG					*unite-changelog*
 
 2011-03-25
 - Implemented vimfiler and tabvimfiler actions.
+- Improved documentation.
 
 2011-03-23
 - Fixed kind completion bug.

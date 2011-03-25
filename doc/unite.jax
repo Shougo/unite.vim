@@ -1282,9 +1282,11 @@ name			文字列		(必須)
 
 						*unite-source-attribute-gather_candidates*
 gather_candidates	関数		(ほぼ必須)
-			uniteが候補を収集する際に一度だけ呼ばれる。
+			uniteが候補を収集する際に一度だけ呼ばれる。ただし、
+			|<Plug>(unite_redraw)|による再描画の際にも呼ばれる。
 			sourceが|unite-source-attribute-is_volatile|の場合は、
-			入力文字列が変化すると呼ばれる。
+			|unite-source-attribute-change_candidates|が定義され
+			ていない限り、入力文字列が変化すると呼ばれる。
 			この関数は{args}と{context}を引数に取り、{candidate}の
 			リストを返す。
 			{args}は|:Unite|コマンドを実行された際にsourceに渡され
@@ -1295,6 +1297,12 @@ gather_candidates	関数		(ほぼ必須)
 			せよ。
 			この属性は基本的に必須だが、他の属性を用いて候補を取得
 			できる場合には省略することができる。
+			この属性で収集された候補はuniteバッファによりキャッ
+			シュされる。キャッシュはuniteバッファが閉じられるま
+			で有効だが、uniteバッファが閉じられると
+			|:UniteResume|を使わない限り破棄される。uniteバッファ
+			の寿命によらず永続的にキャッシュしたい場合は、source
+			側でキャッシュを保存しておく必要がある。
 
 						*unite-source-attribute-change_candidates*
 change_candidates	関数		(任意)
@@ -1449,7 +1457,7 @@ NOTATION					*unite-notation*
 				か。
 
 			is_redraw		(数値)
-				<Plug>(unite_redraw)で呼び出されたかどうか。
+				|<Plug>(unite_redraw)|で呼び出されたかどうか。
 				ユーザーが明示的にキャッシュを破棄しているので、
 				自前でキャッシュを管理するsourceにとっては重
 				要な情報となる。
