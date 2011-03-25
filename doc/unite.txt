@@ -1073,6 +1073,10 @@ Defines an interface for files you can move to with cd command.
 			only when you already installed |vimshell|.
 	tabvimshell	Run |:VimShellTab| on the directory.  This is
 			available only when you already installed |vimshell|.
+	vimfiler	Run |vimfiler| on the directory.  This is available
+			only when you already installed |vimfiler|.
+	tabvimfiler	Run |:VimFilerTab| on the directory.  This is
+			available only when you already installed |vimfiler|.
 	rec		Run |unite-source-file_rec| on the directory.
 
 file						*unite-action-file*
@@ -1258,6 +1262,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-03-25
+- Implemented vimfiler and tabvimfiler actions.
 
 2011-03-23
 - Fixed kind completion bug.

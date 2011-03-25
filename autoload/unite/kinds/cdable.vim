@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Feb 2011.
+" Last Modified: 25 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -114,6 +114,22 @@ if exists(':VimShellTab')
         \ }
   function! s:kind.action_table.tabvimshell.func(candidate)"{{{
     VimShellTab `=a:candidate.action__directory`
+  endfunction"}}}
+endif
+if exists(':VimFiler')
+  let s:kind.action_table.vimfiler = {
+        \ 'description' : 'open vimfiler buffer here',
+        \ }
+  function! s:kind.action_table.vimfiler.func(candidate)"{{{
+    VimFilerCreate `=a:candidate.action__directory`
+  endfunction"}}}
+endif
+if exists(':VimFilerTab')
+  let s:kind.action_table.tabvimfiler = {
+        \ 'description' : 'tabopen vimfiler buffer here',
+        \ }
+  function! s:kind.action_table.tabvimfiler.func(candidate)"{{{
+    VimFilerTab `=a:candidate.action__directory`
   endfunction"}}}
 endif
 "}}}

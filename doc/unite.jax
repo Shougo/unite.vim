@@ -1170,8 +1170,11 @@ cd可能ファイルのインタフェースを定義している。
 	vimshell	そのディレクトリで|vimshell|を起動する。これ
 			は|vimshell|がインストールされている場合にのみ有効なア
 			クションである。
-	tabvimshell	そのディレクトリで|:VimShellTab|を実行する。これは
-			|vimshell|がインストールされている場合にのみ有効な
+	vimfiler	そのディレクトリで|vimfiler|を起動する。これは
+			|vimfiler|がインストールされている場合にのみ有効なア
+			クションである。
+	tabvimfiler	そのディレクトリで|:VimFilerTab|を実行する。これは
+			|vimfiler|がインストールされている場合にのみ有効な
 			アクションである。
 	rec		そのディレクトリで|unite-source-file_rec|を起動する。
 
