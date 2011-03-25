@@ -1308,6 +1308,9 @@ gather_candidates	関数		(ほぼ必須)
 change_candidates	関数		(任意)
 			uniteが候補を収集する際に、入力文字列が変化すると呼ばれ
 			る。入力文字列から候補を生成するときに便利である。
+			この属性で追加する候補は、
+			|unite-source-attribute-gather_candidates|によって
+			キャッシュした候補に追加される。
 			この関数は{args}と{context}を引数に取り、{candidate}の
 			リストを返す。
 			引数や戻り値の仕様は
