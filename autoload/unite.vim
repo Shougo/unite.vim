@@ -1196,7 +1196,7 @@ function! s:initialize_unite_buffer()"{{{
       syntax match uniteCandidateSourceName /^-/ contained
       let l:source_padding = 3
     endif
-    execute 'syntax match uniteCandidateAbbr' '/\%'.(l:unite.max_source_name+l:source_padding).'c.*$/ contained'
+    execute 'syntax match uniteCandidateAbbr' '/\%'.(l:unite.max_source_name+l:source_padding).'c.*/ contained'
 
     execute 'highlight default link uniteCandidateAbbr'  g:unite_abbr_highlight
 
@@ -1205,7 +1205,7 @@ function! s:initialize_unite_buffer()"{{{
       if l:source.syntax != ''
         let l:name = len(l:unite.sources) > 1 ? l:source.name : ''
 
-        execute 'syntax match' l:source.syntax '/\%'.(l:unite.max_source_name+l:source_padding).'c.*$/ contained'
+        execute 'syntax match' l:source.syntax '/\%'.(l:unite.max_source_name+l:source_padding).'c.*/ contained'
 
         execute 'highlight default link' l:source.syntax g:unite_abbr_highlight
 
