@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Mar 2011.
+" Last Modified: 25 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,7 +26,7 @@
 "=============================================================================
 
 function! unite#version()"{{{
-  return str2nr(printf('%02d%02d%03d', 1, 1, 0))
+  return str2nr(printf('%02d%02d%03d', 1, 5, 0))
 endfunction"}}}
 
 " User functions."{{{
@@ -1196,7 +1196,7 @@ function! s:initialize_unite_buffer()"{{{
       syntax match uniteCandidateSourceName /^-/ contained
       let l:source_padding = 3
     endif
-    execute 'syntax match uniteCandidateAbbr' '/\%'.(l:unite.max_source_name+l:source_padding).'c.*/ contained'
+    execute 'syntax match uniteCandidateAbbr' '/\%'.(l:unite.max_source_name+l:source_padding).'c.*$/ contained'
 
     execute 'highlight default link uniteCandidateAbbr'  g:unite_abbr_highlight
 
@@ -1205,12 +1205,12 @@ function! s:initialize_unite_buffer()"{{{
       if l:source.syntax != ''
         let l:name = len(l:unite.sources) > 1 ? l:source.name : ''
 
-        execute 'syntax match' l:source.syntax '/\%'.(l:unite.max_source_name+l:source_padding).'c.*/ contained'
+        execute 'syntax match' l:source.syntax '/\%'.(l:unite.max_source_name+l:source_padding).'c.*$/ contained'
 
         execute 'highlight default link' l:source.syntax g:unite_abbr_highlight
 
-        execute printf('syntax region %s start="^- %s" end="$" contains=uniteSourceNames,%s',
-              \ 'uniteSourceLine__'.l:source.syntax, l:name == '' ? '' : l:name . '\>', l:source.syntax
+        execute printf('syntax region %s start="^- %s" end="$" contains=%s%s',
+              \ 'uniteSourceLine__'.l:source.syntax, (l:name == '' ? '' : l:name . '\>'), (l:name == '' ? '' : 'uniteSourceNames,'), l:source.syntax
               \ )
 
         if has_key(l:source.hooks, 'on_syntax')
