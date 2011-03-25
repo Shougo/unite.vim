@@ -784,13 +784,6 @@ function! s:quit_session(is_force)  "{{{
     pclose!
   endif
 
-  " Call finalize functions.
-  for l:source in unite#loaded_sources_list()
-    if has_key(l:source.hooks, 'on_close')
-      call l:source.hooks.on_close(l:source.args, l:source.unite__context)
-    endif
-  endfor
-
   if winnr('$') != 1
     if !a:is_force && l:unite.context.no_quit
       if winnr('#') > 0
@@ -805,6 +798,13 @@ function! s:quit_session(is_force)  "{{{
       endif
     endif
   endif
+
+  " Call finalize functions.
+  for l:source in unite#loaded_sources_list()
+    if has_key(l:source.hooks, 'on_close')
+      call l:source.hooks.on_close(l:source.args, l:source.unite__context)
+    endif
+  endfor
 
   if l:unite.context.complete
     if l:unite.context.col < col('$')

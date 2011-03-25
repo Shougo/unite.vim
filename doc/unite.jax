@@ -1360,11 +1360,8 @@ hooks			辞書		(任意)
 
 			on_close		*unite-source-attribute-hooks-on_close*
 			<Plug>(unite_exit)を実行したときや、コマンドの実行後に
-			uniteバッファが閉じられる前に呼ばれる。
+			uniteバッファが閉じられた後に呼ばれる。
 			この関数は{args}と{context}を引数に取る。
-			この関数が呼ばれたとしても、まだuniteバッファが残ってい
-			る可能性があるので、内部で使用する変数は解放しないほう
-			がよい。
 
 						*unite-source-attribute-action_table*
 action_table		辞書		(任意)
