@@ -1121,6 +1121,9 @@ sorter_default	|unite-filter-default|により呼び出される、デフォル�
 						*unite-filter-sorter_nothing*
 sorter_nothing	何もsortをしないsorter。source側のsortがそのまま反映される。
 
+						*unite-filter-sorter_word*
+sorter_word	wordを比較するsorter。
+
 						*unite-filter-converter_default*
 converter_default
 		|unite-filter-default|により呼び出される、デフォルトのconverter。
@@ -1352,7 +1355,7 @@ hooks			辞書		(任意)
 
 			ハイライトの設定例：
 >
-			syntax match uniteSource_FileMru_Time /(.*)/ containedin=uniteSource_FileMru
+			syntax match uniteSource_FileMru_Time /(.*)/ contained containedin=uniteSource_FileMru
 			highlight default link uniteSource_FileMru_Time Statement
 <
 			|unite-source-attribute-syntax|で設定したsyntax名を

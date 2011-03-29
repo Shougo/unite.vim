@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Mar 2011.
+" Last Modified: 29 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -67,7 +67,7 @@ function! s:source_buffer_all.hooks.on_init(args, context)"{{{
   let a:context.source__buffer_list = s:get_buffer_list()
 endfunction"}}}
 function! s:source_buffer_all.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSource__Buffer_Directory /\[.*\]/ containedin=uniteSource__Buffer
+  syntax match uniteSource__Buffer_Directory /\[.*\]/ contained containedin=uniteSource__Buffer
   highlight default link uniteSource__Buffer_Directory PreProc
 endfunction"}}}
 

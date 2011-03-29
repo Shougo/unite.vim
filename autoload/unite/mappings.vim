@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Mar 2011.
+" Last Modified: 29 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -142,9 +142,10 @@ function! unite#mappings#narrowing(word)"{{{
   endif
 endfunction"}}}
 function! unite#mappings#do_action(action_name, ...)"{{{
-  let l:candidates = unite#get_marked_candidates()
+  let l:candidates = a:0 > 0 && type(a:1) == type([]) ?
+        \ a:1 : unite#get_marked_candidates()
 
-  if a:0 > 0 || empty(l:candidates)
+  if a:0 <= 0 || empty(l:candidates)
     let l:num = a:0 > 0 ? a:1 :
           \ (line('.') <= unite#get_current_unite().prompt_linenr) ? 0 :
           \ (line('.') - (unite#get_current_unite().prompt_linenr + 1))
@@ -160,10 +161,37 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     endif
   endif
 
-  " Check action.
+  let l:action_tables = s:get_action_table(a:action_name, l:candidates)
+
+  " Execute action.
+  let l:is_redraw = 0
+  for l:table in l:action_tables
+    " Check quit flag.
+    if l:table.action.is_quit
+      call unite#quit_session()
+    endif
+
+    call l:table.action.func(l:table.candidates)
+
+    " Check invalidate cache flag.
+    if l:table.action.is_invalidate_cache
+      for l:source_name in l:table.source_names
+        call unite#invalidate_cache(l:source_name)
+      endfor
+
+      let l:is_redraw = 1
+    endif
+  endfor
+
+  if l:is_redraw
+    call unite#force_redraw()
+  endif
+endfunction"}}}
+
+function! s:get_action_table(action_name, candidates)"{{{
   let l:action_tables = []
   let Self = unite#get_self_functions()[-1]
-  for l:candidate in l:candidates
+  for l:candidate in a:candidates
     let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, Self)
 
     let l:action_name =
@@ -180,7 +208,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     let l:action = l:action_table[l:action_name]
 
     " Check selectable flag.
-    if !l:action.is_selectable && len(l:candidates) > 1
+    if !l:action.is_selectable && len(a:candidates) > 1
       call unite#util#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
       call unite#util#print_error('Not selectable action : ' . l:action_name)
       return
@@ -207,29 +235,21 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     endif
   endfor
 
-  " Execute action.
-  let l:is_redraw = 0
-  for l:table in l:action_tables
-    " Check quit flag.
-    if l:table.action.is_quit
-      call unite#quit_session()
-    endif
-
-    call l:table.action.func(l:table.candidates)
-
-    " Check invalidate cache flag.
-    if l:table.action.is_invalidate_cache
-      for l:source_name in l:table.source_names
-        call unite#invalidate_cache(l:source_name)
-      endfor
-
-      let l:is_redraw = 1
-    endif
-  endfor
-
-  if l:is_redraw
-    call unite#force_redraw()
+  return l:action_tables
+endfunction"}}}
+function! s:get_actions(candidates)"{{{
+  let Self = unite#get_self_functions()[-1]
+  let l:actions = unite#get_action_table(a:candidates[0].source, a:candidates[0].kind, Self)
+  if len(a:candidates) > 1
+    for l:candidate in a:candidates
+      let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, Self)
+      " Filtering unique items and check selectable flag.
+      call filter(l:actions, 'has_key(l:action_table, v:key)
+            \ && l:action_table[v:key].is_selectable')
+    endfor
   endif
+
+  return l:actions
 endfunction"}}}
 
 " key-mappings functions.
@@ -299,19 +319,24 @@ function! s:choose_action()"{{{
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
 
-  echohl Statement | echo 'Candidates:' | echohl None
-
-  let Self = unite#get_self_functions()[-1]
-  let s:actions = unite#get_action_table(l:candidates[0].source, l:candidates[0].kind, Self)
-  if len(l:candidates) > 1
-    for l:candidate in l:candidates
-      let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, Self)
-      " Filtering unique items and check selectable flag.
-      call filter(s:actions, 'has_key(l:action_table, v:key)
-            \ && l:action_table[v:key].is_selectable')
-    endfor
+  call unite#start([['action'] + l:candidates])
+endfunction"}}}
+function! s:choose_action_old()"{{{
+  if line('$') < (unite#get_current_unite().prompt_linenr+1)
+    " Ignore.
+    return
   endif
 
+  let l:candidates = unite#get_marked_candidates()
+  if empty(l:candidates)
+    let l:num = line('.') <= unite#get_current_unite().prompt_linenr ? 0 : line('.') - (unite#get_current_unite().prompt_linenr+1)
+
+    let l:candidates = [ unite#get_unite_candidates()[l:num] ]
+  endif
+
+  echohl Statement | echo 'Candidates:' | echohl None
+
+  let s:actions = s:get_actions(l:candidates)
   if empty(s:actions)
     call unite#util#print_error('No actions.')
     return
@@ -326,7 +351,7 @@ function! s:choose_action()"{{{
   endfor
 
   " Print action names.
-  let l:max = max(map(keys(s:actions), 'len(v:val)'))
+  let l:max = max(map(values(s:actions), 'len(v:val.name)'))
   for [l:action_name, l:action] in items(s:actions)
     echohl Identifier
     echo unite#util#truncate(l:action_name, l:max)
@@ -496,5 +521,65 @@ endfunction"}}}
 function! unite#mappings#complete_actions(arglead, cmdline, cursorpos)"{{{
   return filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
+
+" Unite action source."{{{
+let s:source = {
+      \ 'name' : 'action',
+      \ 'description' : 'candidates from unite action',
+      \ 'action_table' : {},
+      \ 'hooks' : {},
+      \ 'default_action' : { 'common' : 'do' },
+      \ 'syntax' : 'uniteSource__Action',
+      \}
+
+function! s:source.hooks.on_syntax(args, context)"{{{
+  syntax match uniteSource__ActionDescriptionLine / -- .*$/ contained containedin=uniteSource__Action
+  syntax match uniteSource__ActionDescription /.*$/ contained containedin=uniteSource__ActionDescriptionLine
+  syntax match uniteSource__ActionMarker / -- / contained containedin=uniteSource__ActionDescriptionLine
+  highlight default link uniteSource__ActionMarker Special
+  highlight default link uniteSource__ActionDescription Comment
+endfunction"}}}
+
+function! s:source.gather_candidates(args, context)"{{{
+  let l:candidates = copy(a:args)
+
+  " Print candidates.
+  call unite#print_message(map(copy(l:candidates), '"[action] candidates: ".v:val.abbr."(".v:val.source.")"'))
+
+  let l:actions = s:get_actions(l:candidates)
+  let l:max = max(map(values(l:actions), 'len(v:val.name)'))
+
+  return sort(map(values(l:actions), '{
+        \   "word": v:val.name,
+        \   "abbr": printf("%-' . l:max . 's -- %s", v:val.name, v:val.description),
+        \   "kind": "common",
+        \   "source__candidates": l:candidates,
+        \   "action__action": l:actions[v:val.name],
+        \ }'), 's:compare_word')
+endfunction"}}}
+
+function! s:compare_word(i1, i2)
+  return (a:i1.word ># a:i2.word) ? 1 : -1
+endfunction
+
+" Actions"{{{
+let s:action_table = {}
+
+let s:action_table.do = {
+      \ 'description' : 'do action',
+      \ }
+function! s:action_table.do.func(candidate)"{{{
+  call unite#mappings#do_action(a:candidate.word, a:candidate.source__candidates)
+endfunction"}}}
+
+let s:source.action_table['*'] = s:action_table
+
+unlet s:action_table
+"}}}
+
+call unite#define_source(s:source)
+
+unlet s:source
+"}}}
 
 " vim: foldmethod=marker

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Mar 2011.
+" Last Modified: 29 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -231,7 +231,7 @@ function! unite#loaded_source_names()"{{{
   return map(copy(unite#loaded_sources_list()), 'v:val.name')
 endfunction"}}}
 function! unite#loaded_source_names_with_args()"{{{
-  return map(copy(unite#loaded_sources_list()), 'join(insert(copy(v:val.args), v:val.name), ":")')
+  return map(copy(unite#loaded_sources_list()), 'join(insert(filter(copy(v:val.args), "type(v:val) < 1"), v:val.name), ":")')
 endfunction"}}}
 function! unite#loaded_sources_list()"{{{
   return s:get_loaded_sources()
@@ -332,7 +332,10 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
   endif
 
   " Set default parameters.
-  for l:action in values(l:action_table)
+  for [l:action_name, l:action] in items(l:action_table)
+    if !has_key(l:action, 'name')
+      let l:action.name = l:action_name
+    endif
     if !has_key(l:action, 'description')
       let l:action.description = ''
     endif
@@ -425,7 +428,7 @@ function! unite#redraw_line(...) "{{{
   setlocal modifiable
 
   let l:candidate = unite#get_unite_candidates()[l:linenr - (unite#get_current_unite().prompt_linenr+1)]
-  call setline(l:linenr, s:convert_line(l:candidate))
+  call setline(l:linenr, s:convert_lines([l:candidate])[0])
 
   let &l:modifiable = l:modifiable_save
 endfunction"}}}
@@ -1041,6 +1044,7 @@ function! s:convert_quick_match_lines(candidates)"{{{
     call add(l:candidates,
           \ (has_key(l:keys, l:num) ? l:keys[l:num] : '   ')
           \ . unite#util#truncate(l:candidate.source, l:max_source_name)
+          \ . (l:unite.max_source_name == 0 ? ' ' : '')
           \ . unite#util#truncate_smart(l:candidate.abbr, l:max_width, l:max_width/3, '..'))
     let l:num += 1
   endfor
@@ -1048,19 +1052,14 @@ function! s:convert_quick_match_lines(candidates)"{{{
   return l:candidates
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
-  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), unite#get_current_unite().max_source_name, 2)
+  let l:unite = unite#get_current_unite()
+  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), l:unite.max_source_name, 2)
 
   return map(copy(a:candidates),
         \ '(v:val.unite__is_marked ? "* " : "- ")
         \ . unite#util#truncate(v:val.source, l:max_source_name)
+        \ . (l:unite.max_source_name == 0 ? " " : "")
         \ . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', l:max_width/3, "..")')
-endfunction"}}}
-function! s:convert_line(candidate)"{{{
-  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), unite#get_current_unite().max_source_name, 2)
-
-  return (a:candidate.unite__is_marked ? '* ' : '- ')
-        \ . unite#util#truncate(a:candidate.source, l:max_source_name)
-        \ . unite#util#truncate_smart(a:candidate.abbr, l:max_width, l:max_width/3, '..')
 endfunction"}}}
 
 function! s:initialize_current_unite(sources, context)"{{{
@@ -1193,7 +1192,7 @@ function! s:initialize_unite_buffer()"{{{
       syntax match uniteCandidateSourceName /^- \zs[[:alnum:]_\/-]\+/ contained
       let l:source_padding = 2
     else
-      syntax match uniteCandidateSourceName /^-/ contained
+      syntax match uniteCandidateSourceName /^- / contained
       let l:source_padding = 3
     endif
     execute 'syntax match uniteCandidateAbbr' '/\%'.(l:unite.max_source_name+l:source_padding).'c.*/ contained'

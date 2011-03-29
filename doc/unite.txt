@@ -1263,6 +1263,13 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-03-29
+- Implemented unite action source.
+- Changed unite#loaded_source_names_with_args().
+- Added sorter_word.
+- Improved redraw.
+- Fixed highlight settings.
+
 2011-03-25
 - Implemented vimfiler and tabvimfiler actions.
 - Improved documentation.
