@@ -1268,6 +1268,7 @@ CHANGELOG					*unite-changelog*
 - Improved file_mru source.
 - Improved directory_mru source.
 - Fixed choose_action documentation.
+- Add '..' directory in unite source.
 
 2011-03-29
 - Implemented unite action source.

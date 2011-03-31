@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Mar 2011.
+" Last Modified: 31 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,7 +56,12 @@ function! s:source.change_candidates(args, context)"{{{
   let l:input = substitute(l:input, '[^/.]*$', '', '')
   let l:candidates = split(unite#util#substitute_path_separator(glob(l:input . (l:input =~ '\*$' ? '' : '*'))), '\n')
 
-  if a:context.input != ''
+  if a:context.input == ''
+    if isdirectory('..')
+      " Add .. directory.
+      call insert(l:candidates, '..')
+    endif
+  else
     let l:dummy = substitute(a:context.input, '[*\\]', '', 'g')
     if (!filereadable(l:dummy) && !isdirectory(l:dummy) && isdirectory(fnamemodify(l:dummy, ':h')))
           \ || l:dummy =~ '^\%(/\|\a\+:/\)$'
