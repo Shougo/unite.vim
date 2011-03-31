@@ -1037,9 +1037,6 @@ completion	An interface for completion
 ==============================================================================
 ACTIONS						*unite-actions*
 
-When you select an action with |<Plug>(unite_choose_action)|, you can complete
-action names or skip just by the first letters.
-
 Actions of each kinds
 
 common					*unite-action-common*
@@ -1270,6 +1267,7 @@ CHANGELOG					*unite-changelog*
 - Added post_filter hook.
 - Improved file_mru source.
 - Improved directory_mru source.
+- Fixed choose_action documentation.
 
 2011-03-29
 - Implemented unite action source.

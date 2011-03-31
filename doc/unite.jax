@@ -461,10 +461,10 @@ g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scro
 		|unite-default-action|を参照。
 
 <Plug>(unite_choose_action)			*<Plug>(unite_choose_action)*
-		選択している候補に対して実行するアクションを選択する。アクショ
-		ンは候補のkindごとに定義されている。複数の候補が選択されている
-		場合は共通なアクションのみ選択ができる。kindについては
-		|unite-kind|を参照。
+		uniteインタフェースにより、選択している候補に対して実行するアク
+		ションを選択する。アクションは候補のkindごとに定義されている。
+		複数の候補が選択されている場合は共通なアクションのみ選択ができ
+		る。kindについては|unite-kind|を参照。
 
 <Plug>(unite_insert_enter)			*<Plug>(unite_insert_enter)*
 		カーソル位置から絞込みテキスト入力を開始する。ただし、カーソル
@@ -1137,9 +1137,6 @@ converter_nothing
 
 ==============================================================================
 アクション					*unite-actions*
-
-|<Plug>(unite_choose_action)|で選択するときは、アクション名を補完したり、曖昧で
-なければ先頭文字で省略することができる。
 
 kind別アクション
 
