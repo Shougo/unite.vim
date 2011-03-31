@@ -1042,8 +1042,8 @@ function! s:convert_quick_match_lines(candidates)"{{{
   for l:candidate in a:candidates
     call add(l:candidates,
           \ (has_key(l:keys, l:num) ? l:keys[l:num] : '   ')
-          \ . unite#util#truncate(l:candidate.source, l:max_source_name)
-          \ . (l:unite.max_source_name == 0 ? ' ' : '')
+          \ . (l:unite.max_source_name == 0 ? ' ' :
+          \    unite#util#truncate(l:candidate.source, l:max_source_name))
           \ . unite#util#truncate_smart(l:candidate.abbr, l:max_width, l:max_width/3, '..'))
     let l:num += 1
   endfor
@@ -1056,8 +1056,7 @@ function! s:convert_lines(candidates)"{{{
 
   return map(copy(a:candidates),
         \ '(v:val.unite__is_marked ? "* " : "- ")
-        \ . unite#util#truncate(v:val.source, l:max_source_name)
-        \ . (l:unite.max_source_name == 0 ? " " : "")
+        \ . (l:unite.max_source_name == 0 ? " " : unite#util#truncate(v:val.source, l:max_source_name))
         \ . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', l:max_width/3, "..")')
 endfunction"}}}
 
