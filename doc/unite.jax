@@ -1366,6 +1366,12 @@ hooks			辞書		(任意)
 			uniteバッファが閉じられた後に呼ばれる。
 			この関数は{args}と{context}を引数に取る。
 
+			on_post_filter		*unite-source-attribute-hooks-on_post_filter*
+			filterが呼ばれ、候補が絞り込まれた後に呼ばれる。
+			パフォーマンスの影響を避けるため、絞り込まれた後に属性
+			をセットする際に使用する。
+			この関数は{args}と{context}を引数に取る。
+
 						*unite-source-attribute-action_table*
 action_table		辞書		(任意)
 			source独自のアクションテーブルを追加するときに使用する。
@@ -1467,6 +1473,11 @@ NOTATION					*unite-notation*
 
 			source			(辞書)
 				現在候補を収集しているsourceの情報。
+
+			candidates		(リスト)
+				フィルタリング終了後の候補。
+				|unite-source-attribute-hooks-on_post_filter|内
+				でのみ有効。
 
 			winnr			(数値)
 				uniteを呼び出したウィンドウの番号。

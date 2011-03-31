@@ -804,11 +804,7 @@ function! s:quit_session(is_force)  "{{{
   endif
 
   " Call finalize functions.
-  for l:source in unite#loaded_sources_list()
-    if has_key(l:source.hooks, 'on_close')
-      call l:source.hooks.on_close(l:source.args, l:source.unite__context)
-    endif
-  endfor
+  call s:call_hook(unite#loaded_sources_list(), 'on_close')
 
   if l:unite.context.complete
     if l:unite.context.col < col('$')
@@ -1007,6 +1003,10 @@ function! s:recache_candidates(input, is_force)"{{{
       let l:source_candidates = l:source_candidates[: l:source.max_candidates - 1]
     endif
 
+    " Call post_filter hook.
+    let l:source.unite__context.candidates = l:source_candidates
+    call s:call_hook([l:source], 'on_post_filter')
+
     for l:candidate in l:source_candidates
       if !has_key(l:candidate, 'abbr')
         let l:candidate.abbr = l:candidate.word
@@ -1089,11 +1089,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:sources = s:initialize_loaded_sources(a:sources, a:context)
 
   " Call initialize functions.
-  for l:source in l:sources
-    if has_key(l:source.hooks, 'on_init')
-      call l:source.hooks.on_init(l:source.args, l:source.unite__context)
-    endif
-  endfor
+  call s:call_hook(l:sources, 'on_init')
 
   " Set parameters.
   let l:unite = {}
@@ -1213,9 +1209,7 @@ function! s:initialize_unite_buffer()"{{{
               \ 'uniteSourceLine__'.l:source.syntax, (l:name == '' ? '' : l:name . '\>'), (l:name == '' ? '' : 'uniteSourceNames,'), l:source.syntax
               \ )
 
-        if has_key(l:source.hooks, 'on_syntax')
-          call l:source.hooks.on_syntax(l:source.args, l:source.unite__context)
-        endif
+        call s:call_hook([l:source], 'on_syntax')
       endif
     endfor
   endif
@@ -1434,6 +1428,13 @@ function! s:get_substitute_input(input)"{{{
   let l:input .= l:subst
 
   return l:input
+endfunction"}}}
+function! s:call_hook(sources, hook_name)"{{{
+  for l:source in a:sources
+    if has_key(l:source.hooks, a:hook_name)
+      call call(l:source.hooks[a:hook_name], [l:source.args, l:source.unite__context], l:source.hooks)
+    endif
+  endfor
 endfunction"}}}
 "}}}
 

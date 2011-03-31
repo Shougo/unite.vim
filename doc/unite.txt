@@ -1267,6 +1267,8 @@ CHANGELOG					*unite-changelog*
 - Improved sort.
 - Optimized initialization.
 - Improved truncate.
+- Added post_filter hook.
+- Improved file_mru source.
 
 2011-03-29
 - Implemented unite action source.
