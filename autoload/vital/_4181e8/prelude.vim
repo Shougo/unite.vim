@@ -16,7 +16,8 @@ function! s:truncate(str, width)"{{{
   " http://github.com/mattn/googlereader-vim/tree/master
 
   if a:str =~# '^[\x00-\x7f]*$'
-    return printf('%-'.a:width.'s', a:str)
+    return len(a:str) < a:width ?
+          \ printf('%-'.a:width.'s', a:str) : strpart(a:str, 0, a:width)
   endif
 
   let ret = a:str

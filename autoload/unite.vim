@@ -1183,7 +1183,7 @@ function! s:initialize_unite_buffer()"{{{
   setlocal nomodifiable
   setfiletype unite
 
-  if exists('b:current_syntax') && b:current_syntax == 'unite'
+  if exists('b:current_syntax') && b:current_syntax ==# 'unite'
     " Set highlight.
     let l:match_prompt = escape(l:unite.prompt, '\/*~.^$[]')
     syntax clear uniteInputPrompt
