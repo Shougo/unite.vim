@@ -1029,6 +1029,10 @@ function! s:recache_candidates(input, is_force)"{{{
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
   let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), unite#get_current_unite().max_source_name, 5)
+  if l:unite.max_source_name == 0
+    let l:max_width -= 1
+  endif
+
   let l:candidates = []
 
   " Create key table.
@@ -1053,6 +1057,9 @@ endfunction"}}}
 function! s:convert_lines(candidates)"{{{
   let l:unite = unite#get_current_unite()
   let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), l:unite.max_source_name, 2)
+  if l:unite.max_source_name == 0
+    let l:max_width -= 1
+  endif
 
   return map(copy(a:candidates),
         \ '(v:val.unite__is_marked ? "* " : "- ")
