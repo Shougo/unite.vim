@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Mar 2011.
+" Last Modified: 01 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -141,13 +141,11 @@ function! unite#mappings#narrowing(word)"{{{
     normal! 0z.
   endif
 endfunction"}}}
-function! unite#mappings#do_action(action_name, ...)"{{{
-  let l:candidates = a:0 > 0 && type(a:1) == type([]) ?
-        \ a:1 : unite#get_marked_candidates()
+function! unite#mappings#do_action(action_name)"{{{
+  let l:candidates = unite#get_marked_candidates()
 
-  if a:0 <= 0 || empty(l:candidates)
-    let l:num = a:0 > 0 ? a:1 :
-          \ (line('.') <= unite#get_current_unite().prompt_linenr) ? 0 :
+  if empty(l:candidates)
+    let l:num = (line('.') <= unite#get_current_unite().prompt_linenr) ? 0 :
           \ (line('.') - (unite#get_current_unite().prompt_linenr + 1))
     if type(l:num) == type(0)
       if line('$') - (unite#get_current_unite().prompt_linenr + 1) < l:num
@@ -202,7 +200,7 @@ function! s:get_action_table(action_name, candidates)"{{{
     if !has_key(l:action_table, l:action_name)
       call unite#util#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
       call unite#util#print_error('No such action : ' . l:action_name)
-      return
+      return []
     endif
 
     let l:action = l:action_table[l:action_name]
@@ -211,7 +209,7 @@ function! s:get_action_table(action_name, candidates)"{{{
     if !l:action.is_selectable && len(a:candidates) > 1
       call unite#util#print_error(l:candidate.abbr . '(' . l:candidate.source . ')')
       call unite#util#print_error('Not selectable action : ' . l:action_name)
-      return
+      return []
     endif
 
     let l:found = 0

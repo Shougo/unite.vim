@@ -1260,6 +1260,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-01
+- Fixed get action table bug.
+
 2011-03-31
 - Improved sort.
 - Optimized initialization.
