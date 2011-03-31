@@ -871,7 +871,9 @@ endfunction"}}}
 function! s:initialize_sources()"{{{
   let l:sources = extend(deepcopy(s:static.sources), deepcopy(s:dynamic.sources))
 
-  for l:source in values(l:sources)
+  for l:source in values(filter(copy(l:sources), '!has_key(v:val, "is_initialized")'))
+    let l:source.is_initialized = 1
+
     if !has_key(l:source, 'is_volatile')
       let l:source.is_volatile = 0
     endif
@@ -914,7 +916,8 @@ function! s:initialize_sources()"{{{
 endfunction"}}}
 function! s:initialize_kinds()"{{{
   let l:kinds = extend(copy(s:static.kinds), s:dynamic.kinds)
-  for l:kind in values(l:kinds)
+  for l:kind in values(filter(copy(l:kinds), '!has_key(v:val, "is_initialized")'))
+    let l:kind.is_initialized = 1
     if !has_key(l:kind, 'alias_table')
       let l:kind.alias_table = {}
     endif
@@ -926,11 +929,7 @@ function! s:initialize_kinds()"{{{
   return l:kinds
 endfunction"}}}
 function! s:initialize_filters()"{{{
-  let l:filters = extend(copy(s:static.filters), s:dynamic.filters)
-  for l:filter in values(l:filters)
-  endfor
-
-  return l:filters
+  return extend(copy(s:static.filters), s:dynamic.filters)
 endfunction"}}}
 function! s:initialize_buffer_name_options(buffer_name)"{{{
   if !has_key(s:buffer_name_options, a:buffer_name)
@@ -998,9 +997,8 @@ function! s:recache_candidates(input, is_force)"{{{
     " Filter.
     for l:filter_name in has_key(l:custom_source, 'filters') ?
           \ l:custom_source.filters : l:source.filters
-      let l:filter = unite#get_filters(l:filter_name)
-      if !empty(l:filter)
-        let l:source_candidates = l:filter.filter(l:source_candidates, l:source.unite__context)
+      if has_key(l:unite.filters, l:filter_name)
+        let l:source_candidates = l:unite.filters[l:filter_name].filter(l:source_candidates, l:source.unite__context)
       endif
     endfor
 
@@ -1130,6 +1128,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let s:current_unite = l:unite
 endfunction"}}}
 function! s:initialize_unite_buffer()"{{{
+  let l:is_bufexists = bufexists(s:current_unite.real_buffer_name)
   call s:switch_unite_buffer(s:current_unite.real_buffer_name, s:current_unite.context)
 
   let b:unite = s:current_unite
@@ -1137,39 +1136,41 @@ function! s:initialize_unite_buffer()"{{{
 
   let s:last_unite_bufnr = bufnr('%')
 
-  " Basic settings.
-  setlocal bufhidden=hide
-  setlocal buftype=nofile
-  setlocal nolist
-  setlocal nobuflisted
-  setlocal noswapfile
-  setlocal noreadonly
-  setlocal nofoldenable
-  setlocal nomodeline
-  setlocal nonumber
-  setlocal nowrap
-  setlocal foldcolumn=0
-  setlocal iskeyword+=-,+,\\,!,~
-  set hlsearch
-  if has('conceal')
-    setlocal conceallevel=3
-    setlocal concealcursor=n
-  endif
+  if !l:is_bufexists
+    " Basic settings.
+    setlocal bufhidden=hide
+    setlocal buftype=nofile
+    setlocal nolist
+    setlocal nobuflisted
+    setlocal noswapfile
+    setlocal noreadonly
+    setlocal nofoldenable
+    setlocal nomodeline
+    setlocal nonumber
+    setlocal nowrap
+    setlocal foldcolumn=0
+    setlocal iskeyword+=-,+,\\,!,~
+    set hlsearch
+    if has('conceal')
+      setlocal conceallevel=3
+      setlocal concealcursor=n
+    endif
 
-  " Autocommands.
-  augroup plugin-unite
-    autocmd InsertEnter <buffer>  call s:on_insert_enter()
-    autocmd InsertLeave <buffer>  call s:on_insert_leave()
-    autocmd CursorHoldI <buffer>  call s:on_cursor_hold_i()
-    autocmd CursorHold <buffer>  call s:on_cursor_hold()
-    autocmd CursorMoved,CursorMovedI <buffer>  call s:on_cursor_moved()
-  augroup END
+    " Autocommands.
+    augroup plugin-unite
+      autocmd InsertEnter <buffer>  call s:on_insert_enter()
+      autocmd InsertLeave <buffer>  call s:on_insert_leave()
+      autocmd CursorHoldI <buffer>  call s:on_cursor_hold_i()
+      autocmd CursorHold <buffer>  call s:on_cursor_hold()
+      autocmd CursorMoved,CursorMovedI <buffer>  call s:on_cursor_moved()
+    augroup END
 
-  call unite#mappings#define_default_mappings()
+    call unite#mappings#define_default_mappings()
 
-  if exists(':NeoComplCacheLock')
-    " Lock neocomplcache.
-    NeoComplCacheLock
+    if exists(':NeoComplCacheLock')
+      " Lock neocomplcache.
+      NeoComplCacheLock
+    endif
   endif
 
   if exists('&redrawtime')
@@ -1238,6 +1239,7 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
       while l:bufnr <= l:max
         if bufname(l:bufnr) ==# a:buffer_name
           silent execute l:bufnr 'buffer'
+          break
         endif
 
         let l:bufnr += 1

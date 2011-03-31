@@ -1265,6 +1265,7 @@ CHANGELOG					*unite-changelog*
 
 2011-03-31
 - Improved sort.
+- Optimized initialization.
 
 2011-03-29
 - Implemented unite action source.
