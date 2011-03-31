@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: sorter_word.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Mar 2011.
+" Last Modified: 31 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,11 +34,7 @@ let s:sorter = {
       \}
 
 function! s:sorter.filter(candidates, context)"{{{
-  return sort(a:candidates, 's:compare_word')
+  return unite#util#sort_by(a:candidates, 'v:val.word')
 endfunction"}}}
-
-function! s:compare_word(i1, i2)
-  return (a:i1.word ># a:i2.word) ? 1 : -1
-endfunction
 
 " vim: foldmethod=marker

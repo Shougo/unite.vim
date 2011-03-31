@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Mar 2011.
+" Last Modified: 31 Mar 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -474,7 +474,8 @@ function! unite#redraw_candidates() "{{{
   let l:unite.candidates = l:candidates
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{
-  return sort(filter(copy(unite#get_unite_candidates()), 'v:val.unite__is_marked'), 's:compare_marked_candidates')
+  return unite#util#sort_by(filter(copy(unite#get_unite_candidates()),
+        \ 'v:val.unite__is_marked'), 'v:val.unite__marked_time')
 endfunction"}}}
 function! unite#get_input()"{{{
   let l:unite = unite#get_current_unite()
@@ -1353,12 +1354,6 @@ function! s:adjustments(currentwinwidth, the_max_source_name, size)"{{{
     return [l:max_width, a:the_max_source_name]
   endif
 endfunction"}}}
-function! s:compare_substitute_patterns(pattern_a, pattern_b)"{{{
-  return a:pattern_b.priority - a:pattern_a.priority
-endfunction"}}}
-function! s:compare_marked_candidates(candidate_a, candidate_b)"{{{
-  return a:candidate_a.unite__marked_time - a:candidate_b.unite__marked_time
-endfunction"}}}
 function! s:extend_actions(self_func, action_table1, action_table2, ...)"{{{
   let l:filterd_table = s:filter_self_func(a:action_table2, a:self_func)
 
@@ -1430,8 +1425,8 @@ function! s:get_substitute_input(input)"{{{
     let l:input = ''
   endif
 
-  for l:pattern in sort(values(l:substitute_patterns),
-        \ 's:compare_substitute_patterns')
+  for l:pattern in unite#util#sort_by(values(l:substitute_patterns),
+        \ 'v:val.priority')
     let l:subst = substitute(l:subst, l:pattern.pattern, l:pattern.subst, 'g')
   endfor
 

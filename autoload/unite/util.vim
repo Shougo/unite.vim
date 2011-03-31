@@ -1,4 +1,5 @@
 let s:V = vital#of('unite')
+call s:V.load('Data.List')
 function! unite#util#truncate_smart(...)
   return call(s:V.truncate_smart, a:000)
 endfunction
@@ -58,4 +59,7 @@ function! unite#util#system(...)
 endfunction
 function! unite#util#get_last_status(...)
   return call(s:V.get_last_status, a:000)
+endfunction
+function! unite#util#sort_by(...)
+  return call(s:V.Data.List.sort_by, a:000)
 endfunction
