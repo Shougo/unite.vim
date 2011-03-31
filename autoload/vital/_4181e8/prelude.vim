@@ -15,6 +15,10 @@ function! s:truncate(str, width)"{{{
   " Original function is from mattn.
   " http://github.com/mattn/googlereader-vim/tree/master
 
+  if a:str =~# '^[\x00-\x7f]*$'
+    return printf('%-'.a:width.'s', a:str)
+  endif
+
   let ret = a:str
   let width = s:wcswidth(a:str)
   if width > a:width
@@ -107,8 +111,9 @@ else
   endfunction"}}}
 endif
 
+let s:is_windows = has('win16') || has('win32') || has('win64')
 function! s:is_win()"{{{
-  return has('win16') || has('win32') || has('win64')
+  return s:is_windows
 endfunction"}}}
 
 function! s:print_error(message)"{{{
@@ -139,7 +144,7 @@ function! s:set_dictionary_helper(variable, keys, pattern)"{{{
   endfor
 endfunction"}}}
 function! s:substitute_path_separator(path)"{{{
-  return s:is_win() ? substitute(a:path, '\\', '/', 'g') : a:path
+  return s:is_windows ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
 function! s:path2directory(path)"{{{
   return s:substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
