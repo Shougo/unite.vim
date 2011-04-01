@@ -669,7 +669,7 @@ function! unite#start(sources, ...)"{{{
       return
     elseif len(l:candidates) == 1
       " Default action.
-      call unite#mappings#do_action(l:context.default_action, l:candidates[0])
+      call unite#mappings#do_action(l:context.default_action, [l:candidates[0]])
       return
     endif
   endif
@@ -1427,8 +1427,8 @@ function! s:get_substitute_input(input)"{{{
     let l:input = ''
   endif
 
-  for l:pattern in unite#util#sort_by(values(l:substitute_patterns),
-        \ 'v:val.priority')
+  for l:pattern in reverse(unite#util#sort_by(values(l:substitute_patterns),
+        \ 'v:val.priority'))
     let l:subst = substitute(l:subst, l:pattern.pattern, l:pattern.subst, 'g')
   endfor
 

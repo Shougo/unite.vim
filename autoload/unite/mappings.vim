@@ -141,8 +141,8 @@ function! unite#mappings#narrowing(word)"{{{
     normal! 0z.
   endif
 endfunction"}}}
-function! unite#mappings#do_action(action_name)"{{{
-  let l:candidates = unite#get_marked_candidates()
+function! unite#mappings#do_action(action_name, ...)"{{{
+  let l:candidates = a:0 > 0 ? a:1 : unite#get_marked_candidates()
 
   if empty(l:candidates)
     let l:num = (line('.') <= unite#get_current_unite().prompt_linenr) ? 0 :

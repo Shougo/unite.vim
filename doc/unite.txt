@@ -1262,6 +1262,7 @@ CHANGELOG					*unite-changelog*
 
 2011-04-01
 - Fixed get action table bug.
+- Fixed priority sort bug.
 
 2011-03-31
 - Improved sort.
