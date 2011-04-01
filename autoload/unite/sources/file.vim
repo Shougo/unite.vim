@@ -58,8 +58,8 @@ function! s:source.change_candidates(args, context)"{{{
 
   if a:context.input != ''
     let l:dummy = substitute(a:context.input, '[*\\]', '', 'g')
-    if (!filereadable(l:dummy) && !isdirectory(l:dummy) && isdirectory(fnamemodify(l:dummy, ':h')))
-          \ || l:dummy =~ '^\%(/\|\a\+:/\)$'
+    " if (!filereadable(l:dummy) && !isdirectory(l:dummy) && isdirectory(fnamemodify(l:dummy, ':h')))
+    if !filereadable(l:dummy) && !isdirectory(l:dummy)
       " Add dummy candidate.
       call add(l:candidates, l:dummy)
     endif
@@ -69,9 +69,12 @@ function! s:source.change_candidates(args, context)"{{{
     call filter(l:candidates, 'v:val !~ ' . string(g:unite_source_file_ignore_pattern))
   endif
 
-  if l:input !~ '^\%(/\|\a\+:/\)$' && isdirectory(l:input . '..')
-    " Add .. directory.
-    call insert(l:candidates, l:input . '..')
+  if l:input !~ '^\%(/\|\a\+:/\)$'
+    let l:dummy = substitute(a:context.input, '[*\\]', '', 'g')
+    if (l:input == '' || isdirectory(l:input)) && isdirectory(l:dummy . '..')
+      " Add .. directory.
+      call insert(l:candidates, l:dummy . '..')
+    endif
   endif
 
   let l:candidates_dir = []

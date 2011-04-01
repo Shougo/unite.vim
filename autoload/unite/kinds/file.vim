@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Nov 2010
+" Last Modified: 01 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,7 +42,7 @@ let s:kind.action_table.open = {
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
   for l:candidate in a:candidates
-    call unite#util#smart_execute_command('edit', l:candidate.action__path)
+    call s:execute_command('edit', l:candidate)
   endfor
 endfunction"}}}
 
@@ -52,7 +52,7 @@ let s:kind.action_table.preview = {
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
   if filereadable(a:candidate.action__path)
-    silent call unite#util#smart_execute_command('pedit', a:candidate.action__path)
+    call s:execute_command('pedit', l:candidate)
   endif
 endfunction"}}}
 
@@ -62,7 +62,7 @@ let s:kind.action_table.tabopen = {
       \ }
 function! s:kind.action_table.tabopen.func(candidates)"{{{
   for l:candidate in a:candidates
-    call unite#util#smart_execute_command('tabedit', l:candidate.action__path)
+    call s:execute_command('tabedit', l:candidate)
   endfor
 endfunction"}}}
 
@@ -72,7 +72,7 @@ let s:kind.action_table.split = {
       \ }
 function! s:kind.action_table.split.func(candidates)"{{{
   for l:candidate in a:candidates
-    call unite#util#smart_execute_command('split', l:candidate.action__path)
+    call s:execute_command('split', l:candidate)
   endfor
 endfunction"}}}
 
@@ -82,7 +82,7 @@ let s:kind.action_table.vsplit = {
       \ }
 function! s:kind.action_table.vsplit.func(candidates)"{{{
   for l:candidate in a:candidates
-    call unite#util#smart_execute_command('vsplit', l:candidate.action__path)
+    call s:execute_command('vsplit', l:candidate)
   endfor
 endfunction"}}}
 
@@ -92,7 +92,7 @@ let s:kind.action_table.left = {
       \ }
 function! s:kind.action_table.left.func(candidates)"{{{
   for l:candidate in a:candidates
-    call unite#util#smart_execute_command('leftabove vsplit', l:candidate.action__path)
+    call s:execute_command('leftabove vsplit', l:candidate)
   endfor
 endfunction"}}}
 
@@ -102,7 +102,7 @@ let s:kind.action_table.right = {
       \ }
 function! s:kind.action_table.right.func(candidates)"{{{
   for l:candidate in a:candidates
-    call unite#util#smart_execute_command('rightbelow vsplit', l:candidate.action__path)
+    call s:execute_command('rightbelow vsplit', l:candidate)
   endfor
 endfunction"}}}
 
@@ -112,7 +112,7 @@ let s:kind.action_table.above = {
       \ }
 function! s:kind.action_table.above.func(candidates)"{{{
   for l:candidate in a:candidates
-    call unite#util#smart_execute_command('leftabove split', l:candidate.action__path)
+    call s:execute_command('leftabove split', l:candidate)
   endfor
 endfunction"}}}
 
@@ -122,9 +122,20 @@ let s:kind.action_table.below = {
       \ }
 function! s:kind.action_table.below.func(candidates)"{{{
   for l:candidate in a:candidates
-    call unite#util#smart_execute_command('rightbelow split', l:candidate.action__path)
+    call s:execute_command('rightbelow split', l:candidate)
   endfor
 endfunction"}}}
 "}}}
+
+function! s:execute_command(command, candidate)"{{{
+  let l:dir = unite#util#path2directory(a:candidate.action__path)
+  " Auto make directory.
+  if !isdirectory(l:dir) &&
+        \ input(printf('"%s" does not exist. Create? [y/N]', l:dir)) =~? '^y\%[es]$'
+    call mkdir(iconv(l:dir, &encoding, &termencoding), 'p')
+  endif
+
+  silent call unite#util#smart_execute_command(a:command, a:candidate.action__path)
+endfunction"}}}
 
 " vim: foldmethod=marker

@@ -1265,6 +1265,7 @@ CHANGELOG					*unite-changelog*
 - Fixed priority sort bug.
 - Fixed narrowing.
 - Improved file source.
+- Implemented auto mkdir().
 
 2011-03-31
 - Improved sort.
