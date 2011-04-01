@@ -125,6 +125,18 @@ function! s:kind.action_table.below.func(candidates)"{{{
     call s:execute_command('rightbelow split', l:candidate)
   endfor
 endfunction"}}}
+
+let s:kind.action_table.mkdir = {
+      \ 'description' : 'make this directory or parents directory',
+      \ 'is_quit' : 0,
+      \ 'is_invalidate_cache' : 1,
+      \ }
+function! s:kind.action_table.mkdir.func(candidate)"{{{
+  if !filereadable(a:candidate.action__path)
+    call mkdir(iconv(a:candidate.action__path, &encoding, &termencoding), 'p')
+  endif
+endfunction"}}}
+
 "}}}
 
 function! s:execute_command(command, candidate)"{{{

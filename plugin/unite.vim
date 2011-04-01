@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Mar 2011.
+" Last Modified: 01 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -77,7 +77,7 @@ if !exists('g:unite_data_directory')
   let g:unite_data_directory = expand('~/.unite')
 endif
 if !isdirectory(fnamemodify(g:unite_data_directory, ':p'))
-  call mkdir(fnamemodify(g:unite_data_directory, ':p'), 'p')
+  call mkdir(iconv(fnamemodify(g:unite_data_directory, ':p'), &encoding, &termencoding), 'p')
 endif
 "}}}
 

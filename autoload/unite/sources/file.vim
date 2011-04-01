@@ -70,7 +70,8 @@ function! s:source.change_candidates(args, context)"{{{
   endif
 
   if l:input !~ '^\%(/\|\a\+:/\)$'
-    let l:dummy = substitute(a:context.input, '[*\\]', '', 'g')
+    let l:dummy = substitute(l:input, '[*\\]', '', 'g')
+
     if (l:input == '' || isdirectory(l:input)) && isdirectory(l:dummy . '..')
       " Add .. directory.
       call insert(l:candidates, l:dummy . '..')

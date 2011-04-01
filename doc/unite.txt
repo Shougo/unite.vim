@@ -1082,6 +1082,7 @@ Opens a file into a new buffer.  This kind extends |unite-action-openable| and
 	open		Open the file
 	preview		Open the file into preview window
 	bookmark	Add the file into your bookmark
+	mkdir		Make directory. If exists file, this action is invalid.
 
 buffer						*unite-action-buffer*
 This kind extends |unite-action-file|.
@@ -1266,6 +1267,7 @@ CHANGELOG					*unite-changelog*
 - Fixed narrowing.
 - Improved file source.
 - Implemented auto mkdir().
+- Implemented mkdir action.
 
 2011-03-31
 - Improved sort.

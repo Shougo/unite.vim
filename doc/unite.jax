@@ -1184,6 +1184,8 @@ file						*unite-action-file*
 	open		ファイルを開く
 	preview		プレビューウィンドウにファイルを開く
 	bookmark	候補をブックマークに追加する
+	mkdir		ファイル名をディレクトリ名としてディレクトリを作成する。
+			ファイルが存在する場合は無効。
 
 buffer						*unite-action-buffer*
 このkindは|unite-action-file|のアクションを継承している。
