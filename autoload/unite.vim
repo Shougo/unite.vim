@@ -245,7 +245,12 @@ endfunction"}}}
 " function! unite#get_action_table(source_name, kind_name, self_func, [is_parent_action])
 function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
   let l:kind = unite#get_kinds(a:kind_name)
-  let l:source = s:get_loaded_sources(a:source_name)
+  let l:source = unite#get_sources(a:source_name)
+  if empty(l:source)
+    call unite#print_error('source "' . a:source_name . '" is not found.')
+    return {}
+  endif
+
   let l:is_parents_action = a:0 > 0 ? a:1 : 0
 
   let l:action_table = {}
@@ -354,7 +359,7 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
   return filter(l:action_table, 'v:key !=# "nop"')
 endfunction"}}}
 function! unite#get_default_action(source_name, kind_name)"{{{
-  let l:source = s:get_loaded_sources(a:source_name)
+  let l:source = unite#get_sources(a:source_name)
 
   let l:source_kind = 'source/'.a:source_name.'/'.a:kind_name
   let l:source_kind_wild = 'source/'.a:source_name.'/*'
