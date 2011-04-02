@@ -144,11 +144,12 @@ endfunction"}}}
 function! unite#mappings#do_action(action_name, ...)"{{{
   let l:candidates = a:0 > 0 ? a:1 : unite#get_marked_candidates()
 
+  let l:unite = unite#get_current_unite()
   if empty(l:candidates)
-    let l:num = (line('.') <= unite#get_current_unite().prompt_linenr) ? 0 :
-          \ (line('.') - (unite#get_current_unite().prompt_linenr + 1))
+    let l:num = (line('.') <= l:unite.prompt_linenr) ? 0 :
+          \ (line('.') - (l:unite.prompt_linenr + 1))
     if type(l:num) == type(0)
-      if line('$') - (unite#get_current_unite().prompt_linenr + 1) < l:num
+      if line('$') - (l:unite.prompt_linenr + 1) < l:num
         " Ignore.
         return
       endif
@@ -161,12 +162,16 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
   let l:action_tables = s:get_action_table(a:action_name, l:candidates)
 
+  let l:context = l:unite.context
+
   " Execute action.
   let l:is_redraw = 0
+  let l:is_quit = 0
   for l:table in l:action_tables
     " Check quit flag.
     if l:table.action.is_quit
       call unite#quit_session()
+      let l:is_quit = 1
     endif
 
     call l:table.action.func(l:table.candidates)
@@ -180,6 +185,13 @@ function! unite#mappings#do_action(action_name, ...)"{{{
       let l:is_redraw = 1
     endif
   endfor
+
+  if l:context.temporary && !l:is_quit
+    " Resume unite buffer.
+    call unite#quit_session()
+    call unite#resume(l:context.old_buffer_name)
+    call setpos('.', l:context.old_pos)
+  endif
 
   if l:is_redraw
     call unite#force_redraw()
@@ -253,6 +265,13 @@ endfunction"}}}
 " key-mappings functions.
 function! s:exit()"{{{
   call unite#force_quit_session()
+
+  let l:context = unite#get_context()
+  if l:context.temporary
+    " Resume unite buffer.
+    call unite#resume(l:context.old_buffer_name)
+    call setpos('.', l:context.old_pos)
+  endif
 endfunction"}}}
 function! s:restart()"{{{
   let l:unite = unite#get_current_unite()
@@ -305,26 +324,31 @@ function! s:toggle_mark_candidates(start, end)"{{{
   endwhile
 endfunction"}}}
 function! s:choose_action()"{{{
-  if line('$') < (unite#get_current_unite().prompt_linenr+1)
+  let l:unite = unite#get_current_unite()
+  if line('$') < (l:unite.prompt_linenr+1)
+        \ || l:unite.context.temporary
     " Ignore.
     return
   endif
 
   let l:candidates = unite#get_marked_candidates()
   if empty(l:candidates)
-    let l:num = line('.') <= unite#get_current_unite().prompt_linenr ? 0 : line('.') - (unite#get_current_unite().prompt_linenr+1)
+    let l:num = line('.') <= l:unite.prompt_linenr ?
+          \ 0 : line('.') - (l:unite.prompt_linenr+1)
 
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
 
   call unite#define_source(s:source)
 
-  let l:context = unite#get_context()
-  let l:context.buffer_name = 'action'
+  let l:context = deepcopy(l:unite.context)
   let l:context.old_pos = getpos('.')
+  let l:context.old_buffer_name = l:unite.buffer_name
+
+  let l:context.buffer_name = 'action'
   let l:context.temporary = 1
 
-  call unite#start([['action'] + l:candidates], unite#get_context())
+  call unite#start([['action'] + l:candidates], l:context)
 endfunction"}}}
 function! s:choose_action_old()"{{{
   if line('$') < (unite#get_current_unite().prompt_linenr+1)

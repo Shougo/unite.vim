@@ -726,7 +726,6 @@ function! unite#resume(buffer_name)"{{{
           \ 'getbufvar(v:val, "unite")')
       let l:buffer_dict[l:unite.buffer_name] = l:unite.bufnr
     endfor
-    unlet l:unite
 
     if !has_key(l:buffer_dict, a:buffer_name)
       call unite#util#print_error('Invalid buffer name : ' . a:buffer_name)
@@ -1146,7 +1145,9 @@ function! s:initialize_unite_buffer()"{{{
   let b:unite = s:current_unite
   let l:unite = unite#get_current_unite()
 
-  let s:last_unite_bufnr = bufnr('%')
+  if !l:unite.context.temporary
+    let s:last_unite_bufnr = bufnr('%')
+  endif
   let l:unite.bufnr = bufnr('%')
 
   if !l:is_bufexists
