@@ -188,7 +188,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
   if l:context.temporary && !l:is_quit
     " Resume unite buffer.
-    call unite#quit_session()
+    call unite#force_quit_session()
     call unite#resume(l:context.old_buffer_name)
     call setpos('.', l:context.old_pos)
   endif
@@ -348,6 +348,7 @@ function! s:choose_action()"{{{
   let l:context.buffer_name = 'action'
   let l:context.temporary = 1
 
+  call unite#force_quit_session()
   call unite#start([['action'] + l:candidates], l:context)
 endfunction"}}}
 function! s:insert_enter()"{{{

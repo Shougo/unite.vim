@@ -1264,6 +1264,7 @@ CHANGELOG					*unite-changelog*
 2011-04-02
 - Fixed :UniteResume bug.
 - Improved unite action.
+- Fixed choose action.
 
 2011-04-01
 - Fixed get action table bug.
