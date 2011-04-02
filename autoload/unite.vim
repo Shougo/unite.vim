@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Apr 2011.
+" Last Modified: 02 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -405,7 +405,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   return filter(sort(keys(l:sources))+s:unite_options, 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
 function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
-  let l:buffer_list = map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite"'), 'getbufvar(v:val, "unite").buffer_name')
+  let l:buffer_list = map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite" && !getbufvar(v:val, "unite").context.temporary'), 'getbufvar(v:val, "unite").buffer_name')
 
   return filter(l:buffer_list, printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
@@ -652,6 +652,9 @@ function! unite#start(sources, ...)"{{{
   if !has_key(l:context, 'direction')
     let l:context.direction = g:unite_split_rule
   endif
+  if !has_key(l:context, 'temporary')
+    let l:context.temporary = 0
+  endif
   let l:context.is_redraw = 0
 
   try
@@ -718,9 +721,12 @@ function! unite#resume(buffer_name)"{{{
     let l:bufnr = s:last_unite_bufnr
   else
     let l:buffer_dict = {}
-    for l:unite in map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite"'), 'getbufvar(v:val, "unite")')
+    for l:unite in map(filter(range(1, bufnr('$')),
+          \ 'getbufvar(v:val, "&filetype") ==# "unite" && !getbufvar(v:val, "unite").context.temporary'),
+          \ 'getbufvar(v:val, "unite")')
       let l:buffer_dict[l:unite.buffer_name] = l:unite.bufnr
     endfor
+    unlet l:unite
 
     if !has_key(l:buffer_dict, a:buffer_name)
       call unite#util#print_error('Invalid buffer name : ' . a:buffer_name)
@@ -742,7 +748,7 @@ function! unite#resume(buffer_name)"{{{
   let l:unite.hlsearch_save = &hlsearch
   let l:unite.search_pattern_save = @/
 
-  let s:current_unite = b:unite
+  let s:current_unite = l:unite
 
   setlocal modifiable
 
@@ -1119,7 +1125,6 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.prompt = l:context.prompt
   let l:unite.input = l:context.input
   let l:unite.last_input = l:context.input
-  let l:unite.bufnr = bufnr('%')
   let l:unite.hlsearch_save = &hlsearch
   let l:unite.search_pattern_save = @/
   let l:unite.prompt_linenr = 2
@@ -1142,6 +1147,7 @@ function! s:initialize_unite_buffer()"{{{
   let l:unite = unite#get_current_unite()
 
   let s:last_unite_bufnr = bufnr('%')
+  let l:unite.bufnr = bufnr('%')
 
   if !l:is_bufexists
     " Basic settings.

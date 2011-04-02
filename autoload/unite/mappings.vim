@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Apr 2011.
+" Last Modified: 02 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -317,7 +317,14 @@ function! s:choose_action()"{{{
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
 
-  call unite#start([['action'] + l:candidates])
+  call unite#define_source(s:source)
+
+  let l:context = unite#get_context()
+  let l:context.buffer_name = 'action'
+  let l:context.old_pos = getpos('.')
+  let l:context.temporary = 1
+
+  call unite#start([['action'] + l:candidates], unite#get_context())
 endfunction"}}}
 function! s:choose_action_old()"{{{
   if line('$') < (unite#get_current_unite().prompt_linenr+1)
@@ -574,10 +581,6 @@ let s:source.action_table['*'] = s:action_table
 
 unlet s:action_table
 "}}}
-
-call unite#define_source(s:source)
-
-unlet s:source
 "}}}
 
 " vim: foldmethod=marker
