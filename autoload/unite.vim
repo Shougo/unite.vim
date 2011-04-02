@@ -1261,10 +1261,12 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
     endif
   endif
 
-  if a:context.vertical
-    execute 'vertical resize' a:context.winwidth
-  else
-    execute 'resize' a:context.winheight
+  if winnr('$') != 1
+    if a:context.vertical
+      execute 'vertical resize' a:context.winwidth
+    else
+      execute 'resize' a:context.winheight
+    endif
   endif
 endfunction"}}}
 
