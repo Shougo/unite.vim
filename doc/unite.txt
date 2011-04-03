@@ -1261,6 +1261,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-03
+- Improved unite action.
+
 2011-04-02
 - Fixed :UniteResume bug.
 - Improved unite action.

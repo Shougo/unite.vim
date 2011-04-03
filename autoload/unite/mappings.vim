@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Apr 2011.
+" Last Modified: 03 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -488,6 +488,9 @@ let s:source = {
       \ 'syntax' : 'uniteSource__Action',
       \}
 
+function! s:source.hooks.on_close(args, context)"{{{
+  call unite#undef_source('action')
+endfunction"}}}
 function! s:source.hooks.on_syntax(args, context)"{{{
   syntax match uniteSource__ActionDescriptionLine / -- .*$/ contained containedin=uniteSource__Action
   syntax match uniteSource__ActionDescription /.*$/ contained containedin=uniteSource__ActionDescriptionLine
