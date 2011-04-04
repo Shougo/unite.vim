@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Apr 2011.
+" Last Modified: 04 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -436,7 +436,9 @@ function! s:insert_selected_candidate()"{{{
   call unite#mappings#narrowing(l:candidate.word)
 endfunction"}}}
 function! s:quick_match()"{{{
-  if line('$') < (unite#get_current_unite().prompt_linenr+1)
+  let l:unite = unite#get_current_unite()
+
+  if line('$') < (l:unite.prompt_linenr+1)
     call unite#util#print_error('Candidate is nothing.')
     return
   elseif !empty(unite#get_marked_candidates())
@@ -461,9 +463,9 @@ function! s:quick_match()"{{{
   call unite#force_redraw()
 
   if has_key(g:unite_quick_match_table, l:char)
-        \ && g:unite_quick_match_table[l:char] < len(unite#get_current_unite().candidates)
-    call unite#mappings#do_action(unite#get_current_unite().context.default_action,
-          \ g:unite_quick_match_table[l:char])
+        \ && g:unite_quick_match_table[l:char] < len(l:unite.candidates)
+    call unite#mappings#do_action(l:unite.context.default_action,
+          \ [ l:unite.candidates[g:unite_quick_match_table[l:char]] ])
   else
     call unite#util#print_error('Canceled.')
   endif

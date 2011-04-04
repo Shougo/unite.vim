@@ -752,8 +752,10 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		which buffer_name is files, it adds a wildcard in order to
 		match ~ as $HOME and to match partially /.
 >
-		call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
-		call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
+		call unite#set_substitute_pattern('files', '^\~',
+		\ substitute(unite#util#substitute_path_separator($HOME), ' ', '\\\\ ', 'g'), -100)
+		call unite#set_substitute_pattern('files', '[^~.*]\ze/', '\0*', 100)
+		call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
 <
 unite#get_substitute_pattern({buffer-name})
 						*unite#get_substitute_pattern()*
@@ -1260,6 +1262,10 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-04-04
+- Fixed quick match error.
+- Improved default substitute pattern.
 
 2011-04-03
 - Improved unite action.

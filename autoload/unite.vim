@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Apr 2011.
+" Last Modified: 04 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -196,8 +196,10 @@ let s:custom.filters = {}
 let s:custom.source = {}
 
 let s:buffer_name_options = {}
-call unite#set_substitute_pattern('files', '^\~', substitute(substitute($HOME, '\\', '/', 'g'), ' ', '\\\\ ', 'g'), -100)
-call unite#set_substitute_pattern('files', '[^~.*]\zs/', '*/*', 100)
+call unite#set_substitute_pattern('files', '^\~',
+      \ substitute(unite#util#substitute_path_separator($HOME), ' ', '\\\\ ', 'g'), -100)
+call unite#set_substitute_pattern('files', '[^~.*]\ze/', '\0*', 100)
+call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
 
 let s:unite_options = [
       \ '-buffer-name=', '-input=', '-prompt=',
@@ -1038,7 +1040,8 @@ function! s:recache_candidates(input, is_force)"{{{
   let &ignorecase = l:ignorecase_save
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
-  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), unite#get_current_unite().max_source_name, 5)
+  let l:unite = unite#get_current_unite()
+  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0), l:unite.max_source_name, 5)
   if l:unite.max_source_name == 0
     let l:max_width -= 1
   endif
