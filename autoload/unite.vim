@@ -791,6 +791,7 @@ function! s:quit_session(is_force)  "{{{
     let &redrawtime = l:unite.redrawtime_save
   endif
   let &hlsearch = l:unite.hlsearch_save
+  let &sidescrolloff = l:unite.sidescrolloff_save
 
   match
 
@@ -1127,6 +1128,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.input = l:context.input
   let l:unite.last_input = l:context.input
   let l:unite.hlsearch_save = &hlsearch
+  let l:unite.sidescrolloff_save = &sidescrolloff
   let l:unite.search_pattern_save = @/
   let l:unite.prompt_linenr = 2
   let l:unite.max_source_name = len(a:sources) > 1 ?
@@ -1167,6 +1169,7 @@ function! s:initialize_unite_buffer()"{{{
     setlocal foldcolumn=0
     setlocal iskeyword+=-,+,\\,!,~
     set hlsearch
+    set sidescrolloff=0
     match
     if has('conceal')
       setlocal conceallevel=3
