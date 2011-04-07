@@ -997,7 +997,7 @@ function! s:recache_candidates(input, is_force)"{{{
       if !l:source.unite__context.is_async
         " Update async state.
         let l:unite.is_async =
-              \ len(filter(copy(l:sources), 'v:val.unite__context.is_async')) > 0
+              \ len(filter(copy(l:unite.sources), 'v:val.unite__context.is_async')) > 0
       endif
     endif
 
