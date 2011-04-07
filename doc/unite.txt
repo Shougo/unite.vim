@@ -1263,6 +1263,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-07
+- Fixed hlsearch bug.
+
 2011-04-04
 - Fixed quick match error.
 - Improved default substitute pattern.
