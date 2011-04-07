@@ -1466,11 +1466,21 @@ NOTATION					*unite-notation*
 				uniteバッファが挿入モードから呼び出されたかどう
 				か。
 
+			immediately		(数値)
+				uniteバッファが|unite-options-immediately|によ
+				って呼び出されたかどうか。
+
 			is_redraw		(数値)
 				|<Plug>(unite_redraw)|で呼び出されたかどうか。
 				ユーザーが明示的にキャッシュを破棄しているので、
 				自前でキャッシュを管理するsourceにとっては重
 				要な情報となる。
+
+			is_async		(数値)
+				sourceが非同期に候補を収集するかどうか。
+				|unite-source-attribute-async_gather_candidates|
+				が存在する場合、1となる。これをsource内で明示的
+				に0にセットすると今後非同期では呼ばれなくなる。
 
 			source			(辞書)
 				現在候補を収集しているsourceの情報。

@@ -1266,6 +1266,7 @@ CHANGELOG					*unite-changelog*
 2011-04-07
 - Fixed hlsearch bug.
 - Fixed sidescrolloff problem.
+- Added is_async context flag.
 
 2011-04-04
 - Fixed quick match error.

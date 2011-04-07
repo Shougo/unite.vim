@@ -866,6 +866,8 @@ function! s:initialize_loaded_sources(sources, context)"{{{
     let l:source.unite__is_invalidate = 1
 
     let l:source.unite__context = deepcopy(a:context)
+    let l:source.unite__context.is_async =
+          \ has_key(l:source, 'async_gather_candidates')
     let l:source.unite__candidates = []
     let l:source.unite__cached_candidates = []
     let l:source.unite__number = l:number
@@ -989,8 +991,14 @@ function! s:recache_candidates(input, is_force)"{{{
       let l:source.unite__is_invalidate = 0
     endif
 
-    if has_key(l:source, 'async_gather_candidates')
+    if l:source.unite__context.is_async
       let l:source.unite__cached_candidates += l:source.async_gather_candidates(l:source.args, l:source.unite__context)
+
+      if !l:source.unite__context.is_async
+        " Update async state.
+        let l:unite.is_async =
+              \ len(filter(copy(l:sources), 'v:val.unite__context.is_async')) > 0
+      endif
     endif
 
     let l:source_candidates = copy(l:source.unite__cached_candidates)
@@ -1134,7 +1142,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.max_source_name = len(a:sources) > 1 ?
         \ max(map(copy(a:sources), 'len(v:val[0])')) + 2 : 0
   let l:unite.is_async =
-        \ len(filter(copy(l:sources), 'has_key(v:val, "async_gather_candidates")')) > 0
+        \ len(filter(copy(l:sources), 'v:val.unite__context.is_async')) > 0
 
   " Preview windows check.
   let l:unite.has_preview_window =
