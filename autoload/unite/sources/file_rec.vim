@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Mar 2011.
+" Last Modified: 09 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -61,15 +61,12 @@ function! s:source.gather_candidates(args, context)"{{{
 endfunction"}}}
 
 function! s:source.async_gather_candidates(args, context)"{{{
-  if empty(a:context.source__continuation.files)
-    return []
-  endif
-
   let [a:context.source__continuation.files, l:candidates] =
         \ s:get_files(a:context.source__continuation.files)
 
   if empty(a:context.source__continuation.files)
     call unite#print_message('[file_rec] Directory traverse was completed.')
+    let a:context.is_async = 0
   endif
 
   return map(l:candidates, '{

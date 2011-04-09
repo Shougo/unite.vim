@@ -1263,6 +1263,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-09
+- Improved file_rec source.
+
 2011-04-07
 - Fixed hlsearch bug.
 - Fixed sidescrolloff problem.
