@@ -39,6 +39,8 @@ let s:source = {
       \ 'max_candidates' : 50,
       \ }
 
+let s:continuation = {}
+
 function! s:source.gather_candidates(args, context)"{{{
   if !empty(a:args)
     let l:directory = a:args[0]
@@ -52,30 +54,48 @@ function! s:source.gather_candidates(args, context)"{{{
 
   call unite#print_message('[file_rec] directory: ' . l:directory)
 
-  " Initialize continuation.
-  let a:context.source__continuation = {
-        \ 'files' : [l:directory],
-        \ }
+  let a:context.source__directory = l:directory
+  if a:context.is_redraw || !has_key(s:continuation, l:directory)
+    let a:context.is_async = 1
 
-  return []
-endfunction"}}}
+    " Initialize continuation.
+    let s:continuation[l:directory] = {
+          \ 'files' : [l:directory],
+          \ 'cached' : [],
+          \ }
+  endif
 
-function! s:source.async_gather_candidates(args, context)"{{{
-  let [a:context.source__continuation.files, l:candidates] =
-        \ s:get_files(a:context.source__continuation.files)
-
-  if empty(a:context.source__continuation.files)
+  let l:continuation = s:continuation[a:context.source__directory]
+  if empty(l:continuation.files)
+    " Disable async.
     call unite#print_message('[file_rec] Directory traverse was completed.')
     let a:context.is_async = 0
   endif
 
-  return map(l:candidates, '{
+  return l:continuation.cached
+endfunction"}}}
+
+function! s:source.async_gather_candidates(args, context)"{{{
+  let l:continuation = s:continuation[a:context.source__directory]
+  let [l:continuation.files, l:candidates] = s:get_files(l:continuation.files)
+
+  if empty(l:continuation.files)
+    " Disable async.
+    call unite#print_message('[file_rec] Directory traverse was completed.')
+    let a:context.is_async = 0
+  endif
+
+  call map(l:candidates, '{
         \ "word" : unite#util#substitute_path_separator(fnamemodify(v:val, ":p")),
         \ "abbr" : unite#util#substitute_path_separator(fnamemodify(v:val, ":.")),
         \ "kind" : "file",
         \ "action__path" : unite#util#substitute_path_separator(fnamemodify(v:val, ":p")),
         \ "action__directory" : unite#util#path2directory(v:val),
         \ }')
+
+  let l:continuation.cached += l:candidates
+
+  return l:candidates
 endfunction"}}}
 
 " Add custom action table."{{{

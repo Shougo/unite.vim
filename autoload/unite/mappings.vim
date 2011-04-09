@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Apr 2011.
+" Last Modified: 09 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -132,7 +132,7 @@ function! unite#mappings#narrowing(word)"{{{
   let l:unite = unite#get_current_unite()
   let l:unite.input = escape(a:word, ' *')
   call setline(unite#get_current_unite().prompt_linenr, unite#get_current_unite().prompt . unite#get_current_unite().input)
-  call unite#force_redraw()
+  call unite#redraw()
   if unite#get_current_unite().is_insert
     execute unite#get_current_unite().prompt_linenr
     startinsert!
@@ -398,6 +398,8 @@ function! s:append_end()"{{{
   startinsert!
 endfunction"}}}
 function! s:redraw()"{{{
+  call unite#clear_message()
+
   let l:unite = unite#get_current_unite()
   call unite#force_redraw()
 endfunction"}}}

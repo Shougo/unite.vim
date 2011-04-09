@@ -870,7 +870,9 @@ directory_mru	Nominates directories you used recently as candidates,
 						*unite-source-file_rec*
 file_rec	Nominates all directory or file names of input narrowing text
 		under the current directly as candidates.  This may get Vim
-		frozen when there are too many candidates.
+		frozen when there are too many candidates. The candidates is
+		cached by file_rec source. If you clear cache, use
+		|<Plug>(unite_redraw)| keymapping.
 
 		Source arguments:
 		1. the narrowing text.
@@ -1265,6 +1267,8 @@ CHANGELOG					*unite-changelog*
 
 2011-04-09
 - Improved file_rec source.
+- Caching file_rec source.
+- Fixed narrowing action.
 
 2011-04-07
 - Fixed hlsearch bug.
