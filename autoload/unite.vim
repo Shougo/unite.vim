@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Apr 2011.
+" Last Modified: 12 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1287,6 +1287,10 @@ endfunction"}}}
 function! s:redraw(is_force) "{{{
   if &filetype !=# 'unite'
     return
+  endif
+
+  if a:is_force
+    call unite#clear_message()
   endif
 
   let l:unite = unite#get_current_unite()

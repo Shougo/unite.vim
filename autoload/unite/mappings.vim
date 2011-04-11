@@ -463,7 +463,7 @@ function! s:quick_match()"{{{
   redraw
   echo ''
 
-  call unite#redraw()
+  call unite#redraw_candidates()
 
   if has_key(g:unite_quick_match_table, l:char)
         \ && g:unite_quick_match_table[l:char] < len(l:unite.candidates)
