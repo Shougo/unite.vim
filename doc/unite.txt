@@ -1265,6 +1265,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-12
+- Fixed quick match bug.
+- Fixed choose action.
+
 2011-04-09
 - Improved file_rec source.
 - Caching file_rec source.
