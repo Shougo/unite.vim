@@ -1259,6 +1259,7 @@ CHANGELOG					*unite-changelog*
 - Fixed choose action.
 - Improved redraw.
 - Deleted g:unite_enable_ignore_case and g:unite_enable_smart_case options.
+- Improved source file dummy candidates.
 
 2011-04-09
 - Improved file_rec source.
