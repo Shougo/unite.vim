@@ -285,17 +285,6 @@ g:unite_enable_start_insert			*g:unite_enable_start_insert*
 		
 		初期値は0である。
 
-g:unite_enable_ignore_case			*g:unite_enable_ignore_case*
-		大文字・小文字を区別するかを制御する。1ならば区別しない。
-		
-		初期値は'ignorecase'オプションと同じである。
-
-g:unite_enable_smart_case			*g:unite_enable_smart_case*
-		入力に大文字が含まれている場合は、大文字・小文字を区別する。1
-		ならば有効になる。
-		
-		初期値は'infercase'オプションと同じである。
-
 g:unite_split_rule				*g:unite_split_rule*
 		uniteのウィンドウを生成する際、画面分割の位置ルールを指定する。
 		
