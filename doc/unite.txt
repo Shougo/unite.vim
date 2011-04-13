@@ -287,6 +287,17 @@ g:unite_enable_start_insert			*g:unite_enable_start_insert*
 
 		Default value is 0.
 
+g:unite_enable_ignore_case			*g:unite_enable_ignore_case*
+		Ignores case when the value is 1.
+
+		Default value is same to 'ignorecase' option.
+
+g:unite_enable_smart_case			*g:unite_enable_smart_case*
+		Distinguish capitals from smalls when the narrowing text has a
+		capital letter if this variable is 1.
+		
+		Default value is same to 'infercase'.
+
 g:unite_split_rule				*g:unite_split_rule*
 		Defines split position rule.
 
@@ -1254,11 +1265,13 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-13
+- Reverted g:unite_enable_ignore_case and g:unite_enable_smart_case options.
+
 2011-04-12
 - Fixed quick match bug.
 - Fixed choose action.
 - Improved redraw.
-- Deleted g:unite_enable_ignore_case and g:unite_enable_smart_case options.
 - Improved source file dummy candidates.
 
 2011-04-09

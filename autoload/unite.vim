@@ -955,6 +955,15 @@ function! s:initialize_buffer_name_options(buffer_name)"{{{
 endfunction"}}}
 
 function! s:recache_candidates(input, is_force)"{{{
+  " Save options.
+  let l:ignorecase_save = &ignorecase
+
+  if g:unite_enable_smart_case && a:input =~ '\u'
+    let &ignorecase = 0
+  else
+    let &ignorecase = g:unite_enable_ignore_case
+  endif
+
   let l:input = s:get_substitute_input(a:input)
   let l:input_len = unite#util#strchars(l:input)
   let l:unite = unite#get_current_unite()
@@ -1035,6 +1044,8 @@ function! s:recache_candidates(input, is_force)"{{{
 
     let l:source.unite__candidates = l:source_candidates
   endfor
+
+  let &ignorecase = l:ignorecase_save
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
   let l:unite = unite#get_current_unite()
