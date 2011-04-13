@@ -370,7 +370,7 @@ g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
 		candidates in which source is file.  This matches on the full
 		path of each files.  If the variable isn't empty string, unite
 		filters with the regex pattern on the results.  It depends on
-		'ignorecase' to distinguish cases or not.
+		|g:unite_enable_ignore_case| to distinguish cases or not.
 
 		Refer autoload/unite/sources/file.vim about the default value.
 
@@ -404,7 +404,7 @@ g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 		|unite-source-file_mru|.  This applies on the full path of
 		each files.  Unless this variable value is an empty string,
 		Unite filters out the result with the regexp.  Regardless of
-		'ignorecase' value, it's case sensitive.
+		|g:unite_enable_ignore_case| value, it's case sensitive.
 
 		Refer autoload/unite/sources/file_mru.vim about the default
 		value.
@@ -427,7 +427,7 @@ g:unite_source_file_rec_ignore_pattern		*g:unite_source_file_rec_ignore_pattern*
 		|unite-source-file_rec|.  This applies on the full path of
 		each files.  Unless this variable value is an empty string,
 		Unite filters out the result with the regexp.  Regardless of
-		'ignorecase' value, it's case sensitive.
+		|g:unite_enable_ignore_case| value, it's case sensitive.
 
 		Refer autoload/unite/sources/file_rec.vim about the default
 		value.
