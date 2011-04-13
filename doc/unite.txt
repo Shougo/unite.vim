@@ -287,17 +287,6 @@ g:unite_enable_start_insert			*g:unite_enable_start_insert*
 
 		Default value is 0.
 
-g:unite_enable_ignore_case			*g:unite_enable_ignore_case*
-		Ignores case when the value is 1.
-
-		Default value is same to 'ignorecase' option.
-
-g:unite_enable_smart_case			*g:unite_enable_smart_case*
-		Distinguish capitals from smalls when the narrowing text has a
-		capital letter if this variable is 1.
-		
-		Default value is same to 'infercase'.
-
 g:unite_split_rule				*g:unite_split_rule*
 		Defines split position rule.
 
@@ -762,6 +751,20 @@ unite#get_substitute_pattern({buffer-name})
 		Gets the substitute pattern for narrowing text of a Unite buffer
 		name {buffer-name}.  This causes an error if the substitute
 		pattern of {buffer-name}.  This is for debugging.
+
+unite#unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
+						*unite#set_buffer_name_option()*
+		Set {buffer-name} specialized {option-name} to {value}.
+		
+		This options is available:
+		
+		substitute_patterns		(Dictionary)
+		
+		filters				(List)
+		
+		ignorecase			(Number)
+		
+		smartcase			(Number)
 
 unite#custom_default_action({kind}, {default-action})
 						*unite#custom_default_action()*
@@ -1266,7 +1269,7 @@ BUGS						*unite-bugs*
 CHANGELOG					*unite-changelog*
 
 2011-04-13
-- Reverted g:unite_enable_ignore_case and g:unite_enable_smart_case options.
+- Added ignorecase and smartcase buffer_name options.
 
 2011-04-12
 - Fixed quick match bug.

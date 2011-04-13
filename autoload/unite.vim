@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Apr 2011.
+" Last Modified: 13 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -952,22 +952,28 @@ function! s:initialize_buffer_name_options(buffer_name)"{{{
   if !has_key(l:setting, 'filters')
     let l:setting.filters = []
   endif
+  if !has_key(l:setting, 'ignorecase')
+    let l:setting.ignorecase = &ignorecase
+  endif
+  if !has_key(l:setting, 'smartcase')
+    let l:setting.smartcase = &smartcase
+  endif
 endfunction"}}}
 
 function! s:recache_candidates(input, is_force)"{{{
+  let l:unite = unite#get_current_unite()
+
   " Save options.
   let l:ignorecase_save = &ignorecase
 
-  if g:unite_enable_smart_case && a:input =~ '\u'
+  if unite#get_buffer_name_option(l:unite.buffer_name, 'smartcase') && a:input =~ '\u'
     let &ignorecase = 0
   else
-    let &ignorecase = g:unite_enable_ignore_case
+    let &ignorecase = unite#get_buffer_name_option(l:unite.buffer_name, 'ignorecase')
   endif
 
   let l:input = s:get_substitute_input(a:input)
   let l:input_len = unite#util#strchars(l:input)
-  let l:unite = unite#get_current_unite()
-
 
   let l:unite.context.input = l:input
   let l:unite.context.is_force = a:is_force

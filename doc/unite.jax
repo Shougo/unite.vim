@@ -285,17 +285,6 @@ g:unite_enable_start_insert			*g:unite_enable_start_insert*
 		
 		初期値は0である。
 
-g:unite_enable_ignore_case			*g:unite_enable_ignore_case*
-		大文字・小文字を区別するかを制御する。1ならば区別しない。
-		
-		初期値は'ignorecase'オプションと同じである。
-
-g:unite_enable_smart_case			*g:unite_enable_smart_case*
-		入力に大文字が含まれている場合は、大文字・小文字を区別する。1
-		ならば有効になる。
-		
-		初期値は'infercase'オプションと同じである。
-
 g:unite_split_rule				*g:unite_split_rule*
 		uniteのウィンドウを生成する際、画面分割の位置ルールを指定する。
 		
@@ -770,6 +759,14 @@ unite#unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
 		filter名のリストを指定する。ここで指定したfilterは、source毎
 		に呼び出される普通のfilterとは異なり、全候補を結合した後に呼
 		び出される。
+		
+		ignorecase			(数値)
+		uniteバッファで一時的にセットされる'ignorecase'オプションの値を
+		決定する。省略すると、'ignorecase'の値と同じになる。
+		
+		smartcase			(数値)
+		大文字が入力されているときに、'ignorecase'オプションの値を無視
+		するかどうか決定する。省略すると、'smartcase'の値と同じになる。
 
 unite#custom_default_action({kind}, {default-action})
 						*unite#custom_default_action()*
