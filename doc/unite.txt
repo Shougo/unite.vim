@@ -752,7 +752,7 @@ unite#get_substitute_pattern({buffer-name})
 		name {buffer-name}.  This causes an error if the substitute
 		pattern of {buffer-name}.  This is for debugging.
 
-unite#unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
+unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
 						*unite#set_buffer_name_option()*
 		Set {buffer-name} specialized {option-name} to {value}.
 		
@@ -1270,6 +1270,7 @@ CHANGELOG					*unite-changelog*
 
 2011-04-13
 - Added ignorecase and smartcase buffer_name options.
+- Fixed help.
 
 2011-04-12
 - Fixed quick match bug.

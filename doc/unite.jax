@@ -357,8 +357,7 @@ g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
 		|unite-source-file|, |unite-source-file_rec|の候補に表示しな
 		いファイルの正規表現パターンを指定する。マッチングはファイル
 		のフルパスに対して行われる。この変数が空文字列以外であれば、
-		指定した正規表現で結果をフィルタリングする。正規表現の大文字・
-		小文字の区別は|g:unite_enable_ignore_case|の設定次第である。
+		指定した正規表現で結果をフィルタリングする。
 
 		初期値は autoload/unite/sources/file.vim を参照。
 
@@ -390,8 +389,8 @@ g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 		|unite-source-file_mru|の候補に表示しないファイルの正規表現
 		パターンを指定する。マッチングはファイルのフルパスに対して行
 		われる。この変数が空文字列以外であれば、指定した正規表現で結
-		果をフィルタリングする。正規表現の大文字・小文字は
-		|g:unite_enable_ignore_case|の設定に関わらず、明確に区別される。
+		果をフィルタリングする。正規表現の大文字・小文字は明確に区別さ
+		れる。
 		
 		初期値は autoload/unite/sources/file_mru.vim を参照。
 
@@ -412,8 +411,8 @@ g:unite_source_file_rec_ignore_pattern		*g:unite_source_file_rec_ignore_pattern*
 		|unite-source-file_rec|の候補に表示しないファイルの正規表現
 		パターンを指定する。マッチングはファイルのフルパスに対して行
 		われる。この変数が空文字列以外であれば、指定した正規表現で結
-		果をフィルタリングする。正規表現の大文字・小文字は
-		|g:unite_enable_ignore_case|の設定に関わらず、明確に区別される。
+		果をフィルタリングする。正規表現の大文字・小文字は明確に区別さ
+		れる。
 		
 		初期値は autoload/unite/sources/file_rec.vim を参照。
 
@@ -743,7 +742,7 @@ unite#get_substitute_pattern({buffer-name})
 		ーンを取得する。{buffer-name}に置換パターンが定義されていない
 		と、エラーになる。デバッグ用である。
 
-unite#unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
+unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
 						*unite#set_buffer_name_option()*
 		uniteのバッファ名{buffer-name}における{option-name}のオプショ
 		ンを{value}に設定する。
