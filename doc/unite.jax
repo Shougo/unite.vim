@@ -927,6 +927,8 @@ tab		開いているタブを候補とする。t:cwdをカレントディレク�
 
 						*unite-source-register*
 register	レジスタに保存されている文字列を候補とする。
+		|yanktmp|がインストールされている場合、それも仮想レジスタとして
+		参照できる。
 
 						*unite-source-bookmark*
 bookmark	ブックマークされたファイルやディレクトリを候補とする。
