@@ -1268,6 +1268,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-15
+- Supported yanktmp in register source.
+
 2011-04-13
 - Added ignorecase and smartcase buffer_name options.
 - Fixed help.
