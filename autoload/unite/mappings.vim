@@ -501,6 +501,7 @@ function! s:loop_cursor_down()"{{{
     let l:num = (line('.') <= l:prompt_linenr) ? 0 :
           \ (line('.') - (l:prompt_linenr + 1))
     let l:count = 1
+
     while 1
       let l:candidate = get(unite#get_unite_candidates(), l:num + l:count, {})
       if !empty(l:candidate) && l:candidate.is_dummy
@@ -511,11 +512,11 @@ function! s:loop_cursor_down()"{{{
       break
     endwhile
 
-    if l:is_insert
-      if line('.') == l:prompt_linenr
-        let l:count += 1
-      endif
+    if line('.') == l:prompt_linenr
+      let l:count += 1
+    endif
 
+    if l:is_insert
       return "\<Home>" . repeat("\<Down>", l:count)
     else
       return repeat('j', l:count)
