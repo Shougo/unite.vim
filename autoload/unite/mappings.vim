@@ -513,10 +513,10 @@ function! s:loop_cursor_down()"{{{
 
     if l:is_insert
       if line('.') == l:prompt_linenr
-        return "\<Home>\<Down>\<Down>"
-      else
-        return "\<Home>" . repeat("\<Down>", l:count)
+        let l:count += 1
       endif
+
+      return "\<Home>" . repeat("\<Down>", l:count)
     else
       return repeat('j', l:count)
     endif
