@@ -1432,7 +1432,8 @@ function! s:take_action(action_name, candidate, is_parent_action)"{{{
         \ : a:action_name
 
   if !has_key(l:action_table, a:action_name)
-    throw 'no such action ' . a:action_name
+    " throw 'no such action ' . a:action_name
+    return
   endif
 
   let l:action = l:action_table[a:action_name]

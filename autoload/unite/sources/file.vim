@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Apr 2011.
+" Last Modified: 17 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,11 +57,11 @@ function! s:source.change_candidates(args, context)"{{{
   let l:candidates = split(unite#util#substitute_path_separator(glob(l:input . (l:input =~ '\*$' ? '' : '*'))), '\n')
 
   if a:context.input != ''
-    let l:dummy = substitute(a:context.input, '[*\\]', '', 'g')
-    " if (!filereadable(l:dummy) && !isdirectory(l:dummy) && isdirectory(fnamemodify(l:dummy, ':h')))
-    if !filereadable(l:dummy) && !isdirectory(l:dummy)
-      " Add dummy candidate.
-      call add(l:candidates, l:dummy)
+    let l:newfile = substitute(a:context.input, '[*\\]', '', 'g')
+    " if (!filereadable(l:newfile) && !isdirectory(l:newfile) && isdirectory(fnamemodify(l:newfile, ':h')))
+    if !filereadable(l:newfile) && !isdirectory(l:newfile)
+      " Add newfile candidate.
+      call add(l:candidates, l:newfile)
     endif
   endif
 
@@ -70,12 +70,12 @@ function! s:source.change_candidates(args, context)"{{{
   endif
 
   if l:input !~ '^\%(/\|\a\+:/\)$'
-    let l:dummy = substitute(l:input, '[*\\]\|\.[^/]*$', '', 'g')
+    let l:parent = substitute(l:input, '[*\\]\|\.[^/]*$', '', 'g')
 
-    " if (l:input == '' || isdirectory(l:input)) && isdirectory(l:dummy . '..')
-    if a:context.input =~ '\.$' && isdirectory(l:dummy . '..')
+    " if (l:input == '' || isdirectory(l:input)) && isdirectory(l:parent . '..')
+    if a:context.input =~ '\.$' && isdirectory(l:parent . '..')
       " Add .. directory.
-      call insert(l:candidates, l:dummy . '..')
+      call insert(l:candidates, l:parent . '..')
     endif
   endif
 
@@ -99,7 +99,7 @@ function! s:source.change_candidates(args, context)"{{{
       call add(l:candidates_dir, l:dict)
     else
       if !filereadable(l:file)
-        " Dummy.
+        " New file.
         let l:dict.abbr = '[new file]' . l:file
       endif
 
