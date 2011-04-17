@@ -1516,6 +1516,11 @@ NOTATION					*unite-notation*
 			kind			(文字列)	(任意)
 				候補が所属するkind名。省略すると"common"となる。
 
+			is_dummy		(数値)		(任意)
+				ダミー候補であるかどうか。省略すると0となる。
+				ダミー候補の場合、アクションや移動時に無視さ
+				れる。
+
 			source__{name}		(不定)		(任意)
 				source独自の付加情報。source側で自由に使用でき
 				る。

@@ -1043,6 +1043,9 @@ function! s:recache_candidates(input, is_force)"{{{
       if !has_key(l:candidate, 'source')
         let l:candidate.source = l:source.name
       endif
+      if !has_key(l:candidate, 'is_dummy')
+        let l:candidate.is_dummy = 0
+      endif
 
       " Initialize.
       let l:candidate.unite__is_marked = 0

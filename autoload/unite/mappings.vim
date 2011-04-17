@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Apr 2011.
+" Last Modified: 17 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,8 +39,8 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_rotate_previous_source)  :<C-u>call <SID>rotate_source(0)<CR>
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)  unite#get_current_unite().prompt_linenr.'G0z.'
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  (line('.') == line('$'))? unite#get_current_unite().prompt_linenr.'G0z.' : 'j'
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  (line('.') <= unite#get_current_unite().prompt_linenr)? 'G' : 'k'
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  <SID>loop_cursor_down()
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  <SID>loop_cursor_up()
   nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  :<C-u>call <SID>quick_match()<CR>
   nnoremap <silent><buffer> <Plug>(unite_input_directory)   :<C-u>call <SID>input_directory()<CR>
   nnoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(unite#get_current_unite().context.default_action)
@@ -55,10 +55,8 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(unite#get_current_unite().prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : "\<C-w>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_path)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : <SID>delete_backward_path()
-  inoremap <expr><buffer> <Plug>(unite_select_next_line)  pumvisible() ? "\<C-n>" : line('.') == line('$') ? "\<C-Home>\<End>".repeat("\<Down>", unite#get_current_unite().prompt_linenr-1)
-        \ : line('.') == unite#get_current_unite().prompt_linenr ? "\<Home>\<Down>\<Down>" : "\<Home>\<Down>"
-  inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : line('.') == unite#get_current_unite().prompt_linenr ? "\<C-End>\<Home>"
-        \ : line('.') == (unite#get_current_unite().prompt_linenr+2) ? "\<End>\<Up>\<Up>" : "\<Home>\<Up>"
+  inoremap <expr><buffer> <Plug>(unite_select_next_line)  pumvisible() ? "\<C-n>" : <SID>loop_cursor_down()
+  inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : <SID>loop_cursor_up()
   inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
@@ -158,6 +156,11 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     else
       let l:candidates = [ l:num ]
     endif
+  endif
+
+  call filter(l:candidates, '!v:val.is_dummy')
+  if empty(l:candidates)
+    return
   endif
 
   let l:action_tables = s:get_action_table(a:action_name, l:candidates)
@@ -339,6 +342,11 @@ function! s:choose_action()"{{{
     let l:candidates = [ unite#get_unite_candidates()[l:num] ]
   endif
 
+  call filter(l:candidates, '!v:val.is_dummy')
+  if empty(l:candidates)
+    return
+  endif
+
   call unite#define_source(s:source)
 
   let l:context = deepcopy(l:unite.context)
@@ -478,6 +486,46 @@ function! s:input_directory()"{{{
   let l:path = unite#substitute_path_separator(input('Input narrowing directory: ', unite#get_input(), 'dir'))
   let l:path = l:path.(l:path == '' || l:path =~ '/$' ? '' : '/')
   call unite#mappings#narrowing(l:path)
+endfunction"}}}
+function! s:loop_cursor_down()"{{{
+  let l:is_insert = mode() ==# 'i'
+  let l:prompt_linenr = unite#get_current_unite().prompt_linenr
+
+  if line('.') == line('$')
+    if l:is_insert
+      return "\<C-Home>\<End>".repeat("\<Down>", l:prompt_linenr)."\<Home>"
+    else
+      return unite#get_current_unite().prompt_linenr.'G0z.'
+    endif
+  elseif l:is_insert
+    if line('.') == l:prompt_linenr
+      return "\<Home>\<Down>\<Down>"
+    else
+      return "\<Home>\<Down>"
+    endif
+  else
+    return 'j'
+  endif
+endfunction"}}}
+function! s:loop_cursor_up()"{{{
+  let l:is_insert = mode() ==# 'i'
+  let l:prompt_linenr = unite#get_current_unite().prompt_linenr
+
+  if line('.') <= l:prompt_linenr
+    if l:is_insert
+      return "\<C-End>\<Home>"
+    else
+      return 'G'
+    endif
+  elseif l:is_insert
+    if line('.') == l:prompt_linenr + 2
+      return "\<End>\<Up>\<Up>"
+    else
+      return "\<Home>\<Up>"
+    endif
+  else
+    return 'k'
+  endif
 endfunction"}}}
 
 function! unite#mappings#complete_actions(arglead, cmdline, cursorpos)"{{{

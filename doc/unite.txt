@@ -1272,6 +1272,7 @@ CHANGELOG					*unite-changelog*
 - Improved auto preview.
 - Ignore invalid action.
 - Improved source file.
+- Improved loop cursor down/up.
 
 2011-04-16
 - Fixed auto preview bug.
