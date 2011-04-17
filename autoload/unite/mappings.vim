@@ -495,16 +495,32 @@ function! s:loop_cursor_down()"{{{
     if l:is_insert
       return "\<C-Home>\<End>".repeat("\<Down>", l:prompt_linenr)."\<Home>"
     else
-      return unite#get_current_unite().prompt_linenr.'G0z.'
-    endif
-  elseif l:is_insert
-    if line('.') == l:prompt_linenr
-      return "\<Home>\<Down>\<Down>"
-    else
-      return "\<Home>\<Down>"
+      return l:prompt_linenr.'G0z.'
     endif
   else
-    return 'j'
+    let l:num = (line('.') <= l:prompt_linenr) ? 0 :
+          \ (line('.') - (l:prompt_linenr + 1))
+    let l:count = 1
+    while 1
+      let l:candidate = get(unite#get_unite_candidates(), l:num, {})
+      if !empty(l:candidate) && l:candidate.is_dummy
+        let l:count += 1
+        let l:num += 1
+        continue
+      endif
+
+      break
+    endwhile
+
+    if l:is_insert
+      if line('.') == l:prompt_linenr
+        return "\<Home>\<Down>\<Down>"
+      else
+        return "\<Home>" . repeat("\<Down>", l:count)
+      endif
+    else
+      return repeat('j', l:count)
+    endif
   endif
 endfunction"}}}
 function! s:loop_cursor_up()"{{{
@@ -517,14 +533,38 @@ function! s:loop_cursor_up()"{{{
     else
       return 'G'
     endif
-  elseif l:is_insert
-    if line('.') == l:prompt_linenr + 2
-      return "\<End>\<Up>\<Up>"
-    else
-      return "\<Home>\<Up>"
-    endif
   else
-    return 'k'
+    let l:num = (line('.') <= l:prompt_linenr) ? 0 :
+          \ (line('.') - (l:prompt_linenr + 1))
+    let l:count = 1
+    while 1
+      let l:candidate = get(unite#get_unite_candidates(), l:num, {})
+      if l:num >= 0 && !empty(l:candidate) && l:candidate.is_dummy
+        let l:count += 1
+        let l:num -= 1
+        continue
+      endif
+
+      break
+    endwhile
+
+    if l:num < 0
+      if l:is_insert
+        return "\<C-Home>\<End>".repeat("\<Down>", l:prompt_linenr)."\<Home>"
+      else
+        return l:prompt_linenr.'G0z.'
+      endif
+    endif
+
+    if l:is_insert
+      if line('.') == l:prompt_linenr + 1
+        return "\<Up>\<End>"
+      else
+        return "\<Home>" . repeat("\<Up>", l:count)
+      endif
+    else
+      return repeat('k', l:count)
+    endif
   endif
 endfunction"}}}
 

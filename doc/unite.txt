@@ -1273,6 +1273,7 @@ CHANGELOG					*unite-changelog*
 - Ignore invalid action.
 - Improved source file.
 - Improved loop cursor down/up.
+- Implemented dummy candidates.
 
 2011-04-16
 - Fixed auto preview bug.
