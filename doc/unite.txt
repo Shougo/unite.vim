@@ -1268,6 +1268,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-17
+- Improved auto preview.
+
 2011-04-16
 - Fixed auto preview bug.
 
