@@ -502,10 +502,9 @@ function! s:loop_cursor_down()"{{{
           \ (line('.') - (l:prompt_linenr + 1))
     let l:count = 1
     while 1
-      let l:candidate = get(unite#get_unite_candidates(), l:num, {})
+      let l:candidate = get(unite#get_unite_candidates(), l:num + l:count, {})
       if !empty(l:candidate) && l:candidate.is_dummy
         let l:count += 1
-        let l:num += 1
         continue
       endif
 
@@ -538,10 +537,9 @@ function! s:loop_cursor_up()"{{{
           \ (line('.') - (l:prompt_linenr + 1))
     let l:count = 1
     while 1
-      let l:candidate = get(unite#get_unite_candidates(), l:num, {})
-      if l:num >= 0 && !empty(l:candidate) && l:candidate.is_dummy
+      let l:candidate = get(unite#get_unite_candidates(), l:num - l:count, {})
+      if l:num >= l:count && !empty(l:candidate) && l:candidate.is_dummy
         let l:count += 1
-        let l:num -= 1
         continue
       endif
 
