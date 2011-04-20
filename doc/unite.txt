@@ -1268,6 +1268,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-20
+- Fixed default action bug.
+
 2011-04-17
 - Improved auto preview.
 - Ignore invalid action.
