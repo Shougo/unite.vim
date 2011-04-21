@@ -68,8 +68,8 @@ function! unite#sources#directory_mru#_append()"{{{
   call insert(filter(s:mru_dirs, 'v:val.action__path !=# l:path'),
   \           s:convert2dictionary([l:path, localtime()]))
 
-  if g:unite_source_directory_mru_limit > 0
-    unlet s:mru_dirs[g:unite_source_directory_mru_limit]
+  if g:unite_source_directory_mru_limit < len(s:mru_dirs)
+    unlet s:mru_dirs[g:unite_source_directory_mru_limit :]
   endif
 
   call s:save()
