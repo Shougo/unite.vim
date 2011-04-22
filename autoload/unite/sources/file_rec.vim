@@ -117,7 +117,7 @@ unlet! s:cdable_action_rec
 function! s:get_files(files)"{{{
   let l:continuation_files = []
   let l:ret_files = []
-  let l:max_len = 20
+  let l:max_len = 30
   let l:files_index = 0
   let l:ret_files_len = 0
   for l:file in a:files
