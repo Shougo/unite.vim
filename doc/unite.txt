@@ -1268,6 +1268,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-22
+- Set cpoptions.
+
 2011-04-21
 - Fixed redraw candidates bug.
 
