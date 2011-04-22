@@ -1270,6 +1270,7 @@ CHANGELOG					*unite-changelog*
 
 2011-04-22
 - Set cpoptions.
+- Improved file_rec source.
 
 2011-04-21
 - Fixed redraw candidates bug.

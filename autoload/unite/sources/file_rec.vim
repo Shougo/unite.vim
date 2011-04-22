@@ -123,8 +123,9 @@ function! s:get_files(files)"{{{
   for l:file in a:files
     let l:files_index += 1
 
-    if g:unite_source_file_rec_ignore_pattern != '' &&
-          \ l:file =~ g:unite_source_file_rec_ignore_pattern
+    if l:file =~ '/\.\+$'
+          \ || (g:unite_source_file_rec_ignore_pattern != '' &&
+          \     l:file =~ g:unite_source_file_rec_ignore_pattern)
       continue
     endif
 
@@ -139,7 +140,7 @@ function! s:get_files(files)"{{{
       for l:child in l:childs
         let l:child_index += 1
 
-        if l:child =~ '/\.\%(\.\|$\)'
+        if l:child =~ '/\.\+$'
               \ ||(g:unite_source_file_rec_ignore_pattern != '' &&
               \     l:child =~ g:unite_source_file_rec_ignore_pattern)
           continue
