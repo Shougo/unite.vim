@@ -28,12 +28,18 @@ if exists('g:loaded_unite_source_buffer')
   finish
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 augroup plugin-unite-source-buffer
   autocmd!
   autocmd BufEnter,BufWinEnter,BufFilePost * call unite#sources#buffer#_append()
 augroup END
 
 let g:loaded_unite_source_buffer = 1
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " __END__
 " vim: foldmethod=marker

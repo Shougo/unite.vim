@@ -1,3 +1,6 @@
+let s:save_cpo = &cpo
+set cpo&vim
+
 let s:V = vital#of('unite')
 call s:V.load('Data.List')
 function! unite#util#truncate_smart(...)
@@ -63,3 +66,7 @@ endfunction
 function! unite#util#sort_by(...)
   return call(s:V.Data.List.sort_by, a:000)
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+

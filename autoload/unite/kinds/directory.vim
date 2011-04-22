@@ -24,6 +24,9 @@
 " }}}
 "=============================================================================
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! unite#kinds#directory#define()"{{{
   return s:kind
 endfunction"}}}
@@ -37,5 +40,8 @@ let s:kind = {
 
 " Actions"{{{
 "}}}
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim: foldmethod=marker

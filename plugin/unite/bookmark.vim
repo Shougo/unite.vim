@@ -28,9 +28,15 @@ if exists('g:loaded_unite_source_bookmark')
   finish
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 command! -nargs=? -complete=file UniteBookmarkAdd call unite#sources#bookmark#_append(<q-args>)
 
 let g:loaded_unite_source_bookmark = 1
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " __END__
 " vim: foldmethod=marker

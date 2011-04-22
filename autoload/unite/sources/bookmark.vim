@@ -24,6 +24,9 @@
 " }}}
 "=============================================================================
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 " Variables  "{{{
 " The version of bookmark file format.
 let s:VERSION = '0.1.0'
@@ -179,5 +182,7 @@ function! s:is_exists_path(path)  "{{{
   return isdirectory(a:path) || filereadable(a:path)
 endfunction"}}}
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim: foldmethod=marker

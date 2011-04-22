@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Dec 2010.
+" Last Modified: 22 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,12 +28,18 @@ if exists('g:loaded_unite_source_window')
   finish
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 augroup plugin-unite-source-window
   autocmd!
   autocmd WinEnter,BufWinEnter * call unite#sources#window#_append()
 augroup END
 
 let g:loaded_unite_source_window = 1
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " __END__
 " vim: foldmethod=marker

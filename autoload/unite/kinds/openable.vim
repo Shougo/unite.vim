@@ -24,6 +24,9 @@
 " }}}
 "=============================================================================
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! unite#kinds#openable#define()"{{{
   return s:kind
 endfunction"}}}
@@ -112,5 +115,7 @@ function! s:kind.action_table.below.func(candidates)"{{{
 endfunction"}}}
 "}}}
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim: foldmethod=marker

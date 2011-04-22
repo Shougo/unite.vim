@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Feb 2011.
+" Last Modified: 22 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,6 +29,9 @@ if version < 700
 elseif exists('b:current_syntax')
   finish
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 syntax match uniteStatusLine /\%1l.*/
       \  contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
@@ -79,3 +82,7 @@ highlight default link uniteError Error
 highlight default link uniteErrorHidden Ignore
 
 let b:current_syntax = 'unite'
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+

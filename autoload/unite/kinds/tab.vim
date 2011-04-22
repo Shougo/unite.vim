@@ -24,6 +24,9 @@
 " }}}
 "=============================================================================
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! unite#kinds#tab#define()"{{{
   return s:kind
 endfunction"}}}
@@ -80,5 +83,8 @@ endif
 function! s:compare(candidate_a, candidate_b)"{{{
   return a:candidate_b.action__tab_nr - a:candidate_a.action__tab_nr
 endfunction"}}}
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim: foldmethod=marker

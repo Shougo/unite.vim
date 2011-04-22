@@ -1,3 +1,6 @@
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! unite#vital#truncate_smart(...)
   return call('vital#_39a315#truncate_smart', a:000)
 endfunction
@@ -58,3 +61,6 @@ endfunction
 function! unite#vital#get_last_status(...)
   return call('vital#_39a315#get_last_status', a:000)
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo

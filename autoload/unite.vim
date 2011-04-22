@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Apr 2011.
+" Last Modified: 22 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,6 +24,9 @@
 " }}}
 " Version: 1.5, for Vim 7.0
 "=============================================================================
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! unite#version()"{{{
   return str2nr(printf('%02d%02d%03d', 1, 5, 0))
@@ -1479,5 +1482,8 @@ function! s:call_hook(sources, hook_name)"{{{
   endfor
 endfunction"}}}
 "}}}
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim: foldmethod=marker

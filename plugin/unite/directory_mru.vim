@@ -28,12 +28,18 @@ if exists('g:loaded_unite_source_directory_mru')
   finish
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 augroup plugin-unite-source-directory_mru
   autocmd!
   autocmd BufLeave,BufWinLeave,BufFilePost * call unite#sources#directory_mru#_append()
 augroup END
 
 let g:loaded_unite_source_directory_mru = 1
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " __END__
 " vim: foldmethod=marker
