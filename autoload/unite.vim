@@ -235,6 +235,9 @@ endfunction"}}}
 function! unite#loaded_source_names()"{{{
   return map(copy(unite#loaded_sources_list()), 'v:val.name')
 endfunction"}}}
+function! unite#loaded_source_names_string()"{{{
+  return join(unite#loaded_source_names())
+endfunction"}}}
 function! unite#loaded_source_names_with_args()"{{{
   return map(copy(unite#loaded_sources_list()), 'join(insert(filter(copy(v:val.args), "type(v:val) < 1"), v:val.name), ":")')
 endfunction"}}}
@@ -698,11 +701,12 @@ function! unite#start(sources, ...)"{{{
   endfor
   call unite#redraw_candidates()
 
-  let l:pos = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
-  let l:is_restore = l:unite.context.input == '' && !empty(l:pos)
+  let l:positions = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
+  let l:is_restore = l:unite.context.input == '' &&
+        \ has_key(l:positions, unite#loaded_source_names_string())
   if l:is_restore
     " Restore position.
-    call setpos('.', l:pos)
+    call setpos('.', l:positions[unite#loaded_source_names_string()])
   endif
 
   if l:unite.context.start_insert || l:unite.context.complete
@@ -764,11 +768,12 @@ function! unite#resume(buffer_name)"{{{
 
   setlocal modifiable
 
-  let l:pos = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
-  let l:is_restore = l:unite.context.input == '' && !empty(l:pos)
+  let l:positions = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
+  let l:is_restore = l:unite.context.input == '' &&
+        \ has_key(l:positions, unite#loaded_source_names_string())
   if l:is_restore
     " Restore position.
-    call setpos('.', l:pos)
+    call setpos('.', l:positions[unite#loaded_source_names_string()])
   endif
 
   if g:unite_enable_start_insert
@@ -826,7 +831,8 @@ function! s:quit_session(is_force)  "{{{
   endif
 
   " Save position.
-  call unite#set_buffer_name_option(l:unite.buffer_name, 'unite__save_pos', getpos('.'))
+  let l:positions = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
+  let l:positions[unite#loaded_source_names_string()] = getpos('.')
 
   if winnr('$') != 1
     if !a:is_force && l:unite.context.no_quit
@@ -987,7 +993,7 @@ function! s:initialize_buffer_name_options(buffer_name)"{{{
     let l:setting.smartcase = &smartcase
   endif
   if !has_key(l:setting, 'unite__save_pos')
-    let l:setting.unite__save_pos = []
+    let l:setting.unite__save_pos = {}
   endif
 endfunction"}}}
 
