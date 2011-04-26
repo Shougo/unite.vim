@@ -1413,6 +1413,16 @@ function! s:on_cursor_moved()  "{{{
     endif
 
     call unite#mappings#do_action('preview')
+
+    " Restore window size.
+    let l:context = unite#get_context()
+    if winnr('$') != 1
+      if l:context.vertical && winwidth(winnr()) != l:context.winwidth
+        execute 'vertical resize' l:context.winwidth
+      elseif winheight(winnr()) != l:context.winwidth
+        execute 'resize' l:context.winheight
+      endif
+    endif
   endif
 endfunction"}}}
 
