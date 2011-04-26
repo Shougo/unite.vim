@@ -955,6 +955,9 @@ output		実行したVimコマンドの出力を候補とする。
 						*unite-source-command*
 command		VimのExコマンドを候補とする。
 
+						*unite-source-mapping*
+mapping		ユーザーが定義したマッピングを候補とする。
+
 ==============================================================================
 kind						*unite-kinds*
 

@@ -927,6 +927,9 @@ output		Nominates executed Vim command as candidates.
 						*unite-source-command*
 command		Nominates Vim Ex commands as candidates.
 
+						*unite-source-mapping*
+mapping		Nominates Vim mappings as candidates.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1271,6 +1274,7 @@ CHANGELOG					*unite-changelog*
 2011-04-26
 - Implemented position restore.
 - Improved auto preview behavior.
+- Implemented mapping source.
 
 2011-04-25
 - Fixed file_mru error.
