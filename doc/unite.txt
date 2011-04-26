@@ -1268,6 +1268,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-26
+- Implemented position restore.
+
 2011-04-25
 - Fixed file_mru error.
 

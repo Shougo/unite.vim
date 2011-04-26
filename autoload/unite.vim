@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 26 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -698,16 +698,28 @@ function! unite#start(sources, ...)"{{{
   endfor
   call unite#redraw_candidates()
 
+  let l:pos = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
+  let l:is_restore = l:unite.context.input == '' && !empty(l:pos)
+  if l:is_restore
+    " Restore position.
+    call setpos('.', l:pos)
+  endif
+
   if l:unite.context.start_insert || l:unite.context.complete
     let l:unite.is_insert = 1
+
     execute l:unite.prompt_linenr
-    normal! 0z.
+
     startinsert!
   else
     let l:unite.is_insert = 0
-    execute (l:unite.prompt_linenr+1)
-    normal! 0z.
+
+    if !l:is_restore
+      execute (l:unite.prompt_linenr+1)
+    endif
   endif
+
+  normal! z.
 
   setlocal nomodifiable
 endfunction"}}}
@@ -752,17 +764,31 @@ function! unite#resume(buffer_name)"{{{
 
   setlocal modifiable
 
+  let l:pos = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
+  let l:is_restore = l:unite.context.input == '' && !empty(l:pos)
+  if l:is_restore
+    " Restore position.
+    call setpos('.', l:pos)
+  endif
+
   if g:unite_enable_start_insert
         \ || l:unite.context.start_insert || l:unite.context.complete
     let l:unite.is_insert = 1
-    execute l:unite.prompt_linenr
-    normal! 0z.
+
+    if !l:is_restore
+      execute l:unite.prompt_linenr
+    endif
+
     startinsert!
   else
     let l:unite.is_insert = 0
-    execute (l:unite.prompt_linenr+1)
-    normal! 0z.
+
+    if !l:is_restore
+      execute (l:unite.prompt_linenr+1)
+    endif
   endif
+
+  normal! z.
 
   setlocal nomodifiable
 endfunction"}}}
@@ -798,6 +824,9 @@ function! s:quit_session(is_force)  "{{{
     " Close preview window.
     pclose!
   endif
+
+  " Save position.
+  call unite#set_buffer_name_option(l:unite.buffer_name, 'unite__save_pos', getpos('.'))
 
   if winnr('$') != 1
     if !a:is_force && l:unite.context.no_quit
@@ -956,6 +985,9 @@ function! s:initialize_buffer_name_options(buffer_name)"{{{
   endif
   if !has_key(l:setting, 'smartcase')
     let l:setting.smartcase = &smartcase
+  endif
+  if !has_key(l:setting, 'unite__save_pos')
+    let l:setting.unite__save_pos = []
   endif
 endfunction"}}}
 
