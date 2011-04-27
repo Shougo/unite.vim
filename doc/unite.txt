@@ -1271,6 +1271,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-04-28
+- Fixed unite source.
+
 2011-04-27
 - Refactored a bit.
 
