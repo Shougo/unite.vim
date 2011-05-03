@@ -173,6 +173,7 @@ COMMANDS 					*unite-commands*
 						*unite-options-input*
 		-input={input-text}
 		Specifies an initial narrowing text. The default value is ''.
+		You can use "-input=." to show the "../" candidate. 
 
 						*unite-options-prompt*
 		-prompt={prompt-text}
