@@ -692,9 +692,9 @@ function! unite#start(sources, ...)"{{{
 
   call s:initialize_unite_buffer()
 
-  setlocal modifiable
-
   let l:unite = unite#get_current_unite()
+
+  setlocal modifiable
 
   silent % delete _
   call unite#redraw_status()
@@ -705,31 +705,31 @@ function! unite#start(sources, ...)"{{{
   endfor
   call unite#redraw_candidates()
 
-  let l:positions = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
-  let l:is_restore = l:unite.context.input == '' &&
-        \ has_key(l:positions, unite#loaded_source_names_string())
-  if l:is_restore
-    " Restore position.
-    call setpos('.', l:positions[unite#loaded_source_names_string()])
-  endif
+  " setlocal nomodifiable
 
   if l:unite.context.start_insert || l:unite.context.complete
     let l:unite.is_insert = 1
 
     execute l:unite.prompt_linenr
+    normal! z.
 
     startinsert!
   else
+    let l:positions = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
+    let l:is_restore = l:unite.context.input == '' &&
+          \ has_key(l:positions, unite#loaded_source_names_string())
+    if l:is_restore
+      " Restore position.
+      call setpos('.', l:positions[unite#loaded_source_names_string()])
+    endif
+
     let l:unite.is_insert = 0
 
     if !l:is_restore
       execute (l:unite.prompt_linenr+1)
     endif
+    normal! z.
   endif
-
-  normal! z.
-
-  setlocal nomodifiable
 endfunction"}}}
 function! unite#resume(buffer_name)"{{{
   if a:buffer_name == ''
@@ -770,15 +770,7 @@ function! unite#resume(buffer_name)"{{{
 
   let s:current_unite = l:unite
 
-  setlocal modifiable
-
-  let l:positions = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
-  let l:is_restore = l:unite.context.input == '' &&
-        \ has_key(l:positions, unite#loaded_source_names_string())
-  if l:is_restore
-    " Restore position.
-    call setpos('.', l:positions[unite#loaded_source_names_string()])
-  endif
+  setlocal nomodifiable
 
   if g:unite_enable_start_insert
         \ || l:unite.context.start_insert || l:unite.context.complete
@@ -790,6 +782,14 @@ function! unite#resume(buffer_name)"{{{
 
     startinsert!
   else
+    let l:positions = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
+    let l:is_restore = l:unite.context.input == '' &&
+          \ has_key(l:positions, unite#loaded_source_names_string())
+    if l:is_restore
+      " Restore position.
+      call setpos('.', l:positions[unite#loaded_source_names_string()])
+    endif
+
     let l:unite.is_insert = 0
 
     if !l:is_restore
@@ -798,8 +798,6 @@ function! unite#resume(buffer_name)"{{{
   endif
 
   normal! z.
-
-  setlocal nomodifiable
 endfunction"}}}
 
 function! unite#force_quit_session()  "{{{
