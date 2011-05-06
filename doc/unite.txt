@@ -861,6 +861,9 @@ SOURCES						*unite-sources*
 
 						*unite-source-file*
 file		Nominates an input file as a candidate.
+		Note: This source doesn't nominates parent file(Example: "../")
+		or hidden files(Example: ".gitignore").  If you want to open
+		this files, please input ".".
 
 						*unite-source-file_mru*
 file_mru	Nominates files you used recently as candidates, ordering
@@ -1276,6 +1279,7 @@ CHANGELOG					*unite-changelog*
 - Fixed example.
 - Improved g:unite_enable_start_insert option.
 - Added .gitignore file.
+- Improved file source discription.
 
 2011-05-01
 - Ver.2.0 is released.

@@ -887,6 +887,8 @@ source						*unite-sources*
 
 						*unite-source-file*
 file		入力されたファイルを候補とする。
+		Note: デフォルトでは、"../"といった親ディレクトリや隠しファイル
+		は表示されない。絞り込み文字列に.を入力すると表示される。
 
 						*unite-source-file_mru*
 file_mru	最近使用したファイルを候補とする。使用した順番に整列される。
