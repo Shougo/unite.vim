@@ -1275,6 +1275,7 @@ CHANGELOG					*unite-changelog*
 - Fixed syntax error.
 - Fixed example.
 - Improved g:unite_enable_start_insert option.
+- Added .gitignore file.
 
 2011-05-01
 - Ver.2.0 is released.
