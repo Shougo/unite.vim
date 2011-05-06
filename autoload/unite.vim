@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 May 2011.
+" Last Modified: 06 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -560,10 +560,12 @@ function! unite#clear_message()"{{{
       let &l:modifiable = l:modifiable_save
       call s:on_cursor_moved()
 
-      syntax clear uniteInputLine
-      execute 'syntax match uniteInputLine'
-            \ '/\%'.l:unite.prompt_linenr.'l.*/'
-            \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+      if exists('b:current_syntax') && b:current_syntax ==# 'unite'
+        syntax clear uniteInputLine
+        execute 'syntax match uniteInputLine'
+              \ '/\%'.l:unite.prompt_linenr.'l.*/'
+              \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+      endif
     endif
   endif
   let s:unite_cached_message = []
@@ -588,10 +590,12 @@ function! s:print_buffer(message)"{{{
     let &l:modifiable = l:modifiable_save
     call s:on_cursor_moved()
 
-    syntax clear uniteInputLine
-    execute 'syntax match uniteInputLine'
-          \ '/\%'.l:unite.prompt_linenr.'l.*/'
-          \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+    if exists('b:current_syntax') && b:current_syntax ==# 'unite'
+      syntax clear uniteInputLine
+      execute 'syntax match uniteInputLine'
+            \ '/\%'.l:unite.prompt_linenr.'l.*/'
+            \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+    endif
   endif
 endfunction"}}}
 "}}}

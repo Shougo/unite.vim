@@ -1271,6 +1271,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-05-06
+- Fixed syntax error.
+
 2011-05-01
 - Ver.2.0 is released.
 
