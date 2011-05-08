@@ -1276,6 +1276,7 @@ CHANGELOG					*unite-changelog*
 
 2011-05-08
 - Fixed :UniteResume error.
+- Improved cursor move behavior.
 
 2011-05-06
 - Fixed syntax error.

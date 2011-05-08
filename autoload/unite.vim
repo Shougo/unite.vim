@@ -728,7 +728,7 @@ function! unite#start(sources, ...)"{{{
     if !l:is_restore
       execute (l:unite.prompt_linenr+1)
     endif
-    normal! z.
+    normal! 0z.
   endif
 endfunction"}}}
 function! unite#resume(buffer_name)"{{{
@@ -777,6 +777,7 @@ function! unite#resume(buffer_name)"{{{
     let l:unite.is_insert = 1
 
     execute l:unite.prompt_linenr
+    normal! z.
 
     startinsert!
   else
@@ -793,9 +794,9 @@ function! unite#resume(buffer_name)"{{{
     if !l:is_restore
       execute (l:unite.prompt_linenr+1)
     endif
-  endif
 
-  normal! z.
+    normal! 0z.
+  endif
 endfunction"}}}
 
 function! unite#force_quit_session()  "{{{

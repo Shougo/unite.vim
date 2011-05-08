@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 08 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -523,7 +523,7 @@ function! s:loop_cursor_down()"{{{
     if l:is_insert
       return "\<Home>" . repeat("\<Down>", l:count)
     else
-      return repeat('j', l:count)
+      return '0' . repeat('j', l:count)
     endif
   endif
 endfunction"}}}
@@ -566,7 +566,7 @@ function! s:loop_cursor_up()"{{{
         return "\<Home>" . repeat("\<Up>", l:count)
       endif
     else
-      return repeat('k', l:count)
+      return '0' . repeat('k', l:count)
     endif
   endif
 endfunction"}}}
