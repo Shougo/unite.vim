@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 May 2011.
+" Last Modified: 08 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -776,9 +776,7 @@ function! unite#resume(buffer_name)"{{{
         \ || l:unite.context.start_insert || l:unite.context.complete
     let l:unite.is_insert = 1
 
-    if !l:is_restore
-      execute l:unite.prompt_linenr
-    endif
+    execute l:unite.prompt_linenr
 
     startinsert!
   else

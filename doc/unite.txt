@@ -1274,6 +1274,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-05-08
+- Fixed :UniteResume error.
+
 2011-05-06
 - Fixed syntax error.
 - Fixed example.
