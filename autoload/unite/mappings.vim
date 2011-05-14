@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 May 2011.
+" Last Modified: 14 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -99,7 +99,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
   nnoremap <silent><buffer><expr> e   unite#smart_map('e', unite#do_action('narrow'))
   nnoremap <silent><buffer><expr> l   unite#smart_map('l', unite#do_action(unite#get_current_unite().context.default_action))
-  nnoremap <silent><buffer><expr> p   unite#smart_map('p', unite#do_action('preview'))
+  nnoremap <silent><buffer><expr> p   unite#do_action('preview')
   nmap <silent><buffer><expr> x       unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 
   " Visual mode key-mappings.

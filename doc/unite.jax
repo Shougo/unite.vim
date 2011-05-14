@@ -604,7 +604,7 @@ l		候補を選択している場合は default アクションの実行
 d		候補を選択している場合は delete アクションの実行
 b		候補を選択している場合は bookmark アクションの実行
 e		候補を選択している場合は narrow アクションの実行
-p		候補を選択している場合は preview アクションの実行
+p		preview アクションの実行
 x		候補を選択している場合は|<Plug>(unite_quick_match_default_action)|
 
 インサートモードマッピング

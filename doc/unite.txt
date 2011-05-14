@@ -611,7 +611,7 @@ l		In case when you selected a candidate, runs default action
 d		In case when you selected a candidate, runs delete action
 b		In case when you selected a candidate, runs bookmark action
 e		In case when you selected a candidate, runs narrow action
-p		In case when you selected a candidate, runs preview action
+p		runs preview action
 x		In case when you selected a candidate, runs
 		|<Plug>(unite_quick_match_default_action)|
 
@@ -1276,6 +1276,8 @@ CHANGELOG					*unite-changelog*
 
 2011-05-14
 - Fixed kind command.
+- Fixed preview action.
+- Updated vital.vim.
 
 2011-05-08
 - Fixed :UniteResume error.
