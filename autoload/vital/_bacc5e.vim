@@ -74,7 +74,7 @@ function! s:_build_module(sid)
   endif
   let prefix = '<SNR>' . a:sid . '_'
   let funcs = s:_redir('function')
-  let filter_pat = '^function ' . prefix
+  let filter_pat = '^\s*function ' . prefix
   let map_pat = prefix . '\zs\w\+'
   let functions = map(filter(split(funcs, "\n"), 'v:val =~# filter_pat'),
   \          'matchstr(v:val, map_pat)')
