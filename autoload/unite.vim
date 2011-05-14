@@ -1426,8 +1426,10 @@ function! s:on_cursor_moved()  "{{{
     " Restore window size.
     let l:context = unite#get_context()
     if winnr('$') != 1
-      if l:context.vertical && winwidth(winnr()) != l:context.winwidth
-        execute 'vertical resize' l:context.winwidth
+      if l:context.vertical
+        if winwidth(winnr()) != l:context.winwidth
+          execute 'vertical resize' l:context.winwidth
+        endif
       elseif winheight(winnr()) != l:context.winwidth
         execute 'resize' l:context.winheight
       endif
