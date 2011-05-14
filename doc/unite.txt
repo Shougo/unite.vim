@@ -1278,6 +1278,7 @@ CHANGELOG					*unite-changelog*
 - Fixed kind command.
 - Fixed preview action.
 - Updated vital.vim.
+- Fixed choose action.
 
 2011-05-08
 - Fixed :UniteResume error.

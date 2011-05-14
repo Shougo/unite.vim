@@ -602,7 +602,14 @@ function! s:source.gather_candidates(args, context)"{{{
   " Print candidates.
   call unite#print_message(map(copy(l:candidates), '"[action] candidates: ".v:val.abbr."(".v:val.source.")"'))
 
-  let l:actions = s:get_actions(l:candidates)
+  " Uniq.
+  let l:actions = {}
+  for l:action in values(s:get_actions(l:candidates))
+    if !has_key(l:actions, l:action.name)
+      let l:actions[l:action.name] = l:action
+    endif
+  endfor
+
   let l:max = max(map(values(l:actions), 'len(v:val.name)'))
 
   return sort(map(values(l:actions), '{

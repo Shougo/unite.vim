@@ -69,6 +69,9 @@ endfunction
 function! unite#util#sort_by(...)
   return call(s:V.Data.List.sort_by, a:000)
 endfunction
+function! unite#util#uniq(...)
+  return call(s:V.Data.List.uniq, a:000)
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
