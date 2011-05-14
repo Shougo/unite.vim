@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 May 2011.
+" Last Modified: 14 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -365,6 +365,42 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
 
   " Filtering nop action.
   return filter(l:action_table, 'v:key !=# "nop"')
+endfunction"}}}
+function! unite#get_alias_table(source_name, kind_name)"{{{
+  let l:kind = unite#get_kinds(a:kind_name)
+  let l:source = unite#get_sources(a:source_name)
+
+  let l:table = l:kind.alias_table
+
+  let l:source_kind = 'source/'.a:source_name.'/'.a:kind_name
+  let l:source_kind_wild = 'source/'.a:source_name.'/*'
+
+  " Kind custom aliases.
+  if has_key(s:custom.aliases, a:kind_name)
+    let l:table = extend(l:table, s:custom.aliases[a:kind_name])
+  endif
+
+  " Source/* aliases.
+  if has_key(l:source.alias_table, '*')
+    let l:table = extend(l:table, l:source.alias_table['*'])
+  endif
+
+  " Source/* custom aliases.
+  if has_key(s:custom.aliases, l:source_kind_wild)
+    let l:table = extend(l:table, s:custom.aliases[l:source_kind_wild])
+  endif
+
+  " Source/kind aliases.
+  if has_key(s:custom.aliases, l:source_kind)
+    let l:table = extend(l:table, s:custom.aliases[l:source_kind])
+  endif
+
+  " Source/kind custom aliases.
+  if has_key(l:source.alias_table, a:kind_name)
+    let l:table = extend(l:table, l:source.alias_table[a:kind_name])
+  endif
+
+  return l:table
 endfunction"}}}
 function! unite#get_default_action(source_name, kind_name)"{{{
   let l:source = unite#get_sources(a:source_name)

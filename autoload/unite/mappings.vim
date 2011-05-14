@@ -603,12 +603,13 @@ function! s:source.gather_candidates(args, context)"{{{
   call unite#print_message(map(copy(l:candidates), '"[action] candidates: ".v:val.abbr."(".v:val.source.")"'))
 
   " Process Alias.
-  let l:actions = {}
-  " let l:alias_table = a:candidates[0].kind.alias_table
-  for l:action in values(s:get_actions(l:candidates))
-    if !has_key(l:actions, l:action.name)
-      let l:actions[l:action.name] = l:action
-    endif
+  let l:actions = s:get_actions(l:candidates)
+  let l:alias_table = unite#get_alias_table(
+        \ l:candidates[0].source, l:candidates[0].kind)
+  for [l:alias_name, l:action_name] in items(l:alias_table)
+    " if !has_key(l:actions, l:action_name)
+      " let l:actions[l:action_name] = l:action
+    " endif
   endfor
 
   let l:max = max(map(values(l:actions), 'len(v:val.name)'))
