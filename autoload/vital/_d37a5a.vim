@@ -65,7 +65,10 @@ function! s:_import(name, scripts)
 endfunction
 
 function! s:_scripts()
-  return split(s:_redir('scriptnames'), "\n")
+  redir => scripts
+    silent! script
+  redir END
+  return split(scripts, "\n")
 endfunction
 
 function! s:_build_module(sid)
