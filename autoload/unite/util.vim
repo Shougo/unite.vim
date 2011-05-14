@@ -25,7 +25,10 @@ function! unite#util#wcswidth(...)
   return call(s:V.wcswidth, a:000)
 endfunction
 function! unite#util#is_win(...)
-  return call(s:V.is_win, a:000)
+  return call(s:V.is_windows, a:000)
+endfunction
+function! unite#util#is_mac(...)
+  return call(s:V.is_mac, a:000)
 endfunction
 function! unite#util#print_error(...)
   return call(s:V.print_error, a:000)

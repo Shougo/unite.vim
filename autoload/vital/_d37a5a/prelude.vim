@@ -113,8 +113,12 @@ else
 endif
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
-function! s:is_win()"{{{
+let s:is_mac = !s:is_windows && (has('mac') || has('macunix') || has('gui_macvim') || system('uname') =~? '^darwin')
+function! s:is_windows()"{{{
   return s:is_windows
+endfunction"}}}
+function! s:is_mac()"{{{
+  return s:is_mac
 endfunction"}}}
 
 function! s:print_error(message)"{{{
