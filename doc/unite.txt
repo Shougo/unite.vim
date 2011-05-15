@@ -1274,6 +1274,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-05-15
+- Improved alias in choose action.
+
 2011-05-14
 - Fixed kind command.
 - Fixed preview action.

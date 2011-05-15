@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 May 2011.
+" Last Modified: 15 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -607,9 +607,10 @@ function! s:source.gather_candidates(args, context)"{{{
   let l:alias_table = unite#get_alias_table(
         \ l:candidates[0].source, l:candidates[0].kind)
   for [l:alias_name, l:action_name] in items(l:alias_table)
-    " if !has_key(l:actions, l:action_name)
-      " let l:actions[l:action_name] = l:action
-    " endif
+    if has_key(l:actions, l:alias_name)
+      let l:actions[l:action_name] = copy(l:actions[l:action_name])
+      let l:actions[l:action_name].name = l:alias_name
+    endif
   endfor
 
   let l:max = max(map(values(l:actions), 'len(v:val.name)'))
