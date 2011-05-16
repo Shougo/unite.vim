@@ -1274,6 +1274,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-05-16
+- Fixed directory_mru error.
+
 2011-05-15
 - Improved alias in choose action.
 
