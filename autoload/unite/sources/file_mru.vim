@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Apr 2011.
+" Last Modified: 21 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -143,7 +143,7 @@ function! s:load()  "{{{
   endif
 endfunction"}}}
 function! s:is_exists_path(path)  "{{{
-  return filereadable(a:path)
+  return getftype(a:path) != ''
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
   let l:path = unite#util#substitute_path_separator(a:list[0])
