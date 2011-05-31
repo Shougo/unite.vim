@@ -1276,6 +1276,8 @@ CHANGELOG					*unite-changelog*
 
 2011-05-21
 - Improved file_mru.
+- Improved redraw flag.
+- Fixed is_redraw flag.
 
 2011-05-16
 - Fixed directory_mru error.

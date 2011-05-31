@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 May 2011.
+" Last Modified: 31 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1052,7 +1052,7 @@ function! s:recache_candidates(input, is_force)"{{{
   let l:input_len = unite#util#strchars(l:input)
 
   let l:unite.context.input = l:input
-  let l:unite.context.is_force = a:is_force
+  let l:unite.context.is_redraw = a:is_force
 
   for l:source in unite#loaded_sources_list()
     " Check required pattern length.
@@ -1064,7 +1064,6 @@ function! s:recache_candidates(input, is_force)"{{{
     " Set context.
     let l:source.unite__context.input = l:unite.context.input
     let l:source.unite__context.source = l:source
-    let l:source.unite__context.is_force = l:unite.context.is_force
     let l:source.unite__context.is_redraw = l:unite.context.is_redraw
 
     if !l:source.is_volatile && has_key(l:source, 'gather_candidates') && (a:is_force || l:source.unite__is_invalidate)
@@ -1386,7 +1385,7 @@ function! s:redraw(is_force) "{{{
   endif
 
   let l:unite.last_input = l:input
-  let l:unite.context.is_redraw = 1
+  let l:unite.context.is_redraw = a:is_force
 
   " Recaching.
   call s:recache_candidates(l:input, a:is_force)
