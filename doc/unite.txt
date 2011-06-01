@@ -1274,10 +1274,15 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
-2011-05-21
-- Improved file_mru.
+2011-06-01
+- Fixed recaching.
+
+2011-05-31
 - Improved redraw flag.
 - Fixed is_redraw flag.
+
+2011-05-21
+- Improved file_mru.
 
 2011-05-16
 - Fixed directory_mru error.

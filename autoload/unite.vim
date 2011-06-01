@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 May 2011.
+" Last Modified: 01 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -699,7 +699,6 @@ function! unite#start(sources, ...)"{{{
   if !has_key(l:context, 'temporary')
     let l:context.temporary = 0
   endif
-  let l:context.is_redraw = 0
 
   try
     call s:initialize_current_unite(a:sources, l:context)
@@ -707,10 +706,10 @@ function! unite#start(sources, ...)"{{{
     return
   endtry
 
-  " Force caching.
+  " Caching.
   let s:current_unite.last_input = l:context.input
   let s:current_unite.input = l:context.input
-  call s:recache_candidates(l:context.input, 1)
+  call s:recache_candidates(l:context.input, l:context.is_redraw)
 
   if l:context.immediately
     let l:candidates = unite#gather_candidates()
