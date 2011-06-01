@@ -1276,6 +1276,7 @@ CHANGELOG					*unite-changelog*
 
 2011-06-01
 - Fixed recaching.
+- Fixed choose_action.
 
 2011-05-31
 - Improved redraw flag.

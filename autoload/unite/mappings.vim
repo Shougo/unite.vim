@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 May 2011.
+" Last Modified: 01 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -613,9 +613,17 @@ function! s:source.gather_candidates(args, context)"{{{
     endif
   endfor
 
-  let l:max = max(map(values(l:actions), 'len(v:val.name)'))
+  " Uniq.
+  let l:uniq_actions = {}
+  for l:action in values(l:actions)
+    if !has_key(l:action, l:action.name)
+      let l:uniq_actions[l:action.name] = l:action
+    endif
+  endfor
 
-  return sort(map(values(l:actions), '{
+  let l:max = max(map(values(l:uniq_actions), 'len(v:val.name)'))
+
+  return sort(map(values(l:uniq_actions), '{
         \   "word": v:val.name,
         \   "abbr": printf("%-' . l:max . 's -- %s", v:val.name, v:val.description),
         \   "kind": "common",
