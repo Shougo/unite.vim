@@ -699,6 +699,7 @@ function! unite#start(sources, ...)"{{{
   if !has_key(l:context, 'temporary')
     let l:context.temporary = 0
   endif
+  let l:context.is_redraw = 0
 
   try
     call s:initialize_current_unite(a:sources, l:context)
