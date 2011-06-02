@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jun 2011.
+" Last Modified: 02 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -165,6 +165,11 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   if empty(l:candidates)
     return
   endif
+
+  " Clear mark flag.
+  for l:candidate in l:candidates
+    let l:candidate.unite__is_marked = 0
+  endfor
 
   let l:action_tables = s:get_action_table(a:action_name, l:candidates)
 

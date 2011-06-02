@@ -1031,6 +1031,9 @@ jump_list	ジャンプリスト
 			action__pattern		(文字列)		(任意)
 				ファイルを開いた後に検索するパターン
 
+			action__text		(文字列)		(任意)
+				ジャンプする行の内容
+
 			action__signature	(文字列)		(任意)
 				action__patternに設定するパターンや
 				action__lineだけではジャンプ位置の一意性を保証
@@ -1223,6 +1226,8 @@ jump_list					*unite-action-jump_list*
 のアクションについて解説する。
 	open		その候補の場所にジャンプする
 	preview		その候補の場所をプレビューする
+	replace		選択した候補を|qfreplace|プラグインで置換する。
+			候補にaction__textが必要である。
 
 command						*unite-action-command*
 	execute		コマンドを実行する

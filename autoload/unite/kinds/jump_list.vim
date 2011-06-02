@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 02 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -72,6 +72,31 @@ let s:kind.action_table.preview = {
 function! s:kind.action_table.preview.func(candidate)"{{{
   pedit +call\ s:jump(a:candidate) `=a:candidate.action__path`
 endfunction"}}}
+
+if globpath(&runtimepath, 'autoload/qfreplace.vim') != ''
+  let s:kind.action_table.replace = {
+        \ 'description' : 'replace with qfreplace',
+        \ 'is_selectable' : 1,
+        \ }
+  function! s:kind.action_table.replace.func(candidates)"{{{
+    let l:qflist = []
+    for candidate in a:candidates
+      if has_key(candidate, 'action__line')
+            \ && has_key(candidate, 'action__text')
+        call add(l:qflist, {
+              \ 'filename' : candidate.action__path,
+              \ 'lnum' : candidate.action__line,
+              \ 'text' : candidate.action__text,
+              \ })
+      endif
+    endfor
+
+    if !empty(l:qflist)
+      call setqflist(l:qflist)
+      call qfreplace#start('')
+    endif
+  endfunction"}}}
+endif
 "}}}
 
 " Misc.

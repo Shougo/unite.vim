@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jun 2011.
+" Last Modified: 02 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1051,8 +1051,9 @@ function! s:recache_candidates(input, is_force)"{{{
   let l:input = s:get_substitute_input(a:input)
   let l:input_len = unite#util#strchars(l:input)
 
-  let l:unite.context.input = l:input
-  let l:unite.context.is_redraw = a:is_force
+  let l:context = l:unite.context
+  let l:context.input = l:input
+  let l:context.is_redraw = a:is_force
 
   for l:source in unite#loaded_sources_list()
     " Check required pattern length.
@@ -1062,9 +1063,9 @@ function! s:recache_candidates(input, is_force)"{{{
     endif
 
     " Set context.
-    let l:source.unite__context.input = l:unite.context.input
+    let l:source.unite__context.input = l:context.input
     let l:source.unite__context.source = l:source
-    let l:source.unite__context.is_redraw = l:unite.context.is_redraw
+    let l:source.unite__context.is_redraw = l:context.is_redraw
 
     if !l:source.is_volatile && has_key(l:source, 'gather_candidates') && (a:is_force || l:source.unite__is_invalidate)
       " Recaching.
@@ -1122,8 +1123,9 @@ function! s:recache_candidates(input, is_force)"{{{
         let l:candidate.is_dummy = 0
       endif
 
-      " Initialize.
-      let l:candidate.unite__is_marked = 0
+      if !l:unite.is_async || !has_key(l:candidate, 'unite__is_marked')
+        let l:candidate.unite__is_marked = 0
+      endif
     endfor
 
     let l:source.unite__candidates = l:source_candidates

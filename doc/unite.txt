@@ -1128,6 +1128,7 @@ This kind extends actions of |unite-action-openable|.  Let me explain about
 the additional actions defined in this.
 	open		Jump to the location of the candidate
 	preview		Preview around the location of the candidate
+	replace		Replace selected candidates with |qfreplace| plugin
 
 command						*unite-action-command*
 	execute		Execute the command
@@ -1273,6 +1274,10 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-06-02
+- Added replace action in jump_list kind.
+- Improved redraw.
 
 2011-06-01
 - Fixed recaching.
