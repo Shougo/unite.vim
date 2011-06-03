@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jun 2011.
+" Last Modified: 03 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -638,11 +638,6 @@ endfunction"}}}
 
 " Command functions.
 function! unite#start(sources, ...)"{{{
-  if empty(s:static)
-    " Initialize load.
-    call s:load_default_scripts()
-  endif
-
   " Save context.
   let l:context = a:0 >= 1 ? a:1 : {}
   if !has_key(l:context, 'input')
@@ -952,6 +947,11 @@ function! s:initialize_loaded_sources(sources, context)"{{{
   return l:sources
 endfunction"}}}
 function! s:initialize_sources()"{{{
+  if empty(s:static)
+    " Initialize load.
+    call s:load_default_scripts()
+  endif
+
   let l:sources = extend(deepcopy(s:static.sources), deepcopy(s:dynamic.sources))
 
   for l:source in values(filter(copy(l:sources), '!has_key(v:val, "is_initialized")'))
