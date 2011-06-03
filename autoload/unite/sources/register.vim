@@ -57,9 +57,12 @@ function! s:source.gather_candidates(args, context)"{{{
 
   for [l:reg, l:register] in l:registers
     if l:register != ''
+      let l:abbr = substitute(l:register[ : l:max_width], '\t', '>---', 'g')
+      let l:abbr = substitute(l:abbr, '\r\?\n', '\\n', 'g')
+
       call add(l:candidates, {
             \ 'word' : l:register,
-            \ 'abbr' : printf('%-7s - %s', l:reg, l:register[ : l:max_width]),
+            \ 'abbr' : printf('%-7s - %s', l:reg, l:abbr),
             \ 'kind' : 'word',
             \ })
     endif
