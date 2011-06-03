@@ -235,8 +235,8 @@ http://www.ustream.tv/recorded/11240673
 
 						*unite-options-direction*
 		-direction={direction}
-		Defines split position rule. The default value is same to
-		|g:unite_split_rule|.
+		uniteバッファの分割方法を指定する。デフォルト値は
+		|g:unite_split_rule|と同じである。
 
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同

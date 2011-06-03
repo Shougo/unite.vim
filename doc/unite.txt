@@ -1275,6 +1275,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-06-03
+- Improved unite-register.
+
 2011-06-02
 - Added replace action in jump_list kind.
 - Improved redraw.
