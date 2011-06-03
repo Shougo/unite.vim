@@ -1186,6 +1186,7 @@ cd可能ファイルのインタフェースを定義している。
 			|vimfiler|がインストールされている場合にのみ有効な
 			アクションである。
 	rec		そのディレクトリで|unite-source-file_rec|を起動する。
+	file		そのディレクトリで|unite-source-file|を起動する。
 
 file						*unite-action-file*
 ファイルはすべて別のバッファに開かれる。

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 03 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -80,7 +80,7 @@ endfunction"}}}
 
 function! s:source.async_gather_candidates(args, context)"{{{
   let l:continuation = s:continuation[a:context.source__directory]
-  let [l:continuation.files, l:candidates] = s:get_files(l:continuation.files)
+  let [l:continuation.files, l:files] = s:get_files(l:continuation.files)
 
   if empty(l:continuation.files)
     " Disable async.
@@ -88,13 +88,23 @@ function! s:source.async_gather_candidates(args, context)"{{{
     let a:context.is_async = 0
   endif
 
-  call map(l:candidates, '{
-        \ "word" : unite#util#substitute_path_separator(fnamemodify(v:val, ":p")),
-        \ "abbr" : unite#util#substitute_path_separator(fnamemodify(v:val, ":.")),
-        \ "kind" : "file",
-        \ "action__path" : unite#util#substitute_path_separator(fnamemodify(v:val, ":p")),
-        \ "action__directory" : unite#util#path2directory(v:val),
-        \ }')
+  let l:is_relative_path =
+        \ a:context.source__directory == unite#util#substitute_path_separator(getcwd())
+
+  let l:candidates = []
+  for l:file in l:files
+    let l:dict = {
+        \ 'word' : unite#util#substitute_path_separator(fnamemodify(l:file, ':p')),
+        \ 'abbr' : unite#util#substitute_path_separator(fnamemodify(l:file, ':.')),
+        \ 'kind' : 'file',
+        \ }
+    let l:dict.action__path = l:dict.word
+    let l:dict.action__directory = l:is_relative_path ?
+          \ fnamemodify(unite#util#path2directory(l:file), ':.') :
+          \ unite#util#path2directory(l:dict.action__path)
+
+    call add(l:candidates, l:dict)
+  endfor
 
   let l:continuation.cached += l:candidates
 
@@ -103,7 +113,7 @@ endfunction"}}}
 
 " Add custom action table."{{{
 let s:cdable_action_rec = {
-      \ 'description' : 'open this directory by file_rec',
+      \ 'description' : 'open this directory by file_rec source',
       \}
 
 function! s:cdable_action_rec.func(candidate)

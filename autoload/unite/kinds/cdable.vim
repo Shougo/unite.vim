@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 03 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -93,10 +93,7 @@ function! s:kind.action_table.narrow.func(candidate)"{{{
   if a:candidate.word =~ '^\.\.\?/'
     let l:word = a:candidate.word
   else
-    let l:word = unite#util#substitute_path_separator(fnamemodify(a:candidate.action__directory, ':.'))
-    if l:word == ''
-      let l:word = a:candidate.word
-    endif
+    let l:word = a:candidate.action__directory
   endif
 
   if l:word !~ '[\\/]$'

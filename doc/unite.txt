@@ -1088,6 +1088,7 @@ Defines an interface for files you can move to with cd command.
 	tabvimfiler	Run |:VimFilerTab| on the directory.  This is
 			available only when you already installed |vimfiler|.
 	rec		Run |unite-source-file_rec| on the directory.
+	file		Run |unite-source-file| on the directory.
 
 file						*unite-action-file*
 Opens a file into a new buffer.  This kind extends |unite-action-openable| and
@@ -1278,6 +1279,8 @@ CHANGELOG					*unite-changelog*
 2011-06-03
 - Fixed unite-register freeze.
 - Fixed initialize error.
+- Added file action in cdable kind.
+- Improved narrow action.
 
 2011-06-02
 - Added replace action in jump_list kind.
