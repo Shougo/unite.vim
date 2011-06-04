@@ -611,7 +611,6 @@ j		|<Plug>(unite_loop_cursor_down)|
 k		|<Plug>(unite_loop_cursor_up)|
 <Up>		|<Plug>(unite_loop_cursor_up)|
 <CR>		In case when you selected a candidate, runs default action
-l		In case when you selected a candidate, runs default action
 d		In case when you selected a candidate, runs delete action
 b		In case when you selected a candidate, runs bookmark action
 e		In case when you selected a candidate, runs narrow action
@@ -1282,6 +1281,7 @@ CHANGELOG					*unite-changelog*
 
 2011-06-04
 - Added <Plug>(unite_toggle_mark_all_candidates) keymapping.
+- Deleted l default keymapping.
 
 2011-06-03
 - Fixed unite-register freeze.

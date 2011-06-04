@@ -100,7 +100,6 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
   nnoremap <silent><buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
   nnoremap <silent><buffer><expr> e   unite#smart_map('e', unite#do_action('narrow'))
-  nnoremap <silent><buffer><expr> l   unite#smart_map('l', unite#do_action(unite#get_current_unite().context.default_action))
   nnoremap <silent><buffer><expr> p   unite#do_action('preview')
   nmap <silent><buffer><expr> x       unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 

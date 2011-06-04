@@ -604,7 +604,6 @@ j		|<Plug>(unite_loop_cursor_down)|
 k		|<Plug>(unite_loop_cursor_up)|
 <Up>		|<Plug>(unite_loop_cursor_up)|
 <CR>		候補を選択している場合は default アクションの実行
-l		候補を選択している場合は default アクションの実行
 d		候補を選択している場合は delete アクションの実行
 b		候補を選択している場合は bookmark アクションの実行
 e		候補を選択している場合は narrow アクションの実行
