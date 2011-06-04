@@ -480,9 +480,12 @@ Normal mode mappings.
 		cursor into the prompt line automatically.
 
 <Plug>(unite_toggle_mark_current_candidate)	*<Plug>(unite_toggle_mark_current_candidate)*
-		Toggles the mark of the candidate in the current line.  You may
+		Toggles the mark of the candidates in the current line.  You may
 		run an action on multiple candidates at the same time by
 		marking multiple candidates.
+
+<Plug>(unite_toggle_mark_current_candidate)	*<Plug>(unite_toggle_mark_all_candidates)*
+		Toggles the mark of the candidates in the all lines.
 
 <Plug>(unite_redraw)				*<Plug>(unite_redraw)*
 		Without waiting for the update time defined in 
@@ -595,6 +598,7 @@ A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
 <C-r>		|<Plug>(unite_restart)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
+*		|<Plug>(unite_toggle_mark_all_candidates)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_rotate_next_source)|
 <C-p>		|<Plug>(unite_rotate_previous_source)|
@@ -1275,6 +1279,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-06-04
+- Added <Plug>(unite_toggle_mark_all_candidates) keymapping.
 
 2011-06-03
 - Fixed unite-register freeze.

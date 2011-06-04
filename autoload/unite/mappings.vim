@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jun 2011.
+" Last Modified: 04 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,12 +49,13 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(unite#get_current_unite().context.default_action)
   nnoremap <silent><buffer> <Plug>(unite_delete_backward_path)  :<C-u>call <SID>normal_delete_backward_path()<CR>
   nnoremap <silent><buffer> <Plug>(unite_restart)  :<C-u>call <SID>restart()<CR>
+  nnoremap <buffer><silent> <Plug>(unite_toggle_mark_all_candidates)  :<C-u>call <SID>toggle_mark_candidates(0, len(unite#get_unite_candidates()) - 1)<CR>
 
-  vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1], getpos("'>")[1])<CR>
+  vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1] - unite#get_current_unite().prompt_linenr-1, getpos("'>")[1] - unite#get_current_unite().prompt_linenr - 1)<CR>
 
   inoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
   inoremap <silent><buffer> <Plug>(unite_insert_leave)  <C-o>:<C-u>call <SID>insert_leave()<CR>
-  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
+  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(unite#get_current_unite().prompt)-1) ? "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(unite#get_current_unite().prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : "\<C-w>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_path)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : <SID>delete_backward_path()
@@ -94,6 +95,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <Up>         <Plug>(unite_loop_cursor_up)
   nmap <buffer> <C-h>     <Plug>(unite_delete_backward_path)
   nmap <buffer> <C-r>     <Plug>(unite_restart)
+  nmap <buffer> *         <Plug>(unite_toggle_mark_all_candidates)
 
   nnoremap <silent><buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
   nnoremap <silent><buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
@@ -318,18 +320,18 @@ function! s:toggle_mark()"{{{
   normal! j
 endfunction"}}}
 function! s:toggle_mark_candidates(start, end)"{{{
-  if a:start <= unite#get_current_unite().prompt_linenr
+  if a:start < 0 || a:end >= len(unite#get_unite_candidates())
     " Ignore.
     return
   endif
 
   let l:cnt = a:start
   while l:cnt <= a:end
-    let l:candidate = unite#get_unite_candidates()[l:cnt - (unite#get_current_unite().prompt_linenr+1)]
+    let l:candidate = unite#get_unite_candidates()[l:cnt]
     let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
     let l:candidate.unite__marked_time = localtime()
 
-    call unite#redraw_line(l:cnt)
+    call unite#redraw_line(l:cnt + unite#get_current_unite().prompt_linenr+1)
 
     let l:cnt += 1
   endwhile
