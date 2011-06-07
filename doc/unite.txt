@@ -1279,6 +1279,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-06-07
+- Improved "e" mapping.
+
 2011-06-04
 - Added <Plug>(unite_toggle_mark_all_candidates) keymapping.
 - Deleted l default keymapping.

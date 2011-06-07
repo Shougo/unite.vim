@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jun 2011.
+" Last Modified: 07 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,6 +34,7 @@ endfunction"}}}
 let s:kind = {
       \ 'name' : 'cdable',
       \ 'action_table' : {},
+      \ 'alias_table' : { 'edit' : 'narrow' },
       \}
 
 " Actions"{{{

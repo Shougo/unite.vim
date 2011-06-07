@@ -606,7 +606,7 @@ k		|<Plug>(unite_loop_cursor_up)|
 <CR>		候補を選択している場合は default アクションの実行
 d		候補を選択している場合は delete アクションの実行
 b		候補を選択している場合は bookmark アクションの実行
-e		候補を選択している場合は narrow アクションの実行
+e		候補を選択している場合は edit アクションの実行
 p		preview アクションの実行
 x		候補を選択している場合は|<Plug>(unite_quick_match_default_action)|
 
@@ -628,7 +628,7 @@ x		候補を選択している場合は|<Plug>(unite_quick_match_default_action)
 <C-w>		|i_<Plug>(unite_delete_backward_word)|
 <C-a>		|i_<Plug>(unite_move_head)|
 <Home>		|i_<Plug>(unite_move_head)|
-/		候補を選択している場合は narrow アクションの実行
+/		候補を選択している場合は edit アクションの実行
 d		候補を選択している場合は delete アクションの実行
 <Space>		候補を選択している場合は|i_<Plug>(unite_toggle_mark_current_candidate)|
 x		候補を選択している場合は|i_<Plug>(unite_quick_match_default_action)|

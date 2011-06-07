@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jun 2011.
+" Last Modified: 07 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -99,7 +99,7 @@ function! unite#mappings#define_default_mappings()"{{{
 
   nnoremap <silent><buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
   nnoremap <silent><buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
-  nnoremap <silent><buffer><expr> e   unite#smart_map('e', unite#do_action('narrow'))
+  nnoremap <silent><buffer><expr> e   unite#smart_map('e', unite#do_action('edit'))
   nnoremap <silent><buffer><expr> p   unite#do_action('preview')
   nmap <silent><buffer><expr> x       unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 
@@ -124,7 +124,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <Home>    <Plug>(unite_move_head)
 
   inoremap <silent><buffer><expr> d         unite#smart_map('d', unite#do_action('delete'))
-  inoremap <silent><buffer><expr> /         unite#smart_map('/', unite#do_action('narrow'))
+  inoremap <silent><buffer><expr> /         unite#smart_map('/', unite#do_action('edit'))
   imap <silent><buffer><expr> <Space>       unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <silent><buffer><expr> x             unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 endfunction"}}}
