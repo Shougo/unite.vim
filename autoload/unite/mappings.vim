@@ -55,7 +55,7 @@ function! unite#mappings#define_default_mappings()"{{{
 
   inoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
   inoremap <silent><buffer> <Plug>(unite_insert_leave)  <C-o>:<C-u>call <SID>insert_leave()<CR>
-  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(unite#get_current_unite().prompt)-1) ? "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
+  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(unite#get_current_unite().prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : "\<C-w>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_path)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : <SID>delete_backward_path()
