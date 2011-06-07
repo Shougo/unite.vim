@@ -636,7 +636,7 @@ Insert mode mappings.
 <C-w>		|i_<Plug>(unite_delete_backward_word)|
 <C-a>		|i_<Plug>(unite_move_head)|
 <Home>		|i_<Plug>(unite_move_head)|
-/		In case when you selected a candidate, runs narrow action
+e		In case when you selected a candidate, runs narrow action
 d		In case when you selected a candidate, runs delete action
 <Space>		In case when you selected a candidate,
 		|i_<Plug>(unite_toggle_mark_current_candidate)|
@@ -1281,6 +1281,7 @@ CHANGELOG					*unite-changelog*
 
 2011-06-07
 - Improved "e" mapping.
+- Changed insert mode mappings.
 
 2011-06-04
 - Added <Plug>(unite_toggle_mark_all_candidates) keymapping.
