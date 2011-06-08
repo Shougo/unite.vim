@@ -124,7 +124,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <Home>    <Plug>(unite_move_head)
 
   inoremap <silent><buffer><expr> d         unite#smart_map('d', unite#do_action('delete'))
-  inoremap <silent><buffer><expr> e         unite#smart_map('/', unite#do_action('edit'))
+  inoremap <silent><buffer><expr> e         unite#smart_map('e', unite#do_action('edit'))
   imap <silent><buffer><expr> <Space>       unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <silent><buffer><expr> x             unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 endfunction"}}}
