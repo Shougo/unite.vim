@@ -1279,6 +1279,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-06-09
+- Improved unite#print_error().
+
 2011-06-07
 - Improved "e" mapping.
 - Changed insert mode mappings.

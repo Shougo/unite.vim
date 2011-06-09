@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jun 2011.
+" Last Modified: 09 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -571,9 +571,13 @@ endfunction"}}}
 
 " Utils.
 function! unite#print_error(message)"{{{
-  call s:print_buffer('!!!' . a:message . '!!!')
+  let l:message = type(a:message) == type([]) ?
+        \ l:message : [a:message]
+  for l:mes in l:message
+    call unite#print_message('!!!'.l:mes.'!!!')
 
-  echohl WarningMsg | echomsg a:message | echohl None
+    echohl WarningMsg | echomsg l:mes | echohl None
+  endfor
 endfunction"}}}
 function! unite#print_message(message)"{{{
   if &filetype ==# 'unite'
@@ -1067,14 +1071,17 @@ function! s:recache_candidates(input, is_force)"{{{
     let l:source.unite__context.source = l:source
     let l:source.unite__context.is_redraw = l:context.is_redraw
 
-    if !l:source.is_volatile && has_key(l:source, 'gather_candidates') && (a:is_force || l:source.unite__is_invalidate)
+    if !l:source.is_volatile && has_key(l:source, 'gather_candidates')
+          \ && (a:is_force || l:source.unite__is_invalidate)
       " Recaching.
-      let l:source.unite__cached_candidates = copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
+      let l:source.unite__cached_candidates =
+            \ copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
       let l:source.unite__is_invalidate = 0
     endif
 
     if l:source.unite__context.is_async
-      let l:source.unite__cached_candidates += l:source.async_gather_candidates(l:source.args, l:source.unite__context)
+      let l:source.unite__cached_candidates +=
+            \ l:source.async_gather_candidates(l:source.args, l:source.unite__context)
 
       if !l:source.unite__context.is_async
         " Update async state.
@@ -1089,14 +1096,16 @@ function! s:recache_candidates(input, is_force)"{{{
           \ s:custom.source[l:source.name] : {}
 
     if has_key(l:source, 'change_candidates')
-      let l:source_candidates += l:source.change_candidates(l:source.args, l:source.unite__context)
+      let l:source_candidates +=
+            \ l:source.change_candidates(l:source.args, l:source.unite__context)
     endif
 
     " Filter.
     for l:filter_name in has_key(l:custom_source, 'filters') ?
           \ l:custom_source.filters : l:source.filters
       if has_key(l:unite.filters, l:filter_name)
-        let l:source_candidates = l:unite.filters[l:filter_name].filter(l:source_candidates, l:source.unite__context)
+        let l:source_candidates =
+              \ l:unite.filters[l:filter_name].filter(l:source_candidates, l:source.unite__context)
       endif
     endfor
 
