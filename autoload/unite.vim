@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jun 2011.
+" Last Modified: 10 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -210,6 +210,7 @@ let s:unite_options = [
       \ '-winwidth=', '-winheight=',
       \ '-immediately', '-auto-preview', '-complete',
       \ '-vertical', '-horizontal', '-direction=',
+      \ '-verbose',
       \]
 "}}}
 
@@ -698,6 +699,9 @@ function! unite#start(sources, ...)"{{{
   if !has_key(l:context, 'temporary')
     let l:context.temporary = 0
   endif
+  if !has_key(l:context, 'verbose')
+    let l:context.verbose = 0
+  endif
   let l:context.is_redraw = 0
 
   try
@@ -1058,6 +1062,7 @@ function! s:recache_candidates(input, is_force)"{{{
   let l:context = l:unite.context
   let l:context.input = l:input
   let l:context.is_redraw = a:is_force
+  let l:filtered_count = 0
 
   for l:source in unite#loaded_sources_list()
     " Check required pattern length.
@@ -1110,8 +1115,14 @@ function! s:recache_candidates(input, is_force)"{{{
     endfor
 
     if l:source.max_candidates != 0
+          \ && len(l:source_candidates) > l:source.max_candidates
       " Filtering too many candidates.
       let l:source_candidates = l:source_candidates[: l:source.max_candidates - 1]
+
+      if l:context.verbose && l:filtered_count < &cmdheight
+        echohl WarningMsg | echomsg printf('[%s] Filtering too many candidates.', l:source.name) | echohl None
+        let l:filtered_count += 1
+      endif
     endif
 
     " Call post_filter hook.

@@ -238,6 +238,10 @@ http://www.ustream.tv/recorded/11240673
 		uniteバッファの分割方法を指定する。デフォルト値は
 		|g:unite_split_rule|と同じである。
 
+						*unite-options-verbose*
+		-verbose
+		冗長な警告メッセージを出すようにする。
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。
