@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2010
+" Last Modified: 11 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,6 +35,7 @@ let s:kind = {
       \ 'name' : 'tab',
       \ 'default_action' : 'open',
       \ 'action_table': {},
+      \ 'alias_table': { 'edit' : 'rename' },
       \}
 
 " Actions"{{{

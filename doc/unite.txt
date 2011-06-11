@@ -1283,6 +1283,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-06-11
+- Improved kind tab.
+
 2011-06-10
 - Added -verbose option.
 
