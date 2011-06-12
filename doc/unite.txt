@@ -1283,6 +1283,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-06-12
+- Fixed quit unite buffer problem.
+
 2011-06-11
 - Improved kind tab.
 

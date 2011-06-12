@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Jun 2011.
+" Last Modified: 12 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -183,6 +183,7 @@ let s:LNUM_STATUS = 1
 let s:last_unite_bufnr = -1
 let s:current_unite = {}
 let s:unite_cached_message = []
+let s:is_initialized_unite_buffer = 0
 
 let s:static = {}
 
@@ -563,7 +564,7 @@ function! unite#gather_candidates()"{{{
   return l:candidates
 endfunction"}}}
 function! unite#get_current_unite() "{{{
-  return exists('b:unite') ? b:unite : s:current_unite
+  return exists('b:unite') && s:is_initialized_unite_buffer ? b:unite : s:current_unite
 endfunction"}}}
 function! unite#set_search_pattern(pattern) "{{{
   let l:unite = unite#get_current_unite()
@@ -704,6 +705,8 @@ function! unite#start(sources, ...)"{{{
   endif
   let l:context.is_redraw = 0
 
+  let s:is_initialized_unite_buffer = 0
+
   try
     call s:initialize_current_unite(a:sources, l:context)
   catch /^Invalid source/
@@ -730,6 +733,8 @@ function! unite#start(sources, ...)"{{{
   endif
 
   call s:initialize_unite_buffer()
+
+  let s:is_initialized_unite_buffer = 1
 
   let l:unite = unite#get_current_unite()
 
@@ -1204,10 +1209,10 @@ function! s:initialize_current_unite(sources, context)"{{{
           \ && unite#get_current_unite().buffer_name ==# l:context.buffer_name
       " Get input text.
       let l:context.input = unite#get_input()
-    endif
 
-    " Quit unite buffer.
-    call unite#quit_session()
+      " Quit unite buffer.
+      call unite#quit_session()
+    endif
   endif
 
   " The current buffer is initialized.
@@ -1360,10 +1365,8 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
     silent execute bufwinnr(unite#util#escape_file_searching(a:buffer_name)) 'wincmd w'
   else
     " Split window.
-    execute a:context.direction
-          \ a:context.vertical ?
-          \        (bufexists(a:buffer_name) ? 'vsplit' : 'vnew')
-          \      : (bufexists(a:buffer_name) ? 'split' : 'new')
+    execute a:context.direction ((a:context.vertical) ? 'vnew' : 'new')
+
     if bufexists(a:buffer_name)
       " Search buffer name.
       let l:bufnr = 1
