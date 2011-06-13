@@ -1283,6 +1283,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-06-13
+- Fixed switch_unite_buffer().
+
 2011-06-12
 - Fixed quit unite buffer problem.
 
