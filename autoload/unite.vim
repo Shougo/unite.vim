@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jun 2011.
+" Last Modified: 15 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -667,7 +667,7 @@ function! unite#start(sources, ...)"{{{
     let l:context.no_quit = 0
   endif
   if !has_key(l:context, 'buffer_name')
-    let l:context.buffer_name = ''
+    let l:context.buffer_name = 'default'
   endif
   if !has_key(l:context, 'prompt')
     let l:context.prompt = '>'
@@ -1217,9 +1217,7 @@ function! s:initialize_current_unite(sources, context)"{{{
 
   " The current buffer is initialized.
   let l:buffer_name = unite#is_win() ? '[unite]' : '*unite*'
-  if l:context.buffer_name != ''
-    let l:buffer_name .= ' - ' . l:context.buffer_name
-  endif
+  let l:buffer_name .= ' - ' . l:context.buffer_name
 
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
