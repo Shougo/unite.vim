@@ -1081,13 +1081,29 @@ function! s:recache_candidates(input, is_force)"{{{
     let l:source.unite__context.source = l:source
     let l:source.unite__context.is_redraw = l:context.is_redraw
 
-    if !l:source.is_volatile && has_key(l:source, 'gather_candidates')
-          \ && (a:is_force || l:source.unite__is_invalidate)
-      " Recaching.
-      let l:source.unite__cached_candidates =
-            \ copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
-      let l:source.unite__is_invalidate = 0
+    if a:is_force ||
+          \ (has_key(l:source, 'change_candidates')
+          \   && a:input !=# l:unite.last_input)
+      let l:source.unite__is_invalidate = 1
     endif
+
+    if l:source.unite__is_invalidate
+      " Recaching.
+      let l:source.unite__cached_candidates = []
+
+      if has_key(l:source, 'gather_candidates')
+        let l:source.unite__cached_candidates +=
+              \ copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
+      endif
+
+      if has_key(l:source, 'change_candidates')
+        " Recaching.
+        let l:source.unite__cached_candidates +=
+              \ l:source.change_candidates(l:source.args, l:source.unite__context)
+      endif
+    endif
+
+    let l:source.unite__is_invalidate = 0
 
     if l:source.unite__context.is_async
       let l:source.unite__cached_candidates +=
@@ -1104,11 +1120,6 @@ function! s:recache_candidates(input, is_force)"{{{
 
     let l:custom_source = has_key(s:custom.source, l:source.name) ?
           \ s:custom.source[l:source.name] : {}
-
-    if has_key(l:source, 'change_candidates')
-      let l:source_candidates +=
-            \ l:source.change_candidates(l:source.args, l:source.unite__context)
-    endif
 
     " Filter.
     for l:filter_name in has_key(l:custom_source, 'filters') ?
@@ -1408,11 +1419,12 @@ function! s:redraw(is_force) "{{{
     return
   endif
 
-  let l:unite.last_input = l:input
   let l:unite.context.is_redraw = a:is_force
 
   " Recaching.
   call s:recache_candidates(l:input, a:is_force)
+
+  let l:unite.last_input = l:input
 
   " Redraw.
   call unite#redraw_candidates()
