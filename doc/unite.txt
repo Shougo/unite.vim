@@ -1283,6 +1283,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-06-17
+- Fixed caching bug.
+
 2011-06-15
 - Fixed unite-buffer-name problem.
 
