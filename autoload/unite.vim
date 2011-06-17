@@ -1089,11 +1089,6 @@ function! s:recache_candidates(input, is_force)"{{{
       let l:source.unite__is_invalidate = 0
     endif
 
-    if has_key(l:source, 'change_candidates')
-      let l:source.unite__cached_candidates +=
-            \ l:source.change_candidates(l:source.args, l:source.unite__context)
-    endif
-
     if l:source.unite__context.is_async
       let l:source.unite__cached_candidates +=
             \ l:source.async_gather_candidates(l:source.args, l:source.unite__context)
@@ -1109,6 +1104,11 @@ function! s:recache_candidates(input, is_force)"{{{
 
     let l:custom_source = has_key(s:custom.source, l:source.name) ?
           \ s:custom.source[l:source.name] : {}
+
+    if has_key(l:source, 'change_candidates')
+      let l:source_candidates +=
+            \ l:source.change_candidates(l:source.args, l:source.unite__context)
+    endif
 
     " Filter.
     for l:filter_name in has_key(l:custom_source, 'filters') ?
