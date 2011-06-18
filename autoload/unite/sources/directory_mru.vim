@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 May 2011.
+" Last Modified: 19 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -148,10 +148,16 @@ function! s:load()  "{{{
       return
     endif
 
-    let s:mru_dirs =
-    \   map(s:mru_dirs[: g:unite_source_directory_mru_limit - 1],
-    \              's:convert2dictionary(split(v:val, "\t"))')
-    call filter(s:mru_dirs, 'isdirectory(v:val.action__path)')
+    try
+      let s:mru_dirs = map(s:mru_dirs[: g:unite_source_directory_mru_limit - 1],
+            \              's:convert2dictionary(split(v:val, "\t"))')
+    catch
+      call unite#util#print_error('Sorry, MRU file is invalid.  Clears the MRU list.')
+      let s:mru_dirs = []
+      return
+    endtry
+
+    let s:mru_dirs = filter(s:mru_dirs, 'isdirectory(v:val.action__path)')
 
     let s:mru_file_mtime = getftime(g:unite_source_directory_mru_file)
   endif
