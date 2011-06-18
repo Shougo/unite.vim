@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jun 2011.
+" Last Modified: 18 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -809,7 +809,6 @@ function! unite#resume(buffer_name)"{{{
   let l:unite.winnr = l:winnr
   let l:unite.win_rest_cmd = l:win_rest_cmd
   let l:unite.redrawtime_save = &redrawtime
-  let l:unite.hlsearch_save = &hlsearch
   let l:unite.search_pattern_save = @/
 
   let s:current_unite = l:unite
@@ -865,7 +864,6 @@ function! s:quit_session(is_force)  "{{{
   if exists('&redrawtime')
     let &redrawtime = l:unite.redrawtime_save
   endif
-  let &hlsearch = l:unite.hlsearch_save
   let &sidescrolloff = l:unite.sidescrolloff_save
 
   match
@@ -1254,7 +1252,6 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.prompt = l:context.prompt
   let l:unite.input = l:context.input
   let l:unite.last_input = l:context.input
-  let l:unite.hlsearch_save = &hlsearch
   let l:unite.sidescrolloff_save = &sidescrolloff
   let l:unite.search_pattern_save = @/
   let l:unite.prompt_linenr = 2
@@ -1295,7 +1292,6 @@ function! s:initialize_unite_buffer()"{{{
     setlocal nowrap
     setlocal foldcolumn=0
     setlocal iskeyword+=-,+,\\,!,~
-    set hlsearch
     set sidescrolloff=0
     match
     if has('conceal')

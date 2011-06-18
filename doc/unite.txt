@@ -1283,6 +1283,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-06-18
+- Fixed hlsearch.
+
 2011-06-17
 - Fixed caching bug.
 - Improved s:recache_candidates().
