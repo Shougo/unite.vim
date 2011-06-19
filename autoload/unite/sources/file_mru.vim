@@ -143,7 +143,7 @@ function! s:load()  "{{{
       return
     endtry
 
-    let s:mru_files = filter(s:mru_files, 'isdirectory(v:val.action__path)')
+    let s:mru_files = filter(s:mru_files, 's:is_exists_path(v:val.action__path)')
 
     let s:mru_file_mtime = getftime(g:unite_source_file_mru_file)
   endif
