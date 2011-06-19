@@ -143,8 +143,6 @@ function! s:load()  "{{{
       return
     endtry
 
-    let s:mru_files = filter(s:mru_files, 'isdirectory(v:val.action__path)')
-
     let s:mru_file_mtime = getftime(g:unite_source_file_mru_file)
   endif
 endfunction"}}}
