@@ -1283,6 +1283,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-06-20
+- Fixed path separator problem in unite-file.
+
 2011-06-19
 - Improved detect error in mru.
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jun 2011.
+" Last Modified: 20 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -96,7 +96,8 @@ function! s:source.change_candidates(args, context)"{{{
           \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(l:file, ':p')),
           \}
     let l:dict.action__directory = l:is_relative_path ?
-          \ fnamemodify(unite#util#path2directory(l:file), ':.') :
+          \ unite#util#substitute_path_separator(
+          \    fnamemodify(unite#util#path2directory(l:file), ':.')) :
           \ unite#util#path2directory(l:dict.action__path)
 
     if isdirectory(l:file)
