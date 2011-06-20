@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jun 2011.
+" Last Modified: 20 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -720,12 +720,24 @@ function! unite#start(sources, ...)"{{{
 
   if l:context.immediately
     let l:candidates = unite#gather_candidates()
+    let l:winnr = bufwinnr(unite#get_current_unite().real_buffer_name)
 
     " Immediately action.
     if empty(l:candidates)
+      if l:winnr > 0
+        " Close previous unite buffer.
+        execute l:winnr . 'wincmd w'
+        close!
+      endif
+
       " Ignore.
       return
     elseif len(l:candidates) == 1
+      if l:winnr > 0
+        execute l:winnr . 'wincmd w'
+        close!
+      endif
+
       " Default action.
       call unite#mappings#do_action(l:context.default_action, [l:candidates[0]])
       return
@@ -892,13 +904,13 @@ function! s:quit_session(is_force)  "{{{
     endif
   endif
 
-  " Call finalize functions.
-  call s:call_hook(unite#loaded_sources_list(), 'on_close')
+  if !a:is_force && l:unite.context.no_quit
+    " Call finalize functions.
+    call s:call_hook(unite#loaded_sources_list(), 'on_close')
+  endif
 
   if l:unite.context.complete
     if l:unite.context.col < col('$')
-      echomsg l:unite.context.col
-      echomsg col('$')
       startinsert
     else
       startinsert!
