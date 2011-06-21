@@ -44,7 +44,7 @@ function! s:strwidthpart(str, width)"{{{
   while width > a:width
     let char = matchstr(ret, '.$')
     let ret = ret[: -1 - len(char)]
-    let width -= s:wcwidth(char)
+    let width -= s:wcswidth(char)
   endwhile
 
   return ret
@@ -55,7 +55,7 @@ function! s:strwidthpart_reverse(str, width)"{{{
   while width > a:width
     let char = matchstr(ret, '^.')
     let ret = ret[len(char) :]
-    let width -= s:wcwidth(char)
+    let width -= s:wcswidth(char)
   endwhile
 
   return ret
@@ -64,9 +64,6 @@ endfunction"}}}
 if v:version >= 703
   " Use builtin function.
   function! s:wcswidth(str)"{{{
-    return strdisplaywidth(a:str)
-  endfunction"}}}
-  function! s:wcwidth(str)"{{{
     return strwidth(a:str)
   endfunction"}}}
 else
@@ -226,9 +223,13 @@ function! s:system(str, ...)"{{{
   if a:0 == 0
     let l:output = s:has_vimproc() ?
           \ vimproc#system(l:command) : system(l:command)
-  else
+  elseif a:0 == 1
     let l:output = s:has_vimproc() ?
           \ vimproc#system(l:command, l:input) : system(l:command, l:input)
+  else
+    " ignores 3rd argument unless you have vimproc.
+    let l:output = s:has_vimproc() ?
+          \ vimproc#system(l:command, l:input, a:2) : system(l:command, l:input)
   endif
 
   if &termencoding != '' && &termencoding != &encoding

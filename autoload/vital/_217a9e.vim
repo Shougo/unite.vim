@@ -95,23 +95,10 @@ function! s:_build_module(sid)
   return copy(module)
 endfunction
 
-function! s:_redir(...)
-  let temp = tempname()
-  let save_vfile = &verbosefile
-  let &verbosefile = temp
-
-  let res = ''
-  try
-    for c in a:000
-      silent execute c
-    endfor
-    if &verbosefile ==# temp
-      let &verbosefile = save_vfile
-      let res = join(readfile(temp, 'b'), "\n")
-    endif
-  finally
-    call delete(temp)
-  endtry
+function! s:_redir(cmd)
+  redir => res
+    silent! execute a:cmd
+  redir END
   return res
 endfunction
 
