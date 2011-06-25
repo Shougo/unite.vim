@@ -109,7 +109,7 @@ function! s:grep_source.hooks.on_init(args, context) "{{{
 endfunction"}}}
 function! s:grep_source.hooks.on_syntax(args, context)"{{{
   execute 'syntax match uniteSource__GrepPattern /:.*\zs'
-        \ . substitute(a:context.source__input, '/', '\\/', 'g')
+        \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
         \ . '/ contained containedin=uniteSource__Grep'
   highlight default link uniteSource__GrepPattern Search
 endfunction"}}}
