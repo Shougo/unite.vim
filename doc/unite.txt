@@ -968,6 +968,9 @@ mapping		Nominates Vim mappings as candidates.
 grep		Nominates "grep" command output as candidates.
 		Note: This source is created by Sixeight.
 
+		Note: This source requires vimproc.  Please install.
+		http://github.com/Shougo/vimproc/tree/master
+
 		Source arguments:
 		1. the target directory.
 		2. "grep" options.

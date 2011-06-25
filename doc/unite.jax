@@ -993,6 +993,9 @@ mapping		ユーザーが定義したマッピングを候補とする。
 grep		"grep"コマンドを実行した結果を候補とする。
 		Note: このsourceはSixeight氏によって作成された。
 
+		Note: このsourceはvimprocを必要としている。
+		http://github.com/Shougo/vimproc/tree/master
+
 		source引数：
 		1. ターゲットとなるディレクトリ名
 		2. "grep"に与えるオプション
