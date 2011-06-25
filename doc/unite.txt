@@ -1287,6 +1287,7 @@ CHANGELOG					*unite-changelog*
 
 2011-06-25
 - Added rename action.
+- Deleted search pattern.
 
 2011-06-24
 - Don't follow symbolic link in file_rec source.

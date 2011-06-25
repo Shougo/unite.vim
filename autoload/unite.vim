@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jun 2011.
+" Last Modified: 25 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -566,10 +566,6 @@ endfunction"}}}
 function! unite#get_current_unite() "{{{
   return exists('b:unite') && s:is_initialized_unite_buffer ? b:unite : s:current_unite
 endfunction"}}}
-function! unite#set_search_pattern(pattern) "{{{
-  let l:unite = unite#get_current_unite()
-  let l:unite.search_pattern_save = a:pattern
-endfunction"}}}
 
 " Utils.
 function! unite#print_error(message)"{{{
@@ -821,7 +817,6 @@ function! unite#resume(buffer_name)"{{{
   let l:unite.winnr = l:winnr
   let l:unite.win_rest_cmd = l:win_rest_cmd
   let l:unite.redrawtime_save = &redrawtime
-  let l:unite.search_pattern_save = @/
 
   let s:current_unite = l:unite
 
@@ -868,9 +863,6 @@ function! s:quit_session(is_force)  "{{{
   " Save unite value.
   let s:current_unite = b:unite
   let l:unite = s:current_unite
-
-  " Highlight off.
-  let @/ = l:unite.search_pattern_save
 
   " Restore options.
   if exists('&redrawtime')
@@ -1265,7 +1257,6 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.input = l:context.input
   let l:unite.last_input = l:context.input
   let l:unite.sidescrolloff_save = &sidescrolloff
-  let l:unite.search_pattern_save = @/
   let l:unite.prompt_linenr = 2
   let l:unite.max_source_name = len(a:sources) > 1 ?
         \ max(map(copy(a:sources), 'len(v:val[0])')) + 2 : 0
