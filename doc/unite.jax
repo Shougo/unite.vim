@@ -1203,6 +1203,7 @@ file						*unite-action-file*
 	bookmark	候補をブックマークに追加する
 	mkdir		ファイル名をディレクトリ名としてディレクトリを作成する。
 			ファイルが存在する場合は無効。
+	rename		ファイル名を変更する
 
 buffer						*unite-action-buffer*
 このkindは|unite-action-file|のアクションを継承している。
@@ -1211,6 +1212,7 @@ buffer						*unite-action-buffer*
 	wipeout		バッファを|:bwipeout|
 	unload		バッファを|:bunload|
 	bookmark	候補をブックマークに追加する
+	rename		バッファのファイル名を変更する
 
 tab						*unite-action-tab*
 このkindは|gettabvar()|が存在するときのみ、|unite-action-cdable|のアクションを

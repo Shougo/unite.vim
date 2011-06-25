@@ -1104,6 +1104,7 @@ Opens a file into a new buffer.  This kind extends |unite-action-openable| and
 	preview		Open the file into preview window
 	bookmark	Add the file into your bookmark
 	mkdir		Make directory. If exists file, this action is invalid.
+	rename		Change the file name.
 
 buffer						*unite-action-buffer*
 This kind extends |unite-action-file|.
@@ -1112,6 +1113,7 @@ This kind extends |unite-action-file|.
 	wipeout		|:bwipeout| the buffer
 	unload		|:bunload| the buffer
 	bookmark	Add the candidate into your bookmark
+	rename		Change the buffer name and file name.
 
 tab						*unite-action-tab*
 This kind extends actions of |unite-action-cdable| only when |gettabvar()|
@@ -1282,6 +1284,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-06-25
+- Added rename action.
 
 2011-06-24
 - Don't follow symbolic link in file_rec source.
