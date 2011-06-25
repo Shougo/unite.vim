@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Jun 2011.
+" Last Modified: 26 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1311,6 +1311,8 @@ function! s:initialize_unite_buffer()"{{{
       autocmd CursorHoldI <buffer>  call s:on_cursor_hold_i()
       autocmd CursorHold <buffer>  call s:on_cursor_hold()
       autocmd CursorMoved,CursorMovedI <buffer>  call s:on_cursor_moved()
+      autocmd WinEnter,BufWinEnter <buffer>  call s:on_win_enter()
+      autocmd WinLeave,BufWinLeave <buffer>  call s:on_win_leave()
     augroup END
 
     call unite#mappings#define_default_mappings()
@@ -1434,22 +1436,12 @@ endfunction"}}}
 
 " Autocmd events.
 function! s:on_insert_enter()  "{{{
-  if &updatetime > g:unite_update_time
-    let l:unite = unite#get_current_unite()
-    let l:unite.update_time_save = &updatetime
-    let &updatetime = g:unite_update_time
-  endif
-
   setlocal modifiable
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   if line('.') == unite#get_current_unite().prompt_linenr
     " Redraw.
     call unite#redraw()
-  endif
-
-  if has_key(unite#get_current_unite(), 'update_time_save') && &updatetime < unite#get_current_unite().update_time_save
-    let &updatetime = unite#get_current_unite().update_time_save
   endif
 
   setlocal nomodifiable
@@ -1506,6 +1498,20 @@ function! s:on_cursor_moved()  "{{{
         execute 'resize' l:context.winheight
       endif
     endif
+  endif
+endfunction"}}}
+function! s:on_win_enter()  "{{{
+  if &updatetime > g:unite_update_time
+    let l:unite = unite#get_current_unite()
+    let l:unite.update_time_save = &updatetime
+    let &updatetime = g:unite_update_time
+  endif
+endfunction"}}}
+function! s:on_win_leave()  "{{{
+  let l:unite = unite#get_current_unite()
+  if has_key(l:unite, 'update_time_save')
+        \ && &updatetime < l:unite.update_time_save
+    let &updatetime = l:unite.update_time_save
   endif
 endfunction"}}}
 
