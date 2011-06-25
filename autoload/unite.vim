@@ -727,6 +727,7 @@ function! unite#start(sources, ...)"{{{
       endif
 
       " Ignore.
+      let s:is_initialized_unite_buffer = 1
       return
     elseif len(l:candidates) == 1
       if l:winnr > 0
@@ -736,6 +737,7 @@ function! unite#start(sources, ...)"{{{
 
       " Default action.
       call unite#mappings#do_action(l:context.default_action, [l:candidates[0]])
+      let s:is_initialized_unite_buffer = 1
       return
     endif
   endif
