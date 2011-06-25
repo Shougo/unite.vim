@@ -69,10 +69,11 @@ function! unite#sources#grep#define() "{{{
 endfunction "}}}
 
 let s:grep_source = {
-  \   'name': 'grep',
-  \   'max_candidates': g:unite_source_grep_max_candidates,
-  \   'hooks' : {},
-  \ }
+      \ 'name': 'grep',
+      \ 'max_candidates': g:unite_source_grep_max_candidates,
+      \ 'hooks' : {},
+      \ 'syntax' : 'uniteSource__Grep',
+      \ }
 
 function! s:grep_source.hooks.on_init(args, context) "{{{
   let l:target  = get(a:args, 0, '')
@@ -106,6 +107,12 @@ function! s:grep_source.hooks.on_init(args, context) "{{{
   call unite#print_message('[grep] Target: ' . join(a:context.source__target))
   call unite#print_message('[grep] Pattern: ' . a:context.source__input)
 endfunction"}}}
+function! s:grep_source.hooks.on_syntax(args, context)"{{{
+  execute 'syntax match uniteSource__GrepPattern /:.*\zs'
+        \ . substitute(a:context.source__input, '/', '\\/', 'g')
+        \ . '/ contained containedin=uniteSource__Grep'
+  highlight default link uniteSource__GrepPattern Search
+endfunction"}}}
 
 function! s:grep_source.gather_candidates(args, context) "{{{
   if empty(a:context.source__target)
@@ -118,7 +125,7 @@ function! s:grep_source.gather_candidates(args, context) "{{{
   let l:cmdline = printf('%s %s ''%s'' %s %s',
     \   g:unite_source_grep_command,
     \   g:unite_source_grep_default_opts,
-    \   a:context.source__input,
+    \   substitute(a:context.source__input, "'", "''", 'g'),
     \   join(a:context.source__target),
     \   a:context.source__extra_opts)
   call unite#print_message('[grep] Command-line: ' . l:cmdline)

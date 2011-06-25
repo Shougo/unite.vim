@@ -1337,6 +1337,8 @@ CHANGELOG					*unite-changelog*
 - Deleted search pattern.
 - Fixed initialize unite bug.
 - Added grep source(Thanks Sixeight).
+- Improved unite-grep.
+- Added pattern highlight in unite-grep.
 
 2011-06-24
 - Don't follow symbolic link in file_rec source.
