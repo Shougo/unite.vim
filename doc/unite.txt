@@ -477,6 +477,11 @@ g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scro
 
 		Default is 25.
 
+g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_open_blink_time*
+		A number of blink time after "persist_open" action by |unite-kind-openable|.
+
+		Default value is "250m"
+
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*unite-key-mappings*
 
@@ -1143,6 +1148,8 @@ to define open action.
 	right		Open the file in the right, splitting vertically
 	above		Open the file in the top, splitting horizontally
 	below		Open the file in the bottom, splitting horizontally
+	persist_open	Open the file in alternate window. Don't close unite
+			window.
 
 cdable					*unite-action-cdable*
 Defines an interface for files you can move to with cd command.
@@ -1359,6 +1366,7 @@ CHANGELOG					*unite-changelog*
 - Improved preview action in jump_list.
 - Added lines source.
 - Fixed for syntax case.
+- Added persist_open action.
 
 2011-06-25
 - Added rename action.

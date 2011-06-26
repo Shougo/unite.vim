@@ -34,9 +34,6 @@ else
   let g:unite_kind_jump_list_after_jump_scroll =
         \ min([max([0, g:unite_kind_jump_list_after_jump_scroll]), 100])
 endif
-if !exists('g:unite_kind_jump_list_persist_jump_blink_time')
-  let g:unite_kind_jump_list_persist_jump_blink_time = "250m"
-endif
 "}}}
 
 function! unite#kinds#jump_list#define()"{{{
@@ -74,22 +71,6 @@ let s:kind.action_table.preview = {
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
   pedit +call\ s:jump(a:candidate,1) `=a:candidate.action__path`
-endfunction"}}}
-
-let s:kind.action_table.persist_jump = {
-      \ 'description' : 'persistent jump',
-      \ 'is_quit'     : 0,
-      \ }
-function! s:kind.action_table.persist_jump.func(candidate)"{{{
-  wincmd p
-  call s:kind.action_table.open.func([a:candidate])
-  if g:unite_kind_jump_list_persist_jump_blink_time
-    normal! ^v$
-    redraw!
-    exe "sleep " . g:unite_kind_jump_list_persist_jump_blink_time
-    normal! v
-  endif
-  wincmd p
 endfunction"}}}
 
 if globpath(&runtimepath, 'autoload/qfreplace.vim') != ''

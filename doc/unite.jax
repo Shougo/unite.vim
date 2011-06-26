@@ -468,6 +468,12 @@ g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scro
 
 		初期値は25である。
 
+g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_open_blink_time*
+		|unite-kind-openable|において、"persist_open"後にカーソル行
+		を点滅させる時間。
+
+		初期値は"250m"である。
+
 ------------------------------------------------------------------------------
 キーマッピング 					*unite-key-mappings*
 
@@ -1237,6 +1243,8 @@ openable					*unite-action-openable*
 	right		ウィンドウを垂直分割して右側にファイルを開く
 	above		ウィンドウを水平分割して上側にファイルを開く
 	below		ウィンドウを水平分割して下側にファイルを開く
+	persist_open	ファイルを裏ウィンドウに開く。uniteバッファは閉じな
+			い。
 
 cdable					*unite-action-cdable*
 cd可能ファイルのインタフェースを定義している。
