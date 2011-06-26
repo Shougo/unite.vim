@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 25 Jun 2011.
+" Last Modified: 26 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -108,6 +108,7 @@ function! s:grep_source.hooks.on_init(args, context) "{{{
   call unite#print_message('[grep] Pattern: ' . a:context.source__input)
 endfunction"}}}
 function! s:grep_source.hooks.on_syntax(args, context)"{{{
+  syntax case ignore
   execute 'syntax match uniteSource__GrepPattern /:.*\zs'
         \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
         \ . '/ contained containedin=uniteSource__Grep'

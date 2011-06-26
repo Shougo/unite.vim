@@ -1358,6 +1358,7 @@ CHANGELOG					*unite-changelog*
 - Improved error highlight.
 - Improved preview action in jump_list.
 - Added lines source.
+- Fixed for syntax case.
 
 2011-06-25
 - Added rename action.

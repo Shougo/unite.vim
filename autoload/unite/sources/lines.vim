@@ -37,6 +37,7 @@ let s:unite_source.name = 'lines'
 
 function! s:unite_source.hooks.on_init(args, context) "{{{
     execute 'highlight default link uniteSource__Lines_target ' . g:unite_source_lines_search_word_highlight
+    syntax case ignore
 endfunction"}}}
 function! s:unite_source.hooks.on_syntax(args, context) "{{{
     call s:hl_refresh(a:context)
@@ -44,6 +45,7 @@ endfunction"}}}
 
 function! s:hl_refresh(context)
     syntax clear uniteSource__Lines_target
+    syntax case ignore
     if a:context.input == '' || !g:unite_source_lines_enable_highlight
         return
     endif
