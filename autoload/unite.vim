@@ -1479,8 +1479,16 @@ function! s:on_cursor_hold()  "{{{
   endif
 endfunction"}}}
 function! s:on_cursor_moved()  "{{{
-  execute 'setlocal' line('.') == unite#get_current_unite().prompt_linenr ?
+  let l:prompt_linenr = unite#get_current_unite().prompt_linenr
+
+  execute 'setlocal' line('.') == l:prompt_linenr ?
         \ 'modifiable' : 'nomodifiable'
+
+  execute 'match' (line('.') <= l:prompt_linenr ?
+        \ line('$') <= l:prompt_linenr ?
+        \ 'UniteError /\%'.l:prompt_linenr.'l/' :
+        \ g:unite_cursor_line_highlight.' /\%'.(l:prompt_linenr+1).'l/' :
+        \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
 
   if unite#get_current_unite().context.auto_preview
     if !unite#get_current_unite().has_preview_window
