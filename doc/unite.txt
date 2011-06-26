@@ -1332,6 +1332,10 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-06-26
+- Improved autocmd.
+- Improved matcher.
+
 2011-06-25
 - Added rename action.
 - Deleted search pattern.
