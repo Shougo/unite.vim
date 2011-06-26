@@ -1335,6 +1335,7 @@ CHANGELOG					*unite-changelog*
 2011-06-26
 - Improved autocmd.
 - Improved matcher.
+- Improved error highlight.
 
 2011-06-25
 - Added rename action.
