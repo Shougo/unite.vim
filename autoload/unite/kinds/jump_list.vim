@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jun 2011.
+" Last Modified: 26 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,7 +57,7 @@ function! s:kind.action_table.open.func(candidates)"{{{
     if bufnr(unite#util#escape_file_searching(l:candidate.action__path)) != bufnr('%')
       edit `=l:candidate.action__path`
     endif
-    call s:jump(l:candidate)
+    call s:jump(l:candidate, 0)
 
     " Open folds.
     normal! zv
@@ -70,7 +70,7 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
-  pedit +call\ s:jump(a:candidate) `=a:candidate.action__path`
+  pedit +call\ s:jump(a:candidate,1) `=a:candidate.action__path`
 endfunction"}}}
 
 if globpath(&runtimepath, 'autoload/qfreplace.vim') != ''
@@ -100,7 +100,7 @@ endif
 "}}}
 
 " Misc.
-function! s:jump(candidate)"{{{
+function! s:jump(candidate, is_highlight)"{{{
   if !has_key(a:candidate, 'action__line') && !has_key(a:candidate, 'action__pattern')
     " Move to head.
     0
@@ -117,6 +117,7 @@ function! s:jump(candidate)"{{{
   if !has_key(a:candidate, 'action__pattern')
     " Jump to the line number.
     execute a:candidate.action__line
+    call s:open_current_line(a:is_highlight)
     return
   endif
 
@@ -133,6 +134,8 @@ function! s:jump(candidate)"{{{
     else
       call search(l:pattern, 'w')
     endif
+
+    call s:open_current_line(a:is_highlight)
     return
   endif
 
@@ -155,6 +158,8 @@ function! s:jump(candidate)"{{{
       endif
     endwhile
   endif
+
+  call s:open_current_line(a:is_highlight)
 endfunction"}}}
 
 function! s:best_winline()"{{{
@@ -179,6 +184,14 @@ function! s:adjust_scroll(best_winline)"{{{
     execute "normal! \<C-e>"
   endif
   call setpos('.', l:save_cursor)
+endfunction"}}}
+
+function! s:open_current_line(is_highlight)"{{{
+  normal! zv
+  normal! zz
+  if a:is_highlight
+    execute 'match Search /\%'.line('.').'l/'
+  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo
