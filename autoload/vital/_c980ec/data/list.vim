@@ -76,6 +76,12 @@ function! s:char_range(from, to) " {{{
   \)
 endfunction "}}}
 
+" Returns true if a:list has a:Value.
+" Returns false otherwise.
+function! s:has(list, Value) "{{{
+  return index(a:list, a:Value) isnot -1
+endfunction "}}}
+
 " Returns true if a:list[a:index] exists.
 " Returns false otherwise.
 " NOTE: Returns false when a:index is negative number.

@@ -4,18 +4,25 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+" [Callable Object] is one of the following values:
+" - function name (String)
+" - Funcref value
+" - callable object
+"
+" [Functor] is a Dictionary which has the key "do" of Funcref value.
+" Please note that `Functor.wrap([Callable Object]).do` is always Funcref value.
+" So you can always call .do() method without checking return value of `Functor.wrap()`.
+" e.g.: `Functor.wrap("").do()`
+
+
 " The same arguments as call()
-" but first argument is callable object.
+" but first argument is [Callable Object].
 function! s:call(callable, args, ...)
     let functor = s:wrap(a:callable)
     return call(functor.do, a:args, (a:0 ? a:1 : functor))
 endfunction
 
-" Wrap
-" - function name (String)
-" - Funcref value
-" - callable object
-" with callable object.
+" Convert [Callable Object] to [Functor].
 " NOTE: `s:wrap(callable).do` must be Funcref value.
 let s:TYPE_STRING  = type("")
 let s:TYPE_FUNCREF = type(function('tr'))
