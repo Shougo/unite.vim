@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Apr 2011.
+" Last Modified: 25 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -140,6 +140,20 @@ function! s:kind.action_table.mkdir.func(candidate)"{{{
   endif
 endfunction"}}}
 
+let s:kind.action_table.rename = {
+      \ 'description' : 'rename files',
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.rename.func(candidates)"{{{
+  for l:candidate in a:candidates
+    let l:filename = input(printf('New buffer name: %s -> ', l:candidate.action__path), l:candidate.action__path)
+    if l:filename != '' && l:filename !=# l:candidate.action__path
+      call rename(l:candidate.action__path, l:filename)
+    endif
+  endfor
+endfunction"}}}
 "}}}
 
 function! s:execute_command(command, candidate)"{{{

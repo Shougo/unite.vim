@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_glob.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 26 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,21 +49,19 @@ function! s:matcher.filter(candidates, context)"{{{
     if l:input =~ '^!'
       " Exclusion.
       let l:input = unite#escape_match(l:input)
-      call filter(l:candidates, 'v:val.word !~ ' . string(l:input[1:]))
+      let l:expr = 'v:val.word !~ ' . string(l:input[1:])
     elseif l:input =~ '\\\@<!\*'
       " Wildcard.
       let l:input = unite#escape_match(l:input)
-      call filter(l:candidates, 'v:val.word =~ ' . string(l:input))
+      let l:expr = 'v:val.word =~ ' . string(l:input)
     else
       let l:input = substitute(l:input, '\\\(.\)', '\1', 'g')
-      if &ignorecase
-        let l:expr = printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:input)))
-      else
-        let l:expr = printf('stridx(v:val.word, %s) != -1', string(l:input))
-      endif
-
-      let l:candidates = filter(l:candidates, l:expr)
+      let l:expr = &ignorecase ?
+            \ printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:input))) :
+            \ printf('stridx(v:val.word, %s) != -1', string(l:input))
     endif
+
+    call filter(l:candidates, l:expr)
   endfor
 
   return l:candidates

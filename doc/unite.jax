@@ -420,6 +420,39 @@ g:unite_source_file_rec_ignore_pattern		*g:unite_source_file_rec_ignore_pattern*
 		
 		初期値は autoload/unite/sources/file_rec.vim を参照。
 
+g:unite_source_grep_command			*g:unite_source_grep_command*
+		"grep"コマンドを指定する。
+
+		初期値は"grep"である。
+
+g:unite_source_grep_recursive_opt		*g:unite_source_grep_recursive_opt*
+		"grep"の再帰検索オプションを指定する。
+
+		初期値は"-R"である。
+
+g:unite_source_grep_default_opts		*g:unite_source_grep_default_opts*
+		"grep"に与えるデフォルトのオプションを指定する。
+		Note: "grep"の出力は下記のパターンに一致しなければならない。
+		filename:number:pattern
+
+		初期値は"-Hn"である。
+
+g:unite_source_grep_max_candidates		*g:unite_source_grep_max_candidates*
+		|unite-source-grep|の候補の最大数を指定する。
+
+		初期値は100である。
+
+g:unite_source_lines_enable_highlight		*g:unite_source_lines_enable_highlight*
+		検索キーワードをハイライトするか制御する。
+
+		Default value is 1.
+
+g:unite_source_lines_search_word_highlight	*g:unite_source_lines_search_word_highlight*
+		|g:unite_source_lines_enable_highlight|が真のとき、検索文字
+		列のハイライトを設定する。
+
+		初期値は"Search"である。
+
 kindの変数					*unite-kinds-variables*
 
 g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scroll*
@@ -434,6 +467,12 @@ g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scro
 		100	ウィンドウ最下	normal! |z-|
 
 		初期値は25である。
+
+g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_open_blink_time*
+		|unite-kind-openable|において、"persist_open"後にカーソル行
+		を点滅させる時間。
+
+		初期値は"250m"である。
 
 ------------------------------------------------------------------------------
 キーマッピング 					*unite-key-mappings*
@@ -967,6 +1006,35 @@ command		VimのExコマンドを候補とする。
 						*unite-source-mapping*
 mapping		ユーザーが定義したマッピングを候補とする。
 
+						*unite-source-grep*
+grep		"grep"コマンドを実行した結果を候補とする。
+		Note: このsourceはSixeight氏によって作成された。
+
+		Note: このsourceはvimprocを必要としている。
+		http://github.com/Shougo/vimproc/tree/master
+
+		source引数：
+		1. ターゲットとなるディレクトリ名
+		2. "grep"に与えるオプション
+		3. 絞り込みパターン
+
+		Example:
+>
+	:Unite grep:~/.vim/autoload/unite/sources:-iR:file
+<
+		次のような特別なターゲットも認識する。
+		%         : カレントバッファ名
+		#         : 裏バッファ名
+		$buffers  : 全てのバッファ名
+
+						*unite-source-lines*
+lines		カレントバッファの行を候補とする。
+		Note: このsourceはt9md氏によって作成された。
+
+		Example:
+>
+	nnoremap <silent> /  :<C-u>Unite -buffer-name=search lines -start-insert -no-quit<CR>
+<
 ==============================================================================
 kind						*unite-kinds*
 
@@ -1175,6 +1243,8 @@ openable					*unite-action-openable*
 	right		ウィンドウを垂直分割して右側にファイルを開く
 	above		ウィンドウを水平分割して上側にファイルを開く
 	below		ウィンドウを水平分割して下側にファイルを開く
+	persist_open	ファイルを裏ウィンドウに開く。uniteバッファは閉じな
+			い。
 
 cdable					*unite-action-cdable*
 cd可能ファイルのインタフェースを定義している。
@@ -1203,6 +1273,9 @@ file						*unite-action-file*
 	bookmark	候補をブックマークに追加する
 	mkdir		ファイル名をディレクトリ名としてディレクトリを作成する。
 			ファイルが存在する場合は無効。
+	rename		ファイル名を変更する
+	grep		ファイルをgrepする
+	grep_directory	ディレクトリをgrepする
 
 buffer						*unite-action-buffer*
 このkindは|unite-action-file|のアクションを継承している。
@@ -1211,6 +1284,7 @@ buffer						*unite-action-buffer*
 	wipeout		バッファを|:bwipeout|
 	unload		バッファを|:bunload|
 	bookmark	候補をブックマークに追加する
+	rename		バッファのファイル名を変更する
 
 tab						*unite-action-tab*
 このkindは|gettabvar()|が存在するときのみ、|unite-action-cdable|のアクションを

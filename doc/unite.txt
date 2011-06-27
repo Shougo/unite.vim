@@ -425,6 +425,42 @@ g:unite_source_file_rec_ignore_pattern		*g:unite_source_file_rec_ignore_pattern*
 		Refer autoload/unite/sources/file_rec.vim about the default
 		value.
 
+g:unite_source_grep_command			*g:unite_source_grep_command*
+		Set grep command.
+
+		Default value is "grep".
+
+g:unite_source_grep_recursive_opt		*g:unite_source_grep_recursive_opt*
+		Set grep recursive option.
+
+		Default value is "-R".
+
+g:unite_source_grep_default_opts		*g:unite_source_grep_default_opts*
+		Set grep default options.
+		Note: grep output must be this pattern.
+		filename:number:pattern
+>
+		let g:unite_source_grep_default_opts = '-iRHn'
+<
+		Default value is "-Hn".
+
+g:unite_source_grep_max_candidates		*g:unite_source_grep_max_candidates*
+		Set |unite-source-grep| max candidates number.
+
+		Default value is 100.
+
+g:unite_source_lines_enable_highlight		*g:unite_source_lines_enable_highlight*
+		Control whether search keyword is highlighted in unite
+		buffer.
+
+		Default value is 1.
+
+g:unite_source_lines_search_word_highlight	*g:unite_source_lines_search_word_highlight*
+		Highlight setting applied to search keyword when
+		|g:unite_source_enable_highlight| is true.
+
+		Default value is "Search".
+
 KINDS VARIABLES					*unite-kinds-variables*
 
 g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scroll*
@@ -440,6 +476,11 @@ g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scro
 		100	Window bottom	normal! |z-|
 
 		Default is 25.
+
+g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_open_blink_time*
+		A number of blink time after "persist_open" action by |unite-kind-openable|.
+
+		Default value is "250m"
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*unite-key-mappings*
@@ -940,6 +981,35 @@ command		Nominates Vim Ex commands as candidates.
 						*unite-source-mapping*
 mapping		Nominates Vim mappings as candidates.
 
+						*unite-source-grep*
+grep		Nominates "grep" command output as candidates.
+		Note: This source is created by Sixeight.
+
+		Note: This source requires vimproc.  Please install.
+		http://github.com/Shougo/vimproc/tree/master
+
+		Source arguments:
+		1. the target directory.
+		2. "grep" options.
+		3. the narrowing pattern.
+
+		Example:
+>
+	:Unite grep:~/.vim/autoload/unite/sources:-iR:file
+<
+		Special Target:
+		%         : Current buffer name
+		#         : Alternate buffer name
+		$buffers  : All buffer names
+
+						*unite-source-lines*
+lines		Nominates current buffer lines as candidates.
+		Note: This source is created by t9md.
+
+		Example:
+>
+	nnoremap <silent> /  :<C-u>Unite -buffer-name=search lines -start-insert -no-quit<CR>
+<
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1078,6 +1148,8 @@ to define open action.
 	right		Open the file in the right, splitting vertically
 	above		Open the file in the top, splitting horizontally
 	below		Open the file in the bottom, splitting horizontally
+	persist_open	Open the file in alternate window. Don't close unite
+			window.
 
 cdable					*unite-action-cdable*
 Defines an interface for files you can move to with cd command.
@@ -1104,6 +1176,9 @@ Opens a file into a new buffer.  This kind extends |unite-action-openable| and
 	preview		Open the file into preview window
 	bookmark	Add the file into your bookmark
 	mkdir		Make directory. If exists file, this action is invalid.
+	rename		Change the file name.
+	grep		grep files
+	grep_directory	grep directories
 
 buffer						*unite-action-buffer*
 This kind extends |unite-action-file|.
@@ -1112,6 +1187,7 @@ This kind extends |unite-action-file|.
 	wipeout		|:bwipeout| the buffer
 	unload		|:bunload| the buffer
 	bookmark	Add the candidate into your bookmark
+	rename		Change the buffer name and file name.
 
 tab						*unite-action-tab*
 This kind extends actions of |unite-action-cdable| only when |gettabvar()|
@@ -1282,6 +1358,23 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-06-26
+- Improved autocmd.
+- Improved matcher.
+- Improved error highlight.
+- Improved preview action in jump_list.
+- Added lines source.
+- Fixed for syntax case.
+- Added persist_open action.
+
+2011-06-25
+- Added rename action.
+- Deleted search pattern.
+- Fixed initialize unite bug.
+- Added grep source(Thanks Sixeight).
+- Improved unite-grep.
+- Added pattern highlight in unite-grep.
 
 2011-06-24
 - Don't follow symbolic link in file_rec source.
