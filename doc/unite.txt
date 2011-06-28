@@ -1376,6 +1376,7 @@ CHANGELOG					*unite-changelog*
 - Improved unite buffer initialize.
 - Added <Plug>(unite_narrowing_path) keymapping.
 - Supported redraw in source lines.
+- Improved unite buffer initialize.
 
 2011-06-26
 - Improved autocmd.

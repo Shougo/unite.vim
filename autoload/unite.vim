@@ -1272,7 +1272,8 @@ function! s:initialize_unite_buffer()"{{{
   endif
   let l:unite.bufnr = bufnr('%')
 
-  if !l:is_bufexists
+  " Note: If unite buffer initialize is incomplete, &modified or &wrap.
+  if !l:is_bufexists || &modified || &wrap
     " Basic settings.
     setlocal bufhidden=hide
     setlocal buftype=nofile
