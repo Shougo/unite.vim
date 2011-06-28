@@ -571,6 +571,9 @@ Normal mode mappings.
 <Plug>(unite_toggle_transpose_window)		*<Plug>(unite_toggle_transpose_window)*
 		Change the unite buffer's split direction.
 
+<Plug>(unite_narrowing_path)			*<Plug>(unite_narrowing_path)*
+		Narrowing candidates by candidate path(or word).
+
 Insert mode mappings.
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -630,6 +633,9 @@ Insert mode mappings.
 
 <Plug>(unite_toggle_selected_candidates)	*i_<Plug>(unite_toggle_transpose_window)*
 		Same to |<Plug>(unite_toggle_transpose_window)|.
+
+<Plug>(unite_narrowing_path)			*i_<Plug>(unite_narrowing_path)*
+		Same to |<Plug>(unite_narrowing_path)|.
 
 Visual mode mappings.
 
@@ -1368,6 +1374,7 @@ CHANGELOG					*unite-changelog*
 2011-06-28
 - Added <Plug>(unite_toggle_selected_candidates) keymapping.
 - Improved unite buffer initialize.
+- Added <Plug>(unite_narrowing_path) keymapping.
 
 2011-06-26
 - Improved autocmd.
