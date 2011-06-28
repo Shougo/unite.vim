@@ -568,6 +568,9 @@ Normal mode mappings.
 <Plug>(unite_delete_backward_path)		*<Plug>(unite_delete_backward_path)*
 		Deletes a path upward. Refer to |i_<Plug>(unite_delete_backward_path)|.
 
+<Plug>(unite_toggle_transpose_window)		*<Plug>(unite_toggle_transpose_window)*
+		Change the unite buffer's split direction.
+
 Insert mode mappings.
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -624,6 +627,9 @@ Insert mode mappings.
 
 <Plug>(unite_input_directory)			*i_<Plug>(unite_input_directory)*
 		Same to |<Plug>(unite_input_directory)|.
+
+<Plug>(unite_toggle_selected_candidates)	*i_<Plug>(unite_toggle_transpose_window)*
+		Same to |<Plug>(unite_toggle_transpose_window)|.
 
 Visual mode mappings.
 
@@ -1358,6 +1364,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-06-28
+- Added <Plug>(unite_toggle_selected_candidates) keymapping.
 
 2011-06-26
 - Improved autocmd.

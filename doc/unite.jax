@@ -558,6 +558,9 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 		一つ上のパスまで削除する。
 		|i_<Plug>(unite_delete_backward_path)|を参照せよ。
 
+<Plug>(unite_toggle_transpose_window)		*<Plug>(unite_toggle_transpose_window)*
+		uniteバッファの分割方向を変更する。
+
 インサートモードマッピング
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -614,6 +617,9 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 
 <Plug>(unite_input_directory)			*i_<Plug>(unite_input_directory)*
 		|<Plug>(unite_input_directory)|と同じ。
+
+<Plug>(unite_toggle_transpose_window)		*i_<Plug>(unite_toggle_transpose_window)*
+		|<Plug>(unite_toggle_transpose_window)|と同じ。
 
 ビジュアルモードマッピング
 
