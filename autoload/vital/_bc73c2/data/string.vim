@@ -78,15 +78,5 @@ function! s:chop(str) "{{{
     return substitute(a:str, '.$', '', '')
 endfunction "}}}
 
-" iconv() wrapper for safety.
-" NOTE: This returns a:expr when the conversion fails.
-function! s:iconv(expr, from, to)
-  if a:from == '' || a:to == '' || a:from ==? a:to
-    return a:expr
-  endif
-  let result = iconv(a:expr, a:from, a:to)
-  return result != '' ? result : a:expr
-endfunction
-
 
 let &cpo = s:save_cpo
