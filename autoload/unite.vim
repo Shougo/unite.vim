@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jun 2011.
+" Last Modified: 28 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -716,25 +716,13 @@ function! unite#start(sources, ...)"{{{
 
   if l:context.immediately
     let l:candidates = unite#gather_candidates()
-    let l:winnr = bufwinnr(unite#get_current_unite().real_buffer_name)
 
     " Immediately action.
     if empty(l:candidates)
-      if l:winnr > 0
-        " Close previous unite buffer.
-        execute l:winnr . 'wincmd w'
-        close!
-      endif
-
       " Ignore.
       let s:is_initialized_unite_buffer = 1
       return
     elseif len(l:candidates) == 1
-      if l:winnr > 0
-        execute l:winnr . 'wincmd w'
-        close!
-      endif
-
       " Default action.
       call unite#mappings#do_action(l:context.default_action, [l:candidates[0]])
       let s:is_initialized_unite_buffer = 1
@@ -1219,13 +1207,14 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:context = a:context
 
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
-    if l:context.input == ''
-          \ && unite#get_current_unite().buffer_name ==# l:context.buffer_name
-      " Get input text.
-      let l:context.input = unite#get_input()
-
+    if unite#get_current_unite().buffer_name ==# l:context.buffer_name
       " Quit unite buffer.
-      call unite#quit_session()
+      call unite#force_quit_session()
+
+      if l:context.input == ''
+        " Get input text.
+        let l:context.input = unite#get_input()
+      endif
     endif
   endif
 

@@ -1367,6 +1367,7 @@ CHANGELOG					*unite-changelog*
 
 2011-06-28
 - Added <Plug>(unite_toggle_selected_candidates) keymapping.
+- Improved unite buffer initialize.
 
 2011-06-26
 - Improved autocmd.
