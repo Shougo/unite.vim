@@ -62,11 +62,12 @@ function! s:unite_source.gather_candidates(args, context)
     let lines = getbufline('%', 1, '$')
     let format = '%' . strlen(len(lines)) . 'd: %s'
     return map(lines, '{
-                \   "word": printf("%s", v:val),
+                \   "word": v:val,
                 \   "abbr": printf(format, v:key + 1, v:val),
                 \   "kind": "jump_list",
                 \   "action__path": path,
                 \   "action__line": v:key + 1,
+                \   "action__text": v:val,
                 \ }')
 endfunction
 
