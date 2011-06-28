@@ -2,7 +2,7 @@
 " FILE: lines.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 26 Jun 2011.
+" Last Modified: 28 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,6 +38,8 @@ let s:unite_source.name = 'lines'
 function! s:unite_source.hooks.on_init(args, context) "{{{
     execute 'highlight default link uniteSource__Lines_target ' . g:unite_source_lines_search_word_highlight
     syntax case ignore
+    let a:context.source__path = expand('%:p')
+    let a:context.source__bufnr = bufnr('%')
 endfunction"}}}
 function! s:unite_source.hooks.on_syntax(args, context) "{{{
     call s:hl_refresh(a:context)
@@ -58,14 +60,13 @@ function! s:hl_refresh(context)
 endfunction
 
 function! s:unite_source.gather_candidates(args, context)
-    let path = expand('%:p')
-    let lines = getbufline('%', 1, '$')
+    let lines = getbufline(a:context.source__bufnr, 1, '$')
     let format = '%' . strlen(len(lines)) . 'd: %s'
     return map(lines, '{
                 \   "word": v:val,
                 \   "abbr": printf(format, v:key + 1, v:val),
                 \   "kind": "jump_list",
-                \   "action__path": path,
+                \   "action__path": a:context.source__path,
                 \   "action__line": v:key + 1,
                 \   "action__text": v:val,
                 \ }')
