@@ -40,6 +40,7 @@ function! s:unite_source.hooks.on_init(args, context) "{{{
     syntax case ignore
     let a:context.source__path = expand('%:p')
     let a:context.source__bufnr = bufnr('%')
+    let a:context.source__linenr = line('.')
 endfunction"}}}
 function! s:unite_source.hooks.on_syntax(args, context) "{{{
     call s:hl_refresh(a:context)
@@ -59,16 +60,32 @@ function! s:hl_refresh(context)
     endfor
 endfunction
 
+let s:supported_search_direction = ["forward", "backward"]
 function! s:unite_source.gather_candidates(args, context)
-    let lines = getbufline(a:context.source__bufnr, 1, '$')
+    let direction = len(a:args) > 0 ? a:args[0] : "all"
+    if index(s:supported_search_direction, direction) == -1
+        let direction = "all"
+    endif
+
+    let lines = map(getbufline(a:context.source__bufnr, 1, '$'),
+                \ '{"nr": v:key+1, "val": v:val }')
+
+    let linenr = a:context.source__linenr
+    if     direction == "forward"  | let lines = lines[linenr-1 : ]
+    elseif direction == "backward" | let lines = lines[0 : linenr-1]
+    end
+    if direction !=# "all"
+        call unite#print_message('[lines] ' . direction)
+    endif
+
     let format = '%' . strlen(len(lines)) . 'd: %s'
     return map(lines, '{
-                \   "word": v:val,
-                \   "abbr": printf(format, v:key + 1, v:val),
+                \   "word": v:val.val,
+                \   "abbr": printf(format, v:val.nr, v:val.val),
                 \   "kind": "jump_list",
                 \   "action__path": a:context.source__path,
-                \   "action__line": v:key + 1,
-                \   "action__text": v:val,
+                \   "action__line": v:val.nr,
+                \   "action__text": v:val.val
                 \ }')
 endfunction
 
