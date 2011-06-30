@@ -60,7 +60,7 @@ function! s:hl_refresh(context)
     endfor
 endfunction
 
-let s:supported_search_direction = ['forward', 'backward']
+let s:supported_search_direction = ['forward', 'backward', 'all']
 function! s:unite_source.gather_candidates(args, context)
     let direction = len(a:args) > 0 ? a:args[0] : 'all'
     if index(s:supported_search_direction, direction) == -1
