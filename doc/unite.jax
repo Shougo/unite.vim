@@ -1043,6 +1043,10 @@ grep		"grep"コマンドを実行した結果を候補とする。
 lines		カレントバッファの行を候補とする。
 		Note: このsourceはt9md氏によって作成された。
 
+		source引数：
+		1. 検索方向。 "all", "forward", "backward"のうちどれかを指定
+		する。省略すると"all"となる。
+
 		Example:
 >
 	nnoremap <silent> /  :<C-u>Unite -buffer-name=search lines -start-insert -no-quit<CR>

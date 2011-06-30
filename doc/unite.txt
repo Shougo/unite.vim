@@ -1018,6 +1018,9 @@ grep		Nominates "grep" command output as candidates.
 lines		Nominates current buffer lines as candidates.
 		Note: This source is created by t9md.
 
+		Source arguments:
+		1. the search direction. "all" or "forward" or "backward".
+
 		Example:
 >
 	nnoremap <silent> /  :<C-u>Unite -buffer-name=search lines -start-insert -no-quit<CR>
@@ -1370,6 +1373,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-06-30
+- Added direction argument in source lines.
 
 2011-06-28
 - Added <Plug>(unite_toggle_selected_candidates) keymapping.

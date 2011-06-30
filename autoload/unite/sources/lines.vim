@@ -2,7 +2,7 @@
 " FILE: lines.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 28 Jun 2011.
+" Last Modified: 30 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,23 +60,26 @@ function! s:hl_refresh(context)
     endfor
 endfunction
 
-let s:supported_search_direction = ["forward", "backward"]
+let s:supported_search_direction = ['forward', 'backward']
 function! s:unite_source.gather_candidates(args, context)
-    let direction = len(a:args) > 0 ? a:args[0] : "all"
+    let direction = len(a:args) > 0 ? a:args[0] : 'all'
     if index(s:supported_search_direction, direction) == -1
-        let direction = "all"
+        let direction = 'all'
     endif
 
-    let lines = map(getbufline(a:context.source__bufnr, 1, '$'),
-                \ '{"nr": v:key+1, "val": v:val }')
-
-    let linenr = a:context.source__linenr
-    if     direction == "forward"  | let lines = lines[linenr-1 : ]
-    elseif direction == "backward" | let lines = lines[0 : linenr-1]
-    end
-    if direction !=# "all"
-        call unite#print_message('[lines] ' . direction)
+    if direction !=# 'all'
+        call unite#print_message('[lines] direction: ' . direction)
     endif
+
+    let [start, end] =
+                \ direction ==# 'forward' ?
+                \ [a:context.source__linenr, '$'] :
+                \ direction ==# 'backward' ?
+                \ [1, a:context.source__linenr] :
+                \ [1, '$']
+
+    let lines = map(getbufline(a:context.source__bufnr, start, end),
+                \ '{"nr": v:key+start, "val": v:val }')
 
     let format = '%' . strlen(len(lines)) . 'd: %s'
     return map(lines, '{
