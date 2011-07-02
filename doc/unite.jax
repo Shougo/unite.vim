@@ -263,12 +263,10 @@ http://www.ustream.tv/recorded/11240673
 		|:UniteWithInput|と同じであるが、入力する文字列はデイレクトリと
 		みなされ、自動的に変換される。
 
-:UniteResume [{options}, {buffer-name}]		*:UniteResume*
+:UniteResume [{buffer-name}]			*:UniteResume*
 		以前開いた{buffer-name}という名前のuniteバッファを再利用する。
 		{buffer-name}を省略すると、以前使用したバッファを再利用する。
 		絞込みテキストや候補はそのままの状態となる。
-		{option}を指定すると、uniteバッファのオプションを変更するこ
-		とができる。
 
 sourceのコマンド				*unite-sources-commands*
 
@@ -1060,6 +1058,10 @@ lines		カレントバッファの行を候補とする。
 >
 	nnoremap <silent> /  :<C-u>Unite -buffer-name=search lines -start-insert -no-quit<CR>
 <
+						*unite-source-resume*
+resume		|:UniteResume|の引数となるuniteバッファを候補とする。uniteバッ
+		ファは使用した順番に並び換えられる。
+
 ==============================================================================
 kind						*unite-kinds*
 

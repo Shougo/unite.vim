@@ -451,7 +451,10 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   return filter(sort(keys(l:sources))+s:unite_options, 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
 function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
-  let l:buffer_list = map(filter(range(1, bufnr('$')), 'getbufvar(v:val, "&filetype") ==# "unite" && !getbufvar(v:val, "unite").context.temporary'), 'getbufvar(v:val, "unite").buffer_name')
+  let l:buffer_list = map(filter(range(1, bufnr('$')), '
+        \ getbufvar(v:val, "&filetype") ==# "unite" &&
+        \ !getbufvar(v:val, "unite").context.temporary'),
+        \ 'getbufvar(v:val, "unite").buffer_name')
 
   return filter(l:buffer_list, printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
@@ -715,7 +718,7 @@ function! unite#start(sources, ...)"{{{
     normal! 0z.
   endif
 endfunction"}}}
-function! unite#resume(buffer_name, context)"{{{
+function! unite#resume(buffer_name)"{{{
   if a:buffer_name == ''
     " Use last unite buffer.
     if !bufexists(s:last_unite_bufnr)
@@ -742,11 +745,7 @@ function! unite#resume(buffer_name, context)"{{{
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
 
-  let l:context = extend(getbufvar(l:bufnr, 'unite').context, a:context)
-  if l:context.no_start_insert
-    let l:context.start_insert = 0
-  endif
-
+  let l:context = getbufvar(l:bufnr, 'unite').context
   call s:switch_unite_buffer(bufname(l:bufnr), l:context)
 
   " Set parameters.
@@ -754,13 +753,13 @@ function! unite#resume(buffer_name, context)"{{{
   let l:unite.winnr = l:winnr
   let l:unite.win_rest_cmd = l:win_rest_cmd
   let l:unite.redrawtime_save = &redrawtime
+  let l:unite.access_time = localtime()
 
   let s:current_unite = l:unite
 
   setlocal nomodifiable
 
   if g:unite_enable_start_insert
-        \ || l:unite.context.start_insert || l:context.complete
     let l:unite.is_insert = 1
 
     execute l:unite.prompt_linenr
@@ -1258,6 +1257,7 @@ function! s:initialize_current_unite(sources, context)"{{{
         \ max(map(copy(a:sources), 'len(v:val[0])')) + 2 : 0
   let l:unite.is_async =
         \ len(filter(copy(l:sources), 'v:val.unite__context.is_async')) > 0
+  let l:unite.access_time = localtime()
 
   " Preview windows check.
   let l:unite.has_preview_window =

@@ -183,12 +183,7 @@ function! s:parse_options(args)"{{{
   return [l:args, l:options]
 endfunction"}}}
 
-command! -nargs=? -complete=customlist,unite#complete_buffer UniteResume call s:call_unite_resume(<q-args>)
-function! s:call_unite_resume(args)"{{{
-  let [l:args, l:options] = s:parse_options(a:args)
-
-  call unite#resume(join(l:args, ' '), l:options)
-endfunction"}}}
+command! -nargs=? -complete=customlist,unite#complete_buffer UniteResume call unite#resume(<q-args>)
 
 let g:loaded_unite = 1
 

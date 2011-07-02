@@ -263,7 +263,7 @@ COMMANDS 					*unite-commands*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the word on the cursor.
 
-:UniteResume [{options}, {buffer-name}]		*:UniteResume*
+:UniteResume [{buffer-name}]			*:UniteResume*
 		Reuses the unite buffer previously opened named {buffer-name}.
 		Reuses the last unite buffer you used if you skipped
 		specifying {buffer-name}.  Narrowing texts or candidates are
@@ -1032,6 +1032,10 @@ lines		Nominates current buffer lines as candidates.
 >
 	nnoremap <silent> /  :<C-u>Unite -buffer-name=search lines -start-insert -no-quit<CR>
 <
+						*unite-source-resume*
+resume		Nominates unite buffers as candidates, ordering by time
+		series.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1382,9 +1386,9 @@ BUGS						*unite-bugs*
 CHANGELOG					*unite-changelog*
 
 2011-07-02
-- Improved :UniteResume command.
 - Added matcher_regexp filter.
 - Changed lines and grep filters.
+- Added resume source.
 
 2011-06-30
 - Added direction argument in source lines.
