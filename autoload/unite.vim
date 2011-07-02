@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jun 2011.
+" Last Modified: 02 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -640,66 +640,8 @@ endfunction"}}}
 
 " Command functions.
 function! unite#start(sources, ...)"{{{
-  " Save context.
   let l:context = a:0 >= 1 ? a:1 : {}
-  if !has_key(l:context, 'input')
-    let l:context.input = ''
-  endif
-  if !has_key(l:context, 'start_insert')
-    let l:context.start_insert = g:unite_enable_start_insert
-  endif
-  if has_key(l:context, 'no_start_insert')
-        \ && l:context.no_start_insert
-    " Disable start insert.
-    let l:context.start_insert = 0
-  endif
-  if !has_key(l:context, 'complete')
-    let l:context.complete = 0
-  endif
-  if !has_key(l:context, 'col')
-    let l:context.col = col('.')
-  endif
-  if !has_key(l:context, 'no_quit')
-    let l:context.no_quit = 0
-  endif
-  if !has_key(l:context, 'buffer_name')
-    let l:context.buffer_name = 'default'
-  endif
-  if !has_key(l:context, 'prompt')
-    let l:context.prompt = '>'
-  endif
-  if !has_key(l:context, 'default_action')
-    let l:context.default_action = 'default'
-  endif
-  if !has_key(l:context, 'winwidth')
-    let l:context.winwidth = g:unite_winwidth
-  endif
-  if !has_key(l:context, 'winheight')
-    let l:context.winheight = g:unite_winheight
-  endif
-  if !has_key(l:context, 'immediately')
-    let l:context.immediately = 0
-  endif
-  if !has_key(l:context, 'auto_preview')
-    let l:context.auto_preview = 0
-  endif
-  if !has_key(l:context, 'vertical')
-    let l:context.vertical = g:unite_enable_split_vertically
-  endif
-  if has_key(l:context, 'horizontal')
-    " Disable vertically.
-    let l:context.vertical = 0
-  endif
-  if !has_key(l:context, 'direction')
-    let l:context.direction = g:unite_split_rule
-  endif
-  if !has_key(l:context, 'temporary')
-    let l:context.temporary = 0
-  endif
-  if !has_key(l:context, 'verbose')
-    let l:context.verbose = 0
-  endif
-  let l:context.is_redraw = 0
+  call s:initialize_context(l:context)
 
   let s:is_initialized_unite_buffer = 0
 
@@ -773,7 +715,7 @@ function! unite#start(sources, ...)"{{{
     normal! 0z.
   endif
 endfunction"}}}
-function! unite#resume(buffer_name)"{{{
+function! unite#resume(buffer_name, context)"{{{
   if a:buffer_name == ''
     " Use last unite buffer.
     if !bufexists(s:last_unite_bufnr)
@@ -800,7 +742,12 @@ function! unite#resume(buffer_name)"{{{
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
 
-  call s:switch_unite_buffer(bufname(l:bufnr), getbufvar(l:bufnr, 'unite').context)
+  let l:context = extend(getbufvar(l:bufnr, 'unite').context, a:context)
+  if l:context.no_start_insert
+    let l:context.start_insert = 0
+  endif
+
+  call s:switch_unite_buffer(bufname(l:bufnr), l:context)
 
   " Set parameters.
   let l:unite = unite#get_current_unite()
@@ -813,7 +760,7 @@ function! unite#resume(buffer_name)"{{{
   setlocal nomodifiable
 
   if g:unite_enable_start_insert
-        \ || l:unite.context.start_insert || l:unite.context.complete
+        \ || l:unite.context.start_insert || l:context.complete
     let l:unite.is_insert = 1
 
     execute l:unite.prompt_linenr
@@ -822,8 +769,7 @@ function! unite#resume(buffer_name)"{{{
     startinsert!
   else
     let l:positions = unite#get_buffer_name_option(l:unite.buffer_name, 'unite__save_pos')
-    let l:is_restore = l:unite.context.input == '' &&
-          \ has_key(l:positions, unite#loaded_source_names_string())
+    let l:is_restore = has_key(l:positions, unite#loaded_source_names_string())
     if l:is_restore
       " Restore position.
       call setpos('.', l:positions[unite#loaded_source_names_string()])
@@ -834,9 +780,68 @@ function! unite#resume(buffer_name)"{{{
     if !l:is_restore
       execute (l:unite.prompt_linenr+1)
     endif
-
     normal! 0z.
   endif
+endfunction"}}}
+function! s:initialize_context(context)"{{{
+  if !has_key(a:context, 'input')
+    let a:context.input = ''
+  endif
+  if !has_key(a:context, 'start_insert')
+    let a:context.start_insert = g:unite_enable_start_insert
+  endif
+  if has_key(a:context, 'no_start_insert')
+        \ && a:context.no_start_insert
+    " Disable start insert.
+    let a:context.start_insert = 0
+  endif
+  if !has_key(a:context, 'complete')
+    let a:context.complete = 0
+  endif
+  if !has_key(a:context, 'col')
+    let a:context.col = col('.')
+  endif
+  if !has_key(a:context, 'no_quit')
+    let a:context.no_quit = 0
+  endif
+  if !has_key(a:context, 'buffer_name')
+    let a:context.buffer_name = 'default'
+  endif
+  if !has_key(a:context, 'prompt')
+    let a:context.prompt = '>'
+  endif
+  if !has_key(a:context, 'default_action')
+    let a:context.default_action = 'default'
+  endif
+  if !has_key(a:context, 'winwidth')
+    let a:context.winwidth = g:unite_winwidth
+  endif
+  if !has_key(a:context, 'winheight')
+    let a:context.winheight = g:unite_winheight
+  endif
+  if !has_key(a:context, 'immediately')
+    let a:context.immediately = 0
+  endif
+  if !has_key(a:context, 'auto_preview')
+    let a:context.auto_preview = 0
+  endif
+  if !has_key(a:context, 'vertical')
+    let a:context.vertical = g:unite_enable_split_vertically
+  endif
+  if has_key(a:context, 'horizontal')
+    " Disable vertically.
+    let a:context.vertical = 0
+  endif
+  if !has_key(a:context, 'direction')
+    let a:context.direction = g:unite_split_rule
+  endif
+  if !has_key(a:context, 'temporary')
+    let a:context.temporary = 0
+  endif
+  if !has_key(a:context, 'verbose')
+    let a:context.verbose = 0
+  endif
+  let a:context.is_redraw = 0
 endfunction"}}}
 
 function! unite#force_quit_session()  "{{{
