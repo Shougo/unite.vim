@@ -439,7 +439,7 @@ function! unite#get_default_action(source_name, kind_name)"{{{
   return unite#get_kinds(a:kind_name).default_action
 endfunction"}}}
 function! unite#escape_match(str)"{{{
-  return substitute(substitute(escape(a:str, '~"\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
+  return substitute(substitute(escape(a:str, '~\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   if empty(s:static)

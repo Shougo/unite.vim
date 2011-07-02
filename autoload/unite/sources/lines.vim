@@ -2,7 +2,7 @@
 " FILE: lines.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 30 Jun 2011.
+" Last Modified: 02 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,6 +34,8 @@ let s:unite_source = {}
 let s:unite_source.syntax = 'uniteSource__Lines'
 let s:unite_source.hooks = {}
 let s:unite_source.name = 'lines'
+let s:unite_source.name = 'lines'
+call unite#custom_filters('lines', ['matcher_regexp', 'sorter_default', 'converter_default'])
 
 function! s:unite_source.hooks.on_init(args, context) "{{{
     execute 'highlight default link uniteSource__Lines_target ' . g:unite_source_lines_search_word_highlight

@@ -1221,6 +1221,10 @@ matcher_glob	ユーザーが入力したglobパターンにより候補をフィ
 		matcher。
 		絞り込みにはwordを使用する。
 
+						*unite-filter-matcher_regexp*
+matcher_regexp	ユーザーが入力したパターンを正規表現として、候補をフィルタリ
+		ングするmatcher。絞り込みにはwordを使用する。
+
 						*unite-filter-sorter_default*
 sorter_default	|unite-filter-default|により呼び出される、デフォルトのsorter。
 		初期状態では、["sorter_nothing"]のsorterを呼び出す。

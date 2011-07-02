@@ -1383,6 +1383,8 @@ CHANGELOG					*unite-changelog*
 
 2011-07-02
 - Improved :UniteResume command.
+- Added matcher_regexp filter.
+- Changed lines and grep filters.
 
 2011-06-30
 - Added direction argument in source lines.
