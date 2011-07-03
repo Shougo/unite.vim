@@ -1385,6 +1385,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-07-03
+- Improved insert enter mappings.
+
 2011-07-02
 - Added matcher_regexp filter.
 - Changed lines and grep filters.

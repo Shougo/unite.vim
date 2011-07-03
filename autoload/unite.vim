@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jul 2011.
+" Last Modified: 03 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1431,7 +1431,15 @@ endfunction"}}}
 
 " Autocmd events.
 function! s:on_insert_enter()  "{{{
+  let l:unite = unite#get_current_unite()
+  let l:unite.is_insert = 1
   setlocal modifiable
+
+  if line('.') != l:unite.prompt_linenr
+        \ || col('.') <= len(l:unite.prompt)
+    execute l:unite.prompt_linenr
+    startinsert!
+  endif
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   if line('.') == unite#get_current_unite().prompt_linenr

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jun 2011.
+" Last Modified: 03 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,10 +32,10 @@ function! unite#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_insert_enter)  :<C-u>call <SID>insert_enter()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_insert_head)  :<C-u>call <SID>insert_head()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_append_enter)  :<C-u>call <SID>append_enter()<CR>
-  nnoremap <silent><buffer> <Plug>(unite_append_end)  :<C-u>call <SID>append_end()<CR>
+  nnoremap <expr><buffer> <Plug>(unite_insert_enter)  <SID>insert_enter('i')
+  nnoremap <expr><buffer> <Plug>(unite_insert_head)   <SID>insert_enter('0'.(len(unite#get_current_unite().prompt)-1).'li')
+  nnoremap <expr><buffer> <Plug>(unite_append_enter)  <SID>insert_enter('a')
+  nnoremap <expr><buffer> <Plug>(unite_append_end)    <SID>insert_enter('A')
   nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  :<C-u>call <SID>toggle_mark()<CR>
   nnoremap <silent><buffer> <Plug>(unite_redraw)  :<C-u>call <SID>redraw()<CR>
   nnoremap <silent><buffer> <Plug>(unite_rotate_next_source)  :<C-u>call <SID>rotate_source(1)<CR>
@@ -376,23 +376,9 @@ function! s:choose_action()"{{{
   call unite#force_quit_session()
   call unite#start([['action'] + l:candidates], l:context)
 endfunction"}}}
-function! s:insert_enter()"{{{
-  let l:unite = unite#get_current_unite()
-
-  if line('.') != l:unite.prompt_linenr
-    execute l:unite.prompt_linenr
-    startinsert!
-  else
-    startinsert
-
-    if col('.') <= len(l:unite.prompt)+1
-      let l:pos = getpos('.')
-      let l:pos[2] = len(l:unite.prompt)+1
-      call setpos('.', l:pos)
-    endif
-  endif
-
-  let l:unite.is_insert = 1
+function! s:insert_enter(key)"{{{
+  setlocal modifiable
+  return a:key
 endfunction"}}}
 function! s:insert_leave()"{{{
   let l:unite = unite#get_current_unite()
@@ -408,19 +394,7 @@ function! s:insert_head()"{{{
   let l:pos = getpos('.')
   let l:pos[2] = len(unite#get_current_unite().prompt)+1
   call setpos('.', l:pos)
-  call s:insert_enter()
-endfunction"}}}
-function! s:append_enter()"{{{
-  call s:insert_enter()
-  if col('.')+1 == col('$')
-    startinsert!
-  elseif col('$') != len(unite#get_current_unite().prompt)+1
-    normal! l
-  endif
-endfunction"}}}
-function! s:append_end()"{{{
-  call s:insert_enter()
-  startinsert!
+  call s:insert_enter(col('.'))
 endfunction"}}}
 function! s:redraw()"{{{
   call unite#clear_message()
