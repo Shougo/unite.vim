@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 02 Jul 2011.
+" Last Modified: 03 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,7 +74,7 @@ let s:grep_source = {
       \ 'hooks' : {},
       \ 'syntax' : 'uniteSource__Grep',
       \ }
-call unite#custom_filters('lines', ['matcher_regexp', 'sorter_default', 'converter_default'])
+call unite#custom_filters('grep', ['matcher_regexp', 'sorter_default', 'converter_default'])
 
 function! s:grep_source.hooks.on_init(args, context) "{{{
   let l:target  = get(a:args, 0, '')
@@ -122,6 +122,10 @@ function! s:grep_source.gather_candidates(args, context) "{{{
     let a:context.is_async = 0
     call unite#print_message('[grep] Completed.')
     return []
+  endif
+
+  if a:context.is_redraw
+    let a:context.is_async = 1
   endif
 
   let l:cmdline = printf('%s %s ''%s'' %s %s',

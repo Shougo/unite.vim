@@ -449,13 +449,13 @@ g:unite_source_grep_max_candidates		*g:unite_source_grep_max_candidates*
 
 		初期値は100である。
 
-g:unite_source_lines_enable_highlight		*g:unite_source_lines_enable_highlight*
+g:unite_source_line_enable_highlight		*g:unite_source_line_enable_highlight*
 		検索キーワードをハイライトするか制御する。
 
 		Default value is 1.
 
-g:unite_source_lines_search_word_highlight	*g:unite_source_lines_search_word_highlight*
-		|g:unite_source_lines_enable_highlight|が真のとき、検索文字
+g:unite_source_line_search_word_highlight	*g:unite_source_line_search_word_highlight*
+		|g:unite_source_line_enable_highlight|が真のとき、検索文字
 		列のハイライトを設定する。
 
 		初期値は"Search"である。
@@ -1046,8 +1046,8 @@ grep		"grep"コマンドを実行した結果を候補とする。
 		#         : 裏バッファ名
 		$buffers  : 全てのバッファ名
 
-						*unite-source-lines*
-lines		カレントバッファの行を候補とする。
+						*unite-source-line*
+line		カレントバッファの行を候補とする。
 		Note: このsourceはt9md氏によって作成された。
 
 		source引数：
@@ -1056,7 +1056,7 @@ lines		カレントバッファの行を候補とする。
 
 		Example:
 >
-	nnoremap <silent> /  :<C-u>Unite -buffer-name=search lines -start-insert -no-quit<CR>
+	nnoremap <silent> /  :<C-u>Unite -buffer-name=search line -start-insert -no-quit<CR>
 <
 						*unite-source-resume*
 resume		|:UniteResume|の引数となるuniteバッファを候補とする。uniteバッ
