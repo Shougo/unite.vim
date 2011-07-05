@@ -1385,6 +1385,12 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+------------------------------------------------------------------------------
+ChangeLog unite.vim Ver.2.1:
+
+2011-07-05
+- Released unite.vim Ver.2.1.
+
 2011-07-03
 - Improved insert enter mappings.
 - Renamed lines source to line.
