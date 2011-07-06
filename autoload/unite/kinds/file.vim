@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Jun 2011.
+" Last Modified: 06 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,76 +57,6 @@ function! s:kind.action_table.preview.func(candidate)"{{{
   if filereadable(a:candidate.action__path)
     call s:execute_command('pedit', a:candidate)
   endif
-endfunction"}}}
-
-let s:kind.action_table.tabopen = {
-      \ 'description' : 'tabopen files or buffers',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.tabopen.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:execute_command('tabedit', l:candidate)
-  endfor
-endfunction"}}}
-
-let s:kind.action_table.split = {
-      \ 'description' : 'horizontal split open files or buffers',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.split.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:execute_command('split', l:candidate)
-  endfor
-endfunction"}}}
-
-let s:kind.action_table.vsplit = {
-      \ 'description' : 'vertical split open files or buffers',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.vsplit.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:execute_command('vsplit', l:candidate)
-  endfor
-endfunction"}}}
-
-let s:kind.action_table.left = {
-      \ 'description' : 'vertical left split files or buffers',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.left.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:execute_command('leftabove vsplit', l:candidate)
-  endfor
-endfunction"}}}
-
-let s:kind.action_table.right = {
-      \ 'description' : 'vertical right split open files or buffers',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.right.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:execute_command('rightbelow vsplit', l:candidate)
-  endfor
-endfunction"}}}
-
-let s:kind.action_table.above = {
-      \ 'description' : 'horizontal above split open files or buffers',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.above.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:execute_command('leftabove split', l:candidate)
-  endfor
-endfunction"}}}
-
-let s:kind.action_table.below = {
-      \ 'description' : 'horizontal below split open files or buffers',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.below.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:execute_command('rightbelow split', l:candidate)
-  endfor
 endfunction"}}}
 
 let s:kind.action_table.mkdir = {

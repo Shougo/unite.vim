@@ -1,6 +1,6 @@
 *unite.txt*	Unite all sources
 
-Version: 2.1
+Version: 2.2
 Author : Shougo <Shougo.Matsu@gmail.com>
 Documentation Author: ujihisa <ujihisa at gmail com>
 License: MIT license  {{{
@@ -1384,6 +1384,10 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-07-06
+- Ver.2.2 development is started.
+- Fixed file actions.
 
 ------------------------------------------------------------------------------
 ChangeLog unite.vim Ver.2.1:
