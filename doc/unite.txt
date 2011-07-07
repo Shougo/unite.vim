@@ -1387,6 +1387,7 @@ CHANGELOG					*unite-changelog*
 
 2011-07-07
 - Improved unite#print_message() and unite#clear_message() behavior.
+- Improved grep source behavior.
 
 2011-07-06
 - Ver.2.2 development is started.
