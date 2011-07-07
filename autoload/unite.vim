@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jul 2011.
+" Last Modified: 07 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -594,7 +594,10 @@ function! unite#clear_message()"{{{
       let l:modifiable_save = &l:modifiable
       setlocal modifiable
 
+      let l:pos = getpos('.')
       silent! execute '2,'.(l:unite.prompt_linenr-1).'delete _'
+      call setpos('.', l:pos)
+      normal! z.
 
       let l:unite.prompt_linenr = 2
 
@@ -623,10 +626,15 @@ function! s:print_buffer(message)"{{{
     setlocal modifiable
 
     let l:unite = unite#get_current_unite()
+    let l:pos = getpos('.')
     call append(l:unite.prompt_linenr-1, a:message)
     let l:len = type(a:message) == type([]) ?
           \ len(a:message) : 1
     let l:unite.prompt_linenr += l:len
+
+    let l:pos[2] += l:len
+    call setpos('.', l:pos)
+    normal! z.
 
     let &l:modifiable = l:modifiable_save
     call s:on_cursor_moved()
