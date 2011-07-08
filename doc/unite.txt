@@ -1393,6 +1393,7 @@ CHANGELOG					*unite-changelog*
 
 2011-07-09
 - Improved command line buffer detect.
+- Improved substitute pattern.
 
 2011-07-08
 - Added unite#custom_max_candidates().

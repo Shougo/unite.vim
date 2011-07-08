@@ -210,6 +210,7 @@ call unite#set_substitute_pattern('files', '^\~',
       \ substitute(unite#util#substitute_path_separator($HOME), ' ', '\\\\ ', 'g'), -100)
 call unite#set_substitute_pattern('files', '[^~.*]\ze/', '\0*', 100)
 call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
+call unite#set_substitute_pattern('files', '\.', '*.', 1000)
 
 let s:unite_options = [
       \ '-buffer-name=', '-input=', '-prompt=',
