@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 03 Jul 2011.
+" Last Modified: 07 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,6 +125,8 @@ function! s:grep_source.gather_candidates(args, context) "{{{
   endif
 
   if a:context.is_redraw
+    call unite#print_message('[grep] Target: ' . join(a:context.source__target))
+    call unite#print_message('[grep] Pattern: ' . a:context.source__input)
     let a:context.is_async = 1
   endif
 
