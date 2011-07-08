@@ -1393,6 +1393,7 @@ CHANGELOG					*unite-changelog*
 
 2011-07-08
 - Added unite#custom_max_candidates().
+- Fixed s:print_buffer().
 
 2011-07-07
 - Improved unite#print_message() and unite#clear_message() behavior.

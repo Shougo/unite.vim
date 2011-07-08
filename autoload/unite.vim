@@ -638,7 +638,7 @@ function! s:print_buffer(message)"{{{
           \ len(a:message) : 1
     let l:unite.prompt_linenr += l:len
 
-    let l:pos[2] += l:len
+    let l:pos[1] += l:len
     call setpos('.', l:pos)
     normal! z.
 
