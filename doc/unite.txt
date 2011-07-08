@@ -1391,6 +1391,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-07-09
+- Improved command line buffer detect.
+
 2011-07-08
 - Added unite#custom_max_candidates().
 - Fixed s:print_buffer().
