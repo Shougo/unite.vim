@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jul 2011.
+" Last Modified: 09 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,7 +56,7 @@ function! unite#mappings#define_default_mappings()"{{{
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1] - unite#get_current_unite().prompt_linenr-1, getpos("'>")[1] - unite#get_current_unite().prompt_linenr - 1)<CR>
 
   inoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
-  inoremap <silent><buffer> <Plug>(unite_insert_leave)  <C-o>:<C-u>call <SID>insert_leave()<CR>
+  inoremap <silent><buffer> <Plug>(unite_insert_leave)  <ESC>
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(unite#get_current_unite().prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : "\<C-w>"
@@ -111,7 +111,6 @@ function! unite#mappings#define_default_mappings()"{{{
   xmap <buffer> <Space>   <Plug>(unite_toggle_mark_selected_candidates)
 
   " Insert mode key-mappings.
-  imap <buffer> <ESC>     <Plug>(unite_insert_leave)
   imap <buffer> <TAB>     <Plug>(unite_choose_action)
   imap <buffer> <C-n>     <Plug>(unite_select_next_line)
   imap <buffer> <Down>     <Plug>(unite_select_next_line)
@@ -380,16 +379,6 @@ function! s:insert_enter(key)"{{{
   setlocal modifiable
   return a:key
 endfunction"}}}
-function! s:insert_leave()"{{{
-  let l:unite = unite#get_current_unite()
-
-  stopinsert
-  if line('.') != l:unite.prompt_linenr
-    normal! 0
-  endif
-
-  let l:unite.is_insert = 0
-endfunction"}}}
 function! s:insert_head()"{{{
   let l:pos = getpos('.')
   let l:pos[2] = len(unite#get_current_unite().prompt)+1
@@ -575,7 +564,6 @@ function! s:narrowing_path()"{{{
   let l:candidate = unite#get_unite_candidates()[line('.') - (unite#get_current_unite().prompt_linenr+1)]
   call unite#mappings#narrowing(has_key(l:candidate, 'action__path')? l:candidate.action__path : l:candidate.word)
 endfunction"}}}
-
 
 function! unite#mappings#complete_actions(arglead, cmdline, cursorpos)"{{{
   return filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(a:arglead)))

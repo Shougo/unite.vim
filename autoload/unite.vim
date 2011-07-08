@@ -1476,10 +1476,16 @@ function! s:on_insert_enter()  "{{{
   endif
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
-  if line('.') == unite#get_current_unite().prompt_linenr
+  let l:unite = unite#get_current_unite()
+
+  if line('.') == l:unite.prompt_linenr
     " Redraw.
     call unite#redraw()
+  else
+    normal! 0
   endif
+
+  let l:unite.is_insert = 0
 
   setlocal nomodifiable
 endfunction"}}}

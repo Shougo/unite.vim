@@ -685,7 +685,6 @@ x		In case when you selected a candidate, runs
 Insert mode mappings.
 {lhs}		{rhs}
 --------	-----------------------------
-<ESC>		|i_<Plug>(unite_insert_leave)|
 <Tab>		|i_<Plug>(unite_choose_action)|
 <C-n>		|i_<Plug>(unite_select_next_line)|
 <Down>		|i_<Plug>(unite_select_next_line)|
@@ -1394,6 +1393,7 @@ CHANGELOG					*unite-changelog*
 2011-07-09
 - Improved command line buffer detect.
 - Improved substitute pattern.
+- Deleted <ESC> default mapping.
 
 2011-07-08
 - Added unite#custom_max_candidates().
