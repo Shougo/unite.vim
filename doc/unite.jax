@@ -882,6 +882,12 @@ unite#custom_filters({source-name}, {filters})	*unite#custom_filters()*
 		指定することに注意しなければならない。特にmatcherの指定を忘
 		れると、絞り込みができなくなるであろう。
 
+unite#custom_max_candidates({source-name}, {max})
+						*unite#custom_max_candidates()*
+		{source-name}のmax_candidatesを{max}に変更する。
+		{source-name}は","区切りで複数指定ができる。
+		{max}に0を指定した場合、そのsourceの候補は全て表示される。
+
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
 		{candidate}に対し、{action-name}という名前のアクションを実行する。

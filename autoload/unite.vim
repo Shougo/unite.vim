@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Jul 2011.
+" Last Modified: 08 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -104,6 +104,11 @@ function! unite#custom_action(kind, name, action)"{{{
     let s:custom.actions[key][a:name] = a:action
   endfor
 endfunction"}}}
+function! unite#custom_max_candidates(source_name, max)"{{{
+  for key in split(a:source_name, ',')
+    let s:custom.max_candidates[key] = a:max
+  endfor
+endfunction"}}}
 function! unite#undef_custom_action(kind, name)"{{{
   for key in split(a:kind, ',')
     if has_key(s:custom.actions, key)
@@ -198,6 +203,7 @@ let s:custom.default_actions = {}
 let s:custom.aliases = {}
 let s:custom.filters = {}
 let s:custom.source = {}
+let s:custom.max_candidates = {}
 
 let s:buffer_name_options = {}
 call unite#set_substitute_pattern('files', '^\~',
@@ -977,9 +983,6 @@ function! s:initialize_sources()"{{{
     if !has_key(l:source, 'is_volatile')
       let l:source.is_volatile = 0
     endif
-    if !has_key(l:source, 'max_candidates')
-      let l:source.max_candidates = 0
-    endif
     if !has_key(l:source, 'required_pattern_length')
       let l:source.required_pattern_length = 0
     endif
@@ -1001,15 +1004,23 @@ function! s:initialize_sources()"{{{
     if !has_key(l:source, 'syntax')
       let l:source.syntax = ''
     endif
-    if !has_key(l:source, 'filters')
-      let l:source.filters = has_key(s:custom.filters, l:source.name) ?
-            \ s:custom.filters[l:source.name] :
-            \ unite#filters#default#get()
-    endif
     if l:source.is_volatile
           \ && !has_key(l:source, 'change_candidates')
       let l:source.change_candidates = l:source.gather_candidates
     endif
+
+    let l:source.filters =
+          \ has_key(s:custom.filters, l:source.name) ?
+          \ s:custom.filters[l:source.name] :
+          \ has_key(l:source, 'filters') ?
+          \ l:source.filters :
+          \ unite#filters#default#get()
+    let l:source.max_candidates =
+          \ has_key(s:custom.max_candidates, l:source.name) ?
+          \ s:custom.max_candidates[l:source.name] :
+          \ has_key(l:source, 'max_candidates') ?
+          \ l:source.max_candidates :
+          \ 0
   endfor
 
   return l:sources

@@ -875,10 +875,16 @@ unite#custom_alias({kind}, {name}, {action})
 		call unite#custom_alias('file', 'h', 'left')
 <
 unite#custom_filters({source-name}, {filters})	*unite#custom_filters()*
-		Changes the filters of {source-name} into {filters}.  You
+		Changes the filters of {source-name} into {filters}. You
 		may specify multiple sources with separating "," in
 		{source-name}.  {filters} is a name of filter or a list of
 		the names.
+
+unite#custom_max_candidates({source-name}, {max})
+						*unite#custom_max_candidates()*
+		Changes the max candidates of {source-name} into {max}. You
+		may specify multiple sources with separating "," in
+		{source-name}. If {max} is 0, all candidates is displayed.
 
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
@@ -1384,6 +1390,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-07-08
+- Added unite#custom_max_candidates().
 
 2011-07-07
 - Improved unite#print_message() and unite#clear_message() behavior.
