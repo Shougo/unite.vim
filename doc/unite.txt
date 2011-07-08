@@ -1395,6 +1395,7 @@ CHANGELOG					*unite-changelog*
 - Added unite#custom_max_candidates().
 - Fixed s:print_buffer().
 - Detect command line buffer.
+- Improved mru.
 
 2011-07-07
 - Improved unite#print_message() and unite#clear_message() behavior.

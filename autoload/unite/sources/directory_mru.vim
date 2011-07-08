@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jun 2011.
+" Last Modified: 08 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,7 +56,7 @@ function! unite#sources#directory_mru#_append()"{{{
     let l:path = getcwd()
   endif
 
-  let l:path = unite#util#substitute_path_separator(simplify(l:path))
+  let l:path = unite#util#substitute_path_separator(simplify(resolve(l:path)))
   " Chomp last /.
   let l:path = substitute(l:path, '/$', '', '')
 
