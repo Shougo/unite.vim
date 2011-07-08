@@ -657,6 +657,13 @@ endfunction"}}}
 
 " Command functions.
 function! unite#start(sources, ...)"{{{
+  " Check command line window.
+  if s:is_cmdwin()
+    echoerr 'Command line buffer is detected!'
+    echoerr 'Please close command line buffer.'
+    return
+  endif
+
   let l:context = a:0 >= 1 ? a:1 : {}
   call s:initialize_context(l:context)
 
@@ -733,6 +740,13 @@ function! unite#start(sources, ...)"{{{
   endif
 endfunction"}}}
 function! unite#resume(buffer_name)"{{{
+  " Check command line window.
+  if s:is_cmdwin()
+    echoerr 'Command line buffer is detected!'
+    echoerr 'Please close command line buffer.'
+    return
+  endif
+
   if a:buffer_name == ''
     " Use last unite buffer.
     if !bufexists(s:last_unite_bufnr)
@@ -1501,6 +1515,10 @@ function! s:on_cursor_hold()  "{{{
   endif
 endfunction"}}}
 function! s:on_cursor_moved()  "{{{
+  if &filetype !=# 'unite'
+    return
+  endif
+
   let l:prompt_linenr = unite#get_current_unite().prompt_linenr
 
   execute 'setlocal' line('.') == l:prompt_linenr ?
@@ -1643,6 +1661,16 @@ function! s:call_hook(sources, hook_name)"{{{
       call call(l:source.hooks[a:hook_name], [l:source.args, l:source.unite__context], l:source.hooks)
     endif
   endfor
+endfunction"}}}
+function! s:is_cmdwin()"{{{
+  try
+    noautocmd wincmd p
+    noautocmd wincmd p
+  catch
+    return 1
+  endtry
+
+  return 0
 endfunction"}}}
 "}}}
 
