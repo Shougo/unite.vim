@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jul 2011.
+" Last Modified: 10 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,11 +84,15 @@ function! s:source.hooks.on_syntax(args, context)"{{{
 endfunction"}}}
 function! s:source.hooks.on_post_filter(args, context)"{{{
   for l:mru in a:context.candidates
-    let l:path = (g:unite_source_file_mru_filename_format == '') ? '' :
-          \ unite#util#substitute_path_separator(fnamemodify(l:mru.action__path, g:unite_source_file_mru_filename_format))
-    let l:mru.abbr = (g:unite_source_file_mru_filename_format == '' ? '' :
-          \ strftime(g:unite_source_file_mru_time_format, l:mru.source__time)) .
-          \ (l:path == '' ? l:mru.action__path : l:path)
+    let l:path = (g:unite_source_file_mru_filename_format == '') ?
+          \ l:mru.action__path :
+          \ unite#util#substitute_path_separator(
+          \     fnamemodify(l:mru.action__path, g:unite_source_file_mru_filename_format))
+    if l:path == ''
+      let l:path = l:mru.action__path
+    endif
+    let l:mru.abbr = (g:unite_source_file_mru_time_format == '' ? '' :
+          \ strftime(g:unite_source_file_mru_time_format, l:mru.source__time)) .l:path
   endfor
 endfunction"}}}
 
