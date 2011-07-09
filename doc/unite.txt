@@ -1393,6 +1393,7 @@ CHANGELOG					*unite-changelog*
 2011-07-10
 - Fixed narrowing problem.
 - Improved buffer and file_mru source abbr.
+- Improved delete backword path keymapping.
 
 2011-07-09
 - Improved command line buffer detect.

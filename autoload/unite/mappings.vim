@@ -297,8 +297,9 @@ function! s:restart()"{{{
   call unite#start(l:sources, l:context)
 endfunction"}}}
 function! s:delete_backward_path()"{{{
-  let l:prompt   = unite#get_current_unite().prompt
-  let l:input    = getline(unite#get_current_unite().prompt_linenr)[len(l:prompt):]
+  let l:unite    = unite#get_current_unite()
+  let l:prompt   = l:unite.prompt
+  let l:input    = getline(l:unite.prompt_linenr)[len(l:prompt):]
   let l:startcol = match(l:input, '[^/]*.$') + 1 + len(l:prompt)
   let l:endcol   = virtcol('.')
   return repeat("\<C-h>", (l:startcol < l:endcol ? l:endcol - l:startcol : 0))
