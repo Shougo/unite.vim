@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jul 2011.
+" Last Modified: 10 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -162,7 +162,7 @@ endfunction"}}}
 
 function! unite#do_action(action)
   return printf("%s:\<C-u>call unite#mappings#do_action(%s)\<CR>",
-        \             (mode() ==# 'i' ? "\<ESC>" : ''), string(a:action))
+        \             (mode() ==# 'i' ? "\<C-o>" : ''), string(a:action))
 endfunction
 function! unite#smart_map(narrow_map, select_map)"{{{
   return (line('.') <= unite#get_current_unite().prompt_linenr && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
