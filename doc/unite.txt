@@ -1394,6 +1394,7 @@ CHANGELOG					*unite-changelog*
 - Improved command line buffer detect.
 - Improved substitute pattern.
 - Deleted <ESC> default mapping.
+- Improved on InsertEnter.
 
 2011-07-08
 - Added unite#custom_max_candidates().

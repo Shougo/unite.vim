@@ -1472,6 +1472,7 @@ function! s:on_insert_enter()  "{{{
   if line('.') != l:unite.prompt_linenr
         \ || col('.') <= len(l:unite.prompt)
     execute l:unite.prompt_linenr
+    normal! z.
     startinsert!
   endif
 endfunction"}}}
