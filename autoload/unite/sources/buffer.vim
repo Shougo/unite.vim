@@ -139,12 +139,10 @@ function! s:make_word(bufnr)"{{{
     let l:path = printf('*vimfiler* [%s]', unite#substitute_path_separator(simplify(l:path)))
   elseif l:filetype ==# 'vimshell'
     let l:vimshell = getbufvar(a:bufnr, 'vimshell')
-    let l:path = printf('*vimshell*: %s [%s]',
-          \ (has_key(l:vimshell, 'cmdline') ? l:vimshell.cmdline : ''),
+    let l:path = printf('*vimshell*: [%s]',
           \ unite#substitute_path_separator(simplify(l:vimshell.save_dir)))
   else
-    let l:path = bufname(a:bufnr) . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
-    let l:path = unite#substitute_path_separator(simplify(l:path))
+    let l:path = unite#substitute_path_separator(simplify(bufname(a:bufnr)))
   endif
 
   return l:path
@@ -160,7 +158,7 @@ function! s:make_abbr(bufnr)"{{{
           \ (has_key(l:vimshell, 'cmdline') ? l:vimshell.cmdline : ''),
           \ unite#substitute_path_separator(simplify(l:vimshell.save_dir)))
   else
-    let l:path = fnamemodify(bufname(a:bufnr), ':.') . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
+    let l:path = fnamemodify(bufname(a:bufnr), ':~:.') . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
     let l:path = unite#substitute_path_separator(simplify(l:path))
   endif
 
