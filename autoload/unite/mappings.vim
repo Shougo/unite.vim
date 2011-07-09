@@ -297,8 +297,11 @@ function! s:restart()"{{{
   call unite#start(l:sources, l:context)
 endfunction"}}}
 function! s:delete_backward_path()"{{{
-  let l:input = getline(unite#get_current_unite().prompt_linenr)[len(unite#get_current_unite().prompt):]
-  return repeat("\<C-h>", len(matchstr(l:input, '[^/]*.$')))
+  let l:prompt   = unite#get_current_unite().prompt
+  let l:input    = getline(unite#get_current_unite().prompt_linenr)[len(l:prompt):]
+  let l:startcol = match(l:input, '[^/]*.$') + 1 + len(l:prompt)
+  let l:endcol   = virtcol('.')
+  return repeat("\<C-h>", (l:startcol < l:endcol ? l:endcol - l:startcol : 0))
 endfunction"}}}
 function! s:normal_delete_backward_path()"{{{
   let l:modifiable_save = &l:modifiable
