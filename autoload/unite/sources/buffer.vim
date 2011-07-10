@@ -82,7 +82,7 @@ function! s:source_buffer_all.gather_candidates(args, context)"{{{
 
   let l:candidates = map(copy(a:context.source__buffer_list), '{
         \ "word" : s:make_word(v:val.action__buffer_nr),
-        \ "word" : s:make_abbr(v:val.action__buffer_nr),
+        \ "abbr" : s:make_abbr(v:val.action__buffer_nr),
         \ "kind" : "buffer",
         \ "action__path" : unite#substitute_path_separator(bufname(v:val.action__buffer_nr)),
         \ "action__buffer_nr" : v:val.action__buffer_nr,
