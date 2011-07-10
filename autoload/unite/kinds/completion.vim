@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: completion.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Apr 2011.
+" Last Modified: 10 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,7 +73,7 @@ function! s:kind.action_table.preview.func(candidate)"{{{
   redraw
 
   if has_key(a:candidate, 'action__complete_info')
-    echo join(split(a:candidate.action__complete_info, '\n\|\r\n')[: &cmdheight-1], '\n')
+    echo join(split(a:candidate.action__complete_info, '\n\|\r\n')[: &cmdheight-1], "\n")
   endif
 endfunction"}}}
 "}}}

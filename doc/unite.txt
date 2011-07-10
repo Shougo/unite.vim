@@ -1395,6 +1395,7 @@ CHANGELOG					*unite-changelog*
 - Improved buffer and file_mru source abbr.
 - Improved delete backword path keymapping.
 - Fixed buffer source error.
+- Fixed preview action in completion kind.
 
 2011-07-09
 - Improved command line buffer detect.
