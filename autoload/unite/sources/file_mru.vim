@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Jul 2011.
+" Last Modified: 11 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,7 +62,7 @@ function! unite#sources#file_mru#_append()"{{{
   call insert(filter(s:mru_files, 'v:val.action__path !=# l:path'),
   \           s:convert2dictionary([l:path, localtime()]))
 
-  if g:unite_source_file_mru_limit < len(s:mru_files)
+  if g:unite_source_file_mru_limit > len(s:mru_files)
     let s:mru_files = s:mru_files[ : g:unite_source_file_mru_limit - 1]
   endif
 

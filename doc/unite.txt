@@ -1390,6 +1390,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-07-11
+- Fixed fatal mru bug.
+
 2011-07-10
 - Fixed narrowing problem.
 - Improved buffer and file_mru source abbr.
