@@ -73,7 +73,8 @@ function! s:kind.action_table.preview.func(candidate)"{{{
   redraw
 
   if has_key(a:candidate, 'action__complete_info')
-    echo join(split(a:candidate.action__complete_info, '\n\|\r\n')[: &cmdheight-1], "\n")
+    let S = vital#of('unite').import('Data.String')
+    echo join(S.wrap(a:candidate.action__complete_info)[: &cmdheight-1], "\n")
   endif
 endfunction"}}}
 "}}}
