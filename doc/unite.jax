@@ -727,7 +727,7 @@ unite#start({sources}, [, {context}])				*unite#start()*
 		り込みテキストは保存される。
 
 		{sources}はリストであり、それぞれ
-		の要素は{source-name}または、[{source-name}, [{args},...]]とい
+		の要素は{source-name}または、[{source-name}, {args},...]とい
 		う形式である。{args}には{source-name}に渡す引数を文字列形式で
 		複数指定できる。
 

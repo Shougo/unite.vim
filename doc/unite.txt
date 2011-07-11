@@ -739,9 +739,8 @@ unite#start({sources}, [, {context}])		*unite#start()*
 		Unite buffer, the narrowing text will be preserved.
 
 		{sources} is a list which elements are formatted as
-		{source-name} or [{source-name}, [{args}, ...]].  You may
+		{source-name} or [{source-name}, {args}, ...].  You may
 		specify multiple string arguments in {args} for {source-name}.
-
 
 		Refer |unite-notation-{context}| about {context}.  If you
 		skipped it will use the default value.
@@ -1392,6 +1391,7 @@ CHANGELOG					*unite-changelog*
 
 2011-07-11
 - Fixed fatal mru bug.
+- Fixed unite#start() description.
 
 2011-07-10
 - Fixed narrowing problem.
