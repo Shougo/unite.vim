@@ -1514,6 +1514,9 @@ default_action		辞書		(任意)
 			キーはアクションテーブルを追加するkindで、値は標準ア
 			クションである。これを省略した場合はkindの
 			default_actionを使用する。
+			default_actionは文字列形式にすることもできる。
+			その場合、'default_action' : { '*' : action_name }と指
+			定したことと同じとなる。
 
 						*unite-source-attribute-alias_table*
 alias_table		辞書		(任意)
