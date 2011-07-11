@@ -1393,6 +1393,7 @@ CHANGELOG					*unite-changelog*
 - Fixed fatal mru bug.
 - Fixed unite#start() description.
 - Implemented default_action syntax sugar.
+- Improved source action_table description.
 
 2011-07-10
 - Fixed narrowing problem.

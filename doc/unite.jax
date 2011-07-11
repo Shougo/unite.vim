@@ -1503,10 +1503,20 @@ hooks			辞書		(任意)
 						*unite-source-attribute-action_table*
 action_table		辞書		(任意)
 			source独自のアクションテーブルを追加するときに使用する。
-			キーはアクションテーブルを追加するkindで、値は追加するアクションテーブルである。
-			キーに"*"を設定すると、どんなkindにもマッチするようになる。
-			アクションテーブルの詳細については、|unite-kind-attribute-action_table|
-			を参照せよ。もしこれが与えられない場合、空となる。
+			キーはアクションテーブルを追加するkindで、値は追加す
+			るアクションテーブルである。それぞれのアクションテーブ
+			ルの仕様は、|unite-kind-attribute-action_table|と同じで
+			ある。つまり、source側では候補のkind毎に
+			|unite-kind-attribute-action_table|を定義できる。
+			例えば、
+>
+			'action_table' : { 'buffer' : foo_action_table }
+<
+			の場合、このsourceのkind "buffer"では、foo_action_table
+			が使用される。
+			キーのkindに"*"を設定すると、どんなkindにもマッチするよ
+			うになる。候補のkindが一種類しかない場合に便利である。
+			もしこれが与えられない場合、空となる。
 
 						*unite-source-attribute-default_action*
 default_action		辞書		(任意)
