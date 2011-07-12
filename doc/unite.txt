@@ -360,10 +360,9 @@ SOURCES VARIABLES 				*unite-sources-variables*
 
 g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
 		Specifies a regex pattern for ignoring some specific
-		candidates in which source is file.  This matches on the full
+		candidates in |unite-source-file|.  This matches on the full
 		path of each files.  If the variable isn't empty string, unite
-		filters with the regex pattern on the results.  It depends on
-		|g:unite_enable_ignore_case| to distinguish cases or not.
+		filters with the regex pattern on the results.
 
 		Refer autoload/unite/sources/file.vim about the default value.
 
