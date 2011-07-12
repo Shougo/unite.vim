@@ -358,10 +358,10 @@ g:unite_no_default_keymappings			*g:unite_no_default_keymappings*
 sourceの変数					*unite-sources-variables*
 
 g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
-		|unite-source-file|, |unite-source-file_rec|の候補に表示しな
-		いファイルの正規表現パターンを指定する。マッチングはファイル
-		のフルパスに対して行われる。この変数が空文字列以外であれば、
-		指定した正規表現で結果をフィルタリングする。
+		|unite-source-file|の候補に表示しないファイルの正規表現パター
+		ンを指定する。マッチングはファイルのフルパスに対して行われる。
+		この変数が空文字列以外であれば、指定した正規表現で結果をフィル
+		タリングする。
 
 		初期値は autoload/unite/sources/file.vim を参照。
 
