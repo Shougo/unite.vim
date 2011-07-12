@@ -1388,6 +1388,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-07-12
+- Fixed on_close call timing.
+
 2011-07-11
 - Fixed fatal mru bug.
 - Fixed unite#start() description.

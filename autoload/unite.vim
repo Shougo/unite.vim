@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jul 2011.
+" Last Modified: 12 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -920,6 +920,8 @@ function! s:quit_session(is_force)  "{{{
   endif
 
   if !a:is_force && l:unite.context.no_quit
+    " Ignore.
+  else
     " Call finalize functions.
     call s:call_hook(unite#loaded_sources_list(), 'on_close')
   endif
