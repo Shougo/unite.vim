@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jul 2011.
+" Last Modified: 13 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -139,10 +139,11 @@ function! s:get_files(files, level, max_len)"{{{
     if l:file =~ '/\.\+$'
           \ || (g:unite_source_file_rec_ignore_pattern != '' &&
           \     l:file =~ g:unite_source_file_rec_ignore_pattern)
+          \ || isdirectory(l:file) && getftype(l:file) ==# 'link'
       continue
     endif
 
-    if isdirectory(l:file) && getftype(l:file) !=# 'link'
+    if isdirectory(l:file)
       if l:file != '/' && l:file =~ '/$'
         let l:file = l:file[: -2]
       endif
@@ -156,10 +157,11 @@ function! s:get_files(files, level, max_len)"{{{
         if l:child =~ '/\.\+$'
               \ ||(g:unite_source_file_rec_ignore_pattern != '' &&
               \     l:child =~ g:unite_source_file_rec_ignore_pattern)
+              \ || isdirectory(l:child) && getftype(l:child) ==# 'link'
           continue
         endif
 
-        if isdirectory(l:child) && getftype(l:file) !=# 'link'
+        if isdirectory(l:child)
           if a:level < 5 && l:ret_files_len < a:max_len
             let [l:continuation_files_child, l:ret_files_child] =
                   \ s:get_files([l:child], a:level + 1, a:max_len - l:ret_files_len)
@@ -170,13 +172,13 @@ function! s:get_files(files, level, max_len)"{{{
           endif
         else
           call add(l:ret_files, l:child)
-        endif
 
-        let l:ret_files_len += 1
+          let l:ret_files_len += 1
 
-        if l:ret_files_len > a:max_len
-          let l:continuation_files += l:childs[l:child_index :]
-          break
+          if l:ret_files_len > a:max_len
+            let l:continuation_files += l:childs[l:child_index :]
+            break
+          endif
         endif
       endfor
     else
