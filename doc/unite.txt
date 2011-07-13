@@ -251,6 +251,10 @@ COMMANDS 					*unite-commands*
 		-verbose
 		Print verbose warning messages.
 
+						*unite-options-auto-resize*
+		-auto-resize
+		Auto resize unite buffer height by candidates number.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
@@ -1387,6 +1391,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-07-13
+- Added -auto-resize option.
 
 2011-07-12
 - Fixed on_close call timing.

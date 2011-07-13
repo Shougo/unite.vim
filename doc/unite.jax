@@ -225,6 +225,10 @@ http://www.ustream.tv/recorded/11240673
 		-vertical
 		uniteバッファを垂直分割する。
 
+						*unite-options-auto-resize*
+		-auto-resize
+		候補数に応じて、uniteバッファを自動的にリサイズする。
+
 						*unite-options-horizontal*
 		-horizontal
 		uniteバッファを水平分割する。
