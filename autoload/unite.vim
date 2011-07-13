@@ -613,6 +613,7 @@ function! unite#clear_message()"{{{
 
       let l:pos = getpos('.')
       silent! execute '2,'.(l:unite.prompt_linenr-1).'delete _'
+      let l:pos[1] -= l:unite.prompt_linenr-2
       call setpos('.', l:pos)
       normal! z.
 

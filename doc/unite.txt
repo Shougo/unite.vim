@@ -1394,6 +1394,7 @@ CHANGELOG					*unite-changelog*
 
 2011-07-13
 - Added -auto-resize option.
+- Fixed unite#clear_message().
 
 2011-07-12
 - Fixed on_close call timing.
