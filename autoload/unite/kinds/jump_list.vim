@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jun 2011.
+" Last Modified: 15 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -55,7 +55,11 @@ let s:kind.action_table.open = {
 function! s:kind.action_table.open.func(candidates)"{{{
   for l:candidate in a:candidates
     if bufnr(unite#util#escape_file_searching(l:candidate.action__path)) != bufnr('%')
-      edit `=l:candidate.action__path`
+      if has_key(l:candidate, 'action__buffer_nr')
+        execute 'buffer' l:candidate.action__buffer_nr
+      else
+        edit `=l:candidate.action__path`
+      endif
     endif
     call s:jump(l:candidate, 0)
 
@@ -71,6 +75,7 @@ let s:kind.action_table.preview = {
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
   pedit +call\ s:jump(a:candidate,1) `=a:candidate.action__path`
+  syn on
 endfunction"}}}
 
 if globpath(&runtimepath, 'autoload/qfreplace.vim') != ''
