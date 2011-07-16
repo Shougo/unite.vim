@@ -1392,6 +1392,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-07-16
+- Improved redraw.
+
 2011-07-15
 - Fixed jump_list kind.
 
