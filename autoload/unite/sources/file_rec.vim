@@ -50,6 +50,7 @@ function! s:source.gather_candidates(args, context)"{{{
   if l:directory == ''
     let l:directory = isdirectory(a:context.input) ?
           \ a:context.input : getcwd()
+  endif
 
   let l:directory = unite#util#substitute_path_separator(
         \ substitute(l:directory, '^\~', unite#util#substitute_path_separator($HOME), ''))
