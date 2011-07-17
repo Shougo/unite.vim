@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jul 2011.
+" Last Modified: 17 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -938,6 +938,7 @@ function! s:quit_session(is_force)  "{{{
   else
     " Call finalize functions.
     call s:call_hook(unite#loaded_sources_list(), 'on_close')
+    let l:unite.is_finalized = 1
   endif
 
   if l:unite.context.complete
@@ -1311,6 +1312,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.is_async =
         \ len(filter(copy(l:sources), 'v:val.unite__context.is_async')) > 0
   let l:unite.access_time = localtime()
+  let l:unite.is_finalized = 0
 
   " Preview windows check.
   let l:unite.has_preview_window =
@@ -1361,6 +1363,7 @@ function! s:initialize_unite_buffer()"{{{
       autocmd CursorMoved,CursorMovedI <buffer>  call s:on_cursor_moved()
       autocmd WinEnter,BufWinEnter <buffer>  call s:on_win_enter()
       autocmd WinLeave,BufWinLeave <buffer>  call s:on_win_leave()
+      autocmd VimLeave <buffer>  call s:on_vim_leave()
     augroup END
 
     call unite#mappings#define_default_mappings()
@@ -1590,6 +1593,14 @@ function! s:on_win_leave()  "{{{
         \ && &updatetime < l:unite.update_time_save
     let &updatetime = l:unite.update_time_save
   endif
+endfunction"}}}
+function! s:on_vim_leave()  "{{{
+  " Call finalize functions.
+  for unite in filter(map(range(1, bufnr('$')), 'getbufvar(v:val, "unite")'),
+        \ 'type(v:val) == type({}) && !v:val.is_finalized')
+    call s:call_hook(unite.sources, 'on_close')
+    let unite.is_finalized = 1
+  endfor
 endfunction"}}}
 
 " Internal helper functions."{{{

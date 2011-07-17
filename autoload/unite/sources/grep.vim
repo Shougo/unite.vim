@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 07 Jul 2011.
+" Last Modified: 17 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -115,6 +115,11 @@ function! s:grep_source.hooks.on_syntax(args, context)"{{{
         \ . '/ contained containedin=uniteSource__Grep'
   highlight default link uniteSource__GrepPattern Search
 endfunction"}}}
+function! s:grep_source.hooks.on_close(args, context) "{{{
+  if has_key(a:context, 'source__proc')
+    call a:context.source__proc.waitpid()
+  endif
+endfunction "}}}
 
 function! s:grep_source.gather_candidates(args, context) "{{{
   if empty(a:context.source__target)
@@ -155,27 +160,7 @@ function! s:grep_source.async_gather_candidates(args, context) "{{{
     let a:context.is_async = 0
   endif
 
-  let l:result = []
-  if has('reltime') && has('float')
-    let l:time = reltime()
-    while str2float(reltimestr(reltime(l:time))) < 0.2
-          \       && !l:stdout.eof
-      let l:output = l:stdout.read_line()
-      if l:output != ''
-        call add(l:result, l:output)
-      endif
-    endwhile
-  else
-    let i = 100
-    while 0 < i && !l:stdout.eof
-      let l:output = l:stdout.read_line()
-      if l:output != ''
-        call add(l:result, l:output)
-      endif
-
-      let i -= 1
-    endwhile
-  endif
+  let l:result = l:stdout.read_lines(-1, 300)
 
   let l:candidates = map(filter(l:result,
     \  'v:val =~ "^.\\+:.\\+:.\\+$"'),
@@ -190,10 +175,6 @@ function! s:grep_source.async_gather_candidates(args, context) "{{{
     \   "action__line": v:val[1][1],
     \   "action__text": join(v:val[1][2:], ":"),
     \ }')
-endfunction "}}}
-
-function! s:grep_source.on_close(args, context) "{{{
-  call a:context.source__proc.close()
 endfunction "}}}
 
 " vim: foldmethod=marker
