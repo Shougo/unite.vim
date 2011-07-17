@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 15 Jul 2011.
+" Last Modified: 17 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -64,7 +64,11 @@ endfunction
 
 let s:supported_search_direction = ['forward', 'backward', 'all']
 function! s:unite_source.gather_candidates(args, context)
-    let direction = len(a:args) > 0 ? a:args[0] : 'all'
+    let direction = get(a:args, 0, '')
+    if direction == ''
+        let direction = 'all'
+    endif
+
     if index(s:supported_search_direction, direction) == -1
         let direction = 'all'
     endif

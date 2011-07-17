@@ -1395,6 +1395,8 @@ CHANGELOG					*unite-changelog*
 2011-07-17
 - Fixed resource leak in grep source.
 - Use new vimproc function.
+- Improved async.
+- Fixed args problem.
 
 2011-07-16
 - Improved redraw.

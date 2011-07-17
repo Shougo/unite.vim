@@ -1158,13 +1158,11 @@ function! s:recache_candidates(input, is_force)"{{{
     if l:source.unite__context.is_async
       let l:source.unite__cached_candidates +=
             \ l:source.async_gather_candidates(l:source.args, l:source.unite__context)
-
-      if !l:source.unite__context.is_async
-        " Update async state.
-        let l:unite.is_async =
-              \ len(filter(copy(l:unite.sources), 'v:val.unite__context.is_async')) > 0
-      endif
     endif
+
+    " Update async state.
+    let l:unite.is_async =
+          \ len(filter(copy(l:unite.sources), 'v:val.unite__context.is_async')) > 0
 
     let l:source_candidates = copy(l:source.unite__cached_candidates)
 

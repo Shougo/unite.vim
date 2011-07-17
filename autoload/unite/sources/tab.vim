@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 17 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,7 +48,8 @@ function! s:source.gather_candidates(args, context)"{{{
   if exists('*gettabvar')
     call sort(l:list, 's:compare')
   endif
-  if empty(a:args) || a:args[0] !=# 'no-current'
+  let l:arg = get(a:args, 0, '')
+  if l:arg !=# 'no-current'
     " Add current tab.
     call add(l:list, tabpagenr())
   endif
