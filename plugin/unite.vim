@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jul 2011.
+" Last Modified: 17 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -156,7 +156,7 @@ endfunction"}}}
 function! s:parse_options(args)"{{{
   let l:args = []
   let l:options = {}
-  for l:arg in split(a:args, '\%(\\\@<!\s\)\+')
+  for l:arg in split(a:args, '\%(\\\@<!\s\)\+', 1)
     let l:arg = substitute(l:arg, '\\\( \)', '\1', 'g')
 
     let l:found = 0

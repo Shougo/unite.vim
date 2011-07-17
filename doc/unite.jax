@@ -144,12 +144,17 @@ http://www.ustream.tv/recorded/11240673
 		現在uniteバッファに居る場合、絞り込みテキストは保存される。
 
 		source名の後ろに:で区切った文字列のリストを引数として渡すことが
-		できる。引数に含まれる:と\は\でエスケープしなければならない。引
-		数がどう解釈されるかは、sourceによって異なる。
+		できる。引数に含まれる:と\は\でエスケープしなければならな
+		い。::は引数の省略を表す。引数がどう解釈されるかは、sourceに
+		よって異なる。
 
 		例：
-		"file:hoge:piyo": source fileに与える引数は[hoge, piyo]である。
-		"file:hoge\:piyo": source fileに与える引数は[hoge:piyo]である。
+		"file:hoge:piyo": source fileに与える引数は
+		                  ["hoge", "piyo"]である。
+		"file:hoge\:piyo": source fileに与える引数は
+		                  ["hoge:piyo"]である。
+		"file:hoge::piyo": source fileに与える引数は
+		                  ["hoge", "", "piyo"]である。
 
 						*unite-options*
 		{options}とはuniteバッファに与えるオプションである。
