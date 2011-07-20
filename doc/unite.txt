@@ -1398,6 +1398,7 @@ CHANGELOG					*unite-changelog*
 
 2011-07-20
 - Fixed source args parse.
+- Fixed filter description.
 
 2011-07-17
 - Fixed resource leak in grep source.

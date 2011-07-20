@@ -1214,7 +1214,8 @@ filter						*unite-filter*
 
 filterには大まかに分けて、"matcher", "sorter", "converter"の三種類が存在する。
 matcherは入力に合う候補を取り出し、sorterは候補の並べ換えを行い、converterは
-候補の見ためを変更する。
+候補の中身を変更する。converterが候補のabbrを変更するものなら、候補の表示が変わ
+ることになる。
 filterはデフォルトで、|unite-filter-default|にあるものが使用される。
 だが、|unite#custom_filters()|でsource毎に変更することも可能である。
 
