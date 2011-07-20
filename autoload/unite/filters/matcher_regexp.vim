@@ -46,7 +46,7 @@ function! s:matcher.filter(candidates, context)"{{{
     if l:input =~ '^!'
       " Exclusion match.
       try
-        call filter(l:candidates, 'v:val.word !~ ' . string(l:input[1:])
+        call filter(l:candidates, 'v:val.word !~ ' . string(l:input[1:]))
       catch
       endtry
     elseif l:input !~ '[~\\.^$[\]*]'
