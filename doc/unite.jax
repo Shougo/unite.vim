@@ -1589,6 +1589,12 @@ syntax			文字列		(任意)
 			|unite-source-attribute-hooks-on_syntax|を使用しなけ
 			ればならない。
 
+						*unite-source-attribute-filters*
+filters			リスト		(任意)
+			そのsourceが使用するfilterのリスト。filterの仕様は、
+			|unite-filter-attributes|を参照せよ。これが省略されると
+			|unite-filter-default|が使用される。
+
 						*unite-source-attribute-source__*
 source__		不定		(任意)
 			source毎の独自属性。unite側の属性と被らないように、
