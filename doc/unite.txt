@@ -1400,6 +1400,7 @@ CHANGELOG					*unite-changelog*
 
 2011-07-21
 - Set max candidates in line source.
+- Improved matcher.
 
 2011-07-20
 - Fixed source args parse.

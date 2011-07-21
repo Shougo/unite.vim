@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_glob.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jun 2011.
+" Last Modified: 21 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,6 +47,10 @@ function! s:matcher.filter(candidates, context)"{{{
     let l:input = substitute(l:input, '\\ ', ' ', 'g')
 
     if l:input =~ '^!'
+      if l:input == '!'
+        continue
+      endif
+
       " Exclusion.
       let l:input = unite#escape_match(l:input)
       let l:expr = 'v:val.word !~ ' . string(l:input[1:])

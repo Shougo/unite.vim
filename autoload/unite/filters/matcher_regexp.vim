@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_regexp.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jul 2011.
+" Last Modified: 21 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,6 +44,9 @@ function! s:matcher.filter(candidates, context)"{{{
   let l:candidates = copy(a:candidates)
   for l:input in split(a:context.input, '\\\@<! ')
     if l:input =~ '^!'
+      if l:input == '!'
+        continue
+      endif
       " Exclusion match.
       try
         call filter(l:candidates, 'v:val.word !~ ' . string(l:input[1:]))
