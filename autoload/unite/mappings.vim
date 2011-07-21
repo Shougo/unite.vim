@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Jul 2011.
+" Last Modified: 21 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -159,7 +159,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
         return
       endif
 
-      let l:candidates = [ unite#get_unite_candidates()[l:num] ]
+      let l:candidates = [ unite#get_current_candidate() ]
     else
       let l:candidates = [ l:num ]
     endif
@@ -319,7 +319,7 @@ function! s:toggle_mark()"{{{
     return
   endif
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - (unite#get_current_unite().prompt_linenr+1)]
+  let l:candidate = unite#get_current_candidate()
   let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
   let l:candidate.unite__marked_time = localtime()
   call unite#redraw_line()
@@ -353,10 +353,7 @@ function! s:choose_action()"{{{
 
   let l:candidates = unite#get_marked_candidates()
   if empty(l:candidates)
-    let l:num = line('.') <= l:unite.prompt_linenr ?
-          \ 0 : line('.') - (l:unite.prompt_linenr+1)
-
-    let l:candidates = [ unite#get_unite_candidates()[l:num] ]
+    let l:candidates = [ unite#get_current_candidate() ]
   endif
 
   call filter(l:candidates, '!v:val.is_dummy')
@@ -417,7 +414,7 @@ function! s:print_candidate()"{{{
     return
   endif
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - (unite#get_current_unite().prompt_linenr+1)]
+  let l:candidate = unite#get_current_candidate()
   echo l:candidate.word
 endfunction"}}}
 function! s:insert_selected_candidate()"{{{
@@ -426,7 +423,7 @@ function! s:insert_selected_candidate()"{{{
     return
   endif
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - (unite#get_current_unite().prompt_linenr+1)]
+  let l:candidate = unite#get_current_candidate()
   call unite#mappings#narrowing(l:candidate.word)
 endfunction"}}}
 function! s:quick_match()"{{{
@@ -565,7 +562,7 @@ function! s:narrowing_path()"{{{
     return
   endif
 
-  let l:candidate = unite#get_unite_candidates()[line('.') - (unite#get_current_unite().prompt_linenr+1)]
+  let l:candidate = unite#get_current_candidate()
   call unite#mappings#narrowing(has_key(l:candidate, 'action__path')? l:candidate.action__path : l:candidate.word)
 endfunction"}}}
 

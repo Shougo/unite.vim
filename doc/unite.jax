@@ -140,6 +140,7 @@ http://www.ustream.tv/recorded/11240673
 		絞込みテキストは空。{sources} はスペースで区切って複数指定でき
 		る。また、{sources} の指定順序がsourceの候補の表示順序となる。
 		sourceについては|unite-source|を参照。
+		このコマンドは前回の位置を保存する。
 
 		現在uniteバッファに居る場合、絞り込みテキストは保存される。
 

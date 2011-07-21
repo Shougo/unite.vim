@@ -145,6 +145,7 @@ COMMANDS 					*unite-commands*
 		narrowing text.  You may specify multiple {sources} with
 		spaces as a separator; the order of the {sources} will be the
 		order of candidates.  See |unite-source| also for sources.
+		This command restores previous position.
 
 		In case you are already on unite buffer, the narrowing text
 		will be stored.
@@ -1401,6 +1402,7 @@ CHANGELOG					*unite-changelog*
 2011-07-21
 - Set max candidates in line source.
 - Improved matcher.
+- Improved restore position.
 
 2011-07-20
 - Fixed source args parse.
