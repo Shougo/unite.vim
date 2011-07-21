@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jul 2011.
+" Last Modified: 21 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,7 +29,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#version()"{{{
-  return str2nr(printf('%02d%02d%03d', 2, 1, 0))
+  return str2nr(printf('%02d%02d%03d', 2, 2, 0))
 endfunction"}}}
 
 " User functions."{{{
