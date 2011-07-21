@@ -1022,6 +1022,7 @@ grep		Nominates "grep" command output as candidates.
 		1. the target directory.
 		2. "grep" options.
 		3. the narrowing pattern.
+		Max candidates: |g:unite_source_grep_max_candidates|
 
 		Example:
 >
@@ -1038,6 +1039,7 @@ line		Nominates current buffer lines as candidates.
 
 		Source arguments:
 		1. the search direction. "all" or "forward" or "backward".
+		Max candidates: 100
 
 		Example:
 >
@@ -1395,6 +1397,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-07-21
+- Set max candidates in line source.
 
 2011-07-20
 - Fixed source args parse.

@@ -1051,6 +1051,8 @@ grep		"grep"コマンドを実行した結果を候補とする。
 		2. "grep"に与えるオプション
 		3. 絞り込みパターン
 
+		候補の最大数：|g:unite_source_grep_max_candidates|
+
 		Example:
 >
 	:Unite grep:~/.vim/autoload/unite/sources:-iR:file
@@ -1067,6 +1069,8 @@ line		カレントバッファの行を候補とする。
 		source引数：
 		1. 検索方向。 "all", "forward", "backward"のうちどれかを指定
 		する。省略すると"all"となる。
+
+		候補の最大数：100
 
 		Example:
 >

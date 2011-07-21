@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 20 Jul 2011.
+" Last Modified: 21 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,11 +30,14 @@
 call unite#util#set_default('g:unite_source_line_enable_highlight', 1)
 call unite#util#set_default('g:unite_source_line_search_word_highlight', 'Search')
 
-let s:unite_source = {}
-let s:unite_source.syntax = 'uniteSource__Line'
-let s:unite_source.hooks = {}
-let s:unite_source.name = 'line'
-let s:unite_source.filters = ['matcher_regexp', 'sorter_default', 'converter_default']
+let s:unite_source = {
+            \ 'name' : 'line',
+            \ 'syntax' : 'uniteSource__Line',
+            \ 'hooks' : {},
+            \ 'max_candidates': 100,
+            \ 'filters' :
+            \    ['matcher_regexp', 'sorter_default', 'converter_default'],
+            \ }
 
 function! s:unite_source.hooks.on_init(args, context) "{{{
     execute 'highlight default link uniteSource__Line_target ' . g:unite_source_line_search_word_highlight
