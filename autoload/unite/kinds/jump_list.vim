@@ -123,7 +123,7 @@ function! s:jump(candidate, is_highlight)"{{{
     " Jump to the line number.
     let l:col = has_key(a:candidate, 'action__col') ?
           \ a:candidate.action__col : 0
-    call cursor(a:candidate.action__line, a:candidate.action__col)
+    call cursor(a:candidate.action__line, l:col)
     call s:open_current_line(a:is_highlight)
     return
   endif
