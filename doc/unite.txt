@@ -1050,6 +1050,9 @@ line		Nominates current buffer lines as candidates.
 resume		Nominates unite buffers as candidates, ordering by time
 		series.
 
+						*unite-source-jump*
+jump		Nominates results of |:jumps| command as candidates.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1106,8 +1109,16 @@ jump_list	An interface for jump lists.  This kind is inheriting
 			action__path		(String)	(Required)
 				The path of the file that you'll jump into.
 
+			action__buffer_nr	(String)	(Required)
+				The buffer number of the buffer that you'll
+				jump into.
+
 			action__line		(Number)	(Optional)
 				The line number in the file you'll jump into.
+
+			action__col		(Number)	(Optional)
+				The column number in the file you'll jump
+				into.
 
 			action__pattern		(String)	(Optional)
 				The search pattern that you'll search after
@@ -1398,6 +1409,9 @@ BUGS						*unite-bugs*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-07-23
+- Added jump source.
 
 2011-07-21
 - Set max candidates in line source.
