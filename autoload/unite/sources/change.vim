@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: jump.vim
+" FILE: changes.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 23 Jul 2011.
 " License: MIT license  {{{
@@ -30,74 +30,48 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#jump#define()"{{{
+function! unite#sources#change#define()"{{{
   return s:source
 endfunction"}}}
 
 let s:source = {
-      \ 'name' : 'jump',
-      \ 'description' : 'candidates from jumps',
+      \ 'name' : 'change',
+      \ 'description' : 'candidates from changes',
+      \ 'hooks' : {},
       \ }
 
 let s:cached_result = []
-function! s:source.gather_candidates(args, context)"{{{
-  " Get jumps list.
+function! s:source.hooks.on_init(args, context)"{{{
+  " Get changes list.
   redir => l:redir
-  silent! jumps
+  silent! changes
   redir END
 
   let l:result = []
-  let l:max_path = (winwidth(0) - 5) / 2
-  let l:max_text = (winwidth(0) - 5) - l:max_path
-  for jump in split(l:redir, '\n')[1:]
-    let l:list = split(jump)
+  let l:max_width = (winwidth(0) - 5)
+  for change in split(l:redir, '\n')[1:]
+    let l:list = split(change)
     if len(l:list) < 4
       continue
     endif
 
-    let [l:linenr, l:col, l:file_text] = [l:list[1], l:list[2]+1, join(l:list[3:])]
-    let l:lines = getbufline(l:file_text, l:linenr)
-    let l:path = l:file_text
-    let l:bufnr = bufnr(l:file_text)
-    if empty(l:lines)
-      if getline(l:linenr) ==# l:file_text
-        let l:lines = [l:file_text]
-        let l:path = bufname('%')
-        let l:bufnr = bufnr('%')
-      elseif filereadable(l:path)
-        let l:bufnr = 0
-        let l:lines = ['buffer unloaded']
-      else
-        " Skip.
-        continue
-      endif
-    endif
+    let [l:linenr, l:col, l:text] = [l:list[1], l:list[2]+1, join(l:list[3:])]
 
-    if getbufvar(l:bufnr, '&filetype') ==# 'unite'
-      " Skip unite buffer.
-      continue
-    endif
-
-    let l:text = get(l:lines, 0, '')
-
-    let l:dict = {
-          \ 'word' : unite#util#truncate_smart(printf('%s:%d-%d  ', l:path, l:linenr, l:col),
-          \           l:max_path, l:max_path/3, '..') .
-          \          unite#util#truncate_smart(l:text, l:max_text, l:max_text/3, '..'),
+    call add(l:result, {
+          \ 'word' : unite#util#truncate_smart(printf('%4d-%-3d  %s', l:linenr, l:col, l:text),
+          \           l:max_width, l:max_width/3, '..'),
           \ 'kind' : 'jump_list',
-          \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(expand(l:path), ':p')),
+          \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(expand('%'), ':p')),
+          \ 'action__buffer_nr' : bufnr('%'),
           \ 'action__line' : l:linenr,
           \ 'action__col' : l:col,
-          \ }
-
-    if l:bufnr > 0
-      let l:dict.action__buffer_nr = l:bufnr
-    endif
-
-    call add(l:result, l:dict)
+          \ })
   endfor
 
-  return reverse(l:result)
+  let a:context.source__result = l:result
+endfunction"}}}
+function! s:source.gather_candidates(args, context)"{{{
+  return a:context.source__result
 endfunction"}}}
 
 let &cpo = s:save_cpo

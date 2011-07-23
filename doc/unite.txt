@@ -1053,6 +1053,9 @@ resume		Nominates unite buffers as candidates, ordering by time
 						*unite-source-jump*
 jump		Nominates results of |:jumps| command as candidates.
 
+						*unite-source-change*
+change		Nominates results of |:changes| command as candidates.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1412,6 +1415,7 @@ CHANGELOG					*unite-changelog*
 
 2011-07-23
 - Added jump source.
+- Added change source.
 
 2011-07-21
 - Set max candidates in line source.

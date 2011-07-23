@@ -1084,6 +1084,9 @@ resume		|:UniteResume|の引数となるuniteバッファを候補とする。un
 						*unite-source-jump*
 jump		|:jumps|の結果を候補とする。
 
+						*unite-source-change*
+change		|:changes|の結果を候補とする。
+
 ==============================================================================
 kind						*unite-kinds*
 
