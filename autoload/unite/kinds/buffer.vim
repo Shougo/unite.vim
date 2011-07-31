@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jul 2011.
+" Last Modified: 31 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -95,6 +95,22 @@ function! s:kind.action_table.unload.func(candidates)"{{{
   for l:candidate in a:candidates
     call s:delete('unload', l:candidate)
   endfor
+endfunction"}}}
+
+let s:kind.action_table.preview = {
+      \ 'description' : 'preview buffer',
+      \ 'is_quit' : 0,
+      \ }
+function! s:kind.action_table.preview.func(candidate)"{{{
+  pedit `=a:candidate.action__path`
+
+  let l:filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
+  if l:filetype != ''
+    let l:winnr = winnr()
+    execute bufwinnr(a:candidate.action__buffer_nr) . 'wincmd w'
+    execute 'setfiletype' l:filetype
+    execute l:winnr . 'wincmd w'
+  endif
 endfunction"}}}
 
 let s:kind.action_table.rename = {
