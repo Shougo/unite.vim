@@ -1415,6 +1415,7 @@ CHANGELOG					*unite-changelog*
 
 2011-07-31
 - Fixed preview problems.
+- Fixed arguments parse.
 
 2011-07-23
 - Added jump source.

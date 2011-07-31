@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jul 2011.
+" Last Modified: 31 Jul 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -156,7 +156,7 @@ endfunction"}}}
 function! s:parse_options(args)"{{{
   let l:args = []
   let l:options = {}
-  for l:arg in split(a:args, '\%(\\\@<!\s\)\+', 1)
+  for l:arg in split(a:args, '\%(\\\@<!\s\)\+')
     let l:arg = substitute(l:arg, '\\\( \)', '\1', 'g')
 
     let l:found = 0
@@ -174,8 +174,10 @@ function! s:parse_options(args)"{{{
     if !l:found
       " Add source name.
       let l:source_name = matchstr(l:arg, '^[^:]*')
-      let l:source_args = map(split(l:arg[len(l:source_name)+1 :], '\\\@<!:', 1),
-            \ 'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
+      let l:source_arg = l:arg[len(l:source_name)+1 :]
+      let l:source_args = l:source_arg  == '' ? [] :
+            \  map(split(l:source_arg, '\\\@<!:', 1),
+            \      'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
       call add(l:args, insert(l:source_args, l:source_name))
     endif
   endfor

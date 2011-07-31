@@ -1449,7 +1449,10 @@ gather_candidates	関数		(ほぼ必須)
 			リストを返す。
 			{args}は|:Unite|コマンドを実行された際にsourceに渡され
 			た引数リスト、{context}はsourceが呼ばれたときのコンテキ
-			スト情報である。
+			スト情報である。引数が省略されると、その引数には""が
+			渡される。よって、引数が空文字列であっても、うまく対
+			応しなければならない。引数は|get()|を用いてチェック
+			するようにするべきである。
 			{context}については|unite-notation-{context}|、
 			{candidate}については|unite-notation-{candidate}|を参照
 			せよ。
