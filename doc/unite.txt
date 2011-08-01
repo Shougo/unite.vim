@@ -1413,6 +1413,9 @@ BUGS						*unite-bugs*
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-08-01
+- Improved unite-grep source.
+
 2011-07-31
 - Fixed preview problems.
 - Fixed arguments parse.
