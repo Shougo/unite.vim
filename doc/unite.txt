@@ -1410,6 +1410,7 @@ CHANGELOG					*unite-changelog*
 2011-08-01
 - Improved unite-grep source.
 - Added converter_relative_abbr and converter_relative_word.
+- Improved converter_relative.
 
 2011-07-31
 - Fixed preview problems.

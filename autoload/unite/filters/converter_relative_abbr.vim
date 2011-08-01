@@ -40,13 +40,14 @@ function! s:converter.filter(candidates, context)"{{{
   try
     if has_key(a:context, 'source__directory')
       let l:old_dir = getcwd()
+      let l:directory = substitute(a:context.source__directory, '*', '', 'g')
 
-      lcd `=a:context.source__directory`
+      lcd `=l:directory`
     endif
 
     for candidate in a:candidates
       let candidate.abbr = unite#util#substitute_path_separator(
-            \ fnamemodify(candidate.abbr, ':.'))
+            \ fnamemodify(candidate.abbr, ':.:~'))
     endfor
   finally
     if has_key(a:context, 'source__directory')

@@ -41,7 +41,9 @@ function! s:converter.filter(candidates, context)"{{{
     if has_key(a:context, 'source__directory')
       let l:old_dir = getcwd()
 
-      lcd `=a:context.source__directory`
+      let l:directory = substitute(a:context.source__directory, '*', '', 'g')
+
+      lcd `=l:directory`
     endif
 
     for candidate in a:candidates
