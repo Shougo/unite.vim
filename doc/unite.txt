@@ -1411,6 +1411,7 @@ CHANGELOG					*unite-changelog*
 - Improved unite-grep source.
 - Added converter_relative_abbr and converter_relative_word.
 - Improved converter_relative.
+- Improved quit session.
 
 2011-07-31
 - Fixed preview problems.
