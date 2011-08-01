@@ -1235,6 +1235,7 @@ matcherは入力に合う候補を取り出し、sorterは候補の並べ換え�
 ることになる。
 filterはデフォルトで、|unite-filter-default|にあるものが使用される。
 だが、|unite#custom_filters()|でsource毎に変更することも可能である。
+filterは指定したリストの順番で呼び出されるので注意せよ。
 
 						*unite-filter-default*
 default		特にfilterが指定されていないときに呼び出される、デフォルトの
@@ -1281,6 +1282,21 @@ converter_default
 						*unite-filter-converter_nothing*
 converter_nothing
 		候補を何も変更しないconverter。
+
+						*unite-filter-converter_relative_word*
+converter_relative_word
+		候補のwordを相対パスに変換するconverter。wordはmatcherにおいて、
+		絞り込みに使用される。そのため、このconverterを使用する場合は、
+		matcherの前に指定しなければならない。
+>
+		call unite#custom_filters('file_rec',
+		\ ['converter_relative_word', 'matcher_default',
+		\  'sorter_default', 'converter_relative_abbr'])
+<
+
+						*unite-filter-converter_relative_abbr*
+converter_relative_abbr
+		候補のabbrを相対パスに変換するconverter。
 
 ==============================================================================
 アクション					*unite-actions*
@@ -1900,12 +1916,6 @@ description		文字列		(任意)
 
 作者以外の手により作成されたsourceについては、Wikiのページを参照せよ。
 https://github.com/Shougo/unite.vim/wiki/unite-plugins
-
-==============================================================================
-TODO						*unite-todo*
-
-==============================================================================
-既知のバグ					*unite-bugs*
 
 ==============================================================================
 更新履歴					*unite-changelog*

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Jul 2011.
+" Last Modified: 01 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -733,8 +733,6 @@ function! unite#start(sources, ...)"{{{
   endfor
   call unite#redraw_candidates()
 
-  " setlocal nomodifiable
-
   if l:unite.context.start_insert || l:unite.context.complete
     let l:unite.is_insert = 1
 
@@ -796,7 +794,9 @@ function! unite#resume(buffer_name)"{{{
   let l:winnr = winnr()
   let l:win_rest_cmd = winrestcmd()
 
-  let l:context = getbufvar(l:bufnr, 'unite').context
+  let l:unite = getbufvar(l:bufnr, 'unite')
+  let l:context = l:unite.context
+
   call s:switch_unite_buffer(bufname(l:bufnr), l:context)
 
   " Set parameters.
@@ -807,8 +807,6 @@ function! unite#resume(buffer_name)"{{{
   let l:unite.access_time = localtime()
 
   let s:current_unite = l:unite
-
-  setlocal nomodifiable
 
   if g:unite_enable_start_insert
     let l:unite.is_insert = 1

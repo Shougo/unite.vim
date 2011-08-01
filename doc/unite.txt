@@ -1405,16 +1405,11 @@ See Wiki page(Japanese).
 https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
-TODO						*unite-todo*
-
-==============================================================================
-BUGS						*unite-bugs*
-
-==============================================================================
 CHANGELOG					*unite-changelog*
 
 2011-08-01
 - Improved unite-grep source.
+- Added converter_relative_abbr and converter_relative_word.
 
 2011-07-31
 - Fixed preview problems.
