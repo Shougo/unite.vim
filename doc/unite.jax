@@ -1296,7 +1296,7 @@ converter_relative_word
 
 						*unite-filter-converter_relative_abbr*
 converter_relative_abbr
-		候補のabbrを相対パスに変換するconverter。
+		候補のabbrをwordの相対パスに変換するconverter。
 
 ==============================================================================
 アクション					*unite-actions*

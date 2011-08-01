@@ -1412,6 +1412,7 @@ CHANGELOG					*unite-changelog*
 - Added converter_relative_abbr and converter_relative_word.
 - Improved converter_relative.
 - Improved quit session.
+- Improved file_rec source.
 
 2011-07-31
 - Fixed preview problems.

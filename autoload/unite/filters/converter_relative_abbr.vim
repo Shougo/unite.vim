@@ -47,7 +47,7 @@ function! s:converter.filter(candidates, context)"{{{
 
     for candidate in a:candidates
       let candidate.abbr = unite#util#substitute_path_separator(
-            \ fnamemodify(candidate.abbr, ':.:~'))
+            \ fnamemodify(candidate.word, ':~:.'))
     endfor
   finally
     if has_key(a:context, 'source__directory')
