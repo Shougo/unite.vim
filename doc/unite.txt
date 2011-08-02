@@ -1407,6 +1407,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-08-03
+- Improved relative converters.
+
 2011-08-02
 - Improved mru filtering.
 
