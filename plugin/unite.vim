@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jul 2011.
+" Last Modified: 03 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -71,7 +71,7 @@ if !exists('g:unite_lcd_command')
   let g:unite_lcd_command = 'lcd'
 endif
 if !exists('g:unite_abbr_highlight')
-  let g:unite_abbr_highlight = 'Pmenu'
+  let g:unite_abbr_highlight = 'Normal'
 endif
 if !exists('g:unite_cursor_line_highlight')
   let g:unite_cursor_line_highlight = 'PmenuSel'

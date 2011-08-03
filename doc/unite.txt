@@ -342,7 +342,7 @@ g:unite_cursor_line_highlight			*g:unite_cursor_line_highlight*
 g:unite_abbr_highlight				*g:unite_abbr_highlight*
 		Specifies candidates abbr highlight.
 		
-		The default value is "Pmenu".
+		The default value is "Normal".
 
 g:unite_quick_match_table			*g:unite_quick_match_table*
 		The table of completion candidates of quick match list,
@@ -1419,6 +1419,7 @@ CHANGELOG					*unite-changelog*
 2011-08-03
 - Improved relative converters.
 - Added source kind.
+- Improved g:unite_abbr_highlight default value.
 
 2011-08-02
 - Improved mru filtering.
