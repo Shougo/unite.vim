@@ -38,13 +38,11 @@ License: MIT license  {{{
   kind			  |unite-kinds|
   アクション		  |unite-actions|
   filter		  |unite-filters|
-設定例			|unite-examples|
 sourceの作成		|unite-create-source|
 kindの作成		|unite-create-kind|
 filterの作成		|unite-create-filter|
+設定例			|unite-examples|
 ユーザーのsource	|unite-user-sources|
-ToDo			|unite-todo|
-既知のバグ			|unite-bugs|
 更新履歴		|unite-changelog|
 
 ==============================================================================

@@ -38,13 +38,11 @@ Interface		|unite-interface|
   Kinds			  |unite-kinds|
   Actions		  |unite-actions|
   Filters		  |unite-filters|
-Configulation Examples	|unite-examples|
 Create source		|unite-create-source|
 Create kind		|unite-create-kind|
 Create filter		|unite-create-filter|
+Configulation Examples	|unite-examples|
 User defined source	|unite-user-sources|
-ToDo			|unite-todo|
-Bugs			|unite-bugs|
 Changelog		|unite-changelog|
 
 ==============================================================================
@@ -1188,6 +1186,10 @@ source		unite.vim source
 				The source arguments
 
 ==============================================================================
+FILTERS						*unite-filters*
+
+Todo
+==============================================================================
 ACTIONS						*unite-actions*
 
 Actions of each kinds
@@ -1316,22 +1318,15 @@ word		insert
 jump_list	open
 
 ==============================================================================
-FILTERS						*unite-filters*
-
-TODO
-
-==============================================================================
 CREATE SOURCE					*unite-create-source*
 
-TODO
+Todo
 
 ------------------------------------------------------------------------------
 SOURCE ATTRIBUTES				*unite-source-attributes*
 
-TODO
-
 						*unite-source-attribute-name*
-name			string		(required)
+name			String		(Required)
 			The name of a source. It must consist of the following
 			characters:
 			- a-z
@@ -1341,11 +1336,61 @@ name			string		(required)
 
 			For example:
 			- "buffer" , "file_mru" and "virw/git" are valid.
-			- "BadOne", "!@#$%^&*()_[]{}-|" and "" are
-			  not valid.
+			- "BadOne", "!@#$%^&*()_[]{}-|" and "" are invalid.
+
+						*unite-source-attribute-gather_candidates*
+gather_candidates	Function	(Required)
+			Todo
+
+						*unite-source-attribute-change_candidates*
+change_candidates	Function	(Optional)
+			Todo
+
+						*unite-source-attribute-async_gather_candidates*
+async_gather_candidates	Function	(Optional)
+			Todo
+
+						*unite-source-attribute-hooks*
+hooks			Dictionary		(Optional)
+			Todo
+
+			on_init			*unite-source-attribute-hooks-on_init*
+			Todo
+
+			on_syntax		*unite-source-attribute-hooks-on_syntax*
+			Todo
+
+			Example:
+>
+			syntax match uniteSource_FileMru_Time /(.*)/ contained containedin=uniteSource_FileMru
+			highlight default link uniteSource_FileMru_Time Statement
+<
+			Todo
+
+			on_close		*unite-source-attribute-hooks-on_close*
+			Todo
+
+			on_post_filter		*unite-source-attribute-hooks-on_post_filter*
+			Todo
+
+						*unite-source-attribute-action_table*
+action_table		Dictionary		(Optional)
+			Todo
+>
+			'action_table' : { 'buffer' : foo_action_table }
+<
+			Todo
+
+						*unite-source-attribute-default_action*
+default_action		Dictionary		(Optional)
+			Todo
+
+						*unite-source-attribute-alias_table*
+alias_table		Dictionary		(Optional)
+			Todo
 
 						*unite-source-attribute-max_candidates*
-max_candidates		number		(optional)
+max_candidates		Number		(Optional)
 			The maximum number of candidates.
 
 			This attribute is optional; if it is not given, 0 is
@@ -1353,22 +1398,187 @@ max_candidates		number		(optional)
 			is infinity.
 
 						*unite-source-attribute-required_pattern_length*
-required_pattern_length	number		(optional)
-			The required pattern length to collect candidates.
+required_pattern_length	Number		(Optional)
+			Todo
 
-			This attribute is optional; if it is not given, 0 is
-			used as the default value. This means that always
-			collect candidates.
+						*unite-source-attribute-is_volatile*
+is_volatile		Number		(Optional)
+			Todo
+
+						*unite-source-attribute-description*
+description		String		(Optional)
+			Todo
+
+						*unite-source-attribute-syntax*
+syntax			String		(Optional)
+			Todo
+
+						*unite-source-attribute-filters*
+filters			List		(Optional)
+			Todo
+
+						*unite-source-attribute-source__*
+source__		Unknown		(Optional)
+			Todo
+
+NOTATION					*unite-notation*
+
+{context}					*unite-notation-{context}*
+			Todo
+
+			input			(String)
+				The input string of unite buffer.
+
+			buffer_name		(String)
+				The name of unite buffer.
+
+			prompt			(String)
+				The prompt string of unite buffer.
+
+			is_insert		(Number)
+				Todo
+
+			immediately		(Number)
+				Todo
+
+			is_redraw		(Number)
+				Todo
+
+			is_async		(Number)
+				Todo
+
+			source			(Dictionary)
+				Todo
+
+			candidates		(List)
+				Todo
+
+			winnr			(Number)
+				Todo
+
+			source__{name}		(Unknown)		(Optional)
+				Todo
+
+{candidate}					*unite-notation-{candidate}*
+			Todo
+
+			word			(String)
+				Todo
+
+			abbr			(String)	(Optional)
+				Todo
+
+			source			(String)	(Optional)
+				Todo
+
+			kind			(String)	(Optional)
+				Todo
+
+			is_dummy		(Number)	(Optional)
+				Todo
+
+			source__{name}		(Unknown)	(Optional)
+				Todo
+
+			action__{name}		(Unknown)	(Optional)
+				Todo
 
 ==============================================================================
 CREATE KIND					*unite-create-kind*
 
-TODO
+Todo
+
+------------------------------------------------------------------------------
+KIND ATTRIBUTES					*unite-kind-attributes*
+
+						*unite-kind-attribute-name*
+name			String		(Required)
+			The name of a kind. It must consist of the following
+			characters:
+			- a-z
+			- 0-9
+			- _
+			- /
+
+			For example:
+			- "buffer" , "file_mru" and "virw/git" are valid.
+			- "BadOne", "!@#$%^&*()_[]{}-|" and "" are invalid.
+
+						*unite-kind-attribute-default_action*
+default_action		String		(Required)
+			Todo
+
+						*unite-kind-attribute-action_table*
+action_table		Dictionary		(Required)
+			Todo
+			
+			func			(Function)
+				Todo
+
+			description		(String)	(Optional)
+				Todo
+
+			is_quit			(Number)		(Optional)
+				Todo
+
+			is_selectable		(Number)		(Optional)
+				Todo
+
+			is_invalidate_cache	(Number)		(Optional)
+				Todo
+
+						*unite-kind-attribute-alias_table*
+alias_table		Dictionary		(Optional)
+			Todo
+
+						*unite-kind-attribute-parents*
+parents			List		(Optional)
+			Todo
+
+------------------------------------------------------------------------------
+IMPLICIT KIND					*unite-implicit-kind-for-a-source*
+
+Todo
+>
+	call unite#custom_action('source/file/*', 'delete', function('...'))
+<
+------------------------------------------------------------------------------
+ACTION RESOLUTION ORDER				*unite-action-resolution-order*
+
+Todo
+
+(1) Custom action table for kind "source/file/file".
+(2) Default action table for kind "source/file/file".
+(3) Custom action table for kind "source/file/*".
+(4) Default action table for kind "source/file/*".
+(5) Custom action table for kind "file".
+(6) Default action table for kind "file".
+(7) Custom action table for kind "openable".
+(8) Default action table for kind "openable".
+(9) Custom action table for kind "cdable".
+(10) Default action table for kind "cdable".
+(11) Custom action table for kind "common".
+(12) Default action table for kind "common".
 
 ==============================================================================
 CREATE FILTER					*unite-create-filter*
 
-TODO
+Todo
+
+------------------------------------------------------------------------------
+FILTER ATTRIBUTES				*unite-filter-attributes*
+
+						*unite-filter-attribute-name*
+name			String		(Required)
+			The filter name.
+
+						*unite-filter-attribute-filter*
+filter			Function		(Required)
+			Todo
+
+						*unite-filter-attribute-description*
+description		String		(Optional)
+			Todo
 
 ==============================================================================
 EXAMPLES					*unite-examples*
@@ -1420,6 +1630,7 @@ CHANGELOG					*unite-changelog*
 - Improved relative converters.
 - Added source kind.
 - Improved g:unite_abbr_highlight default value.
+- Improved documentation.
 
 2011-08-02
 - Improved mru filtering.
