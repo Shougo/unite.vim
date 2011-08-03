@@ -1214,14 +1214,23 @@ window		ウィンドウ
 						*unite-kind-completion*
 completion	補完
 
-			action__complete_word	(String)	(必須)
+			action__complete_word	(文字列)	(必須)
 				補完する文字列
 
-			action__complete_pos	(Number)	(必須)
+			action__complete_pos	(数値)	(必須)
 				補完する位置
 
-			action__complete_info	(String)	(任意)
+			action__complete_info	(数値)	(任意)
 				補完候補の追加情報
+
+						*unite-kind-source*
+source		unite.vimのsource
+
+			action__source_name	(文字列)	(必須)
+				実行するsourceの名前
+
+			action__source_name	(リスト)	(任意)
+				実行するsourceの引数
 
 ==============================================================================
 filter						*unite-filter*

@@ -27,31 +27,33 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#source#define()"{{{
-  return s:source
+function! unite#kinds#source#define()"{{{
+  return s:kind
 endfunction"}}}
 
-let s:source = {
+let s:kind = {
       \ 'name' : 'source',
-      \ 'description' : 'candidates from sources list',
-      \ 'action_table' : {},
       \ 'default_action' : 'start',
+      \ 'action_table': {},
       \}
 
-function! s:source.gather_candidates(args, context)"{{{
-  return map(sort(values(unite#get_sources()), 's:compare_sources'), '{
-        \ "word" : v:val.name,
-        \ "abbr" : unite#util#truncate(v:val.name, 25) . (v:val.description != "" ? " -- " . v:val.description : ""),
-        \ "kind" : "source",
-        \ "action__source_name" : v:val.name,
-        \ "action__source_args" : [],
-        \}')
-endfunction"}}}
+" Actions"{{{
+let s:kind.action_table.start = {
+      \ 'description' : 'start source',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.start.func(candidates)"{{{
+  let l:context = unite#get_context()
+  let l:context.input = ''
+  let l:context.auto_preview = 0
+  let l:context.default_action = 'default'
 
-function! s:compare_sources(source_a, source_b) "{{{
-  return a:source_a.name ==# a:source_b.name ? 0 :
-  \      a:source_a.name >#  a:source_b.name ? 1 : -1
+  call unite#start(map(copy(a:candidates),
+        \ 'has_key(v:val, "action__source_args") ?'
+        \  . 'insert(v:val.action__source_args, v:val.action__source_name) :'
+        \  . 'v:val.action__source_name'), l:context)
 endfunction"}}}
+"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Aug 2011.
+" Last Modified: 03 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -623,7 +623,7 @@ function! unite#clear_message()"{{{
       silent! execute '2,'.(l:unite.prompt_linenr-1).'delete _'
       let l:pos[1] -= l:unite.prompt_linenr-2
       call setpos('.', l:pos)
-      normal! z.
+      normal! zb
 
       let l:unite.prompt_linenr = 2
 
@@ -660,7 +660,7 @@ function! s:print_buffer(message)"{{{
 
     let l:pos[1] += l:len
     call setpos('.', l:pos)
-    normal! z.
+    normal! zb
 
     let &l:modifiable = l:modifiable_save
     call s:on_cursor_moved()
@@ -737,6 +737,7 @@ function! unite#start(sources, ...)"{{{
     let l:unite.is_insert = 1
 
     execute l:unite.prompt_linenr
+    normal! zb
 
     startinsert!
   else
@@ -756,6 +757,7 @@ function! unite#start(sources, ...)"{{{
     if !l:is_restore ||
           \ l:candidate != unite#get_current_candidate(l:unite.prompt_linenr+1)
       execute (l:unite.prompt_linenr+1)
+      normal! zb
     endif
     normal! 0
   endif
@@ -812,7 +814,7 @@ function! unite#resume(buffer_name)"{{{
     let l:unite.is_insert = 1
 
     execute l:unite.prompt_linenr
-    normal! z.
+    normal! zb
 
     startinsert!
   else
@@ -832,7 +834,7 @@ function! unite#resume(buffer_name)"{{{
           \ || l:candidate != unite#get_current_candidate()
       execute (l:unite.prompt_linenr+1)
     endif
-    normal! 0z.
+    normal! 0zb
   endif
 endfunction"}}}
 function! s:initialize_context(context)"{{{
@@ -1485,7 +1487,7 @@ function! s:on_insert_enter()  "{{{
   if line('.') != l:unite.prompt_linenr
         \ || col('.') <= len(l:unite.prompt)
     execute l:unite.prompt_linenr
-    normal! z.
+    normal! zb
     startinsert!
   endif
 endfunction"}}}

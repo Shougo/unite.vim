@@ -1178,6 +1178,15 @@ completion	An interface for completion
 			action__complete_info	(String)	(Optional)
 				The completion information
 
+						*unite-kind-source*
+source		unite.vim source
+
+			action__source_name	(String)	(Required)
+				The source name
+
+			action__source_name	(List)		(Optional)
+				The source arguments
+
 ==============================================================================
 ACTIONS						*unite-actions*
 
@@ -1409,6 +1418,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-03
 - Improved relative converters.
+- Added source kind.
 
 2011-08-02
 - Improved mru filtering.
