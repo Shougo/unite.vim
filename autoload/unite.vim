@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Aug 2011.
+" Last Modified: 04 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -931,7 +931,9 @@ function! s:quit_session(is_force)  "{{{
         wincmd p
       endif
     else
+      let l:bufname = bufname('%')
       close!
+      call s:on_buf_unload(l:bufname)
       execute l:unite.winnr . 'wincmd w'
     endif
   endif
@@ -1356,7 +1358,7 @@ function! s:initialize_unite_buffer()"{{{
       autocmd CursorMoved,CursorMovedI <buffer>  call s:on_cursor_moved()
       autocmd WinEnter,BufWinEnter <buffer>  call s:on_win_enter()
       autocmd WinLeave,BufWinLeave <buffer>  call s:on_win_leave()
-      autocmd BufUnload,BufHidden <buffer>  call s:on_buf_unload()
+      autocmd BufUnload,BufHidden <buffer>  call s:on_buf_unload(expand('<afile>'))
     augroup END
 
     call unite#mappings#define_default_mappings()
@@ -1587,9 +1589,9 @@ function! s:on_win_leave()  "{{{
     let &updatetime = l:unite.update_time_save
   endif
 endfunction"}}}
-function! s:on_buf_unload()  "{{{
+function! s:on_buf_unload(bufname)  "{{{
   " Save unite value.
-  let s:current_unite = getbufvar(expand('<afile>'), 'unite')
+  let s:current_unite = getbufvar(a:bufname, 'unite')
   let l:unite = s:current_unite
 
   if l:unite.is_finalized
