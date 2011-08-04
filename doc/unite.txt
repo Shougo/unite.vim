@@ -587,6 +587,9 @@ Normal mode mappings.
 <Plug>(unite_narrowing_path)			*<Plug>(unite_narrowing_path)*
 		Narrowing candidates by candidate path(or word).
 
+<Plug>(unite_toggle_auto_preview)		*<Plug>(unite_toggle_auto_preview)*
+		Toggle the unite buffer's auto preview mode.
+
 Insert mode mappings.
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -649,6 +652,9 @@ Insert mode mappings.
 
 <Plug>(unite_narrowing_path)			*i_<Plug>(unite_narrowing_path)*
 		Same to |<Plug>(unite_narrowing_path)|.
+
+<Plug>(unite_toggle_auto_preview)	*i_<Plug>(unite_toggle_auto_preview)*
+		Same to |<Plug>(unite_toggle_auto_preview)|.
 
 Visual mode mappings.
 
@@ -1628,6 +1634,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-04
 - Fixed windows restore.
+- Added <Plug>(unite_toggle_auto_preview) keymapping.
 
 2011-08-03
 - Improved relative converters.
