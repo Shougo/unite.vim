@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Aug 2011.
+" Last Modified: 04 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,7 @@ function! s:source.gather_candidates(args, context)"{{{
   endif
 
   let l:directory = unite#util#substitute_path_separator(
-        \ substitute(l:directory, '^\~', unite#util#substitute_path_separator($HOME), ''))
+        \ substitute(fnamemodify(l:directory, ':p'), '^\~', unite#util#substitute_path_separator($HOME), ''))
 
   call unite#print_message('[file_rec] directory: ' . l:directory)
 
@@ -82,7 +82,11 @@ endfunction"}}}
 
 function! s:source.async_gather_candidates(args, context)"{{{
   let l:continuation = s:continuation[a:context.source__directory]
-  let [l:continuation.files, l:files] = s:get_files(l:continuation.files, 1, 30)
+
+  let l:is_relative_path =
+        \ a:context.source__directory == unite#util#substitute_path_separator(getcwd())
+
+  let [l:continuation.files, l:files] = s:get_files(l:continuation.files, 1, 20)
 
   if empty(l:continuation.files)
     call unite#print_message('[file_rec] Directory traverse was completed.')
@@ -91,8 +95,6 @@ function! s:source.async_gather_candidates(args, context)"{{{
     let a:context.is_async = 0
   endif
 
-  let l:is_relative_path =
-        \ a:context.source__directory == unite#util#substitute_path_separator(getcwd())
   if !l:is_relative_path
     let l:cwd = getcwd()
     lcd `=a:context.source__directory`

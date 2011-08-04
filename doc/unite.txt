@@ -1635,6 +1635,7 @@ CHANGELOG					*unite-changelog*
 2011-08-04
 - Fixed windows restore.
 - Added <Plug>(unite_toggle_auto_preview) keymapping.
+- Fixed file_rec relative path.
 
 2011-08-03
 - Improved relative converters.
