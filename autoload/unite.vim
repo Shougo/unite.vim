@@ -908,6 +908,7 @@ function! unite#quit_session()  "{{{
   call s:quit_session(0)
 endfunction"}}}
 function! s:quit_session(is_force)  "{{{
+  echomsg 'quit'
   if &filetype !=# 'unite'
     return
   endif
@@ -932,9 +933,9 @@ function! s:quit_session(is_force)  "{{{
       endif
     else
       let l:bufname = bufname('%')
-      close!
-      call s:on_buf_unload(l:bufname)
+      noautocmd close!
       execute l:unite.winnr . 'wincmd w'
+      call s:on_buf_unload(l:bufname)
     endif
   endif
 
