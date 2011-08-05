@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 05 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,8 +38,7 @@ syntax match uniteStatusLine /\%1l.*/
 syntax match uniteSourcePrompt /^Sources/ contained nextgroup=uniteSourceSeparator
 syntax match uniteSeparator /:/ contained nextgroup=uniteSourceNames
 syntax match uniteSourceNames / [[:alnum:]_\/-]\+/ contained nextgroup=uniteSourceArgs
-syntax match uniteMessage /^\[.*\].*$/
-      \  contains=uniteMessageSource
+syntax match uniteMessage /^\[.*\].*$/  contains=uniteMessageSource
 syntax match uniteMessageSource /^\[.*\]/ contained
 syntax match uniteSourceArgs /:\S\+/ contained
 
