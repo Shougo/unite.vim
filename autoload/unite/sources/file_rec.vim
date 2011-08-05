@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Aug 2011.
+" Last Modified: 05 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,12 +34,13 @@ call unite#util#set_default('g:unite_source_file_rec_min_cache_files', 50)
 "}}}
 
 function! unite#sources#file_rec#define()"{{{
-  return s:source
+  return executable('ls') && unite#util#has_vimproc() ? s:source : {}
 endfunction"}}}
 
 let s:source = {
       \ 'name' : 'file_rec',
       \ 'description' : 'candidates from directory by recursive',
+      \ 'hooks' : {},
       \ 'max_candidates' : 50,
       \ }
 
@@ -83,9 +84,6 @@ endfunction"}}}
 function! s:source.async_gather_candidates(args, context)"{{{
   let l:continuation = s:continuation[a:context.source__directory]
 
-  let l:is_relative_path =
-        \ a:context.source__directory == unite#util#substitute_path_separator(getcwd())
-
   let [l:continuation.files, l:files] = s:get_files(l:continuation.files, 1, 20)
 
   if empty(l:continuation.files)
@@ -95,33 +93,37 @@ function! s:source.async_gather_candidates(args, context)"{{{
     let a:context.is_async = 0
   endif
 
+  let l:candidates = map(l:files, '{
+        \ "word" : unite#util#substitute_path_separator(fnamemodify(v:val, ":p"))
+        \ }')
+
+  let l:continuation.cached += l:candidates
+
+  return l:candidates
+endfunction"}}}
+
+function! s:source.hooks.on_post_filter(args, context)"{{{
+  let l:is_relative_path =
+        \ a:context.source__directory == unite#util#substitute_path_separator(getcwd())
+
   if !l:is_relative_path
     let l:cwd = getcwd()
     lcd `=a:context.source__directory`
   endif
 
-  let l:candidates = []
-  for l:file in l:files
-    let l:dict = {
-        \ 'word' : unite#util#substitute_path_separator(fnamemodify(l:file, ':p')),
-        \ 'abbr' : unite#util#substitute_path_separator(fnamemodify(l:file, ':.')),
-        \ 'kind' : 'file',
-        \ }
-    let l:dict.action__path = l:dict.word
-    let l:dict.action__directory = l:is_relative_path ?
-          \ fnamemodify(unite#util#path2directory(l:file), ':.') :
-          \ unite#util#path2directory(l:dict.action__path)
-
-    call add(l:candidates, l:dict)
+  for l:candidate in a:context.candidates
+    let l:candidate.kind = 'file'
+    let l:candidate.abbr = unite#util#substitute_path_separator(
+          \ fnamemodify(l:candidate.word, ':.'))
+    let l:candidate.action__path = l:candidate.word
+    let l:candidate.action__directory = l:is_relative_path ?
+          \ l:candidate.abbr :
+          \ unite#util#path2directory(l:candidate.action__path)
   endfor
 
   if !l:is_relative_path
     lcd `=l:cwd`
   endif
-
-  let l:continuation.cached += l:candidates
-
-  return l:candidates
 endfunction"}}}
 
 " Add custom action table."{{{

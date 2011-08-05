@@ -86,7 +86,8 @@ function! s:source.change_candidates(args, context)"{{{
     let l:newfile = substitute(a:context.input, '[*\\]', '', 'g')
     if !filereadable(l:newfile) && !isdirectory(l:newfile)
       " Add newfile candidate.
-      call add(l:candidates, s:create_dict(l:newfile, l:is_relative_path))
+      let l:candidates = copy(l:candidates) +
+            \ [s:create_dict(l:newfile, l:is_relative_path)]
     endif
 
     if l:input !~ '^\%(/\|\a\+:/\)$'
@@ -94,7 +95,8 @@ function! s:source.change_candidates(args, context)"{{{
 
       if a:context.input =~ '\.$' && isdirectory(l:parent . '..')
         " Add .. directory.
-        call insert(l:candidates, s:create_dict(l:newfile, l:is_relative_path))
+        let l:candidates = [s:create_dict(l:parent . '..', l:is_relative_path)]
+              \ + copy(l:candidates)
       endif
     endif
   endif
