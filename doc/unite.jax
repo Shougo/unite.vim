@@ -982,6 +982,13 @@ file_rec	入力された絞り込みテキストのディレクトリまたは�
 		ない。候補はsource内でキャッシュされるため、キャッシュを更新
 		するためには、|<Plug>(unite_redraw)|を用いる。
 
+		source引数：
+		1. 絞り込み文字列
+
+						*unite-source-file_rec/async*
+file_rec/async	|unite-source-file_rec|と同じだが、候補の取得を完全に非同期
+		で行う。
+		
 		Note: このsourceはvimprocと外部lsコマンドを必要としている。
 		http://github.com/Shougo/vimproc/tree/master
 

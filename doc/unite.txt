@@ -963,6 +963,12 @@ file_rec	Nominates all directory or file names of input narrowing text
 		cached by file_rec source. If you clear cache, use
 		|<Plug>(unite_redraw)| keymapping.
 
+		Source arguments:
+		1. the narrowing text.
+
+						*unite-source-file_rec/async*
+file_rec/async	Same as |unite-source-file_rec|. But get files by asynchronously.
+		
 		Note: This source requires vimproc and external "ls" command.
 		Please install.
 		http://github.com/Shougo/vimproc/tree/master
@@ -1647,6 +1653,7 @@ CHANGELOG					*unite-changelog*
 - Optimized unite-file.
 - Asynchronous file_rec source(experimental).
 - Improved file_rec.
+- Added file_rec/async source.
 
 2011-08-03
 - Improved relative converters.
