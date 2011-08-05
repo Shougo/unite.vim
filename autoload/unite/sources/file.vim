@@ -43,6 +43,7 @@ let s:source = {
 
 function! s:source.change_candidates(args, context)"{{{
   if !has_key(a:context, 'source__cache') || a:context.is_redraw
+        \ || a:context.is_invalidate
     " Initialize cache.
     let a:context.source__cache = {}
   endif

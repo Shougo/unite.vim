@@ -1126,11 +1126,11 @@ function! s:recache_candidates(input, is_force)"{{{
     " Set context.
     let l:source.unite__context.input = l:context.input
     let l:source.unite__context.source = l:source
-    let l:source.unite__context.is_redraw =
-          \ l:context.is_redraw || l:source.unite__is_invalidate
+    let l:source.unite__context.is_redraw = l:context.is_redraw
+    let l:source.unite__context.is_invalidate = l:source.unite__is_invalidate
 
-    if l:source.unite__is_invalidate || a:is_force ||
-          \ (has_key(l:source, 'change_candidates')
+    if l:context.is_redraw || l:source.unite__is_invalidate
+          \ || (has_key(l:source, 'change_candidates')
           \   && a:input !=# l:unite.last_input)
       " Recaching.
       let l:source.unite__cached_candidates = []

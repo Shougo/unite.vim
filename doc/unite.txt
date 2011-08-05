@@ -963,6 +963,10 @@ file_rec	Nominates all directory or file names of input narrowing text
 		cached by file_rec source. If you clear cache, use
 		|<Plug>(unite_redraw)| keymapping.
 
+		Note: This source requires vimproc and external "ls" command.
+		Please install.
+		http://github.com/Shougo/vimproc/tree/master
+
 		Source arguments:
 		1. the narrowing text.
 
@@ -1450,6 +1454,9 @@ NOTATION					*unite-notation*
 			is_redraw		(Number)
 				Todo
 
+			is_invalidate		(Number)
+				Todo
+
 			is_async		(Number)
 				Todo
 
@@ -1638,6 +1645,7 @@ CHANGELOG					*unite-changelog*
 - Fixed file_rec relative path.
 - Improved cursor line.
 - Optimized unite-file.
+- Asynchronous file_rec source(experimental).
 
 2011-08-03
 - Improved relative converters.

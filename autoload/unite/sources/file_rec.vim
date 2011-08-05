@@ -54,53 +54,78 @@ function! s:source.gather_candidates(args, context)"{{{
   endif
 
   let l:directory = unite#util#substitute_path_separator(
-        \ substitute(fnamemodify(l:directory, ':p'), '^\~', unite#util#substitute_path_separator($HOME), ''))
+        \ substitute(fnamemodify(l:directory, ':p'), '^\~',
+        \ unite#util#substitute_path_separator($HOME), ''))
 
   call unite#print_message('[file_rec] directory: ' . l:directory)
 
   let a:context.source__directory = l:directory
-  if a:context.is_redraw || !has_key(s:continuation, l:directory)
-        \ || len(s:continuation[l:directory].cached) < 50
+  if a:context.is_redraw
+        \ || !has_key(s:continuation, l:directory)
+        \ || len(s:continuation[l:directory].files)
+        \      < g:unite_source_file_rec_min_cache_files
     let a:context.is_async = 1
 
-    " Initialize continuation.
     let s:continuation[l:directory] = {
-          \ 'files' : [l:directory],
-          \ 'cached' : [],
+          \ 'files' : [], 'directory' : l:directory,
+          \ 'end' : 0,
           \ }
   endif
 
   let l:continuation = s:continuation[a:context.source__directory]
 
-  if empty(l:continuation.files)
+  if l:continuation.end
     " Disable async.
     call unite#print_message('[file_rec] Directory traverse was completed.')
     let a:context.is_async = 0
+
+    return l:continuation.files
   endif
 
-  return l:continuation.cached
+  let a:context.source__proc = vimproc#pgroup_open('ls -R1 '
+        \ . escape(l:directory, ' '))
+
+  " Close handles.
+  call a:context.source__proc.stdin.close()
+  call a:context.source__proc.stderr.close()
+
+  return []
 endfunction"}}}
 
 function! s:source.async_gather_candidates(args, context)"{{{
   let l:continuation = s:continuation[a:context.source__directory]
 
-  let [l:continuation.files, l:files] = s:get_files(l:continuation.files, 1, 20)
-
-  if empty(l:continuation.files)
-    call unite#print_message('[file_rec] Directory traverse was completed.')
-
+  let l:stdout = a:context.source__proc.stdout
+  if l:stdout.eof
     " Disable async.
+    call unite#print_message('[file_rec] Directory traverse was completed.')
     let a:context.is_async = 0
+    let l:continuation.end = 1
   endif
 
-  let l:candidates = map(l:files, '{
-        \ "word" : unite#util#substitute_path_separator(fnamemodify(v:val, ":p"))
-        \ }')
+  let l:candidates = []
+  for l:line in map(l:stdout.read_lines(-1, 300),
+        \ 'iconv(v:val, &termencoding, &encoding)')
+    if l:line =~ ':$'
+      " Directory name.
+      let l:continuation.directory = l:line[: -2]
+    elseif l:line != ''
+      call add(l:candidates, {
+            \ 'word' : l:continuation.directory . '/' . l:line
+            \ })
+    endif
+  endfor
 
-  let l:continuation.cached += l:candidates
+  let l:continuation.files += l:candidates
 
   return l:candidates
 endfunction"}}}
+
+function! s:source.hooks.on_close(args, context) "{{{
+  if has_key(a:context, 'source__proc')
+    call a:context.source__proc.waitpid()
+  endif
+endfunction "}}}
 
 function! s:source.hooks.on_post_filter(args, context)"{{{
   let l:is_relative_path =

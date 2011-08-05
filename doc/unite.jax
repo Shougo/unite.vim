@@ -982,6 +982,9 @@ file_rec	入力された絞り込みテキストのディレクトリまたは�
 		ない。候補はsource内でキャッシュされるため、キャッシュを更新
 		するためには、|<Plug>(unite_redraw)|を用いる。
 
+		Note: このsourceはvimprocと外部lsコマンドを必要としている。
+		http://github.com/Shougo/vimproc/tree/master
+
 		source引数：
 		1. 絞り込み文字列
 
@@ -1675,6 +1678,11 @@ NOTATION					*unite-notation*
 				自前でキャッシュを管理するsourceにとっては重
 				要な情報となる。アクションの実行により、キャッ
 				シュが無効化された場合も1になる。
+
+			is_invalidate		(数値)
+				アクションの実行により、キャッシュが無効化さ
+				れたかどうか。uniteバッファの初期化のときに
+				も1になる。
 
 			is_async		(数値)
 				sourceが非同期に候補を収集するかどうか。
