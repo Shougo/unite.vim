@@ -579,6 +579,12 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 <Plug>(unite_narrowing_path)			*<Plug>(unite_narrowing_path)*
 		候補のパスもしくはwordにより絞り込みを行う。
 
+<Plug>(unite_narrowing_input_history)		*<Plug>(unite_narrowing_input_history)*
+		バッファの入力履歴により絞り込みを行う。
+
+<Plug>(unite_toggle_auto_preview)		*<Plug>(unite_toggle_auto_preview)*
+		uniteバッファのauto previewモードをトグルする。
+
 インサートモードマッピング
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -641,6 +647,12 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 
 <Plug>(unite_narrowing_path)			*i_<Plug>(unite_narrowing_path)*
 		|<Plug>(unite_narrowing_path)|と同じ。
+
+<Plug>(unite_narrowing_input_history)		*i_<Plug>(unite_narrowing_input_history)*
+		|<Plug>(unite_narrowing_input_history)|と同じ。
+
+<Plug>(unite_toggle_auto_preview)		*i_<Plug>(unite_toggle_auto_preview)*
+		|<Plug>(unite_toggle_auto_preview)|と同じ。
 
 ビジュアルモードマッピング
 

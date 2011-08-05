@@ -587,6 +587,9 @@ Normal mode mappings.
 <Plug>(unite_narrowing_path)			*<Plug>(unite_narrowing_path)*
 		Narrowing candidates by candidate path(or word).
 
+<Plug>(unite_narrowing_input_history)		*<Plug>(unite_narrowing_input_history)*
+		Narrowing candidates by input history.
+
 <Plug>(unite_toggle_auto_preview)		*<Plug>(unite_toggle_auto_preview)*
 		Toggle the unite buffer's auto preview mode.
 
@@ -652,6 +655,9 @@ Insert mode mappings.
 
 <Plug>(unite_narrowing_path)			*i_<Plug>(unite_narrowing_path)*
 		Same to |<Plug>(unite_narrowing_path)|.
+
+<Plug>(unite_narrowing_input_history)		*i_<Plug>(unite_narrowing_input_history)*
+		Same to |<Plug>(unite_narrowing_input_history)|.
 
 <Plug>(unite_toggle_auto_preview)	*i_<Plug>(unite_toggle_auto_preview)*
 		Same to |<Plug>(unite_toggle_auto_preview)|.
@@ -1654,6 +1660,7 @@ CHANGELOG					*unite-changelog*
 - Asynchronous file_rec source(experimental).
 - Improved file_rec.
 - Added file_rec/async source.
+- Added <Plug>(unite_narrowing_input_history) keymapping.
 
 2011-08-03
 - Improved relative converters.

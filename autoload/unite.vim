@@ -768,6 +768,25 @@ function! unite#start(sources, ...)"{{{
     normal! 0
   endif
 endfunction"}}}
+function! unite#start_temporary(sources, new_context, buffer_name)"{{{
+  " Get current context.
+  let l:context = deepcopy(unite#get_context())
+  let l:context.old_buffer_info = insert(l:context.old_buffer_info,
+        \ { 'buffer_name' : unite#get_current_unite().buffer_name,
+        \   'pos' : getpos('.'), })
+
+  let l:context.buffer_name = a:buffer_name
+  let l:context.temporary = 1
+  let l:context.input = ''
+  let l:context.auto_preview = 0
+  let l:context.default_action = 'default'
+
+  " Overwrite context.
+  let l:context = extend(l:context, a:new_context)
+
+  call unite#force_quit_session()
+  call unite#start(a:sources, l:context)
+endfunction"}}}
 function! unite#resume(buffer_name)"{{{
   " Check command line window.
   if s:is_cmdwin()
@@ -904,14 +923,27 @@ function! s:initialize_context(context)"{{{
   if !has_key(a:context, 'auto_resize')
     let a:context.auto_resize = 0
   endif
+  if !has_key(a:context, 'old_buffer_info')
+    let a:context.old_buffer_info = []
+  endif
   let a:context.is_redraw = 0
 endfunction"}}}
 
 function! unite#force_quit_session()  "{{{
   call s:quit_session(1)
+
+  let l:context = unite#get_context()
+  if l:context.temporary
+    call s:resume_from_temporary(l:context)
+  endif
 endfunction"}}}
 function! unite#quit_session()  "{{{
   call s:quit_session(0)
+
+  let l:context = unite#get_context()
+  if l:context.temporary
+    call s:resume_from_temporary(l:context)
+  endif
 endfunction"}}}
 function! s:quit_session(is_force)  "{{{
   if &filetype !=# 'unite'
@@ -922,14 +954,24 @@ function! s:quit_session(is_force)  "{{{
   let s:current_unite = b:unite
   let l:unite = s:current_unite
 
+  let l:key = unite#loaded_source_names_string()
+
   " Save position.
   let l:positions = unite#get_buffer_name_option(
         \ l:unite.buffer_name, 'unite__save_pos')
-  let l:key = unite#loaded_source_names_string()
   let l:positions[l:key] = {
         \ 'pos' : getpos('.'),
         \ 'candidate' : unite#get_current_candidate(),
         \ }
+
+  " Save input.
+  let l:inputs = unite#get_buffer_name_option(
+        \ l:unite.buffer_name, 'unite__inputs')
+  if !has_key(l:inputs, l:key)
+    let l:inputs[l:key] = []
+  endif
+  call insert(filter(l:inputs[l:key],
+        \ 'v:val !=# l:unite.context.input'), l:unite.context.input)
 
   if winnr('$') != 1
     if !a:is_force && l:unite.context.no_quit
@@ -954,6 +996,13 @@ function! s:quit_session(is_force)  "{{{
     stopinsert
     redraw!
   endif
+endfunction"}}}
+function! s:resume_from_temporary(context)  "{{{
+  " Resume unite buffer.
+  let l:buffer_info = a:context.old_buffer_info[0]
+  call unite#resume(l:buffer_info.buffer_name)
+  call setpos('.', l:buffer_info.pos)
+  let a:context.old_buffer_info = a:context.old_buffer_info[1:]
 endfunction"}}}
 
 function! s:load_default_scripts()"{{{
@@ -1099,6 +1148,9 @@ function! s:initialize_buffer_name_options(buffer_name)"{{{
   endif
   if !has_key(l:setting, 'unite__save_pos')
     let l:setting.unite__save_pos = {}
+  endif
+  if !has_key(l:setting, 'unite__inputs')
+    let l:setting.unite__inputs = {}
   endif
 endfunction"}}}
 
