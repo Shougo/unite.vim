@@ -624,6 +624,9 @@ function! unite#clear_message()"{{{
       let l:pos[1] -= l:unite.prompt_linenr-2
       call setpos('.', l:pos)
       normal! zb
+      if mode() ==# 'i' && l:pos[2] == col('$')
+        startinsert!
+      endif
 
       let l:unite.prompt_linenr = 2
 
@@ -661,6 +664,9 @@ function! s:print_buffer(message)"{{{
     let l:pos[1] += l:len
     call setpos('.', l:pos)
     normal! zb
+    if mode() ==# 'i' && l:pos[2] == col('$')
+      startinsert!
+    endif
 
     let &l:modifiable = l:modifiable_save
     call s:on_cursor_moved()

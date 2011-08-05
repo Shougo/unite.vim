@@ -1646,6 +1646,7 @@ CHANGELOG					*unite-changelog*
 - Improved cursor line.
 - Optimized unite-file.
 - Asynchronous file_rec source(experimental).
+- Improved file_rec.
 
 2011-08-03
 - Improved relative converters.

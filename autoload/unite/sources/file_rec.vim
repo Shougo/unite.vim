@@ -140,6 +140,7 @@ function! s:source.hooks.on_post_filter(args, context)"{{{
     let l:candidate.kind = 'file'
     let l:candidate.abbr = unite#util#substitute_path_separator(
           \ fnamemodify(l:candidate.word, ':.'))
+          \ . (isdirectory(l:candidate.word) ? '/' : '')
     let l:candidate.action__path = l:candidate.word
     let l:candidate.action__directory = l:is_relative_path ?
           \ l:candidate.abbr :
