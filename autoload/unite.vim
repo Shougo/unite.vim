@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Aug 2011.
+" Last Modified: 05 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -908,7 +908,6 @@ function! unite#quit_session()  "{{{
   call s:quit_session(0)
 endfunction"}}}
 function! s:quit_session(is_force)  "{{{
-  echomsg 'quit'
   if &filetype !=# 'unite'
     return
   endif
