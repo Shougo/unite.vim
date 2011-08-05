@@ -1305,6 +1305,8 @@ converter_relative_word
 		候補のwordを相対パスに変換するconverter。wordはmatcherにおいて、
 		絞り込みに使用される。そのため、このconverterを使用する場合は、
 		matcherの前に指定しなければならない。
+		context情報に、source__directoryが含まれている場合は、そのパ
+		スを基準として相対パスに変換する。
 >
 		call unite#custom_filters('file_rec',
 		\ ['converter_relative_word', 'matcher_default',
@@ -1313,7 +1315,8 @@ converter_relative_word
 
 						*unite-filter-converter_relative_abbr*
 converter_relative_abbr
-		候補のabbrをwordの相対パスに変換するconverter。
+		候補のabbrをwordの相対パスに変換するconverter。仕様は
+		|unite-filter-converter_relative_word|とほぼ同じである。
 
 ==============================================================================
 アクション					*unite-actions*
