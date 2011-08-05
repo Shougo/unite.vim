@@ -1637,6 +1637,7 @@ CHANGELOG					*unite-changelog*
 - Added <Plug>(unite_toggle_auto_preview) keymapping.
 - Fixed file_rec relative path.
 - Improved cursor line.
+- Optimized unite-file.
 
 2011-08-03
 - Improved relative converters.
