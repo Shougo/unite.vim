@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Aug 2011.
+" Last Modified: 06 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,10 +42,16 @@ syntax match uniteMessage /^\[.*\].*$/  contains=uniteMessageSource
 syntax match uniteMessageSource /^\[.*\]/ contained
 syntax match uniteSourceArgs /:\S\+/ contained
 
-syntax match uniteInputLine /\%2l.*/ contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial
+syntax match uniteInputLine /\%2l.*/
+      \ contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial
 
+syntax match uniteQuickMatchLine /^.:.*/
+      \ contains=uniteQuickMatchTrigger,uniteCandidateSourceName,uniteCandidateAbbr
 syntax match uniteMarkedLine /^\*.*/
-syntax match uniteNonMarkedLine /^-.*/     contains=uniteCandidateSourceName,uniteCandidateAbbr
+syntax match uniteNonMarkedLine /^- .*/
+      \ contains=uniteCandidateMarker,uniteCandidateSourceName,uniteCandidateAbbr
+syntax match uniteCandidateMarker /^- / contained
+syntax match uniteQuickMatchTrigger /^.:/ contained
 
 syntax region   uniteError   start=+!!!+ end=+!!!+ contains=uniteErrorHidden oneline
 if has('conceal')
@@ -62,8 +68,10 @@ highlight default link uniteSourceArgs  Function
 highlight default link uniteMessage Comment
 highlight default link uniteMessageSource Constant
 
+highlight default link uniteQuickMatchTrigger  Special
 highlight default link uniteMarkedLine  Statement
 highlight default link uniteCandidateSourceName  Type
+highlight default link uniteCandidateMarker  Special
 
 " The following definitions are for <Plug>(unite-choose-action).
 highlight default link uniteChooseAction  NONE

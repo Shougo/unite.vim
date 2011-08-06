@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Aug 2011.
+" Last Modified: 06 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -953,6 +953,7 @@ function! s:quit_session(is_force)  "{{{
   " Save unite value.
   let s:current_unite = b:unite
   let l:unite = s:current_unite
+  let l:context = l:unite.context
 
   let l:key = unite#loaded_source_names_string()
 
@@ -964,17 +965,19 @@ function! s:quit_session(is_force)  "{{{
         \ 'candidate' : unite#get_current_candidate(),
         \ }
 
-  " Save input.
-  let l:inputs = unite#get_buffer_name_option(
-        \ l:unite.buffer_name, 'unite__inputs')
-  if !has_key(l:inputs, l:key)
-    let l:inputs[l:key] = []
+  if l:context.input != ''
+    " Save input.
+    let l:inputs = unite#get_buffer_name_option(
+          \ l:unite.buffer_name, 'unite__inputs')
+    if !has_key(l:inputs, l:key)
+      let l:inputs[l:key] = []
+    endif
+    call insert(filter(l:inputs[l:key],
+          \ 'v:val !=# l:unite.context.input'), l:context.input)
   endif
-  call insert(filter(l:inputs[l:key],
-        \ 'v:val !=# l:unite.context.input'), l:unite.context.input)
 
   if winnr('$') != 1
-    if !a:is_force && l:unite.context.no_quit
+    if !a:is_force && l:context.no_quit
       if winnr('#') > 0
         wincmd p
       endif
@@ -986,8 +989,8 @@ function! s:quit_session(is_force)  "{{{
     endif
   endif
 
-  if l:unite.context.complete
-    if l:unite.context.col < col('$')
+  if l:context.complete
+    if l:context.col < col('$')
       startinsert
     else
       startinsert!
@@ -1270,7 +1273,7 @@ function! s:recache_candidates(input, is_force)"{{{
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
   let l:unite = unite#get_current_unite()
-  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0)-1, l:unite.max_source_name, 5)
+  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0)-2, l:unite.max_source_name, 5)
   if l:unite.max_source_name == 0
     let l:max_width -= 1
   endif
@@ -1298,13 +1301,13 @@ function! s:convert_quick_match_lines(candidates)"{{{
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
   let l:unite = unite#get_current_unite()
-  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0)-1, l:unite.max_source_name, 2)
+  let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0)-2, l:unite.max_source_name, 2)
   if l:unite.max_source_name == 0
     let l:max_width -= 1
   endif
 
   return map(copy(a:candidates),
-        \ '(v:val.unite__is_marked ? "* " : "- ")
+        \ '(v:val.unite__is_marked ? "*  " : "-  ")
         \ . (l:unite.max_source_name == 0 ? " " : unite#util#truncate(v:val.source, l:max_source_name))
         \ . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', l:max_width/3, "..")')
 endfunction"}}}
@@ -1442,12 +1445,11 @@ function! s:initialize_unite_buffer()"{{{
 
     syntax clear uniteCandidateSourceName
     if l:unite.max_source_name > 0
-      syntax match uniteCandidateSourceName /^- \zs[[:alnum:]_\/-]\+/ contained
-      let l:source_padding = 2
+      syntax match uniteCandidateSourceName /\%4c[[:alnum:]_\/-]\+/ contained
     else
       syntax match uniteCandidateSourceName /^- / contained
-      let l:source_padding = 3
     endif
+    let l:source_padding = 3
     execute 'syntax match uniteCandidateAbbr' '/\%'.(l:unite.max_source_name+l:source_padding).'c.*/ contained'
 
     execute 'highlight default link uniteCandidateAbbr'  g:unite_abbr_highlight
