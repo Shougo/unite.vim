@@ -1651,6 +1651,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-08-06
+- Fixed file_rec path problem.
+
 2011-08-05
 - Improved quick match.
 - Fixed file_rec/async source.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2011.
+" Last Modified: 07 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -82,7 +82,7 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
   endif
 
   let l:candidates = map(l:files, '{
-        \ "word" : unite#util#substitute_path_separator(fnamemodify(v:val, ":p"))
+        \ "word" : v:val, "action__path" : v:val,
         \ }')
 
   let l:continuation.files += l:candidates
@@ -155,7 +155,8 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
           \ && (g:unite_source_file_rec_ignore_pattern == ''
           \      || l:line !~ g:unite_source_file_rec_ignore_pattern)
       call add(l:candidates, {
-            \ 'word' : l:continuation.directory . l:line
+            \ 'word' : l:continuation.directory . l:line,
+            \ 'action__path' : l:continuation.directory . l:line,
             \ })
     endif
   endfor
@@ -273,7 +274,8 @@ function! s:get_files(files, level, max_len)"{{{
   endfor
 
   let l:continuation_files += a:files[l:files_index :]
-  return [l:continuation_files, l:ret_files]
+  return [l:continuation_files, map(l:ret_files,
+        \ 'unite#util#substitute_path_separator(fnamemodify(v:val, ":p"))')]
 endfunction"}}}
 function! s:on_post_filter(args, context)"{{{
   let l:is_relative_path =
@@ -287,9 +289,8 @@ function! s:on_post_filter(args, context)"{{{
   for l:candidate in a:context.candidates
     let l:candidate.kind = 'file'
     let l:candidate.abbr = unite#util#substitute_path_separator(
-          \ fnamemodify(l:candidate.word, ':.'))
-          \ . (isdirectory(l:candidate.word) ? '/' : '')
-    let l:candidate.action__path = l:candidate.word
+          \ fnamemodify(l:candidate.action__path, ':.'))
+          \ . (isdirectory(l:candidate.action__path) ? '/' : '')
     let l:candidate.action__directory = l:is_relative_path ?
           \ l:candidate.abbr :
           \ unite#util#path2directory(l:candidate.action__path)
