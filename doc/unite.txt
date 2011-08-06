@@ -1653,6 +1653,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-05
 - Improved quick match.
+- Fixed file_rec/async source.
 
 2011-08-04
 - Fixed windows restore.

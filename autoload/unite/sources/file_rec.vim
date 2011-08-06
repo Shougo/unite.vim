@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Aug 2011.
+" Last Modified: 06 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,13 +57,13 @@ function! s:source_rec.gather_candidates(args, context)"{{{
 
   let l:continuation = s:continuation[l:directory]
 
+  let a:context.source__directory = l:directory
+
   if empty(l:continuation.rest) || l:continuation.end
     " Disable async.
     call unite#print_message('[file_rec] Directory traverse was completed.')
     let a:context.is_async = 0
   endif
-
-  let a:context.source__directory = l:directory
 
   return l:continuation.files
 endfunction"}}}
@@ -111,6 +111,8 @@ function! s:source_async.gather_candidates(args, context)"{{{
 
   let l:continuation = s:continuation[l:directory]
 
+  let a:context.source__directory = l:directory
+
   if empty(l:continuation.rest) || l:continuation.end
     " Disable async.
     call unite#print_message('[file_rec/async] Directory traverse was completed.')
@@ -118,8 +120,6 @@ function! s:source_async.gather_candidates(args, context)"{{{
 
     return l:continuation.files
   endif
-
-  let a:context.source__directory = l:directory
 
   let a:context.source__proc = vimproc#pgroup_open('ls -R1 '
         \ . escape(l:directory, ' '))
@@ -148,9 +148,14 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
     if l:line =~ ':$'
       " Directory name.
       let l:continuation.directory = l:line[: -2]
+      if l:continuation.directory !~ '/$'
+        let l:continuation.directory .= '/'
+      endif
     elseif l:line != ''
+          \ && (g:unite_source_file_rec_ignore_pattern == ''
+          \      || l:line !~ g:unite_source_file_rec_ignore_pattern)
       call add(l:candidates, {
-            \ 'word' : l:continuation.directory . '/' . l:line
+            \ 'word' : l:continuation.directory . l:line
             \ })
     endif
   endfor
