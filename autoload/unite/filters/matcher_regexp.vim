@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_regexp.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Jul 2011.
+" Last Modified: 08 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,7 +41,7 @@ function! s:matcher.filter(candidates, context)"{{{
     return a:candidates
   endif
 
-  let l:candidates = copy(a:candidates)
+  let l:candidates = a:candidates
   for l:input in split(a:context.input, '\\\@<! ')
     if l:input =~ '^!'
       if l:input == '!'
@@ -49,7 +49,8 @@ function! s:matcher.filter(candidates, context)"{{{
       endif
       " Exclusion match.
       try
-        call filter(l:candidates, 'v:val.word !~ ' . string(l:input[1:]))
+        let l:candidates = filter(copy(l:candidates),
+              \ 'v:val.word !~ ' . string(l:input[1:]))
       catch
       endtry
     elseif l:input !~ '[~\\.^$[\]*]'
@@ -59,10 +60,11 @@ function! s:matcher.filter(candidates, context)"{{{
             \ printf('stridx(tolower(v:val.word), %s) != -1', string(tolower(l:input))) :
             \ printf('stridx(v:val.word, %s) != -1', string(l:input))
 
-      call filter(l:candidates, l:expr)
+      let l:candidates = filter(copy(l:candidates), l:expr)
     else
       try
-        call filter(l:candidates, 'v:val.word =~ ' . string(l:input))
+        let l:candidates = filter(copy(l:candidates),
+              \ 'v:val.word =~ ' . string(l:input))
       catch
       endtry
     endif
