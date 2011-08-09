@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2011.
+" Last Modified: 09 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1046,6 +1046,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
     let l:source.unite__context = deepcopy(a:context)
     let l:source.unite__context.is_async =
           \ has_key(l:source, 'async_gather_candidates')
+    let l:source.unite__context.source = l:source
     let l:source.unite__candidates = []
     let l:source.unite__cached_candidates = []
     let l:source.unite__number = l:number
@@ -1186,7 +1187,6 @@ function! s:recache_candidates(input, is_force)"{{{
 
     " Set context.
     let l:source.unite__context.input = l:context.input
-    let l:source.unite__context.source = l:source
     let l:source.unite__context.is_redraw = l:context.is_redraw
     let l:source.unite__context.is_invalidate = l:source.unite__is_invalidate
 
