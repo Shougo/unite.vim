@@ -15,7 +15,7 @@ function! s:open(filename) "{{{
   " Detect desktop environment.
   if s:is_windows
     " For URI only.
-    execute '!start rundll32 url.dll,FileProtocolHandler' l:filename
+    silent execute '!start rundll32 url.dll,FileProtocolHandler' l:filename
   elseif s:is_cygwin
     " Cygwin.
     call system(printf('%s ''%s''', 'cygstart', l:filename))

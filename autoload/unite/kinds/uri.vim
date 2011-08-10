@@ -31,7 +31,7 @@ function! unite#kinds#uri#define()"{{{
   return s:kind
 endfunction"}}}
 
-let g:System = vital#of('unite').import('System.File')
+let s:System = vital#of('unite').import('System.File')
 
 let s:kind = {
       \ 'name' : 'uri',
@@ -46,7 +46,7 @@ let s:kind.action_table.start = {
       \ }
 function! s:kind.action_table.start.func(candidates)"{{{
   for l:candidate in a:candidates
-    call g:System.open(l:candidate.action__path)
+    call s:System.open(l:candidate.action__path)
   endfor
 endfunction"}}}
 "}}}
