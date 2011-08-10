@@ -1139,8 +1139,8 @@ cdable		cd可能インタフェース
 
 						*unite-kind-file*
 file		ファイル
-		このkindはcdable, openableを継承しているため、それらのkindが
-		使用する属性も必要である。
+		このkindはcdable, openable, uriを継承しているため、それらのkind
+		が使用する属性も必要である。
 
 			action__path		(文字列)		(必須)
 				対象となるファイルのパス

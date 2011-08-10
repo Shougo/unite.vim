@@ -1102,8 +1102,8 @@ cdable		An interface that can cd.
 				The target directory
 
 						*unite-kind-file*
-file		An interface for files.  This kind is inheriting cdable and
-		openable, so this requires kinds that they require.
+file		An interface for files.  This kind is inheriting cdable, uri
+		and openable, so this requires kinds that they require.
 
 			action__path		(String)	(Required)
 				The path of the target directory
@@ -1672,6 +1672,7 @@ CHANGELOG					*unite-changelog*
 - Optimized source line.
 - Added jump_point source.
 - Added file_point source and uri kind.
+- Kind file inherited uri kind.
 
 2011-08-09
 - Improved context source.
