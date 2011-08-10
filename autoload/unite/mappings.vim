@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2011.
+" Last Modified: 11 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -304,14 +304,14 @@ function! s:normal_delete_backward_path()"{{{
   let &l:modifiable = l:modifiable_save
 endfunction"}}}
 function! s:toggle_mark()"{{{
-  if line('.') <= unite#get_current_unite().prompt_linenr
-    " Ignore.
-    return
-  endif
-
   let l:candidate = unite#get_current_candidate()
   let l:candidate.unite__is_marked = !l:candidate.unite__is_marked
   let l:candidate.unite__marked_time = localtime()
+
+  let l:prompt_linenr = unite#get_current_unite().prompt_linenr
+  if line('.') <= l:prompt_linenr
+    call cursor(l:prompt_linenr+1, 0)
+  endif
   call unite#redraw_line()
 
   normal! j
