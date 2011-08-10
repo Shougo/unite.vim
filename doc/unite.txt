@@ -1080,6 +1080,10 @@ change		Nominates results of |:changes| command as candidates.
 jump_point	Nominates current line of "file:line" format as candidates.
 		This source is useful for |vimshell| outputs.
 
+						*unite-source-file_point*
+file_point	Nominates cursor word of filename or URI as candidates.
+		This source is useful for |vimshell| outputs.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
