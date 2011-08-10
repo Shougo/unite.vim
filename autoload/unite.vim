@@ -1775,14 +1775,9 @@ function! s:call_hook(sources, hook_name)"{{{
   endfor
 endfunction"}}}
 function! s:is_cmdwin()"{{{
-  try
-    noautocmd wincmd p
-    noautocmd wincmd p
-  catch /^Vim(wincmd):E11:/
-    return 1
-  endtry
-
-  return 0
+  silent! noautocmd wincmd p
+  silent! noautocmd wincmd p
+  return v:errmsg =~ '^E11:'
 endfunction"}}}
 "}}}
 

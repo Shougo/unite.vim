@@ -1673,6 +1673,7 @@ CHANGELOG					*unite-changelog*
 - Added jump_point source.
 - Added file_point source and uri kind.
 - Kind file inherited uri kind.
+- Improved command-line window detection.
 
 2011-08-09
 - Improved context source.
