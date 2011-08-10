@@ -1420,8 +1420,6 @@ function! s:initialize_unite_buffer()"{{{
       autocmd CursorHoldI <buffer>  call s:on_cursor_hold_i()
       autocmd CursorHold <buffer>  call s:on_cursor_hold()
       autocmd CursorMoved,CursorMovedI <buffer>  call s:on_cursor_moved()
-      autocmd WinEnter,BufWinEnter <buffer>  call s:on_win_enter()
-      autocmd WinLeave,BufWinLeave <buffer>  call s:on_win_leave()
       autocmd BufUnload,BufHidden <buffer>  call s:on_buf_unload(expand('<afile>'))
     augroup END
 
@@ -1556,6 +1554,12 @@ function! s:on_insert_enter()  "{{{
     normal! zb
     startinsert!
   endif
+
+  if &updatetime > g:unite_update_time
+    let l:unite = unite#get_current_unite()
+    let l:unite.update_time_save = &updatetime
+    let &updatetime = g:unite_update_time
+  endif
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   let l:unite = unite#get_current_unite()
@@ -1570,6 +1574,11 @@ function! s:on_insert_leave()  "{{{
   let l:unite.is_insert = 0
 
   setlocal nomodifiable
+
+  if has_key(l:unite, 'update_time_save')
+        \ && &updatetime < l:unite.update_time_save
+    let &updatetime = l:unite.update_time_save
+  endif
 endfunction"}}}
 function! s:on_cursor_hold_i()  "{{{
   let l:prompt_linenr = unite#get_current_unite().prompt_linenr
@@ -1639,20 +1648,6 @@ function! s:on_cursor_moved()  "{{{
         execute 'resize' l:context.winheight
       endif
     endif
-  endif
-endfunction"}}}
-function! s:on_win_enter()  "{{{
-  if &updatetime > g:unite_update_time
-    let l:unite = unite#get_current_unite()
-    let l:unite.update_time_save = &updatetime
-    let &updatetime = g:unite_update_time
-  endif
-endfunction"}}}
-function! s:on_win_leave()  "{{{
-  let l:unite = unite#get_current_unite()
-  if has_key(l:unite, 'update_time_save')
-        \ && &updatetime < l:unite.update_time_save
-    let &updatetime = l:unite.update_time_save
   endif
 endfunction"}}}
 function! s:on_buf_unload(bufname)  "{{{

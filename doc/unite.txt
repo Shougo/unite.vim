@@ -1677,6 +1677,7 @@ CHANGELOG					*unite-changelog*
 - Fixed for cursorline.
 - Fixed for colorcolumn.
 - Changed default prompt.
+- Improved autocmd.
 
 2011-08-09
 - Improved context source.
