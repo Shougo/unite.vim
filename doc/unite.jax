@@ -1256,6 +1256,13 @@ source		unite.vimのsource
 			action__source_name	(リスト)	(任意)
 				実行するsourceの引数
 
+						*unite-kind-uri*
+uri		ファイルやhttpといったプロトコル
+
+			action__path		(文字列)		(必須)
+				ファイルのパス
+
+
 ==============================================================================
 filter						*unite-filter*
 
@@ -1439,6 +1446,9 @@ window						*unite-action-window*
 completion					*unite-action-completion*
 	insert		候補の挿入
 	preview		候補の情報を表示
+
+uri						*unite-action-uri*
+	start		ファイルを関連付けで開く
 
 source別アクション
 

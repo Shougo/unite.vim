@@ -1211,6 +1211,12 @@ source		unite.vim source
 			action__source_name	(List)		(Optional)
 				The source arguments
 
+						*unite-kind-uri*
+uri		Files and protocols.
+
+			action__path		(String)	(Required)
+				The file path.
+
 ==============================================================================
 FILTERS						*unite-filters*
 
@@ -1318,6 +1324,9 @@ This kind extends ctions of |unite-action-cdable|.
 completion					*unite-action-completion*
 	insert		Insert the candidate
 	preview		Show the information of the candidate
+
+uri						*unite-action-uri*
+	start		Open file with associated program.
 
 Actions of each sources
 
@@ -1658,6 +1667,7 @@ CHANGELOG					*unite-changelog*
 2011-08-10
 - Optimized source line.
 - Added jump_point source.
+- Added file_point source and uri kind.
 
 2011-08-09
 - Improved context source.
