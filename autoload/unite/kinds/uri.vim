@@ -31,7 +31,7 @@ function! unite#kinds#uri#define()"{{{
   return s:kind
 endfunction"}}}
 
-let g:System = vital#of('unite.vim').import('System.File')
+let g:System = vital#of('unite').import('System.File')
 
 let s:kind = {
       \ 'name' : 'uri',
