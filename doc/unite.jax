@@ -846,10 +846,12 @@ unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
 		ignorecase			(数値)
 		uniteバッファで一時的にセットされる'ignorecase'オプションの値を
 		決定する。省略すると、'ignorecase'の値と同じになる。
+		ただし、buffer_nameが"files"の場合は初期値が"1"になっている。
 		
 		smartcase			(数値)
 		大文字が入力されているときに、'ignorecase'オプションの値を無視
 		するかどうか決定する。省略すると、'smartcase'の値と同じになる。
+		ただし、buffer_nameが"files"の場合は初期値が"0"になっている。
 
 unite#custom_default_action({kind}, {default-action})
 						*unite#custom_default_action()*

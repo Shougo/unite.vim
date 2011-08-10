@@ -1679,6 +1679,7 @@ CHANGELOG					*unite-changelog*
 - Changed default prompt.
 - Improved autocmd.
 - Improved cursor down/up behavior.
+- Initialize ignorecase and smartcase value in files buffer.
 
 2011-08-09
 - Improved context source.

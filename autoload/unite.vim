@@ -211,6 +211,8 @@ call unite#set_substitute_pattern('files', '^\~',
 call unite#set_substitute_pattern('files', '[^~.*]\ze/', '\0*', 100)
 call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
 call unite#set_substitute_pattern('files', '\.', '*.', 1000)
+call unite#set_buffer_name_option('files', 'smartcase', 0)
+call unite#set_buffer_name_option('files', 'ignorecase', 1)
 
 let s:unite_options = [
       \ '-buffer-name=', '-input=', '-prompt=',
