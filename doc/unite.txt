@@ -1651,6 +1651,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-08-10
+- Optimized source line.
+
 2011-08-09
 - Improved context source.
 
