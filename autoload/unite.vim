@@ -1408,6 +1408,9 @@ function! s:initialize_unite_buffer()"{{{
     if exists('+cursorcolumn')
       setlocal nocursorcolumn
     endif
+    if exists('+colorcolumn')
+      setlocal colorcolumn=0
+    endif
     setlocal nocursorline
 
     " Autocommands.
