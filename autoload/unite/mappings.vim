@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2011.
+" Last Modified: 10 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -450,35 +450,36 @@ function! s:loop_cursor_down()"{{{
   let l:prompt_linenr = unite#get_current_unite().prompt_linenr
 
   if line('.') == line('$')
+    " Loop.
     if l:is_insert
-      return "\<C-Home>\<End>".repeat("\<Down>", l:prompt_linenr)."\<Home>"
+      return "\<C-Home>\<End>".repeat("\<Down>", l:prompt_linenr-1)."\<End>"
     else
       return l:prompt_linenr.'G0z.'
     endif
-  else
-    let l:num = (line('.') <= l:prompt_linenr) ? 0 :
-          \ (line('.') - (l:prompt_linenr + 1))
-    let l:count = 1
+  endif
 
-    while 1
-      let l:candidate = get(unite#get_unite_candidates(), l:num + l:count, {})
-      if !empty(l:candidate) && l:candidate.is_dummy
-        let l:count += 1
-        continue
-      endif
+  let l:num = (line('.') <= l:prompt_linenr) ? 0 :
+        \ (line('.') - (l:prompt_linenr + 1))
+  let l:count = 1
 
-      break
-    endwhile
-
-    if line('.') == l:prompt_linenr
+  while 1
+    let l:candidate = get(unite#get_unite_candidates(), l:num + l:count, {})
+    if !empty(l:candidate) && l:candidate.is_dummy
       let l:count += 1
+      continue
     endif
 
-    if l:is_insert
-      return "\<Home>" . repeat("\<Down>", l:count)
-    else
-      return '0' . repeat('j', l:count)
-    endif
+    break
+  endwhile
+
+  if l:is_insert && line('.') == l:prompt_linenr
+    let l:count += 1
+  endif
+
+  if l:is_insert
+    return "\<Home>" . repeat("\<Down>", l:count)
+  else
+    return '0' . repeat('j', l:count)
   endif
 endfunction"}}}
 function! s:loop_cursor_up()"{{{
@@ -486,42 +487,49 @@ function! s:loop_cursor_up()"{{{
   let l:prompt_linenr = unite#get_current_unite().prompt_linenr
 
   if line('.') <= l:prompt_linenr
+    " Loop.
     if l:is_insert
       return "\<C-End>\<Home>"
     else
       return 'G'
     endif
-  else
-    let l:num = (line('.') <= l:prompt_linenr) ? 0 :
-          \ (line('.') - (l:prompt_linenr + 1))
-    let l:count = 1
-    while 1
-      let l:candidate = get(unite#get_unite_candidates(), l:num - l:count, {})
-      if l:num >= l:count && !empty(l:candidate) && l:candidate.is_dummy
-        let l:count += 1
-        continue
-      endif
+  endif
 
-      break
-    endwhile
+  let l:num = (line('.') <= l:prompt_linenr) ? 0 :
+        \ (line('.') - (l:prompt_linenr + 1))
 
-    if l:num < 0
-      if l:is_insert
-        return "\<C-Home>\<End>".repeat("\<Down>", l:prompt_linenr)."\<Home>"
-      else
-        return l:prompt_linenr.'G0z.'
-      endif
+  let l:count = 1
+
+  if l:is_insert && line('.') == l:prompt_linenr + 2
+    let l:count += 1
+  endif
+
+  while 1
+    let l:candidate = get(unite#get_unite_candidates(), l:num - l:count, {})
+    if l:num >= l:count && !empty(l:candidate) && l:candidate.is_dummy
+      let l:count += 1
+      continue
     endif
 
+    break
+  endwhile
+
+  if l:num < 0
     if l:is_insert
-      if line('.') == l:prompt_linenr + 1
-        return "\<Up>\<End>"
-      else
-        return "\<Home>" . repeat("\<Up>", l:count)
-      endif
+      return "\<C-Home>\<End>".repeat("\<Down>", l:prompt_linenr)."\<Home>"
     else
-      return '0' . repeat('k', l:count)
+      return l:prompt_linenr.'G0z.'
     endif
+  endif
+
+  if l:is_insert
+    if line('.') <= l:prompt_linenr + 2
+      return repeat("\<Up>", l:count) . "\<End>"
+    else
+      return "\<Home>" . repeat("\<Up>", l:count)
+    endif
+  else
+    return '0' . repeat('k', l:count)
   endif
 endfunction"}}}
 function! s:toggle_transpose_window()"{{{
