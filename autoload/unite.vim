@@ -887,7 +887,7 @@ function! s:initialize_context(context)"{{{
     let a:context.buffer_name = 'default'
   endif
   if !has_key(a:context, 'prompt')
-    let a:context.prompt = '>'
+    let a:context.prompt = '> '
   endif
   if !has_key(a:context, 'default_action')
     let a:context.default_action = 'default'

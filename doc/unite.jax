@@ -173,7 +173,7 @@ http://www.ustream.tv/recorded/11240673
 
 						*unite-options-prompt*
 		-prompt={prompt-text}
-		プロンプトを指定する。指定しないと、'>'が使われる。
+		プロンプトを指定する。指定しないと、'> 'が使われる。
 
 						*unite-options-default-action*
 		-default-action={default-action}

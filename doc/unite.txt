@@ -179,7 +179,7 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-prompt*
 		-prompt={prompt-text}
-		Specifies a prompt. The default value is '>'.
+		Specifies a prompt. The default value is '> '.
 
 						*unite-options-default-action*
 		-default-action={default-action}
@@ -1676,6 +1676,7 @@ CHANGELOG					*unite-changelog*
 - Improved command-line window detection.
 - Fixed for cursorline.
 - Fixed for colorcolumn.
+- Changed default prompt.
 
 2011-08-09
 - Improved context source.
