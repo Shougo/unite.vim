@@ -1076,6 +1076,10 @@ jump		Nominates results of |:jumps| command as candidates.
 						*unite-source-change*
 change		Nominates results of |:changes| command as candidates.
 
+						*unite-source-jump_point*
+jump_point	Nominates current line of "file:line" format as candidates.
+		This source is useful for |vimshell| outputs.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1653,6 +1657,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-10
 - Optimized source line.
+- Added jump_point source.
 
 2011-08-09
 - Improved context source.

@@ -1107,6 +1107,10 @@ jump		|:jumps|の結果を候補とする。
 						*unite-source-change*
 change		|:changes|の結果を候補とする。
 
+						*unite-source-jump_point*
+jump_point	現在行の"file:line"形式をジャンプ先として、候補とする。
+		|vimshell|の出力に対して利用すると便利である。
+
 ==============================================================================
 kind						*unite-kinds*
 
