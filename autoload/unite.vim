@@ -1405,6 +1405,10 @@ function! s:initialize_unite_buffer()"{{{
       setlocal conceallevel=3
       setlocal concealcursor=n
     endif
+    if exists('+cursorcolumn')
+      setlocal nocursorcolumn
+    endif
+    setlocal nocursorline
 
     " Autocommands.
     augroup plugin-unite
@@ -1602,6 +1606,8 @@ function! s:on_cursor_moved()  "{{{
   endif
 
   let l:prompt_linenr = unite#get_current_unite().prompt_linenr
+
+  setlocal nocursorline
 
   execute 'setlocal' line('.') == l:prompt_linenr ?
         \ 'modifiable' : 'nomodifiable'
