@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2011.
+" Last Modified: 12 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1051,6 +1051,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
     let l:source.unite__context.source = l:source
     let l:source.unite__candidates = []
     let l:source.unite__cached_candidates = []
+    let l:source.unite__cached_change_candidates = []
     let l:source.unite__number = l:number
     let l:number += 1
 
@@ -1100,6 +1101,7 @@ function! s:initialize_sources()"{{{
     if l:source.is_volatile
           \ && !has_key(l:source, 'change_candidates')
       let l:source.change_candidates = l:source.gather_candidates
+      call remove(l:source, 'gather_candidates')
     endif
 
     let l:source.filters =
@@ -1183,7 +1185,6 @@ function! s:recache_candidates(input, is_force)"{{{
   for l:source in unite#loaded_sources_list()
     " Check required pattern length.
     if l:input_len < l:source.required_pattern_length
-      let l:source.unite__candidates = []
       continue
     endif
 
@@ -1193,20 +1194,12 @@ function! s:recache_candidates(input, is_force)"{{{
     let l:source.unite__context.is_invalidate = l:source.unite__is_invalidate
 
     if l:context.is_redraw || l:source.unite__is_invalidate
-          \ || (has_key(l:source, 'change_candidates')
-          \   && a:input !=# l:unite.last_input)
       " Recaching.
       let l:source.unite__cached_candidates = []
 
       if has_key(l:source, 'gather_candidates')
         let l:source.unite__cached_candidates +=
               \ copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
-      endif
-
-      if has_key(l:source, 'change_candidates')
-        " Recaching.
-        let l:source.unite__cached_candidates +=
-              \ l:source.change_candidates(l:source.args, l:source.unite__context)
       endif
     endif
 
@@ -1221,7 +1214,16 @@ function! s:recache_candidates(input, is_force)"{{{
     let l:unite.is_async =
           \ len(filter(copy(l:unite.sources), 'v:val.unite__context.is_async')) > 0
 
-    let l:source_candidates = copy(l:source.unite__cached_candidates)
+    if has_key(l:source, 'change_candidates')
+          \ && (l:context.is_redraw || l:source.unite__is_invalidate
+          \      || a:input !=# l:unite.last_input)
+      " Recaching.
+      let l:source.unite__cached_change_candidates =
+            \ l:source.change_candidates(l:source.args, l:source.unite__context)
+    endif
+
+    let l:source_candidates = l:source.unite__cached_candidates
+          \ + l:source.unite__cached_change_candidates
 
     let l:custom_source = has_key(s:custom.source, l:source.name) ?
           \ s:custom.source[l:source.name] : {}
