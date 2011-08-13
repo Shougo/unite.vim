@@ -1,6 +1,6 @@
 *unite.txt*	Unite all sources
 
-Version: 2.2
+Version: 3.0
 Author : Shougo <Shougo.Matsu@gmail.com>
 Documentation Author: ujihisa <ujihisa at gmail com>
 License: MIT license  {{{
@@ -1666,6 +1666,11 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-08-13
+- Ver.3.0 development is started.
+
+------------------------------------------------------------------------------
+ChangeLog unite.vim Ver.2.2:
 2011-08-13
 - Fixed recache candidates.
 - Improved <Plug>(unite_insert_leave) keymapping.
