@@ -1668,6 +1668,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-13
 - Ver.3.0 development is started.
+- Implemented vimfiler interface(experimental).
 
 ------------------------------------------------------------------------------
 ChangeLog unite.vim Ver.2.2:

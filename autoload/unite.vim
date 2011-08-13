@@ -706,7 +706,7 @@ function! unite#start(sources, ...)"{{{
   " Caching.
   let s:current_unite.last_input = l:context.input
   let s:current_unite.input = l:context.input
-  call s:recache_candidates(l:context.input, l:context.is_redraw)
+  call s:recache_candidates(l:context.input, l:context.is_redraw, 0)
 
   if l:context.immediately
     let l:candidates = unite#gather_candidates()
@@ -788,6 +788,36 @@ function! unite#start_temporary(sources, new_context, buffer_name)"{{{
 
   call unite#force_quit_session()
   call unite#start(a:sources, l:context)
+endfunction"}}}
+function! unite#get_vimfiler_candidates(sources, ...)"{{{
+  let l:context = a:0 >= 1 ? a:1 : {}
+  call s:initialize_context(l:context)
+
+  try
+    call s:initialize_current_unite(a:sources, l:context)
+  catch /^Invalid source/
+    return []
+  endtry
+
+  " Caching.
+  let s:current_unite.last_input = l:context.input
+  let s:current_unite.input = l:context.input
+  call s:recache_candidates(l:context.input, l:context.is_redraw, 1)
+
+  let l:candidates = []
+  for l:source in unite#loaded_sources_list()
+    let l:candidates += l:source.unite__candidates
+  endfor
+  for l:candidate in l:candidates
+    " Set default property.
+    let l:candidate.vimfiler__filetype = vimfiler#get_filetype(l:candidate)
+    let l:candidate.vimfiler__datemark = vimfiler#get_datemark(l:candidate)
+    let l:candidate.vimfiler__extension =
+          \ l:candidate.vimfiler__is_directory ?
+          \ '' : fnamemodify(l:file, ':e')
+  endfor
+
+  return l:candidates
 endfunction"}}}
 function! unite#resume(buffer_name)"{{{
   " Check command line window.
@@ -929,6 +959,7 @@ function! s:initialize_context(context)"{{{
     let a:context.old_buffer_info = []
   endif
   let a:context.is_redraw = 0
+  let a:context.is_changed = 0
 endfunction"}}}
 
 function! unite#force_quit_session()  "{{{
@@ -1162,7 +1193,7 @@ function! s:initialize_buffer_name_options(buffer_name)"{{{
   endif
 endfunction"}}}
 
-function! s:recache_candidates(input, is_force)"{{{
+function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
   let l:unite = unite#get_current_unite()
 
   " Save options.
@@ -1180,6 +1211,7 @@ function! s:recache_candidates(input, is_force)"{{{
   let l:context = l:unite.context
   let l:context.input = l:input
   let l:context.is_redraw = a:is_force
+  let l:context.is_changed = a:input !=# l:unite.last_input
   let l:filtered_count = 0
 
   for l:source in unite#loaded_sources_list()
@@ -1191,37 +1223,10 @@ function! s:recache_candidates(input, is_force)"{{{
     " Set context.
     let l:source.unite__context.input = l:context.input
     let l:source.unite__context.is_redraw = l:context.is_redraw
+    let l:source.unite__context.is_changed = l:context.is_changed
     let l:source.unite__context.is_invalidate = l:source.unite__is_invalidate
 
-    if l:context.is_redraw || l:source.unite__is_invalidate
-      " Recaching.
-      let l:source.unite__cached_candidates = []
-
-      if has_key(l:source, 'gather_candidates')
-        let l:source.unite__cached_candidates +=
-              \ copy(l:source.gather_candidates(l:source.args, l:source.unite__context))
-      endif
-    endif
-
-    if l:source.unite__context.is_async
-      let l:source.unite__cached_candidates +=
-            \ l:source.async_gather_candidates(l:source.args, l:source.unite__context)
-    endif
-
-    " Update async state.
-    let l:unite.is_async =
-          \ len(filter(copy(l:unite.sources), 'v:val.unite__context.is_async')) > 0
-
-    if has_key(l:source, 'change_candidates')
-          \ && (l:context.is_redraw || l:source.unite__is_invalidate
-          \      || a:input !=# l:unite.last_input)
-      " Recaching.
-      let l:source.unite__cached_change_candidates =
-            \ l:source.change_candidates(l:source.args, l:source.unite__context)
-    endif
-
-    let l:source_candidates = l:source.unite__cached_candidates
-          \ + l:source.unite__cached_change_candidates
+    let l:source_candidates = s:get_source_candidates(l:source, a:is_vimfiler)
 
     let l:custom_source = has_key(s:custom.source, l:source.name) ?
           \ s:custom.source[l:source.name] : {}
@@ -1235,7 +1240,7 @@ function! s:recache_candidates(input, is_force)"{{{
       endif
     endfor
 
-    if l:source.max_candidates != 0
+    if !a:is_vimfiler && l:source.max_candidates != 0
           \ && len(l:source_candidates) > l:source.max_candidates
       " Filtering too many candidates.
       let l:source_candidates = l:source_candidates[: l:source.max_candidates - 1]
@@ -1272,7 +1277,48 @@ function! s:recache_candidates(input, is_force)"{{{
     let l:source.unite__is_invalidate = 0
   endfor
 
+  " Update async state.
+  let l:unite.is_async =
+        \ len(filter(copy(l:unite.sources),
+        \           'v:val.unite__context.is_async')) > 0
+
   let &ignorecase = l:ignorecase_save
+endfunction"}}}
+function! s:get_source_candidates(source, is_vimfiler)"{{{
+  if a:is_vimfiler
+    return has_key(a:source, 'vimfiler_gather_candidates') ?
+          \ copy(a:source.vimfiler_gather_candidates(
+          \           a:source.args, a:source.unite__context))
+          \ : []
+  endif
+
+  let l:context = a:source.unite__context
+
+  if l:context.is_redraw || a:source.unite__is_invalidate
+    " Recaching.
+    let a:source.unite__cached_candidates = []
+
+    if has_key(a:source, 'gather_candidates')
+      let a:source.unite__cached_candidates +=
+            \ copy(a:source.gather_candidates(a:source.args, l:context))
+    endif
+  endif
+
+  if a:source.unite__context.is_async
+    let a:source.unite__cached_candidates +=
+          \ a:source.async_gather_candidates(a:source.args, l:context)
+  endif
+
+  if has_key(a:source, 'change_candidates')
+        \ && (l:context.is_redraw || l:context.is_changed
+        \     || a:source.unite__is_invalidate)
+    " Recaching.
+    let a:source.unite__cached_change_candidates =
+          \ a:source.change_candidates(a:source.args, a:source.unite__context)
+  endif
+
+  return a:source.unite__cached_candidates
+        \ + a:source.unite__cached_change_candidates
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates)"{{{
   let l:unite = unite#get_current_unite()
@@ -1536,7 +1582,7 @@ function! s:redraw(is_force) "{{{
   let l:unite.context.is_redraw = a:is_force
 
   " Recaching.
-  call s:recache_candidates(l:input, a:is_force)
+  call s:recache_candidates(l:input, a:is_force, 0)
 
   let l:unite.last_input = l:input
 

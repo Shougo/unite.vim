@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Aug 2011.
+" Last Modified: 13 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -103,6 +103,32 @@ function! s:source.change_candidates(args, context)"{{{
   endif
 
   return l:candidates
+endfunction"}}}
+function! s:source.vimfiler_gather_candidates(args, context)"{{{
+  let l:path = get(a:args, 0, '')
+
+  if isdirectory(a:path)
+    let l:type = 'directory'
+    let l:candidates = self.change_candidates(a:args, a:context)
+  elseif filereadable(a:path)
+    let l:type = 'file'
+    let l:candidates = [ a:path ]
+  else
+    return []
+  endif
+
+  " Set vimfiler property.
+  for l:candidate in l:candidates
+    let l:candidate.vimfiler__filename = l:candidate.word
+    let l:candidate.vimfiler__is_directory =
+          \ isdirectory(l:candidate.action__path)
+    let l:candidate.vimfiler__is_executable =
+          \ executable(l:candidate.action__path)
+    let l:candidate.vimfiler__filesize = getfsize(l:file)
+    let l:candidate.vimfiler__filetime = getftime(l:file),
+  endfor
+
+  return [l:type, l:candidates]
 endfunction"}}}
 function! s:create_dict(file, is_relative_path)"{{{
   let l:dict = {
