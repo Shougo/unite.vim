@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Aug 2011.
+" Last Modified: 14 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -808,13 +808,35 @@ function! unite#get_vimfiler_candidates(sources, ...)"{{{
   for l:source in unite#loaded_sources_list()
     let l:candidates += l:source.unite__candidates
   endfor
+
   for l:candidate in l:candidates
-    " Set default property.
-    let l:candidate.vimfiler__filetype = vimfiler#get_filetype(l:candidate)
-    let l:candidate.vimfiler__datemark = vimfiler#get_datemark(l:candidate)
-    let l:candidate.vimfiler__extension =
-          \ l:candidate.vimfiler__is_directory ?
-          \ '' : fnamemodify(l:file, ':e')
+    " Set default vimfiler property.
+    if !has_key(l:candidate, 'vimfiler__filename')
+      let l:candidate.vimfiler__filename = l:candidate.word
+    endif
+    if !has_key(l:candidate, 'vimfiler__is_directory')
+      let l:candidate.vimfiler__is_directory = 0
+    endif
+    if !has_key(l:candidate, 'vimfiler__is_executable')
+      let l:candidate.vimfiler__is_executable = 0
+    endif
+    if !has_key(l:candidate, 'vimfiler__filesize')
+      let l:candidate.vimfiler__filesize = -1
+    endif
+    if !has_key(l:candidate, 'vimfiler__filetime')
+      let l:candidate.vimfiler__filetime = -1
+    endif
+    if !has_key(l:candidate, 'vimfiler__filetype')
+      let l:candidate.vimfiler__filetype = vimfiler#get_filetype(l:candidate)
+    endif
+    if !has_key(l:candidate, 'vimfiler__datemark')
+      let l:candidate.vimfiler__datemark = vimfiler#get_datemark(l:candidate)
+    endif
+    if !has_key(l:candidate, 'vimfiler__extension')
+      let l:candidate.vimfiler__extension =
+            \ l:candidate.vimfiler__is_directory ?
+            \ '' : fnamemodify(l:file, ':e')
+    endif
   endfor
 
   return l:candidates
