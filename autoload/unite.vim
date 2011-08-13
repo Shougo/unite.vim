@@ -806,13 +806,18 @@ function! unite#get_vimfiler_candidates(sources, ...)"{{{
 
   let l:candidates = []
   for l:source in unite#loaded_sources_list()
-    let l:candidates += l:source.unite__candidates
+    if !empty(l:source.unite__candidates)
+      let l:candidates += l:source.unite__candidates
+    endif
   endfor
 
   for l:candidate in l:candidates
     " Set default vimfiler property.
     if !has_key(l:candidate, 'vimfiler__filename')
       let l:candidate.vimfiler__filename = l:candidate.word
+    endif
+    if !has_key(l:candidate, 'vimfiler__abbr')
+      let l:candidate.vimfiler__abbr = l:candidate.word
     endif
     if !has_key(l:candidate, 'vimfiler__is_directory')
       let l:candidate.vimfiler__is_directory = 0
@@ -826,17 +831,18 @@ function! unite#get_vimfiler_candidates(sources, ...)"{{{
     if !has_key(l:candidate, 'vimfiler__filetime')
       let l:candidate.vimfiler__filetime = -1
     endif
-    if !has_key(l:candidate, 'vimfiler__filetype')
-      let l:candidate.vimfiler__filetype = vimfiler#get_filetype(l:candidate)
-    endif
     if !has_key(l:candidate, 'vimfiler__datemark')
       let l:candidate.vimfiler__datemark = vimfiler#get_datemark(l:candidate)
     endif
     if !has_key(l:candidate, 'vimfiler__extension')
       let l:candidate.vimfiler__extension =
             \ l:candidate.vimfiler__is_directory ?
-            \ '' : fnamemodify(l:file, ':e')
+            \ '' : fnamemodify(l:candidate.vimfiler__filename, ':e')
     endif
+    if !has_key(l:candidate, 'vimfiler__filetype')
+      let l:candidate.vimfiler__filetype = vimfiler#get_filetype(l:candidate)
+    endif
+    let l:candidate.vimfiler__is_marked = 0
   endfor
 
   return l:candidates

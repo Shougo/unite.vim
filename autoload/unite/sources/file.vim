@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Aug 2011.
+" Last Modified: 14 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,10 +53,15 @@ function! s:source.change_candidates(args, context)"{{{
   let l:input = empty(l:input_list) ? '' : l:input_list[0]
   let l:input = substitute(substitute(a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
 
-  if l:input !~ '^\%(/\|\a\+:/\)' && get(a:args, 0) != ''
-    let l:input = a:args[0] . '/' .  l:input
+  let l:path = get(a:args, 0, '')
+  if l:path =~ '[\\/]$'
+    " Chomp.
+    let l:path = l:path[: -2]
   endif
-  let l:is_relative_path = l:input !~ '^\%(/\|\a\+:/\)' && get(a:args, 0) == ''
+  if l:input !~ '^\%(/\|\a\+:/\)' && l:path != ''
+    let l:input = l:path . '/' .  l:input
+  endif
+  let l:is_relative_path = l:input !~ '^\%(/\|\a\+:/\)' && l:path == ''
 
   " Substitute *. -> .* .
   let l:input = substitute(l:input, '\*\.', '.*', 'g')
@@ -107,28 +112,51 @@ endfunction"}}}
 function! s:source.vimfiler_gather_candidates(args, context)"{{{
   let l:path = get(a:args, 0, '')
 
-  if isdirectory(a:path)
+  if isdirectory(l:path)
     let l:type = 'directory'
     let l:candidates = self.change_candidates(a:args, a:context)
-  elseif filereadable(a:path)
+    if a:context.vimfiler__visible_dot_files
+      " Add doted files.
+      let l:args = deepcopy(l:args)
+      let l:args .= '.'
+      let l:candidates += self.change_candidates(l:args, a:context)
+    endif
+  elseif filereadable(l:path)
     let l:type = 'file'
-    let l:candidates = [ a:path ]
+    let l:candidates = [ s:create_dict(l:path, 0) ]
   else
     return []
   endif
 
+  let l:old_dir = getcwd()
+  if l:path !=# l:old_dir
+        \ && isdirectory(l:path)
+    lcd `=l:path`
+  endif
+
   " Set vimfiler property.
   for l:candidate in l:candidates
-    let l:candidate.vimfiler__filename = l:candidate.word
+    let l:candidate.vimfiler__filename =
+          \ unite#util#substitute_path_separator(
+          \       fnamemodify(l:candidate.word, ':t'))
+    let l:candidate.vimfiler__abbr =
+          \ unite#util#substitute_path_separator(
+          \       fnamemodify(l:candidate.word, ':.'))
     let l:candidate.vimfiler__is_directory =
           \ isdirectory(l:candidate.action__path)
     let l:candidate.vimfiler__is_executable =
           \ executable(l:candidate.action__path)
-    let l:candidate.vimfiler__filesize = getfsize(l:file)
-    let l:candidate.vimfiler__filetime = getftime(l:file),
+    let l:candidate.vimfiler__filesize = getfsize(l:candidate.action__path)
+    let l:candidate.vimfiler__filetime = getftime(l:candidate.action__path)
   endfor
 
-  return [l:type, l:candidates]
+  if l:path !=# l:old_dir
+        \ && isdirectory(l:path)
+    lcd `=l:old_dir`
+  endif
+
+  " return [l:type, l:candidates]
+  return l:candidates
 endfunction"}}}
 function! s:create_dict(file, is_relative_path)"{{{
   let l:dict = {
