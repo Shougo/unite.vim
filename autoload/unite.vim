@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Aug 2011.
+" Last Modified: 13 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1203,8 +1203,6 @@ function! s:recache_candidates(input, is_force)"{{{
       endif
     endif
 
-    let l:source.unite__is_invalidate = 0
-
     if l:source.unite__context.is_async
       let l:source.unite__cached_candidates +=
             \ l:source.async_gather_candidates(l:source.args, l:source.unite__context)
@@ -1271,6 +1269,7 @@ function! s:recache_candidates(input, is_force)"{{{
     endfor
 
     let l:source.unite__candidates = l:source_candidates
+    let l:source.unite__is_invalidate = 0
   endfor
 
   let &ignorecase = l:ignorecase_save

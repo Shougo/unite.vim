@@ -1668,6 +1668,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-08-13
+- Fixed recache candidates.
+
 2011-08-12
 - Fixed change_candidates().
 
