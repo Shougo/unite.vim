@@ -591,7 +591,7 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 		uniteを終了する。
 
 <Plug>(unite_insert_leave)			*i_<Plug>(unite_insert_leave)*
-		ノーマルモードに移行する。
+		ノーマルモードに移行する。最初の候補にカーソルを動かす。
 
 <Plug>(unite_delete_backward_char)		*i_<Plug>(unite_delete_backward_char)*
 		カーソル直前の1文字を消す。文字が入力されていない場合はuniteを

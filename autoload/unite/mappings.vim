@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Aug 2011.
+" Last Modified: 13 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,15 +58,26 @@ function! unite#mappings#define_default_mappings()"{{{
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1] - unite#get_current_unite().prompt_linenr-1, getpos("'>")[1] - unite#get_current_unite().prompt_linenr - 1)<CR>
 
   inoremap <silent><buffer> <Plug>(unite_exit)  <ESC>:<C-u>call <SID>exit()<CR>
-  inoremap <silent><buffer> <Plug>(unite_insert_leave)  <ESC>
-  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
-  inoremap <expr><buffer> <Plug>(unite_delete_backward_line)  repeat("\<C-h>", col('.')-(len(unite#get_current_unite().prompt)+1))
-  inoremap <expr><buffer> <Plug>(unite_delete_backward_word)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : "\<C-w>"
-  inoremap <expr><buffer> <Plug>(unite_delete_backward_path)  col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : <SID>delete_backward_path()
-  inoremap <expr><buffer> <Plug>(unite_select_next_line)  pumvisible() ? "\<C-n>" : <SID>loop_cursor_down()
-  inoremap <expr><buffer> <Plug>(unite_select_previous_line)  pumvisible() ? "\<C-p>" : <SID>loop_cursor_up()
-  inoremap <expr><buffer> <Plug>(unite_select_next_page)  pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
-  inoremap <expr><buffer> <Plug>(unite_select_previous_page)  pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
+  inoremap <silent><expr><buffer> <Plug>(unite_insert_leave)
+        \ (line('.') <= unite#get_current_unite().prompt_linenr) ?
+        \ "\<ESC>0".(unite#get_current_unite().prompt_linenr+1)."G" : "\<ESC>0"
+  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
+        \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
+        \ "\<C-o>:\<C-u>call \<SID>exit()\<Cr>" : "\<C-h>"
+  inoremap <expr><buffer> <Plug>(unite_delete_backward_line)
+        \ repeat("\<C-h>", col('.')-(len(unite#get_current_unite().prompt)+1))
+  inoremap <expr><buffer> <Plug>(unite_delete_backward_word)
+        \ col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : "\<C-w>"
+  inoremap <expr><buffer> <Plug>(unite_delete_backward_path)
+        \ col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : <SID>delete_backward_path()
+  inoremap <expr><buffer> <Plug>(unite_select_next_line)
+        \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down()
+  inoremap <expr><buffer> <Plug>(unite_select_previous_line)
+        \ pumvisible() ? "\<C-p>" : <SID>loop_cursor_up()
+  inoremap <expr><buffer> <Plug>(unite_select_next_page)
+        \ pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
+  inoremap <expr><buffer> <Plug>(unite_select_previous_page)
+        \ pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)  <C-o>:<C-u>call <SID>toggle_mark()<CR>
   inoremap <silent><buffer> <Plug>(unite_choose_action)  <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <silent><buffer> <Plug>(unite_move_head)  <C-o>:<C-u>call <SID>insert_head()<CR>

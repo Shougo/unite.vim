@@ -599,7 +599,8 @@ Insert mode mappings.
 		Exits Unite.
 
 <Plug>(unite_insert_leave)			*i_<Plug>(unite_insert_leave)*
-		Changes the mode into Normal mode.
+		Changes the mode into Normal mode and move cursor to first
+		candidate line.
 
 <Plug>(unite_delete_backward_char)		*i_<Plug>(unite_delete_backward_char)*
 		Deletes a char just before the cursor, otherwise quits the Unite.
@@ -1670,6 +1671,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-13
 - Fixed recache candidates.
+- Improved <Plug>(unite_insert_leave) keymapping.
 
 2011-08-12
 - Fixed change_candidates().
