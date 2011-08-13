@@ -1739,9 +1739,6 @@ NOTATION					*unite-notation*
 				|unite-source-attribute-hooks-on_post_filter|内
 				でのみ有効。
 
-			winnr			(数値)
-				uniteを呼び出したウィンドウの番号。
-
 			source__{name}		(不定)		(任意)
 				source独自の付加情報。source側で自由に使用でき
 				る。複数回同じsourceを呼び出せるようにするため

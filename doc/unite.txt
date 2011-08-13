@@ -1496,9 +1496,6 @@ NOTATION					*unite-notation*
 			candidates		(List)
 				Todo
 
-			winnr			(Number)
-				Todo
-
 			source__{name}		(Unknown)		(Optional)
 				Todo
 
@@ -1672,6 +1669,7 @@ CHANGELOG					*unite-changelog*
 2011-08-13
 - Fixed recache candidates.
 - Improved <Plug>(unite_insert_leave) keymapping.
+- Fixed documentation.
 
 2011-08-12
 - Fixed change_candidates().
