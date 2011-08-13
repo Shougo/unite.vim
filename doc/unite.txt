@@ -1670,6 +1670,7 @@ CHANGELOG					*unite-changelog*
 - Fixed recache candidates.
 - Improved <Plug>(unite_insert_leave) keymapping.
 - Fixed documentation.
+- Released ver.2.2.
 
 2011-08-12
 - Fixed change_candidates().
