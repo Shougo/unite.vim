@@ -1693,6 +1693,7 @@ CHANGELOG					*unite-changelog*
 - Fixed vimfiler error.
 - Improved redraw.
 - Added is_matched and keymappings.
+- Improved action name.
 
 2011-08-13
 - Ver.3.0 development is started.

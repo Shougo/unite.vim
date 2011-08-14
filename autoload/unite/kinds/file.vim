@@ -70,11 +70,6 @@ let s:kind = {
       \ 'default_action' : 'open',
       \ 'action_table' : {},
       \ 'alias_table' : {
-      \       'vimfiler__execute' : 'start',
-      \       'vimfiler__open'    : 'open',
-      \       'vimfiler__split'   : 'split',
-      \       'vimfiler__vsplit'  : 'vsplit',
-      \       'vimfiler__preview' : 'preview',
       \ },
       \ 'parents' : ['openable', 'cdable', 'uri'],
       \}
