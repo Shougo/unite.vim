@@ -1694,6 +1694,7 @@ CHANGELOG					*unite-changelog*
 - Improved redraw.
 - Added is_matched and keymappings.
 - Improved action name.
+- Implemented copy and delete and move action.
 
 2011-08-13
 - Ver.3.0 development is started.

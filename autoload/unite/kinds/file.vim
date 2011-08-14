@@ -29,34 +29,27 @@ set cpo&vim
 
 " Global options definition."{{{
 " External commands.
-if !exists('g:vimfiler_external_delete_command')
+if !exists('g:unite_kind_file_delete_command')
   if unite#util#is_win() && !executable('rm')
-    let g:vimfiler_external_delete_command = 'system rmdir /Q /S $srcs'
+    " Can't support.
+    let g:unite_kind_file_delete_command = ''
   else
-    let g:vimfiler_external_delete_command = 'rm -r $srcs'
+    let g:unite_kind_file_delete_command = 'rm -r $srcs'
   endif
 endif
-if !exists('g:vimfiler_external_copy_file_command')
+if !exists('g:unite_kind_file_copy_command')
   if unite#util#is_win() && !executable('cp')
     " Can't support.
-    let g:vimfiler_external_copy_file_command = ''
+    let g:unite_kind_file_copy_command = ''
   else
-    let g:vimfiler_external_copy_file_command = 'cp -p $src $dest'
+    let g:unite_kind_file_copy_command = 'cp -p -r $srcs $dest'
   endif
 endif
-if !exists('g:vimfiler_external_copy_directory_command')
-  if unite#util#is_win() && !executable('cp')
-    " Can't support.
-    let g:vimfiler_external_copy_directory_command = ''
-  else
-    let g:vimfiler_external_copy_directory_command = 'cp -p -r $src $dest'
-  endif
-endif
-if !exists('g:vimfiler_external_move_command')
+if !exists('g:unite_kind_file_move_command')
   if unite#util#is_win() && !executable('mv')
-    let g:vimfiler_external_move_command = 'move /Y $srcs $dest'
+    let g:unite_kind_file_move_command = 'move /Y $srcs $dest'
   else
-    let g:vimfiler_external_move_command = 'mv $srcs $dest'
+    let g:unite_kind_file_move_command = 'mv $srcs $dest'
   endif
 endif
 "}}}
@@ -132,33 +125,54 @@ let s:kind.action_table.vimfiler__move = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
+  if g:unite_kind_file_move_command == ''
+    call unite#print_error("Please install mv.exe.")
+    return 1
+  endif
+
+  let l:yes = unite#util#input_yesno('Really move files?')
+
+  if !l:yes
+    redraw
+    echo 'Canceled.'
+    return
+  endif
+
   let l:context = unite#get_context()
   let l:dest_dir = has_key(a:context, 'vimfiler__dest_directory') ?
         \ a:context.vimfiler__dest_directory :
         \ unite#util#input_directory('Input destination directory: ')
+  if l:dest_dir !~ '/'
+    let l:dest_dir .= '/'
+  endif
 
   let l:dest_drive = matchstr(l:dest_dir, '^\a\+\ze:')
   for l:candidate in a:candidates
     let l:filename = l:candidate.action__path
     if isdirectory(l:filename) && unite#util#is_win()
           \ && matchstr(l:filename, '^\a\+\ze:') !=? l:dest_drive
-      " rename() doesn't supported directory over drive move in Windows.
-      if g:vimfiler_external_copy_directory_command == ''
-        call unite#print_error(
-              \ "Directory move is not supported in this platform. Please install cp.exe.")
-      else
-        let l:ret = s:external('copy_directory', a:dest_dir, [l:filename])
-        if l:ret
-          call unite#print_error('Failed file move: ' . l:filename)
-        else
-          let l:ret = s:external('delete', '', [l:filename])
-          if l:ret
-            call unite#print_error('Failed file delete: ' . l:filename)
-          endif
-        endif
+      " move command doesn't supported directory over drive move in Windows.
+      if g:unite_kind_file_copy_command == ''
+        call unite#print_error("Please install cp.exe.")
+        return 1
+      elseif g:unite_kind_file_delete_command == ''
+        call unite#print_error("Please install rm.exe.")
+        return 1
+      endif
+
+      let l:ret = s:kind.action_table.vimfiler__copy.func([l:candidate])
+      if l:ret
+        call unite#print_error('Failed file move: ' . l:filename)
+        return 1
+      endif
+
+      let l:ret = s:kind.action_table.vimfiler__delete.func([l:candidate])
+      if l:ret
+        call unite#print_error('Failed file delete: ' . l:filename)
+        return 1
       endif
     else
-      let l:ret = rename(l:filename, a:dest_dir . fnamemodify(l:file, ':t'))
+      let l:ret = s:external('move', l:dest_dir, [l:filename])
       if l:ret
         call unite#print_error('Failed file move: ' . l:filename)
       endif
@@ -173,22 +187,21 @@ let s:kind.action_table.vimfiler__copy = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.vimfiler__copy.func(dest_dir, src_files)"{{{
-  if g:vimfiler_external_copy_directory_command == ''
-        \ || g:vimfiler_external_copy_file_command == ''
-    call unite#print_error(
-          \ "Copy is not supported in this platform. Please install cp.exe.")
-    return
+  if g:unite_kind_file_copy_command == ''
+    call unite#print_error("Please install cp.exe.")
+    return 1
   endif
 
   let l:dest_dir = has_key(a:context, 'vimfiler__dest_directory') ?
         \ a:context.vimfiler__dest_directory :
         \ unite#util#input_directory('Input destination directory: ')
+  if l:dest_dir !~ '/'
+    let l:dest_dir .= '/'
+  endif
 
   for l:candidate in a:candidates
     let l:filename = l:candidate.action__path
-    let l:ret = isdirectory(l:filename) ?
-          \ s:external('copy_directory', a:dest_dir, [l:filename]) :
-          \ s:external('copy_file', a:dest_dir, [l:filename])
+    let l:ret = s:external('copy', l:dest_dir, [l:filename])
     if l:ret
       call unite#print_error('Failed file copy: ' . l:filename)
     endif
@@ -202,6 +215,11 @@ let s:kind.action_table.vimfiler__delete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
+  if g:unite_kind_file_delete_command == ''
+    call unite#print_error("Please install rm.exe.")
+    return 1
+  endif
+
   let l:yes = unite#util#input_yesno('Really force delete files?')
 
   if !l:yes
@@ -212,10 +230,10 @@ function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
 
   " Execute force delete.
   for l:candidate in a:candidates
-    let l:ret = s:external('delete', '', [l:file.action__path])
+    let l:ret = s:external('delete', '', [l:candidate.action__path])
 
     if l:ret
-      call unite#print_error('Failed file delete: ' . l:file)
+      call unite#print_error('Failed file delete: ' . l:candidate.action__path)
     endif
   endfor
 endfunction"}}}
@@ -224,47 +242,27 @@ endfunction"}}}
 function! s:execute_command(command, candidate)"{{{
   let l:dir = unite#util#path2directory(a:candidate.action__path)
   " Auto make directory.
-  if !isdirectory(l:dir) &&
-        \ input(printf('"%s" does not exist. Create? [y/N]', l:dir)) =~? '^y\%[es]$'
+  if !isdirectory(l:dir) && unite#util#input_yesno(
+        \   printf('"%s" does not exist. Create? [y/N]', l:dir))
     call mkdir(iconv(l:dir, &encoding, &termencoding), 'p')
   endif
 
   silent call unite#util#smart_execute_command(a:command, a:candidate.action__path)
 endfunction"}}}
 function! s:external(command, dest_dir, src_files)"{{{
-  let l:command_line = g:vimfiler_external_{a:command}_command
+  let l:command_line = g:unite_kind_file_{a:command}_command
 
-  if l:command_line =~# '\$src\>'
-    for l:src in a:src_files
-      let l:command_line = g:vimfiler_external_{a:command}_command
+  " Substitute pattern.
+  let l:command_line = substitute(l:command_line,
+        \'\$srcs\>', join(map(a:src_files, '''"''.v:val.''"''')), 'g')
+  let l:command_line = substitute(l:command_line,
+        \'\$dest\>', '"'.a:dest_dir.'"', 'g')
 
-      let l:command_line = substitute(l:command_line, 
-            \'\$src\>', '"'.l:src.'"', 'g') 
-      let l:command_line = substitute(l:command_line, 
-            \'\$dest\>', '"'.a:dest_dir.'"', 'g')
+  let l:output = unite#util#system(l:command_line)
 
-      if unite#util#is_win() && l:command_line =~# '^system '
-        let l:output = vimfiler#force_system(l:command_line[7:])
-      else
-        let l:output = vimfiler#system(l:command_line)
-      endif
-    endfor
-  else
-    let l:command_line = substitute(l:command_line, 
-          \'\$srcs\>', join(map(a:src_files, '''"''.v:val.''"''')), 'g') 
-    let l:command_line = substitute(l:command_line, 
-          \'\$dest\>', '"'.a:dest_dir.'"', 'g')
+  echon l:output
 
-    if unite#util#is_win() && l:command_line =~# '^system '
-      let l:output = vimfiler#force_system(l:command_line[7:])
-    else
-      let l:output = vimfiler#system(l:command_line)
-    endif
-
-    echon l:output
-  endif
-
-  return vimfiler#get_system_error()
+  return unite#util#get_last_status()
 endfunction"}}}
 
 let &cpo = s:save_cpo
