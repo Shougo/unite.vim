@@ -70,6 +70,10 @@ let s:kind = {
       \ 'default_action' : 'open',
       \ 'action_table' : {},
       \ 'alias_table' : {
+      \   'vimfiler__rename' : 'rename',
+      \   'copy'   : 'vimfiler__copy',
+      \   'move' : 'vimfiler__move',
+      \   'vimfiler__execute' : 'start',
       \ },
       \ 'parents' : ['openable', 'cdable', 'uri'],
       \}
