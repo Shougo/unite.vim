@@ -1805,7 +1805,7 @@ function! s:filter_alias_action(action_table, alias_table, from)"{{{
         " Delete nop action.
         call remove(a:action_table, l:alias_name)
       endif
-    else
+    elseif has_key(a:action_table, l:alias_action)
       let a:action_table[l:alias_name] = a:action_table[l:alias_action]
       let a:action_table[l:alias_name].from = a:from
     endif
