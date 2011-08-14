@@ -188,7 +188,7 @@ let s:LNUM_STATUS = 1
 let s:last_unite_bufnr = -1
 let s:current_unite = {}
 let s:unite_cached_message = []
-let s:is_initialized_unite_buffer = 0
+let s:use_current_unite = 1
 
 let s:static = {}
 
@@ -481,11 +481,11 @@ function! unite#invalidate_cache(source_name)  "{{{
     endif
   endfor
 endfunction"}}}
-function! unite#force_redraw() "{{{
-  call s:redraw(1)
+function! unite#force_redraw(...) "{{{
+  call s:redraw(1, get(a:000, 0, 0))
 endfunction"}}}
-function! unite#redraw() "{{{
-  call s:redraw(0)
+function! unite#redraw(...) "{{{
+  call s:redraw(0, get(a:000, 0, 0))
 endfunction"}}}
 function! unite#redraw_line(...) "{{{
   let l:linenr = a:0 > 0 ? a:1 : line('.')
@@ -594,7 +594,7 @@ function! unite#gather_candidates()"{{{
   return l:candidates
 endfunction"}}}
 function! unite#get_current_unite() "{{{
-  return exists('b:unite') && s:is_initialized_unite_buffer ? b:unite : s:current_unite
+  return exists('b:unite') && !s:use_current_unite ? b:unite : s:current_unite
 endfunction"}}}
 
 " Utils.
@@ -695,7 +695,7 @@ function! unite#start(sources, ...)"{{{
   let l:context = a:0 >= 1 ? a:1 : {}
   call s:initialize_context(l:context)
 
-  let s:is_initialized_unite_buffer = 0
+  let s:use_initialized_unite_buffer = 0
 
   try
     call s:initialize_current_unite(a:sources, l:context)
@@ -714,19 +714,19 @@ function! unite#start(sources, ...)"{{{
     " Immediately action.
     if empty(l:candidates)
       " Ignore.
-      let s:is_initialized_unite_buffer = 1
+      let s:use_current_unite = 0
       return
     elseif len(l:candidates) == 1
       " Default action.
       call unite#mappings#do_action(l:context.default_action, [l:candidates[0]])
-      let s:is_initialized_unite_buffer = 1
+      let s:use_current_unite = 0
       return
     endif
   endif
 
   call s:initialize_unite_buffer()
 
-  let s:is_initialized_unite_buffer = 1
+  let s:use_initialized_unite_buffer = 1
 
   let l:unite = unite#get_current_unite()
 
@@ -1591,7 +1591,17 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
   endif
 endfunction"}}}
 
-function! s:redraw(is_force) "{{{
+function! s:redraw(is_force, winnr) "{{{
+  if a:winnr > 0
+    " Set current unite.
+    let s:use_current_unite = 1
+    let l:use_current_unite_save = s:use_current_unite
+    let l:unite = getbufvar(a:winnr, 'unite')
+    let l:unite_save = s:current_unite
+
+    execute a:winnr 'wincmd w'
+  endif
+
   if &filetype !=# 'unite'
     return
   endif
@@ -1617,6 +1627,13 @@ function! s:redraw(is_force) "{{{
   " Redraw.
   call unite#redraw_candidates()
   let l:unite.context.is_redraw = 0
+
+  if a:winnr > 0
+    " Restore current unite.
+    let s:use_current_unite = l:use_current_unite_save
+    let s:current_unite = l:unite_save
+    wincmd p
+  endif
 endfunction"}}}
 
 " Autocmd events.
