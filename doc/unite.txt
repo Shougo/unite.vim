@@ -1668,6 +1668,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-14
 - Fixed for vimfiler Ver.3.
+- Implemented vimfiler actions.
 
 2011-08-13
 - Ver.3.0 development is started.

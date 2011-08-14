@@ -72,6 +72,40 @@ endfunction
 function! unite#util#uniq(...)
   return call(s:V.Data.List.uniq, a:000)
 endfunction
+function! unite#util#input_yesno(message)"{{{
+  let l:yesno = input(a:message . ' [yes/no] : ')
+  while l:yesno !~? '^\%(y\%[es]\|n\%[o]\)$'
+    redraw
+    if l:yesno == ''
+      echo 'Canceled.'
+      break
+    endif
+
+    " Retry.
+    call unite#print_error('Invalid input.')
+    let l:yesno = input(a:message . ' [yes/no] : ')
+  endwhile
+
+  return l:yesno =~? 'y\%[es]'
+endfunction"}}}
+function! unite#util#input_directory(message)"{{{
+  echo a:message
+  let l:dir = input('', '', 'dir')
+  while !isdirectory(l:dir)
+    redraw
+    if l:dir == ''
+      echo 'Canceled.'
+      break
+    endif
+
+    " Retry.
+    call unite#print_error('Invalid path.')
+    echo a:message
+    let l:dir = input('', '', 'dir')
+  endwhile
+
+  return l:dir
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
