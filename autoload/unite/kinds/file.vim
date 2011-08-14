@@ -30,14 +30,14 @@ set cpo&vim
 " Global options definition."{{{
 " External commands.
 if !exists('g:vimfiler_external_delete_command')
-  if vimfiler#iswin() && !executable('rm')
+  if unite#util#is_win() && !executable('rm')
     let g:vimfiler_external_delete_command = 'system rmdir /Q /S $srcs'
   else
     let g:vimfiler_external_delete_command = 'rm -r $srcs'
   endif
 endif
 if !exists('g:vimfiler_external_copy_file_command')
-  if vimfiler#iswin() && !executable('cp')
+  if unite#util#is_win() && !executable('cp')
     " Can't support.
     let g:vimfiler_external_copy_file_command = ''
   else
@@ -45,7 +45,7 @@ if !exists('g:vimfiler_external_copy_file_command')
   endif
 endif
 if !exists('g:vimfiler_external_copy_directory_command')
-  if vimfiler#iswin() && !executable('cp')
+  if unite#util#is_win() && !executable('cp')
     " Can't support.
     let g:vimfiler_external_copy_directory_command = ''
   else
@@ -53,7 +53,7 @@ if !exists('g:vimfiler_external_copy_directory_command')
   endif
 endif
 if !exists('g:vimfiler_external_move_command')
-  if vimfiler#iswin() && !executable('mv')
+  if unite#util#is_win() && !executable('mv')
     let g:vimfiler_external_move_command = 'move /Y $srcs $dest'
   else
     let g:vimfiler_external_move_command = 'mv $srcs $dest'
@@ -134,7 +134,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
   let l:dest_drive = matchstr(l:dest_dir, '^\a\+\ze:')
   for l:candidate in a:candidates
     let l:filename = l:candidate.action__path
-    if isdirectory(l:filename) && vimfiler#iswin()
+    if isdirectory(l:filename) && unite#util#is_win()
           \ && matchstr(l:filename, '^\a\+\ze:') !=? l:dest_drive
       " rename() doesn't supported directory over drive move in Windows.
       if g:vimfiler_external_copy_directory_command == ''
@@ -237,7 +237,7 @@ function! s:external(command, dest_dir, src_files)"{{{
       let l:command_line = substitute(l:command_line, 
             \'\$dest\>', '"'.a:dest_dir.'"', 'g')
 
-      if vimfiler#iswin() && l:command_line =~# '^system '
+      if unite#util#is_win() && l:command_line =~# '^system '
         let l:output = vimfiler#force_system(l:command_line[7:])
       else
         let l:output = vimfiler#system(l:command_line)
@@ -249,7 +249,7 @@ function! s:external(command, dest_dir, src_files)"{{{
     let l:command_line = substitute(l:command_line, 
           \'\$dest\>', '"'.a:dest_dir.'"', 'g')
 
-    if vimfiler#iswin() && l:command_line =~# '^system '
+    if unite#util#is_win() && l:command_line =~# '^system '
       let l:output = vimfiler#force_system(l:command_line[7:])
     else
       let l:output = vimfiler#system(l:command_line)
