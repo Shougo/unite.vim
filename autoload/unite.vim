@@ -1296,6 +1296,9 @@ function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
       if !has_key(l:candidate, 'is_dummy')
         let l:candidate.is_dummy = 0
       endif
+      if !has_key(l:candidate, 'is_matched')
+        let l:candidate.is_matched = 1
+      endif
       if !has_key(l:candidate, 'unite__is_marked')
         let l:candidate.unite__is_marked = 0
       endif

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Aug 2011.
+" Last Modified: 14 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,8 +42,10 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_rotate_previous_source)  :<C-u>call <SID>rotate_source(0)<CR>
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)  :<C-u>call <SID>print_candidate()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)  unite#get_current_unite().prompt_linenr.'G0z.'
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  <SID>loop_cursor_down()
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  <SID>loop_cursor_up()
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)  <SID>loop_cursor_down(0)
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)  <SID>loop_cursor_up(0)
+  nnoremap <buffer><expr> <Plug>(unite_skip_cursor_down)  <SID>loop_cursor_down(1)
+  nnoremap <buffer><expr> <Plug>(unite_skip_cursor_up)  <SID>loop_cursor_up(1)
   nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)  :<C-u>call <SID>quick_match()<CR>
   nnoremap <silent><buffer> <Plug>(unite_input_directory)   :<C-u>call <SID>input_directory()<CR>
   nnoremap <silent><buffer><expr> <Plug>(unite_do_default_action)   unite#do_action(unite#get_current_unite().context.default_action)
@@ -71,9 +73,13 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_delete_backward_path)
         \ col('.') <= (len(unite#get_current_unite().prompt)+1) ? '' : <SID>delete_backward_path()
   inoremap <expr><buffer> <Plug>(unite_select_next_line)
-        \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down()
+        \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(0)
   inoremap <expr><buffer> <Plug>(unite_select_previous_line)
-        \ pumvisible() ? "\<C-p>" : <SID>loop_cursor_up()
+        \ pumvisible() ? "\<C-p>" : <SID>loop_cursor_up(0)
+  inoremap <expr><buffer> <Plug>(unite_skip_next_line)
+        \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(1)
+  inoremap <expr><buffer> <Plug>(unite_skip_previous_line)
+        \ pumvisible() ? "\<C-p>" : <SID>loop_cursor_up(1)
   inoremap <expr><buffer> <Plug>(unite_select_next_page)
         \ pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)
@@ -112,6 +118,8 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <Down>         <Plug>(unite_loop_cursor_down)
   nmap <buffer> k         <Plug>(unite_loop_cursor_up)
   nmap <buffer> <Up>         <Plug>(unite_loop_cursor_up)
+  nmap <buffer> J         <Plug>(unite_skip_cursor_down)
+  nmap <buffer> K         <Plug>(unite_skip_cursor_down)
   nmap <buffer> <C-h>     <Plug>(unite_delete_backward_path)
   nmap <buffer> <C-r>     <Plug>(unite_restart)
   nmap <buffer> *         <Plug>(unite_toggle_mark_all_candidates)
@@ -456,7 +464,7 @@ function! s:input_directory()"{{{
   let l:path = l:path.(l:path == '' || l:path =~ '/$' ? '' : '/')
   call unite#mappings#narrowing(l:path)
 endfunction"}}}
-function! s:loop_cursor_down()"{{{
+function! s:loop_cursor_down(is_skip_not_matched)"{{{
   let l:is_insert = mode() ==# 'i'
   let l:prompt_linenr = unite#get_current_unite().prompt_linenr
 
@@ -475,7 +483,8 @@ function! s:loop_cursor_down()"{{{
 
   while 1
     let l:candidate = get(unite#get_unite_candidates(), l:num + l:count, {})
-    if !empty(l:candidate) && l:candidate.is_dummy
+    if !empty(l:candidate) && (l:candidate.is_dummy
+          \ || (a:is_skip_not_matched && !l:candidate.is_matched))
       let l:count += 1
       continue
     endif
@@ -493,7 +502,7 @@ function! s:loop_cursor_down()"{{{
     return '0' . repeat('j', l:count)
   endif
 endfunction"}}}
-function! s:loop_cursor_up()"{{{
+function! s:loop_cursor_up(is_skip_not_matched)"{{{
   let l:is_insert = mode() ==# 'i'
   let l:prompt_linenr = unite#get_current_unite().prompt_linenr
 
@@ -517,7 +526,8 @@ function! s:loop_cursor_up()"{{{
 
   while 1
     let l:candidate = get(unite#get_unite_candidates(), l:num - l:count, {})
-    if l:num >= l:count && !empty(l:candidate) && l:candidate.is_dummy
+    if l:num >= l:count && !empty(l:candidate) && (l:candidate.is_dummy
+          \ || (a:is_skip_not_matched && !l:candidate.is_matched))
       let l:count += 1
       continue
     endif

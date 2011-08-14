@@ -570,6 +570,14 @@ Normal mode mappings.
 <Plug>(unite_loop_cursor_up)			*<Plug>(unite_loop_cursor_up)*
 		Goes to the previous line.  Goes bottom when you are on top.
 
+<Plug>(unite_skip_cursor_down)			*<Plug>(unite_skip_cursor_down)*
+		Goes to the next line. But skips not matched candidates.
+		Goes up to top when you are on bottom.
+
+<Plug>(unite_skip_cursor_up)			*<Plug>(unite_skip_cursor_up)*
+		Goes to the previous line. But skips not matched candidates.
+		Goes bottom when you are on top.
+
 <Plug>(unite_quick_match_default_action)	*<Plug>(unite_quick_match_default_action)*
 		Runs the default action of the selected candidate with using
 		quick match.   This doesn't work when there are marked
@@ -626,6 +634,14 @@ Insert mode mappings.
 
 <Plug>(unite_select_previous_line)		*i_<Plug>(unite_select_previous_line)*
 		Goes to the previous candidate.  Goes to the bottom from top.
+
+<Plug>(unite_skip_next_line)			*i_<Plug>(unite_skip_next_line)*
+		Goes to the next candidate. But skips not matched candidates.
+		Goes to the top from bottom.
+
+<Plug>(unite_skip_previous_line)		*i_<Plug>(unite_skip_previous_line)*
+		Goes to the previous candidate. But skips not matched candidates.
+		Goes to the bottom from top.
 
 <Plug>(unite_select_next_page)			*i_<Plug>(unite_select_next_page)*
 		Shows the next candidate page.
@@ -693,6 +709,8 @@ j		|<Plug>(unite_loop_cursor_down)|
 <Down>		|<Plug>(unite_loop_cursor_down)|
 k		|<Plug>(unite_loop_cursor_up)|
 <Up>		|<Plug>(unite_loop_cursor_up)|
+J		|<Plug>(unite_skip_cursor_down)|
+K		|<Plug>(unite_skip_cursor_up)|
 <CR>		In case when you selected a candidate, runs default action
 d		In case when you selected a candidate, runs delete action
 b		In case when you selected a candidate, runs bookmark action
@@ -1517,6 +1535,9 @@ NOTATION					*unite-notation*
 			is_dummy		(Number)	(Optional)
 				Todo
 
+			is_matched		(Number)	(Optional)
+				Todo
+
 			source__{name}		(Unknown)	(Optional)
 				Todo
 
@@ -1671,6 +1692,7 @@ CHANGELOG					*unite-changelog*
 - Implemented vimfiler actions.
 - Fixed vimfiler error.
 - Improved redraw.
+- Added is_matched and keymappings.
 
 2011-08-13
 - Ver.3.0 development is started.
