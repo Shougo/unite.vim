@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Aug 2011.
+" Last Modified: 15 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -111,7 +111,7 @@ let s:kind.action_table.rename = {
       \ }
 function! s:kind.action_table.rename.func(candidates)"{{{
   for l:candidate in a:candidates
-    let l:filename = input(printf('New buffer name: %s -> ', l:candidate.action__path), l:candidate.action__path)
+    let l:filename = input(printf('New file name: %s -> ', l:candidate.action__path), l:candidate.action__path)
     if l:filename != '' && l:filename !=# l:candidate.action__path
       call rename(l:candidate.action__path, l:filename)
     endif
@@ -139,16 +139,53 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
   endif
 
   let l:context = unite#get_context()
-  let l:dest_dir = has_key(a:context, 'vimfiler__dest_directory') ?
-        \ a:context.vimfiler__dest_directory :
+  let l:dest_dir = has_key(l:context, 'vimfiler__dest_directory') ?
+        \ l:context.vimfiler__dest_directory :
         \ unite#util#input_directory('Input destination directory: ')
   if l:dest_dir !~ '/'
     let l:dest_dir .= '/'
   endif
 
   let l:dest_drive = matchstr(l:dest_dir, '^\a\+\ze:')
+  let l:overwrite_method = ''
+  let l:is_reset_method = 1
   for l:candidate in a:candidates
+    " Overwrite check.
     let l:filename = l:candidate.action__path
+    let l:dest_filename = l:dest_dir . fnamemodify(l:filename, ':t')
+    if filereadable(l:dest_filename) || isdirectory(l:dest_filename)"{{{
+      if l:overwrite_method == ''
+        let l:overwrite_method =
+              \ s:input_overwrite_method(l:dest_filename, l:filename)
+        if l:overwrite_method =~ '^\u'
+          " Same overwrite.
+          let l:is_reset_method = 0
+        endif
+      endif
+
+      if l:overwrite_method =~? '^f'
+        " Ignore.
+      elseif l:overwrite_method =~? '^t'
+        if getftime(l:filename) <= getftime(l:dest_filename)
+          continue
+        endif
+      elseif l:overwrite_method =~? '^u'
+        let l:filename .= '_'
+      elseif l:overwrite_method =~? '^n'
+        if l:is_reset_method
+          let l:overwrite_method = ''
+        endif
+
+        continue
+      elseif l:overwrite_method =~? '^r'
+        let l:filename = input(printf('New name: %s -> ', l:filename), l:filename)
+      endif
+
+      if l:is_reset_method
+        let l:overwrite_method = ''
+      endif
+    endif"}}}
+
     if isdirectory(l:filename) && unite#util#is_win()
           \ && matchstr(l:filename, '^\a\+\ze:') !=? l:dest_drive
       " move command doesn't supported directory over drive move in Windows.
@@ -186,21 +223,59 @@ let s:kind.action_table.vimfiler__copy = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.vimfiler__copy.func(dest_dir, src_files)"{{{
+function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
   if g:unite_kind_file_copy_command == ''
     call unite#print_error("Please install cp.exe.")
     return 1
   endif
 
-  let l:dest_dir = has_key(a:context, 'vimfiler__dest_directory') ?
-        \ a:context.vimfiler__dest_directory :
+  let l:context = unite#get_context()
+  let l:dest_dir = has_key(l:context, 'vimfiler__dest_directory') ?
+        \ l:context.vimfiler__dest_directory :
         \ unite#util#input_directory('Input destination directory: ')
   if l:dest_dir !~ '/'
     let l:dest_dir .= '/'
   endif
 
+  let l:overwrite_method = ''
+  let l:is_reset_method = 1
   for l:candidate in a:candidates
+    " Overwrite check.
     let l:filename = l:candidate.action__path
+    let l:dest_filename = l:dest_dir . fnamemodify(l:filename, ':t')
+    if filereadable(l:dest_filename) || isdirectory(l:dest_filename)"{{{
+      if l:overwrite_method == ''
+        let l:overwrite_method =
+              \ s:input_overwrite_method(l:dest_filename, l:filename)
+        if l:overwrite_method =~ '^\u'
+          " Same overwrite.
+          let l:is_reset_method = 0
+        endif
+      endif
+
+      if l:overwrite_method =~? '^f'
+        " Ignore.
+      elseif l:overwrite_method =~? '^t'
+        if getftime(l:filename) <= getftime(l:dest_filename)
+          continue
+        endif
+      elseif l:overwrite_method =~? '^u'
+        let l:filename .= '_'
+      elseif l:overwrite_method =~? '^n'
+        if l:is_reset_method
+          let l:overwrite_method = ''
+        endif
+
+        continue
+      elseif l:overwrite_method =~? '^r'
+        let l:filename = input(printf('New name: %s -> ', l:filename), l:filename)
+      endif
+
+      if l:is_reset_method
+        let l:overwrite_method = ''
+      endif
+    endif"}}}
+
     let l:ret = s:external('copy', l:dest_dir, [l:filename])
     if l:ret
       call unite#print_error('Failed file copy: ' . l:filename)
@@ -263,6 +338,23 @@ function! s:external(command, dest_dir, src_files)"{{{
   echon l:output
 
   return unite#util#get_last_status()
+endfunction"}}}
+function! s:input_overwrite_method(dest, src)"{{{
+  redraw
+  echo 'File is already exists!'
+  echo printf('dest: %s %d bytes %s', a:dest, getfsize(a:dest),
+        \ strftime('%y/%m/%d %H:%M', getftime(a:dest)))
+  echo printf('src:  %s %d bytes %s', a:src, getfsize(a:src),
+        \ strftime('%y/%m/%d %H:%M', getftime(a:src)))
+
+  echo 'Please select overwrite method(Upper case is all).'
+  let l:method = input('f[orce]/t[ime]/u[nder]/n[o]/r[ename] : ')
+  while l:method !~? '^\%(f\%[orce]\|t\%[ime]\|u\%[nder]\|n\%[o]\|r\%[ename]\)$'
+    " Retry.
+    let l:method = input('[force/time/under/no/rename] : ')
+  endwhile
+
+  return l:method
 endfunction"}}}
 
 let &cpo = s:save_cpo
