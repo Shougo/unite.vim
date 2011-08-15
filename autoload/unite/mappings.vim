@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Aug 2011.
+" Last Modified: 16 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -170,7 +170,8 @@ function! unite#mappings#narrowing(word)"{{{
   endif
 endfunction"}}}
 function! unite#mappings#do_action(action_name, ...)"{{{
-  let l:candidates = a:0 > 0 ? a:1 : unite#get_marked_candidates()
+  let l:candidates = get(a:000, 0, unite#get_marked_candidates())
+  let l:new_context = get(a:000, 1, {})
 
   let l:unite = unite#get_current_unite()
   if empty(l:candidates)
@@ -200,7 +201,13 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
   let l:action_tables = s:get_action_table(a:action_name, l:candidates)
 
-  let l:context = l:unite.context
+  if !empty(l:new_context)
+    " Set new context.
+    let l:new_context = extend(deepcopy(unite#get_context()), l:new_context)
+    let l:old_context = unite#set_context(l:new_context)
+  endif
+
+  let l:context = unite#get_context()
 
   " Execute action.
   let l:is_redraw = 0
@@ -223,6 +230,11 @@ function! unite#mappings#do_action(action_name, ...)"{{{
       let l:is_redraw = 1
     endif
   endfor
+
+  if !empty(l:new_context)
+    " Restore context.
+    call unite#set_context(l:old_context)
+  endif
 
   if l:is_redraw
     call unite#force_redraw()

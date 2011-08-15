@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Aug 2011.
+" Last Modified: 16 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -80,8 +80,6 @@ let s:kind = {
       \ 'action_table' : {},
       \ 'alias_table' : {
       \   'vimfiler__rename' : 'rename',
-      \   'copy'   : 'vimfiler__copy',
-      \   'move' : 'vimfiler__move',
       \   'vimfiler__execute' : 'start',
       \ },
       \ 'parents' : ['openable', 'cdable', 'uri'],
@@ -144,12 +142,6 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
   if g:unite_kind_file_move_command == ''
     call unite#print_error("Please install mv.exe.")
     return 1
-  endif
-
-  if !unite#util#input_yesno('Really move files?')
-    redraw
-    echo 'Canceled.'
-    return
   endif
 
   let l:context = unite#get_context()
@@ -230,6 +222,17 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
   endfor
 endfunction"}}}
 
+let s:kind.action_table.move = deepcopy(s:kind.action_table.vimfiler__move)
+function! s:kind.action_table.move.func(candidates)"{{{
+  if !unite#util#input_yesno('Really move files?')
+    redraw
+    echo 'Canceled.'
+    return
+  endif
+
+  return s:kind.action_table.vimfiler__move.func(a:candidates)
+endfunction"}}}
+
 let s:kind.action_table.vimfiler__copy = {
       \ 'description' : 'copy files',
       \ 'is_quit' : 0,
@@ -297,6 +300,12 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
   endfor
 endfunction"}}}
 
+let s:kind.action_table.copy = deepcopy(s:kind.action_table.vimfiler__copy)
+function! s:kind.action_table.copy.func(candidates)"{{{
+  return s:kind.action_table.vimfiler__copy.func(a:candidates)
+endfunction"}}}
+
+
 let s:kind.action_table.vimfiler__delete = {
       \ 'description' : 'delete files',
       \ 'is_quit' : 0,
@@ -308,12 +317,6 @@ function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
         \ || g:unite_kind_file_delete_directory_command == ''
     call unite#print_error("Please install rm.exe.")
     return 1
-  endif
-
-  if !unite#util#input_yesno('Really force delete files?')
-    redraw
-    echo 'Canceled.'
-    return
   endif
 
   " Execute force delete.
