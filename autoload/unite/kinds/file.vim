@@ -29,20 +29,36 @@ set cpo&vim
 
 " Global options definition."{{{
 " External commands.
-if !exists('g:unite_kind_file_delete_command')
+if !exists('g:unite_kind_file_delete_file_command')
   if unite#util#is_win() && !executable('rm')
     " Can't support.
-    let g:unite_kind_file_delete_command = ''
+    let g:unite_kind_file_delete_file_command = ''
   else
-    let g:unite_kind_file_delete_command = 'rm -r $srcs'
+    let g:unite_kind_file_delete_file_command = 'rm $srcs'
   endif
 endif
-if !exists('g:unite_kind_file_copy_command')
+if !exists('g:unite_kind_file_delete_directory_command')
+  if unite#util#is_win() && !executable('rm')
+    " Can't support.
+    let g:unite_kind_file_delete_directory_command = ''
+  else
+    let g:unite_kind_file_delete_directory_command = 'rm -r $srcs'
+  endif
+endif
+if !exists('g:unite_kind_file_copy_file_command')
   if unite#util#is_win() && !executable('cp')
     " Can't support.
-    let g:unite_kind_file_copy_command = ''
+    let g:unite_kind_file_copy_file_command = ''
   else
-    let g:unite_kind_file_copy_command = 'cp -p -r $srcs $dest'
+    let g:unite_kind_file_copy_file_command = 'cp -p $srcs $dest'
+  endif
+endif
+if !exists('g:unite_kind_file_copy_directory_command')
+  if unite#util#is_win() && !executable('cp')
+    " Can't support.
+    let g:unite_kind_file_copy_directory_command = ''
+  else
+    let g:unite_kind_file_copy_directory_command = 'cp -p -r $srcs $dest'
   endif
 endif
 if !exists('g:unite_kind_file_move_command')
@@ -130,17 +146,15 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
     return 1
   endif
 
-  let l:yes = unite#util#input_yesno('Really move files?')
-
-  if !l:yes
+  if !unite#util#input_yesno('Really move files?')
     redraw
     echo 'Canceled.'
     return
   endif
 
   let l:context = unite#get_context()
-  let l:dest_dir = has_key(l:context, 'vimfiler__dest_directory') ?
-        \ l:context.vimfiler__dest_directory :
+  let l:dest_dir = has_key(l:context, 'action__directory') ?
+        \ l:context.action__directory :
         \ unite#util#input_directory('Input destination directory: ')
   if l:dest_dir !~ '/'
     let l:dest_dir .= '/'
@@ -150,41 +164,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
   let l:overwrite_method = ''
   let l:is_reset_method = 1
   for l:candidate in a:candidates
-    " Overwrite check.
     let l:filename = l:candidate.action__path
-    let l:dest_filename = l:dest_dir . fnamemodify(l:filename, ':t')
-    if filereadable(l:dest_filename) || isdirectory(l:dest_filename)"{{{
-      if l:overwrite_method == ''
-        let l:overwrite_method =
-              \ s:input_overwrite_method(l:dest_filename, l:filename)
-        if l:overwrite_method =~ '^\u'
-          " Same overwrite.
-          let l:is_reset_method = 0
-        endif
-      endif
-
-      if l:overwrite_method =~? '^f'
-        " Ignore.
-      elseif l:overwrite_method =~? '^t'
-        if getftime(l:filename) <= getftime(l:dest_filename)
-          continue
-        endif
-      elseif l:overwrite_method =~? '^u'
-        let l:filename .= '_'
-      elseif l:overwrite_method =~? '^n'
-        if l:is_reset_method
-          let l:overwrite_method = ''
-        endif
-
-        continue
-      elseif l:overwrite_method =~? '^r'
-        let l:filename = input(printf('New name: %s -> ', l:filename), l:filename)
-      endif
-
-      if l:is_reset_method
-        let l:overwrite_method = ''
-      endif
-    endif"}}}
 
     if isdirectory(l:filename) && unite#util#is_win()
           \ && matchstr(l:filename, '^\a\+\ze:') !=? l:dest_drive
@@ -197,22 +177,55 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
         return 1
       endif
 
-      let l:ret = s:kind.action_table.vimfiler__copy.func([l:candidate])
-      if l:ret
+      if s:kind.action_table.vimfiler__copy.func([l:candidate])
         call unite#print_error('Failed file move: ' . l:filename)
         return 1
       endif
 
-      let l:ret = s:kind.action_table.vimfiler__delete.func([l:candidate])
-      if l:ret
+      if s:kind.action_table.vimfiler__delete.func([l:candidate])
         call unite#print_error('Failed file delete: ' . l:filename)
         return 1
       endif
-    else
-      let l:ret = s:external('move', l:dest_dir, [l:filename])
-      if l:ret
-        call unite#print_error('Failed file move: ' . l:filename)
+      continue
+    endif
+
+    " Overwrite check.
+    let l:dest_filename = l:dest_dir . fnamemodify(l:filename, ':t')
+    if filereadable(l:dest_filename) || isdirectory(l:dest_filename)"{{{
+      if l:overwrite_method == ''
+        let l:overwrite_method =
+              \ s:input_overwrite_method(l:dest_filename, l:filename)
+        if l:overwrite_method =~ '^\u'
+          " Same overwrite.
+          let l:is_reset_method = 0
+        endif
       endif
+
+      if l:overwrite_method =~? '^f'
+        " Ignore.
+      elseif l:overwrite_method =~? '^t'
+        if getftime(l:filename) <= getftime(l:dest_filename)
+          continue
+        endif
+      elseif l:overwrite_method =~? '^u'
+        let l:filename .= '_'
+      elseif l:overwrite_method =~? '^n'
+        if l:is_reset_method
+          let l:overwrite_method = ''
+        endif
+
+        continue
+      elseif l:overwrite_method =~? '^r'
+        let l:dest_filename = input(printf('New name: %s -> ', l:filename), l:filename)
+      endif
+
+      if l:is_reset_method
+        let l:overwrite_method = ''
+      endif
+    endif"}}}
+
+    if s:external('move', l:dest_filename, [l:filename])
+      call unite#print_error('Failed file move: ' . l:filename)
     endif
   endfor
 endfunction"}}}
@@ -224,14 +237,15 @@ let s:kind.action_table.vimfiler__copy = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
-  if g:unite_kind_file_copy_command == ''
+  if g:unite_kind_file_copy_file_command == ''
+        \ || g:unite_kind_file_copy_directory_command == ''
     call unite#print_error("Please install cp.exe.")
     return 1
   endif
 
   let l:context = unite#get_context()
-  let l:dest_dir = has_key(l:context, 'vimfiler__dest_directory') ?
-        \ l:context.vimfiler__dest_directory :
+  let l:dest_dir = has_key(l:context, 'action__directory') ?
+        \ l:context.action__directory :
         \ unite#util#input_directory('Input destination directory: ')
   if l:dest_dir !~ '/'
     let l:dest_dir .= '/'
@@ -268,7 +282,7 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
 
         continue
       elseif l:overwrite_method =~? '^r'
-        let l:filename = input(printf('New name: %s -> ', l:filename), l:filename)
+        let l:dest_filename = input(printf('New name: %s -> ', l:filename), l:filename)
       endif
 
       if l:is_reset_method
@@ -276,8 +290,8 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
       endif
     endif"}}}
 
-    let l:ret = s:external('copy', l:dest_dir, [l:filename])
-    if l:ret
+    if s:external(isdirectory(l:filename) ?
+          \ 'copy_directory' : 'copy_file', l:dest_filename, [l:filename])
       call unite#print_error('Failed file copy: ' . l:filename)
     endif
   endfor
@@ -290,14 +304,13 @@ let s:kind.action_table.vimfiler__delete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
-  if g:unite_kind_file_delete_command == ''
+  if g:unite_kind_file_delete_file_command == ''
+        \ || g:unite_kind_file_delete_directory_command == ''
     call unite#print_error("Please install rm.exe.")
     return 1
   endif
 
-  let l:yes = unite#util#input_yesno('Really force delete files?')
-
-  if !l:yes
+  if !unite#util#input_yesno('Really force delete files?')
     redraw
     echo 'Canceled.'
     return
@@ -305,10 +318,10 @@ function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
 
   " Execute force delete.
   for l:candidate in a:candidates
-    let l:ret = s:external('delete', '', [l:candidate.action__path])
-
-    if l:ret
-      call unite#print_error('Failed file delete: ' . l:candidate.action__path)
+    let l:filename = l:candidate.action__path
+    if s:external(isdirectory(l:filename) ?
+          \ 'delete_directory' : 'delete_file', '', [l:filename])
+      call unite#print_error('Failed file delete: ' . l:filename)
     endif
   endfor
 endfunction"}}}
@@ -333,6 +346,7 @@ function! s:external(command, dest_dir, src_files)"{{{
   let l:command_line = substitute(l:command_line,
         \'\$dest\>', '"'.a:dest_dir.'"', 'g')
 
+  " echomsg l:command_line
   let l:output = unite#util#system(l:command_line)
 
   echon l:output
