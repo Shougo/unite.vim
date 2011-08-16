@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Aug 2011.
+" Last Modified: 17 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -117,9 +117,10 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
     let l:candidates = self.change_candidates(a:args, a:context)
     if a:context.vimfiler__visible_dot_files
       " Add doted files.
-      let l:args = deepcopy(l:args)
-      let l:args .= '.'
-      let l:candidates += self.change_candidates(l:args, a:context)
+      let l:context = deepcopy(a:context)
+      let l:context.input .= '.'
+      let l:candidates += filter(self.change_candidates(a:args, l:context),
+            \ 'v:val.word !~ "/\.\.$"')
     endif
   elseif filereadable(l:path)
     let l:type = 'file'

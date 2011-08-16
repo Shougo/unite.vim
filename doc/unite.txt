@@ -1694,6 +1694,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-08-17
+- Fixed visible dot file error.
+
 2011-08-16
 - Improved vimfiler actions.
 - Added is_listed attribute.
