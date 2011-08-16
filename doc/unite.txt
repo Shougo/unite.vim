@@ -1696,6 +1696,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-17
 - Fixed visible dot file error.
+- Fixed default mapping.
 
 2011-08-16
 - Improved vimfiler actions.
