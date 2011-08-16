@@ -1771,7 +1771,7 @@ NOTATION					*unite-notation*
 {candidate}					*unite-notation-{candidate}*
 			候補を表す辞書変数。次の情報を持つ。
 
-			word			(文字列)
+			word			(文字列)	(必須)
 				画面に表示される候補を表す文字列。候補の絞り込
 				みに使われる。
 
