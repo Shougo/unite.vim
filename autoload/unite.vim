@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Aug 2011.
+" Last Modified: 16 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -390,6 +390,9 @@ function! unite#get_action_table(source_name, kind_name, self_func, ...)"{{{
     if !has_key(l:action, 'is_invalidate_cache')
       let l:action.is_invalidate_cache = 0
     endif
+    if !has_key(l:action, 'is_listed')
+      let l:action.is_listed = 1
+    endif
   endfor
 
   " Filtering nop action.
@@ -469,12 +472,7 @@ function! unite#escape_match(str)"{{{
   return substitute(substitute(escape(a:str, '~\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
-  if empty(s:static)
-    " Initialize load.
-    call s:load_default_scripts()
-  endif
-
-  let l:sources = extend(copy(s:static.sources), s:dynamic.sources)
+  let l:sources = filter(s:initialize_sources(), 'v:val.is_listed')
   return filter(sort(keys(l:sources))+s:unite_options, 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
 function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
@@ -1136,13 +1134,16 @@ function! s:initialize_sources()"{{{
     call s:load_default_scripts()
   endif
 
-  let l:sources = extend(deepcopy(s:static.sources), deepcopy(s:dynamic.sources))
+  let l:sources = extend(copy(s:static.sources), s:dynamic.sources)
 
   for l:source in values(filter(copy(l:sources), '!has_key(v:val, "is_initialized")'))
     let l:source.is_initialized = 1
 
     if !has_key(l:source, 'is_volatile')
       let l:source.is_volatile = 0
+    endif
+    if !has_key(l:source, 'is_listed')
+      let l:source.is_listed = 1
     endif
     if !has_key(l:source, 'required_pattern_length')
       let l:source.required_pattern_length = 0

@@ -137,6 +137,7 @@ let s:kind.action_table.vimfiler__move = {
       \ 'is_quit' : 0,
       \ 'is_invalidate_cache' : 1,
       \ 'is_selectable' : 1,
+      \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
   if g:unite_kind_file_move_command == ''
@@ -223,6 +224,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
 endfunction"}}}
 
 let s:kind.action_table.move = deepcopy(s:kind.action_table.vimfiler__move)
+let s:kind.action_table.move.is_listed = 1
 function! s:kind.action_table.move.func(candidates)"{{{
   if !unite#util#input_yesno('Really move files?')
     redraw
@@ -238,6 +240,7 @@ let s:kind.action_table.vimfiler__copy = {
       \ 'is_quit' : 0,
       \ 'is_invalidate_cache' : 1,
       \ 'is_selectable' : 1,
+      \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
   if g:unite_kind_file_copy_file_command == ''
@@ -301,6 +304,7 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
 endfunction"}}}
 
 let s:kind.action_table.copy = deepcopy(s:kind.action_table.vimfiler__copy)
+let s:kind.action_table.copy.is_listed = 1
 function! s:kind.action_table.copy.func(candidates)"{{{
   return s:kind.action_table.vimfiler__copy.func(a:candidates)
 endfunction"}}}
@@ -311,6 +315,7 @@ let s:kind.action_table.vimfiler__delete = {
       \ 'is_quit' : 0,
       \ 'is_invalidate_cache' : 1,
       \ 'is_selectable' : 1,
+      \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
   if g:unite_kind_file_delete_file_command == ''

@@ -1463,6 +1463,10 @@ required_pattern_length	Number		(Optional)
 is_volatile		Number		(Optional)
 			Todo
 
+						*unite-source-attribute-is_listed*
+is_listed		Number		(Optional)
+			Todo
+
 						*unite-source-attribute-description*
 description		String		(Optional)
 			Todo
@@ -1588,6 +1592,9 @@ action_table		Dictionary		(Required)
 			is_invalidate_cache	(Number)		(Optional)
 				Todo
 
+			is_listed		(Number)		(Optional)
+				Todo
+
 						*unite-kind-attribute-alias_table*
 alias_table		Dictionary		(Optional)
 			Todo
@@ -1689,6 +1696,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-16
 - Improved vimfiler actions.
+- Added is_listed attribute.
 
 2011-08-15
 - Fixed vimfiler actions.

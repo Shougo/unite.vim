@@ -657,7 +657,7 @@ function! s:source_action.gather_candidates(args, context)"{{{
 
   let l:max = max(map(values(l:uniq_actions), 'len(v:val.name)'))
 
-  return sort(map(values(l:uniq_actions), '{
+  return sort(map(filter(values(l:uniq_actions), 'v:val.is_listed'), '{
         \   "word": v:val.name,
         \   "abbr": printf("%-' . l:max . 's -- %s", v:val.name, v:val.description),
         \   "kind": "common",

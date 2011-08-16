@@ -1678,6 +1678,11 @@ is_volatile		数値		(任意)
 			閉じられるまで有効である。もっと長い時間キャッシュした
 			い場合はsourceが自前でキャッシュするほかない。
 
+						*unite-source-attribute-is_listed*
+is_listed		数値		(任意)
+			source名がユーザーに見えるかどうか。内部的に使用する
+			sourceの場合は0にする。省略されると1になる。
+
 						*unite-source-attribute-description*
 description		文字列		(任意)
 			sourceを説明する文字列。省略すると""になる。
@@ -1869,6 +1874,11 @@ action_table		辞書		(必須)
 				このアクションを実行した際にキャッシュを無効化
 				するかどうか。省略すると0になり、キャッシュは無
 				効化されない。
+
+			is_listed		(数値)		(任意)
+				該当するアクションがアクション一覧に表示され
+				るかどうか。内部的に使用するアクションの場合
+				はこれを0にする。省略すると1になる。
 
 						*unite-kind-attribute-alias_table*
 alias_table		辞書		(任意)
