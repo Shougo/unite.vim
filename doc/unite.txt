@@ -1106,6 +1106,9 @@ file_point	Nominates cursor word of filename or URI as candidates.
 						*unite-source-launcher*
 launcher	Nominates executable files from $PATH as candidates.
 
+		Source arguments:
+		1. comma separated executable files path.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1711,6 +1714,7 @@ CHANGELOG					*unite-changelog*
 - Fixed default mapping.
 - Added guicmd kind.
 - Added launcher source.
+- Improved launcher source.
 
 2011-08-16
 - Improved vimfiler actions.

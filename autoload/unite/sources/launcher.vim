@@ -39,11 +39,16 @@ let s:source = {
       \ 'description' : 'candidates from executable files',
       \ }
 
-let s:cached_result = []
+let s:cached_result = {}
 function! s:source.gather_candidates(args, context)"{{{
-  if empty(s:cached_result) || a:context.is_redraw
-    " Search executable files from $PATH.
+  let l:path = get(a:args, 0, '')
+  if l:path == ''
+    " Use $PATH.
     let l:path = substitute($PATH, (unite#util#is_win() ? ';' : ':'), ',', 'g')
+  endif
+
+  if !has_key(s:cached_result, l:path) || a:context.is_redraw
+    " Search executable files from $PATH.
     let l:files = split(globpath(l:path, '*'), '\n')
 
     if unite#util#is_win()
@@ -55,14 +60,14 @@ function! s:source.gather_candidates(args, context)"{{{
 
     call filter(l:files, l:pattern)
 
-    let s:cached_result = map(l:files, '{
+    let s:cached_result[l:path] = map(l:files, '{
           \ "word" : v:val,
           \ "kind" : "guicmd",
           \ "action__path" : v:val,
           \ }')
   endif
 
-  return s:cached_result
+  return s:cached_result[l:path]
 endfunction"}}}
 
 let &cpo = s:save_cpo
