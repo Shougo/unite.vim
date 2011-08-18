@@ -1103,6 +1103,9 @@ jump_point	Nominates current line of "file:line" format as candidates.
 file_point	Nominates cursor word of filename or URI as candidates.
 		This source is useful for |vimshell| outputs.
 
+						*unite-source-launcher*
+launcher	Nominates executable files from $PATH as candidates.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1235,10 +1238,19 @@ source		unite.vim source
 				The source arguments
 
 						*unite-kind-uri*
-uri		Files and protocols.
+uri		Files and protocols
 
 			action__path		(String)	(Required)
-				The file path.
+				The file path
+
+						*unite-kind-guicmd*
+guicmd		GUI executable commands
+
+			action__path		(String)	(Required)
+				The command path
+
+			action__args		(List)		(Optional)
+				The command args
 
 ==============================================================================
 FILTERS						*unite-filters*
@@ -1697,6 +1709,8 @@ CHANGELOG					*unite-changelog*
 2011-08-17
 - Fixed visible dot file error.
 - Fixed default mapping.
+- Added guicmd kind.
+- Added launcher source.
 
 2011-08-16
 - Improved vimfiler actions.
