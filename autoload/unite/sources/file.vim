@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2011.
+" Last Modified: 18 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -135,6 +135,10 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
     lcd `=l:path`
   endif
 
+  if unite#util#is_win()
+    let l:exts = escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.')
+  endif
+
   " Set vimfiler property.
   for l:candidate in l:candidates
     let l:candidate.vimfiler__filename =
@@ -146,6 +150,8 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
     let l:candidate.vimfiler__is_directory =
           \ isdirectory(l:candidate.action__path)
     let l:candidate.vimfiler__is_executable =
+          \ unite#util#is_win() ?
+          \ ('.'.fnamemodify(l:candidate.vimfiler__filename, ':e') =~? l:exts) :
           \ executable(l:candidate.action__path)
     let l:candidate.vimfiler__filesize = getfsize(l:candidate.action__path)
     let l:candidate.vimfiler__filetime = getftime(l:candidate.action__path)
