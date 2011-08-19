@@ -498,7 +498,7 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 		uniteを終了する。
 
 <Plug>(unite_restart)				*<Plug>(unite_restart)*
-		unitを再起動する。
+		uniteを再起動する。
 
 <Plug>(unite_do_default_action)			*<Plug>(unite_do_default_action)*
 		選択している候補に対してデフォルトのアクションを実行する。アク
