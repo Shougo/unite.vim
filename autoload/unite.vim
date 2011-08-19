@@ -1609,8 +1609,8 @@ endfunction"}}}
 function! s:redraw(is_force, winnr) "{{{
   if a:winnr > 0
     " Set current unite.
-    let s:use_current_unite = 1
     let l:use_current_unite_save = s:use_current_unite
+    let s:use_current_unite = 1
     let l:unite = getbufvar(a:winnr, 'unite')
     let l:unite_save = s:current_unite
 
