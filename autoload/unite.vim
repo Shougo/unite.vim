@@ -718,9 +718,9 @@ function! unite#start(sources, ...)"{{{
   call s:recache_candidates(l:context.input, l:context.is_redraw, 0)
 
   if l:context.immediately
+    " Immediately action.
     let l:candidates = unite#gather_candidates()
 
-    " Immediately action.
     if empty(l:candidates)
       " Ignore.
       let s:use_current_unite = 0
@@ -1648,6 +1648,17 @@ function! s:redraw(is_force, winnr) "{{{
     let s:use_current_unite = l:use_current_unite_save
     let s:current_unite = l:unite_save
     wincmd p
+  endif
+
+  let l:context = unite#get_context()
+  if l:context.immediately
+    " Immediately action.
+    let l:candidates = unite#gather_candidates()
+
+    if len(l:candidates) == 1
+      " Default action.
+      call unite#mappings#do_action(l:context.default_action, [l:candidates[0]])
+    endif
   endif
 endfunction"}}}
 

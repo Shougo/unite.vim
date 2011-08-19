@@ -210,7 +210,8 @@ http://www.ustream.tv/recorded/11240673
 						*unite-options-immediately*
 		-immediately
 		候補が一つしかないとき、即座にアクションを実行する。候補がな
-		いときにはuniteバッファを開かない。
+		いときにはuniteバッファを開かない。絞り込み時のときも、候補
+		が一つになったら即座に実行される。
 
 						*unite-options-auto-preview*
 		-auto-preview
