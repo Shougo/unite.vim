@@ -1693,7 +1693,9 @@ function! s:on_insert_leave()  "{{{
 
   let l:unite.is_insert = 0
 
-  setlocal nomodifiable
+  if &filetype ==# 'unite'
+    setlocal nomodifiable
+  endif
 
   if has_key(l:unite, 'update_time_save')
         \ && &updatetime < l:unite.update_time_save
@@ -1705,6 +1707,10 @@ function! s:on_cursor_hold_i()  "{{{
   if line('.') == l:prompt_linenr
     " Redraw.
     call unite#redraw()
+
+    if &filetype !=# 'unite'
+      return
+    endif
 
     execute 'match' (line('.') <= l:prompt_linenr ?
           \ line('$') <= l:prompt_linenr ?
