@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Aug 2011.
+" Last Modified: 20 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -511,11 +511,12 @@ function! unite#redraw_line(...) "{{{
 
   let &l:modifiable = l:modifiable_save
 endfunction"}}}
-function! unite#quick_match_redraw() "{{{
+function! unite#quick_match_redraw(quick_match_table) "{{{
   let l:modifiable_save = &l:modifiable
   setlocal modifiable
 
-  call setline(unite#get_current_unite().prompt_linenr+1, s:convert_quick_match_lines(unite#get_current_unite().candidates))
+  call setline(unite#get_current_unite().prompt_linenr+1,
+        \ s:convert_quick_match_lines(unite#get_current_unite().candidates, a:quick_match_table))
   redraw
 
   let &l:modifiable = l:modifiable_save
@@ -1363,7 +1364,7 @@ function! s:get_source_candidates(source, is_vimfiler)"{{{
   return a:source.unite__cached_candidates
         \ + a:source.unite__cached_change_candidates
 endfunction"}}}
-function! s:convert_quick_match_lines(candidates)"{{{
+function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
   let l:unite = unite#get_current_unite()
   let [l:max_width, l:max_source_name] = s:adjustments(winwidth(0)-2, l:unite.max_source_name, 5)
   if l:unite.max_source_name == 0
@@ -1374,7 +1375,7 @@ function! s:convert_quick_match_lines(candidates)"{{{
 
   " Create key table.
   let l:keys = {}
-  for [l:key, l:number] in items(g:unite_quick_match_table)
+  for [l:key, l:number] in items(a:quick_match_table)
     let l:keys[l:number] = l:key . ': '
   endfor
 

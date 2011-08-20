@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Aug 2011.
+" Last Modified: 20 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -437,17 +437,13 @@ function! s:insert_selected_candidate()"{{{
   call unite#mappings#narrowing(l:candidate.word)
 endfunction"}}}
 function! s:quick_match()"{{{
-  let l:unite = unite#get_current_unite()
-
-  if line('$') < (l:unite.prompt_linenr+1)
-    call unite#util#print_error('Candidate is nothing.')
-    return
-  elseif !empty(unite#get_marked_candidates())
+  if !empty(unite#get_marked_candidates())
     call unite#util#print_error('Marked candidates is detected.')
     return
   endif
 
-  call unite#quick_match_redraw()
+  let l:quick_match_table = s:get_quick_match_table()
+  call unite#quick_match_redraw(l:quick_match_table)
 
   if mode() !~# '^c'
     echo 'Input quick match key: '
@@ -463,10 +459,12 @@ function! s:quick_match()"{{{
 
   call unite#redraw_candidates()
 
-  if has_key(g:unite_quick_match_table, l:char)
-        \ && g:unite_quick_match_table[l:char] < len(l:unite.candidates)
+  let l:unite = unite#get_current_unite()
+
+  if has_key(l:quick_match_table, l:char)
+        \ && l:quick_match_table[l:char] < len(l:unite.candidates)
     call unite#mappings#do_action(l:unite.context.default_action,
-          \ [ l:unite.candidates[g:unite_quick_match_table[l:char]] ])
+          \ [ l:unite.candidates[l:quick_match_table[l:char]] ])
   else
     call unite#util#print_error('Canceled.')
   endif
@@ -603,6 +601,19 @@ function! s:narrowing_input_history()"{{{
   call unite#start_temporary(['history/input'],
         \ { 'old_source_names_string' : unite#loaded_source_names_string() },
         \ 'history/input')
+endfunction"}}}
+
+function! s:get_quick_match_table()"{{{
+  let l:offset = line('.') - unite#get_current_unite().prompt_linenr - 1
+  if l:offset < 0
+    let l:offset = 0
+  endif
+
+  let l:table = deepcopy(g:unite_quick_match_table)
+  for l:key in keys(l:table)
+    let l:table[l:key] += l:offset
+  endfor
+  return l:table
 endfunction"}}}
 
 function! unite#mappings#complete_actions(arglead, cmdline, cursorpos)"{{{

@@ -1709,6 +1709,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-08-20
+- Improved quick match behavior.
+
 2011-08-19
 - Fixed current unite bug.
 - Changed -immediately behavior.
