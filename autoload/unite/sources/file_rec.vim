@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Aug 2011.
+" Last Modified: 21 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -152,12 +152,13 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
         let l:continuation.directory .= '/'
       endif
     elseif l:line != ''
-          \ && (g:unite_source_file_rec_ignore_pattern == ''
-          \      || l:line !~ g:unite_source_file_rec_ignore_pattern)
-      call add(l:candidates, {
-            \ 'word' : l:continuation.directory . l:line,
-            \ 'action__path' : l:continuation.directory . l:line,
-            \ })
+      let l:filename = l:continuation.directory.l:line
+      if g:unite_source_file_rec_ignore_pattern == ''
+          \ || l:filename !~ g:unite_source_file_rec_ignore_pattern
+        call add(l:candidates, {
+              \ 'word' : l:filename, 'action__path' : l:filename,
+              \ })
+      endif
     endif
   endfor
 
