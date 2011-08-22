@@ -396,7 +396,7 @@ g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		Specifies the file to write the information of most recent
 		used files.
 
-		Default value is |g:unite_data_directory|; '/.file_mru'
+		Default value is |g:unite_data_directory|; '/file_mru'
 
 g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
 		The maximum number of most recent files to save.
@@ -420,11 +420,11 @@ g:unite_source_directory_mru_ignore_pattern	*g:unite_source_directory_mru_ignore
 		They are same to |unite-source-file_mru| except for the
 		targets are |unite-source-directory_mru|.
 
-g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
-		Specifies the file that |unite-source-bookmark| writes its
+g:unite_source_bookmark_directory			*g:unite_source_bookmark_directory*
+		Specifies the directory that |unite-source-bookmark| writes its
 		bookmarks.
 
-		Default value is |g:unite_data_directory|; '/.bookmark'. 
+		Default value is |g:unite_data_directory|; '/bookmark'.
 
 g:unite_source_file_rec_ignore_pattern		*g:unite_source_file_rec_ignore_pattern*
 		Specifies the regexp pattern to ignore candidates of
@@ -1718,6 +1718,8 @@ CHANGELOG					*unite-changelog*
 - Fixed source syntax highlight.
 - Updated vital.vim.
 - Added -toggle option.
+- Changed file_mru and directory_mru default filename.
+- Changed g:unite_source_bookmark_file to g:unite_source_bookmark_directory.
 
 2011-08-21
 - Fixed file_rec/async ignore pattern.

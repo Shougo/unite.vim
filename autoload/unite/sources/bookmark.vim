@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 May 2011.
+" Last Modified: 22 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,13 +36,17 @@ let s:bookmark_file_mtime = 0  " the last modified time of the bookmark file.
 " [ [ name, full_path, linenr, search pattern ], ... ]
 let s:bookmark_files = []
 
-call unite#util#set_default('g:unite_source_bookmark_file',  g:unite_data_directory . '/.bookmark')
+call unite#util#set_default('g:unite_source_bookmark_directory',  g:unite_data_directory . '/bookmark')
 "}}}
 
 function! unite#sources#bookmark#define()"{{{
   return s:source
 endfunction"}}}
 function! unite#sources#bookmark#_append(filename)"{{{
+  if !isdirectory(g:unite_source_bookmark_directory)
+    call mkdir(g:unite_source_bookmark_directory, 'p')
+  endif
+
   if a:filename == ''
     " Append the current buffer to the bookmark list.
     let l:path = expand('%:p')
@@ -75,9 +79,9 @@ function! unite#sources#bookmark#_append(filename)"{{{
   echo a:filename
   let l:name = input('Please input bookmark name : ')
 
-  call s:load()
+  call s:load('default')
   call insert(s:bookmark_files, [l:name, l:path, l:linenr, l:pattern])
-  call s:save()
+  call s:save('default')
 endfunction"}}}
 
 let s:source = {
@@ -87,7 +91,7 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
-  call s:load()
+  call s:load('default')
   return map(copy(s:bookmark_files), '{
         \ "abbr" : (v:val[0] != "" ? "[" . v:val[0] . "] " : "") .  
         \          (fnamemodify(v:val[1], ":~:.") != "" ? fnamemodify(v:val[1], ":~:.") : v:val[1]),
@@ -116,7 +120,7 @@ function! s:action_table.delete.func(candidates)"{{{
         \ string(string([l:candidate.source_bookmark_name, l:candidate.action__path, l:candidate.action__line, l:candidate.action__pattern])))
   endfor
 
-  call s:save()
+  call s:save('default')
 endfunction"}}}
 
 let s:source.action_table['*'] = s:action_table
@@ -156,15 +160,17 @@ unlet! s:buffer_bookmark_action
 "}}}
 
 " Misc
-function! s:save()  "{{{
+function! s:save(filename)  "{{{
+  let l:filename = g:unite_source_bookmark_directory . '/' . a:filename
   call writefile([s:VERSION] + map(copy(s:bookmark_files), 'join(v:val, "\t")'),
-  \              g:unite_source_bookmark_file)
-  let s:bookmark_file_mtime = getftime(g:unite_source_bookmark_file)
+        \ l:filename)
+  let s:bookmark_file_mtime = getftime(l:filename)
 endfunction"}}}
-function! s:load()  "{{{
-  if filereadable(g:unite_source_bookmark_file)
-  \  && s:bookmark_file_mtime != getftime(g:unite_source_bookmark_file)
-    let [ver; s:bookmark_files] = readfile(g:unite_source_bookmark_file)
+function! s:load(filename)  "{{{
+  let l:filename = g:unite_source_bookmark_directory . '/' . a:filename
+  if filereadable(l:filename)
+  \  && s:bookmark_file_mtime != getftime(l:filename)
+    let [ver; s:bookmark_files] = readfile(l:filename)
     if ver !=# s:VERSION
       echohl WarningMsg
       echomsg 'Sorry, the version of bookmark file is old.  Clears the bookmark list.'
@@ -175,7 +181,7 @@ function! s:load()  "{{{
     let s:bookmark_files =
     \   filter(map(s:bookmark_files,
     \              'split(v:val, "\t", 1)'), 's:is_exists_path(v:val[1])')
-    let s:bookmark_file_mtime = getftime(g:unite_source_bookmark_file)
+    let s:bookmark_file_mtime = getftime(l:filename)
   endif
 endfunction"}}}
 function! s:is_exists_path(path)  "{{{

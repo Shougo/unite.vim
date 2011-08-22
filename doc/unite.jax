@@ -395,7 +395,7 @@ g:unite_source_file_mru_filename_format		*g:unite_source_file_mru_filename_forma
 g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		最近使用したファイルの情報を書き出すファイルを指定する。
 		
-		初期値は |g:unite_data_directory| . '/.file_mru' である。
+		初期値は |g:unite_data_directory| . '/file_mru' である。
 
 g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
 		最近使用したファイルの最大保存件数を指定する。
@@ -418,11 +418,11 @@ g:unite_source_directory_mru_ignore_pattern	*g:unite_source_directory_mru_ignore
 		これらは対象が|unite-source-directory_mru|であること以外は
 		|unite-source-file_mru|の各変数と同じ仕様である。
 
-g:unite_source_bookmark_file			*g:unite_source_bookmark_file*
-		|unite-source-bookmark|がブックマークを書き出すファイルを指
+g:unite_source_bookmark_directory		*g:unite_source_bookmark_directory*
+		|unite-source-bookmark|がブックマークを書き出すディレクトリ名を指
 		定する。
 		
-		初期値は |g:unite_data_directory| . '/.bookmark' である。
+		初期値は |g:unite_data_directory| . '/bookmark' である。
 
 g:unite_source_file_rec_ignore_pattern		*g:unite_source_file_rec_ignore_pattern*
 		|unite-source-file_rec|の候補に表示しないファイルの正規表現
