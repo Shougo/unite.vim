@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Aug 2011.
+" Last Modified: 22 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1561,8 +1561,10 @@ function! s:initialize_unite_buffer()"{{{
 
         execute 'highlight default link' l:source.syntax g:unite_abbr_highlight
 
-        execute printf('syntax region %s start="^- %s" end="$" contains=%s%s',
-              \ 'uniteSourceLine__'.l:source.syntax, (l:name == '' ? '' : l:name . '\>'), (l:name == '' ? '' : 'uniteSourceNames,'), l:source.syntax
+        execute printf('syntax region %s start="^-  %s" end="$" contains=%s%s',
+              \ 'uniteSourceLine__'.l:source.syntax,
+              \ (l:name == '' ? '' : l:name . '\>'),
+              \ (l:name == '' ? '' : 'uniteSourceNames,'), l:source.syntax
               \ )
 
         call s:call_hook([l:source], 'on_syntax')
