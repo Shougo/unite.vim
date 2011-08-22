@@ -251,6 +251,10 @@ http://www.ustream.tv/recorded/11240673
 		-verbose
 		冗長な警告メッセージを出すようにする。
 
+						*unite-options-toggle*
+		-toggle
+		同一バッファ名のuniteウインドウが表示されている場合は、閉じる。
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。

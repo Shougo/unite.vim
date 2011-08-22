@@ -220,7 +220,7 @@ let s:unite_options = [
       \ '-winwidth=', '-winheight=',
       \ '-immediately', '-auto-preview', '-complete',
       \ '-vertical', '-horizontal', '-direction=',
-      \ '-verbose', '-auto-resize',
+      \ '-verbose', '-auto-resize', '-toggle'
       \]
 "}}}
 
@@ -707,6 +707,18 @@ function! unite#start(sources, ...)"{{{
 
   let s:use_current_unite = 1
 
+  if l:context.toggle
+    " Search unite window.
+    " Note: must escape file-pattern.
+    let l:buffer_name = unite#util#escape_file_searching(l:context.buffer_name)
+    if bufwinnr(l:buffer_name) > 0
+      silent execute bufwinnr(l:buffer_name) 'wincmd w'
+      " Quit unite buffer.
+      call unite#force_quit_session()
+      return
+    endif
+  endif
+
   try
     call s:initialize_current_unite(a:sources, l:context)
   catch /^Invalid source/
@@ -995,6 +1007,9 @@ function! s:initialize_context(context)"{{{
   endif
   if !has_key(a:context, 'old_buffer_info')
     let a:context.old_buffer_info = []
+  endif
+  if !has_key(a:context, 'toggle')
+    let a:context.toggle = 0
   endif
   let a:context.is_redraw = 0
   let a:context.is_changed = 0

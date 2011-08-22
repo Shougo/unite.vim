@@ -258,6 +258,11 @@ COMMANDS 					*unite-commands*
 		-auto-resize
 		Auto resize unite buffer height by candidates number.
 
+						*unite-options-toggle*
+		-toggle
+		Close unite buffer window if this unite buffer name window is
+		exists.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
@@ -1712,6 +1717,7 @@ CHANGELOG					*unite-changelog*
 2011-08-22
 - Fixed source syntax highlight.
 - Updated vital.vim.
+- Added -toggle option.
 
 2011-08-21
 - Fixed file_rec/async ignore pattern.
