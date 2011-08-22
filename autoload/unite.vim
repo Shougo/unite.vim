@@ -539,8 +539,8 @@ function! unite#redraw_candidates() "{{{
   if len(l:lines) < len(unite#get_current_unite().candidates)
     let l:pos = getpos('.')
     silent! execute (unite#get_current_unite().prompt_linenr+1).',$delete _'
-    execute 'normal!' "1z\<Enter>"
     call setpos('.', l:pos)
+    normal! zb
   endif
   call setline(unite#get_current_unite().prompt_linenr+1, l:lines)
 
@@ -553,10 +553,8 @@ function! unite#redraw_candidates() "{{{
         \ && l:unite.prompt_linenr + len(l:candidates)
         \      < l:unite.context.winheight
     " Auto resize.
-    let l:pos = getpos('.')
     execute 'resize' l:unite.prompt_linenr + len(l:candidates)
-    execute 'normal!' "1z\<Enter>"
-    call setpos('.', l:pos)
+    normal! zb
   endif
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{
@@ -778,6 +776,7 @@ function! unite#start(sources, ...)"{{{
     if l:is_restore
       " Restore position.
       call setpos('.', l:positions[l:key].pos)
+      normal! zb
     endif
     let l:candidate = has_key(l:positions, l:key) ?
           \ l:positions[l:key].candidate : {}

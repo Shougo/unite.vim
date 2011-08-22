@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Aug 2011.
+" Last Modified: 22 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -238,7 +238,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
   if l:is_redraw
     call unite#force_redraw()
-    normal! zz
+    normal! zb
   endif
 endfunction"}}}
 

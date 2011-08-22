@@ -1720,6 +1720,7 @@ CHANGELOG					*unite-changelog*
 - Added -toggle option.
 - Changed file_mru and directory_mru default filename.
 - Changed g:unite_source_bookmark_file to g:unite_source_bookmark_directory.
+- Improved redraw.
 
 2011-08-21
 - Fixed file_rec/async ignore pattern.
