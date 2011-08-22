@@ -66,13 +66,7 @@ endfunction
 " Move a file.
 " Implemented by pure vimscript.
 function! s:move_file_pure(src, dest) "{{{
-    let copy_success = s:copy_file(a:src, a:dest)
-    let remove_success = delete(a:src) == 0
-    if copy_success && remove_success
-        return 1
-    else
-        return 0
-    endif
+    return !rename(a:src, a:dest)
 endfunction "}}}
 
 " Copy a file.

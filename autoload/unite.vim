@@ -571,8 +571,8 @@ function! unite#get_input()"{{{
     setlocal modifiable
 
     " Restore prompt.
-    call setline(l:unite.prompt_linenr, l:unite.prompt
-          \ . getline(l:unite.prompt_linenr))
+    " call setline(l:unite.prompt_linenr, l:unite.prompt
+    "       \ . getline(l:unite.prompt_linenr))
 
     let &l:modifiable = l:modifiable_save
   endif
@@ -1401,7 +1401,8 @@ function! s:convert_lines(candidates)"{{{
 
   return map(copy(a:candidates),
         \ '(v:val.unite__is_marked ? "*  " : "-  ")
-        \ . (l:unite.max_source_name == 0 ? " " : unite#util#truncate(v:val.source, l:max_source_name))
+        \ . (l:unite.max_source_name == 0 ? " "
+        \   : unite#util#truncate(v:val.source, l:max_source_name))
         \ . unite#util#truncate_smart(v:val.abbr, ' . l:max_width .  ', l:max_width/3, "..")')
 endfunction"}}}
 
@@ -1444,7 +1445,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.sources = l:sources
   let l:unite.kinds = s:initialize_kinds()
   let l:unite.filters = s:initialize_filters()
-  let l:unite.buffer_name = (l:context.buffer_name == '') ? 'default' : l:context.buffer_name
+  let l:unite.buffer_name = (l:context.buffer_name == '') ?
+        \ 'default' : l:context.buffer_name
   let l:unite.buffer_options =
         \ s:initialize_buffer_name_options(l:unite.buffer_name)
   let l:unite.real_buffer_name = l:buffer_name
@@ -1561,7 +1563,7 @@ function! s:initialize_unite_buffer()"{{{
 
         execute 'highlight default link' l:source.syntax g:unite_abbr_highlight
 
-        execute printf('syntax region %s start="^-  %s" end="$" contains=%s%s',
+        execute printf('syntax region %s start="^-  %s" end="$" contains=uniteCandidateMarker,%s%s',
               \ 'uniteSourceLine__'.l:source.syntax,
               \ (l:name == '' ? '' : l:name . '\>'),
               \ (l:name == '' ? '' : 'uniteSourceNames,'), l:source.syntax
@@ -1575,8 +1577,9 @@ endfunction"}}}
 function! s:switch_unite_buffer(buffer_name, context)"{{{
   " Search unite window.
   " Note: must escape file-pattern.
-  if bufwinnr(unite#util#escape_file_searching(a:buffer_name)) > 0
-    silent execute bufwinnr(unite#util#escape_file_searching(a:buffer_name)) 'wincmd w'
+  let l:buffer_name = unite#util#escape_file_searching(a:buffer_name)
+  if bufwinnr(l:buffer_name) > 0
+    silent execute bufwinnr(l:buffer_name) 'wincmd w'
   else
     " Split window.
     execute a:context.direction (bufexists(a:buffer_name) ?
