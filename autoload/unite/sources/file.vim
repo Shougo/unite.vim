@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Aug 2011.
+" Last Modified: 22 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -82,8 +82,11 @@ function! s:source.change_candidates(args, context)"{{{
       call filter(l:files, 'v:val !~ ' . string(g:unite_source_file_ignore_pattern))
     endif
 
+    let l:files = sort(filter(copy(l:files), 'isdirectory(v:val)'), 1) +
+          \ sort(filter(copy(l:files), '!isdirectory(v:val)'), 1)
+
     let a:context.source__cache[l:glob] =
-          \ map(sort(l:files, 's:compare_file'), 's:create_dict(v:val, l:is_relative_path)')
+          \ map(l:files, 's:create_dict(v:val, l:is_relative_path)')
   endif
 
   let l:candidates = a:context.source__cache[l:glob]
@@ -192,9 +195,6 @@ function! s:create_dict(file, is_relative_path)"{{{
   endif
 
   return l:dict
-endfunction"}}}
-function! s:compare_file(a, b)"{{{
-  return isdirectory(a:b) - isdirectory(a:a)
 endfunction"}}}
 
 " Add custom action table."{{{
