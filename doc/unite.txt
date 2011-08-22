@@ -1722,6 +1722,7 @@ CHANGELOG					*unite-changelog*
 - Changed g:unite_source_bookmark_file to g:unite_source_bookmark_directory.
 - Improved redraw.
 - Improved source file sort.
+- Added vimfiler_dummy_candidates().
 
 2011-08-21
 - Fixed file_rec/async ignore pattern.
