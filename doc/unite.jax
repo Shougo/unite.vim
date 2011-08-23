@@ -325,13 +325,13 @@ g:unite_winwidth				*g:unite_winwidth*
 		
 		初期値は90である。
 
-g:unite_cd_command				*g:unite_cd_command*
+g:unite_kind_openable_cd_command		*g:unite_kind_openable_cd_command*
 		cdアクションで実行されるVimのコマンドを指定する。
 		|`=|を解釈するコマンドでなければならない。
 		
 		初期値は"cd"である。
 
-g:unite_lcd_command				*g:unite_lcd_command*
+g:unite_kind_openable_lcd_command		*g:unite_kind_openable_lcd_command*
 		lcdアクションで実行されるVimのコマンドを指定する。
 		|`=|を解釈するコマンドでなければならない。
 		
@@ -897,7 +897,7 @@ unite#custom_action({kind}, {name}, {action})
 		  call unite#take_action('tabopen', a:candidates)
 		
 		  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
-		  execute g:unite_lcd_command '`=l:dir`'
+		  execute g:unite_kind_openable_lcd_command '`=l:dir`'
 		endfunction
 		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen

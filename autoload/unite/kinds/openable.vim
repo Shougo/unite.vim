@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: openable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jul 2011.
+" Last Modified: 23 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,6 +29,8 @@ set cpo&vim
 
 " Variables  "{{{
 call unite#util#set_default('g:unite_kind_openable_persist_open_blink_time', '250m')
+call unite#util#set_default('g:unite_kind_openable_cd_command', 'cd')
+call unite#util#set_default('g:unite_kind_openable_lcd_command', 'lcd')
 "}}}
 function! unite#kinds#openable#define()"{{{
   return s:kind

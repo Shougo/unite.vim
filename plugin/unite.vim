@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Aug 2011.
+" Last Modified: 23 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -63,12 +63,6 @@ if !exists('g:unite_quick_match_table')
         \'q' : 11, 'w' : 12, 'e' : 13, 'r' : 14, 't' : 15, 'y' : 16, 'u' : 17, 'i' : 18, 'o' : 19, 'p' : 20,
         \'1' : 21, '2' : 22, '3' : 23, '4' : 24, '5' : 25, '6' : 26, '7' : 27, '8' : 28, '9' : 29, '0' : 30,
         \}
-endif
-if !exists('g:unite_cd_command')
-  let g:unite_cd_command = 'cd'
-endif
-if !exists('g:unite_lcd_command')
-  let g:unite_lcd_command = 'lcd'
 endif
 if !exists('g:unite_abbr_highlight')
   let g:unite_abbr_highlight = 'Normal'

@@ -325,13 +325,13 @@ g:unite_winwidth				*g:unite_winwidth*
 
 		The default value is 90.
 
-g:unite_cd_command				*g:unite_cd_command*
+g:unite_kind_openable_cd_command				*g:unite_kind_openable_cd_command*
 		Specifies the Vim command for cd action.
 		This command must interpret |`=|.
 
 		The default value is "cd".
 
-g:unite_lcd_command				*g:unite_lcd_command*
+g:unite_kind_openable_lcd_command				*g:unite_kind_openable_lcd_command*
 		Specifies the Vim command for lcd action.
 		This command must interpret |`=|.
 
@@ -894,7 +894,7 @@ unite#custom_action({kind}, {name}, {action})
 		  call unite#take_action('tabopen', a:candidates)
 		
 		  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
-		  execute g:unite_lcd_command '`=l:dir`'
+		  execute g:unite_kind_openable_lcd_command '`=l:dir`'
 		endfunction
 		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen
@@ -1717,6 +1717,7 @@ CHANGELOG					*unite-changelog*
 2011-08-23
 - Fixed get buffer name input.
 - Fixed vimfiler cd action.
+- Renamed cd and lcd options.
 
 2011-08-22
 - Fixed source syntax highlight.
