@@ -568,8 +568,8 @@ function! unite#get_input()"{{{
     setlocal modifiable
 
     " Restore prompt.
-    " call setline(l:unite.prompt_linenr, l:unite.prompt
-    "       \ . getline(l:unite.prompt_linenr))
+    call setline(l:unite.prompt_linenr, l:unite.prompt
+          \ . getline(l:unite.prompt_linenr))
 
     let &l:modifiable = l:modifiable_save
   endif
@@ -1426,13 +1426,13 @@ function! s:initialize_current_unite(sources, context)"{{{
 
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
     if unite#get_current_unite().buffer_name ==# l:context.buffer_name
-      " Quit unite buffer.
-      call unite#force_quit_session()
-
       if l:context.input == ''
         " Get input text.
         let l:context.input = unite#get_input()
       endif
+
+      " Quit unite buffer.
+      call unite#force_quit_session()
     endif
   endif
 
