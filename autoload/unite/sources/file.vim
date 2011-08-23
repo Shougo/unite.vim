@@ -118,13 +118,12 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
   if isdirectory(l:path)
     let l:type = 'directory'
     let l:candidates = self.change_candidates(a:args, a:context)
-    if a:context.vimfiler__visible_dot_files
-      " Add doted files.
-      let l:context = deepcopy(a:context)
-      let l:context.input .= '.'
-      let l:candidates += filter(self.change_candidates(a:args, l:context),
-            \ 'v:val.word !~ "/\.\.$"')
-    endif
+
+    " Add doted files.
+    let l:context = deepcopy(a:context)
+    let l:context.input .= '.'
+    let l:candidates += filter(self.change_candidates(a:args, l:context),
+          \ 'v:val.word !~ "/\.\.$"')
   elseif filereadable(l:path)
     let l:type = 'file'
     let l:candidates = [ s:create_dict(l:path, 0) ]
@@ -173,7 +172,8 @@ function! s:source.vimfiler_dummy_candidates(args, context)"{{{
   let l:is_relative_path = l:path !~ '^\%(/\|\a\+:/\)'
 
   " Set vimfiler property.
-  for l:candidate in [ s:create_dict(l:path, l:is_relative_path) ]
+  let l:candidates = [ s:create_dict(l:path, l:is_relative_path) ]
+  for l:candidate in l:candidates
     call s:create_vimfiler_dict(l:candidate, l:exts)
   endfor
 

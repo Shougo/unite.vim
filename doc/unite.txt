@@ -1716,6 +1716,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-23
 - Fixed get buffer name input.
+- Fixed vimfiler cd action.
 
 2011-08-22
 - Fixed source syntax highlight.
