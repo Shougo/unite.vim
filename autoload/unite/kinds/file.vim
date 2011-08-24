@@ -80,9 +80,6 @@ let s:kind = {
       \ 'name' : 'file',
       \ 'default_action' : 'open',
       \ 'action_table' : {},
-      \ 'alias_table' : {
-      \   'vimfiler__execute' : 'start',
-      \ },
       \ 'parents' : ['openable', 'cdable', 'uri'],
       \}
 
