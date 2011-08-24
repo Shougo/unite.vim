@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2011.
+" Last Modified: 24 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,6 +32,14 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Obsolute options check."{{{
+if exists('g:unite_cd_command')
+  echoerr 'g:unite_cd_command option does not work this version of unite.vim.'
+endif
+if exists('g:unite_lcd_command')
+  echoerr 'g:unite_lcd_command option does not work this version of unite.vim.'
+endif
+"}}}
 " Global options definition."{{{
 if !exists('g:unite_update_time')
   let g:unite_update_time = 200

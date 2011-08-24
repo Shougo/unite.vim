@@ -1719,6 +1719,7 @@ CHANGELOG					*unite-changelog*
 - Improved update time.
 - Implemented previewd_buffer_list.
 - Implemented vimfiler actions.
+- Check obsolute option.
 
 2011-08-23
 - Fixed get buffer name input.
