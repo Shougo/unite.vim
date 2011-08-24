@@ -505,6 +505,14 @@ function! s:kind.action_table.vimfiler__execute.func(candidates)"{{{
     endif
   endtry
 endfunction"}}}
+
+let s:kind.action_table.vimfiler__write = {
+      \ 'description' : 'save file',
+      \ }
+function! s:kind.action_table.vimfiler__write.func(candidate)"{{{
+  let l:lines = unite#get_context().action__lines
+  call writefile(l:lines, a:candidate.action__path)
+endfunction"}}}
 "}}}
 
 function! s:execute_command(command, candidate)"{{{

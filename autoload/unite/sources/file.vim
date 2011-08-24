@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2011.
+" Last Modified: 24 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -112,11 +112,27 @@ function! s:source.change_candidates(args, context)"{{{
 
   return l:candidates
 endfunction"}}}
-function! s:source.vimfiler_gather_candidates(args, context)"{{{
+function! s:source.vimfiler_check_filetype(args, context)"{{{
   let l:path = get(a:args, 0, '')
 
   if isdirectory(l:path)
     let l:type = 'directory'
+    let l:lines = []
+    let l:dict = {}
+  elseif filereadable(l:path)
+    let l:type = 'file'
+    let l:lines = readfile(l:path)
+    let l:dict = s:create_dict(l:path, 0)
+  else
+    return []
+  endif
+
+  return [l:type, l:lines, l:dict]
+endfunction"}}}
+function! s:source.vimfiler_gather_candidates(args, context)"{{{
+  let l:path = get(a:args, 0, '')
+
+  if isdirectory(l:path)
     let l:candidates = self.change_candidates(a:args, a:context)
 
     " Add doted files.
@@ -125,7 +141,6 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
     let l:candidates += filter(self.change_candidates(a:args, l:context),
           \ 'v:val.word !~ "/\.\.$"')
   elseif filereadable(l:path)
-    let l:type = 'file'
     let l:candidates = [ s:create_dict(l:path, 0) ]
   else
     return []
@@ -150,7 +165,6 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
     lcd `=l:old_dir`
   endif
 
-  " return [l:type, l:candidates]
   return l:candidates
 endfunction"}}}
 function! s:source.vimfiler_dummy_candidates(args, context)"{{{

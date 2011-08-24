@@ -827,6 +827,33 @@ function! unite#start_temporary(sources, new_context, buffer_name)"{{{
   call unite#force_quit_session()
   call unite#start(a:sources, l:context)
 endfunction"}}}
+function! unite#vimfiler_check_filetype(sources, ...)"{{{
+  let l:context = a:0 >= 1 ? a:1 : {}
+  call s:initialize_context(l:context)
+
+  try
+    call s:initialize_current_unite(a:sources, l:context)
+  catch /^Invalid source/
+    return []
+  endtry
+
+  for l:source in unite#loaded_sources_list()
+    if has_key(l:source, 'vimfiler_check_filetype')
+      let l:ret = l:source.vimfiler_check_filetype(l:source.args, l:context)
+      if !empty(l:ret)
+        let [l:type, l:lines, l:dict] = l:ret
+        if !empty(l:dict)
+          call s:initialize_vimfiler_candidates([l:dict])
+        endif
+
+        return [l:type, l:lines, l:dict]
+      endif
+    endif
+  endfor
+
+  " Not found.
+  return []
+endfunction"}}}
 function! unite#get_vimfiler_candidates(sources, ...)"{{{
   let l:context = a:0 >= 1 ? a:1 : {}
   call s:initialize_context(l:context)
@@ -849,39 +876,7 @@ function! unite#get_vimfiler_candidates(sources, ...)"{{{
     endif
   endfor
 
-  for l:candidate in l:candidates
-    " Set default vimfiler property.
-    if !has_key(l:candidate, 'vimfiler__filename')
-      let l:candidate.vimfiler__filename = l:candidate.word
-    endif
-    if !has_key(l:candidate, 'vimfiler__abbr')
-      let l:candidate.vimfiler__abbr = l:candidate.word
-    endif
-    if !has_key(l:candidate, 'vimfiler__is_directory')
-      let l:candidate.vimfiler__is_directory = 0
-    endif
-    if !has_key(l:candidate, 'vimfiler__is_executable')
-      let l:candidate.vimfiler__is_executable = 0
-    endif
-    if !has_key(l:candidate, 'vimfiler__filesize')
-      let l:candidate.vimfiler__filesize = -1
-    endif
-    if !has_key(l:candidate, 'vimfiler__filetime')
-      let l:candidate.vimfiler__filetime = -1
-    endif
-    if !has_key(l:candidate, 'vimfiler__datemark')
-      let l:candidate.vimfiler__datemark = vimfiler#get_datemark(l:candidate)
-    endif
-    if !has_key(l:candidate, 'vimfiler__extension')
-      let l:candidate.vimfiler__extension =
-            \ l:candidate.vimfiler__is_directory ?
-            \ '' : fnamemodify(l:candidate.vimfiler__filename, ':e')
-    endif
-    if !has_key(l:candidate, 'vimfiler__filetype')
-      let l:candidate.vimfiler__filetype = vimfiler#get_filetype(l:candidate)
-    endif
-    let l:candidate.vimfiler__is_marked = 0
-  endfor
+  call s:initialize_vimfiler_candidates(l:candidates)
 
   return l:candidates
 endfunction"}}}
@@ -1263,6 +1258,41 @@ function! s:initialize_buffer_name_options(buffer_name)"{{{
   if !has_key(l:setting, 'unite__inputs')
     let l:setting.unite__inputs = {}
   endif
+endfunction"}}}
+function! s:initialize_vimfiler_candidates(candidates)"{{{
+  " Set default vimfiler property.
+  for l:candidate in a:candidates
+    if !has_key(l:candidate, 'vimfiler__filename')
+      let l:candidate.vimfiler__filename = l:candidate.word
+    endif
+    if !has_key(l:candidate, 'vimfiler__abbr')
+      let l:candidate.vimfiler__abbr = l:candidate.word
+    endif
+    if !has_key(l:candidate, 'vimfiler__is_directory')
+      let l:candidate.vimfiler__is_directory = 0
+    endif
+    if !has_key(l:candidate, 'vimfiler__is_executable')
+      let l:candidate.vimfiler__is_executable = 0
+    endif
+    if !has_key(l:candidate, 'vimfiler__filesize')
+      let l:candidate.vimfiler__filesize = -1
+    endif
+    if !has_key(l:candidate, 'vimfiler__filetime')
+      let l:candidate.vimfiler__filetime = -1
+    endif
+    if !has_key(l:candidate, 'vimfiler__datemark')
+      let l:candidate.vimfiler__datemark = vimfiler#get_datemark(l:candidate)
+    endif
+    if !has_key(l:candidate, 'vimfiler__extension')
+      let l:candidate.vimfiler__extension =
+            \ l:candidate.vimfiler__is_directory ?
+            \ '' : fnamemodify(l:candidate.vimfiler__filename, ':e')
+    endif
+    if !has_key(l:candidate, 'vimfiler__filetype')
+      let l:candidate.vimfiler__filetype = vimfiler#get_filetype(l:candidate)
+    endif
+    let l:candidate.vimfiler__is_marked = 0
+  endfor
 endfunction"}}}
 
 function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
