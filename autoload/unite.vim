@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2011.
+" Last Modified: 24 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1550,6 +1550,11 @@ function! s:initialize_unite_buffer()"{{{
     let &redrawtime = 100
   endif
 
+  if &updatetime > g:unite_update_time
+    let l:unite.update_time_save = &updatetime
+    let &updatetime = g:unite_update_time
+  endif
+
   " User's initialization.
   setlocal nomodifiable
   set sidescrolloff=0
@@ -1698,12 +1703,6 @@ function! s:on_insert_enter()  "{{{
     normal! zb
     startinsert!
   endif
-
-  if &updatetime > g:unite_update_time
-    let l:unite = unite#get_current_unite()
-    let l:unite.update_time_save = &updatetime
-    let &updatetime = g:unite_update_time
-  endif
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   let l:unite = unite#get_current_unite()
@@ -1719,11 +1718,6 @@ function! s:on_insert_leave()  "{{{
 
   if &filetype ==# 'unite'
     setlocal nomodifiable
-  endif
-
-  if has_key(l:unite, 'update_time_save')
-        \ && &updatetime < l:unite.update_time_save
-    let &updatetime = l:unite.update_time_save
   endif
 endfunction"}}}
 function! s:on_cursor_hold_i()  "{{{
@@ -1814,6 +1808,10 @@ function! s:on_buf_unload(bufname)  "{{{
     let &redrawtime = l:unite.redrawtime_save
   endif
   let &sidescrolloff = l:unite.sidescrolloff_save
+  if has_key(l:unite, 'update_time_save')
+        \ && &updatetime < l:unite.update_time_save
+    let &updatetime = l:unite.update_time_save
+  endif
 
   match
 
