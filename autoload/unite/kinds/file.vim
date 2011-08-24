@@ -74,14 +74,14 @@ function! unite#kinds#file#define()"{{{
   return s:kind
 endfunction"}}}
 
+let s:System = vital#of('unite').import('System.File')
+
 let s:kind = {
       \ 'name' : 'file',
       \ 'default_action' : 'open',
       \ 'action_table' : {},
       \ 'alias_table' : {
-      \   'vimfiler__rename' : 'rename',
       \   'vimfiler__execute' : 'start',
-      \   'vimfiler__mkdir' : 'mkdir',
       \ },
       \ 'parents' : ['openable', 'cdable', 'uri'],
       \}
@@ -155,87 +155,58 @@ let s:kind.action_table.vimfiler__move = {
       \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
-  if g:unite_kind_file_move_command == ''
-    call unite#print_error("Please install mv.exe.")
-    return 1
+  let l:vimfiler_current_dir =
+        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  if l:vimfiler_current_dir != ''
+    let l:current_dir = getcwd()
+    lcd `=l:vimfiler_current_dir`
   endif
 
-  let l:context = unite#get_context()
-  let l:dest_dir = has_key(l:context, 'action__directory') ?
-        \ l:context.action__directory :
-        \ unite#util#input_directory('Input destination directory: ')
-  if l:dest_dir !~ '/'
-    let l:dest_dir .= '/'
-  endif
-
-  let l:dest_drive = matchstr(l:dest_dir, '^\a\+\ze:')
-  let l:overwrite_method = ''
-  let l:is_reset_method = 1
-  for l:candidate in a:candidates
-    let l:filename = l:candidate.action__path
-
-    if isdirectory(l:filename) && unite#util#is_win()
-          \ && matchstr(l:filename, '^\a\+\ze:') !=? l:dest_drive
-      " move command doesn't supported directory over drive move in Windows.
-      if g:unite_kind_file_copy_command == ''
-        call unite#print_error("Please install cp.exe.")
-        return 1
-      elseif g:unite_kind_file_delete_command == ''
-        call unite#print_error("Please install rm.exe.")
-        return 1
-      endif
-
-      if s:kind.action_table.vimfiler__copy.func([l:candidate])
-        call unite#print_error('Failed file move: ' . l:filename)
-        return 1
-      endif
-
-      if s:kind.action_table.vimfiler__delete.func([l:candidate])
-        call unite#print_error('Failed file delete: ' . l:filename)
-        return 1
-      endif
-      continue
+  try
+    if g:unite_kind_file_move_command == ''
+      call unite#print_error("Please install mv.exe.")
+      return 1
     endif
 
-    " Overwrite check.
-    let l:dest_filename = l:dest_dir . fnamemodify(l:filename, ':t')
-    if filereadable(l:dest_filename) || isdirectory(l:dest_filename)"{{{
-      if l:overwrite_method == ''
-        let l:overwrite_method =
-              \ s:input_overwrite_method(l:dest_filename, l:filename)
-        if l:overwrite_method =~ '^\u'
-          " Same overwrite.
-          let l:is_reset_method = 0
-        endif
-      endif
+    let l:context = unite#get_context()
+    let l:dest_dir = has_key(l:context, 'action__directory')
+          \ && l:context.action__directory != '' ?
+          \   l:context.action__directory :
+          \   unite#util#input_directory('Input destination directory: ')
+    if l:dest_dir !~ '/'
+      let l:dest_dir .= '/'
+    endif
 
-      if l:overwrite_method =~? '^f'
-        " Ignore.
-      elseif l:overwrite_method =~? '^t'
-        if getftime(l:filename) <= getftime(l:dest_filename)
-          continue
-        endif
-      elseif l:overwrite_method =~? '^u'
-        let l:filename .= '_'
-      elseif l:overwrite_method =~? '^n'
-        if l:is_reset_method
-          let l:overwrite_method = ''
-        endif
+    let l:dest_drive = matchstr(l:dest_dir, '^\a\+\ze:')
+    let l:overwrite_method = ''
+    let l:is_reset_method = 1
+    for l:candidate in a:candidates
+      let l:filename = l:candidate.action__path
 
+      if isdirectory(l:filename) && unite#util#is_win()
+            \ && matchstr(l:filename, '^\a\+\ze:') !=? l:dest_drive
+        call s:move_to_other_drive(l:candidate, l:filename)
         continue
-      elseif l:overwrite_method =~? '^r'
-        let l:dest_filename = input(printf('New name: %s -> ', l:filename), l:filename)
       endif
 
-      if l:is_reset_method
-        let l:overwrite_method = ''
+      " Overwrite check.
+      let [l:dest_filename, l:filename,
+            \ l:overwrite_method, l:is_reset_method, l:is_continue] =
+            \ s:check_over_write(l:dest_dir, l:filename, l:overwrite_method,
+            \                    l:is_reset_method)
+      if l:is_continue
+        continue
       endif
-    endif"}}}
 
-    if s:external('move', l:dest_filename, [l:filename])
-      call unite#print_error('Failed file move: ' . l:filename)
+      if s:external('move', l:dest_filename, [l:filename])
+        call unite#print_error('Failed file move: ' . l:filename)
+      endif
+    endfor
+  finally
+    if l:vimfiler_current_dir != ''
+      lcd `=l:current_dir`
     endif
-  endfor
+  endtry
 endfunction"}}}
 
 let s:kind.action_table.move = deepcopy(s:kind.action_table.vimfiler__move)
@@ -258,64 +229,54 @@ let s:kind.action_table.vimfiler__copy = {
       \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
-  if g:unite_kind_file_copy_file_command == ''
-        \ || g:unite_kind_file_copy_directory_command == ''
-    call unite#print_error("Please install cp.exe.")
-    return 1
+  let l:vimfiler_current_dir =
+        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  if l:vimfiler_current_dir != ''
+    let l:current_dir = getcwd()
+    lcd `=l:vimfiler_current_dir`
   endif
 
-  let l:context = unite#get_context()
-  let l:dest_dir = has_key(l:context, 'action__directory') ?
-        \ l:context.action__directory :
-        \ unite#util#input_directory('Input destination directory: ')
-  if l:dest_dir !~ '/'
-    let l:dest_dir .= '/'
-  endif
-
-  let l:overwrite_method = ''
-  let l:is_reset_method = 1
-  for l:candidate in a:candidates
-    " Overwrite check.
-    let l:filename = l:candidate.action__path
-    let l:dest_filename = l:dest_dir . fnamemodify(l:filename, ':t')
-    if filereadable(l:dest_filename) || isdirectory(l:dest_filename)"{{{
-      if l:overwrite_method == ''
-        let l:overwrite_method =
-              \ s:input_overwrite_method(l:dest_filename, l:filename)
-        if l:overwrite_method =~ '^\u'
-          " Same overwrite.
-          let l:is_reset_method = 0
-        endif
-      endif
-
-      if l:overwrite_method =~? '^f'
-        " Ignore.
-      elseif l:overwrite_method =~? '^t'
-        if getftime(l:filename) <= getftime(l:dest_filename)
-          continue
-        endif
-      elseif l:overwrite_method =~? '^u'
-        let l:filename .= '_'
-      elseif l:overwrite_method =~? '^n'
-        if l:is_reset_method
-          let l:overwrite_method = ''
-        endif
-
-        continue
-      elseif l:overwrite_method =~? '^r'
-        let l:dest_filename = input(printf('New name: %s -> ', l:filename), l:filename)
-      endif
-
-      if l:is_reset_method
-        let l:overwrite_method = ''
-      endif
-    endif"}}}
-
-    if s:external(isdirectory(l:filename) ?
-          \ 'copy_directory' : 'copy_file', l:dest_filename, [l:filename])
-      call unite#print_error('Failed file copy: ' . l:filename)
+  try
+    if g:unite_kind_file_copy_file_command == ''
+          \ || g:unite_kind_file_copy_directory_command == ''
+      call unite#print_error("Please install cp.exe.")
+      return 1
     endif
-  endfor
+
+    let l:context = unite#get_context()
+    let l:dest_dir = has_key(l:context, 'action__directory')
+          \ && l:context.action__directory != '' ?
+          \   l:context.action__directory :
+          \   unite#util#input_directory('Input destination directory: ')
+    if l:dest_dir !~ '/'
+      let l:dest_dir .= '/'
+    endif
+
+    let l:overwrite_method = ''
+    let l:is_reset_method = 1
+    for l:candidate in a:candidates
+      " Overwrite check.
+      let l:filename = l:candidate.action__path
+      let l:dest_filename = l:dest_dir . fnamemodify(l:filename, ':t')
+      " Overwrite check.
+      let [l:dest_filename, l:filename,
+            \ l:overwrite_method, l:is_reset_method, l:is_continue] =
+            \ s:check_over_write(l:dest_dir, l:filename, l:overwrite_method,
+            \                    l:is_reset_method)
+      if l:is_continue
+        continue
+      endif
+
+      if s:external(isdirectory(l:filename) ?
+            \ 'copy_directory' : 'copy_file', l:dest_filename, [l:filename])
+        call unite#print_error('Failed file copy: ' . l:filename)
+      endif
+    endfor
+  finally
+    if l:vimfiler_current_dir != ''
+      lcd `=l:current_dir`
+    endif
+  endtry
 endfunction"}}}
 
 let s:kind.action_table.copy = deepcopy(s:kind.action_table.vimfiler__copy)
@@ -332,20 +293,64 @@ let s:kind.action_table.vimfiler__delete = {
       \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
-  if g:unite_kind_file_delete_file_command == ''
-        \ || g:unite_kind_file_delete_directory_command == ''
-    call unite#print_error("Please install rm.exe.")
-    return 1
+  let l:vimfiler_current_dir =
+        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  if l:vimfiler_current_dir != ''
+    let l:current_dir = getcwd()
+    lcd `=l:vimfiler_current_dir`
   endif
 
-  " Execute force delete.
-  for l:candidate in a:candidates
-    let l:filename = l:candidate.action__path
-    if s:external(isdirectory(l:filename) ?
-          \ 'delete_directory' : 'delete_file', '', [l:filename])
-      call unite#print_error('Failed file delete: ' . l:filename)
+  try
+    if g:unite_kind_file_delete_file_command == ''
+          \ || g:unite_kind_file_delete_directory_command == ''
+      call unite#print_error("Please install rm.exe.")
+      return 1
     endif
-  endfor
+
+    " Execute force delete.
+    for l:candidate in a:candidates
+      let l:filename = l:candidate.action__path
+      if s:external(isdirectory(l:filename) ?
+            \ 'delete_directory' : 'delete_file', '', [l:filename])
+        call unite#print_error('Failed file delete: ' . l:filename)
+      endif
+    endfor
+  finally
+    if l:vimfiler_current_dir != ''
+      lcd `=l:current_dir`
+    endif
+  endtry
+endfunction"}}}
+
+let s:kind.action_table.vimfiler__rename = {
+      \ 'description' : 'rename files',
+      \ 'is_quit' : 0,
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_listed' : 0,
+      \ }
+function! s:kind.action_table.vimfiler__rename.func(candidate)"{{{
+  let l:vimfiler_current_dir =
+        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  if l:vimfiler_current_dir != ''
+    let l:current_dir = getcwd()
+    lcd `=l:vimfiler_current_dir`
+  endif
+
+  try
+    let l:context = unite#get_context()
+    let l:filename = has_key(l:context, 'action__filename') ?
+          \ l:context.action__filename :
+          \ input(printf('New file name: %s -> ',
+          \       a:candidate.action__path), a:candidate.action__path)
+
+    if l:filename != '' && l:filename !=# a:candidate.action__path
+      call rename(a:candidate.action__path, l:filename)
+    endif
+  finally
+    if l:vimfiler_current_dir != ''
+      lcd `=l:current_dir`
+    endif
+  endtry
 endfunction"}}}
 
 let s:kind.action_table.vimfiler__newfile = {
@@ -355,15 +360,38 @@ let s:kind.action_table.vimfiler__newfile = {
       \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__newfile.func(candidate)"{{{
-  let l:filename = a:candidate.action__path
-  if filereadable(l:filename)
-    redraw
-    echo l:filename . ' is already exists.'
-    return
+  let l:vimfiler_current_dir =
+        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  if l:vimfiler_current_dir != ''
+    let l:current_dir = getcwd()
+    lcd `=l:vimfiler_current_dir`
   endif
 
-  call writefile([], l:filename)
-  call unite#mappings#do_action('open', [a:candidate])
+  try
+    let l:filenames = input('New files name(comma separated multiple files): ',
+          \               '', 'file')
+    if l:filenames == ''
+      redraw
+      echo 'Canceled.'
+      return
+    endif
+
+    for l:filename in split(l:filenames, ',')
+      let l:filename = a:candidate.action__path
+      if filereadable(l:filename)
+        redraw
+        echo l:filename . ' is already exists.'
+        return
+      endif
+
+      call writefile([], l:filename)
+      call unite#mappings#do_action('open', [a:candidate])
+    endfor
+  finally
+    if l:vimfiler_current_dir != ''
+      lcd `=l:current_dir`
+    endif
+  endtry
 endfunction"}}}
 
 let s:kind.action_table.vimfiler__shell = {
@@ -371,18 +399,31 @@ let s:kind.action_table.vimfiler__shell = {
       \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__shell.func(candidate)"{{{
-  if !exists(':VimShellPop')
-    shell
-    return
+  let l:vimfiler_current_dir =
+        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  if l:vimfiler_current_dir != ''
+    let l:current_dir = getcwd()
+    lcd `=l:vimfiler_current_dir`
   endif
 
-  VimShellPop `=a:candidate.action__directory`
+  try
+    if !exists(':VimShellPop')
+      shell
+      return
+    endif
 
-  let l:files = unite#get_context().vimfiler__files
-  if !empty(l:files)
-    call setline(line('.'), getline('.') . ' ' . join(l:files))
-    normal! l
-  endif
+    VimShellPop `=a:candidate.action__directory`
+
+    let l:files = unite#get_context().vimfiler__files
+    if !empty(l:files)
+      call setline(line('.'), getline('.') . ' ' . join(l:files))
+      normal! l
+    endif
+  finally
+    if l:vimfiler_current_dir != ''
+      lcd `=l:current_dir`
+    endif
+  endtry
 endfunction"}}}
 
 let s:kind.action_table.vimfiler__shellcmd = {
@@ -390,11 +431,83 @@ let s:kind.action_table.vimfiler__shellcmd = {
       \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__shellcmd.func(candidate)"{{{
-  let l:command = unite#get_context().vimfiler__command
+  let l:vimfiler_current_dir =
+        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  if l:vimfiler_current_dir != ''
+    let l:current_dir = getcwd()
+    lcd `=l:vimfiler_current_dir`
+  endif
 
-  echo unite#util#system(l:command)
+  try
+    let l:command = unite#get_context().vimfiler__command
+
+    echo unite#util#system(l:command)
+  finally
+    if l:vimfiler_current_dir != ''
+      lcd `=l:current_dir`
+    endif
+  endtry
 endfunction"}}}
 
+let s:kind.action_table.vimfiler__mkdir = {
+      \ 'description' : 'make this directory and parents directory',
+      \ 'is_quit' : 0,
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_listed' : 0,
+      \ }
+function! s:kind.action_table.vimfiler__mkdir.func(candidate)"{{{
+  let l:vimfiler_current_dir =
+        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  if l:vimfiler_current_dir != ''
+    let l:current_dir = getcwd()
+    lcd `=l:vimfiler_current_dir`
+  endif
+
+  try
+    let l:dirname = input('New directory name: ', '', 'dir')
+
+    if l:dirname == ''
+      redraw
+      echo 'Canceled.'
+      return
+    endif
+
+    if &termencoding != '' && &termencoding != &encoding
+      let l:dirname = iconv(l:dirname, &encoding, &termencoding)
+    endif
+
+    if !filereadable(l:dirname)
+      call mkdir(l:dirname, 'p')
+    endif
+  finally
+    if l:vimfiler_current_dir != ''
+      lcd `=l:current_dir`
+    endif
+  endtry
+endfunction"}}}
+
+let s:kind.action_table.vimfiler__execute = {
+      \ 'description' : 'open files with associated program',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.vimfiler__execute.func(candidates)"{{{
+  let l:vimfiler_current_dir =
+        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  if l:vimfiler_current_dir != ''
+    let l:current_dir = getcwd()
+    lcd `=l:vimfiler_current_dir`
+  endif
+
+  try
+    for l:candidate in a:candidates
+      call s:System.open(l:candidate.action__path)
+    endfor
+  finally
+    if l:vimfiler_current_dir != ''
+      lcd `=l:current_dir`
+    endif
+  endtry
+endfunction"}}}
 "}}}
 
 function! s:execute_command(command, candidate)"{{{
@@ -439,6 +552,69 @@ function! s:input_overwrite_method(dest, src)"{{{
   endwhile
 
   return l:method
+endfunction"}}}
+function! s:move_to_other_drive(candidate, filename)"{{{
+  " move command doesn't supported directory over drive move in Windows.
+  if g:unite_kind_file_copy_command == ''
+    call unite#print_error("Please install cp.exe.")
+    return 1
+  elseif g:unite_kind_file_delete_command == ''
+    call unite#print_error("Please install rm.exe.")
+    return 1
+  endif
+
+  if s:kind.action_table.vimfiler__copy.func([a:candidate])
+    call unite#print_error('Failed file move: ' . a:filename)
+    return 1
+  endif
+
+  if s:kind.action_table.vimfiler__delete.func([a:candidate])
+    call unite#print_error('Failed file delete: ' . a:filename)
+    return 1
+  endif
+endfunction"}}}
+function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_method)"{{{
+  let l:is_reset_method = a:is_reset_method
+  let l:dest_filename = a:dest_dir . fnamemodify(a:filename, ':t')
+  let l:is_continue = 0
+  let l:filename = a:filename
+  let l:overwrite_method = a:overwrite_method
+
+  if filereadable(l:dest_filename) || isdirectory(l:dest_filename)"{{{
+    if l:overwrite_method == ''
+      let l:overwrite_method =
+            \ s:input_overwrite_method(l:dest_filename, l:filename)
+      if l:overwrite_method =~ '^\u'
+        " Same overwrite.
+        let l:is_reset_method = 0
+      endif
+    endif
+
+    if l:overwrite_method =~? '^f'
+      " Ignore.
+    elseif l:overwrite_method =~? '^t'
+      if getftime(l:filename) <= getftime(l:dest_filename)
+        let l:is_continue = 1
+      endif
+    elseif l:overwrite_method =~? '^u'
+      let l:filename .= '_'
+    elseif l:overwrite_method =~? '^n'
+      if l:is_reset_method
+        let l:overwrite_method = ''
+      endif
+
+      let l:is_continue = 1
+    elseif l:overwrite_method =~? '^r'
+      let l:dest_filename = input(printf('New name: %s -> ', l:filename), l:filename)
+    endif
+
+    if l:is_reset_method
+      let l:overwrite_method = ''
+    endif
+  endif"}}}
+
+  return [l:dest_filename, l:filename,
+        \ l:overwrite_method, l:is_reset_method, l:is_continue]
 endfunction"}}}
 
 let &cpo = s:save_cpo
