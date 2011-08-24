@@ -1718,6 +1718,7 @@ CHANGELOG					*unite-changelog*
 - Fixed unite buffer delete.
 - Improved update time.
 - Implemented previewd_buffer_list.
+- Implemented vimfiler actions.
 
 2011-08-23
 - Fixed get buffer name input.

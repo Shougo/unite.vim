@@ -81,6 +81,7 @@ let s:kind = {
       \ 'alias_table' : {
       \   'vimfiler__rename' : 'rename',
       \   'vimfiler__execute' : 'start',
+      \   'vimfiler__mkdir' : 'mkdir',
       \ },
       \ 'parents' : ['openable', 'cdable', 'uri'],
       \}
@@ -120,7 +121,7 @@ function! s:kind.action_table.preview.func(candidate)"{{{
 endfunction"}}}
 
 let s:kind.action_table.mkdir = {
-      \ 'description' : 'make this directory or parents directory',
+      \ 'description' : 'make this directory and parents directory',
       \ 'is_quit' : 0,
       \ 'is_invalidate_cache' : 1,
       \ }
@@ -145,6 +146,7 @@ function! s:kind.action_table.rename.func(candidates)"{{{
   endfor
 endfunction"}}}
 
+" For vimfiler.
 let s:kind.action_table.vimfiler__move = {
       \ 'description' : 'move files',
       \ 'is_quit' : 0,
@@ -322,7 +324,6 @@ function! s:kind.action_table.copy.func(candidates)"{{{
   return s:kind.action_table.vimfiler__copy.func(a:candidates)
 endfunction"}}}
 
-
 let s:kind.action_table.vimfiler__delete = {
       \ 'description' : 'delete files',
       \ 'is_quit' : 0,
@@ -346,6 +347,54 @@ function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
     endif
   endfor
 endfunction"}}}
+
+let s:kind.action_table.vimfiler__newfile = {
+      \ 'description' : 'make this file',
+      \ 'is_quit' : 1,
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_listed' : 0,
+      \ }
+function! s:kind.action_table.vimfiler__newfile.func(candidate)"{{{
+  let l:filename = a:candidate.action__path
+  if filereadable(l:filename)
+    redraw
+    echo l:filename . ' is already exists.'
+    return
+  endif
+
+  call writefile([], l:filename)
+  call unite#mappings#do_action('open', [a:candidate])
+endfunction"}}}
+
+let s:kind.action_table.vimfiler__shell = {
+      \ 'description' : 'popup shell',
+      \ 'is_listed' : 0,
+      \ }
+function! s:kind.action_table.vimfiler__shell.func(candidate)"{{{
+  if !exists(':VimShellPop')
+    shell
+    return
+  endif
+
+  VimShellPop `=a:candidate.action__directory`
+
+  let l:files = unite#get_context().vimfiler__files
+  if !empty(l:files)
+    call setline(line('.'), getline('.') . ' ' . join(l:files))
+    normal! l
+  endif
+endfunction"}}}
+
+let s:kind.action_table.vimfiler__shellcmd = {
+      \ 'description' : 'execute shell command',
+      \ 'is_listed' : 0,
+      \ }
+function! s:kind.action_table.vimfiler__shellcmd.func(candidate)"{{{
+  let l:command = unite#get_context().vimfiler__command
+
+  echo unite#util#system(l:command)
+endfunction"}}}
+
 "}}}
 
 function! s:execute_command(command, candidate)"{{{
