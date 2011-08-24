@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Aug 2011.
+" Last Modified: 24 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -93,6 +93,10 @@ let s:kind.action_table.open = {
 function! s:kind.action_table.open.func(candidates)"{{{
   for l:candidate in a:candidates
     call s:execute_command('edit', l:candidate)
+
+    call unite#remove_previewed_buffer_list(
+          \ bufnr(unite#util#escape_file_searching(
+          \       l:candidate.action__path)))
   endfor
 endfunction"}}}
 
@@ -101,8 +105,17 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
+  let l:buflisted = buflisted(
+        \ unite#util#escape_file_searching(
+        \ a:candidate.action__path))
   if filereadable(a:candidate.action__path)
     call s:execute_command('pedit', a:candidate)
+  endif
+
+  if !l:buflisted
+    call unite#add_previewed_buffer_list(
+        \ bufnr(unite#util#escape_file_searching(
+        \       a:candidate.action__path)))
   endif
 endfunction"}}}
 

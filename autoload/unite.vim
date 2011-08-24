@@ -603,6 +603,24 @@ endfunction"}}}
 function! unite#get_current_unite() "{{{
   return exists('b:unite') && !s:use_current_unite ? b:unite : s:current_unite
 endfunction"}}}
+function! unite#add_previewed_buffer_list(bufnr) "{{{
+  let l:unite = unite#get_current_unite()
+  call add(l:unite.previewd_buffer_list, a:bufnr)
+endfunction"}}}
+function! unite#remove_previewed_buffer_list(bufnr) "{{{
+  let l:unite = unite#get_current_unite()
+  call filter(l:unite.previewd_buffer_list, 'v:val != a:bufnr')
+endfunction"}}}
+function! unite#clear_previewed_buffer_list() "{{{
+  let l:unite = unite#get_current_unite()
+  for l:bufnr in l:unite.previewd_buffer_list
+    if buflisted(l:bufnr)
+      silent execute 'bdelete!' l:bufnr
+    endif
+  endfor
+
+  let l:unite.previewd_buffer_list = []
+endfunction"}}}
 
 " Utils.
 function! unite#print_error(message)"{{{
@@ -1479,6 +1497,7 @@ function! s:initialize_current_unite(sources, context)"{{{
         \ len(filter(copy(l:sources), 'v:val.unite__context.is_async')) > 0
   let l:unite.access_time = localtime()
   let l:unite.is_finalized = 0
+  let l:unite.previewd_buffer_list = []
 
   " Preview windows check.
   let l:unite.has_preview_window =
@@ -1819,6 +1838,8 @@ function! s:on_buf_unload(bufname)  "{{{
     " Close preview window.
     pclose!
   endif
+
+  call unite#clear_previewed_buffer_list()
 
   if winnr('$') != 1
     execute l:unite.win_rest_cmd

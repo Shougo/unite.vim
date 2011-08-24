@@ -149,7 +149,7 @@ function! s:delete(delete_command, candidate)"{{{
     let l:winnr += 1
   endwhile
 
-  execute a:candidate.action__buffer_nr a:delete_command
+  silent execute a:candidate.action__buffer_nr a:delete_command
 endfunction"}}}
 function! s:alternate_buffer()"{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))

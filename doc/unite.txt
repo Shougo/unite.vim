@@ -1717,6 +1717,7 @@ CHANGELOG					*unite-changelog*
 2011-08-24
 - Fixed unite buffer delete.
 - Improved update time.
+- Implemented previewd_buffer_list.
 
 2011-08-23
 - Fixed get buffer name input.
