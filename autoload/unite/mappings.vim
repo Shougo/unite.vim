@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Aug 2011.
+" Last Modified: 25 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -172,6 +172,7 @@ endfunction"}}}
 function! unite#mappings#do_action(action_name, ...)"{{{
   let l:candidates = get(a:000, 0, unite#get_marked_candidates())
   let l:new_context = get(a:000, 1, {})
+  let l:is_clear_marks = get(a:000, 2, 1)
 
   let l:unite = unite#get_current_unite()
   if empty(l:candidates)
@@ -189,15 +190,17 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     endif
   endif
 
-  call filter(l:candidates, '!v:val.is_dummy')
+  call filter(copy(l:candidates), '!v:val.is_dummy')
   if empty(l:candidates)
     return
   endif
 
-  " Clear mark flag.
-  for l:candidate in l:candidates
-    let l:candidate.unite__is_marked = 0
-  endfor
+  if l:is_clear_marks
+    " Clear marks.
+    for l:candidate in l:candidates
+      let l:candidate.unite__is_marked = 0
+    endfor
+  endif
 
   let l:action_tables = s:get_action_table(a:action_name, l:candidates)
 

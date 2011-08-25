@@ -1716,6 +1716,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-25
 - Improved vimfiler interface.
+- Fixed auto preview.
 
 2011-08-24
 - Fixed unite buffer delete.
