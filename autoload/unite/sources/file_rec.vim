@@ -114,17 +114,21 @@ function! s:source_rec.vimfiler_gather_candidates(args, context)"{{{
     return []
   endif
 
-  let l:candidates = self.gather_candidates(a:args, a:context)
-  while !a:context.is_async
+  " Initialize.
+  let l:candidates = copy(self.gather_candidates(a:args, a:context))
+  while a:context.is_async
     " Gather all candidates.
 
     " User input check.
-    if getchar(1)
+    echo 'File searching...(if press any key, will cancel.)'
+    redraw
+    if getchar(0)
       break
     endif
 
     let l:candidates += self.async_gather_candidates(a:args, a:context)
   endwhile
+  redraw!
 
   let l:old_dir = getcwd()
   if l:path !=# l:old_dir

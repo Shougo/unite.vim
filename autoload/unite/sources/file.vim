@@ -202,9 +202,9 @@ endfunction"}}}
 
 function! unite#sources#file#create_file_dict(file, is_relative_path)"{{{
   let l:dict = {
-        \ 'word' : a:file,
-        \ 'abbr' : a:file, 'source' : 'file',
-        \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(a:file, ':p')),
+        \ 'word' : a:file, 'abbr' : a:file,
+        \ 'action__path' : unite#util#substitute_path_separator(
+        \ fnamemodify(a:file, ':p')),
         \}
   let l:dict.action__directory = a:is_relative_path ?
         \ unite#util#substitute_path_separator(

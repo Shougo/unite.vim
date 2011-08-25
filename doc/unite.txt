@@ -1718,6 +1718,7 @@ CHANGELOG					*unite-changelog*
 - Improved vimfiler interface.
 - Fixed auto preview.
 - Added file_rec vimfiler interface.
+- Implemented file_rec vimfiler interface.
 
 2011-08-24
 - Fixed unite buffer delete.
