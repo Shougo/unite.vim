@@ -108,9 +108,11 @@ function! s:source_rec.vimfiler_check_filetype(args, context)"{{{
   return [l:type, l:lines, l:dict]
 endfunction"}}}
 function! s:source_rec.vimfiler_gather_candidates(args, context)"{{{
-  let l:path = get(a:args, 0, '')
+  let l:path = s:get_path(a:args, a:context)
 
   if !isdirectory(l:path)
+    let a:context.source__directory = l:path
+
     return []
   endif
 
