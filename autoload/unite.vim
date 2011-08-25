@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Aug 2011.
+" Last Modified: 26 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -843,6 +843,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
       if !empty(l:ret)
         let [l:type, l:lines, l:dict] = l:ret
         if !empty(l:dict)
+          call s:initialize_candidates([l:dict], l:source.name)
           call s:initialize_vimfiler_candidates([l:dict])
         endif
 
@@ -1259,6 +1260,28 @@ function! s:initialize_buffer_name_options(buffer_name)"{{{
     let l:setting.unite__inputs = {}
   endif
 endfunction"}}}
+function! s:initialize_candidates(candidates, source_name)"{{{
+  for l:candidate in a:candidates
+    if !has_key(l:candidate, 'abbr')
+      let l:candidate.abbr = l:candidate.word
+    endif
+    if !has_key(l:candidate, 'kind')
+      let l:candidate.kind = 'common'
+    endif
+    if !has_key(l:candidate, 'source')
+      let l:candidate.source = a:source_name
+    endif
+    if !has_key(l:candidate, 'is_dummy')
+      let l:candidate.is_dummy = 0
+    endif
+    if !has_key(l:candidate, 'is_matched')
+      let l:candidate.is_matched = 1
+    endif
+    if !has_key(l:candidate, 'unite__is_marked')
+      let l:candidate.unite__is_marked = 0
+    endif
+  endfor
+endfunction"}}}
 function! s:initialize_vimfiler_candidates(candidates)"{{{
   " Set default vimfiler property.
   for l:candidate in a:candidates
@@ -1357,26 +1380,7 @@ function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
     let l:source.unite__context.candidates = l:source_candidates
     call s:call_hook([l:source], 'on_post_filter')
 
-    for l:candidate in l:source_candidates
-      if !has_key(l:candidate, 'abbr')
-        let l:candidate.abbr = l:candidate.word
-      endif
-      if !has_key(l:candidate, 'kind')
-        let l:candidate.kind = 'common'
-      endif
-      if !has_key(l:candidate, 'source')
-        let l:candidate.source = l:source.name
-      endif
-      if !has_key(l:candidate, 'is_dummy')
-        let l:candidate.is_dummy = 0
-      endif
-      if !has_key(l:candidate, 'is_matched')
-        let l:candidate.is_matched = 1
-      endif
-      if !has_key(l:candidate, 'unite__is_marked')
-        let l:candidate.unite__is_marked = 0
-      endif
-    endfor
+    call s:initialize_candidates(l:source_candidates, l:source.name)
 
     let l:source.unite__candidates = l:source_candidates
     let l:source.unite__is_invalidate = 0

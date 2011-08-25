@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Aug 2011.
+" Last Modified: 26 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -510,7 +510,13 @@ let s:kind.action_table.vimfiler__write = {
       \ 'description' : 'save file',
       \ }
 function! s:kind.action_table.vimfiler__write.func(candidate)"{{{
-  let l:lines = unite#get_context().action__lines
+  let l:context = unite#get_context()
+  let l:lines = getline(l:context.vimfiler__line1, l:context.vimfiler__line2)
+
+  if l:context.vimfiler__eventname ==# 'FileAppendCmd'
+    " Append.
+    let l:lines = readfile(a:candidate.action__path) + l:lines
+  endif
   call writefile(l:lines, a:candidate.action__path)
 endfunction"}}}
 "}}}

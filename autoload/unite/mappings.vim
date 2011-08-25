@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Aug 2011.
+" Last Modified: 26 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -181,7 +181,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     if type(l:num) == type(0)
       if line('$') - (l:unite.prompt_linenr + 1) < l:num
         " Ignore.
-        return
+        return []
       endif
 
       let l:candidates = [ unite#get_current_candidate() ]
@@ -192,7 +192,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
   call filter(copy(l:candidates), '!v:val.is_dummy')
   if empty(l:candidates)
-    return
+    return []
   endif
 
   if l:is_clear_marks
@@ -215,6 +215,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   " Execute action.
   let l:is_redraw = 0
   let l:is_quit = 0
+  let _ = []
   for l:table in l:action_tables
     " Check quit flag.
     if l:table.action.is_quit
@@ -222,7 +223,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
       let l:is_quit = 1
     endif
 
-    call l:table.action.func(l:table.candidates)
+    call add(_, l:table.action.func(l:table.candidates))
 
     " Check invalidate cache flag.
     if l:table.action.is_invalidate_cache
@@ -243,6 +244,8 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     call unite#force_redraw()
     normal! zb
   endif
+
+  return _
 endfunction"}}}
 
 function! s:get_action_table(action_name, candidates)"{{{
