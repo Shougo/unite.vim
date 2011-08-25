@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Aug 2011.
+" Last Modified: 25 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,6 +92,91 @@ endfunction"}}}
 
 function! s:source_rec.hooks.on_post_filter(args, context)"{{{
   call s:on_post_filter(a:args, a:context)
+endfunction"}}}
+
+function! s:source_rec.vimfiler_check_filetype(args, context)"{{{
+  let l:path = get(a:args, 0, '')
+
+  if isdirectory(l:path)
+    let l:type = 'directory'
+    let l:lines = []
+    let l:dict = {}
+  else
+    return []
+  endif
+
+  return [l:type, l:lines, l:dict]
+endfunction"}}}
+function! s:source_rec.vimfiler_gather_candidates(args, context)"{{{
+  let l:path = get(a:args, 0, '')
+
+  if !isdirectory(l:path)
+    return []
+  endif
+
+  let l:candidates = self.gather_candidates(a:args, a:context)
+  while !a:context.is_async
+    " Gather all candidates.
+
+    " User input check.
+    if getchar(1)
+      break
+    endif
+
+    let l:candidates += self.async_gather_candidates(a:args, a:context)
+  endwhile
+
+  let l:old_dir = getcwd()
+  if l:path !=# l:old_dir
+        \ && isdirectory(l:path)
+    lcd `=l:path`
+  endif
+
+  let l:exts = unite#util#is_win() ?
+        \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
+
+  " Set vimfiler property.
+  for l:candidate in l:candidates
+    call unite#sources#file#create_vimfiler_dict(l:candidate, l:exts)
+  endfor
+
+  if l:path !=# l:old_dir
+        \ && isdirectory(l:path)
+    lcd `=l:old_dir`
+  endif
+
+  return l:candidates
+endfunction"}}}
+function! s:source_rec.vimfiler_dummy_candidates(args, context)"{{{
+  let l:path = get(a:args, 0, '')
+
+  if l:path == ''
+    return []
+  endif
+
+  let l:old_dir = getcwd()
+  if l:path !=# l:old_dir
+        \ && isdirectory(l:path)
+    lcd `=l:path`
+  endif
+
+  let l:exts = unite#util#is_win() ?
+        \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
+
+  let l:is_relative_path = l:path !~ '^\%(/\|\a\+:/\)'
+
+  " Set vimfiler property.
+  let l:candidates = [ unite#sources#file#create_file_dict(l:path, l:is_relative_path) ]
+  for l:candidate in l:candidates
+    call unite#sources#file#create_vimfiler_dict(l:candidate, l:exts)
+  endfor
+
+  if l:path !=# l:old_dir
+        \ && isdirectory(l:path)
+    lcd `=l:old_dir`
+  endif
+
+  return l:candidates
 endfunction"}}}
 
 " Source async.
