@@ -1717,6 +1717,7 @@ CHANGELOG					*unite-changelog*
 2011-08-26
 - Implemented vimfiler write interface.
 - Implemented vimfiler completion interface.
+- Fixed grep action.
 
 2011-08-25
 - Improved vimfiler interface.
