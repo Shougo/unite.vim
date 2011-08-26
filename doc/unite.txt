@@ -1716,6 +1716,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-26
 - Implemented vimfiler write interface.
+- Implemented vimfiler completion interface.
 
 2011-08-25
 - Improved vimfiler interface.

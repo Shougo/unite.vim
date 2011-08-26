@@ -255,6 +255,10 @@ endfunction"}}}
 function! unite#loaded_sources_list()"{{{
   return s:get_loaded_sources()
 endfunction"}}}
+function! unite#get_vimfiler_source_names()"{{{
+  return map(filter(values(s:initialize_sources()),
+        \ 'has_key(v:val, "vimfiler_check_filetype")'), 'v:val.name')
+endfunction"}}}
 function! unite#get_unite_candidates()"{{{
   return unite#get_current_unite().candidates
 endfunction"}}}
@@ -880,6 +884,26 @@ function! unite#get_vimfiler_candidates(sources, ...)"{{{
   call s:initialize_vimfiler_candidates(l:candidates)
 
   return l:candidates
+endfunction"}}}
+function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
+  let l:context = {}
+  call s:initialize_context(l:context)
+
+  try
+    call s:initialize_current_unite(a:sources, l:context)
+  catch /^Invalid source/
+    return []
+  endtry
+
+  let _ = []
+  for l:source in unite#loaded_sources_list()
+    if has_key(l:source, 'vimfiler_complete')
+      let _ += l:source.vimfiler_complete(
+            \ l:source.args, l:context, a:arglead, a:cmdline, a:cursorpos)
+    endif
+  endfor
+
+  return _
 endfunction"}}}
 function! unite#resume(buffer_name)"{{{
   " Check command line window.
@@ -1945,6 +1969,11 @@ function! s:take_action(action_name, candidate, is_parent_action)"{{{
         \ [a:candidate] : a:candidate)
 endfunction"}}}
 function! s:get_loaded_sources(...)"{{{
+  if empty(s:static)
+    " Initialize load.
+    call s:load_default_scripts()
+  endif
+
   let l:unite = unite#get_current_unite()
   return a:0 == 0 ? l:unite.sources : get(filter(copy(l:unite.sources), 'v:val.name ==# a:1'), 0, {})
 endfunction"}}}
