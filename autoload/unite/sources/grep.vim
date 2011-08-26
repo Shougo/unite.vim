@@ -141,9 +141,10 @@ function! s:grep_source.gather_candidates(args, context) "{{{
   let l:cmdline = printf('%s %s ''%s'' %s %s',
     \   g:unite_source_grep_command,
     \   g:unite_source_grep_default_opts,
+    \   a:context.source__extra_opts,
     \   substitute(a:context.source__input, "'", "''", 'g'),
     \   join(a:context.source__target),
-    \   a:context.source__extra_opts)
+    \)
   call unite#print_message('[grep] Command-line: ' . l:cmdline)
   let a:context.source__proc = vimproc#pgroup_open(l:cmdline)
   " let a:context.source__proc = vimproc#popen3(l:cmdline)
