@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Aug 2011.
+" Last Modified: 27 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -727,12 +727,36 @@ function! unite#start(sources, ...)"{{{
   let s:use_current_unite = 1
 
   if l:context.toggle
+    let l:quit_winnr = 0
+
     " Search unite window.
     " Note: must escape file-pattern.
     let l:buffer_name = unite#util#escape_file_searching(l:context.buffer_name)
     if bufwinnr(l:buffer_name) > 0
-      silent execute bufwinnr(l:buffer_name) 'wincmd w'
+      let l:quit_winnr = bufwinnr(l:buffer_name)
+    else
+      " Search from temporary buffer.
+      let l:winnr = 1
+      while l:winnr <= winnr('$')
+        if type(getbufvar(winbufnr(l:winnr), 'unite')) == type({})
+          let l:buffer_context = getbufvar(winbufnr(l:winnr), 'unite').context
+          if l:buffer_context.temporary
+                \ && !empty(filter(copy(l:buffer_context.old_buffer_info),
+                  \ 'v:val.buffer_name ==# l:context.buffer_name'))
+            let l:quit_winnr = l:winnr
+            " Disable resume.
+            let l:buffer_context.old_buffer_info = []
+            break
+          endif
+        endif
+
+        let l:winnr += 1
+      endwhile
+    endif
+
+    if l:quit_winnr > 0
       " Quit unite buffer.
+      silent execute l:quit_winnr 'wincmd w'
       call unite#force_quit_session()
       return
     endif
@@ -782,7 +806,7 @@ function! unite#start(sources, ...)"{{{
   endfor
   call unite#redraw_candidates()
 
-  if l:unite.context.start_insert || l:unite.context.complete
+  if l:unite.context.start_insert
     let l:unite.is_insert = 1
 
     execute l:unite.prompt_linenr
@@ -810,6 +834,8 @@ function! unite#start(sources, ...)"{{{
       normal! zb
     endif
     normal! 0
+
+    stopinsert
   endif
 endfunction"}}}
 function! unite#start_temporary(sources, new_context, buffer_name)"{{{
@@ -953,7 +979,7 @@ function! unite#resume(buffer_name)"{{{
 
   let s:current_unite = l:unite
 
-  if g:unite_enable_start_insert
+  if l:unite.context.start_insert
     let l:unite.is_insert = 1
 
     execute l:unite.prompt_linenr
@@ -978,22 +1004,25 @@ function! unite#resume(buffer_name)"{{{
       execute (l:unite.prompt_linenr+1)
     endif
     normal! 0zb
+
+    stopinsert
   endif
 endfunction"}}}
 function! s:initialize_context(context)"{{{
   if !has_key(a:context, 'input')
     let a:context.input = ''
   endif
+  if !has_key(a:context, 'complete')
+    let a:context.complete = 0
+  endif
   if !has_key(a:context, 'start_insert')
-    let a:context.start_insert = g:unite_enable_start_insert
+    let a:context.start_insert = a:context.complete ?
+          \ 1 : g:unite_enable_start_insert
   endif
   if has_key(a:context, 'no_start_insert')
         \ && a:context.no_start_insert
     " Disable start insert.
     let a:context.start_insert = 0
-  endif
-  if !has_key(a:context, 'complete')
-    let a:context.complete = 0
   endif
   if !has_key(a:context, 'col')
     let a:context.col = col('.')
@@ -1123,6 +1152,10 @@ function! s:quit_session(is_force)  "{{{
   endif
 endfunction"}}}
 function! s:resume_from_temporary(context)  "{{{
+  if empty(a:context.old_buffer_info)
+    return
+  endif
+
   " Resume unite buffer.
   let l:buffer_info = a:context.old_buffer_info[0]
   call unite#resume(l:buffer_info.buffer_name)
