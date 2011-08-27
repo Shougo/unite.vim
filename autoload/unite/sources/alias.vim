@@ -51,7 +51,8 @@ function! s:make_aliases()
     function! l:alias.hooks.on_pre_init(args, context)
       let l:config = a:context.source.source__config
       let l:original_source =
-            \ (!has_key(l:config, 'source')) ? {} :
+            \ (!has_key(l:config, 'source') ||
+            \  l:config.source ==# l:config.source) ? {} :
             \ deepcopy(unite#get_sources(l:config.source))
       let l:original_source.name = a:context.source.name
       let l:original_source.description = a:context.source.description

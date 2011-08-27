@@ -1221,7 +1221,8 @@ function! s:initialize_sources()"{{{
 
   let l:sources = extend(copy(s:static.sources), s:dynamic.sources)
 
-  for l:source in values(filter(copy(l:sources), '!has_key(v:val, "is_initialized")'))
+  for l:source in values(filter(copy(l:sources),
+        \ '!has_key(v:val, "is_initialized")'))
     let l:source.is_initialized = 1
 
     if !has_key(l:source, 'hooks')
