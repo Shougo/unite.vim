@@ -1716,6 +1716,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-27
 - Fixed unite toggle.
+- Added alias source.
 
 2011-08-26
 - Implemented vimfiler write interface.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: source.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Aug 2011.
+" Last Modified: 27 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,8 +39,8 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
-  return map(sort(filter(values(unite#get_sources()), 'v:val.is_listed'),
-        \                       's:compare_sources'), '{
+  return map(unite#util#sort_by(filter(values(unite#get_sources()), 'v:val.is_listed'),
+        \                       'v:val.name'), '{
         \ "word" : v:val.name,
         \ "abbr" : unite#util#truncate(v:val.name, 25) .
         \         (v:val.description != "" ? " -- " . v:val.description : ""),
@@ -48,11 +48,6 @@ function! s:source.gather_candidates(args, context)"{{{
         \ "action__source_name" : v:val.name,
         \ "action__source_args" : [],
         \}')
-endfunction"}}}
-
-function! s:compare_sources(source_a, source_b) "{{{
-  return a:source_a.name ==# a:source_b.name ? 0 :
-  \      a:source_a.name >#  a:source_b.name ? 1 : -1
 endfunction"}}}
 
 let &cpo = s:save_cpo
