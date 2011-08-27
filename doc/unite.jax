@@ -479,6 +479,8 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 		値として次の属性を持つ辞書を取る。
 		alias sourceは元々のsourceのコピーであるため、alias sourceの
 		中身を変更しても、元々のsourceに影響を与えることはない。
+		引数を静的に指定したsourceの別名を定義したり、元のsourceから
+		filterのみを変更したsourceを定義することができる。
 
 		source			(文字列)	(必須)
 		alias sourceの定義となるsource名を指定する。
