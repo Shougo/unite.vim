@@ -473,6 +473,36 @@ g:unite_source_line_search_word_highlight	*g:unite_source_line_search_word_highl
 
 		初期値は"Search"である。
 
+g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
+		|unite-source-alias|が定義するsourceのaliasを設定する。
+		この変数は辞書であり、キーとしてaliasとして定義するsourceの名前、
+		値として次の属性を持つ辞書を取る。
+		alias sourceは元々のsourceのコピーであるため、alias sourceの
+		中身を変更しても、元々のsourceに影響を与えることはない。
+
+		source			(文字列)	(必須)
+		alias sourceの定義となるsource名を指定する。
+		ここで指定するsourceは、alias sourceが呼び出されるときには、
+		定義されていなければならない。
+
+		args			(文字列)	(任意)
+		alias sourceに自動的に与えられる引数。
+
+		description		(文字列)	(任意)
+		alias sourceの説明用文字列。
+
+		例えば、次の設定では"file_rec" sourceの定義を利用し、"test"というsourceが定義される。
+		このsourceの引数には自動的に"~/"がセットされる。
+>
+		let g:unite_source_alias_aliases = {
+		      \   'test' : {
+		      \     'source': 'file_rec',
+		      \     'args': '~/',
+		      \   },
+		      \ }
+<
+		初期値は{}である。
+
 kindの変数					*unite-kinds-variables*
 
 g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scroll*
@@ -1146,6 +1176,13 @@ launcher	$PATHにパスを通した実行ファイルを候補とする。
 		source引数：
 		1. カンマ区切りの実行ファイルへのパス
 
+						*unite-source-alias*
+alias		すでに存在するsourceの定義をコピーし、aliasのsourceを生成する。
+		このsource自体はダミーである。aliasというsourceは存在しない。
+		alias sourceの作り方については、|g:unite_source_alias_aliases|を
+		参照せよ。
+		Note: このsourceはtacroeによって作成された。
+
 ==============================================================================
 kind						*unite-kinds*
 
@@ -1634,6 +1671,12 @@ hooks			辞書		(任意)
 			パフォーマンスの影響を避けるため、絞り込まれた後に属性
 			をセットする際に使用する。
 			この関数は{args}と{context}を引数に取る。
+
+			on_pre_init		*unite-source-attribute-hooks-on_pre_init*
+			sourceが初期化される前に呼ばれる。{args}は空である。{context}には
+			現在のsourceが"a:context.source"にセットされている。
+			この関数内で"a:context.source"を変更することで、現在
+			のsourceを動的に初期化することができる。
 
 						*unite-source-attribute-action_table*
 action_table		辞書		(任意)

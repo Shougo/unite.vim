@@ -47,17 +47,45 @@ function! s:make_aliases()
     let l:alias.description = get(l:config, 'description',
           \ s:make_default_description(l:config.source, l:args))
     let l:alias.source__config = l:config
+    let l:alias.source__args = l:args
     let l:alias.hooks = {}
+
     function! l:alias.hooks.on_pre_init(args, context)
       let l:config = a:context.source.source__config
       let l:original_source =
             \ (!has_key(l:config, 'source') ||
-            \  l:config.source ==# l:config.source) ? {} :
+            \  l:config.source ==# a:context.source.name) ? {} :
             \ deepcopy(unite#get_sources(l:config.source))
-      let l:original_source.name = a:context.source.name
-      let l:original_source.description = a:context.source.description
+      let l:alias_source = deepcopy(a:context.source)
 
-      return extend(a:context.source, l:original_source)
+      let l:source = extend(a:context.source,
+            \ filter(copy(l:original_source),
+            \ 'type(v:val) != type(function("type"))'))
+      let l:source.name = l:alias_source.name
+      let l:source.description = l:alias_source.description
+      let l:source.hooks = {}
+      let l:source.source__original_source = l:original_source
+
+      " Overwrite functions.
+      for l:func in keys(l:original_source.hooks)
+        let l:define_function = join([
+              \ 'function! l:source.hooks.' . l:func . '(args, context)',
+              \ '  let l:args = a:context.source.source__args + a:args',
+              \ '  return a:context.source.source__original_source.hooks.'
+              \                    . l:func . '(l:args, a:context)',
+              \ 'endfunction'], "\n")
+        execute l:define_function
+      endfor
+      for l:func in keys(filter(copy(l:original_source),
+            \ 'type(v:val) == type(function("type"))'))
+        let l:define_function = join([
+              \ 'function! l:source.' . l:func . '(args, context)',
+              \ '  let l:args = a:context.source.source__args + a:args',
+              \ '  return a:context.source.source__original_source.'
+              \                    . l:func . '(l:args, a:context)',
+              \ 'endfunction'], "\n")
+        execute l:define_function
+      endfor
     endfunction
 
     call add(l:aliases, l:alias)

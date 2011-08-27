@@ -1237,7 +1237,7 @@ function! s:initialize_sources()"{{{
       let l:source.unite__context = { 'source' : l:source }
 
       " Overwrite source values.
-      let [l:source] = s:call_hook([l:source], 'on_pre_init')
+      call s:call_hook([l:source], 'on_pre_init')
     endif
 
     if !has_key(l:source, 'is_volatile')
@@ -1285,9 +1285,6 @@ function! s:initialize_sources()"{{{
           \ has_key(l:source, 'max_candidates') ?
           \ l:source.max_candidates :
           \ 0
-  endfor
-
-  for l:source in values(filter(copy(l:sources), '!has_key(v:val, "is_initialized")'))
   endfor
 
   return l:sources
@@ -2056,12 +2053,10 @@ function! s:call_hook(sources, hook_name)"{{{
   let _ = []
   for l:source in a:sources
     if has_key(l:source.hooks, a:hook_name)
-      call add(_, call(l:source.hooks[a:hook_name],
-            \ [l:source.args, l:source.unite__context], l:source.hooks))
+      call call(l:source.hooks[a:hook_name],
+            \ [l:source.args, l:source.unite__context], l:source.hooks)
     endif
   endfor
-
-  return _
 endfunction"}}}
 function! s:is_cmdwin()"{{{
   silent! noautocmd wincmd p

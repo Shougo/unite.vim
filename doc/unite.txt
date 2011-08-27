@@ -479,6 +479,32 @@ g:unite_source_line_search_word_highlight	*g:unite_source_line_search_word_highl
 
 		Default value is "Search".
 
+g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
+		Set |unite-source-alias| settings.
+		This variable is dictionary. The key is alias source name,
+		and the value is following attributes dictionary.
+		Alias sources are copy of original source.
+
+		source			(String)	(Required)
+		Base source name.
+
+		args			(String)	(Optional)
+		Set arguments automatically.
+
+		description		(String)	(Optional)
+		Description length.
+
+		Example:
+>
+		let g:unite_source_alias_aliases = {
+		      \   'test' : {
+		      \     'source': 'file_rec',
+		      \     'args': '~/',
+		      \   },
+		      \ }
+<
+		Default value is "{}".
+
 KINDS VARIABLES					*unite-kinds-variables*
 
 g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scroll*
@@ -1114,6 +1140,12 @@ launcher	Nominates executable files from $PATH as candidates.
 		Source arguments:
 		1. comma separated executable files path.
 
+						*unite-source-alias*
+alias		Create alias source copied original source.
+		This source is dummy. To create alias source, please refer to
+		|g:unite_source_alias_aliases|.
+		Note: This source is created by tacroe.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1451,6 +1483,9 @@ hooks			Dictionary		(Optional)
 			on_post_filter		*unite-source-attribute-hooks-on_post_filter*
 			Todo
 
+			on_pre_init		*unite-source-attribute-hooks-on_pre_init*
+			Todo
+
 						*unite-source-attribute-action_table*
 action_table		Dictionary		(Optional)
 			Todo
@@ -1713,6 +1748,10 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-08-28
+- Fixed unite alias.
+- Added documentation.
 
 2011-08-27
 - Fixed unite toggle.
