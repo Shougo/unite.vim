@@ -1763,7 +1763,7 @@ function! s:redraw(is_force, winnr) "{{{
     " Set current unite.
     let l:use_current_unite_save = s:use_current_unite
     let s:use_current_unite = 1
-    let l:unite = getbufvar(a:winnr, 'unite')
+    let l:unite = getbufvar(winbufnr(a:winnr), 'unite')
     let l:unite_save = s:current_unite
 
     execute a:winnr 'wincmd w'
