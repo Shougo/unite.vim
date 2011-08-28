@@ -2,7 +2,7 @@
 " FILE: alias.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          tacroe <tacroe at gmail.com>
-" Last Modified: 27 Aug 2011.
+" Last Modified: 28 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,6 +57,14 @@ function! s:make_aliases()
             \  l:config.source ==# a:context.source.name) ? {} :
             \ deepcopy(unite#get_sources(l:config.source))
       let l:alias_source = deepcopy(a:context.source)
+
+      if has_key(l:original_source, 'hooks')
+            \ && has_key(l:original_source.hooks, 'on_pre_init')
+        " Call pre init hook.
+        call l:original_source.hooks.on_pre_init(
+              \ a:context.source.source__args + a:args,
+              \ { 'source' : l:original_source })
+      endif
 
       let l:source = extend(a:context.source,
             \ filter(copy(l:original_source),
