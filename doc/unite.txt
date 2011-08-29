@@ -1711,7 +1711,8 @@ NOTATION					*unite-notation*
 				Todo
 
 			is_invalidate		(Number)
-				Todo
+				1 if action disables a cache. This is also 1
+				in initialization of unite buffer.
 
 			is_async		(Number)
 				Todo
