@@ -1919,8 +1919,13 @@ function! s:on_cursor_moved()  "{{{
 endfunction"}}}
 function! s:on_buf_unload(bufname)  "{{{
   " Save unite value.
-  let s:current_unite = getbufvar(a:bufname, 'unite')
-  let l:unite = s:current_unite
+  let l:unite = getbufvar(a:bufname, 'unite')
+  if type(l:unite) != type({})
+    " Invalid unite.
+    return
+  endif
+
+  let s:current_unite = l:unite
 
   if l:unite.is_finalized
     return

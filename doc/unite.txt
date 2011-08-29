@@ -1751,6 +1751,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-29
 - Fixed unite alias.
+- Fixed unite on_buf_unload error.
 
 2011-08-28
 - Fixed unite alias.
