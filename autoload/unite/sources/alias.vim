@@ -2,7 +2,7 @@
 " FILE: alias.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          tacroe <tacroe at gmail.com>
-" Last Modified: 28 Aug 2011.
+" Last Modified: 29 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -75,7 +75,8 @@ function! s:make_aliases()
       let l:source.source__original_source = l:original_source
 
       " Overwrite functions.
-      for l:func in keys(l:original_source.hooks)
+      for l:func in filter(keys(l:original_source.hooks),
+            \ 'v:val !=# "on_pre_init"')
         let l:define_function = join([
               \ 'function! l:source.hooks.' . l:func . '(args, context)',
               \ '  let l:args = a:context.source.source__args + a:args',
