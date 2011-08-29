@@ -275,11 +275,12 @@ COMMANDS 					*unite-commands*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the word on the cursor.
 
-:UniteResume [{buffer-name}]			*:UniteResume*
+:UniteResume [{options}] [{buffer-name}]		*:UniteResume*
 		Reuses the unite buffer previously opened named {buffer-name}.
 		Reuses the last unite buffer you used if you skipped
 		specifying {buffer-name}.  Narrowing texts or candidates are
-		same to them.
+		same to them. If {options} are given, context information
+		will override.
 
 A command of source				*:unite-sources-command*
 
@@ -1748,6 +1749,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-08-30
+- Improved :UniteResume.
 
 2011-08-29
 - Fixed unite alias.

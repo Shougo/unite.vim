@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2011.
+" Last Modified: 30 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -479,13 +479,14 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   let l:sources = filter(s:initialize_sources(), 'v:val.is_listed')
   return filter(sort(keys(l:sources))+s:unite_options, 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
-function! unite#complete_buffer(arglead, cmdline, cursorpos)"{{{
-  let l:buffer_list = map(filter(range(1, bufnr('$')), '
+function! unite#complete_resume(arglead, cmdline, cursorpos)"{{{
+  let _ = map(filter(range(1, bufnr('$')), '
         \ getbufvar(v:val, "&filetype") ==# "unite" &&
         \ !getbufvar(v:val, "unite").context.temporary'),
         \ 'getbufvar(v:val, "unite").buffer_name')
+  let _ += s:unite_options
 
-  return filter(l:buffer_list, printf('stridx(v:val, %s) == 0', string(a:arglead)))
+  return filter(_, printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 function! unite#invalidate_cache(source_name)  "{{{
   for l:source in unite#get_current_unite().sources
@@ -721,7 +722,7 @@ function! unite#start(sources, ...)"{{{
     return
   endif
 
-  let l:context = a:0 >= 1 ? a:1 : {}
+  let l:context = get(a:000, 0, {})
   call s:initialize_context(l:context)
 
   let s:use_current_unite = 1
@@ -858,7 +859,7 @@ function! unite#start_temporary(sources, new_context, buffer_name)"{{{
   call unite#start(a:sources, l:context)
 endfunction"}}}
 function! unite#vimfiler_check_filetype(sources, ...)"{{{
-  let l:context = a:0 >= 1 ? a:1 : {}
+  let l:context = get(a:000, 0, {})
   call s:initialize_context(l:context)
 
   try
@@ -886,7 +887,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
   return []
 endfunction"}}}
 function! unite#get_vimfiler_candidates(sources, ...)"{{{
-  let l:context = a:0 >= 1 ? a:1 : {}
+  let l:context = get(a:000, 0, {})
   call s:initialize_context(l:context)
 
   try
@@ -931,7 +932,7 @@ function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
 
   return _
 endfunction"}}}
-function! unite#resume(buffer_name)"{{{
+function! unite#resume(buffer_name, ...)"{{{
   " Check command line window.
   if s:is_cmdwin()
     echoerr 'Command line buffer is detected!'
@@ -970,12 +971,16 @@ function! unite#resume(buffer_name)"{{{
 
   call s:switch_unite_buffer(bufname(l:bufnr), l:context)
 
+  let l:context = get(a:000, 0, {})
+  call s:initialize_context(l:context)
+
   " Set parameters.
   let l:unite = unite#get_current_unite()
   let l:unite.winnr = l:winnr
   let l:unite.win_rest_cmd = l:win_rest_cmd
   let l:unite.redrawtime_save = &redrawtime
   let l:unite.access_time = localtime()
+  let l:unite.context = extend(l:unite.context, l:context)
 
   let s:current_unite = l:unite
 

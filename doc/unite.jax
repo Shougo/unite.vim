@@ -276,10 +276,11 @@ http://www.ustream.tv/recorded/11240673
 		|:UniteWithInput|と同じであるが、入力する文字列はデイレクトリと
 		みなされ、自動的に変換される。
 
-:UniteResume [{buffer-name}]			*:UniteResume*
+:UniteResume [{options}] [{buffer-name}]		*:UniteResume*
 		以前開いた{buffer-name}という名前のuniteバッファを再利用する。
 		{buffer-name}を省略すると、以前使用したバッファを再利用する。
 		絞込みテキストや候補はそのままの状態となる。
+		{options}を与えると、context情報を上書きする。
 
 sourceのコマンド				*unite-sources-commands*
 
