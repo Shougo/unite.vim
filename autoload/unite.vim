@@ -2035,6 +2035,7 @@ function! s:filter_alias_action(action_table, alias_table, from)"{{{
     elseif has_key(a:action_table, l:alias_action)
       let a:action_table[l:alias_name] = a:action_table[l:alias_action]
       let a:action_table[l:alias_name].from = a:from
+      let a:action_table[l:alias_name].name = l:alias_name
     endif
   endfor
 endfunction"}}}

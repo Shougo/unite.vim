@@ -657,18 +657,11 @@ function! s:source_action.gather_candidates(args, context)"{{{
   let l:candidates = copy(a:args)
 
   " Print candidates.
-  call unite#print_message(map(copy(l:candidates), '"[action] candidates: ".v:val.abbr."(".v:val.source.")"'))
+  call unite#print_message(map(copy(l:candidates),
+        \ '"[action] candidates: ".v:val.abbr."(".v:val.source.")"'))
 
   " Process Alias.
   let l:actions = s:get_actions(l:candidates)
-  let l:alias_table = unite#get_alias_table(
-        \ l:candidates[0].source, l:candidates[0].kind)
-  for [l:alias_name, l:action_name] in items(l:alias_table)
-    if has_key(l:actions, l:alias_name) && has_key(l:actions, l:action_name)
-      let l:actions[l:action_name] = copy(l:actions[l:action_name])
-      let l:actions[l:action_name].name = l:alias_name
-    endif
-  endfor
 
   " Uniq.
   let l:uniq_actions = {}

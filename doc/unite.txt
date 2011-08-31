@@ -1759,6 +1759,7 @@ CHANGELOG					*unite-changelog*
 - Implemented action_table syntax sugar.
 - Supported kind list(experimental).
 - Fixed unite-mappings.
+- Improved alias.
 
 2011-08-30
 - Improved :UniteResume.
