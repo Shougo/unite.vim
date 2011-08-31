@@ -1592,7 +1592,7 @@ NOTATION					*unite-notation*
 			source			(String)	(Optional)
 				Todo
 
-			kind			(String)	(Optional)
+			kind			(String/List)	(Optional)
 				Todo
 
 			is_dummy		(Number)	(Optional)
@@ -1680,10 +1680,10 @@ Todo
 (4) Default action table for kind "source/file/*".
 (5) Custom action table for kind "file".
 (6) Default action table for kind "file".
-(7) Custom action table for kind "openable".
-(8) Default action table for kind "openable".
-(9) Custom action table for kind "cdable".
-(10) Default action table for kind "cdable".
+(7) Custom action table for kind "cdable".
+(8) Default action table for kind "cdable".
+(9) Custom action table for kind "openable".
+(10) Default action table for kind "openable".
 (11) Custom action table for kind "common".
 (12) Default action table for kind "common".
 
@@ -1757,6 +1757,7 @@ CHANGELOG					*unite-changelog*
 - Fixed new file action.
 - Added register delete action.
 - Implemented action_table syntax sugar.
+- Supported kind list(experimental).
 
 2011-08-30
 - Improved :UniteResume.

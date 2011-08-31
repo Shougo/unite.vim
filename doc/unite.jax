@@ -1858,8 +1858,16 @@ NOTATION					*unite-notation*
 				候補が所属するsource名。省略された場合、自動
 				的にセットされる。
 
-			kind			(文字列)	(任意)
+			kind			(文字列/リスト)	(任意)
 				候補が所属するkind名。省略すると"common"となる。
+				ここにはリストを指定することもできる。リスト
+				の場合、アクションの検索については、リストの順
+				番で辿っていき、後から見つかったものによって上
+				書きされる。例えば、["file", "command"]とすると、
+				"file"のアクションは"command"のアクションで上
+				書きされる。この場合、デフォルトアクションの検
+				索は、"command" kindからしか行われないことに注
+				意。
 
 			is_dummy		(数値)		(任意)
 				ダミー候補であるかどうか。省略すると0となる。
@@ -1996,10 +2004,10 @@ actionの解決順序				*unite-action-resolution-order*
 (4) Default action table for kind "source/file/*".
 (5) Custom action table for kind "file".
 (6) Default action table for kind "file".
-(7) Custom action table for kind "openable".
-(8) Default action table for kind "openable".
-(9) Custom action table for kind "cdable".
-(10) Default action table for kind "cdable".
+(7) Custom action table for kind "cdable".
+(8) Default action table for kind "cdable".
+(9) Custom action table for kind "openable".
+(10) Default action table for kind "openable".
 (11) Custom action table for kind "common".
 (12) Default action table for kind "common".
 

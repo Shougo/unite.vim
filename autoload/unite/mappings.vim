@@ -253,11 +253,13 @@ function! s:get_action_table(action_name, candidates)"{{{
   let l:action_tables = []
   let Self = unite#get_self_functions()[-1]
   for l:candidate in a:candidates
-    let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, Self)
+    let l:kinds = type(l:candidate.kind) == type([]) ?
+          \ l:candidate.kind : [l:candidate.kind]
+    let l:action_table = s:get_candidate_action_table(l:candidate)
 
     let l:action_name =
           \ a:action_name ==# 'default' ?
-          \ unite#get_default_action(l:candidate.source, l:candidate.kind)
+          \ unite#get_default_action(l:candidate.source, l:kinds[-1])
           \ : a:action_name
 
     if !has_key(l:action_table, l:action_name)
@@ -300,17 +302,39 @@ function! s:get_action_table(action_name, candidates)"{{{
 endfunction"}}}
 function! s:get_actions(candidates)"{{{
   let Self = unite#get_self_functions()[-1]
-  let l:actions = unite#get_action_table(a:candidates[0].source, a:candidates[0].kind, Self)
-  if len(a:candidates) > 1
-    for l:candidate in a:candidates
-      let l:action_table = unite#get_action_table(l:candidate.source, l:candidate.kind, Self)
-      " Filtering unique items and check selectable flag.
-      call filter(l:actions, 'has_key(l:action_table, v:key)
-            \ && l:action_table[v:key].is_selectable')
-    endfor
-  endif
+
+  let l:actions = s:get_candidate_action_table(a:candidates[0])
+
+  for l:candidate in a:candidates[1:]
+    let l:action_table = s:get_candidate_action_table(l:candidate)
+    " Filtering unique items and check selectable flag.
+    call filter(l:actions, 'has_key(l:action_table, v:key)
+          \ && l:action_table[v:key].is_selectable')
+  endfor
 
   return l:actions
+endfunction"}}}
+function! s:get_candidate_action_table(candidate)"{{{
+  let Self = unite#get_self_functions()[-1]
+
+  let l:action_table = {}
+  for l:kind_name in type(a:candidate.kind) == type([]) ?
+        \ a:candidate.kind : [a:candidate.kind]
+    call extend(l:action_table,
+          \ unite#get_action_table(a:candidate.source, l:kind_name, Self))
+  endfor
+
+  return l:action_table
+endfunction"}}}
+function! s:get_candidate_alias_table(candidate)"{{{
+  let l:alias_table = {}
+  for l:kind_name in type(a:candidate.kind) == type([]) ?
+        \ a:candidate.kind : [a:candidate.kind]
+    call extend(l:alias_table,
+          \ unite#get_alias_table(a:candidate.source, l:kind_name))
+  endfor
+
+  return l:alias_table
 endfunction"}}}
 
 " key-mappings functions.
@@ -656,8 +680,7 @@ function! s:source_action.gather_candidates(args, context)"{{{
 
   " Process Alias.
   let l:actions = s:get_actions(l:candidates)
-  let l:alias_table = unite#get_alias_table(
-        \ l:candidates[0].source, l:candidates[0].kind)
+  let l:alias_table = s:get_candidate_alias_table(l:candidates[0])
   for [l:alias_name, l:action_name] in items(l:alias_table)
     if has_key(l:actions, l:alias_name)
       let l:actions[l:action_name] = copy(l:actions[l:action_name])
@@ -678,7 +701,6 @@ function! s:source_action.gather_candidates(args, context)"{{{
   return sort(map(filter(values(l:uniq_actions), 'v:val.is_listed'), '{
         \   "word": v:val.name,
         \   "abbr": printf("%-' . l:max . 's -- %s", v:val.name, v:val.description),
-        \   "kind": "common",
         \   "source__candidates": l:candidates,
         \   "action__action": l:actions[v:val.name],
         \ }'), 's:compare_word')
