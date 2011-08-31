@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Aug 2011.
+" Last Modified: 31 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1254,15 +1254,27 @@ function! s:initialize_sources()"{{{
     if !has_key(l:source, 'required_pattern_length')
       let l:source.required_pattern_length = 0
     endif
+
     if !has_key(l:source, 'action_table')
       let l:source.action_table = {}
+    elseif !empty(l:source.action_table)
+      let l:action = values(l:source.action_table)[0]
+
+      " Check if '*' action_table?
+      if has_key(l:action, 'func')
+            \ && type(l:action.func) == type(function('type'))
+        " Syntax sugar.
+        let l:source.action_table = { '*' : l:source.action_table }
+      endif
     endif
+
     if !has_key(l:source, 'default_action')
       let l:source.default_action = {}
     elseif type(l:source.default_action) == type('')
       " Syntax sugar.
       let l:source.default_action = { '*' : l:source.default_action }
     endif
+
     if !has_key(l:source, 'alias_table')
       let l:source.alias_table = {}
     endif

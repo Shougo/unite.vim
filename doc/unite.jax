@@ -1701,7 +1701,13 @@ action_table		辞書		(任意)
 			キーのkindに"*"を設定すると、どんなkindにもマッチするよ
 			うになる。候補のkindが一種類しかない場合に便利である。
 			もしこれが与えられない場合、空となる。
-
+			action_tableに、アクションテーブルをそのまま記述することも
+			できる。その場合、キーのkindは"*"だと解釈される。
+			つまり、次の二つは同じ意味である。
+>
+			'action_table' : foo_action_table
+			'action_table' : { '*' : foo_action_table }
+<
 						*unite-source-attribute-default_action*
 default_action		辞書		(任意)
 			source独自の標準的なアクションを追加するときに使用する。

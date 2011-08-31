@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Aug 2011.
+" Last Modified: 31 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -118,23 +118,19 @@ function! s:source.gather_candidates(args, context)"{{{
 endfunction"}}}
 
 " Actions"{{{
-let s:action_table = {}
-
-let s:action_table.delete = {
+let s:source.action_table.delete = {
       \ 'description' : 'delete from directory_mru list',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:action_table.delete.func(candidates)"{{{
+function! s:source.action_table.delete.func(candidates)"{{{
   for l:candidate in a:candidates
     call filter(s:mru_dirs, 'v:val.action__path !=# l:candidate.action__path')
   endfor
 
   call s:save()
 endfunction"}}}
-
-let s:source.action_table.directory = s:action_table
 "}}}
 
 " Misc

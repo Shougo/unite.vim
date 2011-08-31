@@ -1756,6 +1756,7 @@ CHANGELOG					*unite-changelog*
 2011-08-31
 - Fixed new file action.
 - Added register delete action.
+- Implemented action_table syntax sugar.
 
 2011-08-30
 - Improved :UniteResume.

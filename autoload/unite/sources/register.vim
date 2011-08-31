@@ -74,21 +74,17 @@ function! s:source.gather_candidates(args, context)"{{{
 endfunction"}}}
 
 " Actions"{{{
-let s:action_table = {}
-
-let s:action_table.delete = {
+let s:source.action_table.delete = {
       \ 'description' : 'delete registers',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:action_table.delete.func(candidates)"{{{
+function! s:source.action_table.delete.func(candidates)"{{{
   for l:candidate in a:candidates
     execute 'let' l:candidate.action__register '= ""'
   endfor
 endfunction"}}}
-
-let s:source.action_table['*'] = s:action_table
 "}}}
 
 let &cpo = s:save_cpo
