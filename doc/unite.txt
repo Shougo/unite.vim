@@ -1758,6 +1758,7 @@ CHANGELOG					*unite-changelog*
 - Added register delete action.
 - Implemented action_table syntax sugar.
 - Supported kind list(experimental).
+- Fixed unite-mappings.
 
 2011-08-30
 - Improved :UniteResume.
