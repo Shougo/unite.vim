@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Aug 2011.
+" Last Modified: 31 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -190,7 +190,8 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     endif
   endif
 
-  call filter(copy(l:candidates), '!v:val.is_dummy')
+  call filter(copy(l:candidates),
+        \ '!has_key(v:val, "is_dummy") || !v:val.is_dummy')
   if empty(l:candidates)
     return []
   endif

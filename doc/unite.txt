@@ -1750,6 +1750,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-08-31
+- Fixed new file action.
+
 2011-08-30
 - Improved :UniteResume.
 
