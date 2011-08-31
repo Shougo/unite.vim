@@ -80,7 +80,7 @@ function! s:source.gather_candidates(args, context)"{{{
     call add(s:cached_result, {
           \ 'word' : l:word,
           \ 'abbr' : printf('%-16s %s', l:word, l:prototype),
-          \ 'kind' : ['file', 'command'],
+          \ 'kind' : 'command',
           \ 'action__command' : l:word,
           \})
   endfor
