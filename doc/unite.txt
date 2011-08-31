@@ -1415,6 +1415,9 @@ directory_mru					*unite-action-directory_mru*
 bookmark					*unite-action-bookmark*
 	delete		Delete from bookmark file candidates
 
+register					*unite-action-register*
+	delete		Clear registers
+
 						*unite-default-action*
 Default actions
 
@@ -1752,6 +1755,7 @@ CHANGELOG					*unite-changelog*
 
 2011-08-31
 - Fixed new file action.
+- Added register delete action.
 
 2011-08-30
 - Improved :UniteResume.

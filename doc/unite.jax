@@ -1544,6 +1544,9 @@ directory_mru					*unite-action-directory_mru*
 bookmark					*unite-action-bookmark*
 	delete		ブックマークファイルの候補から削除
 
+register					*unite-action-register*
+	delete		レジスタの中身を空にする
+
 						*unite-default-action*
 デフォルトアクション
 

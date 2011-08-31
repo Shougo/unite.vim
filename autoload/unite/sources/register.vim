@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: register.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jun 2011.
+" Last Modified: 31 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,6 +34,7 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'register',
       \ 'description' : 'candidates from register',
+      \ 'action_table' : {},
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
@@ -64,12 +65,31 @@ function! s:source.gather_candidates(args, context)"{{{
             \ 'word' : l:register,
             \ 'abbr' : printf('%-7s - %s', l:reg, l:abbr),
             \ 'kind' : 'word',
+            \ 'action__register' : '@'.l:reg,
             \ })
     endif
   endfor
 
   return l:candidates
 endfunction"}}}
+
+" Actions"{{{
+let s:action_table = {}
+
+let s:action_table.delete = {
+      \ 'description' : 'delete registers',
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+      \ 'is_selectable' : 1,
+      \ }
+function! s:action_table.delete.func(candidates)"{{{
+  for l:candidate in a:candidates
+    execute 'let' l:candidate.action__register '= ""'
+  endfor
+endfunction"}}}
+
+let s:source.action_table['*'] = s:action_table
+"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
