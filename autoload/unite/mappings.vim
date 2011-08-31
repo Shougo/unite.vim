@@ -253,13 +253,11 @@ function! s:get_action_table(action_name, candidates)"{{{
   let l:action_tables = []
   let Self = unite#get_self_functions()[-1]
   for l:candidate in a:candidates
-    let l:kinds = type(l:candidate.kind) == type([]) ?
-          \ l:candidate.kind : [l:candidate.kind]
     let l:action_table = s:get_candidate_action_table(l:candidate)
 
     let l:action_name =
           \ a:action_name ==# 'default' ?
-          \ unite#get_default_action(l:candidate.source, l:kinds[-1])
+          \ unite#get_default_action(l:candidate.source, l:candidate.kind)
           \ : a:action_name
 
     if !has_key(l:action_table, l:action_name)
@@ -317,24 +315,7 @@ endfunction"}}}
 function! s:get_candidate_action_table(candidate)"{{{
   let Self = unite#get_self_functions()[-1]
 
-  let l:action_table = {}
-  for l:kind_name in type(a:candidate.kind) == type([]) ?
-        \ a:candidate.kind : [a:candidate.kind]
-    call extend(l:action_table,
-          \ unite#get_action_table(a:candidate.source, l:kind_name, Self))
-  endfor
-
-  return l:action_table
-endfunction"}}}
-function! s:get_candidate_alias_table(candidate)"{{{
-  let l:alias_table = {}
-  for l:kind_name in type(a:candidate.kind) == type([]) ?
-        \ a:candidate.kind : [a:candidate.kind]
-    call extend(l:alias_table,
-          \ unite#get_alias_table(a:candidate.source, l:kind_name))
-  endfor
-
-  return l:alias_table
+  return unite#get_action_table(a:candidate.source, a:candidate.kind, Self)
 endfunction"}}}
 
 " key-mappings functions.
@@ -680,7 +661,8 @@ function! s:source_action.gather_candidates(args, context)"{{{
 
   " Process Alias.
   let l:actions = s:get_actions(l:candidates)
-  let l:alias_table = s:get_candidate_alias_table(l:candidates[0])
+  let l:alias_table = unite#get_alias_table(
+        \ l:candidates[0].source, l:candidates[0].kind)
   for [l:alias_name, l:action_name] in items(l:alias_table)
     if has_key(l:actions, l:alias_name)
       let l:actions[l:action_name] = copy(l:actions[l:action_name])
