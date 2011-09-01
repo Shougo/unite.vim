@@ -1573,6 +1573,7 @@ bookmark					*unite-action-bookmark*
 	delete		ブックマークファイルの候補から削除
 
 register					*unite-action-register*
+	edit		レジスタの中身を変更する
 	delete		レジスタの中身を空にする
 
 						*unite-default-action*

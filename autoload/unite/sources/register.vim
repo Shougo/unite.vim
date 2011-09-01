@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: register.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Aug 2011.
+" Last Modified: 01 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,6 +84,16 @@ function! s:source.action_table.delete.func(candidates)"{{{
   for l:candidate in a:candidates
     execute 'let' l:candidate.action__register '= ""'
   endfor
+endfunction"}}}
+
+let s:source.action_table.edit = {
+      \ 'description' : 'change register value',
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+      \ }
+function! s:source.action_table.edit.func(candidate)"{{{
+  let l:new_value = input('', a:candidate.word)
+  execute 'let' a:candidate.action__register '= l:new_value'
 endfunction"}}}
 "}}}
 

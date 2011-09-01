@@ -1450,6 +1450,7 @@ bookmark					*unite-action-bookmark*
 	delete		Delete from bookmark file candidates
 
 register					*unite-action-register*
+	edit		Change register value
 	delete		Clear registers
 
 						*unite-default-action*
@@ -1792,6 +1793,7 @@ CHANGELOG					*unite-changelog*
 - Added nested autocmd.
 - Added sorter_reverse filter.
 - Implemented unite#mappings#set_current_filters().
+- Added register edit action.
 
 2011-08-31
 - Fixed new file action.
