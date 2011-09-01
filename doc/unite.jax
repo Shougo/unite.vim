@@ -858,6 +858,17 @@ unite#smart_map({narrow-map}, {select-map})			*unite#smart_map()*
 >
 		inoremap <buffer><expr> ' unite#smart_map("'", unite#do_action('preview'))
 <
+unite#mappings#set_current_filters({filters})			*unite#mappings#set_current_filters()*
+		|unite#set_buffer_name_option()|で設定された、現在のuniteバッフ
+		ァのfilterを動的に変更する。以下のように、キーマッピングとして
+		呼び出すことも可能である。
+>
+  nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
+        \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
+<
+unite#mappings#get_current_filters()				*unite#smart_map()*
+		現在のuniteバッファのfilterを取得する。
+
 unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 						*unite#set_substitute_pattern()*
 		uniteのバッファ名{buffer-name}における絞込みテキストの置換パタ
@@ -910,7 +921,8 @@ unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
 		filters				(リスト)
 		filter名のリストを指定する。ここで指定したfilterは、source毎
 		に呼び出される普通のfilterとは異なり、全候補を結合した後に呼
-		び出される。
+		び出される。filtersを動的に変更する場合は、
+		|unite#mappings#set_current_filters()|を使用する。
 		
 		ignorecase			(数値)
 		uniteバッファで一時的にセットされる'ignorecase'オプションの値を

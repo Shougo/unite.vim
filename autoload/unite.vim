@@ -635,8 +635,7 @@ function! unite#gather_candidates()"{{{
 
   " Post filter.
   let l:unite = unite#get_current_unite()
-  for l:filter_name in unite#get_buffer_name_option(
-        \ l:unite.buffer_name, 'filters')
+  for l:filter_name in l:unite.post_filters
     if has_key(l:unite.filters, l:filter_name)
       let l:candidates =
             \ l:unite.filters[l:filter_name].filter(l:candidates, l:unite.context)
@@ -1659,6 +1658,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:unite.access_time = localtime()
   let l:unite.is_finalized = 0
   let l:unite.previewd_buffer_list = []
+  let l:unite.post_filters = unite#get_buffer_name_option(
+        \ l:unite.buffer_name, 'filters')
 
   " Preview windows check.
   let l:unite.has_preview_window =

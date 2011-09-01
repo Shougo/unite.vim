@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Aug 2011.
+" Last Modified: 01 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -247,6 +247,16 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   endif
 
   return _
+endfunction"}}}
+
+function! unite#mappings#get_current_filters()"{{{
+  let l:unite = unite#get_current_unite()
+  return l:unite.post_filters
+endfunction"}}}
+function! unite#mappings#set_current_filters(filters)"{{{
+  let l:unite = unite#get_current_unite()
+  let l:unite.post_filters = a:filters
+  return ''
 endfunction"}}}
 
 function! s:get_action_table(action_name, candidates)"{{{
