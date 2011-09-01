@@ -866,7 +866,7 @@ unite#mappings#set_current_filters({filters})			*unite#mappings#set_current_filt
   nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
         \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
 <
-unite#mappings#get_current_filters()				*unite#smart_map()*
+unite#mappings#get_current_filters()				*unite#mappings#get_current_filters()*
 		現在のuniteバッファのfilterを取得する。
 
 unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
