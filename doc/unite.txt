@@ -1766,6 +1766,7 @@ CHANGELOG					*unite-changelog*
 2011-09-01
 - Implemented unite#start_complete().
 - Added nested autocmd.
+- Added sorter_reverse filter.
 
 2011-08-31
 - Fixed new file action.

@@ -767,7 +767,7 @@ function! unite#start(sources, ...)"{{{
 
   let s:use_current_unite = 1
 
-  if l:context.toggle
+  if l:context.toggle"{{{
     let l:quit_winnr = 0
 
     " Search unite window.
@@ -801,7 +801,7 @@ function! unite#start(sources, ...)"{{{
       call unite#force_quit_session()
       return
     endif
-  endif
+  endif"}}}
 
   try
     call s:initialize_current_unite(a:sources, l:context)
@@ -814,7 +814,7 @@ function! unite#start(sources, ...)"{{{
   let s:current_unite.input = l:context.input
   call s:recache_candidates(l:context.input, l:context.is_redraw, 0)
 
-  if l:context.immediately
+  if l:context.immediately"{{{
     " Immediately action.
     let l:candidates = unite#gather_candidates()
 
@@ -828,7 +828,7 @@ function! unite#start(sources, ...)"{{{
       let s:use_current_unite = 0
       return
     endif
-  endif
+  endif"}}}
 
   call s:initialize_unite_buffer()
 

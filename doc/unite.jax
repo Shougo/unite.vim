@@ -1408,6 +1408,9 @@ sorter_nothing	何もsortをしないsorter。source側のsortがそのまま反
 						*unite-filter-sorter_word*
 sorter_word	wordを比較するsorter。
 
+						*unite-filter-sorter_reverse*
+sorter_reverse	順番を反転するsorter。
+
 						*unite-filter-converter_default*
 converter_default
 		|unite-filter-default|により呼び出される、デフォルトのconverter。
