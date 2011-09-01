@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Aug 2011.
+" Last Modified: 01 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -167,6 +167,17 @@ endfunction
 function! unite#smart_map(narrow_map, select_map)"{{{
   return (line('.') <= unite#get_current_unite().prompt_linenr && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
 endfunction"}}}
+function! unite#start_complete(sources, ...) "{{{
+  let l:context = {
+        \ 'col' : col('.'), 'complete' : 1,
+        \ 'direction' : 'rightbelow', 'winheight' : 10,
+        \ 'buffer_name' : 'completion',
+        \ }
+  call extend(l:context, get(a:000, 0, {}))
+
+  return printf("\<ESC>:call unite#start(%s, %s)\<CR>",
+        \  string(a:sources), string(l:context))
+endfunction "}}}
 
 function! unite#take_action(action_name, candidate)"{{{
   call s:take_action(a:action_name, a:candidate, 0)

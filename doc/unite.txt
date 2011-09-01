@@ -1753,6 +1753,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-09-01
+- Implemented unite#start_complete().
+
 2011-08-31
 - Fixed new file action.
 - Added register delete action.
