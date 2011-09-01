@@ -1794,6 +1794,7 @@ CHANGELOG					*unite-changelog*
 - Added sorter_reverse filter.
 - Implemented unite#mappings#set_current_filters().
 - Added register edit action.
+- Improved syntax highlight.
 
 2011-08-31
 - Fixed new file action.
