@@ -256,7 +256,8 @@ endfunction"}}}
 function! unite#mappings#set_current_filters(filters)"{{{
   let l:unite = unite#get_current_unite()
   let l:unite.post_filters = a:filters
-  return ''
+  let l:unite.context.is_redraw = 1
+  return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
 endfunction"}}}
 
 function! s:get_action_table(action_name, candidates)"{{{

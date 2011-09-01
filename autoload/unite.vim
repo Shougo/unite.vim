@@ -1831,18 +1831,21 @@ function! s:redraw(is_force, winnr) "{{{
     return
   endif
 
-  if a:is_force
+  let l:unite = unite#get_current_unite()
+
+  if !l:unite.context.is_redraw
+    let l:unite.context.is_redraw = a:is_force
+  endif
+
+  if l:unite.context.is_redraw
     call unite#clear_message()
   endif
 
-  let l:unite = unite#get_current_unite()
   let l:input = unite#get_input()
-  if !a:is_force && l:input ==# l:unite.last_input
+  if !l:unite.context.is_redraw && l:input ==# l:unite.last_input
         \ && !l:unite.is_async
     return
   endif
-
-  let l:unite.context.is_redraw = a:is_force
 
   " Recaching.
   call s:recache_candidates(l:input, a:is_force, 0)
@@ -1902,8 +1905,9 @@ function! s:on_insert_leave()  "{{{
   endif
 endfunction"}}}
 function! s:on_cursor_hold_i()  "{{{
-  let l:prompt_linenr = unite#get_current_unite().prompt_linenr
-  if line('.') == l:prompt_linenr
+  let l:unite = unite#get_current_unite()
+  let l:prompt_linenr = l:unite.prompt_linenr
+  if line('.') == l:prompt_linenr || l:unite.context.is_redraw
     " Redraw.
     call unite#redraw()
 
@@ -1917,13 +1921,14 @@ function! s:on_cursor_hold_i()  "{{{
           \ g:unite_cursor_line_highlight.' /\%'.(l:prompt_linenr+1).'l/' :
           \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
 
-    " Prompt check.
-    if col('.') <= len(unite#get_current_unite().prompt)
-      startinsert!
-    endif
   endif
 
-  if unite#get_current_unite().is_async
+  " Prompt check.
+  if line('.') == l:prompt_linenr && col('.') <= len(l:unite.prompt)
+    startinsert!
+  endif
+
+  if l:unite.is_async
     " Ignore key sequences.
     call feedkeys("\<C-r>\<ESC>", 'n')
   endif
