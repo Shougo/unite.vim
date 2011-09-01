@@ -70,7 +70,7 @@ function! s:source_buffer_all.hooks.on_init(args, context)"{{{
   let a:context.source__buffer_list = s:get_buffer_list()
 endfunction"}}}
 function! s:source_buffer_all.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSource__Buffer_Directory /\[[^\]]*\]/ contained containedin=uniteSource__Buffer
+  syntax match uniteSource__Buffer_Directory /\[[^\]]*\]\ze\s*$/ contained containedin=uniteSource__Buffer
   highlight default link uniteSource__Buffer_Directory PreProc
 endfunction"}}}
 
@@ -103,7 +103,7 @@ function! s:source_buffer_tab.hooks.on_init(args, context)"{{{
   let a:context.source__buffer_list = s:get_buffer_list()
 endfunction"}}}
 function! s:source_buffer_tab.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSource__BufferTab_Directory /\[[^\]]*\]/ containedin=uniteSource__BufferTab
+  syntax match uniteSource__BufferTab_Directory /\[[^\]]*\]\ze\s*$/ containedin=uniteSource__BufferTab
   highlight default link uniteSource__BufferTab_Directory PreProc
 endfunction"}}}
 

@@ -94,7 +94,7 @@ let s:source = {
       \}
 
 function! s:source.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSource__DirectoryMru_Time /([^)]*)/ contained containedin=uniteSource__DirectoryMru
+  syntax match uniteSource__DirectoryMru_Time /^\s*\zs([^)]*)/ contained containedin=uniteSource__DirectoryMru
   highlight default link uniteSource__DirectoryMru_Time Statement
 endfunction"}}}
 function! s:source.hooks.on_post_filter(args, context)"{{{
