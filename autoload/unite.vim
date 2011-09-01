@@ -1712,7 +1712,7 @@ function! s:initialize_unite_buffer()"{{{
       autocmd InsertLeave <buffer>  call s:on_insert_leave()
       autocmd CursorHoldI <buffer>  call s:on_cursor_hold_i()
       autocmd CursorHold <buffer>  call s:on_cursor_hold()
-      autocmd CursorMoved,CursorMovedI <buffer>  call s:on_cursor_moved()
+      autocmd CursorMoved,CursorMovedI <buffer>  nested call s:on_cursor_moved()
       autocmd BufUnload,BufHidden <buffer>  call s:on_buf_unload(expand('<afile>'))
     augroup END
 
