@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Aug 2011.
+" Last Modified: 03 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -142,7 +142,7 @@ function! s:delete(delete_command, candidate)"{{{
   while l:winnr <= winnr('$')
     if winbufnr(l:winnr) == a:candidate.action__buffer_nr
       execute l:winnr . 'wincmd w'
-      call s:alternate_buffer()
+      call unite#util#alternate_buffer()
       wincmd p
     endif
 
@@ -150,39 +150,6 @@ function! s:delete(delete_command, candidate)"{{{
   endwhile
 
   silent execute a:candidate.action__buffer_nr a:delete_command
-endfunction"}}}
-function! s:alternate_buffer()"{{{
-  if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
-    buffer #
-    return
-  endif
-
-  let l:cnt = 0
-  let l:pos = 1
-  let l:current = 0
-  while l:pos <= bufnr('$')
-    if buflisted(l:pos)
-      if l:pos == bufnr('%')
-        let l:current = l:cnt
-      endif
-
-      let l:cnt += 1
-    endif
-
-    let l:pos += 1
-  endwhile
-
-  if l:current > l:cnt / 2
-    bprevious
-  else
-    bnext
-  endif
-
-  let l:listed_buffer_len = len(filter(range(1, bufnr('$')),
-        \ 'buflisted(v:val) && getbufvar(v:val, "&filetype") !=# "unite"'))
-  if l:listed_buffer_len == 1
-    enew
-  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo

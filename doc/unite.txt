@@ -1788,6 +1788,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-09-03
+- Improved quit unite buffer.
+
 2011-09-02
 - Fixed quit unite buffer.
 

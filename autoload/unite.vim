@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Sep 2011.
+" Last Modified: 03 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1175,19 +1175,19 @@ function! s:quit_session(is_force)  "{{{
     let l:bufname = bufname('%')
 
     if winnr('$') == 1
-      if buflisted(bufnr('#'))
-        buffer #
-      else
-        enew
-      endif
+      call unite#util#alternate_buffer()
     else
       noautocmd close!
       execute l:unite.winnr . 'wincmd w'
     endif
 
     call s:on_buf_unload(l:bufname)
-  elseif winnr('$') != 1 && winnr('#') > 0
-    wincmd p
+  else
+    if winnr('$') == 1 || winnr('#') < 0
+      new
+    else
+      wincmd p
+    endif
   endif
 
   if l:context.complete
@@ -1711,7 +1711,6 @@ function! s:initialize_unite_buffer()"{{{
     if exists('+colorcolumn')
       setlocal colorcolumn=0
     endif
-    setlocal nocursorline
 
     " Autocommands.
     augroup plugin-unite
@@ -1745,6 +1744,7 @@ function! s:initialize_unite_buffer()"{{{
   " User's initialization.
   setlocal nomodifiable
   set sidescrolloff=0
+  setlocal nocursorline
   setfiletype unite
 
   if exists('b:current_syntax') && b:current_syntax ==# 'unite'

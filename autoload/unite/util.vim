@@ -107,6 +107,41 @@ function! unite#util#input_directory(message)"{{{
   return l:dir
 endfunction"}}}
 
+function! unite#util#alternate_buffer()"{{{
+  if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
+    buffer #
+    return
+  endif
+
+  let l:listed_buffer_len = len(filter(range(1, bufnr('$')),
+        \ 'buflisted(v:val) && getbufvar(v:val, "&filetype") !=# "unite"'))
+  if l:listed_buffer_len <= 1
+    enew
+    return
+  endif
+
+  let l:cnt = 0
+  let l:pos = 1
+  let l:current = 0
+  while l:pos <= bufnr('$')
+    if buflisted(l:pos)
+      if l:pos == bufnr('%')
+        let l:current = l:cnt
+      endif
+
+      let l:cnt += 1
+    endif
+
+    let l:pos += 1
+  endwhile
+
+  if l:current > l:cnt / 2
+    bprevious
+  else
+    bnext
+  endif
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
