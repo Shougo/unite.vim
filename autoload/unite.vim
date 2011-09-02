@@ -230,8 +230,8 @@ let s:unite_options = [
       \ '-default-action=', '-start-insert','-no-start-insert', '-no-quit',
       \ '-winwidth=', '-winheight=',
       \ '-immediately', '-auto-preview', '-complete',
-      \ '-vertical', '-horizontal', '-direction=',
-      \ '-verbose', '-auto-resize', '-toggle'
+      \ '-vertical', '-horizontal', '-direction=', '-no-split',
+      \ '-verbose', '-auto-resize', '-toggle',
       \]
 "}}}
 
@@ -596,6 +596,7 @@ function! unite#redraw_candidates() "{{{
   if l:unite.context.auto_resize
         \ && l:unite.prompt_linenr + len(l:candidates)
         \      < l:unite.context.winheight
+        \ && winnr('$') != 1
     " Auto resize.
     execute 'resize' l:unite.prompt_linenr + len(l:candidates)
     normal! zb
@@ -1105,6 +1106,9 @@ function! s:initialize_context(context)"{{{
   if !has_key(a:context, 'direction')
     let a:context.direction = g:unite_split_rule
   endif
+  if !has_key(a:context, 'no_split')
+    let a:context.no_split = 0
+  endif
   if !has_key(a:context, 'temporary')
     let a:context.temporary = 0
   endif
@@ -1174,7 +1178,7 @@ function! s:quit_session(is_force)  "{{{
   if a:is_force || !l:context.no_quit
     let l:bufname = bufname('%')
 
-    if winnr('$') == 1
+    if winnr('$') == 1 || l:context.no_split
       call unite#util#alternate_buffer()
     else
       noautocmd close!
@@ -1788,13 +1792,15 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
   " Search unite window.
   " Note: must escape file-pattern.
   let l:buffer_name = unite#util#escape_file_searching(a:buffer_name)
-  if bufwinnr(l:buffer_name) > 0
+  if !a:context.no_split && bufwinnr(l:buffer_name) > 0
     silent execute bufwinnr(l:buffer_name) 'wincmd w'
   else
-    " Split window.
-    execute a:context.direction (bufexists(a:buffer_name) ?
-          \ ((a:context.vertical) ? 'vsplit' : 'split') :
-          \ ((a:context.vertical) ? 'vnew' : 'new'))
+    if !a:context.no_split
+      " Split window.
+      execute a:context.direction (bufexists(a:buffer_name) ?
+            \ ((a:context.vertical) ? 'vsplit' : 'split') :
+            \ ((a:context.vertical) ? 'vnew' : 'new'))
+    endif
 
     if bufexists(a:buffer_name)
       " Search buffer name.
@@ -1813,7 +1819,7 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
     endif
   endif
 
-  if winnr('$') != 1
+  if !a:context.no_split && winnr('$') != 1
     if a:context.vertical
       execute 'vertical resize' a:context.winwidth
     else

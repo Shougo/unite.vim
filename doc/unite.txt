@@ -250,6 +250,10 @@ COMMANDS 					*unite-commands*
 		Defines split position rule. The default value is same to
 		|g:unite_split_rule|.
 
+						*unite-options-no-split*
+		-no-split
+		No split unite buffer and no resize window.
+
 						*unite-options-verbose*
 		-verbose
 		Print verbose warning messages.
@@ -1790,6 +1794,7 @@ CHANGELOG					*unite-changelog*
 
 2011-09-03
 - Improved quit unite buffer.
+- Implemented -no-split option.
 
 2011-09-02
 - Fixed quit unite buffer.

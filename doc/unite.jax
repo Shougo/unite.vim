@@ -247,6 +247,10 @@ http://www.ustream.tv/recorded/11240673
 		uniteバッファの分割方法を指定する。デフォルト値は
 		|g:unite_split_rule|と同じである。
 
+						*unite-options-no-split*
+		-no-split
+		uniteバッファを分割しない。ウインドウサイズも変更しない。
+
 						*unite-options-verbose*
 		-verbose
 		冗長な警告メッセージを出すようにする。
