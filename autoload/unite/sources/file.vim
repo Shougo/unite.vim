@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Aug 2011.
+" Last Modified: 03 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -114,7 +114,7 @@ function! s:source.change_candidates(args, context)"{{{
   return l:candidates
 endfunction"}}}
 function! s:source.vimfiler_check_filetype(args, context)"{{{
-  let l:path = get(a:args, 0, '')
+  let l:path = expand(get(a:args, 0, ''))
 
   if isdirectory(l:path)
     let l:type = 'directory'
@@ -131,7 +131,7 @@ function! s:source.vimfiler_check_filetype(args, context)"{{{
   return [l:type, l:lines, l:dict]
 endfunction"}}}
 function! s:source.vimfiler_gather_candidates(args, context)"{{{
-  let l:path = get(a:args, 0, '')
+  let l:path = expand(get(a:args, 0, ''))
 
   if isdirectory(l:path)
     let l:candidates = self.change_candidates(a:args, a:context)
@@ -169,7 +169,7 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
   return l:candidates
 endfunction"}}}
 function! s:source.vimfiler_dummy_candidates(args, context)"{{{
-  let l:path = get(a:args, 0, '')
+  let l:path = expand(get(a:args, 0, ''))
 
   if l:path == ''
     return []

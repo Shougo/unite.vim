@@ -1796,6 +1796,7 @@ CHANGELOG					*unite-changelog*
 - Improved quit unite buffer.
 - Implemented -no-split option.
 - Improved insert word action.
+- Improved vimfiler file source.
 
 2011-09-02
 - Fixed quit unite buffer.
