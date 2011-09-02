@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Sep 2011.
+" Last Modified: 02 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1171,17 +1171,19 @@ function! s:quit_session(is_force)  "{{{
           \ 'v:val !=# l:unite.context.input'), l:context.input)
   endif
 
-  if winnr('$') != 1
-    if !a:is_force && l:context.no_quit
-      if winnr('#') > 0
-        wincmd p
-      endif
+  if a:is_force || !l:context.no_quit
+    let l:bufname = bufname('%')
+
+    if winnr('$') == 1
+      enew
     else
-      let l:bufname = bufname('%')
       noautocmd close!
       execute l:unite.winnr . 'wincmd w'
-      call s:on_buf_unload(l:bufname)
     endif
+
+    call s:on_buf_unload(l:bufname)
+  elseif winnr('$') != 1 && winnr('#') > 0
+    wincmd p
   endif
 
   if l:context.complete
