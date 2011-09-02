@@ -1175,7 +1175,11 @@ function! s:quit_session(is_force)  "{{{
     let l:bufname = bufname('%')
 
     if winnr('$') == 1
-      enew
+      if buflisted(bufnr('#'))
+        buffer #
+      else
+        enew
+      endif
     else
       noautocmd close!
       execute l:unite.winnr . 'wincmd w'
