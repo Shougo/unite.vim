@@ -1815,7 +1815,7 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
         let l:bufnr += 1
       endwhile
     else
-      silent! file `=a:buffer_name`
+      silent! edit `=a:buffer_name`
     endif
   endif
 
