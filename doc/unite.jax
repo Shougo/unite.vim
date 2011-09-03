@@ -793,10 +793,11 @@ unite#get_kinds([{kind-name}])			*unite#get_kinds()*
 			この戻り値を変更してはいけない。
 
 unite#get_sources([{source-name}])		*unite#get_sources()*
-			{source-name}に指定されたsourceを取得する。sourceが存
-			在しない場合は空のディクショナリを返す。{source-name}
-			を省略した場合、キーがsource名、値がそれぞれのsourceと
-			したディクショナリを返す。
+			現在のuniteバッファにおける{source-name}に指定された
+			sourceを取得する。sourceが存在しない場合は空のディク
+			ショナリを返す。{source-name}を省略した場合、キーが
+			source名、値がそれぞれのsourceとしたディクショナリを
+			返す。
 
 			この戻り値を変更してはいけない。
 
@@ -810,6 +811,8 @@ unite#start({sources}, [, {context}])				*unite#start()*
 		の要素は{source-name}または、[{source-name}, {args},...]とい
 		う形式である。{args}には{source-name}に渡す引数を文字列形式で
 		複数指定できる。
+		{source-name}にはsourceの定義となる辞書を渡すことができる。
+		その場合、そのsourceはそのuniteバッファのみで有効である。
 
 		{context}については、 |unite-notation-{context}|
 		を参照せよ。値を省略すると、デフォルト値が使用される。

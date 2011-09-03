@@ -241,6 +241,10 @@ function! unite#get_kinds(...)"{{{
   return a:0 == 0 ? l:unite.kinds : get(l:unite.kinds, a:1, {})
 endfunction"}}}
 function! unite#get_sources(...)"{{{
+  let l:unite = unite#get_current_unite()
+  return a:0 == 0 ? l:unite.sources : get(l:unite.sources, a:1, {})
+endfunction"}}}
+function! unite#get_all_sources(...)"{{{
   let l:all_sources = s:initialize_sources()
   return a:0 == 0 ? l:all_sources : get(l:all_sources, a:1, {})
 endfunction"}}}
@@ -1242,13 +1246,21 @@ function! s:initialize_loaded_sources(sources, context)"{{{
   let l:sources = []
 
   let l:number = 0
-  for [l:source_name, l:args] in map(a:sources, 'type(v:val) == type([]) ? [v:val[0], v:val[1:]] : [v:val, []]')
-    if !has_key(l:all_sources, l:source_name)
-      call unite#util#print_error('Invalid source name "' . l:source_name . '" is detected.')
-      throw 'Invalid source'
+  for [l:source, l:args] in map(a:sources, 'type(v:val) == type([]) ? [v:val[0], v:val[1:]] : [v:val, []]')
+    if type(l:source) == type('')
+      let l:source_name = l:source
+      unlet l:source
+      if !has_key(l:all_sources, l:source_name)
+        call unite#util#print_error('Invalid source name "' . l:source_name . '" is detected.')
+        throw 'Invalid source'
+      endif
+
+      let l:source = deepcopy(l:all_sources[l:source_name])
+    else
+      " Use source dictionary.
+      call s:initialize_sources([l:source])
     endif
 
-    let l:source = deepcopy(l:all_sources[l:source_name])
     let l:source.args = l:args
     let l:source.unite__is_invalidate = 1
 
@@ -1263,20 +1275,25 @@ function! s:initialize_loaded_sources(sources, context)"{{{
     let l:number += 1
 
     call add(l:sources, l:source)
+
+    unlet l:source
   endfor
 
   return l:sources
 endfunction"}}}
-function! s:initialize_sources()"{{{
+function! s:initialize_sources(...)"{{{
   if empty(s:static)
     " Initialize load.
     call s:load_default_scripts()
   endif
 
-  let l:sources = extend(copy(s:static.sources), s:dynamic.sources)
+  let l:sources = get(a:000, 0,
+        \ extend(copy(s:static.sources), s:dynamic.sources))
 
-  for l:source in values(filter(copy(l:sources),
-        \ '!has_key(v:val, "is_initialized")'))
+  let l:filterd_sources = filter(copy(l:sources),
+        \ '!has_key(v:val, "is_initialized")')
+  for l:source in type(l:filterd_sources) == type([]) ?
+        \ l:filterd_sources : values(l:filterd_sources)
     let l:source.is_initialized = 1
 
     if !has_key(l:source, 'hooks')

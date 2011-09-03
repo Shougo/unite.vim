@@ -798,10 +798,13 @@ unite#get_kinds([{kind-name}])			*unite#get_kinds()*
 			Changing the return value is not allowed.
 
 unite#get_sources([{source-name}])		*unite#get_sources()*
-			Gets the source of {source-name}. Unless they exist
-			this returns an empty dictionary.  This returns a
-			dictionary which keys are source names and values are
-			the sources when you skipped giving {source-name}.
+			Gets the loaded source of {source-name}. Unless they
+			exist this returns an empty dictionary.  This
+			returns a dictionary which keys are source names and
+			values are the sources when you skipped giving
+			{source-name}.
+			If you give {source-name} as dictionary, unite.vim
+			use this source temporary.
 
 			Changing the return value is not allowed.
 
@@ -1798,6 +1801,7 @@ CHANGELOG					*unite-changelog*
 - Improved insert word action.
 - Improved vimfiler file source.
 - Improved unite#vimfiler_check_filetype().
+- Improved unite#start().
 
 2011-09-02
 - Fixed quit unite buffer.

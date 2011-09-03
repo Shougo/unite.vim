@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Sep 2011.
+" Last Modified: 03 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -405,9 +405,7 @@ function! s:choose_action()"{{{
     return
   endif
 
-  call unite#define_source(s:source_action)
-
-  call unite#start_temporary([['action'] + l:candidates], {}, 'action')
+  call unite#start_temporary([[s:source_action] + l:candidates], {}, 'action')
 endfunction"}}}
 function! s:insert_enter(key)"{{{
   setlocal modifiable
@@ -617,11 +615,7 @@ function! s:narrowing_path()"{{{
   call unite#mappings#narrowing(has_key(l:candidate, 'action__path')? l:candidate.action__path : l:candidate.word)
 endfunction"}}}
 function! s:narrowing_input_history()"{{{
-  let l:unite = unite#get_current_unite()
-
-  call unite#define_source(s:source_input)
-
-  call unite#start_temporary(['history/input'],
+  call unite#start_temporary([s:source_input],
         \ { 'old_source_names_string' : unite#loaded_source_names_string() },
         \ 'history/input')
 endfunction"}}}
@@ -653,9 +647,6 @@ let s:source_action = {
       \ 'syntax' : 'uniteSource__Action',
       \}
 
-function! s:source_action.hooks.on_close(args, context)"{{{
-  call unite#undef_source('action')
-endfunction"}}}
 function! s:source_action.hooks.on_syntax(args, context)"{{{
   syntax match uniteSource__ActionDescriptionLine / -- .*$/ contained containedin=uniteSource__Action
   syntax match uniteSource__ActionDescription /.*$/ contained containedin=uniteSource__ActionDescriptionLine
@@ -717,14 +708,9 @@ let s:source_input = {
       \ 'name' : 'history/input',
       \ 'description' : 'candidates from unite input history',
       \ 'action_table' : {},
-      \ 'hooks' : {},
       \ 'default_action' : 'narrow',
       \ 'syntax' : 'uniteSource__Action',
       \}
-
-function! s:source_input.hooks.on_close(args, context)"{{{
-  call unite#undef_source('history/input')
-endfunction"}}}
 
 function! s:source_input.gather_candidates(args, context)"{{{
   let l:context = unite#get_context()
