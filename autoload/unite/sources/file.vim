@@ -118,17 +118,16 @@ function! s:source.vimfiler_check_filetype(args, context)"{{{
 
   if isdirectory(l:path)
     let l:type = 'directory'
-    let l:lines = []
-    let l:dict = {}
+    let l:info = l:path
   elseif filereadable(l:path)
     let l:type = 'file'
-    let l:lines = readfile(l:path)
-    let l:dict = unite#sources#file#create_file_dict(l:path, 0)
+    let l:info = [readfile(l:path),
+          \ unite#sources#file#create_file_dict(l:path, 0)]
   else
     return []
   endif
 
-  return [l:type, l:lines, l:dict]
+  return [l:type, l:info]
 endfunction"}}}
 function! s:source.vimfiler_gather_candidates(args, context)"{{{
   let l:path = expand(get(a:args, 0, ''))

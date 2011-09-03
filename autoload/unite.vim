@@ -912,13 +912,13 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
     if has_key(l:source, 'vimfiler_check_filetype')
       let l:ret = l:source.vimfiler_check_filetype(l:source.args, l:context)
       if !empty(l:ret)
-        let [l:type, l:lines, l:dict] = l:ret
-        if !empty(l:dict)
-          call s:initialize_candidates([l:dict], l:source.name)
-          call s:initialize_vimfiler_candidates([l:dict])
+        let [l:type, l:info] = l:ret
+        if l:type ==# 'file'
+          call s:initialize_candidates([l:info[1]], l:source.name)
+          call s:initialize_vimfiler_candidates([l:info[1]])
         endif
 
-        return [l:type, l:lines, l:dict]
+        return [l:type, l:info]
       endif
     endif
   endfor
