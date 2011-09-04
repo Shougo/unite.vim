@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2011.
+" Last Modified: 04 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -309,13 +309,13 @@ function! s:get_action_table(action_name, candidates)"{{{
 
   return l:action_tables
 endfunction"}}}
-function! s:get_actions(candidates)"{{{
+function! s:get_actions(candidates, sources)"{{{
   let Self = unite#get_self_functions()[-1]
 
-  let l:actions = s:get_candidate_action_table(a:candidates[0])
+  let l:actions = s:get_candidate_action_table(a:candidates[0], a:sources)
 
   for l:candidate in a:candidates[1:]
-    let l:action_table = s:get_candidate_action_table(l:candidate)
+    let l:action_table = s:get_candidate_action_table(l:candidate, a:sources)
     " Filtering unique items and check selectable flag.
     call filter(l:actions, 'has_key(l:action_table, v:key)
           \ && l:action_table[v:key].is_selectable')
@@ -323,10 +323,11 @@ function! s:get_actions(candidates)"{{{
 
   return l:actions
 endfunction"}}}
-function! s:get_candidate_action_table(candidate)"{{{
+function! s:get_candidate_action_table(candidate, ...)"{{{
   let Self = unite#get_self_functions()[-1]
 
-  return unite#get_action_table(a:candidate.source, a:candidate.kind, Self)
+  return unite#get_action_table(a:candidate.source, a:candidate.kind, Self,
+        \ 0, get(a:000, 0, {}))
 endfunction"}}}
 
 " key-mappings functions.
@@ -405,7 +406,8 @@ function! s:choose_action()"{{{
     return
   endif
 
-  call unite#start_temporary([[s:source_action] + l:candidates], {}, 'action')
+  call unite#start_temporary([[s:source_action] + l:candidates],
+        \ { 'source__sources' : l:unite.sources }, 'action')
 endfunction"}}}
 function! s:insert_enter(key)"{{{
   setlocal modifiable
@@ -663,7 +665,7 @@ function! s:source_action.gather_candidates(args, context)"{{{
         \ '"[action] candidates: ".v:val.abbr."(".v:val.source.")"'))
 
   " Process Alias.
-  let l:actions = s:get_actions(l:candidates)
+  let l:actions = s:get_actions(l:candidates, unite#get_context().source__sources)
 
   " Uniq.
   let l:uniq_actions = {}
@@ -688,18 +690,14 @@ function! s:compare_word(i1, i2)
 endfunction
 
 " Actions"{{{
-let s:action_table = {}
+let s:source_action.action_table = {}
 
-let s:action_table.do = {
+let s:source_action.action_table.do = {
       \ 'description' : 'do action',
       \ }
-function! s:action_table.do.func(candidate)"{{{
+function! s:source_action.action_table.do.func(candidate)"{{{
   call unite#mappings#do_action(a:candidate.word, a:candidate.source__candidates)
 endfunction"}}}
-
-let s:source_action.action_table['*'] = s:action_table
-
-unlet s:action_table
 "}}}
 "}}}
 
@@ -727,24 +725,24 @@ function! s:source_input.gather_candidates(args, context)"{{{
 endfunction"}}}
 
 " Actions"{{{
-let s:action_table = {}
+let s:source_input.action_table = {}
 
-let s:action_table.narrow = {
+let s:source_input.action_table.narrow = {
       \ 'description' : 'narrow by history',
       \ 'is_quit' : 0,
       \ }
-function! s:action_table.narrow.func(candidate)"{{{
+function! s:source_input.action_table.narrow.func(candidate)"{{{
   call unite#force_quit_session()
   call unite#mappings#narrowing(a:candidate.word)
 endfunction"}}}
 
-let s:action_table.delete = {
+let s:source_input.action_table.delete = {
       \ 'description' : 'delete from input history',
       \ 'is_selectable' : 1,
       \ 'is_quit' : 0,
       \ 'is_invalidate_cache' : 1,
       \ }
-function! s:action_table.delete.func(candidates)"{{{
+function! s:source_input.action_table.delete.func(candidates)"{{{
   let l:context = unite#get_context()
   let l:inputs = unite#get_buffer_name_option(
         \ l:context.old_buffer_info[0].buffer_name, 'unite__inputs')
@@ -757,10 +755,6 @@ function! s:action_table.delete.func(candidates)"{{{
     call filter(l:inputs[l:key], 'v:val !=# l:candidate.word')
   endfor
 endfunction"}}}
-
-let s:source_input.action_table['*'] = s:action_table
-
-unlet s:action_table
 "}}}
 "}}}
 

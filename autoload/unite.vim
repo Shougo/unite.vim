@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2011.
+" Last Modified: 04 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -299,23 +299,25 @@ function! unite#set_context(context)"{{{
   return l:old_context
 endfunction"}}}
 
-" function! unite#get_action_table(source_name, kind_name, self_func, [is_parent_action])
 function! unite#get_action_table(source_name, kind, self_func, ...)"{{{
   let l:is_parents_action = get(a:000, 0, 0)
+  let l:source_table = get(a:000, 1, {})
 
   let l:action_table = {}
   for l:kind_name in type(a:kind) == type([]) ?
         \ a:kind : [a:kind]
     call extend(l:action_table,
           \ s:get_action_table(a:source_name,
-          \                l:kind_name, a:self_func, l:is_parents_action))
+          \                l:kind_name, a:self_func,
+          \                l:is_parents_action, l:source_table))
   endfor
 
   return l:action_table
 endfunction"}}}
-function! s:get_action_table(source_name, kind_name, self_func, is_parents_action)"{{{
+function! s:get_action_table(source_name, kind_name, self_func, is_parents_action, source_table)"{{{
   let l:kind = unite#get_kinds(a:kind_name)
-  let l:source = unite#get_sources(a:source_name)
+  let l:source = empty(a:source_table) ?
+        \ unite#get_sources(a:source_name) : get(a:source_table, a:source_name, {})
   if empty(l:source)
     call unite#print_error('source "' . a:source_name . '" is not found.')
     return {}
@@ -365,7 +367,8 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
   " Parents actions.
   for l:parent in l:kind.parents
     let l:action_table = s:extend_actions(a:self_func, l:action_table,
-          \ unite#get_action_table(a:source_name, l:parent, a:self_func))
+          \ unite#get_action_table(a:source_name, l:parent,
+          \                    a:self_func, 0, a:source_table))
   endfor
 
   if !a:is_parents_action
