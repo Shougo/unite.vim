@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Sep 2011.
+" Last Modified: 04 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -140,7 +140,7 @@ function! s:make_word(bufnr)"{{{
   elseif l:filetype ==# 'vimshell'
     let l:vimshell = getbufvar(a:bufnr, 'vimshell')
     let l:path = printf('*vimshell*: [%s]',
-          \ unite#substitute_path_separator(simplify(l:vimshell.save_dir)))
+          \ unite#substitute_path_separator(simplify(l:vimshell.current_dir)))
   else
     let l:path = unite#substitute_path_separator(simplify(bufname(a:bufnr)))
   endif
@@ -151,12 +151,14 @@ function! s:make_abbr(bufnr)"{{{
   let l:filetype = getbufvar(a:bufnr, '&filetype')
   if l:filetype ==# 'vimfiler'
     let l:path = getbufvar(a:bufnr, 'vimfiler').current_dir
-    let l:path = printf('*vimfiler* [%s]', unite#substitute_path_separator(simplify(l:path)))
+    let l:path = printf('%s [%s]', bufname(a:bufnr),
+          \ unite#substitute_path_separator(simplify(l:path)))
   elseif l:filetype ==# 'vimshell'
     let l:vimshell = getbufvar(a:bufnr, 'vimshell')
-    let l:path = printf('*vimshell*: %s [%s]',
+    let l:path = l:vimshell.current_dir
+    let l:path = printf('%s: %s [%s]', bufname(a:bufnr),
           \ (has_key(l:vimshell, 'cmdline') ? l:vimshell.cmdline : ''),
-          \ unite#substitute_path_separator(simplify(l:vimshell.save_dir)))
+          \ unite#substitute_path_separator(simplify(l:path)))
   else
     let l:path = fnamemodify(bufname(a:bufnr), ':~:.') . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
     let l:path = unite#substitute_path_separator(simplify(l:path))
@@ -172,7 +174,7 @@ function! s:get_directory(bufnr)"{{{
   if l:filetype ==# 'vimfiler'
     let l:dir = getbufvar(a:bufnr, 'vimfiler').current_dir
   elseif l:filetype ==# 'vimshell'
-    let l:dir = getbufvar(a:bufnr, 'vimshell').save_dir
+    let l:dir = getbufvar(a:bufnr, 'vimshell').current_dir
   else
     let l:path = unite#substitute_path_separator(bufname(a:bufnr))
     let l:dir = unite#path2directory(l:path)
