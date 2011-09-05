@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2011.
+" Last Modified: 05 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,11 +54,14 @@ function! s:source.change_candidates(args, context)"{{{
   let l:input = substitute(substitute(a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
 
   let l:path = get(a:args, 0, '')
-  if l:path =~ '[\\/]$'
+  if l:path !=# '/' && l:path =~ '[\\/]$'
     " Chomp.
     let l:path = l:path[: -2]
   endif
-  if l:input !~ '^\%(/\|\a\+:/\)' && l:path != ''
+
+  if l:path == '/'
+    let l:input = l:path . l:input
+  elseif l:input !~ '^\%(/\|\a\+:/\)' && l:path != '' && l:path != '/'
     let l:input = l:path . '/' .  l:input
   endif
   let l:is_relative_path = l:input !~ '^\%(/\|\a\+:/\)' && l:path == ''
@@ -237,6 +240,11 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
   let a:candidate.vimfiler__abbr =
         \ unite#util#substitute_path_separator(
         \       fnamemodify(a:candidate.word, ':.'))
+  if getcwd() == '/'
+    " Remove /.
+    let a:candidate.vimfiler__abbr = a:candidate.vimfiler__abbr[1:]
+  endif
+
   let a:candidate.vimfiler__is_directory =
         \ isdirectory(a:candidate.action__path)
   let a:candidate.vimfiler__is_executable =
