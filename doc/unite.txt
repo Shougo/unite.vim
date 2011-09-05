@@ -1797,6 +1797,7 @@ CHANGELOG					*unite-changelog*
 
 2011-09-05
 - Fixed vimfiler file source.
+- Improved register source.
 
 2011-09-04
 - Improved unite buffer source.
