@@ -130,7 +130,7 @@ endif
 function! s:jump(candidate, is_highlight)"{{{
   if !has_key(a:candidate, 'action__line') && !has_key(a:candidate, 'action__pattern')
     " Move to head.
-    0
+    call cursor(1, 1)
     return
   endif
 
@@ -182,7 +182,7 @@ function! s:jump(candidate, is_highlight)"{{{
       if l:lnum == l:start_lnum
         " Not found.
         call unite#print_error("unite: jump_list: Target position is not found.")
-        0
+        call cursor(1, 1)
         return
       endif
     endwhile
