@@ -1800,6 +1800,7 @@ CHANGELOG					*unite-changelog*
 - Changed g:unite_update_time default value.
 - Fixed for yanktmp.
 - Fixed unite#resume().
+- Fixed unite#mappings#do_action().
 
 2011-09-06
 - Fixed unite-source.

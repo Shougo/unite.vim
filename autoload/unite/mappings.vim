@@ -190,7 +190,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     endif
   endif
 
-  call filter(copy(l:candidates),
+  let l:candidates = filter(copy(l:candidates),
         \ '!has_key(v:val, "is_dummy") || !v:val.is_dummy')
   if empty(l:candidates)
     return []
