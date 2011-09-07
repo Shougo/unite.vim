@@ -1798,6 +1798,7 @@ CHANGELOG					*unite-changelog*
 2011-09-07
 - Fixed keymapping.
 - Changed g:unite_update_time default value.
+- Fixed for yanktmp.
 
 2011-09-06
 - Fixed unite-source.
