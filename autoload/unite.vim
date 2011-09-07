@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Sep 2011.
+" Last Modified: 07 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -888,10 +888,12 @@ function! unite#start(sources, ...)"{{{
 endfunction"}}}
 function! unite#start_temporary(sources, new_context, buffer_name)"{{{
   " Get current context.
-  let l:context = deepcopy(unite#get_context())
-  let l:context.old_buffer_info = insert(l:context.old_buffer_info,
-        \ { 'buffer_name' : unite#get_current_unite().buffer_name,
-        \   'pos' : getpos('.'), })
+  let l:old_context = unite#get_context()
+  let l:context = deepcopy(l:old_context)
+  let l:context.old_buffer_info = insert(l:context.old_buffer_info, {
+        \ 'buffer_name' : unite#get_current_unite().buffer_name,
+        \ 'pos' : getpos('.'),
+        \ })
 
   let l:context.buffer_name = a:buffer_name
   let l:context.temporary = 1
@@ -1014,12 +1016,8 @@ function! unite#resume(buffer_name, ...)"{{{
   let l:win_rest_cmd = winrestcmd()
 
   let l:unite = getbufvar(l:bufnr, 'unite')
-  let l:context = l:unite.context
 
-  call s:switch_unite_buffer(bufname(l:bufnr), l:context)
-
-  let l:context = get(a:000, 0, {})
-  call s:initialize_context(l:context)
+  call s:switch_unite_buffer(bufname(l:bufnr), l:unite.context)
 
   " Set parameters.
   let l:unite = unite#get_current_unite()
@@ -1027,7 +1025,7 @@ function! unite#resume(buffer_name, ...)"{{{
   let l:unite.win_rest_cmd = l:win_rest_cmd
   let l:unite.redrawtime_save = &redrawtime
   let l:unite.access_time = localtime()
-  let l:unite.context = extend(l:unite.context, l:context)
+  call extend(l:unite.context, get(a:000, 0, {}))
 
   let s:current_unite = l:unite
 

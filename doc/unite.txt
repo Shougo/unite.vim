@@ -1799,6 +1799,7 @@ CHANGELOG					*unite-changelog*
 - Fixed keymapping.
 - Changed g:unite_update_time default value.
 - Fixed for yanktmp.
+- Fixed unite#resume().
 
 2011-09-06
 - Fixed unite-source.
