@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Aug 2011.
+" Last Modified: 07 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,7 +42,7 @@ endif
 "}}}
 " Global options definition."{{{
 if !exists('g:unite_update_time')
-  let g:unite_update_time = 200
+  let g:unite_update_time = 500
 endif
 if !exists('g:unite_enable_start_insert')
   let g:unite_enable_start_insert = 0

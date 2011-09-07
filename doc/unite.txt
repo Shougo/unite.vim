@@ -300,7 +300,7 @@ g:unite_update_time				*g:unite_update_time*
 		Update time interval of candidates for each input of narrowing
 		text.  In Msec.
 
-		Default value is 200.
+		Default value is 500.
 
 g:unite_enable_start_insert			*g:unite_enable_start_insert*
 		If this variable is 1, unite buffer will be Insert Mode
@@ -1794,6 +1794,10 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-09-07
+- Fixed keymapping.
+- Changed g:unite_update_time default value.
 
 2011-09-06
 - Fixed unite-source.
