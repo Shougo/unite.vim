@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 10 Aug 2011.
+" Last Modified: 08 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,6 +46,8 @@ function! s:unite_source.hooks.on_init(args, context) "{{{
                 \ expand('%:p') : bufname('%')
     let a:context.source__bufnr = bufnr('%')
     let a:context.source__linenr = line('.')
+
+    call unite#print_message('[line] Target: ' . a:context.source__path)
 endfunction"}}}
 function! s:unite_source.hooks.on_syntax(args, context) "{{{
     call s:hl_refresh(a:context)
