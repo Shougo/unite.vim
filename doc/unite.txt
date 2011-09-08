@@ -1797,6 +1797,7 @@ CHANGELOG					*unite-changelog*
 
 2011-09-08
 - Improved unite-line.
+- Fixed unite-register error.
 
 2011-09-07
 - Fixed keymapping.
