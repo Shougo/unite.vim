@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2011.
+" Last Modified: 09 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -121,6 +121,11 @@ let s:kind.action_table.rename = {
       \ }
 function! s:kind.action_table.rename.func(candidates)"{{{
   for l:candidate in a:candidates
+    if getbufvar(l:candidate.action__buffer_nr, '&buftype') =~ 'nofile'
+      " Skip nofile buffer.
+      continue
+    endif
+
     let l:old_buffer_name = bufname(l:candidate.action__buffer_nr)
     let l:buffer_name = input(printf('New buffer name: %s -> ', l:old_buffer_name), l:old_buffer_name)
     if l:buffer_name != '' && l:buffer_name !=# l:old_buffer_name
