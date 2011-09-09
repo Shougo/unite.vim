@@ -2,7 +2,7 @@
 " FILE: alias.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          tacroe <tacroe at gmail.com>
-" Last Modified: 03 Sep 2011.
+" Last Modified: 09 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,17 +74,21 @@ function! s:make_aliases()
       let l:source.hooks = {}
       let l:source.source__original_source = l:original_source
 
+      " Overwrite hooks.
+      if has_key(l:original_source, 'hooks')
+        for l:func in filter(keys(l:original_source.hooks),
+              \ 'v:val !=# "on_pre_init"')
+          let l:define_function = join([
+                \ 'function! l:source.hooks.' . l:func . '(args, context)',
+                \ '  let l:args = a:context.source.source__args + a:args',
+                \ '  return a:context.source.source__original_source.hooks.'
+                \                    . l:func . '(l:args, a:context)',
+                \ 'endfunction'], "\n")
+          execute l:define_function
+        endfor
+      endif
+
       " Overwrite functions.
-      for l:func in filter(keys(l:original_source.hooks),
-            \ 'v:val !=# "on_pre_init"')
-        let l:define_function = join([
-              \ 'function! l:source.hooks.' . l:func . '(args, context)',
-              \ '  let l:args = a:context.source.source__args + a:args',
-              \ '  return a:context.source.source__original_source.hooks.'
-              \                    . l:func . '(l:args, a:context)',
-              \ 'endfunction'], "\n")
-        execute l:define_function
-      endfor
       for l:func in keys(filter(copy(l:original_source),
             \ 'type(v:val) == type(function("type"))'))
         let l:define_function = join([
