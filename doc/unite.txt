@@ -751,6 +751,7 @@ K		|<Plug>(unite_skip_cursor_up)|
 d		In case when you selected a candidate, runs delete action
 b		In case when you selected a candidate, runs bookmark action
 e		In case when you selected a candidate, runs narrow action
+t		In case when you selected a candidate, runs tabopen action
 p		runs preview action
 x		In case when you selected a candidate, runs
 		|<Plug>(unite_quick_match_default_action)|
@@ -774,6 +775,7 @@ Insert mode mappings.
 <Home>		|i_<Plug>(unite_move_head)|
 e		In case when you selected a candidate, runs narrow action
 d		In case when you selected a candidate, runs delete action
+t		In case when you selected a candidate, runs tabopen action
 <Space>		In case when you selected a candidate,
 		|i_<Plug>(unite_toggle_mark_current_candidate)|
 x		In case when you selected a candidate,
@@ -1799,6 +1801,7 @@ CHANGELOG					*unite-changelog*
 - Fixed buffer rename action.
 - Improved initialize candidates.
 - Fixed overwrite hooks error.
+- Added tabopen mappings.
 
 2011-09-08
 - Improved unite-line.
@@ -1933,7 +1936,7 @@ CHANGELOG					*unite-changelog*
 - Implemented copy and delete and move action.
 
 2011-08-13
-- Ver.3.0 development is started.
+- Ver.3.0 development started.
 - Implemented vimfiler interface(experimental).
 
 ------------------------------------------------------------------------------
@@ -2074,7 +2077,7 @@ ChangeLog unite.vim Ver.2.2:
 - Improved grep source behavior.
 
 2011-07-06
-- Ver.2.2 development is started.
+- Ver.2.2 development started.
 - Fixed file actions.
 
 ------------------------------------------------------------------------------
@@ -2200,7 +2203,7 @@ ChangeLog unite.vim Ver.2.1:
 2011-05-08
 - Fixed :UniteResume error.
 - Improved cursor move behavior.
-- Ver.2.1 development is started.
+- Ver.2.1 development started.
 
 2011-05-06
 - Fixed syntax error.
@@ -2509,7 +2512,7 @@ ChangeLog unite.vim Ver.2.0:
 - Improved source arguments description.
 
 2011-01-09
-- Ver.1.1 development is started.
+- Ver.1.1 development started.
 - Improved insert leave.
 - Supported neocomplcache manual completion.
 - Added g:unite_cursor_line_highlight and g:unite_abbr_highlight options.
@@ -2968,7 +2971,7 @@ ChangeLog unite.vim Ver.1.0:
 - Added the unite-functions description into Japanese document.
 
 2010-09-21
-- Ver.1.0 development is started.
+- Ver.1.0 development started.
 - Fixed unite buffer restore bug.
 
 ------------------------------------------------------------------------------
@@ -3049,7 +3052,7 @@ ChangeLog unite.vim Ver.0.5
 - Added kind word.
 
 2010-09-10
-- Ver.0.5 development is started.
+- Ver.0.5 development started.
 - Implemented kind.
 - Improved caching.
 
