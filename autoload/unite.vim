@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Sep 2011.
+" Last Modified: 14 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -786,7 +786,7 @@ function! unite#start(sources, ...)"{{{
       " Search from temporary buffer.
       let l:winnr = 1
       while l:winnr <= winnr('$')
-        if type(getbufvar(winbufnr(l:winnr), 'unite')) == type({})
+        if getbufvar(winbufnr(l:winnr), '&filetype') ==# 'unite'
           let l:buffer_context = getbufvar(winbufnr(l:winnr), 'unite').context
           if l:buffer_context.temporary
                 \ && !empty(filter(copy(l:buffer_context.old_buffer_info),
@@ -1636,16 +1636,27 @@ function! s:initialize_current_unite(sources, context)"{{{
   let l:context = a:context
 
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
-    if unite#get_current_unite().buffer_name ==# l:context.buffer_name
-      if l:context.input == ''
-        " Get input text.
-        let l:context.input = unite#get_input()
-      endif
-
-      " Quit unite buffer.
-      call unite#force_quit_session()
-    endif
+        \ && unite#get_current_unite().buffer_name ==# l:context.buffer_name
+        \ && l:context.input == ''
+    " Get input text.
+    let l:context.input = unite#get_input()
   endif
+
+  " Search unite buffer.
+  let l:winnr = 1
+  while l:winnr <= winnr('$')
+    if getbufvar(winbufnr(l:winnr), '&filetype') ==# 'unite'
+      let l:buffer_context = getbufvar(winbufnr(l:winnr), 'unite').context
+      if l:buffer_context.buffer_name ==# l:context.buffer_name
+        " Quit unite buffer.
+        execute l:winnr 'wincmd w'
+        call unite#force_quit_session()
+        break
+      endif
+    endif
+
+    let l:winnr += 1
+  endwhile
 
   " The current buffer is initialized.
   let l:buffer_name = unite#is_win() ? '[unite]' : '*unite*'
