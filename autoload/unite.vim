@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Sep 2011.
+" Last Modified: 15 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -887,13 +887,19 @@ function! unite#start(sources, ...)"{{{
   endif
 endfunction"}}}
 function! unite#start_temporary(sources, new_context, buffer_name)"{{{
-  " Get current context.
-  let l:old_context = unite#get_context()
-  let l:context = deepcopy(l:old_context)
-  let l:context.old_buffer_info = insert(l:context.old_buffer_info, {
-        \ 'buffer_name' : unite#get_current_unite().buffer_name,
-        \ 'pos' : getpos('.'),
-        \ })
+  if &filetype == 'unite'
+    " Get current context.
+    let l:old_context = unite#get_context()
+    let l:context = deepcopy(l:old_context)
+    let l:context.old_buffer_info = insert(l:context.old_buffer_info, {
+          \ 'buffer_name' : unite#get_current_unite().buffer_name,
+          \ 'pos' : getpos('.'),
+          \ })
+  else
+    let l:context = {}
+    call s:initialize_context(l:context)
+    let l:context.old_buffer_info = []
+  endif
 
   let l:context.buffer_name = a:buffer_name
   let l:context.temporary = 1
