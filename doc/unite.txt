@@ -894,7 +894,7 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 
 		You may mimic ambiguous matching with using this function.
 >
-		call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0', 100)
+		call unite#set_substitute_pattern('files', '[^*]\ze[[:alnum:]]', '\0*', 100)
 		call unite#set_substitute_pattern('files', '[[:alnum:]]', ' \0', 100)
 <
 		The former does ambiguous search within / while the latter
@@ -908,6 +908,7 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		\ substitute(unite#util#substitute_path_separator($HOME), ' ', '\\\\ ', 'g'), -100)
 		call unite#set_substitute_pattern('files', '[^~.*]\ze/', '\0*', 100)
 		call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
+		call unite#set_substitute_pattern('files', '\.', '*.', 1000)
 <
 unite#get_substitute_pattern({buffer-name})
 						*unite#get_substitute_pattern()*
@@ -1801,6 +1802,7 @@ CHANGELOG					*unite-changelog*
 - Fixed vimfiler cd error.
 - Fixed for vimfiler Ver.3.
 - Fixed unite resume.
+- Fixed examples.
 
 2011-09-16
 - Fixed source file for vimfiler.

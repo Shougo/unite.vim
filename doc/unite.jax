@@ -892,7 +892,7 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		
 		この関数を使うと、曖昧マッチを模倣することができる。
 >
-		call unite#set_substitute_pattern('files', '[[:alnum:]]', '*\0', 100)
+		call unite#set_substitute_pattern('files', '[^*]\ze[[:alnum:]]', '\0*', 100)
 		call unite#set_substitute_pattern('files', '[[:alnum:]]', ' \0', 100)
 <
 		上の設定は/を越えずに曖昧検索をするが、下の場合は/を越えて曖昧
@@ -906,6 +906,7 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		\ substitute(unite#util#substitute_path_separator($HOME), ' ', '\\\\ ', 'g'), -100)
 		call unite#set_substitute_pattern('files', '[^~.*]\ze/', '\0*', 100)
 		call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
+		call unite#set_substitute_pattern('files', '\.', '*.', 1000)
 <
 unite#get_substitute_pattern({buffer-name})
 						*unite#get_substitute_pattern()*

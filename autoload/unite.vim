@@ -218,7 +218,8 @@ let s:custom.max_candidates = {}
 
 let s:buffer_name_options = {}
 call unite#set_substitute_pattern('files', '^\~',
-      \ substitute(unite#util#substitute_path_separator($HOME), ' ', '\\\\ ', 'g'), -100)
+      \ substitute(unite#util#substitute_path_separator($HOME),
+      \ ' ', '\\\\ ', 'g'), -100)
 call unite#set_substitute_pattern('files', '[^~.*]\ze/', '\0*', 100)
 call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
 call unite#set_substitute_pattern('files', '\.', '*.', 1000)
