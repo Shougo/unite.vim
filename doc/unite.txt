@@ -1797,6 +1797,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-09-17
+- Fixed vimfiler cd error.
+
 2011-09-16
 - Fixed source file for vimfiler.
 
