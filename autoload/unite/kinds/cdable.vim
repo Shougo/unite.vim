@@ -109,7 +109,7 @@ if exists(':VimShell')
         \ 'description' : 'open vimshell buffer here',
         \ }
   function! s:kind.action_table.vimshell.func(candidate)"{{{
-    VimShellCreate `=a:candidate.action__directory`
+    VimShell `=a:candidate.action__directory`
   endfunction"}}}
 endif
 if exists(':VimShellTab')
@@ -125,7 +125,7 @@ if exists(':VimFiler')
         \ 'description' : 'open vimfiler buffer here',
         \ }
   function! s:kind.action_table.vimfiler.func(candidate)"{{{
-    VimFilerCreate `=a:candidate.action__directory`
+    call vimfiler#create_filer(a:candidate.action__directory)
   endfunction"}}}
 endif
 if exists(':VimFilerTab')
@@ -133,7 +133,7 @@ if exists(':VimFilerTab')
         \ 'description' : 'tabopen vimfiler buffer here',
         \ }
   function! s:kind.action_table.tabvimfiler.func(candidate)"{{{
-    VimFilerTab `=a:candidate.action__directory`
+    tabnew | call vimfiler#create_filer(a:candidate.action__directory)
   endfunction"}}}
 endif
 "}}}
