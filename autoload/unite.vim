@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Sep 2011.
+" Last Modified: 18 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1535,6 +1535,7 @@ function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
     endfor
 
     if !a:is_vimfiler && l:source.max_candidates != 0
+          \ && !l:unite.is_enabled_max_candidates
           \ && len(l:source_candidates) > l:source.max_candidates
       " Filtering too many candidates.
       let l:source_candidates = l:source_candidates[: l:source.max_candidates - 1]
@@ -1711,6 +1712,7 @@ function! s:initialize_current_unite(sources, context)"{{{
         \ len(filter(copy(l:sources), 'v:val.unite__context.is_async')) > 0
   let l:unite.access_time = localtime()
   let l:unite.is_finalized = 0
+  let l:unite.is_enabled_max_candidates = 0
   let l:unite.previewd_buffer_list = []
   let l:unite.post_filters = unite#get_buffer_name_option(
         \ l:unite.buffer_name, 'filters')

@@ -635,6 +635,9 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 <Plug>(unite_toggle_auto_preview)		*<Plug>(unite_toggle_auto_preview)*
 		uniteバッファのauto previewモードをトグルする。
 
+<Plug>(unite_toggle_max_candidates)		*<Plug>(unite_toggle_max_candidates)*
+		uniteバッファのmax_candidatesの有効化・無効化をトグルする。
+
 インサートモードマッピング
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -712,6 +715,9 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 <Plug>(unite_toggle_auto_preview)		*i_<Plug>(unite_toggle_auto_preview)*
 		|<Plug>(unite_toggle_auto_preview)|と同じ。
 
+<Plug>(unite_toggle_max_candidates)		*i_<Plug>(unite_toggle_max_candidates)*
+		|<Plug>(unite_toggle_max_candidates)|と同じ。
+
 ビジュアルモードマッピング
 
 <Plug>(unite_toggle_mark_selected_candidates)	*v_<Plug>(unite_toggle_selected_candidates)*
@@ -732,6 +738,7 @@ q		|<Plug>(unite_exit)|
 <C-r>		|<Plug>(unite_restart)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 *		|<Plug>(unite_toggle_mark_all_candidates)|
+M		|<Plug>(unite_toggle_max_candidates)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_rotate_next_source)|
 <C-p>		|<Plug>(unite_rotate_previous_source)|

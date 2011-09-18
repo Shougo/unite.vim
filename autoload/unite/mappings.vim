@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Sep 2011.
+" Last Modified: 18 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,6 +56,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(unite_toggle_auto_preview)  :<C-u>call <SID>toggle_auto_preview()<CR>
   nnoremap <buffer><silent> <Plug>(unite_narrowing_path)  :<C-u>call <SID>narrowing_path()<CR>
   nnoremap <buffer><silent> <Plug>(unite_narrowing_input_history)  :<C-u>call <SID>narrowing_input_history()<CR>
+  nnoremap <buffer><silent> <Plug>(unite_toggle_max_candidates)  :<C-u>call <SID>toggle_max_candidates()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1] - unite#get_current_unite().prompt_linenr-1, getpos("'>")[1] - unite#get_current_unite().prompt_linenr - 1)<CR>
 
@@ -94,6 +95,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <buffer><silent> <Plug>(unite_toggle_auto_preview)  <C-o>:<C-u>call <SID>toggle_auto_preview()<CR>
   inoremap <buffer><silent> <Plug>(unite_narrowing_path)  <C-o>:<C-u>call <SID>narrowing_path()<CR>
   inoremap <buffer><silent> <Plug>(unite_narrowing_input_history)  <C-o>:<C-u>call <SID>narrowing_input_history()<CR>
+  inoremap <buffer><silent> <Plug>(unite_toggle_max_candidates)  <C-o>:<C-u>call <SID>toggle_max_candidates()<CR>
   "}}}
 
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -123,6 +125,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-h>     <Plug>(unite_delete_backward_path)
   nmap <buffer> <C-r>     <Plug>(unite_restart)
   nmap <buffer> *         <Plug>(unite_toggle_mark_all_candidates)
+  nmap <buffer> M         <Plug>(unite_toggle_max_candidates)
 
   nnoremap <silent><buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
   nnoremap <silent><buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
@@ -613,6 +616,11 @@ function! s:toggle_auto_preview()"{{{
     " Close preview window.
     pclose!
   endif
+endfunction"}}}
+function! s:toggle_max_candidates()"{{{
+  let l:unite = unite#get_current_unite()
+  let l:unite.is_enabled_max_candidates = !l:unite.is_enabled_max_candidates
+  call unite#force_redraw()
 endfunction"}}}
 function! s:narrowing_path()"{{{
   if line('.') <= unite#get_current_unite().prompt_linenr

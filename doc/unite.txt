@@ -637,6 +637,9 @@ Normal mode mappings.
 <Plug>(unite_toggle_auto_preview)		*<Plug>(unite_toggle_auto_preview)*
 		Toggle the unite buffer's auto preview mode.
 
+<Plug>(unite_toggle_max_candidates)		*<Plug>(unite_toggle_max_candidates)*
+		Toggle the unite buffer's max_candidates.
+
 Insert mode mappings.
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -715,6 +718,9 @@ Insert mode mappings.
 <Plug>(unite_toggle_auto_preview)	*i_<Plug>(unite_toggle_auto_preview)*
 		Same to |<Plug>(unite_toggle_auto_preview)|.
 
+<Plug>(unite_toggle_max_candidates)	*i_<Plug>(unite_toggle_max_candidates)*
+		Same to |<Plug>(unite_toggle_max_candidates)|.
+
 Visual mode mappings.
 
 <Plug>(unite_toggle_mark_selected_candidates)	*v_<Plug>(unite_toggle_selected_candidates)*
@@ -734,6 +740,7 @@ q		|<Plug>(unite_exit)|
 <C-r>		|<Plug>(unite_restart)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 *		|<Plug>(unite_toggle_mark_all_candidates)|
+M		|<Plug>(unite_toggle_max_candidates)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_rotate_next_source)|
 <C-p>		|<Plug>(unite_rotate_previous_source)|
@@ -1797,6 +1804,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-09-18
+- Added <Plug>(unite_toggle_max_candidates) mapping.
 
 2011-09-17
 - Fixed vimfiler cd error.
