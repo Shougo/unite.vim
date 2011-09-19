@@ -260,42 +260,42 @@ function! s:path2directory(path)"{{{
   return s:substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
 endfunction"}}}
 function! s:path2project_directory(path)"{{{
-  let l:search_directory = s:path2directory(a:path)
-  let l:directory = ''
+  let search_directory = s:path2directory(a:path)
+  let directory = ''
 
   " Search VCS directory.
   for d in ['.git', '.bzr', '.hg']
-    let d = finddir(d, s:escape_file_searching(l:search_directory) . ';')
+    let d = finddir(d, s:escape_file_searching(search_directory) . ';')
     if d != ''
-      let l:directory = fnamemodify(d, ':p:h:h')
+      let directory = fnamemodify(d, ':p:h:h')
       break
     endif
   endfor
 
   " Search project file.
-  if l:directory == ''
+  if directory == ''
     for d in ['build.xml', 'prj.el', '.project', 'pom.xml', 'Makefile', 'configure', 'Rakefile', 'NAnt.build', 'tags', 'gtags']
-      let d = findfile(d, s:escape_file_searching(l:search_directory) . ';')
+      let d = findfile(d, s:escape_file_searching(search_directory) . ';')
       if d != ''
-        let l:directory = fnamemodify(d, ':p:h')
+        let directory = fnamemodify(d, ':p:h')
         break
       endif
     endfor
   endif
 
-  if l:directory == ''
+  if directory == ''
     " Search /src/ directory.
-    let l:base = s:substitute_path_separator(l:search_directory)
-    if l:base =~# '/src/'
-      let l:directory = l:base[: strridx(l:base, '/src/') + 3]
+    let base = s:substitute_path_separator(search_directory)
+    if base =~# '/src/'
+      let directory = base[: strridx(base, '/src/') + 3]
     endif
   endif
 
-  if l:directory == ''
-    let l:directory = l:search_directory
+  if directory == ''
+    let directory = search_directory
   endif
 
-  return s:substitute_path_separator(l:directory)
+  return s:substitute_path_separator(directory)
 endfunction"}}}
 " Check vimproc."{{{
 let s:exists_vimproc = globpath(&rtp, 'autoload/vimproc.vim') != ''
@@ -304,30 +304,30 @@ function! s:has_vimproc()"{{{
   return s:exists_vimproc
 endfunction"}}}
 function! s:system(str, ...)"{{{
-  let l:command = a:str
-  let l:input = a:0 >= 1 ? a:1 : ''
+  let command = a:str
+  let input = a:0 >= 1 ? a:1 : ''
   if &termencoding != '' && &termencoding != &encoding
-    let l:command = s:iconv(l:command, &encoding, &termencoding)
-    let l:input = s:iconv(l:input, &encoding, &termencoding)
+    let command = s:iconv(command, &encoding, &termencoding)
+    let input = s:iconv(input, &encoding, &termencoding)
   endif
 
   if a:0 == 0
-    let l:output = s:has_vimproc() ?
-          \ vimproc#system(l:command) : system(l:command)
+    let output = s:has_vimproc() ?
+          \ vimproc#system(command) : system(command)
   elseif a:0 == 1
-    let l:output = s:has_vimproc() ?
-          \ vimproc#system(l:command, l:input) : system(l:command, l:input)
+    let output = s:has_vimproc() ?
+          \ vimproc#system(command, input) : system(command, input)
   else
     " ignores 3rd argument unless you have vimproc.
-    let l:output = s:has_vimproc() ?
-          \ vimproc#system(l:command, l:input, a:2) : system(l:command, l:input)
+    let output = s:has_vimproc() ?
+          \ vimproc#system(command, input, a:2) : system(command, input)
   endif
 
   if &termencoding != '' && &termencoding != &encoding
-    let l:output = s:iconv(l:output, &termencoding, &encoding)
+    let output = s:iconv(output, &termencoding, &encoding)
   endif
 
-  return l:output
+  return output
 endfunction"}}}
 function! s:get_last_status()"{{{
   return s:has_vimproc() ?

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: register.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Sep 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,10 +38,10 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
-  let l:candidates = []
+  let candidates = []
 
-  let l:max_width = winwidth(0) - 5
-  let l:registers = [
+  let max_width = winwidth(0) - 5
+  let registers = [
         \ '"',
         \ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
         \ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
@@ -50,27 +50,27 @@ function! s:source.gather_candidates(args, context)"{{{
         \ '-', '*', '+', '.', ':', '#', '%', '/', '=',
         \ ]
   if exists('g:yanktmp_file') && filereadable(g:yanktmp_file)
-    call add(l:registers, 'yanktmp')
+    call add(registers, 'yanktmp')
   endif
 
-  for l:reg in l:registers
-    let l:register = (l:reg ==# 'yanktmp') ?
+  for reg in registers
+    let register = (reg ==# 'yanktmp') ?
           \ join(readfile(g:yanktmp_file, "b"), "\n") :
-          \ getreg(l:reg, 1)
-    if l:register != ''
-      let l:abbr = substitute(l:register[ : l:max_width], '\t', '>---', 'g')
-      let l:abbr = substitute(l:abbr, '\r\?\n', '\\n', 'g')
+          \ getreg(reg, 1)
+    if register != ''
+      let abbr = substitute(register[ : max_width], '\t', '>---', 'g')
+      let abbr = substitute(abbr, '\r\?\n', '\\n', 'g')
 
-      call add(l:candidates, {
-            \ 'word' : l:register,
-            \ 'abbr' : printf('%-7s - %s', l:reg, l:abbr),
+      call add(candidates, {
+            \ 'word' : register,
+            \ 'abbr' : printf('%-7s - %s', reg, abbr),
             \ 'kind' : 'word',
-            \ 'action__register' : l:reg,
+            \ 'action__register' : reg,
             \ })
     endif
   endfor
 
-  return l:candidates
+  return candidates
 endfunction"}}}
 
 " Actions"{{{
@@ -81,11 +81,11 @@ let s:source.action_table.delete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:source.action_table.delete.func(candidates)"{{{
-  for l:candidate in a:candidates
-    if l:candidate.action__register ==# 'yanktmp'
+  for candidate in a:candidates
+    if candidate.action__register ==# 'yanktmp'
       call delete(g:yanktmp_file)
     else
-      silent! call setreg(l:candidate.action__register, '')
+      silent! call setreg(candidate.action__register, '')
     endif
   endfor
 endfunction"}}}
@@ -96,15 +96,15 @@ let s:source.action_table.edit = {
       \ 'is_quit' : 0,
       \ }
 function! s:source.action_table.edit.func(candidate)"{{{
-  let l:register = (a:candidate.action__register ==# 'yanktmp') ?
+  let register = (a:candidate.action__register ==# 'yanktmp') ?
         \ join(readfile(g:yanktmp_file, "b"), "\n") :
         \ getreg(a:candidate.action__register, 1)
-  let l:register = substitute(l:register, '\r\?\n', '\\n', 'g')
-  let l:new_value = substitute(input('', l:register), '\\n', '\n', 'g')
+  let register = substitute(register, '\r\?\n', '\\n', 'g')
+  let new_value = substitute(input('', register), '\\n', '\n', 'g')
   if a:candidate.action__register ==# 'yanktmp'
-    call writefile(split(l:new_value, "\n", 1), g:yanktmp_file)
+    call writefile(split(new_value, "\n", 1), g:yanktmp_file)
   else
-    silent! call setreg(a:candidate.action__register, l:new_value)
+    silent! call setreg(a:candidate.action__register, new_value)
   endif
 endfunction"}}}
 "}}}

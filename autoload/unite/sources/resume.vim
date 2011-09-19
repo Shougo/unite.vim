@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: resume.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jul 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,11 +40,11 @@ function! s:source.gather_candidates(args, context)"{{{
   let a:context.source__buffer_list = filter(range(1, bufnr('$')),
         \ 'getbufvar(v:val, "&filetype") ==# "unite" && !getbufvar(v:val, "unite").context.temporary')
 
-  let l:max_width = max(map(copy(a:context.source__buffer_list),
+  let max_width = max(map(copy(a:context.source__buffer_list),
         \ 'len(getbufvar(v:val, "unite").buffer_name)'))
-  let l:candidates = map(copy(a:context.source__buffer_list), '{
+  let candidates = map(copy(a:context.source__buffer_list), '{
         \ "word" : getbufvar(v:val, "unite").buffer_name,
-        \ "abbr" : printf("%-".l:max_width."s : "
+        \ "abbr" : printf("%-".max_width."s : "
         \          . join(map(copy(getbufvar(v:val, "unite").sources), "v:val.name"), ", "),
         \            getbufvar(v:val, "unite").buffer_name),
         \ "kind" : "command",
@@ -52,7 +52,7 @@ function! s:source.gather_candidates(args, context)"{{{
         \ "source__time" : getbufvar(v:val, "unite").access_time,
         \}')
 
-  return sort(l:candidates, 's:compare')
+  return sort(candidates, 's:compare')
 endfunction"}}}
 
 " Misc.

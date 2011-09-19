@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: converter_relative_word.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Aug 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,13 +38,13 @@ let s:converter = {
 
 function! s:converter.filter(candidates, context)"{{{
   try
-    let l:directory = unite#util#substitute_path_separator(getcwd())
+    let directory = unite#util#substitute_path_separator(getcwd())
     if has_key(a:context, 'source__directory')
-      let l:old_dir = l:directory
-      let l:directory = substitute(a:context.source__directory, '*', '', 'g')
+      let old_dir = directory
+      let directory = substitute(a:context.source__directory, '*', '', 'g')
 
-      if l:directory !=# l:old_dir
-        lcd `=l:directory`
+      if directory !=# old_dir
+        lcd `=directory`
       endif
     endif
 
@@ -54,8 +54,8 @@ function! s:converter.filter(candidates, context)"{{{
     endfor
   finally
     if has_key(a:context, 'source__directory')
-          \ && l:directory !=# l:old_dir
-      lcd `=l:old_dir`
+          \ && directory !=# old_dir
+      lcd `=old_dir`
     endif
   endtry
 

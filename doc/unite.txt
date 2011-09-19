@@ -957,8 +957,8 @@ unite#custom_action({kind}, {name}, {action})
 		function! my_tabopen.func(candidates)
 		  call unite#take_action('tabopen', a:candidates)
 		
-		  let l:dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
-		  execute g:unite_kind_openable_lcd_command '`=l:dir`'
+		  let dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+		  execute g:unite_kind_openable_lcd_command '`=dir`'
 		endfunction
 		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen
@@ -1807,6 +1807,7 @@ CHANGELOG					*unite-changelog*
 
 2011-09-18
 - Added <Plug>(unite_toggle_max_candidates) mapping.
+- Refactoringed local variable names.
 
 2011-09-17
 - Fixed vimfiler cd error.

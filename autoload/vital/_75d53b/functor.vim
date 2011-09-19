@@ -42,7 +42,7 @@ function! s:wrap(callable)
             \}, 'force')
         endif
     endif
-    throw 'vital: Functor.wrap(): '
+    throw 'vita Functor.wrap(): '
     \   . 'a:callable is not callable!'
 endfunction
 

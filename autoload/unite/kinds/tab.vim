@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Jun 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,8 +53,8 @@ let s:kind.action_table.delete = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.delete.func(candidates)"{{{
-  for l:candidate in sort(a:candidates, 's:compare')
-    execute 'tabclose' l:candidate.action__tab_nr
+  for candidate in sort(a:candidates, 's:compare')
+    execute 'tabclose' candidate.action__tab_nr
   endfor
 endfunction"}}}
 
@@ -69,11 +69,11 @@ if exists('*gettabvar')
       \ 'is_quit' : 0,
         \ }
   function! s:kind.action_table.rename.func(candidates)"{{{
-    for l:candidate in a:candidates
-      let l:old_title = gettabvar(l:candidate.action__tab_nr, 'title')
-      let l:title = input(printf('New title: %s -> ', l:old_title), l:old_title)
-      if l:title != '' && l:title !=# l:old_title
-        call settabvar(l:candidate.action__tab_nr, 'title', l:title)
+    for candidate in a:candidates
+      let old_title = gettabvar(candidate.action__tab_nr, 'title')
+      let title = input(printf('New title: %s -> ', old_title), old_title)
+      if title != '' && title !=# old_title
+        call settabvar(candidate.action__tab_nr, 'title', title)
       endif
     endfor
   endfunction"}}}

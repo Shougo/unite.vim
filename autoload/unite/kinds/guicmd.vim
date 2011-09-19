@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: guicmd.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Aug 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,36 +43,36 @@ let s:kind.action_table.execute = {
       \ 'description' : 'execute command',
       \ }
 function! s:kind.action_table.execute.func(candidate)"{{{
-  let l:args = [a:candidate.action__path]
+  let args = [a:candidate.action__path]
   if has_key(a:candidate, 'action__args')
-    let l:args += a:candidate.action__args
+    let args += a:candidate.action__args
   endif
 
   if unite#util#is_win()
-    let l:args[0] = resolve(l:args[0])
-    silent execute ':!start ' . join(map(l:args, '"\"".v:val."\""'))
+    let args[0] = resolve(args[0])
+    silent execute ':!start ' . join(map(args, '"\"".v:val."\""'))
   else
-    call system(printf('%s %s &', l:args[0], join(map(l:args, "''''.v:val.''''"))))
+    call system(printf('%s %s &', args[0], join(map(args, "''''.v:val.''''"))))
   endif
 endfunction"}}}
 let s:kind.action_table.edit = {
       \ 'description' : 'edit command args',
       \ }
 function! s:kind.action_table.edit.func(candidate)"{{{
-  let l:args = [a:candidate.action__path]
+  let args = [a:candidate.action__path]
   if has_key(a:candidate, 'action__args')
-    let l:args += a:candidate.action__args
+    let args += a:candidate.action__args
   endif
 
-  let l:cmdline = unite#util#is_win() ?
-        \ join(map(l:args, '"\"".v:val."\""')) :
-        \ resolve(l:args[0]) . ' ' . join(map(l:args, "''''.v:val.''''"))
-  let l:cmdline = input('Edit command args :', l:cmdline, 'file')
+  let cmdline = unite#util#is_win() ?
+        \ join(map(args, '"\"".v:val."\""')) :
+        \ resolve(args[0]) . ' ' . join(map(args, "''''.v:val.''''"))
+  let cmdline = input('Edit command args :', cmdline, 'file')
 
   if unite#util#is_win()
-    silent execute ':!start' l:cmdline
+    silent execute ':!start' cmdline
   else
-    call system(l:cmdline . ' &')
+    call system(cmdline . ' &')
   endif
 endfunction"}}}
 "}}}

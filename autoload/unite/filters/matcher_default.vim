@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_default.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,15 +37,15 @@ let s:matcher = {
       \}
 
 function! s:matcher.filter(candidates, context)"{{{
-  let l:candidates = a:candidates
-  for l:default in s:default_matchers
-    let l:filter = unite#get_filters(l:default)
-    if !empty(l:filter)
-      let l:candidates = l:filter.filter(l:candidates, a:context)
+  let candidates = a:candidates
+  for default in s:default_matchers
+    let filter = unite#get_filters(default)
+    if !empty(filter)
+      let candidates = filter.filter(candidates, a:context)
     endif
   endfor
 
-  return l:candidates
+  return candidates
 endfunction"}}}
 
 

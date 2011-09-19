@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jul 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,62 +42,62 @@ let s:source = {
 let s:cached_result = []
 function! s:source.gather_candidates(args, context)"{{{
   " Get jumps list.
-  redir => l:redir
+  redir => redir
   silent! jumps
   redir END
 
-  let l:result = []
-  let l:max_path = (winwidth(0) - 5) / 2
-  let l:max_text = (winwidth(0) - 5) - l:max_path
-  for jump in split(l:redir, '\n')[1:]
-    let l:list = split(jump)
-    if len(l:list) < 4
+  let result = []
+  let max_path = (winwidth(0) - 5) / 2
+  let max_text = (winwidth(0) - 5) - max_path
+  for jump in split(redir, '\n')[1:]
+    let list = split(jump)
+    if len(list) < 4
       continue
     endif
 
-    let [l:linenr, l:col, l:file_text] = [l:list[1], l:list[2]+1, join(l:list[3:])]
-    let l:lines = getbufline(l:file_text, l:linenr)
-    let l:path = l:file_text
-    let l:bufnr = bufnr(l:file_text)
-    if empty(l:lines)
-      if getline(l:linenr) ==# l:file_text
-        let l:lines = [l:file_text]
-        let l:path = bufname('%')
-        let l:bufnr = bufnr('%')
-      elseif filereadable(l:path)
-        let l:bufnr = 0
-        let l:lines = ['buffer unloaded']
+    let [linenr, col, file_text] = [list[1], list[2]+1, join(list[3:])]
+    let lines = getbufline(file_text, linenr)
+    let path = file_text
+    let bufnr = bufnr(file_text)
+    if empty(lines)
+      if getline(linenr) ==# file_text
+        let lines = [file_text]
+        let path = bufname('%')
+        let bufnr = bufnr('%')
+      elseif filereadable(path)
+        let bufnr = 0
+        let lines = ['buffer unloaded']
       else
         " Skip.
         continue
       endif
     endif
 
-    if getbufvar(l:bufnr, '&filetype') ==# 'unite'
+    if getbufvar(bufnr, '&filetype') ==# 'unite'
       " Skip unite buffer.
       continue
     endif
 
-    let l:text = get(l:lines, 0, '')
+    let text = get(lines, 0, '')
 
-    let l:dict = {
-          \ 'word' : unite#util#truncate_smart(printf('%s:%d-%d  ', l:path, l:linenr, l:col),
-          \           l:max_path, l:max_path/3, '..') .
-          \          unite#util#truncate_smart(l:text, l:max_text, l:max_text/3, '..'),
+    let dict = {
+          \ 'word' : unite#util#truncate_smart(printf('%s:%d-%d  ', path, linenr, col),
+          \           max_path, max_path/3, '..') .
+          \          unite#util#truncate_smart(text, max_text, max_text/3, '..'),
           \ 'kind' : 'jump_list',
-          \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(expand(l:path), ':p')),
-          \ 'action__line' : l:linenr,
-          \ 'action__col' : l:col,
+          \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(expand(path), ':p')),
+          \ 'action__line' : linenr,
+          \ 'action__col' : col,
           \ }
 
-    if l:bufnr > 0
-      let l:dict.action__buffer_nr = l:bufnr
+    if bufnr > 0
+      let dict.action__buffer_nr = bufnr
     endif
 
-    call add(l:result, l:dict)
+    call add(result, dict)
   endfor
 
-  return reverse(l:result)
+  return reverse(result)
 endfunction"}}}
 
 let &cpo = s:save_cpo

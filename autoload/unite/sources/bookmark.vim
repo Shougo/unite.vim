@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Sep 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,38 +49,38 @@ function! unite#sources#bookmark#_append(filename)"{{{
 
   if a:filename == ''
     " Append the current buffer to the bookmark list.
-    let l:path = expand('%:p')
-    let l:linenr = line('.')
-    let l:pattern = '^' . escape(getline('.'), '~"\.^*$[]') . '$'
+    let path = expand('%:p')
+    let linenr = line('.')
+    let pattern = '^' . escape(getline('.'), '~"\.^*$[]') . '$'
   else
-    let l:path = fnamemodify(a:filename, ':p')
-    let l:linenr = ''
-    let l:pattern = ''
+    let path = fnamemodify(a:filename, ':p')
+    let linenr = ''
+    let pattern = ''
   endif
 
-  let l:filename = (a:filename == '' ? expand('%') : a:filename)
-  if bufexists(l:filename)
-    let l:filetype = getbufvar(l:path, '&filetype')
+  let filename = (a:filename == '' ? expand('%') : a:filename)
+  if bufexists(filename)
+    let filetype = getbufvar(path, '&filetype')
 
     " Detect vimfiler and vimshell.
-    if l:filetype ==# 'vimfiler'
-      let l:path = getbufvar(l:path, 'vimfiler').current_dir
-    elseif l:filetype ==# 'vimshell'
-      let l:path = getbufvar(l:path, 'vimshell').current_dir
+    if filetype ==# 'vimfiler'
+      let path = getbufvar(path, 'vimfiler').current_dir
+    elseif filetype ==# 'vimshell'
+      let path = getbufvar(path, 'vimshell').current_dir
     endif
   endif
 
-  let l:path = unite#substitute_path_separator(l:path)
+  let path = unite#substitute_path_separator(path)
   if !s:is_exists_path(path)
     return
   endif
 
   redraw
   echo a:filename
-  let l:name = input('Please input bookmark name : ')
+  let name = input('Please input bookmark name : ')
 
   call s:load('default')
-  call insert(s:bookmark_files, [l:name, l:path, l:linenr, l:pattern])
+  call insert(s:bookmark_files, [name, path, linenr, pattern])
   call s:save('default')
 endfunction"}}}
 
@@ -113,9 +113,9 @@ let s:source.action_table.delete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:source.action_table.delete.func(candidates)"{{{
-  for l:candidate in a:candidates
+  for candidate in a:candidates
     call filter(s:bookmark_files, 'string(v:val) !=# ' .
-        \ string(string([l:candidate.source_bookmark_name, l:candidate.action__path, l:candidate.action__line, l:candidate.action__pattern])))
+        \ string(string([candidate.source_bookmark_name, candidate.action__path, candidate.action__line, candidate.action__pattern])))
   endfor
 
   call s:save('default')
@@ -135,17 +135,17 @@ let s:buffer_bookmark_action = {
       \ 'description' : 'append buffers to bookmark list',
       \ }
 function! s:buffer_bookmark_action.func(candidate)"{{{
-  let l:filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
-  if l:filetype ==# 'vimfiler'
-    let l:filename = getbufvar(a:candidate.action__buffer_nr, 'vimfiler').current_dir
-  elseif l:filetype ==# 'vimshell'
-    let l:filename = getbufvar(a:candidate.action__buffer_nr, 'vimshell').current_dir
+  let filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
+  if filetype ==# 'vimfiler'
+    let filename = getbufvar(a:candidate.action__buffer_nr, 'vimfiler').current_dir
+  elseif filetype ==# 'vimshell'
+    let filename = getbufvar(a:candidate.action__buffer_nr, 'vimshell').current_dir
   else
-    let l:filename = a:candidate.action__path
+    let filename = a:candidate.action__path
   endif
 
   " Add to bookmark.
-  call unite#sources#bookmark#_append(l:filename)
+  call unite#sources#bookmark#_append(filename)
 endfunction"}}}
 
 call unite#custom_action('file', 'bookmark', s:file_bookmark_action)
@@ -156,16 +156,16 @@ unlet! s:buffer_bookmark_action
 
 " Misc
 function! s:save(filename)  "{{{
-  let l:filename = g:unite_source_bookmark_directory . '/' . a:filename
+  let filename = g:unite_source_bookmark_directory . '/' . a:filename
   call writefile([s:VERSION] + map(copy(s:bookmark_files), 'join(v:val, "\t")'),
-        \ l:filename)
-  let s:bookmark_file_mtime = getftime(l:filename)
+        \ filename)
+  let s:bookmark_file_mtime = getftime(filename)
 endfunction"}}}
 function! s:load(filename)  "{{{
-  let l:filename = g:unite_source_bookmark_directory . '/' . a:filename
-  if filereadable(l:filename)
-  \  && s:bookmark_file_mtime != getftime(l:filename)
-    let [ver; s:bookmark_files] = readfile(l:filename)
+  let filename = g:unite_source_bookmark_directory . '/' . a:filename
+  if filereadable(filename)
+  \  && s:bookmark_file_mtime != getftime(filename)
+    let [ver; s:bookmark_files] = readfile(filename)
     if ver !=# s:VERSION
       echohl WarningMsg
       echomsg 'Sorry, the version of bookmark file is old.  Clears the bookmark list.'
@@ -176,7 +176,7 @@ function! s:load(filename)  "{{{
     let s:bookmark_files =
     \   filter(map(s:bookmark_files,
     \              'split(v:val, "\t", 1)'), 's:is_exists_path(v:val[1])')
-    let s:bookmark_file_mtime = getftime(l:filename)
+    let s:bookmark_file_mtime = getftime(filename)
   endif
 endfunction"}}}
 function! s:is_exists_path(path)  "{{{

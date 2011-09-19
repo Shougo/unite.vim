@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_point.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Aug 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,12 +37,12 @@ let s:source = {
       \ 'hooks' : {},
       \}
 function! s:source.hooks.on_init(args, context)"{{{
-  let l:filename_pattern = '[[:alnum:];/?:@&=+$,_.!~*''|()-]\+'
-  let l:filename = expand(matchstr(getline('.')[: col('.')-1], l:filename_pattern . '$')
-        \ . matchstr(getline('.')[col('.') :], '^'.l:filename_pattern))
+  let filename_pattern = '[[:alnum:];/?:@&=+$,_.!~*''|()-]\+'
+  let filename = expand(matchstr(getline('.')[: col('.')-1], filename_pattern . '$')
+        \ . matchstr(getline('.')[col('.') :], '^'.filename_pattern))
   let a:context.source__filename =
-        \ (l:filename =~ '^\%(https\?\|ftp\)://') ?
-        \ l:filename : fnamemodify(l:filename, ':p')
+        \ (filename =~ '^\%(https\?\|ftp\)://') ?
+        \ filename : fnamemodify(filename, ':p')
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{

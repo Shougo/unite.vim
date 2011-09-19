@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Sep 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,9 +36,9 @@ function! unite#sources#buffer#define()"{{{
 endfunction"}}}
 function! unite#sources#buffer#_append()"{{{
   " Append the current buffer.
-  let l:bufnr = bufnr('%')
-  let s:buffer_list[l:bufnr] = {
-        \ 'action__buffer_nr' : l:bufnr, 'source__time' : localtime(),
+  let bufnr = bufnr('%')
+  let s:buffer_list[bufnr] = {
+        \ 'action__buffer_nr' : bufnr, 'source__time' : localtime(),
         \ }
 
   if !exists('t:unite_buffer_dictionary')
@@ -47,16 +47,16 @@ function! unite#sources#buffer#_append()"{{{
 
   if exists('*gettabvar')
     " Delete same buffer in other tab pages.
-    for l:tabnr in range(1, tabpagenr('$'))
-      let l:buffer_dict = gettabvar(l:tabnr, 'unite_buffer_dictionary')
-      if type(l:buffer_dict) == type({}) && has_key(l:buffer_dict, l:bufnr)
-        call remove(l:buffer_dict, l:bufnr)
+    for tabnr in range(1, tabpagenr('$'))
+      let buffer_dict = gettabvar(tabnr, 'unite_buffer_dictionary')
+      if type(buffer_dict) == type({}) && has_key(buffer_dict, bufnr)
+        call remove(buffer_dict, bufnr)
       endif
-      unlet l:buffer_dict
+      unlet buffer_dict
     endfor
   endif
 
-  let t:unite_buffer_dictionary[l:bufnr] = 1
+  let t:unite_buffer_dictionary[bufnr] = 1
 endfunction"}}}
 
 let s:source_buffer_all = {
@@ -80,7 +80,7 @@ function! s:source_buffer_all.gather_candidates(args, context)"{{{
     let a:context.source__buffer_list = s:get_buffer_list()
   endif
 
-  let l:candidates = map(copy(a:context.source__buffer_list), '{
+  let candidates = map(copy(a:context.source__buffer_list), '{
         \ "word" : s:make_word(v:val.action__buffer_nr),
         \ "abbr" : s:make_abbr(v:val.action__buffer_nr),
         \ "kind" : "buffer",
@@ -89,7 +89,7 @@ function! s:source_buffer_all.gather_candidates(args, context)"{{{
         \ "action__directory" : s:get_directory(v:val.action__buffer_nr),
         \}')
 
-  return l:candidates
+  return candidates
 endfunction"}}}
 
 let s:source_buffer_tab = {
@@ -117,9 +117,9 @@ function! s:source_buffer_tab.gather_candidates(args, context)"{{{
     let t:unite_buffer_dictionary = {}
   endif
 
-  let l:list = filter(copy(a:context.source__buffer_list), 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
+  let list = filter(copy(a:context.source__buffer_list), 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
 
-  let l:candidates = map(l:list, '{
+  let candidates = map(list, '{
         \ "word" : s:make_word(v:val.action__buffer_nr),
         \ "abbr" : s:make_abbr(v:val.action__buffer_nr),
         \ "kind" : "buffer",
@@ -128,89 +128,89 @@ function! s:source_buffer_tab.gather_candidates(args, context)"{{{
         \ "action__directory" : s:get_directory(v:val.action__buffer_nr),
         \}')
 
-  return l:candidates
+  return candidates
 endfunction"}}}
 
 " Misc
 function! s:make_word(bufnr)"{{{
-  let l:filetype = getbufvar(a:bufnr, '&filetype')
-  if l:filetype ==# 'vimfiler'
-    let l:path = getbufvar(a:bufnr, 'vimfiler').current_dir
-    let l:path = printf('*vimfiler* [%s]', unite#substitute_path_separator(simplify(l:path)))
-  elseif l:filetype ==# 'vimshell'
-    let l:vimshell = getbufvar(a:bufnr, 'vimshell')
-    let l:path = printf('*vimshell*: [%s]',
-          \ unite#substitute_path_separator(simplify(l:vimshell.current_dir)))
+  let filetype = getbufvar(a:bufnr, '&filetype')
+  if filetype ==# 'vimfiler'
+    let path = getbufvar(a:bufnr, 'vimfiler').current_dir
+    let path = printf('*vimfiler* [%s]', unite#substitute_path_separator(simplify(path)))
+  elseif filetype ==# 'vimshell'
+    let vimshell = getbufvar(a:bufnr, 'vimshell')
+    let path = printf('*vimshell*: [%s]',
+          \ unite#substitute_path_separator(simplify(vimshell.current_dir)))
   else
-    let l:path = unite#substitute_path_separator(simplify(bufname(a:bufnr)))
+    let path = unite#substitute_path_separator(simplify(bufname(a:bufnr)))
   endif
 
-  return l:path
+  return path
 endfunction"}}}
 function! s:make_abbr(bufnr)"{{{
-  let l:filetype = getbufvar(a:bufnr, '&filetype')
-  if l:filetype ==# 'vimfiler'
-    let l:path = getbufvar(a:bufnr, 'vimfiler').current_dir
-    let l:path = printf('%s [%s]', bufname(a:bufnr),
-          \ unite#substitute_path_separator(simplify(l:path)))
-  elseif l:filetype ==# 'vimshell'
-    let l:vimshell = getbufvar(a:bufnr, 'vimshell')
-    let l:path = l:vimshell.current_dir
-    let l:path = printf('%s: %s [%s]', bufname(a:bufnr),
-          \ (has_key(l:vimshell, 'cmdline') ? l:vimshell.cmdline : ''),
-          \ unite#substitute_path_separator(simplify(l:path)))
+  let filetype = getbufvar(a:bufnr, '&filetype')
+  if filetype ==# 'vimfiler'
+    let path = getbufvar(a:bufnr, 'vimfiler').current_dir
+    let path = printf('%s [%s]', bufname(a:bufnr),
+          \ unite#substitute_path_separator(simplify(path)))
+  elseif filetype ==# 'vimshell'
+    let vimshell = getbufvar(a:bufnr, 'vimshell')
+    let path = vimshell.current_dir
+    let path = printf('%s: %s [%s]', bufname(a:bufnr),
+          \ (has_key(vimshell, 'cmdline') ? vimshell.cmdline : ''),
+          \ unite#substitute_path_separator(simplify(path)))
   else
-    let l:path = fnamemodify(bufname(a:bufnr), ':~:.') . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
-    let l:path = unite#substitute_path_separator(simplify(l:path))
+    let path = fnamemodify(bufname(a:bufnr), ':~:.') . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
+    let path = unite#substitute_path_separator(simplify(path))
   endif
 
-  return l:path
+  return path
 endfunction"}}}
 function! s:compare(candidate_a, candidate_b)"{{{
   return a:candidate_b.source__time - a:candidate_a.source__time
 endfunction"}}}
 function! s:get_directory(bufnr)"{{{
-  let l:filetype = getbufvar(a:bufnr, '&filetype')
-  if l:filetype ==# 'vimfiler'
-    let l:dir = getbufvar(a:bufnr, 'vimfiler').current_dir
-  elseif l:filetype ==# 'vimshell'
-    let l:dir = getbufvar(a:bufnr, 'vimshell').current_dir
+  let filetype = getbufvar(a:bufnr, '&filetype')
+  if filetype ==# 'vimfiler'
+    let dir = getbufvar(a:bufnr, 'vimfiler').current_dir
+  elseif filetype ==# 'vimshell'
+    let dir = getbufvar(a:bufnr, 'vimshell').current_dir
   else
-    let l:path = unite#substitute_path_separator(bufname(a:bufnr))
-    let l:dir = unite#path2directory(l:path)
+    let path = unite#substitute_path_separator(bufname(a:bufnr))
+    let dir = unite#path2directory(path)
   endif
 
-  return l:dir
+  return dir
 endfunction"}}}
 function! s:get_buffer_list()"{{{
   " Make buffer list.
-  let l:list = []
-  let l:bufnr = 1
-  while l:bufnr <= bufnr('$')
-    if buflisted(l:bufnr) && l:bufnr != bufnr('%')
-      if has_key(s:buffer_list, l:bufnr)
-        call add(l:list, s:buffer_list[l:bufnr])
+  let list = []
+  let bufnr = 1
+  while bufnr <= bufnr('$')
+    if buflisted(bufnr) && bufnr != bufnr('%')
+      if has_key(s:buffer_list, bufnr)
+        call add(list, s:buffer_list[bufnr])
       else
-        call add(l:list,
-              \ { 'action__buffer_nr' : l:bufnr, 'source__time' : 0 })
+        call add(list,
+              \ { 'action__buffer_nr' : bufnr, 'source__time' : 0 })
       endif
     endif
-    let l:bufnr += 1
+    let bufnr += 1
   endwhile
 
-  call sort(l:list, 's:compare')
+  call sort(list, 's:compare')
 
   if buflisted(bufnr('%'))
     " Add current buffer.
     if has_key(s:buffer_list, bufnr('%'))
-      call add(l:list, s:buffer_list[bufnr('%')])
+      call add(list, s:buffer_list[bufnr('%')])
     else
-      call add(l:list,
+      call add(list,
             \ { 'action__buffer_nr' : bufnr('%'), 'source__time' : 0 })
     endif
   endif
 
-  return l:list
+  return list
 endfunction"}}}
 
 let &cpo = s:save_cpo

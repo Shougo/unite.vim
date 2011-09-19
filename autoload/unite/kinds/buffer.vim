@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Sep 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,8 +44,8 @@ let s:kind.action_table.open = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.open.func(candidates)"{{{
-  for l:candidate in a:candidates
-    execute 'buffer' l:candidate.action__buffer_nr
+  for candidate in a:candidates
+    execute 'buffer' candidate.action__buffer_nr
   endfor
 endfunction"}}}
 
@@ -56,8 +56,8 @@ let s:kind.action_table.delete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.delete.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:delete('bdelete', l:candidate)
+  for candidate in a:candidates
+    call s:delete('bdelete', candidate)
   endfor
 endfunction"}}}
 
@@ -68,8 +68,8 @@ let s:kind.action_table.fdelete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.fdelete.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:delete('bdelete!', l:candidate)
+  for candidate in a:candidates
+    call s:delete('bdelete!', candidate)
   endfor
 endfunction"}}}
 
@@ -80,8 +80,8 @@ let s:kind.action_table.wipeout = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.wipeout.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:delete('bwipeout', l:candidate)
+  for candidate in a:candidates
+    call s:delete('bwipeout', candidate)
   endfor
 endfunction"}}}
 
@@ -92,8 +92,8 @@ let s:kind.action_table.unload = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.unload.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:delete('unload', l:candidate)
+  for candidate in a:candidates
+    call s:delete('unload', candidate)
   endfor
 endfunction"}}}
 
@@ -104,12 +104,12 @@ let s:kind.action_table.preview = {
 function! s:kind.action_table.preview.func(candidate)"{{{
   pedit `=a:candidate.action__path`
 
-  let l:filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
-  if l:filetype != ''
-    let l:winnr = winnr()
+  let filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
+  if filetype != ''
+    let winnr = winnr()
     execute bufwinnr(a:candidate.action__buffer_nr) . 'wincmd w'
-    execute 'setfiletype' l:filetype
-    execute l:winnr . 'wincmd w'
+    execute 'setfiletype' filetype
+    execute winnr . 'wincmd w'
   endif
 endfunction"}}}
 
@@ -120,20 +120,20 @@ let s:kind.action_table.rename = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.rename.func(candidates)"{{{
-  for l:candidate in a:candidates
-    if getbufvar(l:candidate.action__buffer_nr, '&buftype') =~ 'nofile'
+  for candidate in a:candidates
+    if getbufvar(candidate.action__buffer_nr, '&buftype') =~ 'nofile'
       " Skip nofile buffer.
       continue
     endif
 
-    let l:old_buffer_name = bufname(l:candidate.action__buffer_nr)
-    let l:buffer_name = input(printf('New buffer name: %s -> ', l:old_buffer_name), l:old_buffer_name)
-    if l:buffer_name != '' && l:buffer_name !=# l:old_buffer_name
-      let l:bufnr = bufnr('%')
-      execute 'buffer' l:candidate.action__buffer_nr
-      saveas! `=l:buffer_name`
-      call delete(l:candidate.action__path)
-      execute 'buffer' l:bufnr
+    let old_buffer_name = bufname(candidate.action__buffer_nr)
+    let buffer_name = input(printf('New buffer name: %s -> ', old_buffer_name), old_buffer_name)
+    if buffer_name != '' && buffer_name !=# old_buffer_name
+      let bufnr = bufnr('%')
+      execute 'buffer' candidate.action__buffer_nr
+      saveas! `=buffer_name`
+      call delete(candidate.action__path)
+      execute 'buffer' bufnr
     endif
   endfor
 endfunction"}}}
@@ -143,15 +143,15 @@ endfunction"}}}
 function! s:delete(delete_command, candidate)"{{{
   " Not to close window, move to alternate buffer.
 
-  let l:winnr = 1
-  while l:winnr <= winnr('$')
-    if winbufnr(l:winnr) == a:candidate.action__buffer_nr
-      execute l:winnr . 'wincmd w'
+  let winnr = 1
+  while winnr <= winnr('$')
+    if winbufnr(winnr) == a:candidate.action__buffer_nr
+      execute winnr . 'wincmd w'
       call unite#util#alternate_buffer()
       wincmd p
     endif
 
-    let l:winnr += 1
+    let winnr += 1
   endwhile
 
   silent execute a:candidate.action__buffer_nr a:delete_command

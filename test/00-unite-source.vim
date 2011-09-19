@@ -8,42 +8,42 @@ set cpo&vim
 
 
 function! s:run()
-  let l:kind = {
+  let kind = {
       \ 'name' : 'hoge',
       \ 'default_action' : 'open',
       \ 'action_table': {},
         \ }
-  let l:kind.action_table.open = {
+  let kind.action_table.open = {
         \ 'is_selectable' : 1, 
         \ }
-  function! l:kind.action_table.open.func(candidate)
+  function! kind.action_table.open.func(candidate)
     echo 'hoge'
   endfunction
   
-  Ok unite#define_kind(l:kind) == 0, "defined kind"
+  Ok unite#define_kind(kind) == 0, "defined kind"
   
-  let l:source = {
+  let source = {
         \ 'name' : 'hoge',
         \ 'is_volatile' : 1,
         \}
-  function! l:source.gather_candidates(args, context)"{{{
+  function! source.gather_candidates(args, context)"{{{
     " Add dummy candidate.
-    let l:candidates = [ a:context.input ]
+    let candidates = [ a:context.input ]
 
-    call map(l:candidates, '{
+    call map(candidates, '{
           \ "word" : v:val,
           \ "source" : "hoge",
           \ "kind" : "hoge",
           \}')
 
     if g:unite_source_file_ignore_pattern != ''
-      call filter(l:candidates, 'v:val.word !~ ' . string(g:unite_source_file_ignore_pattern))
+      call filter(candidates, 'v:val.word !~ ' . string(g:unite_source_file_ignore_pattern))
     endif
 
-    return l:candidates
+    return candidates
   endfunction"}}}
   
-  Ok unite#define_source(l:source) == 0, "defind source"
+  Ok unite#define_source(source) == 0, "defind source"
 
   let candidate = {
   \   'ku__source': unite#get_sources('hoge'),
@@ -53,8 +53,8 @@ function! s:run()
   silent! let _ = unite#take_action('*choose*', candidate)
   Like _ 'no such action'
 
-  Ok unite#undef_kind(l:kind.name) == 0, "undef kind"
-  Ok unite#undef_source(l:source.name) == 0, "undef source"
+  Ok unite#undef_kind(kind.name) == 0, "undef kind"
+  Ok unite#undef_source(source.name) == 0, "undef source"
   
 endfunction
 

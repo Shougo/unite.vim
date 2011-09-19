@@ -73,27 +73,27 @@ function! unite#util#uniq(...)
   return call(s:V.Data.List.uniq, a:000)
 endfunction
 function! unite#util#input_yesno(message)"{{{
-  let l:yesno = input(a:message . ' [yes/no] : ')
-  while l:yesno !~? '^\%(y\%[es]\|n\%[o]\)$'
+  let yesno = input(a:message . ' [yes/no] : ')
+  while yesno !~? '^\%(y\%[es]\|n\%[o]\)$'
     redraw
-    if l:yesno == ''
+    if yesno == ''
       echo 'Canceled.'
       break
     endif
 
     " Retry.
     call unite#print_error('Invalid input.')
-    let l:yesno = input(a:message . ' [yes/no] : ')
+    let yesno = input(a:message . ' [yes/no] : ')
   endwhile
 
-  return l:yesno =~? 'y\%[es]'
+  return yesno =~? 'y\%[es]'
 endfunction"}}}
 function! unite#util#input_directory(message)"{{{
   echo a:message
-  let l:dir = input('', '', 'dir')
-  while !isdirectory(l:dir)
+  let dir = input('', '', 'dir')
+  while !isdirectory(dir)
     redraw
-    if l:dir == ''
+    if dir == ''
       echo 'Canceled.'
       break
     endif
@@ -101,10 +101,10 @@ function! unite#util#input_directory(message)"{{{
     " Retry.
     call unite#print_error('Invalid path.')
     echo a:message
-    let l:dir = input('', '', 'dir')
+    let dir = input('', '', 'dir')
   endwhile
 
-  return l:dir
+  return dir
 endfunction"}}}
 
 function! unite#util#alternate_buffer()"{{{
@@ -113,29 +113,29 @@ function! unite#util#alternate_buffer()"{{{
     return
   endif
 
-  let l:listed_buffer_len = len(filter(range(1, bufnr('$')),
+  let listed_buffer_len = len(filter(range(1, bufnr('$')),
         \ 'buflisted(v:val) && getbufvar(v:val, "&filetype") !=# "unite"'))
-  if l:listed_buffer_len <= 1
+  if listed_buffer_len <= 1
     enew
     return
   endif
 
-  let l:cnt = 0
-  let l:pos = 1
-  let l:current = 0
-  while l:pos <= bufnr('$')
-    if buflisted(l:pos)
-      if l:pos == bufnr('%')
-        let l:current = l:cnt
+  let cnt = 0
+  let pos = 1
+  let current = 0
+  while pos <= bufnr('$')
+    if buflisted(pos)
+      if pos == bufnr('%')
+        let current = cnt
       endif
 
-      let l:cnt += 1
+      let cnt += 1
     endif
 
-    let l:pos += 1
+    let pos += 1
   endwhile
 
-  if l:current > l:cnt / 2
+  if current > cnt / 2
     bprevious
   else
     bnext

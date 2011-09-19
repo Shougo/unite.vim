@@ -2,7 +2,7 @@
 " FILE: alias.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          tacroe <tacroe at gmail.com>
-" Last Modified: 09 Sep 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,86 +35,86 @@ function! unite#sources#alias#define()
 endfunction
 
 function! s:make_aliases()
-  let l:aliases = []
-  for [l:name, l:config] in items(g:unite_source_alias_aliases)
-    let l:args =
-          \ (!has_key(l:config, 'args')) ? [] :
-          \ (type(l:config.args) == type([])) ?
-          \ l:config.args : [l:config.args]
+  let aliases = []
+  for [name, config] in items(g:unite_source_alias_aliases)
+    let args =
+          \ (!has_key(config, 'args')) ? [] :
+          \ (type(config.args) == type([])) ?
+          \ config.args : [config.args]
 
-    let l:alias = {}
-    let l:alias.name = l:name
-    let l:alias.description = get(l:config, 'description',
-          \ s:make_default_description(l:config.source, l:args))
-    let l:alias.source__config = l:config
-    let l:alias.source__args = l:args
-    let l:alias.hooks = {}
+    let alias = {}
+    let alias.name = name
+    let alias.description = get(config, 'description',
+          \ s:make_default_description(config.source, args))
+    let alias.source__config = config
+    let alias.source__args = args
+    let alias.hooks = {}
 
-    function! l:alias.hooks.on_pre_init(args, context)
-      let l:config = a:context.source.source__config
-      let l:original_source =
-            \ (!has_key(l:config, 'source') ||
-            \  l:config.source ==# a:context.source.name) ? {} :
-            \ deepcopy(unite#get_all_sources(l:config.source))
-      let l:alias_source = deepcopy(a:context.source)
+    function! alias.hooks.on_pre_init(args, context)
+      let config = a:context.source.source__config
+      let original_source =
+            \ (!has_key(config, 'source') ||
+            \  config.source ==# a:context.source.name) ? {} :
+            \ deepcopy(unite#get_all_sources(config.source))
+      let alias_source = deepcopy(a:context.source)
 
-      if has_key(l:original_source, 'hooks')
-            \ && has_key(l:original_source.hooks, 'on_pre_init')
+      if has_key(original_source, 'hooks')
+            \ && has_key(original_source.hooks, 'on_pre_init')
         " Call pre init hook.
-        call l:original_source.hooks.on_pre_init(
+        call original_source.hooks.on_pre_init(
               \ a:context.source.source__args + a:args,
-              \ { 'source' : l:original_source })
+              \ { 'source' : original_source })
       endif
 
-      let l:source = extend(a:context.source,
-            \ filter(copy(l:original_source),
+      let source = extend(a:context.source,
+            \ filter(copy(original_source),
             \ 'type(v:val) != type(function("type"))'))
-      let l:source.name = l:alias_source.name
-      let l:source.description = l:alias_source.description
-      let l:source.hooks = {}
-      let l:source.source__original_source = l:original_source
+      let source.name = alias_source.name
+      let source.description = alias_source.description
+      let source.hooks = {}
+      let source.source__original_source = original_source
 
       " Overwrite hooks.
-      if has_key(l:original_source, 'hooks')
-        for l:func in filter(keys(l:original_source.hooks),
+      if has_key(original_source, 'hooks')
+        for func in filter(keys(original_source.hooks),
               \ 'v:val !=# "on_pre_init"')
-          let l:define_function = join([
-                \ 'function! l:source.hooks.' . l:func . '(args, context)',
-                \ '  let l:args = a:context.source.source__args + a:args',
+          let define_function = join([
+                \ 'function! source.hooks.' . func . '(args, context)',
+                \ '  let args = a:context.source.source__args + a:args',
                 \ '  return a:context.source.source__original_source.hooks.'
-                \                    . l:func . '(l:args, a:context)',
+                \                    . func . '(args, a:context)',
                 \ 'endfunction'], "\n")
-          execute l:define_function
+          execute define_function
         endfor
       endif
 
       " Overwrite functions.
-      for l:func in keys(filter(copy(l:original_source),
+      for func in keys(filter(copy(original_source),
             \ 'type(v:val) == type(function("type"))'))
-        let l:define_function = join([
-              \ 'function! l:source.' . l:func . '(args, context)',
-              \ '  let l:args = a:context.source.source__args + a:args',
+        let define_function = join([
+              \ 'function! source.' . func . '(args, context)',
+              \ '  let args = a:context.source.source__args + a:args',
               \ '  return a:context.source.source__original_source.'
-              \                    . l:func . '(l:args, a:context)',
+              \                    . func . '(args, a:context)',
               \ 'endfunction'], "\n")
-        execute l:define_function
+        execute define_function
       endfor
     endfunction
 
-    call add(l:aliases, l:alias)
+    call add(aliases, alias)
   endfor
 
-  return l:aliases
+  return aliases
 endfunction
 
 function! s:make_default_description(source_name, args)
-  let l:desc = 'alias for "' . a:source_name
+  let desc = 'alias for "' . a:source_name
   if empty(a:args)
-    return l:desc . '"'
+    return desc . '"'
   endif
 
-  let l:desc .= ':' . join(a:args, ':') . '"'
-  return l:desc
+  let desc .= ':' . join(a:args, ':') . '"'
+  return desc
 endfunction
 
 let &cpo = s:save_cpo

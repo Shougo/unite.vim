@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: changes.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jul 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,32 +43,32 @@ let s:source = {
 let s:cached_result = []
 function! s:source.hooks.on_init(args, context)"{{{
   " Get changes list.
-  redir => l:redir
+  redir => redir
   silent! changes
   redir END
 
-  let l:result = []
-  let l:max_width = (winwidth(0) - 5)
-  for change in split(l:redir, '\n')[1:]
-    let l:list = split(change)
-    if len(l:list) < 4
+  let result = []
+  let max_width = (winwidth(0) - 5)
+  for change in split(redir, '\n')[1:]
+    let list = split(change)
+    if len(list) < 4
       continue
     endif
 
-    let [l:linenr, l:col, l:text] = [l:list[1], l:list[2]+1, join(l:list[3:])]
+    let [linenr, col, text] = [list[1], list[2]+1, join(list[3:])]
 
-    call add(l:result, {
-          \ 'word' : unite#util#truncate_smart(printf('%4d-%-3d  %s', l:linenr, l:col, l:text),
-          \           l:max_width, l:max_width/3, '..'),
+    call add(result, {
+          \ 'word' : unite#util#truncate_smart(printf('%4d-%-3d  %s', linenr, col, text),
+          \           max_width, max_width/3, '..'),
           \ 'kind' : 'jump_list',
           \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(expand('%'), ':p')),
           \ 'action__buffer_nr' : bufnr('%'),
-          \ 'action__line' : l:linenr,
-          \ 'action__col' : l:col,
+          \ 'action__line' : linenr,
+          \ 'action__col' : col,
           \ })
   endfor
 
-  let a:context.source__result = l:result
+  let a:context.source__result = result
 endfunction"}}}
 function! s:source.gather_candidates(args, context)"{{{
   return a:context.source__result

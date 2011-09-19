@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 27 Aug 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -80,25 +80,25 @@ let s:grep_source = {
       \ }
 
 function! s:grep_source.hooks.on_init(args, context) "{{{
-  let l:target  = get(a:args, 0, '')
-  if type(l:target) != type([])
-    if l:target == ''
-      let l:target = input('Target: ', '**', 'file')
+  let target  = get(a:args, 0, '')
+  if type(target) != type([])
+    if target == ''
+      let target = input('Target: ', '**', 'file')
     endif
 
-    if l:target == '%' || l:target == '#'
-      let l:target = unite#util#escape_file_searching(bufname(l:target))
-    elseif l:target ==# '$buffers'
-      let l:target = join(map(filter(range(1, bufnr('$')), 'buflisted(v:val)'),
+    if target == '%' || target == '#'
+      let target = unite#util#escape_file_searching(bufname(target))
+    elseif target ==# '$buffers'
+      let target = join(map(filter(range(1, bufnr('$')), 'buflisted(v:val)'),
             \ 'unite#util#escape_file_searching(bufname(v:val))'))
-    elseif l:target == '**'
+    elseif target == '**'
       " Optimized.
-      let l:target = '* ' . g:unite_source_grep_recursive_opt
+      let target = '* ' . g:unite_source_grep_recursive_opt
     endif
 
-    let a:context.source__target = [l:target]
+    let a:context.source__target = [target]
   else
-    let a:context.source__target = l:target
+    let a:context.source__target = target
   endif
 
   let a:context.source__extra_opts = get(a:args, 1, '')
@@ -138,16 +138,16 @@ function! s:grep_source.gather_candidates(args, context) "{{{
     let a:context.is_async = 1
   endif
 
-  let l:cmdline = printf('%s %s %s ''%s'' %s',
+  let cmdline = printf('%s %s %s ''%s'' %s',
     \   g:unite_source_grep_command,
     \   g:unite_source_grep_default_opts,
     \   a:context.source__extra_opts,
     \   substitute(a:context.source__input, "'", "''", 'g'),
     \   join(a:context.source__target),
     \)
-  call unite#print_message('[grep] Command-line: ' . l:cmdline)
-  let a:context.source__proc = vimproc#pgroup_open(l:cmdline)
-  " let a:context.source__proc = vimproc#popen3(l:cmdline)
+  call unite#print_message('[grep] Command-line: ' . cmdline)
+  let a:context.source__proc = vimproc#pgroup_open(cmdline)
+  " let a:context.source__proc = vimproc#popen3(cmdline)
 
   " Close handles.
   call a:context.source__proc.stdin.close()
@@ -157,19 +157,19 @@ function! s:grep_source.gather_candidates(args, context) "{{{
 endfunction "}}}
 
 function! s:grep_source.async_gather_candidates(args, context) "{{{
-  let l:stdout = a:context.source__proc.stdout
-  if l:stdout.eof
+  let stdout = a:context.source__proc.stdout
+  if stdout.eof
     " Disable async.
     call unite#print_message('[grep] Completed.')
     let a:context.is_async = 0
   endif
 
-  let l:candidates = map(filter(map(l:stdout.read_lines(-1, 300),
+  let candidates = map(filter(map(stdout.read_lines(-1, 300),
         \ 'iconv(v:val, &termencoding, &encoding)'),
     \  'v:val =~ "^.\\+:.\\+:.\\+$"'),
     \ '[v:val, split(v:val[2:], ":")]')
 
-  return map(l:candidates,
+  return map(candidates,
     \ '{
     \   "word": v:val[0],
     \   "kind": "jump_list",

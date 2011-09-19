@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jul 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,8 +50,8 @@ let s:source = {
       \}
 
 function! s:source.hooks.on_init(args, context)"{{{
-  let l:list = range(1, winnr('$'))
-  for i in l:list
+  let list = range(1, winnr('$'))
+  for i in list
     " Set default value.
     if type(getwinvar(i, 'unite_window')) == type('')
       call setwinvar(i, 'unite_window', {
@@ -61,30 +61,30 @@ function! s:source.hooks.on_init(args, context)"{{{
     endif
   endfor
 
-  unlet l:list[winnr()-1]
-  call sort(l:list, 's:compare')
-  let l:arg = get(a:args, 0, '')
-  if l:arg !=# 'no-current'
+  unlet list[winnr()-1]
+  call sort(list, 's:compare')
+  let arg = get(a:args, 0, '')
+  if arg !=# 'no-current'
     " Add current window.
-    call add(l:list, winnr())
+    call add(list, winnr())
   endif
 
   let a:context.source__candidates = []
-  for i in l:list
-    let l:window = getwinvar(i, 'unite_window')
-    let l:bufname = bufname(winbufnr(i))
-    if empty(l:bufname)
-      let l:bufname = '[No Name]'
+  for i in list
+    let window = getwinvar(i, 'unite_window')
+    let bufname = bufname(winbufnr(i))
+    if empty(bufname)
+      let bufname = '[No Name]'
     endif
 
     call add(a:context.source__candidates, {
-          \ 'word' : l:bufname,
+          \ 'word' : bufname,
           \ 'abbr' : printf('[%d/%d] %s %s(%s)', i, winnr('$'),
           \      (i == winnr() ? '%' : i == winnr('#') ? '#' : ' '),
-          \      l:bufname, l:window.cwd),
+          \      bufname, window.cwd),
           \ 'kind' : 'window',
           \ 'action__window_nr' : i,
-          \ 'action__directory' : l:window.cwd,
+          \ 'action__directory' : window.cwd,
           \ })
   endfor
 endfunction"}}}

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: uri.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,8 +45,8 @@ let s:kind.action_table.start = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.start.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:System.open(l:candidate.action__path)
+  for candidate in a:candidates
+    call s:System.open(candidate.action__path)
   endfor
 endfunction"}}}
 "}}}

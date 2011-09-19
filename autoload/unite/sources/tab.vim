@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jul 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,76 +43,76 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
-  let l:list = range(1, tabpagenr('$'))
-  unlet l:list[tabpagenr()-1]
+  let list = range(1, tabpagenr('$'))
+  unlet list[tabpagenr()-1]
   if exists('*gettabvar')
-    call sort(l:list, 's:compare')
+    call sort(list, 's:compare')
   endif
-  let l:arg = get(a:args, 0, '')
-  if l:arg !=# 'no-current'
+  let arg = get(a:args, 0, '')
+  if arg !=# 'no-current'
     " Add current tab.
-    call add(l:list, tabpagenr())
+    call add(list, tabpagenr())
   endif
 
-  let l:candidates = []
-  for i in l:list
-    let l:bufnrs = tabpagebuflist(i)
-    let l:bufnr = l:bufnrs[tabpagewinnr(i) - 1]  " Get current window buffer in tabs.
+  let candidates = []
+  for i in list
+    let bufnrs = tabpagebuflist(i)
+    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " Get current window buffer in tabs.
 
-    let l:bufname = unite#substitute_path_separator(fnamemodify((i == tabpagenr() ? bufname('#') : bufname(l:bufnr)), ':p'))
-    if l:bufname == ''
-      let l:bufname = '[No Name]'
+    let bufname = unite#substitute_path_separator(fnamemodify((i == tabpagenr() ? bufname('#') : bufname(bufnr)), ':p'))
+    if bufname == ''
+      let bufname = '[No Name]'
     endif
 
     if exists('*gettabvar')
       " Use gettabvar().
-      let l:title = gettabvar(i, 'title')
-      if l:title != ''
-        let l:title = '[' . l:title . ']'
+      let title = gettabvar(i, 'title')
+      if title != ''
+        let title = '[' . title . ']'
       endif
 
-      let l:cwd = unite#substitute_path_separator((i == tabpagenr() ? getcwd() : gettabvar(i, 'cwd')))
-      if l:cwd !~ '/$'
-        let l:cwd .= '/'
+      let cwd = unite#substitute_path_separator((i == tabpagenr() ? getcwd() : gettabvar(i, 'cwd')))
+      if cwd !~ '/$'
+        let cwd .= '/'
       endif
     else
-      let l:title = ''
-      let l:cwd = ''
+      let title = ''
+      let cwd = ''
     endif
 
-    let l:abbr = i . ': ' . l:title
-    if l:cwd != ''
-      if stridx(l:bufname, l:cwd) == 0
-        let l:bufname = l:bufname[len(l:cwd) :]
+    let abbr = i . ': ' . title
+    if cwd != ''
+      if stridx(bufname, cwd) == 0
+        let bufname = bufname[len(cwd) :]
       endif
-      let l:abbr .= l:bufname
+      let abbr .= bufname
 
-      let l:abbr .= '(' . substitute(l:cwd, '.\zs/$', '', '') . ')'
+      let abbr .= '(' . substitute(cwd, '.\zs/$', '', '') . ')'
     else
-      let l:abbr .= l:bufname
+      let abbr .= bufname
     endif
 
-    let l:wincount = tabpagewinnr(i, '$')
+    let wincnt = tabpagewinnr(i, '$')
     if i == tabpagenr()
-      let l:wincount -= 1
+      let wincnt -= 1
     endif
-    if l:wincount > 1
-      let l:abbr .= '{' . l:wincount . '}'
+    if wincnt > 1
+      let abbr .= '{' . wincnt . '}'
     endif
-    let l:abbr .= getbufvar(bufnr('%'), '&modified') ? '[+]' : ''
+    let abbr .= getbufvar(bufnr('%'), '&modified') ? '[+]' : ''
 
-    let l:word = exists('*gettabvar') && gettabvar(i, 'title') != '' ? gettabvar(i, 'title') : l:bufname
+    let word = exists('*gettabvar') && gettabvar(i, 'title') != '' ? gettabvar(i, 'title') : bufname
 
-    call add(l:candidates, {
-          \ 'word' : l:word,
-          \ 'abbr' : l:abbr,
+    call add(candidates, {
+          \ 'word' : word,
+          \ 'abbr' : abbr,
           \ 'kind' : 'tab',
           \ 'action__tab_nr' : i,
-          \ 'action__directory' : l:cwd,
+          \ 'action__directory' : cwd,
           \ })
   endfor
 
-  return l:candidates
+  return candidates
 endfunction"}}}
 
 " Misc

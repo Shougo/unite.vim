@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mapping.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Apr 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,22 +44,22 @@ let s:source = {
 let s:cached_result = []
 function! s:source.hooks.on_init(args, context)"{{{
   " Get mapping list.
-  redir => l:redir
+  redir => redir
   silent! nmap
   redir END
 
   let s:cached_result = []
-  for line in split(l:redir, '\n')
-    let l:map = matchstr(line, '^\a*\s*\zs\S\+')
-    if l:map !~ '^<' || l:map =~ '^<SNR>'
+  for line in split(redir, '\n')
+    let map = matchstr(line, '^\a*\s*\zs\S\+')
+    if map !~ '^<' || map =~ '^<SNR>'
       continue
     endif
-    let l:map = substitute(l:map, '\(<.*>\)', '\\\1', 'g')
+    let map = substitute(map, '\(<.*>\)', '\\\1', 'g')
 
     call add(s:cached_result, {
-          \ 'word' : l:line,
+          \ 'word' : line,
           \ 'kind' : 'command',
-          \ 'action__command' : 'execute "normal ' . l:map . '"',
+          \ 'action__command' : 'execute "normal ' . map . '"',
           \ })
   endfor
 endfunction"}}}
