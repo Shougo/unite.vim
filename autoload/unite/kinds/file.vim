@@ -528,7 +528,7 @@ function! s:execute_command(command, candidate)"{{{
   let dir = unite#util#path2directory(a:candidate.action__path)
   " Auto make directory.
   if !isdirectory(dir) && unite#util#input_yesno(
-        \   printf('"%s" does not exist. Create? [y/N]', dir))
+        \   printf('"%s" does not exist. Create?', dir))
     call mkdir(iconv(dir, &encoding, &termencoding), 'p')
   endif
 
