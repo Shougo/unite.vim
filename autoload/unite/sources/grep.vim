@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 21 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,13 +62,8 @@ endif
 " }}}
 
 function! unite#sources#grep#define() "{{{
-  if !exists('*unite#version') || unite#version() <= 100
-    echoerr 'Your unite.vim is too old.'
-    echoerr 'Please install unite.vim Ver.1.1 or above.'
-    return []
-  endif
-
-  return executable(g:unite_source_grep_command) && unite#util#has_vimproc() ? s:grep_source : []
+  return executable(g:unite_source_grep_command) && unite#util#has_vimproc() ?
+        \ s:grep_source : []
 endfunction "}}}
 
 let s:grep_source = {
@@ -107,9 +102,6 @@ function! s:grep_source.hooks.on_init(args, context) "{{{
   if a:context.source__input == ''
     let a:context.source__input = input('Pattern: ')
   endif
-
-  call unite#print_message('[grep] Target: ' . join(a:context.source__target))
-  call unite#print_message('[grep] Pattern: ' . a:context.source__input)
 endfunction"}}}
 function! s:grep_source.hooks.on_syntax(args, context)"{{{
   syntax case ignore
@@ -133,8 +125,6 @@ function! s:grep_source.gather_candidates(args, context) "{{{
   endif
 
   if a:context.is_redraw
-    call unite#print_message('[grep] Target: ' . join(a:context.source__target))
-    call unite#print_message('[grep] Pattern: ' . a:context.source__input)
     let a:context.is_async = 1
   endif
 
@@ -147,7 +137,6 @@ function! s:grep_source.gather_candidates(args, context) "{{{
     \)
   call unite#print_message('[grep] Command-line: ' . cmdline)
   let a:context.source__proc = vimproc#pgroup_open(cmdline)
-  " let a:context.source__proc = vimproc#popen3(cmdline)
 
   " Close handles.
   call a:context.source__proc.stdin.close()

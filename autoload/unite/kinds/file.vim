@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 21 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -228,6 +228,7 @@ let s:kind.action_table.vimfiler__copy = {
 function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  echomsg vimfiler_current_dir
   if vimfiler_current_dir != ''
     let current_dir = getcwd()
     lcd `=vimfiler_current_dir`

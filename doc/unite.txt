@@ -472,6 +472,16 @@ g:unite_source_grep_max_candidates		*g:unite_source_grep_max_candidates*
 
 		Default value is 100.
 
+g:unite_source_find_command			*g:unite_source_find_command*
+		Set find command.
+
+		Default value is "find".
+
+g:unite_source_find_max_candidates		*g:unite_source_find_max_candidates*
+		Set |unite-source-find| max candidates number.
+
+		Default value is 100.
+
 g:unite_source_line_enable_highlight		*g:unite_source_line_enable_highlight*
 		Control whether search keyword is highlighted in unite
 		buffer.
@@ -1155,6 +1165,17 @@ grep		Nominates "grep" command output as candidates.
 		%         : Current buffer name
 		#         : Alternate buffer name
 		$buffers  : All buffer names
+
+						*unite-source-find*
+find		Nominates "find" command output as candidates.
+
+		Note: This source requires vimproc.  Please install.
+		http://github.com/Shougo/vimproc/tree/master
+
+		Source arguments:
+		1. the target directory.
+		2. "find" options.
+		Max candidates: |g:unite_source_find_max_candidates|
 
 						*unite-source-line*
 line		Nominates current buffer lines as candidates.
@@ -1861,6 +1882,7 @@ CHANGELOG					*unite-changelog*
 2011-09-21
 - Added matcher_fuzzy.
 - Improved vimfiler cd.
+- Added find source.
 
 2011-09-18
 - Added <Plug>(unite_toggle_max_candidates) mapping.
