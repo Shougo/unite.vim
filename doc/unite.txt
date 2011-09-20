@@ -1860,6 +1860,7 @@ CHANGELOG					*unite-changelog*
 
 2011-09-21
 - Added matcher_fuzzy.
+- Improved vimfiler cd.
 
 2011-09-18
 - Added <Plug>(unite_toggle_max_candidates) mapping.
