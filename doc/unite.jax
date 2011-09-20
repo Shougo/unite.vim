@@ -1423,6 +1423,15 @@ matcher_glob	ユーザーが入力したglobパターンにより候補をフィ
 matcher_regexp	ユーザーが入力したパターンを正規表現として、候補をフィルタリ
 		ングするmatcher。"!"は否定となる。絞り込みにはwordを使用する。
 
+						*unite-filter-matcher_fuzzy*
+matcher_fuzzy	ユーザーが入力したパターンを曖昧検索として、候補をフィルタリ
+		ングするmatcher。"!"は否定となる。絞り込みにはwordを使用する。
+		このmatcherを使用すると、絞り込みが遅くなるので注意すること。
+		|unite-source-file_rec|に対して設定すると便利かもしれない。
+>
+		call unite#custom_filters('file,buffer,file_rec',
+		\ ['matcher_fuzzy', 'sorter_default', 'converter_default'])
+<
 						*unite-filter-sorter_default*
 sorter_default	|unite-filter-default|により呼び出される、デフォルトのsorter。
 		初期状態では、["sorter_nothing"]のsorterを呼び出す。

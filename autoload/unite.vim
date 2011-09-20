@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 21 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -730,33 +730,37 @@ function! unite#path2directory(path)"{{{
   return unite#util#path2directory(a:path)
 endfunction"}}}
 function! s:print_buffer(message)"{{{
-  if &filetype ==# 'unite'
-    let modifiable_save = &l:modifiable
-    setlocal modifiable
+  if &filetype !=# 'unite'
+    return
+  endif
 
-    let unite = unite#get_current_unite()
-    let pos = getpos('.')
-    call append(unite.prompt_linenr-1, a:message)
-    let len = type(a:message) == type([]) ?
-          \ len(a:message) : 1
-    let unite.prompt_linenr += len
+  let modifiable_save = &l:modifiable
+  setlocal modifiable
 
-    let pos[1] += len
-    call setpos('.', pos)
-    normal! zb
-    if mode() ==# 'i' && pos[2] == col('$')
-      startinsert!
-    endif
+  let unite = unite#get_current_unite()
+  let pos = getpos('.')
 
-    let &l:modifiable = modifiable_save
-    call s:on_cursor_moved()
+  let message = type(a:message) == type([]) ?
+        \ a:message : [a:message]
 
-    if exists('b:current_syntax') && b:current_syntax ==# 'unite'
-      syntax clear uniteInputLine
-      execute 'syntax match uniteInputLine'
-            \ '/\%'.unite.prompt_linenr.'l.*/'
-            \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
-    endif
+  call append(unite.prompt_linenr-1, message)
+  let unite.prompt_linenr += len(message)
+
+  let pos[1] += len(message)
+  call setpos('.', pos)
+  normal! zb
+  if mode() ==# 'i' && pos[2] == col('$')
+    startinsert!
+  endif
+
+  let &l:modifiable = modifiable_save
+  call s:on_cursor_moved()
+
+  if exists('b:current_syntax') && b:current_syntax ==# 'unite'
+    syntax clear uniteInputLine
+    execute 'syntax match uniteInputLine'
+          \ '/\%'.unite.prompt_linenr.'l.*/'
+          \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
   endif
 endfunction"}}}
 "}}}

@@ -1347,7 +1347,60 @@ guicmd		GUI executable commands
 ==============================================================================
 FILTERS						*unite-filters*
 
-Todo
+						*unite-filter-default*
+default		Todo
+
+						*unite-filter-matcher_default*
+matcher_default	Todo
+
+						*unite-filter-matcher_glob*
+matcher_glob	Todo
+
+						*unite-filter-matcher_regexp*
+matcher_regexp	Todo
+
+						*unite-filter-matcher_fuzzy*
+matcher_fuzzy	Todo
+>
+		call unite#custom_filters('file,buffer,file_rec',
+		\ ['matcher_fuzzy', 'sorter_default', 'converter_default'])
+<
+						*unite-filter-sorter_default*
+sorter_default	|unite-filter-default|により呼び出される、デフォルトのsorter。
+		初期状態では、["sorter_nothing"]のsorterを呼び出す。
+		|unite#filters#sorter_default#use()|を呼び出すことで、デフォルトの
+		sorterを変更することができる。
+
+						*unite-filter-sorter_nothing*
+sorter_nothing	何もsortをしないsorter。source側のsortがそのまま反映される。
+
+						*unite-filter-sorter_word*
+sorter_word	Compare words sorter.
+
+						*unite-filter-sorter_reverse*
+sorter_reverse	Reverse order sorter.
+
+						*unite-filter-converter_default*
+converter_default
+		Todo
+
+						*unite-filter-converter_nothing*
+converter_nothing
+		This converter is dummy.
+
+						*unite-filter-converter_relative_word*
+converter_relative_word
+		Todo
+>
+		call unite#custom_filters('file_rec',
+		\ ['converter_relative_word', 'matcher_default',
+		\  'sorter_default', 'converter_relative_abbr'])
+<
+
+						*unite-filter-converter_relative_abbr*
+converter_relative_abbr
+		Todo
+
 ==============================================================================
 ACTIONS						*unite-actions*
 
@@ -1804,6 +1857,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-09-21
+- Added matcher_fuzzy.
 
 2011-09-18
 - Added <Plug>(unite_toggle_max_candidates) mapping.
