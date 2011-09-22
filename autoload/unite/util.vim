@@ -90,7 +90,7 @@ function! unite#util#input_yesno(message)"{{{
 endfunction"}}}
 function! unite#util#input_directory(message)"{{{
   echo a:message
-  let dir = input('', '', 'dir')
+  let dir = unite#util#substitute_path_separator(expand(input('', '', 'dir')))
   while !isdirectory(dir)
     redraw
     if dir == ''
@@ -101,7 +101,7 @@ function! unite#util#input_directory(message)"{{{
     " Retry.
     call unite#print_error('Invalid path.')
     echo a:message
-    let dir = input('', '', 'dir')
+    let dir = unite#util#substitute_path_separator(expand(input('', '', 'dir')))
   endwhile
 
   return dir

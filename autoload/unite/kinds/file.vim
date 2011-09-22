@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2011.
+" Last Modified: 23 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -136,7 +136,9 @@ let s:kind.action_table.rename = {
       \ }
 function! s:kind.action_table.rename.func(candidates)"{{{
   for candidate in a:candidates
-    let filename = input(printf('New file name: %s -> ', candidate.action__path), candidate.action__path)
+    let filename = unite#util#substitute_path_separator(
+          \ expand(input(printf('New file name: %s -> ',
+          \ candidate.action__path), candidate.action__path)))
     if filename != '' && filename !=# candidate.action__path
       call rename(candidate.action__path, filename)
     endif
@@ -170,7 +172,9 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
           \ && context.action__directory != '' ?
           \   context.action__directory :
           \   unite#util#input_directory('Input destination directory: ')
-    if dest_dir !~ '/'
+    if dest_dir == ''
+      return
+    elseif dest_dir !~ '/$'
       let dest_dir .= '/'
     endif
 
@@ -228,7 +232,6 @@ let s:kind.action_table.vimfiler__copy = {
 function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
-  echomsg vimfiler_current_dir
   if vimfiler_current_dir != ''
     let current_dir = getcwd()
     lcd `=vimfiler_current_dir`
@@ -246,7 +249,9 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
           \ && context.action__directory != '' ?
           \   context.action__directory :
           \   unite#util#input_directory('Input destination directory: ')
-    if dest_dir !~ '/'
+    if dest_dir == ''
+      return
+    elseif dest_dir !~ '/$'
       let dest_dir .= '/'
     endif
 
