@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 23 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,7 +41,7 @@ call unite#util#set_default('g:unite_source_file_mru_filename_format', ':~:.')
 call unite#util#set_default('g:unite_source_file_mru_file',  g:unite_data_directory . '/file_mru')
 call unite#util#set_default('g:unite_source_file_mru_limit', 100)
 call unite#util#set_default('g:unite_source_file_mru_ignore_pattern',
-      \'\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|^\%(\\\\\|/mnt/\|/media/\|/Volumes/\)')
+      \'\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|^\%(\\\\\|/mnt/\|/media/\|/Volumes/\)')
 "}}}
 
 function! unite#sources#file_mru#define()"{{{
