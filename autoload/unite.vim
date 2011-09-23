@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2011.
+" Last Modified: 23 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2043,6 +2043,8 @@ function! s:on_cursor_moved()  "{{{
   endif
 endfunction"}}}
 function! s:on_buf_unload(bufname)  "{{{
+  match
+
   " Save unite value.
   let unite = getbufvar(a:bufname, 'unite')
   if type(unite) != type({})
@@ -2065,8 +2067,6 @@ function! s:on_buf_unload(bufname)  "{{{
         \ && &updatetime < unite.update_time_save
     let &updatetime = unite.update_time_save
   endif
-
-  match
 
   if !unite.has_preview_window
     " Close preview window.
