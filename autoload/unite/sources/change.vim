@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: changes.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 24 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,7 +68,7 @@ function! s:source.hooks.on_init(args, context)"{{{
           \ })
   endfor
 
-  let a:context.source__result = result
+  let a:context.source__result = reverse(result)
 endfunction"}}}
 function! s:source.gather_candidates(args, context)"{{{
   return a:context.source__result

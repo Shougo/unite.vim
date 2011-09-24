@@ -1879,6 +1879,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-09-24
+- Fixed source change.
+
 2011-09-23
 - Fixed g:unite_source_file_mru_ignore_pattern.
 - Fixed file actions.
