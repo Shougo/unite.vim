@@ -1879,6 +1879,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-09-26
+- Fixed copy and move behavior.
+
 2011-09-24
 - Fixed source change.
 
