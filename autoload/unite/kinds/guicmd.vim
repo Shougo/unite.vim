@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: guicmd.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 26 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,9 +50,16 @@ function! s:kind.action_table.execute.func(candidate)"{{{
 
   if unite#util#is_win()
     let args[0] = resolve(args[0])
-    silent execute ':!start ' . join(map(args, '"\"".v:val."\""'))
+  endif
+
+  let cmdline = unite#util#is_win() ?
+        \ join(map(args, '"\"".v:val."\""')) :
+        \ args[0] . ' ' . join(map(args[1:], "''''.v:val.''''"))
+
+  if unite#util#is_win()
+    silent execute ':!start' cmdline
   else
-    call system(printf('%s %s &', args[0], join(map(args, "''''.v:val.''''"))))
+    call system(cmdline . ' &')
   endif
 endfunction"}}}
 let s:kind.action_table.edit = {
@@ -64,9 +71,13 @@ function! s:kind.action_table.edit.func(candidate)"{{{
     let args += a:candidate.action__args
   endif
 
+  if unite#util#is_win()
+    let args[0] = resolve(args[0])
+  endif
+
   let cmdline = unite#util#is_win() ?
         \ join(map(args, '"\"".v:val."\""')) :
-        \ resolve(args[0]) . ' ' . join(map(args, "''''.v:val.''''"))
+        \ args[0] . ' ' . join(map(args[1:], "''''.v:val.''''"))
   let cmdline = input('Edit command args :', cmdline, 'file')
 
   if unite#util#is_win()

@@ -1881,6 +1881,7 @@ CHANGELOG					*unite-changelog*
 
 2011-09-26
 - Fixed copy and move behavior.
+- Fixed unite launcher source.
 
 2011-09-24
 - Fixed source change.
