@@ -1879,6 +1879,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-09-27
+- Added history/yank source.
+
 2011-09-26
 - Fixed copy and move behavior.
 - Fixed unite launcher source.
