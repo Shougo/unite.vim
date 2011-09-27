@@ -71,7 +71,7 @@ let s:source.action_table.delete = {
       \ }
 function! s:source.action_table.delete.func(candidates)"{{{
   for candidate in a:candidates
-    call filter(s:yank_histories, 'v:val.word !=# candidate.word')
+    call filter(s:yank_histories, 'v:val !=# candidate.word')
   endfor
 endfunction"}}}
 "}}}
