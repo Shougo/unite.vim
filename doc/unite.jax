@@ -520,6 +520,19 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 <
 		初期値は{}である。
 
+g:unite_source_history_yank_enable		*g:unite_source_history_yank_enable*
+		|unite-source-history/yank|を有効化するかどうか決定する
+		。この変数が定義され、値が0以外なら有効化される。値は
+		.vimrc内でセットしなければならない。
+
+		この変数はデフォルトで定義されない。
+
+g:unite_source_history_yank_limit		*g:unite_source_history_yank_limit*
+		|unite-source-history/yank|が履歴を保存する最大数を指定
+		する。
+		
+		初期値は100である。
+
 kindの変数					*unite-kinds-variables*
 
 g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scroll*
@@ -1247,6 +1260,14 @@ alias		すでに存在するsourceの定義をコピーし、aliasのsourceを�
 		alias sourceの作り方については、|g:unite_source_alias_aliases|を
 		参照せよ。
 		Note: このsourceはtacroeによって作成された。
+
+						*unite-source-history/yank*
+history/yank	ヤンクされたテキストの履歴を候補とする。
+		このsourceを使用するためには、
+		|g:unite_source_history_yank_enable|を1にしなければなら
+		ない。
+		Note: このsourceは|g:unite_source_history_yank_enable|
+		が0か定義されていないときに無効化される。
 
 ==============================================================================
 kind						*unite-kinds*

@@ -520,6 +520,18 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 <
 		Default value is "{}".
 
+g:unite_source_history_yank_enable		*g:unite_source_history_yank_enable*
+		If it's defined and 1, |unite-source-history/yank| is
+		enabled. This variable must set in .vimrc.
+
+		This variable is not defined by default.
+
+g:unite_source_history_yank_limit		*g:unite_source_history_yank_limit*
+		The maximum number of |unite-source-history/yank| to
+		save.
+		
+		Default value is 100.
+
 KINDS VARIABLES					*unite-kinds-variables*
 
 g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scroll*
@@ -1219,6 +1231,13 @@ alias		Create alias source copied original source.
 		|g:unite_source_alias_aliases|.
 		Note: This source is created by tacroe.
 
+						*unite-source-history/yank*
+history/yank	Nominates yanked words.
+		To use this source, please set
+		|g:unite_source_history_yank_enable| is 1.
+		Note: This source is disabled when
+		|g:unite_source_history_yank_enable| is 0 or not defined.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1881,6 +1900,7 @@ CHANGELOG					*unite-changelog*
 
 2011-09-27
 - Added history/yank source.
+- Added documentation.
 
 2011-09-26
 - Fixed copy and move behavior.
