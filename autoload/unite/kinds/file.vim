@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Sep 2011.
+" Last Modified: 27 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -174,9 +174,6 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
           \   unite#util#input_directory('Input destination directory: ')
     if dest_dir == ''
       return
-    elseif dest_dir =~ '/$'
-      " Delete last /.
-      let dest_dir = dest_dir[: -2]
     endif
 
     let dest_drive = matchstr(dest_dir, '^\a\+\ze:')
@@ -252,9 +249,6 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
           \   unite#util#input_directory('Input destination directory: ')
     if dest_dir == ''
       return
-    elseif dest_dir =~ '/$'
-      " Delete last /.
-      let dest_dir = dest_dir[: -2]
     endif
 
     let overwrite_method = ''
@@ -543,13 +537,20 @@ function! s:execute_command(command, candidate)"{{{
   silent call unite#util#smart_execute_command(a:command, a:candidate.action__path)
 endfunction"}}}
 function! s:external(command, dest_dir, src_files)"{{{
+  let dest_dir = a:dest_dir
+  if dest_dir =~ '/$'
+    " Delete last /.
+    let dest_dir = dest_dir[: -2]
+  endif
+
+  let src_files = map(a:src_files, 'substitute(v:val, "/$", "", "")')
   let command_line = g:unite_kind_file_{a:command}_command
 
   " Substitute pattern.
   let command_line = substitute(command_line,
-        \'\$srcs\>', join(map(a:src_files, '''"''.v:val.''"''')), 'g')
+        \'\$srcs\>', join(map(src_files, '''"''.v:val.''"''')), 'g')
   let command_line = substitute(command_line,
-        \'\$dest\>', '"'.a:dest_dir.'"', 'g')
+        \'\$dest\>', '"'.dest_dir.'"', 'g')
 
   " echomsg command_line
   let output = unite#util#system(command_line)

@@ -1901,6 +1901,7 @@ CHANGELOG					*unite-changelog*
 2011-09-27
 - Added history/yank source.
 - Added documentation.
+- Fixed copy/delete action.
 
 2011-09-26
 - Fixed copy and move behavior.
