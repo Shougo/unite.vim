@@ -521,14 +521,14 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 		Default value is "{}".
 
 g:unite_source_history_yank_enable		*g:unite_source_history_yank_enable*
-		If it's defined and 1, |unite-source-history/yank| is
-		enabled. This variable must set in .vimrc.
+		If it's defined and non-0, unite enables 
+		|unite-source-history/yank|. This has to be done in .vimrc to
+		set this value.
 
 		This variable is not defined by default.
 
 g:unite_source_history_yank_limit		*g:unite_source_history_yank_limit*
-		The maximum number of |unite-source-history/yank| to
-		save.
+		The maximum number of |unite-source-history/yank| to save.
 		
 		Default value is 100.
 
