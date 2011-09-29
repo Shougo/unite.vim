@@ -521,8 +521,8 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 		初期値は{}である。
 
 g:unite_source_history_yank_enable		*g:unite_source_history_yank_enable*
-		|unite-source-history/yank|を有効化するかどうか決定する
-		。この変数が定義され、値が0以外なら有効化される。値は
+		|unite-source-history/yank|を有効化するかどうか決定する。
+		この変数が定義され、値が0以外なら有効化される。値は
 		.vimrc内でセットしなければならない。
 
 		この変数はデフォルトで定義されない。
