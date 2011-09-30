@@ -1898,6 +1898,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-09-30
+- Fixed unite-line source.
+
 2011-09-28
 - Fixed g:unite_source_file_rec_ignore_pattern escape.
 

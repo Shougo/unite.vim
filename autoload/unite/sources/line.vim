@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 30 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -89,15 +89,19 @@ function! s:unite_source.gather_candidates(args, context)
                 \ [1, a:context.source__linenr] :
                 \ [1, '$']
 
-    let lines = map(getbufline(a:context.source__bufnr, start, end),
-                \ '{"nr": v:key+start, "val": v:val }')
-    let a:context.source__format = '%' . strlen(len(lines)) . 'd: %s'
+    let _ = []
+    for line in getbufline(a:context.source__bufnr, start, end)
+        call add(_, {
+                    \ 'word' : line,
+                    \ 'action__line' : start,
+                    \ 'action__text' : line,
+                    \ })
 
-    return map(lines, '{
-                \   "word": v:val.val,
-                \   "action__line": v:val.nr,
-                \   "action__text": v:val.val
-                \ }')
+        let start += 1
+    endfor
+    let a:context.source__format = '%' . strlen(len(_)) . 'd: %s'
+
+    return _
 endfunction
 
 function! s:unite_source.hooks.on_post_filter(args, context)
