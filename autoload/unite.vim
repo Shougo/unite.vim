@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Sep 2011.
+" Last Modified: 04 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1471,10 +1471,10 @@ function! s:initialize_vimfiler_candidates(candidates)"{{{
       let candidate.vimfiler__is_executable = 0
     endif
     if !has_key(candidate, 'vimfiler__filesize')
-      let candidate.vimfiler__filesize = -1
+      let candidate.vimfiler__filesize = 0
     endif
     if !has_key(candidate, 'vimfiler__filetime')
-      let candidate.vimfiler__filetime = -1
+      let candidate.vimfiler__filetime = 0
     endif
     if !has_key(candidate, 'vimfiler__datemark')
       let candidate.vimfiler__datemark = vimfiler#get_datemark(candidate)
