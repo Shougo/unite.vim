@@ -1901,6 +1901,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-04
 - Improved unite-bookmark.
+- Fixed vimfiler actions.
 
 2011-09-30
 - Fixed unite-line source.
