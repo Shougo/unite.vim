@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: history_yank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Sep 2011.
+" Last Modified: 04 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,7 +57,7 @@ let s:source = {
 
 function! s:source.gather_candidates(args, context)"{{{
   return map(copy(s:yank_histories), '{
-        \ "word" : v:val,
+        \ "word" : v:val[: 150],
         \ "kind" : "word",
         \ }')
 endfunction"}}}
