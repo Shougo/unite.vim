@@ -1912,6 +1912,7 @@ CHANGELOG					*unite-changelog*
 - Improved unite#sources#file#create_vimfiler_dict().
 - Added process source.
 - Fixed vimfiler_gather_candidates().
+- Improved redraw behavior.
 
 2011-10-04
 - Improved unite-bookmark.
