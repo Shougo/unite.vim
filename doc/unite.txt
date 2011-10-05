@@ -1899,6 +1899,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-10-05
+- Escape [].
+
 2011-10-04
 - Improved unite-bookmark.
 - Fixed vimfiler actions.

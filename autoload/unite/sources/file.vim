@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Oct 2011.
+" Last Modified: 05 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -79,6 +79,13 @@ function! s:source.change_candidates(args, context)"{{{
   " Glob by directory name.
   let input = substitute(input, '[^/.]*$', '', '')
   let glob = input . (input =~ '\*$' ? '' : '*')
+
+  " Escape [.
+  if unite#is_win()
+    let glob = substitute(glob, '\[', '\\[[]', 'g')
+  else
+    let glob = escape(glob, '[')
+  endif
   if !has_key(a:context.source__cache, glob)
     let files = split(unite#util#substitute_path_separator(
           \ glob(glob)), '\n')
