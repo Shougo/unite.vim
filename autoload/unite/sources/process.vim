@@ -31,7 +31,8 @@ set cpo&vim
 "}}}
 
 function! unite#sources#process#define()"{{{
-  return executable('ps') ? s:source : {}
+  return executable('ps') || (unite#is_win() && executable('tasklist')) ?
+        \ s:source : {}
 endfunction"}}}
 
 let s:source = {
@@ -44,19 +45,37 @@ let s:source = {
 function! s:source.gather_candidates(args, context)"{{{
   " Get process list.
   let _ = []
-  for line in split(unite#util#system('ps -A'), '\n')[1:]
-    let process = split(line)
-    if len(process) < 4
-      " Invalid output.
-      continue
-    endif
+  if unite#is_win()
+    " Use tasklist.
+    for line in split(unite#util#system('tasklist'), '\n')[3:]
+      let process = split(line)
+      if len(process) < 5
+        " Invalid output.
+        continue
+      endif
 
-    call add(_, {
-          \ 'word' : process[3],
-          \ 'abbr' : line,
-          \ 'action__pid' : process[0],
-          \})
-  endfor
+      call add(_, {
+            \ 'word' : process[0],
+            \ 'abbr' : line,
+            \ 'action__pid' : process[1],
+            \})
+    endfor
+  else
+    " Use ps.
+    for line in split(unite#util#system('ps -A'), '\n')[1:]
+      let process = split(line)
+      if len(process) < 4
+        " Invalid output.
+        continue
+      endif
+
+      call add(_, {
+            \ 'word' : process[3],
+            \ 'abbr' : line,
+            \ 'action__pid' : process[0],
+            \})
+    endfor
+  endif
 
   return _
 endfunction"}}}
@@ -70,7 +89,7 @@ let s:source.action_table.sigkill = {
       \ }
 function! s:source.action_table.sigkill.func(candidates)"{{{
   for candidate in a:candidates
-    call unite#util#system('kill -KILL ' . candidate.action__pid)
+    call s:kill('-KILL', candidate.action__pid)
   endfor
 endfunction"}}}
 
@@ -82,9 +101,16 @@ let s:source.action_table.sigterm = {
       \ }
 function! s:source.action_table.sigterm.func(candidates)"{{{
   for candidate in a:candidates
-    call unite#util#system('kill -TERM ' . candidate.action__pid)
+    call s:kill('-TERM', candidate.action__pid)
   endfor
 endfunction"}}}
+
+function! s:kill(signal, pid)
+  call unite#util#system(unite#is_win() ?
+        \ printf('taskkill /PID %d', a:pid) :
+        \  printf('kill %s %d', a:signal, a:pid)
+        \ )
+endfunction
 "}}}
 
 let &cpo = s:save_cpo

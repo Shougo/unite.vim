@@ -1913,6 +1913,7 @@ CHANGELOG					*unite-changelog*
 - Added process source.
 - Fixed vimfiler_gather_candidates().
 - Improved redraw behavior.
+- source process supported Windows.
 
 2011-10-04
 - Improved unite-bookmark.
