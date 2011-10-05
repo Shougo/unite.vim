@@ -154,7 +154,7 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
     " Add doted files.
     let context.input .= '.'
     let candidates += filter(self.change_candidates(a:args, context),
-          \ 'v:val.word !~ "/\.\.$"')
+          \ 'v:val.word !~ "/\.\.\\?$"')
   elseif filereadable(path)
     let candidates = [ unite#sources#file#create_file_dict(path, 0) ]
   else

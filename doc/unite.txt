@@ -1911,6 +1911,7 @@ CHANGELOG					*unite-changelog*
 - Escape [].
 - Improved unite#sources#file#create_vimfiler_dict().
 - Added process source.
+- Fixed vimfiler_gather_candidates().
 
 2011-10-04
 - Improved unite-bookmark.
