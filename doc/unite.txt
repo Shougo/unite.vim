@@ -1238,6 +1238,10 @@ history/yank	Nominates yanked words.
 		Note: This source is disabled when
 		|g:unite_source_history_yank_enable| is 0 or not defined.
 
+						*unite-source-process*
+process		Nominates processes.
+		Note: This source is required "ps" command.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1562,6 +1566,10 @@ bookmark					*unite-action-bookmark*
 register					*unite-action-register*
 	edit		Change register value
 	delete		Clear registers
+
+process						*unite-action-process*
+	sigterm		Send SIGTERM to the process
+	sigkill		Send SIGKILL to the process
 
 						*unite-default-action*
 Default actions
@@ -1901,6 +1909,8 @@ CHANGELOG					*unite-changelog*
 
 2011-10-05
 - Escape [].
+- Improved unite#sources#file#create_vimfiler_dict().
+- Added process source.
 
 2011-10-04
 - Improved unite-bookmark.

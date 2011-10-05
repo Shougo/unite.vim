@@ -266,11 +266,13 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
 
   let a:candidate.vimfiler__is_directory =
         \ isdirectory(a:candidate.action__path)
-  let a:candidate.vimfiler__is_executable =
-        \ unite#util#is_win() ?
-        \ ('.'.fnamemodify(a:candidate.vimfiler__filename, ':e') =~? a:exts) :
-        \ executable(a:candidate.action__path)
-  let a:candidate.vimfiler__filesize = getfsize(a:candidate.action__path)
+  if !a:candidate.vimfiler__is_directory
+    let a:candidate.vimfiler__is_executable =
+          \ unite#util#is_win() ?
+          \ ('.'.fnamemodify(a:candidate.vimfiler__filename, ':e') =~? a:exts) :
+          \ executable(a:candidate.action__path)
+    let a:candidate.vimfiler__filesize = getfsize(a:candidate.action__path)
+  endif
   let a:candidate.vimfiler__filetime = getftime(a:candidate.action__path)
 endfunction"}}}
 
