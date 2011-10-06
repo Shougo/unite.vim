@@ -78,7 +78,7 @@ function! s:source.gather_candidates(args, context)"{{{
       endif
 
       call add(_, {
-            \ 'word' : join(process[11:]),
+            \ 'word' : join(process[10:]),
             \ 'abbr' : '      ' . line,
             \ 'action__pid' : process[1],
             \})
