@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: process.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Oct 2011.
+" Last Modified: 06 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,17 +44,19 @@ let s:source = {
 function! s:source.gather_candidates(args, context)"{{{
   " Get process list.
   let _ = []
-  for line in split(unite#util#system('ps -A'), '\n')[1:]
+  let result = split(unite#util#system('ps -A u'), '\n')
+  if empty(result)
+    return []
+  endif
+
+  call unite#print_message('[process] ' . result[0])
+  for line in result[1:]
     let process = split(line)
-    if len(process) < 4
-      " Invalid output.
-      continue
-    endif
 
     call add(_, {
-          \ 'word' : process[3],
-          \ 'abbr' : line,
-          \ 'action__pid' : process[0],
+          \ 'word' : join(process[11:]),
+          \ 'abbr' : '      ' . line,
+          \ 'action__pid' : process[1],
           \})
   endfor
 
