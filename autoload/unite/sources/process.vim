@@ -31,7 +31,8 @@ set cpo&vim
 "}}}
 
 function! unite#sources#process#define()"{{{
-  return executable('ps') ? s:source : {}
+  return executable('ps') || (unite#is_win() && executable('tasklist')) ?
+        \ s:source : {}
 endfunction"}}}
 
 let s:source = {
@@ -44,21 +45,45 @@ let s:source = {
 function! s:source.gather_candidates(args, context)"{{{
   " Get process list.
   let _ = []
-  let result = split(unite#util#system('ps -A u'), '\n')
+  let command = unite#is_win() ? 'tasklist' : 'ps -A u'
+
+  let result = split(vimproc#system(command), '\n')
   if empty(result)
     return []
   endif
 
-  call unite#print_message('[process] ' . result[0])
-  for line in result[1:]
-    let process = split(line)
+  if unite#is_win()
+    " Use tasklist.
+    call unite#print_message('[process] ' . result[1])
+    for line in result[3:]
+      let process = split(line)
+      if len(process) < 5
+        " Invalid output.
+        continue
+      endif
 
-    call add(_, {
-          \ 'word' : join(process[11:]),
-          \ 'abbr' : '      ' . line,
-          \ 'action__pid' : process[1],
-          \})
-  endfor
+      call add(_, {
+            \ 'word' : process[0],
+            \ 'abbr' : line,
+            \ 'action__pid' : process[1],
+            \})
+    endfor
+  else
+    call unite#print_message('[process] ' . result[0])
+    for line in result[1:]
+      let process = split(line)
+      if len(process) < 2
+        " Invalid output.
+        continue
+      endif
+
+      call add(_, {
+            \ 'word' : join(process[11:]),
+            \ 'abbr' : '      ' . line,
+            \ 'action__pid' : process[1],
+            \})
+    endfor
+  endif
 
   return _
 endfunction"}}}
@@ -72,7 +97,7 @@ let s:source.action_table.sigkill = {
       \ }
 function! s:source.action_table.sigkill.func(candidates)"{{{
   for candidate in a:candidates
-    call unite#util#system('kill -KILL ' . candidate.action__pid)
+    call s:kill('-KILL', candidate.action__pid)
   endfor
 endfunction"}}}
 
@@ -84,9 +109,16 @@ let s:source.action_table.sigterm = {
       \ }
 function! s:source.action_table.sigterm.func(candidates)"{{{
   for candidate in a:candidates
-    call unite#util#system('kill -TERM ' . candidate.action__pid)
+    call s:kill('-TERM', candidate.action__pid)
   endfor
 endfunction"}}}
+
+function! s:kill(signal, pid)
+  call unite#util#system(unite#is_win() ?
+        \ printf('taskkill /PID %d', a:pid) :
+        \  printf('kill %s %d', a:signal, a:pid)
+        \ )
+endfunction
 "}}}
 
 let &cpo = s:save_cpo

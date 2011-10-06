@@ -1907,12 +1907,16 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-10-06
+- Improved process view.
+
 2011-10-05
 - Escape [].
 - Improved unite#sources#file#create_vimfiler_dict().
 - Added process source.
 - Fixed vimfiler_gather_candidates().
 - Improved redraw behavior.
+- source process supported Windows.
 
 2011-10-04
 - Improved unite-bookmark.
