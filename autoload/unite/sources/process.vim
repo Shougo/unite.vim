@@ -45,7 +45,7 @@ let s:source = {
 function! s:source.gather_candidates(args, context)"{{{
   " Get process list.
   let _ = []
-  let command = unite#is_win() ? 'tasklist' : 'ps -A u'
+  let command = unite#is_win() ? 'tasklist' : 'ps aux'
 
   let result = split(vimproc#system(command), '\n')
   if empty(result)
