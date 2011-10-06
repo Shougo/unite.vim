@@ -1910,6 +1910,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-06
 - Improved process view.
+- Fixed bookmark check.
 
 2011-10-05
 - Escape [].
