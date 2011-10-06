@@ -593,7 +593,7 @@ function! unite#redraw_candidates() "{{{
     let pos = getpos('.')
     silent! execute (unite#get_current_unite().prompt_linenr+1).',$delete _'
     if pos != getpos('.')
-      call setpos(getpos('.'))
+      call setpos('.', getpos('.'))
     endif
   endif
   call setline(unite#get_current_unite().prompt_linenr+1, lines)
