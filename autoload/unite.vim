@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Oct 2011.
+" Last Modified: 06 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -590,7 +590,11 @@ function! unite#redraw_candidates() "{{{
 
   let lines = s:convert_lines(candidates)
   if len(lines) < len(unite#get_current_unite().candidates)
+    let pos = getpos('.')
     silent! execute (unite#get_current_unite().prompt_linenr+1).',$delete _'
+    if pos != getpos('.')
+      call setpos(getpos('.'))
+    endif
   endif
   call setline(unite#get_current_unite().prompt_linenr+1, lines)
 
