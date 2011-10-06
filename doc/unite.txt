@@ -1240,7 +1240,8 @@ history/yank	Nominates yanked words.
 
 						*unite-source-process*
 process		Nominates processes.
-		Note: This source is required "ps" command.
+		Note: This source is required "ps" command or "tasklist"
+		command(in Windows).
 
 ==============================================================================
 KINDS						*unite-kinds*
