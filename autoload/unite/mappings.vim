@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 07 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -690,13 +690,13 @@ function! s:source_action.gather_candidates(args, context)"{{{
     endif
   endfor
 
-  let max = max(map(values(uniq_actions), 'len(v:val.name)'))
+  let max = max(map(values(actions), 'len(v:val.name)'))
 
   return sort(map(filter(values(uniq_actions), 'v:val.is_listed'), '{
         \   "word": v:val.name,
         \   "abbr": printf("%-' . max . 's -- %s", v:val.name, v:val.description),
         \   "source__candidates": candidates,
-        \   "action__action": actions[v:val.name],
+        \   "action__action": v:val,
         \ }'), 's:compare_word')
 endfunction"}}}
 

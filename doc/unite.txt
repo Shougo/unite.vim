@@ -1910,6 +1910,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-07
 - Added unite process candidates alias.
+- Fixed unite mappings source.
 
 2011-10-06
 - Improved process view.
