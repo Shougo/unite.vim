@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: process.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Oct 2011.
+" Last Modified: 07 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,6 +40,7 @@ let s:source = {
       \ 'description' : 'candidates from processes',
       \ 'default_action' : 'sigterm',
       \ 'action_table' : {},
+      \ 'alias_table' : { 'delete' : 'sigkill' },
       \ }
 
 function! s:source.gather_candidates(args, context)"{{{

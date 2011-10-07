@@ -1908,6 +1908,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-10-07
+- Added unite process candidates alias.
+
 2011-10-06
 - Improved process view.
 - Fixed bookmark check.
