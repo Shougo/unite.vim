@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Sep 2011.
+" Last Modified: 07 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -592,7 +592,9 @@ function! unite#redraw_candidates() "{{{
   if len(lines) < len(unite#get_current_unite().candidates)
     let pos = getpos('.')
     silent! execute (unite#get_current_unite().prompt_linenr+1).',$delete _'
-    call setpos('.', pos)
+    if pos != getpos('.')
+      call setpos('.', pos)
+    endif
   endif
   call setline(unite#get_current_unite().prompt_linenr+1, lines)
 
@@ -1471,10 +1473,10 @@ function! s:initialize_vimfiler_candidates(candidates)"{{{
       let candidate.vimfiler__is_executable = 0
     endif
     if !has_key(candidate, 'vimfiler__filesize')
-      let candidate.vimfiler__filesize = -1
+      let candidate.vimfiler__filesize = 0
     endif
     if !has_key(candidate, 'vimfiler__filetime')
-      let candidate.vimfiler__filetime = -1
+      let candidate.vimfiler__filetime = 0
     endif
     if !has_key(candidate, 'vimfiler__datemark')
       let candidate.vimfiler__datemark = vimfiler#get_datemark(candidate)
@@ -2112,7 +2114,7 @@ function! s:filter_alias_action(action_table, alias_table, from)"{{{
         call remove(a:action_table, alias_name)
       endif
     elseif has_key(a:action_table, alias_action)
-      let a:action_table[alias_name] = a:action_table[alias_action]
+      let a:action_table[alias_name] = copy(a:action_table[alias_action])
       let a:action_table[alias_name].from = a:from
       let a:action_table[alias_name].name = alias_name
     endif

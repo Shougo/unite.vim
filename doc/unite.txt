@@ -521,14 +521,14 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 		Default value is "{}".
 
 g:unite_source_history_yank_enable		*g:unite_source_history_yank_enable*
-		If it's defined and 1, |unite-source-history/yank| is
-		enabled. This variable must set in .vimrc.
+		If it's defined and non-0, unite enables 
+		|unite-source-history/yank|. This has to be done in .vimrc to
+		set this value.
 
 		This variable is not defined by default.
 
 g:unite_source_history_yank_limit		*g:unite_source_history_yank_limit*
-		The maximum number of |unite-source-history/yank| to
-		save.
+		The maximum number of |unite-source-history/yank| to save.
 		
 		Default value is 100.
 
@@ -1245,6 +1245,11 @@ history/yank	Nominates yanked words.
 		Note: This source is disabled when
 		|g:unite_source_history_yank_enable| is 0 or not defined.
 
+						*unite-source-process*
+process		Nominates processes.
+		Note: This source is required "ps" command or "tasklist"
+		command(in Windows).
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1570,6 +1575,10 @@ register					*unite-action-register*
 	edit		Change register value
 	delete		Clear registers
 
+process						*unite-action-process*
+	sigterm		Send SIGTERM to the process
+	sigkill		Send SIGKILL to the process
+
 						*unite-default-action*
 Default actions
 
@@ -1718,7 +1727,8 @@ NOTATION					*unite-notation*
 				Todo
 
 			is_invalidate		(Number)
-				Todo
+				1 if action disables a cache. This is also 1
+				in initialization of unite buffer.
 
 			is_async		(Number)
 				Todo
@@ -1904,6 +1914,30 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-10-07
+- Added unite process candidates alias.
+- Fixed unite mappings source.
+
+2011-10-06
+- Improved process view.
+- Fixed bookmark check.
+
+2011-10-05
+- Escape [].
+- Improved unite#sources#file#create_vimfiler_dict().
+- Added process source.
+- Fixed vimfiler_gather_candidates().
+- Improved redraw behavior.
+- source process supported Windows.
+
+2011-10-04
+- Improved unite-bookmark.
+- Fixed vimfiler actions.
+- Optimized for vimfiler.
+
+2011-09-30
+- Fixed unite-line source.
 
 2011-09-28
 - Fixed g:unite_source_file_rec_ignore_pattern escape.

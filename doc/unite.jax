@@ -521,8 +521,8 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 		初期値は{}である。
 
 g:unite_source_history_yank_enable		*g:unite_source_history_yank_enable*
-		|unite-source-history/yank|を有効化するかどうか決定する
-		。この変数が定義され、値が0以外なら有効化される。値は
+		|unite-source-history/yank|を有効化するかどうか決定する。
+		この変数が定義され、値が0以外なら有効化される。値は
 		.vimrc内でセットしなければならない。
 
 		この変数はデフォルトで定義されない。
@@ -1276,6 +1276,10 @@ history/yank	ヤンクされたテキストの履歴を候補とする。
 		Note: このsourceは|g:unite_source_history_yank_enable|
 		が0か定義されていないときに無効化される。
 
+						*unite-source-process*
+process		プロセスリストを候補とする。
+		Note: このsourceには"ps"外部コマンドが必要である。
+
 ==============================================================================
 kind						*unite-kinds*
 
@@ -1649,6 +1653,10 @@ bookmark					*unite-action-bookmark*
 register					*unite-action-register*
 	edit		レジスタの中身を変更する
 	delete		レジスタの中身を空にする
+
+process						*unite-action-process*
+	sigterm		プロセスにSIGTERMを送る
+	sigkill		プロセスにSIGKILLを送る
 
 						*unite-default-action*
 デフォルトアクション
