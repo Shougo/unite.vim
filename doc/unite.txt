@@ -662,6 +662,9 @@ Normal mode mappings.
 <Plug>(unite_toggle_max_candidates)		*<Plug>(unite_toggle_max_candidates)*
 		Toggle the unite buffer's max_candidates.
 
+<Plug>(unite_quick_help)			*<Plug>(unite_quick_help)*
+		View quick help.
+
 Insert mode mappings.
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -776,6 +779,7 @@ k		|<Plug>(unite_loop_cursor_up)|
 <Up>		|<Plug>(unite_loop_cursor_up)|
 J		|<Plug>(unite_skip_cursor_down)|
 K		|<Plug>(unite_skip_cursor_up)|
+?		|<Plug>(unite_quick_help)|
 <CR>		In case when you selected a candidate, runs default action
 d		In case when you selected a candidate, runs delete action
 b		In case when you selected a candidate, runs bookmark action
@@ -1155,6 +1159,9 @@ command		Nominates Vim Ex commands as candidates.
 
 						*unite-source-mapping*
 mapping		Nominates Vim mappings as candidates.
+
+		Source arguments:
+		1. Buffer number.
 
 						*unite-source-grep*
 grep		Nominates "grep" command output as candidates.

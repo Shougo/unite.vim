@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 08 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,6 +57,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(unite_narrowing_path)  :<C-u>call <SID>narrowing_path()<CR>
   nnoremap <buffer><silent> <Plug>(unite_narrowing_input_history)  :<C-u>call <SID>narrowing_input_history()<CR>
   nnoremap <buffer><silent> <Plug>(unite_toggle_max_candidates)  :<C-u>call <SID>toggle_max_candidates()<CR>
+  nnoremap <buffer><silent> <Plug>(unite_quick_help)  :<C-u>call <SID>quick_help()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)  :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1] - unite#get_current_unite().prompt_linenr-1, getpos("'>")[1] - unite#get_current_unite().prompt_linenr - 1)<CR>
 
@@ -126,6 +127,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-r>     <Plug>(unite_restart)
   nmap <buffer> *         <Plug>(unite_toggle_mark_all_candidates)
   nmap <buffer> M         <Plug>(unite_toggle_max_candidates)
+  nmap <buffer> ?         <Plug>(unite_quick_help)
 
   nnoremap <silent><buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
   nnoremap <silent><buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
@@ -392,6 +394,11 @@ function! s:toggle_mark_candidates(start, end)"{{{
 
     let cnt += 1
   endwhile
+endfunction"}}}
+function! s:quick_help()"{{{
+  let unite = unite#get_current_unite()
+
+  call unite#start_temporary([['mapping', bufnr('%')]], {}, 'mapping-help')
 endfunction"}}}
 function! s:choose_action()"{{{
   let unite = unite#get_current_unite()

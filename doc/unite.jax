@@ -661,6 +661,9 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 <Plug>(unite_toggle_max_candidates)		*<Plug>(unite_toggle_max_candidates)*
 		uniteバッファのmax_candidatesの有効化・無効化をトグルする。
 
+<Plug>(unite_quick_help)			*<Plug>(unite_quick_help)*
+		uniteバッファのマッピングを見る。
+
 インサートモードマッピング
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -775,6 +778,7 @@ k		|<Plug>(unite_loop_cursor_up)|
 <Up>		|<Plug>(unite_loop_cursor_up)|
 J		|<Plug>(unite_skip_cursor_down)|
 K		|<Plug>(unite_skip_cursor_up)|
+?		|<Plug>(unite_quick_help)|
 <CR>		候補を選択している場合は default アクションの実行
 d		候補を選択している場合は delete アクションの実行
 b		候補を選択している場合は bookmark アクションの実行
@@ -1180,6 +1184,9 @@ command		VimのExコマンドを候補とする。
 
 						*unite-source-mapping*
 mapping		ユーザーが定義したマッピングを候補とする。
+
+		source引数：
+		1. ターゲットとなるバッファの番号
 
 						*unite-source-grep*
 grep		"grep"コマンドを実行した結果を候補とする。
