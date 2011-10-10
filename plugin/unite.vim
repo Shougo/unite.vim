@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 10 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,48 +41,37 @@ if exists('g:unite_lcd_command')
 endif
 "}}}
 " Global options definition."{{{
-if !exists('g:unite_update_time')
-  let g:unite_update_time = 500
-endif
-if !exists('g:unite_enable_start_insert')
-  let g:unite_enable_start_insert = 0
-endif
-if !exists('g:unite_enable_ignore_case')
-  let g:unite_enable_ignore_case = &ignorecase
-endif
-if !exists('g:unite_enable_smart_case')
-  let g:unite_enable_smart_case = &infercase
-endif
-if !exists('g:unite_split_rule')
-  let g:unite_split_rule = 'topleft'
-endif
-if !exists('g:unite_enable_split_vertically')
-  let g:unite_enable_split_vertically = 0
-endif
-if !exists('g:unite_winheight')
-  let g:unite_winheight = 20
-endif
-if !exists('g:unite_winwidth')
-  let g:unite_winwidth = 90
-endif
-if !exists('g:unite_quick_match_table')
-  let g:unite_quick_match_table = {
-        \'a' : 1, 's' : 2, 'd' : 3, 'f' : 4, 'g' : 5, 'h' : 6, 'j' : 7, 'k' : 8, 'l' : 9, ';' : 10,
-        \'q' : 11, 'w' : 12, 'e' : 13, 'r' : 14, 't' : 15, 'y' : 16, 'u' : 17, 'i' : 18, 'o' : 19, 'p' : 20,
-        \'1' : 21, '2' : 22, '3' : 23, '4' : 24, '5' : 25, '6' : 26, '7' : 27, '8' : 28, '9' : 29, '0' : 30,
-        \}
-endif
-if !exists('g:unite_abbr_highlight')
-  let g:unite_abbr_highlight = 'Normal'
-endif
-if !exists('g:unite_cursor_line_highlight')
-  let g:unite_cursor_line_highlight = 'PmenuSel'
-endif
-if !exists('g:unite_data_directory')
-  let g:unite_data_directory = expand('~/.unite')
-endif
+let g:unite_update_time =
+      \ get(g:, 'unite_update_time', 500)
+let g:unite_enable_start_insert =
+      \ get(g:, 'unite_enable_start_insert', 0)
+let g:unite_enable_ignore_case =
+      \ get(g:, 'unite_enable_ignore_case', &ignorecase)
+let g:unite_enable_smart_case =
+      \ get(g:, 'unite_enable_smart_case', &infercase)
+let g:unite_split_rule =
+      \ get(g:, 'unite_split_rule', 'topleft')
+let g:unite_enable_split_vertically =
+      \ get(g:, 'unite_enable_split_vertically', 0)
+let g:unite_winheight =
+      \ get(g:, 'unite_winheight', 20)
+let g:unite_winwidth =
+      \ get(g:, 'unite_winwidth', 90)
+let g:unite_quick_match_table =
+      \ get(g:, 'unite_quick_match_table', {
+      \     'a' : 1, 's' : 2, 'd' : 3, 'f' : 4, 'g' : 5, 'h' : 6, 'j' : 7, 'k' : 8, 'l' : 9, ';' : 10,
+      \     'q' : 11, 'w' : 12, 'e' : 13, 'r' : 14, 't' : 15, 'y' : 16, 'u' : 17, 'i' : 18, 'o' : 19, 'p' : 20,
+      \     '1' : 21, '2' : 22, '3' : 23, '4' : 24, '5' : 25, '6' : 26, '7' : 27, '8' : 28, '9' : 29, '0' : 30,
+      \ })
+let g:unite_abbr_highlight =
+      \ get(g:, 'unite_abbr_highlight', 'Normal')
+let g:unite_cursor_line_highlight =
+      \ get(g:, 'unite_cursor_line_highlight', 'PmenuSel')
+let g:unite_data_directory =
+      \ get(g:, 'unite_data_directory', expand('~/.unite'))
 if !isdirectory(fnamemodify(g:unite_data_directory, ':p'))
-  call mkdir(iconv(fnamemodify(g:unite_data_directory, ':p'), &encoding, &termencoding), 'p')
+  call mkdir(iconv(fnamemodify(g:unite_data_directory, ':p'),
+        \    &encoding, &termencoding), 'p')
 endif
 "}}}
 
