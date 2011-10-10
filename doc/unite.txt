@@ -703,7 +703,7 @@ Normal mode mappings.
 		Toggle the unite buffer's max_candidates.
 
 <Plug>(unite_quick_help)			*<Plug>(unite_quick_help)*
-		View quick help.
+		View the mappings of the unite buffer.
 
 Insert mode mappings.
 
