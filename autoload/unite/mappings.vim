@@ -31,6 +31,7 @@ set cpo&vim
 function! unite#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
   nnoremap <silent><buffer> <Plug>(unite_exit)  :<C-u>call <SID>exit()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_all_exit)  :<C-u>call <SID>all_exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)  :<C-u>call <SID>choose_action()<CR>
   nnoremap <expr><buffer> <Plug>(unite_insert_enter)  <SID>insert_enter('i')
   nnoremap <expr><buffer> <Plug>(unite_insert_head)   <SID>insert_enter('0'.(len(unite#get_current_unite().prompt)-1).'li')
@@ -109,6 +110,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> a         <Plug>(unite_append_enter)
   nmap <buffer> A         <Plug>(unite_append_end)
   nmap <buffer> q         <Plug>(unite_exit)
+  nmap <buffer> Q         <Plug>(unite_all_exit)
   nmap <buffer> <CR>      <Plug>(unite_do_default_action)
   nmap <buffer> <Space>   <Plug>(unite_toggle_mark_current_candidate)
   nmap <buffer> <Tab>     <Plug>(unite_choose_action)
@@ -340,6 +342,9 @@ endfunction"}}}
 " key-mappings functions.
 function! s:exit()"{{{
   call unite#force_quit_session()
+endfunction"}}}
+function! s:all_exit()"{{{
+  call unite#all_quit_session()
 endfunction"}}}
 function! s:restart()"{{{
   let unite = unite#get_current_unite()

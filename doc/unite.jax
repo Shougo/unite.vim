@@ -560,7 +560,10 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 ノーマルモードマッピング
 
 <Plug>(unite_exit)				*<Plug>(unite_exit)*
-		uniteを終了する。
+		uniteを終了する。前のuniteバッファメニューは復元される。
+
+<Plug>(unite_all_exit)				*<Plug>(unite_all_exit)*
+		uniteバッファメニューを全て閉じ、uniteを終了する。
 
 <Plug>(unite_restart)				*<Plug>(unite_restart)*
 		uniteを再起動する。
@@ -761,6 +764,7 @@ I		|<Plug>(unite_insert_head)|
 a		|<Plug>(unite_append_enter)|
 A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
+Q		|<Plug>(unite_all_exit)|
 <C-r>		|<Plug>(unite_restart)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 *		|<Plug>(unite_toggle_mark_all_candidates)|
