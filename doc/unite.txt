@@ -1928,6 +1928,7 @@ CHANGELOG					*unite-changelog*
 - Fixed variables initialize.
 - Improved unite-source behavior.
 - Added <Plug>(unite_all_exit) mapping.
+- Improved buffer name option behavior.
 
 2011-10-09
 - Expand path.

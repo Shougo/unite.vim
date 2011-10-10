@@ -71,9 +71,12 @@ function! unite#set_buffer_name_option(buffer_name, option_name, value)"{{{
   endfor
 endfunction"}}}
 function! unite#get_buffer_name_option(buffer_name, option_name)"{{{
-  let buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
+  let buffer_name = matchstr(a:buffer_name, '^\S\+')
+  if buffer_name == ''
+    let buffer_name = 'default'
+  endif
 
-  return s:buffer_name_options[a:buffer_name][a:option_name]
+  return s:buffer_name_options[buffer_name][a:option_name]
 endfunction"}}}
 function! unite#custom_filters(source_name, filters)"{{{
   let filters = type(a:filters) == type([]) ?
@@ -1418,10 +1421,12 @@ function! s:initialize_filters()"{{{
   return extend(copy(s:static.filters), s:dynamic.filters)
 endfunction"}}}
 function! s:initialize_buffer_name_options(buffer_name)"{{{
-  if !has_key(s:buffer_name_options, a:buffer_name)
-    let s:buffer_name_options[a:buffer_name] = {}
+  let buffer_name = matchstr(a:buffer_name, '^\S\+')
+
+  if !has_key(s:buffer_name_options, buffer_name)
+    let s:buffer_name_options[buffer_name] = {}
   endif
-  let setting = s:buffer_name_options[a:buffer_name]
+  let setting = s:buffer_name_options[buffer_name]
   if !has_key(setting, 'substitute_patterns')
     let setting.substitute_patterns = {}
   endif
