@@ -932,7 +932,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
   call s:initialize_context(context)
 
   try
-    call s:initialize_current_unite(a:sources, context)
+    silent call s:initialize_current_unite(a:sources, context)
   catch /^Invalid source/
     return []
   endtry
