@@ -507,7 +507,7 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 		Set arguments automatically.
 
 		description		(String)	(Optional)
-		Description length.
+		Description string.
 
 		Example:
 >
@@ -517,6 +517,42 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 		      \     'args': '~/',
 		      \   },
 		      \ }
+<
+		Default value is "{}".
+
+g:unite_source_menu_menus			*g:unite_source_menu_menus*
+		Set |unite-source-menu| settings.
+		This variable is dictionary. The key is menu name,
+		and the value is following attributes dictionary.
+
+		candidates	(List or Dictionary)	(Required)
+		Menu candidates. If candidates are directory, keys are
+		ignored.
+
+		map_expr		(String)	(Optional)
+		If this attribute is given, candidates will be result of
+		map(candidates, map_expr).
+
+		description		(String)	(Optional)
+		Description string.
+
+		Example:
+>
+		let g:unite_source_menu_menus = {
+			\   'test' : {
+			\     'candidates' : {
+			\       'ghci'      : 'VimShellInteractive ghci',
+			\       'python'    : 'VimShellInteractive python',
+			\       'Unite Beautiful Attack' : 'Unite -auto-preview colorscheme',
+			\     },
+			\     'map_expr' : "{
+			\       'word' : v:key,
+			\       'kind' : 'command',
+			\       'action__command' : v:val,
+			\     }",
+			\     'description' : 'Test menu'
+			\   },
+		\ }
 <
 		Default value is "{}".
 
@@ -1242,6 +1278,15 @@ alias		Create alias source copied original source.
 		|g:unite_source_alias_aliases|.
 		Note: This source is created by tacroe.
 
+						*unite-source-menu*
+menu		Nominates menus.
+		If arguments is not given, nominates all menu names.
+		To create menus, please refer to
+		|g:unite_source_menu_menus|.
+
+		Source arguments:
+		1. menu name.
+
 						*unite-source-history/yank*
 history/yank	Nominates yanked words.
 		To use this source, please set
@@ -1923,6 +1968,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-10-11
+- Added unite-menu source.
 
 2011-10-10
 - Fixed variables initialize.

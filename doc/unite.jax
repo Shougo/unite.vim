@@ -520,6 +520,42 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 <
 		初期値は{}である。
 
+g:unite_source_menu_menus			*g:unite_source_menu_menus*
+		|unite-source-menu|が使用するメニューを定義する。
+		この変数は辞書であり、キーとして定義するmenuの名前、
+		値として次の属性を持つ辞書を取る。
+
+		candidates		(リストか辞書)	(必須)
+		menuの中身となる候補を定義する。
+		この属性は辞書でもよいが、キーは無視される。
+
+		map_expr		(文字列)	(任意)
+		この属性が与えられている場合、map(candidates, map_expr)の処
+		理結果がcandidatesとなる。
+
+		description		(文字列)	(任意)
+		menuの説明用文字列。
+
+		例えば、次の設定では"test"というmenuが定義される。
+>
+		let g:unite_source_menu_menus = {
+			\   'test' : {
+			\     'candidates' : {
+			\       'ghci'      : 'VimShellInteractive ghci',
+			\       'python'    : 'VimShellInteractive python',
+			\       'Unite Beautiful Attack' : 'Unite -auto-preview colorscheme',
+			\     },
+			\     'map_expr' : "{
+			\       'word' : v:key,
+			\       'kind' : 'command',
+			\       'action__command' : v:val,
+			\     }",
+			\     'description' : 'Test menu'
+			\   },
+		\ }
+<
+		初期値は{}である。
+
 g:unite_source_history_yank_enable		*g:unite_source_history_yank_enable*
 		|unite-source-history/yank|を有効化するかどうか決定する。
 		この変数が定義され、値が0以外なら有効化される。値は
@@ -1271,6 +1307,15 @@ alias		すでに存在するsourceの定義をコピーし、aliasのsourceを�
 		alias sourceの作り方については、|g:unite_source_alias_aliases|を
 		参照せよ。
 		Note: このsourceはtacroeによって作成された。
+
+						*unite-source-menu*
+menu		予め定義されたメニューを候補とする。いちいちsourceを定義する
+		必要がない。引数が与えられない場合、menuの一覧を候補とする。
+		メニューの作り方については、|g:unite_source_menu_menus|を参
+		照せよ。
+
+		source引数：
+		1. メニューの名前
 
 						*unite-source-history/yank*
 history/yank	ヤンクされたテキストの履歴を候補とする。

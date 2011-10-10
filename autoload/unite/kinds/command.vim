@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 11 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,7 +44,7 @@ let s:kind.action_table.execute = {
       \ }
 function! s:kind.action_table.execute.func(candidate)"{{{
   " Add history.
-  let type = has_key(a:candidate, 'action__type') ? a:candidate.action__type : ':'
+  let type = get(a:candidate, 'action__type', ':')
   call histadd(type, a:candidate.action__command)
   if type ==# '/'
     let @/ = a:candidate.action__command

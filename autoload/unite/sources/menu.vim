@@ -1,6 +1,6 @@
 "=============================================================================
-" FILE: source.vim
-" AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
+" FILE: menu.vim
+" AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 " Last Modified: 11 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
@@ -27,47 +27,52 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#source#define()"{{{
-  return s:kind
-endfunction"}}}
+call unite#util#set_default('g:unite_source_menu_menus', {})
 
-let s:kind = {
-      \ 'name' : 'source',
-      \ 'default_action' : 'start',
-      \ 'action_table': {},
+function! unite#sources#menu#define()
+  return s:source
+endfunction
+
+let s:source = {
+      \ 'name' : 'menu',
+      \ 'description' : 'candidates from user defined menus',
       \}
 
-" Actions"{{{
-let s:kind.action_table.start = {
-      \ 'description' : 'start source',
-      \ 'is_selectable' : 1,
-      \ 'is_quit' : 0,
-      \ }
-function! s:kind.action_table.start.func(candidates)"{{{
-  call unite#start_temporary(map(copy(a:candidates),
-        \ 'has_key(v:val, "action__source_args") ?'
-        \  . 'insert(copy(v:val.action__source_args), v:val.action__source_name) :'
-        \  . 'v:val.action__source_name'))
-endfunction"}}}
-
-let s:kind.action_table.edit = {
-      \ 'description' : 'edit source args',
-      \ 'is_quit' : 0,
-      \ }
-function! s:kind.action_table.edit.func(candidate)"{{{
-  let default_args = get(a:candidate, 'action__source_args', '')
-  if type(default_args) != type('')
-        \ || type(default_args) != type(0)
-    unlet default_args
-    let default_args = ''
+function! s:source.gather_candidates(args, context)"{{{
+  let menu_name = get(a:args, 0, '')
+  if menu_name == ''
+    " All menus.
+    let candidates = map(copy(g:unite_source_menu_menus), "{
+          \ 'word' : v:key,
+          \ 'abbr' : (v:key . (has_key(v:val, 'description') ?
+          \                   ' - ' . v:val.description : '')),
+          \ 'kind' : 'source',
+          \ 'action__source_name' : 'menu',
+          \ 'action__source_args' : [v:key],
+          \ }")
+    return values(candidates)
   endif
 
-  let args = input(a:candidate.action__source_name . ' : ', default_args)
-  call unite#start_temporary([[a:candidate.action__source_name, args]])
+  " Check menu name.
+  if !has_key(g:unite_source_menu_menus, menu_name)
+    call unite#print_error('[menu] Invalid menu name : ' . menu_name)
+    return []
+  endif
+
+  let menu = g:unite_source_menu_menus[menu_name]
+  let candidates = menu.candidates
+  if has_key(menu, 'map_expr')
+    call map(candidates, menu.map_expr)
+  endif
+  if type(candidates) == type({})
+    let save_candidates = candidates
+    unlet candidates
+    let candidates = values(save_candidates)
+  endif
+
+  return candidates
 endfunction"}}}
-"}}}
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-
-" vim: foldmethod=marker
