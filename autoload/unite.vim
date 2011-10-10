@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Oct 2011.
+" Last Modified: 10 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -893,7 +893,7 @@ function! unite#start(sources, ...)"{{{
     stopinsert
   endif
 endfunction"}}}
-function! unite#start_temporary(sources, new_context, buffer_name)"{{{
+function! unite#start_temporary(sources, ...)"{{{
   if &filetype == 'unite'
     " Get current context.
     let old_context = unite#get_context()
@@ -908,16 +908,20 @@ function! unite#start_temporary(sources, new_context, buffer_name)"{{{
     let context.old_buffer_info = []
   endif
 
-  let context.buffer_name = a:buffer_name
+  let new_context = get(a:000, 0, {})
+  let buffer_name = get(a:000, 1, context.buffer_name
+        \ . ' - ' . len(context.old_buffer_info))
+
+  let context.buffer_name = buffer_name
   let context.temporary = 1
   let context.input = ''
   let context.auto_preview = 0
   let context.default_action = 'default'
 
   " Overwrite context.
-  let context = extend(context, a:new_context)
+  let context = extend(context, new_context)
 
-  call unite#force_quit_session()
+  call unite#all_quit_session()
   call unite#start(a:sources, context)
 endfunction"}}}
 function! unite#vimfiler_check_filetype(sources, ...)"{{{
@@ -1019,7 +1023,6 @@ function! unite#resume(buffer_name, ...)"{{{
     endfor
 
     if !has_key(buffer_dict, a:buffer_name)
-      call unite#util#print_error('Invalid buffer name : ' . a:buffer_name)
       return
     endif
     let bufnr = buffer_dict[a:buffer_name]
@@ -1154,6 +1157,9 @@ function! s:initialize_context(context)"{{{
   return a:context
 endfunction"}}}
 
+function! unite#all_quit_session(...)  "{{{
+  call s:quit_session(get(a:000, 0, 1))
+endfunction"}}}
 function! unite#force_quit_session()  "{{{
   call s:quit_session(1)
 

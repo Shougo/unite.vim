@@ -1639,6 +1639,10 @@ completion					*unite-action-completion*
 uri						*unite-action-uri*
 	start		ファイルを関連付けで開く
 
+source						*unite-action-source*
+	start		sourceを起動する
+	edit		sourceの引数を変更する
+
 source別アクション
 
 file_mru					*unite-action-file_mru*
@@ -1670,6 +1674,7 @@ tab		open
 directory	narrow
 word		insert
 jump_list	open
+source		start
 
 ==============================================================================
 sourceの作成					*unite-create-source*

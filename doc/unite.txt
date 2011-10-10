@@ -1560,6 +1560,10 @@ completion					*unite-action-completion*
 uri						*unite-action-uri*
 	start		Open file with associated program.
 
+source						*unite-action-source*
+	start		Start source
+	edit		Edit source arguments
+
 Actions of each sources
 
 file_mru					*unite-action-file_mru*
@@ -1591,6 +1595,7 @@ tab		open
 directory	narrow
 word		insert
 jump_list	open
+source		start
 
 ==============================================================================
 CREATE SOURCE					*unite-create-source*
@@ -1917,6 +1922,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-10
 - Fixed variables initialize.
+- Improved unite-source behavior.
 
 2011-10-09
 - Expand path.
