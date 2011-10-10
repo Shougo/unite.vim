@@ -1971,6 +1971,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-11
 - Added unite-menu source.
+- Fixed unite-menu.
 
 2011-10-10
 - Fixed variables initialize.

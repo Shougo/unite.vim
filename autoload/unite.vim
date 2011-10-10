@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Oct 2011.
+" Last Modified: 11 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -912,7 +912,7 @@ function! unite#start_temporary(sources, ...)"{{{
   endif
 
   let new_context = get(a:000, 0, {})
-  let buffer_name = get(a:000, 1, context.buffer_name
+  let buffer_name = get(a:000, 1, matchstr(context.buffer_name, '^\S\+')
         \ . ' - ' . len(context.old_buffer_info))
 
   let context.buffer_name = buffer_name

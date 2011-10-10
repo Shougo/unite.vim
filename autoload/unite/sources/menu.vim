@@ -42,15 +42,14 @@ function! s:source.gather_candidates(args, context)"{{{
   let menu_name = get(a:args, 0, '')
   if menu_name == ''
     " All menus.
-    let candidates = map(copy(g:unite_source_menu_menus), "{
+    return values(map(copy(g:unite_source_menu_menus), "{
           \ 'word' : v:key,
           \ 'abbr' : (v:key . (has_key(v:val, 'description') ?
           \                   ' - ' . v:val.description : '')),
           \ 'kind' : 'source',
           \ 'action__source_name' : 'menu',
           \ 'action__source_args' : [v:key],
-          \ }")
-    return values(candidates)
+          \ }"))
   endif
 
   " Check menu name.
@@ -62,7 +61,7 @@ function! s:source.gather_candidates(args, context)"{{{
   let menu = g:unite_source_menu_menus[menu_name]
   let candidates = menu.candidates
   if has_key(menu, 'map_expr')
-    call map(candidates, menu.map_expr)
+    let candidates = map(copy(candidates), menu.map_expr)
   endif
   if type(candidates) == type({})
     let save_candidates = candidates
