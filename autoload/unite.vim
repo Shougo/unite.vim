@@ -945,6 +945,12 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
         if type ==# 'file'
           call s:initialize_candidates([info[1]], source.name)
           call s:initialize_vimfiler_candidates([info[1]])
+        elseif type ==# 'directory'
+        elseif type ==# 'error'
+          call unite#print_error(info[0])
+          return []
+        else
+          call unite#print_error('Invalid filetype : ' . type)
         endif
 
         return [type, info]
