@@ -554,6 +554,8 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		        \       'action__command' : a:value,
 		        \     }
 		endfunction
+		
+		nnoremap <silent> fm  :<C-u>Unite menu:test<CR>
 <
 		初期値は{}である。
 
