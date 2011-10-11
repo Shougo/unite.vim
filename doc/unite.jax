@@ -539,21 +539,20 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 
 		例えば、次の設定では"test"というmenuが定義される。
 >
-		let g:unite_source_menu_menus = {
-			\   'test' : {
-			\     'candidates' : {
-			\       'ghci'      : 'VimShellInteractive ghci',
-			\       'python'    : 'VimShellInteractive python',
-			\       'Unite Beautiful Attack' : 'Unite -auto-preview colorscheme',
-			\     },
-			\     'map_expr' : "{
-			\       'word' : v:key,
-			\       'kind' : 'command',
-			\       'action__command' : v:val,
-			\     }",
-			\     'description' : 'Test menu'
-			\   },
-		\ }
+		let g:unite_source_menu_menus = {}
+		let g:unite_source_menu_menus.test = {
+		      \     'description' : 'Test menu',
+		      \ }
+		let g:unite_source_menu_menus.test.candidates = {
+		      \       'ghci'      : 'VimShellInteractive ghci',
+		      \       'python'    : 'VimShellInteractive python',
+		      \       'Unite Beautiful Attack' : 'Unite -auto-preview colorscheme',
+		      \     }
+		let g:unite_source_menu_menus.test.map_expr = "{
+		      \       'word' : v:key,
+		      \       'kind' : 'command',
+		      \       'action__command' : v:val,
+		      \     }"
 <
 		初期値は{}である。
 
