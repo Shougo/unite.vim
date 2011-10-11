@@ -172,7 +172,7 @@ COMMANDS 					*unite-commands*
 		functions like |unite#set_substitute_pattern()| by giving a
 		buffer name for unite buffers that have same purpose.
 		The default buffer name is 'default'.
-		Note: Buffer name mustn't be contained spaces.
+		Note: Buffer name must not contain spaces.
 
 						*unite-options-input*
 		-input={input-text}
@@ -523,8 +523,8 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 
 g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		Set |unite-source-menu| settings.
-		This variable is dictionary. The key is menu name,
-		and the value is following attributes dictionary.
+		This variable is dictionary that the keys are menu names
+		and the values are the following attributes.
 
 		candidates	(List or Dictionary)	(Required)
 		Menu candidates. If candidates are directory, keys are
@@ -703,7 +703,7 @@ Normal mode mappings.
 		Toggle the unite buffer's max_candidates.
 
 <Plug>(unite_quick_help)			*<Plug>(unite_quick_help)*
-		View quick help.
+		View the mappings of the unite buffer.
 
 Insert mode mappings.
 

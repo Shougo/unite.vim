@@ -524,7 +524,7 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		|unite-source-menu|が使用するメニューを定義する。
 		この変数は辞書であり、キーとして定義するmenuの名前、
-		値として次の属性を持つ辞書を取る。
+		値として次の属性を持つものである。
 
 		candidates		(リストか辞書)	(必須)
 		menuの中身となる候補を定義する。
