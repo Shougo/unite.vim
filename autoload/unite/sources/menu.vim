@@ -59,9 +59,9 @@ function! s:source.gather_candidates(args, context)"{{{
   endif
 
   let menu = g:unite_source_menu_menus[menu_name]
-  let candidates = menu.candidates
+  let candidates = copy(menu.candidates)
   if has_key(menu, 'map_expr')
-    let candidates = map(copy(candidates), menu.map_expr)
+    let candidates = map(candidates, menu.map_expr)
   endif
   if type(candidates) == type({})
     let save_candidates = candidates
@@ -69,7 +69,7 @@ function! s:source.gather_candidates(args, context)"{{{
     let candidates = values(save_candidates)
   endif
 
-  return candidates
+  return sort(candidates)
 endfunction"}}}
 
 
