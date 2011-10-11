@@ -530,9 +530,9 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		Menu candidates. If candidates are directory, keys are
 		ignored.
 
-		map_expr		(String)	(Optional)
+		map		(Function)		(Optional)
 		If this attribute is given, candidates will be result of
-		map(candidates, map_expr).
+		map(key, value).
 
 		description		(String)	(Optional)
 		Description string.
@@ -548,11 +548,12 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		      \       'python'    : 'VimShellInteractive python',
 		      \       'Unite Beautiful Attack' : 'Unite -auto-preview colorscheme',
 		      \     }
-		let g:unite_source_menu_menus.test.map_expr = "{
-		      \       'word' : v:key,
-		      \       'kind' : 'command',
-		      \       'action__command' : v:val,
-		      \     }"
+		function g:unite_source_menu_menus.test.map(key, value)
+		  return {
+		        \       'word' : a:key, 'kind' : 'command',
+		        \       'action__command' : a:value,
+		        \     }
+		endfunction
 <
 		Default value is "{}".
 
@@ -1976,6 +1977,7 @@ CHANGELOG					*unite-changelog*
 - Added buffer name limitation.
 - Fixed expand path.
 - Improved unite-menu examples.
+- Changed g:unite_source_menu_menus interface.
 
 2011-10-10
 - Fixed variables initialize.

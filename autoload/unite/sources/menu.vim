@@ -59,10 +59,23 @@ function! s:source.gather_candidates(args, context)"{{{
   endif
 
   let menu = g:unite_source_menu_menus[menu_name]
-  let candidates = copy(menu.candidates)
-  if has_key(menu, 'map_expr')
-    let candidates = map(candidates, menu.map_expr)
+  if has_key(menu, 'map')
+    let candidates = []
+    if type(menu.candidates) == type([])
+      let key = 1
+      for value in menu.candidates
+        call add(candidates, menu.map(key, value))
+        let key += 1
+      endfor
+    else
+      for [key, value] in items(menu.candidates)
+        call add(candidates, menu.map(key, value))
+      endfor
+    endif
+  else
+    let candidates = copy(menu.candidates)
   endif
+
   if type(candidates) == type({})
     let save_candidates = candidates
     unlet candidates

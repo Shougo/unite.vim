@@ -530,9 +530,9 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		menuの中身となる候補を定義する。
 		この属性は辞書でもよいが、キーは無視される。
 
-		map_expr		(文字列)	(任意)
-		この属性が与えられている場合、map(candidates, map_expr)の処
-		理結果がcandidatesとなる。
+		map			(関数)		(任意)
+		この属性が与えられている場合、map(key, value)の処理結果が
+		candidatesとなる。
 
 		description		(文字列)	(任意)
 		menuの説明用文字列。
@@ -548,11 +548,12 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		      \       'python'    : 'VimShellInteractive python',
 		      \       'Unite Beautiful Attack' : 'Unite -auto-preview colorscheme',
 		      \     }
-		let g:unite_source_menu_menus.test.map_expr = "{
-		      \       'word' : v:key,
-		      \       'kind' : 'command',
-		      \       'action__command' : v:val,
-		      \     }"
+		function g:unite_source_menu_menus.test.map(key, value)
+		  return {
+		        \       'word' : a:key, 'kind' : 'command',
+		        \       'action__command' : a:value,
+		        \     }
+		endfunction
 <
 		初期値は{}である。
 
