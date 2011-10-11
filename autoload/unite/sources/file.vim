@@ -128,7 +128,8 @@ function! s:source.change_candidates(args, context)"{{{
   return candidates
 endfunction"}}}
 function! s:source.vimfiler_check_filetype(args, context)"{{{
-  let path = fnamemodify(expand(get(a:args, 0, '')), ':p')
+  let path = unite#util#substitute_path_separator(
+        \ simplify(fnamemodify(expand(get(a:args, 0, '')), ':p')))
 
   if isdirectory(path)
     let type = 'directory'
