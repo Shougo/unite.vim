@@ -166,6 +166,7 @@ http://www.ustream.tv/recorded/11240673
 		バッファ名を付けることで、|unite#set_substitute_pattern()|など
 		の設定を共通化することができる。指定しないと、'default'が使われ
 		る。
+		Note: バッファ名にスペースを含めてはならない。
 
 						*unite-options-input*
 		-input={input-text}

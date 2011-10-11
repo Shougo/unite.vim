@@ -172,6 +172,7 @@ COMMANDS 					*unite-commands*
 		functions like |unite#set_substitute_pattern()| by giving a
 		buffer name for unite buffers that have same purpose.
 		The default buffer name is 'default'.
+		Note: Buffer name mustn't be contained spaces.
 
 						*unite-options-input*
 		-input={input-text}
@@ -1973,6 +1974,7 @@ CHANGELOG					*unite-changelog*
 - Added unite-menu source.
 - Fixed unite-menu.
 - Fixed unite#vimfiler_check_filetype() error message.
+- Added buffer name limitation.
 
 2011-10-10
 - Fixed variables initialize.
