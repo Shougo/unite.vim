@@ -946,6 +946,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
           call s:initialize_candidates([info[1]], source.name)
           call s:initialize_vimfiler_candidates([info[1]])
         elseif type ==# 'directory'
+          " nop
         elseif type ==# 'error'
           call unite#print_error(info[0])
           return []
