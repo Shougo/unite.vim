@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Oct 2011.
+" Last Modified: 11 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -22,7 +22,7 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 3.0, for Vim 7.0
+" Version: 3.0, for Vim 7.2
 "=============================================================================
 
 if exists('g:loaded_unite')
@@ -31,6 +31,11 @@ endif
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+" Vim version check.
+if v:version < 702
+  echoerr 'Your Vim version is too old. Please update to Vim 7.2 or above.'
+endif
 
 " Obsolute options check."{{{
 if exists('g:unite_cd_command')

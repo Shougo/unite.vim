@@ -22,7 +22,7 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 3.0, for Vim 7.0
+" Version: 3.0, for Vim 7.2
 "=============================================================================
 
 let s:save_cpo = &cpo
