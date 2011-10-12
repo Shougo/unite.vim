@@ -1177,6 +1177,11 @@ register	Nominates the strings stored in registers as candidates.
 
 						*unite-source-bookmark*
 bookmark	Nominates files or directories you bookmarked as candidates.
+		If ommitted source arguments, "default" bookmark file name
+		is used.
+
+		Source arguments:
+		1. Bookmark file name.
 
 						*unite-source-source*
 source		Nominates Unite source names themselves as candidates.
@@ -1971,6 +1976,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-10-13
+- Improved unite-bookmark.
 
 2011-10-12
 - Fixed unite-bookmark.

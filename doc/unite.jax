@@ -1202,6 +1202,10 @@ register	レジスタに保存されている文字列を候補とする。
 
 						*unite-source-bookmark*
 bookmark	ブックマークされたファイルやディレクトリを候補とする。
+		引数が省略されると、"default"が使用される。
+
+		source引数：
+		1. bookmarkファイル名
 
 						*unite-source-source*
 source		uniteのsource名そのものを候補とする。

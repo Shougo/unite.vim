@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Oct 2011.
+" Last Modified: 13 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,10 +31,7 @@ set cpo&vim
 " The version of bookmark file format.
 let s:VERSION = '0.1.0'
 
-let s:bookmark_file_mtime = 0  " the last modified time of the bookmark file.
-
-" [ [ name, full_path, linenr, search pattern ], ... ]
-let s:bookmark_files = []
+let s:bookmarks = {}
 
 call unite#util#set_default('g:unite_source_bookmark_directory',  g:unite_data_directory . '/bookmark')
 "}}}
@@ -73,11 +70,15 @@ function! unite#sources#bookmark#_append(filename)"{{{
 
   redraw
   echo 'Path: ' . path
-  let name = input('Please input bookmark name : ')
+  let bookmark_name = input('Please input bookmark file name (default): ')
+  if bookmark_name == ''
+    let bookmark_name = 'default'
+  endif
+  let entry_name = input('Please input bookmark entry name : ')
 
-  call s:load('default')
-  call insert(s:bookmark_files, [name, path, linenr, pattern])
-  call s:save('default')
+  let bookmark = s:load(bookmark_name)
+  call insert(bookmark.files, [entry_name, path, linenr, pattern])
+  call s:save(bookmark_name, bookmark)
 endfunction"}}}
 
 let s:source = {
@@ -87,12 +88,15 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
-  call s:load('default')
-  return map(copy(s:bookmark_files), '{
+  let bookmark_name = get(a:args, 0, 'default')
+
+  let bookmark = s:load(bookmark_name)
+  return map(copy(bookmark.files), '{
         \ "word" : (v:val[0] != "" ? "[" . v:val[0] . "] " : "") .
         \          (fnamemodify(v:val[1], ":~:.") != "" ? fnamemodify(v:val[1], ":~:.") : v:val[1]),
         \ "kind" : (isdirectory(v:val[1]) ? "directory" : "jump_list"),
-        \ "source_bookmark_name" : v:val[0],
+        \ "source_bookmark_name" : bookmark_name,
+        \ "source_entry_name" : v:val[0],
         \ "action__path" : v:val[1],
         \ "action__line" : v:val[2],
         \ "action__pattern" : v:val[3],
@@ -109,11 +113,12 @@ let s:source.action_table.delete = {
       \ }
 function! s:source.action_table.delete.func(candidates)"{{{
   for candidate in a:candidates
-    call filter(s:bookmark_files, 'string(v:val) !=# ' .
-        \ string(string([candidate.source_bookmark_name, candidate.action__path, candidate.action__line, candidate.action__pattern])))
+    let bookmark = s:bookmarks[candidate.source_bookmark_name]
+    call filter(bookmark.files, 'v:val !=# ' .
+          \ string([candidate.source_entry_name, candidate.action__path,
+          \      candidate.action__line, candidate.action__pattern]))
+    call s:save(candidate.source_bookmark_name, bookmark)
   endfor
-
-  call s:save('default')
 endfunction"}}}
 "}}}
 
@@ -150,26 +155,39 @@ unlet! s:buffer_bookmark_action
 "}}}
 
 " Misc
-function! s:save(filename)  "{{{
+function! s:save(filename, bookmark)  "{{{
   let filename = g:unite_source_bookmark_directory . '/' . a:filename
-  call writefile([s:VERSION] + map(copy(s:bookmark_files), 'join(v:val, "\t")'),
+  call writefile([s:VERSION] + map(copy(a:bookmark.files), 'join(v:val, "\t")'),
         \ filename)
-  let s:bookmark_file_mtime = getftime(filename)
+  let a:bookmark.file_mtime = getftime(filename)
 endfunction"}}}
 function! s:load(filename)  "{{{
   let filename = g:unite_source_bookmark_directory . '/' . a:filename
+
+  call s:init_bookmark(a:filename)
+
+  let bookmark = s:bookmarks[a:filename]
   if filereadable(filename)
-  \  && s:bookmark_file_mtime != getftime(filename)
-    let [ver; s:bookmark_files] = readfile(filename)
+  \  && bookmark.file_mtime != getftime(filename)
+    let [ver; bookmark.files] = readfile(filename)
     if ver !=# s:VERSION
       echohl WarningMsg
       echomsg 'Sorry, the version of bookmark file is old.  Clears the bookmark list.'
       echohl None
-      let s:bookmark_files = []
+      let bookmark.files = []
       return
     endif
-    let s:bookmark_files = map(s:bookmark_files, 'split(v:val, "\t", 1)')
-    let s:bookmark_file_mtime = getftime(filename)
+    let bookmark.files = map(bookmark.files, 'split(v:val, "\t", 1)')
+    let bookmark.file_mtime = getftime(filename)
+  endif
+
+  return bookmark
+endfunction"}}}
+function! s:init_bookmark(filename)  "{{{
+  if !has_key(s:bookmarks, a:filename)
+    " file_mtime: the last modified time of the bookmark file.
+    " files: [ [ name, full_path, linenr, search pattern ], ... ]
+    let s:bookmarks[a:filename] = { 'file_mtime' : 0,  'files' : [] }
   endif
 endfunction"}}}
 
