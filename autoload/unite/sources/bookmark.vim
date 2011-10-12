@@ -70,7 +70,8 @@ function! unite#sources#bookmark#_append(filename)"{{{
 
   redraw
   echo 'Path: ' . path
-  let bookmark_name = input('Please input bookmark file name (default): ')
+  let bookmark_name = input('Please input bookmark file name (default): ',
+        \ '', 'customlist,' . s:SID_PREFIX() . 'complete_bookmark_filename')
   if bookmark_name == ''
     let bookmark_name = 'default'
   endif
@@ -93,7 +94,8 @@ function! s:source.gather_candidates(args, context)"{{{
   let bookmark = s:load(bookmark_name)
   return map(copy(bookmark.files), '{
         \ "word" : (v:val[0] != "" ? "[" . v:val[0] . "] " : "") .
-        \          (fnamemodify(v:val[1], ":~:.") != "" ? fnamemodify(v:val[1], ":~:.") : v:val[1]),
+        \          (fnamemodify(v:val[1], ":~:.") != "" ?
+        \           fnamemodify(v:val[1], ":~:.") : v:val[1]),
         \ "kind" : (isdirectory(v:val[1]) ? "directory" : "jump_list"),
         \ "source_bookmark_name" : bookmark_name,
         \ "source_entry_name" : v:val[0],
@@ -190,6 +192,13 @@ function! s:init_bookmark(filename)  "{{{
     let s:bookmarks[a:filename] = { 'file_mtime' : 0,  'files' : [] }
   endif
 endfunction"}}}
+function! s:complete_bookmark_filename(arglead, cmdline, cursorpos)"{{{
+  return sort(filter(map(split(glob(g:unite_source_bookmark_directory . '/*'), '\n'),
+        \ 'fnamemodify(v:val, ":t")'), 'stridx(v:val, a:arglead) == 0'))
+endfunction"}}}
+function! s:SID_PREFIX()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
