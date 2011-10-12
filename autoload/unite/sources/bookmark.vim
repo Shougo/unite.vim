@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Oct 2011.
+" Last Modified: 12 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,21 +59,20 @@ function! unite#sources#bookmark#_append(filename)"{{{
   endif
 
   let filename = (a:filename == '' ? expand('%') : a:filename)
-  if bufexists(filename)
-    let filetype = getbufvar(path, '&filetype')
-
+  if bufexists(filename) && a:filename == ''
     " Detect vimfiler and vimshell.
-    if filetype ==# 'vimfiler'
-      let path = getbufvar(path, 'vimfiler').current_dir
-    elseif filetype ==# 'vimshell'
-      let path = getbufvar(path, 'vimshell').current_dir
+    if &filetype ==# 'vimfiler'
+      let path = getbufvar(bufnr(filename), 'vimfiler').current_dir
+    elseif &filetype ==# 'vimshell'
+      let path = getbufvar(bufnr(filename), 'vimshell').current_dir
     endif
   endif
 
-  let path = unite#substitute_path_separator(path)
+  let path = unite#substitute_path_separator(
+        \ simplify(fnamemodify(expand(path), ':p')))
 
   redraw
-  echo a:filename
+  echo 'Path: ' . path
   let name = input('Please input bookmark name : ')
 
   call s:load('default')
