@@ -1979,6 +1979,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-13
 - Improved unite-bookmark.
+- Detect sudo vim.
 
 2011-10-12
 - Fixed unite-bookmark.

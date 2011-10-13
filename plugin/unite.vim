@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Oct 2011.
+" Last Modified: 13 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -25,17 +25,19 @@
 " Version: 3.0, for Vim 7.2
 "=============================================================================
 
-if exists('g:loaded_unite')
+if v:version < 702
+  echoerr 'unite.vim does not work this version of Vim "' . v:version . '".'
+  finish
+elseif exists('g:loaded_unite')
+  finish
+elseif $SUDO_USER != ''
+  echoerr '"sudo vim" is detected. Please use sudo.vim or other plugins instead.'
+  echoerr 'unite.vim is disabled.'
   finish
 endif
 
 let s:save_cpo = &cpo
 set cpo&vim
-
-" Vim version check.
-if v:version < 702
-  echoerr 'Your Vim version is too old. Please update to Vim 7.2 or above.'
-endif
 
 " Obsolute options check."{{{
 if exists('g:unite_cd_command')
