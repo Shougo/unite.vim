@@ -1980,6 +1980,7 @@ CHANGELOG					*unite-changelog*
 2011-10-13
 - Improved unite-bookmark.
 - Detect sudo vim.
+- Skip don't exist file in jump_point source.
 
 2011-10-12
 - Fixed unite-bookmark.
