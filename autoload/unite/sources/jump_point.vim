@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_point.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Oct 2011.
+" Last Modified: 14 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,7 +58,7 @@ function! s:source.gather_candidates(args, context)"{{{
 
     let candidate.action__path = unite#util#substitute_path_separator(
           \ fnamemodify(word[:1].list[0], ':p'))
-    if filereadable(candidate.action__path)
+    if !filereadable(candidate.action__path)
       " Skip.
       continue
     endif
