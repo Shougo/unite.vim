@@ -1979,6 +1979,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-14
 - Skip don't exist file in jump_point source.
+- Improved unite async redraw.
 
 2011-10-13
 - Improved unite-bookmark.

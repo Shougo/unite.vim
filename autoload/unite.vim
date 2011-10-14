@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Oct 2011.
+" Last Modified: 14 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1792,7 +1792,6 @@ function! s:initialize_unite_buffer()"{{{
       autocmd InsertEnter <buffer>  call s:on_insert_enter()
       autocmd InsertLeave <buffer>  call s:on_insert_leave()
       autocmd CursorHoldI <buffer>  call s:on_cursor_hold_i()
-      autocmd CursorHold <buffer>  call s:on_cursor_hold()
       autocmd CursorMoved,CursorMovedI <buffer>  nested call s:on_cursor_moved()
       autocmd BufUnload,BufHidden <buffer>  call s:on_buf_unload(expand('<afile>'))
     augroup END
@@ -2016,13 +2015,27 @@ function! s:on_cursor_hold_i()  "{{{
     call feedkeys("\<C-r>\<ESC>", 'n')
   endif
 endfunction"}}}
-function! s:on_cursor_hold()  "{{{
-  " Redraw.
-  call unite#redraw()
+function! unite#_on_cursor_hold()  "{{{
+  if &filetype ==# 'unite'
+    " Redraw.
+    call unite#redraw()
 
-  if unite#get_current_unite().is_async
-    " Ignore key sequences.
-    call feedkeys("g\<ESC>", 'n')
+    if unite#get_current_unite().is_async
+      " Ignore key sequences.
+      call feedkeys("g\<ESC>", 'n')
+    endif
+  else
+    " Search other unite window.
+    let winnr = 1
+    while winnr <= winnr('$')
+      if getbufvar(winbufnr(winnr), '&filetype') ==# 'unite'
+            \ && getbufvar(winbufnr(winnr), 'unite').is_async
+        " Redraw unite buffer.
+        call unite#redraw(winnr)
+      endif
+
+      let winnr += 1
+    endwhile
   endif
 endfunction"}}}
 function! s:on_cursor_moved()  "{{{
