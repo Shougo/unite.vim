@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mapping.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2011.
+" Last Modified: 17 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -61,11 +61,13 @@ function! s:source.hooks.on_init(args, context)"{{{
   endif
 
   let s:cached_result = []
-  for line in split(redir, '\n')
+  for line in map(split(redir, '\n'),
+        \ "substitute(v:val, '<NL>', '<C-J>', 'g')")
     let map = matchstr(line, '^\a*\s*\zs\S\+')
     if map =~ '^<SNR>'
       continue
     endif
+    let map = substitute(map, '<NL>', '<C-j>', 'g')
     let map = substitute(map, '\(<.*>\)', '\\\1', 'g')
 
     call add(s:cached_result, {

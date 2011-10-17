@@ -1990,6 +1990,7 @@ CHANGELOG					*unite-changelog*
 - Fixed jump_point.
 - Improved buffer view.
 - Added bang in buffer source.
+- Improved unite mapping source.
 
 2011-10-15
 - Changed a bit.
