@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: resume.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 17 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,7 +38,9 @@ let s:source = {
 
 function! s:source.gather_candidates(args, context)"{{{
   let a:context.source__buffer_list = filter(range(1, bufnr('$')),
-        \ 'getbufvar(v:val, "&filetype") ==# "unite" && !getbufvar(v:val, "unite").context.temporary')
+        \ 'getbufvar(v:val, "&filetype") ==# "unite"
+        \  && !getbufvar(v:val, "unite").context.temporary
+        \  && getbufvar(v:val, "unite").sources[0].name != "resume"')
 
   let max_width = max(map(copy(a:context.source__buffer_list),
         \ 'len(getbufvar(v:val, "unite").buffer_name)'))
