@@ -107,8 +107,10 @@ endfunction"}}}
 
 let s:kind.action_table.preview = {
       \ 'description' : 'preview word',
+      \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
+  redraw
   echo a:candidate.word
 endfunction"}}}
 "}}}

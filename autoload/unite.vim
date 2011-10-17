@@ -2058,8 +2058,7 @@ function! s:on_cursor_moved()  "{{{
 
   if unite#get_current_unite().context.auto_preview
     if !unite#get_current_unite().has_preview_window
-          \ && len(filter(range(1, winnr('$')),
-          \    'getwinvar(v:val, "&previewwindow")')) > 0
+          \ && s:has_preview_window()
       pclose!
     endif
 
@@ -2067,7 +2066,7 @@ function! s:on_cursor_moved()  "{{{
 
     " Restore window size.
     let context = unite#get_context()
-    if winnr('$') != 1
+    if s:has_preview_window()
       if context.vertical
         if winwidth(winnr()) != context.winwidth
           execute 'vertical resize' context.winwidth
@@ -2229,6 +2228,10 @@ function! s:is_cmdwin()"{{{
   silent! noautocmd wincmd p
   silent! noautocmd wincmd p
   return v:errmsg =~ '^E11:'
+endfunction"}}}
+function! s:has_preview_window()"{{{
+  return len(filter(range(1, winnr('$')),
+          \    'getwinvar(v:val, "&previewwindow")')) > 0
 endfunction"}}}
 "}}}
 
