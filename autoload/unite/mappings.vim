@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Oct 2011.
+" Last Modified: 17 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -531,9 +531,14 @@ function! s:loop_cursor_down(is_skip_not_matched)"{{{
     endif
   endif
 
-  let num = (line('.') <= prompt_linenr) ? 0 :
-        \ (line('.') - (prompt_linenr + 1))
+  let num = line('.') - (prompt_linenr + 1)
   let cnt = 1
+  if line('.') <= prompt_linenr
+    let cnt += prompt_linenr - line('.')
+  endif
+  if is_insert && line('.') == prompt_linenr
+    let cnt += 1
+  endif
 
   while 1
     let candidate = get(unite#get_unite_candidates(), num + cnt, {})
@@ -545,10 +550,6 @@ function! s:loop_cursor_down(is_skip_not_matched)"{{{
 
     break
   endwhile
-
-  if is_insert && line('.') == prompt_linenr
-    let cnt += 1
-  endif
 
   if is_insert
     return "\<Home>" . repeat("\<Down>", cnt)
@@ -569,12 +570,12 @@ function! s:loop_cursor_up(is_skip_not_matched)"{{{
     endif
   endif
 
-  let num = (line('.') <= prompt_linenr) ? 0 :
-        \ (line('.') - (prompt_linenr + 1))
-
+  let num = line('.') - (prompt_linenr + 1)
   let cnt = 1
-
-  if is_insert && line('.') == prompt_linenr + 2
+  if line('.') <= prompt_linenr
+    let cnt += prompt_linenr - line('.')
+  endif
+  if is_insert && line('.') == prompt_linenr+2
     let cnt += 1
   endif
 
