@@ -1156,6 +1156,10 @@ file_rec/async	Same as |unite-source-file_rec|. But get files by asynchronously.
 						*unite-source-buffer*
 buffer		Nominates opened buffers as candidates, ordering by time
 		series.
+		If argument 1 is "!", displays non-listed buffer.
+
+		Source arguments:
+		1. bang.
 
 						*unite-source-buffer_tab*
 buffer_tab	Nominates opened buffers only in the current tab as
@@ -1985,6 +1989,7 @@ CHANGELOG					*unite-changelog*
 - Improved cursor move.
 - Fixed jump_point.
 - Improved buffer view.
+- Added bang in buffer source.
 
 2011-10-15
 - Changed a bit.

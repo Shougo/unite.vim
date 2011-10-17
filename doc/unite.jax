@@ -1177,7 +1177,10 @@ file_rec/async	|unite-source-file_rec|と同じだが、候補の取得を完全
 
 						*unite-source-buffer*
 buffer		開いているバッファを候補とする。バッファは使用した順番に整列さ
-		れる。
+		れる。引数1が"!"ならば、|buflisted()|でないバッファも表示する。
+
+		source引数：
+		1. !
 
 						*unite-source-buffer_tab*
 buffer_tab	現在のタブで開いたバッファを候補とする。バッファは使用した順番

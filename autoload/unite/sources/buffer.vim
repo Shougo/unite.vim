@@ -68,7 +68,9 @@ let s:source_buffer_all = {
       \}
 
 function! s:source_buffer_all.hooks.on_init(args, context)"{{{
-  let a:context.source__buffer_list = s:get_buffer_list()
+  let a:context.source__is_bang = (get(a:args, 0, '') ==# '!')
+  let a:context.source__buffer_list =
+        \ s:get_buffer_list(a:context.source__is_bang)
 endfunction"}}}
 function! s:source_buffer_all.hooks.on_syntax(args, context)"{{{
   syntax match uniteSource__Buffer_Directory /\[[^\]]*\]\ze\s*$/ contained containedin=uniteSource__Buffer
@@ -78,7 +80,8 @@ endfunction"}}}
 function! s:source_buffer_all.gather_candidates(args, context)"{{{
   if a:context.is_redraw
     " Recaching.
-    let a:context.source__buffer_list = s:get_buffer_list()
+    let a:context.source__buffer_list =
+          \ s:get_buffer_list(a:context.source__is_bang)
   endif
 
   let candidates = map(copy(a:context.source__buffer_list), '{
@@ -101,7 +104,9 @@ let s:source_buffer_tab = {
       \}
 
 function! s:source_buffer_tab.hooks.on_init(args, context)"{{{
-  let a:context.source__buffer_list = s:get_buffer_list()
+  let a:context.source__is_bang = (get(a:args, 0, '') ==# '!')
+  let a:context.source__buffer_list =
+        \ s:get_buffer_list(a:context.source__is_bang)
 endfunction"}}}
 function! s:source_buffer_tab.hooks.on_syntax(args, context)"{{{
   syntax match uniteSource__BufferTab_Directory /\[[^\]]*\]\ze\s*$/ containedin=uniteSource__BufferTab
@@ -111,14 +116,16 @@ endfunction"}}}
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{
   if a:context.is_redraw
     " Recaching.
-    let a:context.source__buffer_list = s:get_buffer_list()
+    let a:context.source__buffer_list =
+          \ s:get_buffer_list(a:context.source__is_bang)
   endif
 
   if !exists('t:unite_buffer_dictionary')
     let t:unite_buffer_dictionary = {}
   endif
 
-  let list = filter(copy(a:context.source__buffer_list), 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
+  let list = filter(copy(a:context.source__buffer_list),
+        \ 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
 
   let candidates = map(list, '{
         \ "word" : s:make_word(v:val.action__buffer_nr),
@@ -161,9 +168,11 @@ function! s:make_abbr(bufnr, flags)"{{{
           \ (has_key(vimshell, 'cmdline') ? vimshell.cmdline : ''),
           \ unite#substitute_path_separator(simplify(path)))
   else
-    let path = fnamemodify(bufname(a:bufnr), ':~:.')
-    let path = printf('%s [%s]',
-          \ unite#substitute_path_separator(simplify(path)), a:flags)
+    let path = unite#substitute_path_separator(
+          \ simplify(fnamemodify(bufname(a:bufnr), ':~:.')))
+    if a:flags != ''
+      let path .= ' [' . a:flags . ']'
+    endif
   endif
 
   return path
@@ -184,7 +193,7 @@ function! s:get_directory(bufnr)"{{{
 
   return dir
 endfunction"}}}
-function! s:get_buffer_list()"{{{
+function! s:get_buffer_list(is_bang)"{{{
   " Get :ls flags.
   redir => output
   silent! ls
@@ -199,7 +208,7 @@ function! s:get_buffer_list()"{{{
   let list = []
   let bufnr = 1
   while bufnr <= bufnr('$')
-    if buflisted(bufnr) && bufnr != bufnr('%')
+    if (a:is_bang || buflisted(bufnr)) && bufnr != bufnr('%')
       let dict = get(s:buffer_list, bufnr, {
             \ 'action__buffer_nr' : bufnr,
             \ 'source__time' : 0,
@@ -213,7 +222,7 @@ function! s:get_buffer_list()"{{{
 
   call sort(list, 's:compare')
 
-  if buflisted(bufnr('%'))
+  if a:is_bang || buflisted(bufnr('%'))
     " Add current buffer.
     let dict = get(s:buffer_list, bufnr('%'), {
           \ 'action__buffer_nr' : bufnr('%'),
