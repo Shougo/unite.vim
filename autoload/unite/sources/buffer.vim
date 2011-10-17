@@ -189,7 +189,6 @@ function! s:get_buffer_list()"{{{
   redir => output
   silent! ls
   redir >> END
-  echomsg output
 
   let flag_dict = {}
   for out in map(split(output, '\n'), 'split(v:val)')
