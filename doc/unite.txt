@@ -1523,6 +1523,7 @@ internally.
 	yank_escape	Yank the escaped candidate text
 	ex		Input the escaped candidate text into command line
 	insert		Input the candidate text into the current buffer
+	preview		Preview the candidate text.
 
 openable					*unite-action-openable*
 Defines an interface for files you can open.  This requires an inheriting kind
@@ -1967,7 +1968,7 @@ EXAMPLES					*unite-examples*
 	" For optimize.
 	let g:unite_source_file_mru_filename_format = ''
 	
->
+<
 ==============================================================================
 USER DEFINED SOURCES				*unite-user-sources*
 
@@ -1979,6 +1980,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-16
 - Improved unite-resume behavior.
+- Added preview action in common kind.
 
 2011-10-15
 - Changed a bit.
