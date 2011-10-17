@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_point.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Oct 2011.
+" Last Modified: 17 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -63,13 +63,17 @@ function! s:source.gather_candidates(args, context)"{{{
       continue
     endif
 
-    if len(list) >= 1 && list[1] =~ '^\d\+$'
-      let candidate.action__line = list[1]
-      if len(list) >= 2 && list[2] =~ '^\d\+$'
-        let candidate.action__col = list[2]
+    " Drop filename field.
+    let list = list[1:]
+
+    " Check line:col.
+    if len(list) >= 0 && list[0] =~ '^\d\+$'
+      let candidate.action__line = list[0]
+      if len(list) >= 1 && list[1] =~ '^\d\+$'
+        let candidate.action__col = list[1]
       endif
     else
-      let candidate.action__text = join(list[1:], ':')
+      let candidate.action__text = join(list, ':')
       let candidate.action__pattern =
             \ unite#escape_match(candidate.action__text)
     endif
