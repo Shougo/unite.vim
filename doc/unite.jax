@@ -2256,7 +2256,7 @@ description		文字列		(任意)
 	" For optimize.
 	let g:unite_source_file_mru_filename_format = ''
 	
->
+<
 ==============================================================================
 ユーザーのsource				*unite-user-sources*
 

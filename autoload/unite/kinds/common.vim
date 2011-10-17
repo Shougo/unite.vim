@@ -109,7 +109,7 @@ let s:kind.action_table.preview = {
       \ 'description' : 'preview word',
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
-  echo candidate.word
+  echo a:candidate.word
 endfunction"}}}
 "}}}
 
