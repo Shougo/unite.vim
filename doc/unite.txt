@@ -1981,6 +1981,7 @@ CHANGELOG					*unite-changelog*
 2011-10-16
 - Improved unite-resume behavior.
 - Added preview action in common kind.
+- Improved file_point source.
 
 2011-10-15
 - Changed a bit.
