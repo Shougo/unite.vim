@@ -1984,6 +1984,7 @@ CHANGELOG					*unite-changelog*
 - Improved file_point source.
 - Improved cursor move.
 - Fixed jump_point.
+- Improved buffer view.
 
 2011-10-15
 - Changed a bit.

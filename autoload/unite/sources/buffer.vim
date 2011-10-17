@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 17 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,7 +38,8 @@ function! unite#sources#buffer#_append()"{{{
   " Append the current buffer.
   let bufnr = bufnr('%')
   let s:buffer_list[bufnr] = {
-        \ 'action__buffer_nr' : bufnr, 'source__time' : localtime(),
+        \ 'action__buffer_nr' : bufnr,
+        \ 'source__time' : localtime(),
         \ }
 
   if !exists('t:unite_buffer_dictionary')
@@ -82,7 +83,7 @@ function! s:source_buffer_all.gather_candidates(args, context)"{{{
 
   let candidates = map(copy(a:context.source__buffer_list), '{
         \ "word" : s:make_word(v:val.action__buffer_nr),
-        \ "abbr" : s:make_abbr(v:val.action__buffer_nr),
+        \ "abbr" : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags),
         \ "kind" : "buffer",
         \ "action__path" : unite#substitute_path_separator(bufname(v:val.action__buffer_nr)),
         \ "action__buffer_nr" : v:val.action__buffer_nr,
@@ -121,7 +122,7 @@ function! s:source_buffer_tab.gather_candidates(args, context)"{{{
 
   let candidates = map(list, '{
         \ "word" : s:make_word(v:val.action__buffer_nr),
-        \ "abbr" : s:make_abbr(v:val.action__buffer_nr),
+        \ "abbr" : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags),
         \ "kind" : "buffer",
         \ "action__path" : unite#substitute_path_separator(bufname(v:val.action__buffer_nr)),
         \ "action__buffer_nr" : v:val.action__buffer_nr,
@@ -147,7 +148,7 @@ function! s:make_word(bufnr)"{{{
 
   return path
 endfunction"}}}
-function! s:make_abbr(bufnr)"{{{
+function! s:make_abbr(bufnr, flags)"{{{
   let filetype = getbufvar(a:bufnr, '&filetype')
   if filetype ==# 'vimfiler'
     let path = getbufvar(a:bufnr, 'vimfiler').current_dir
@@ -160,8 +161,9 @@ function! s:make_abbr(bufnr)"{{{
           \ (has_key(vimshell, 'cmdline') ? vimshell.cmdline : ''),
           \ unite#substitute_path_separator(simplify(path)))
   else
-    let path = fnamemodify(bufname(a:bufnr), ':~:.') . (getbufvar(a:bufnr, '&modified') ? '[+]' : '')
-    let path = unite#substitute_path_separator(simplify(path))
+    let path = fnamemodify(bufname(a:bufnr), ':~:.')
+    let path = printf('%s [%s]',
+          \ unite#substitute_path_separator(simplify(path)), a:flags)
   endif
 
   return path
@@ -183,17 +185,29 @@ function! s:get_directory(bufnr)"{{{
   return dir
 endfunction"}}}
 function! s:get_buffer_list()"{{{
+  " Get :ls flags.
+  redir => output
+  silent! ls
+  redir >> END
+  echomsg output
+
+  let flag_dict = {}
+  for out in map(split(output, '\n'), 'split(v:val)')
+    let flag_dict[out[0]] = matchstr(join(out), '^.*\ze\s\+"')
+  endfor
+
   " Make buffer list.
   let list = []
   let bufnr = 1
   while bufnr <= bufnr('$')
     if buflisted(bufnr) && bufnr != bufnr('%')
-      if has_key(s:buffer_list, bufnr)
-        call add(list, s:buffer_list[bufnr])
-      else
-        call add(list,
-              \ { 'action__buffer_nr' : bufnr, 'source__time' : 0 })
-      endif
+      let dict = get(s:buffer_list, bufnr, {
+            \ 'action__buffer_nr' : bufnr,
+            \ 'source__time' : 0,
+            \ })
+      let dict.source__flags = get(flag_dict, bufnr, '')
+
+      call add(list, dict)
     endif
     let bufnr += 1
   endwhile
@@ -202,12 +216,13 @@ function! s:get_buffer_list()"{{{
 
   if buflisted(bufnr('%'))
     " Add current buffer.
-    if has_key(s:buffer_list, bufnr('%'))
-      call add(list, s:buffer_list[bufnr('%')])
-    else
-      call add(list,
-            \ { 'action__buffer_nr' : bufnr('%'), 'source__time' : 0 })
-    endif
+    let dict = get(s:buffer_list, bufnr('%'), {
+          \ 'action__buffer_nr' : bufnr('%'),
+          \ 'source__time' : 0,
+          \ })
+    let dict.source__flags = get(flag_dict, bufnr('%'), '')
+
+    call add(list, dict)
   endif
 
   return list
