@@ -1982,7 +1982,10 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
-2011-10-16
+2011-10-18
+- Fixed end problem.
+
+2011-10-17
 - Improved unite-resume behavior.
 - Added preview action in common kind.
 - Improved file_point source.
