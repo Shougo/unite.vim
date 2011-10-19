@@ -1984,6 +1984,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-19
 - Fixed unite#print_error() error.
+- Fixed unite action source.
 
 2011-10-18
 - Fixed end problem.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Oct 2011.
+" Last Modified: 19 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -182,6 +182,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   let candidates = get(a:000, 0, unite#get_marked_candidates())
   let new_context = get(a:000, 1, {})
   let is_clear_marks = get(a:000, 2, 1)
+  let sources = get(a:000, 3, {})
 
   let unite = unite#get_current_unite()
   if empty(candidates)
@@ -212,7 +213,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     endfor
   endif
 
-  let action_tables = s:get_action_table(a:action_name, candidates)
+  let action_tables = s:get_action_table(a:action_name, candidates, sources)
 
   if !empty(new_context)
     " Set new context.
@@ -269,11 +270,11 @@ function! unite#mappings#set_current_filters(filters)"{{{
   return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
 endfunction"}}}
 
-function! s:get_action_table(action_name, candidates)"{{{
+function! s:get_action_table(action_name, candidates, sources)"{{{
   let action_tables = []
   let Self = unite#get_self_functions()[-1]
   for candidate in a:candidates
-    let action_table = s:get_candidate_action_table(candidate)
+    let action_table = s:get_candidate_action_table(candidate, a:sources)
 
     let action_name =
           \ a:action_name ==# 'default' ?
@@ -332,11 +333,11 @@ function! s:get_actions(candidates, sources)"{{{
 
   return actions
 endfunction"}}}
-function! s:get_candidate_action_table(candidate, ...)"{{{
+function! s:get_candidate_action_table(candidate, sources)"{{{
   let Self = unite#get_self_functions()[-1]
 
   return unite#get_action_table(a:candidate.source, a:candidate.kind, Self,
-        \ 0, get(a:000, 0, {}))
+        \ 0, a:sources)
 endfunction"}}}
 
 " key-mappings functions.
@@ -723,7 +724,9 @@ let s:source_action.action_table.do = {
       \ 'description' : 'do action',
       \ }
 function! s:source_action.action_table.do.func(candidate)"{{{
-  call unite#mappings#do_action(a:candidate.word, a:candidate.source__candidates)
+  call unite#mappings#do_action(a:candidate.word,
+   \ a:candidate.source__candidates, {}, 1,
+   \ unite#get_context().source__sources)
 endfunction"}}}
 "}}}
 "}}}
