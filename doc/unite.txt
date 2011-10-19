@@ -1982,6 +1982,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-10-19
+- Fixed unite#print_error() error.
+
 2011-10-18
 - Fixed end problem.
 
