@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Oct 2011.
+" Last Modified: 23 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -275,6 +275,8 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
     let a:candidate.vimfiler__filesize = getfsize(a:candidate.action__path)
   endif
   let a:candidate.vimfiler__filetime = getftime(a:candidate.action__path)
+  let a:candidate.vimfiler__ftype =
+        \ getftype(a:candidate.action__path)
 endfunction"}}}
 
 " Add custom action table."{{{

@@ -1982,6 +1982,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-10-23
+- Improved check filetype.
+
 2011-10-19
 - Fixed unite#print_error() error.
 - Fixed unite action source.
