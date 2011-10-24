@@ -1990,6 +1990,7 @@ CHANGELOG					*unite-changelog*
 2011-10-24
 - Changed a default keymapping behavior.
 - Added matcher_migemo filter.
+- Improved recache_candidates().
 
 2011-10-23
 - Improved check filetype.

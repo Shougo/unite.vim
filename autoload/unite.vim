@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Oct 2011.
+" Last Modified: 25 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1518,20 +1518,63 @@ function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
   " Save options.
   let ignorecase_save = &ignorecase
 
-  if unite#get_buffer_name_option(unite.buffer_name, 'smartcase') && a:input =~ '\u'
+  if unite#get_buffer_name_option(unite.buffer_name, 'smartcase')
+        \ && a:input =~ '\u'
     let &ignorecase = 0
   else
-    let &ignorecase = unite#get_buffer_name_option(unite.buffer_name, 'ignorecase')
+    let &ignorecase =
+          \ unite#get_buffer_name_option(unite.buffer_name, 'ignorecase')
   endif
 
-  let input = s:get_substitute_input(a:input)
-  let input_len = unite#util#strchars(input)
-
   let context = unite.context
-  let context.input = input
   let context.is_redraw = a:is_force
   let context.is_changed = a:input !=# unite.last_input
+
+  for source in unite#loaded_sources_list()
+    let source.unite__candidates = []
+  endfor
+
+  for input in s:get_substitute_input(a:input)
+    let context.input = input
+    call s:recache_candidates_loop(context, a:is_force, a:is_vimfiler)
+  endfor
+
   let filtered_count = 0
+
+  for source in unite#loaded_sources_list()
+    let source.unite__is_invalidate = 0
+
+    if !a:is_vimfiler && source.max_candidates != 0
+          \ && !unite.is_enabled_max_candidates
+          \ && len(source.unite__candidates) > source.max_candidates
+      " Filtering too many candidates.
+      let source.unite__candidates =
+            \ source.unite__candidates[: source.max_candidates - 1]
+
+      if context.verbose && filtered_count < &cmdheight
+        echohl WarningMsg | echomsg printf('[%s] Filtering too many candidates.', source.name) | echohl None
+        let filtered_count += 1
+      endif
+    endif
+
+    " Call post_filter hook.
+    let source.unite__context.candidates = source.unite__candidates
+    call s:call_hook([source], 'on_post_filter')
+
+    call s:initialize_candidates(source.unite__candidates, source.name)
+  endfor
+
+  " Update async state.
+  let unite.is_async =
+        \ len(filter(copy(unite.sources),
+        \           'v:val.unite__context.is_async')) > 0
+
+  let &ignorecase = ignorecase_save
+endfunction"}}}
+function! s:recache_candidates_loop(context, is_force, is_vimfiler)"{{{
+  let unite = unite#get_current_unite()
+
+  let input_len = unite#util#strchars(a:context.input)
 
   for source in unite#loaded_sources_list()
     " Check required pattern length.
@@ -1540,9 +1583,9 @@ function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
     endif
 
     " Set context.
-    let source.unite__context.input = context.input
-    let source.unite__context.is_redraw = context.is_redraw
-    let source.unite__context.is_changed = context.is_changed
+    let source.unite__context.input = a:context.input
+    let source.unite__context.is_redraw = a:context.is_redraw
+    let source.unite__context.is_changed = a:context.is_changed
     let source.unite__context.is_invalidate = source.unite__is_invalidate
 
     let source_candidates = s:get_source_candidates(source, a:is_vimfiler)
@@ -1555,38 +1598,13 @@ function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
           \ custom_source.filters : source.filters
       if has_key(unite.filters, filter_name)
         let source_candidates =
-              \ unite.filters[filter_name].filter(source_candidates, source.unite__context)
+              \ unite.filters[filter_name].filter(
+              \     source_candidates, source.unite__context)
       endif
     endfor
 
-    if !a:is_vimfiler && source.max_candidates != 0
-          \ && !unite.is_enabled_max_candidates
-          \ && len(source_candidates) > source.max_candidates
-      " Filtering too many candidates.
-      let source_candidates = source_candidates[: source.max_candidates - 1]
-
-      if context.verbose && filtered_count < &cmdheight
-        echohl WarningMsg | echomsg printf('[%s] Filtering too many candidates.', source.name) | echohl None
-        let filtered_count += 1
-      endif
-    endif
-
-    " Call post_filter hook.
-    let source.unite__context.candidates = source_candidates
-    call s:call_hook([source], 'on_post_filter')
-
-    call s:initialize_candidates(source_candidates, source.name)
-
-    let source.unite__candidates = source_candidates
-    let source.unite__is_invalidate = 0
+    let source.unite__candidates += source_candidates
   endfor
-
-  " Update async state.
-  let unite.is_async =
-        \ len(filter(copy(unite.sources),
-        \           'v:val.unite__context.is_async')) > 0
-
-  let &ignorecase = ignorecase_save
 endfunction"}}}
 function! s:get_source_candidates(source, is_vimfiler)"{{{
   let context = a:source.unite__context
@@ -2208,12 +2226,14 @@ function! s:get_substitute_input(input)"{{{
 
   for pattern in reverse(unite#util#sort_by(values(substitute_patterns),
         \ 'v:val.priority'))
-    let subst = substitute(subst, pattern.pattern, pattern.subst, 'g')
+    if subst =~ pattern.pattern
+      let subst = substitute(subst, pattern.pattern, pattern.subst, 'g')
+    endif
   endfor
 
   let input .= subst
 
-  return input
+  return [input]
 endfunction"}}}
 function! s:call_hook(sources, hook_name)"{{{
   let _ = []
