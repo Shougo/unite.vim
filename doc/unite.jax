@@ -800,7 +800,8 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 --------	-----------------------------
 i		|<Plug>(unite_insert_enter)|
 I		|<Plug>(unite_insert_head)|
-a		|<Plug>(unite_append_enter)|
+a		候補を選択している場合は|<Plug>(unite_choose_action)|アクション、
+		そうでなければ|<Plug>(unite_append_enter)|
 A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
 Q		|<Plug>(unite_all_exit)|

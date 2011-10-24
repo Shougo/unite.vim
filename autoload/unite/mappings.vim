@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Oct 2011.
+" Last Modified: 24 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -107,7 +107,6 @@ function! unite#mappings#define_default_mappings()"{{{
   " Normal mode key-mappings.
   nmap <buffer> i         <Plug>(unite_insert_enter)
   nmap <buffer> I         <Plug>(unite_insert_head)
-  nmap <buffer> a         <Plug>(unite_append_enter)
   nmap <buffer> A         <Plug>(unite_append_end)
   nmap <buffer> q         <Plug>(unite_exit)
   nmap <buffer> Q         <Plug>(unite_all_exit)
@@ -131,16 +130,27 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> M         <Plug>(unite_toggle_max_candidates)
   nmap <buffer> ?         <Plug>(unite_quick_help)
 
-  nnoremap <silent><buffer><expr> d   unite#smart_map('d', unite#do_action('delete'))
-  nnoremap <silent><buffer><expr> b   unite#smart_map('b', unite#do_action('bookmark'))
-  nnoremap <silent><buffer><expr> e   unite#smart_map('e', unite#do_action('edit'))
-  nnoremap <silent><buffer><expr> p   unite#do_action('preview')
-  nmap <silent><buffer><expr> x       unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
-  nnoremap <silent><buffer><expr> t   unite#smart_map('t', unite#do_action('tabopen'))
-  inoremap <silent><buffer><expr> t   unite#smart_map('t', unite#do_action('tabopen'))
+  nmap <silent><buffer><expr> a
+        \ unite#smart_map("\<Plug>(unite_append_enter)",
+        \                 "\<Plug>(unite_choose_action)")
+  nnoremap <silent><buffer><expr> d
+        \ unite#smart_map('d', unite#do_action('delete'))
+  nnoremap <silent><buffer><expr> b
+        \ unite#smart_map('b', unite#do_action('bookmark'))
+  nnoremap <silent><buffer><expr> e
+        \ unite#smart_map('e', unite#do_action('edit'))
+  nnoremap <silent><buffer><expr> p
+        \ unite#do_action('preview')
+  nmap <silent><buffer><expr> x
+        \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
+  nnoremap <silent><buffer><expr> t
+        \ unite#smart_map('t', unite#do_action('tabopen'))
+  inoremap <silent><buffer><expr> t
+        \ unite#smart_map('t', unite#do_action('tabopen'))
 
   " Visual mode key-mappings.
-  xmap <buffer> <Space>   <Plug>(unite_toggle_mark_selected_candidates)
+  xmap <buffer> <Space>
+        \ <Plug>(unite_toggle_mark_selected_candidates)
 
   " Insert mode key-mappings.
   imap <buffer> <TAB>     <Plug>(unite_choose_action)

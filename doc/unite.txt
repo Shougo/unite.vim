@@ -801,7 +801,9 @@ Normal mode mappings.
 --------	-----------------------------
 i		|<Plug>(unite_insert_enter)|
 I		|<Plug>(unite_insert_head)|
-a		|<Plug>(unite_append_enter)|
+a		In case when you selected a candidate,
+		|<Plug>(unite_choose_action)|
+		else |<Plug>(unite_append_enter)|
 A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
 Q		|<Plug>(unite_all_exit)|
@@ -1981,6 +1983,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-10-24
+- Changed a default keymapping behavior.
 
 2011-10-23
 - Improved check filetype.
