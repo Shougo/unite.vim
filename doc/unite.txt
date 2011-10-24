@@ -1,4 +1,4 @@
-*unite.txt*	Unite all sources
+*unite.txt*	Ultimate interface to unite all sources
 
 Version: 3.0
 Author : Shougo <Shougo.Matsu@gmail.com>
@@ -1480,14 +1480,17 @@ matcher_fuzzy	Todo
 		call unite#custom_filters('file,buffer,file_rec',
 		\ ['matcher_fuzzy', 'sorter_default', 'converter_default'])
 <
+						*unite-filter-matcher_migemo*
+matcher_migemo	For Japanese migemo filter.
+>
+		call unite#custom_filters('line',
+		\ ['matcher_migemo', 'sorter_default', 'converter_default'])
+<
 						*unite-filter-sorter_default*
-sorter_default	|unite-filter-default|により呼び出される、デフォルトのsorter。
-		初期状態では、["sorter_nothing"]のsorterを呼び出す。
-		|unite#filters#sorter_default#use()|を呼び出すことで、デフォルトの
-		sorterを変更することができる。
+sorter_default	Todo
 
 						*unite-filter-sorter_nothing*
-sorter_nothing	何もsortをしないsorter。source側のsortがそのまま反映される。
+sorter_nothing	Nothing sorter.
 
 						*unite-filter-sorter_word*
 sorter_word	Compare words sorter.
@@ -1986,6 +1989,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-24
 - Changed a default keymapping behavior.
+- Added matcher_migemo filter.
 
 2011-10-23
 - Improved check filetype.

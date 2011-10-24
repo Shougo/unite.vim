@@ -1,4 +1,4 @@
-*unite.txt*	すべてのsourceを統合する
+*unite.txt*	すべてのsourceを統合する究極のインタフェース
 
 Version: 3.0
 Author : Shougo <Shougo.Matsu@gmail.com>
@@ -1545,6 +1545,37 @@ matcher_fuzzy	ユーザーが入力したパターンを曖昧検索として、
 >
 		call unite#custom_filters('file,buffer,file_rec',
 		\ ['matcher_fuzzy', 'sorter_default', 'converter_default'])
+<
+						*unite-filter-matcher_migemo*
+matcher_migemo	migemoを使用して、候補をフィルタリングするmatcher。"!"は否定と
+		なる。絞り込みにはwordを使用する。日本語が候補に含まれていなけ
+		れば意味はない。
+		
+		migemoについての詳しい解説は、こちらのページを参照せよ。
+		http://0xcc.net/migemo/
+		http://www.kaoriya.net/software/cmigemo
+		
+		Note: このfilterは|+migemo|が有効になっているか、"cmigemo"がシ
+		ステムにインストールされていなければ動作しない。
+		このfilterは|unite-filter-matcher_regexp|よりさらに動作が遅い。
+		特に、"cmigemo"を使用する場合は絞り込むごとに外部プロセスを起動
+		するため、さらに遅くなる。候補が数千もあるような場合には向かな
+		い。
+		
+		migemoの辞書ファイルは|+migemo|が有効化されている場合は、
+		'migemodict'を使用する。|+migemo|が有効化されていないか、
+		'migemodict'の値が不正な場合、matcher_migemoは辞書ファイルの自
+		動認識を試みる。
+		辞書ファイルを自動認識するパスは、$VIMもしくは'runtimepath'中の
+		"dict/'migemo/'.&encoding.'/migemo-dict'",
+		"dict/&encoding.'/migemo-dict'", "dict/migemo-dict"である。それ
+		でも見つからない場合、システムのmigemo辞書として、
+		"/usr/local/share/migemo/"から検索しようとする。
+
+		次の例は、line sourceにmatcher_migemoを適用する例である。
+>
+		call unite#custom_filters('line',
+		\ ['matcher_migemo', 'sorter_default', 'converter_default'])
 <
 						*unite-filter-sorter_default*
 sorter_default	|unite-filter-default|により呼び出される、デフォルトのsorter。
