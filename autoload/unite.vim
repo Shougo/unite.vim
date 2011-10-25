@@ -1457,6 +1457,7 @@ endfunction"}}}
 function! s:initialize_candidates(candidates, source_name)"{{{
   let candidates = []
   for candidate in a:candidates
+    let candidate = deepcopy(candidate)
     if !has_key(candidate, 'abbr')
       let candidate.abbr = candidate.word
     endif
