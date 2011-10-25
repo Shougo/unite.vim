@@ -944,8 +944,8 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
       if !empty(ret)
         let [type, info] = ret
         if type ==# 'file'
-          call s:initialize_candidates([info[1]], source.name)
-          call s:initialize_vimfiler_candidates([info[1]])
+          let info[1] = s:initialize_candidates([info[1]], source.name)
+          let info[1] = s:initialize_vimfiler_candidates([info[1]])
         elseif type ==# 'directory'
           " nop
         elseif type ==# 'error'
@@ -985,7 +985,7 @@ function! unite#get_vimfiler_candidates(sources, ...)"{{{
     endif
   endfor
 
-  call s:initialize_vimfiler_candidates(candidates)
+  let candidates = s:initialize_vimfiler_candidates(candidates)
 
   return candidates
 endfunction"}}}
@@ -1455,6 +1455,7 @@ function! s:initialize_buffer_name_options(buffer_name)"{{{
   endif
 endfunction"}}}
 function! s:initialize_candidates(candidates, source_name)"{{{
+  let candidates = []
   for candidate in a:candidates
     if !has_key(candidate, 'abbr')
       let candidate.abbr = candidate.word
@@ -1474,7 +1475,30 @@ function! s:initialize_candidates(candidates, source_name)"{{{
 
     " Force set.
     let candidate.source = a:source_name
+
+    let candidate.is_multiline = get(candidate, 'is_multiline', 0)
+    if candidate.is_multiline && candidate.abbr =~ '\r\?\n'
+      let cnt = 0
+      for multi in split(candidate.abbr, '\r\?\n', 1)[:4]
+        let candidate_multi = deepcopy(candidate)
+        let candidate_multi.abbr =
+              \ (cnt == 0 ? '+ ' : '| ') . multi
+
+        if cnt != 0
+          let candidate_multi.is_dummy = 1
+        endif
+
+        call add(candidates, candidate_multi)
+
+        let cnt += 1
+      endfor
+    else
+      let candidate.abbr = '  ' . candidate.abbr
+      call add(candidates, candidate)
+    endif
   endfor
+
+  return candidates
 endfunction"}}}
 function! s:initialize_vimfiler_candidates(candidates)"{{{
   " Set default vimfiler property.
@@ -1510,6 +1534,8 @@ function! s:initialize_vimfiler_candidates(candidates)"{{{
     endif
     let candidate.vimfiler__is_marked = 0
   endfor
+
+  return a:candidates
 endfunction"}}}
 
 function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
@@ -1561,7 +1587,8 @@ function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
     let source.unite__context.candidates = source.unite__candidates
     call s:call_hook([source], 'on_post_filter')
 
-    call s:initialize_candidates(source.unite__candidates, source.name)
+    let source.unite__candidates = s:initialize_candidates(
+          \ source.unite__candidates, source.name)
   endfor
 
   " Update async state.
@@ -1683,10 +1710,10 @@ function! s:convert_lines(candidates)"{{{
   endif
 
   return map(copy(a:candidates),
-        \ '(v:val.unite__is_marked ? "*  " : "-  ")
-        \ . (unite.max_source_name == 0 ? " "
+        \ "(v:val.unite__is_marked ? '*  ' : '-  ')
+        \ . (unite.max_source_name == 0 ? ' '
         \   : unite#util#truncate(v:val.source, max_source_name))
-        \ . unite#util#truncate_smart(v:val.abbr, ' . max_width .  ', max_width/3, "..")')
+        \ . unite#util#truncate_smart(v:val.abbr, " . max_width .  ", max_width/3, '..')")
 endfunction"}}}
 
 function! s:initialize_current_unite(sources, context)"{{{
@@ -1750,7 +1777,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.sidescrolloff_save = &sidescrolloff
   let unite.prompt_linenr = 2
   let unite.max_source_name = len(a:sources) > 1 ?
-        \ max(map(copy(a:sources), 'len(v:val[0])')) + 2 : 0
+        \ max(map(copy(a:sources), 'len(v:val[0])')) : 0
   let unite.is_async =
         \ len(filter(copy(sources), 'v:val.unite__context.is_async')) > 0
   let unite.access_time = localtime()
@@ -1851,7 +1878,7 @@ function! s:initialize_unite_buffer()"{{{
     else
       syntax match uniteCandidateSourceName /^- / contained
     endif
-    let source_padding = 3
+    let source_padding = 5
     execute 'syntax match uniteCandidateAbbr' '/\%'.(unite.max_source_name+source_padding).'c.*/ contained'
 
     execute 'highlight default link uniteCandidateAbbr'  g:unite_abbr_highlight
