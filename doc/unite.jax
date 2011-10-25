@@ -986,6 +986,12 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
 		call unite#set_substitute_pattern('files', '\.', '*.', 1000)
 <
+		{subst}にリストを与えると、複数の絞り込みテキストから検索することができる。
+		Note: リストに置換されるのは一度のみである。
+>
+		call unite#set_substitute_pattern('files', '^\.v/',
+		\ [expand('~/.vim/'), unite#util#substitute_path_separator($HOME) . '/.bundle/*/'], 1000)
+<
 unite#get_substitute_pattern({buffer-name})
 						*unite#get_substitute_pattern()*
 		uniteのバッファ名{buffer-name}における絞込みテキストの置換パタ

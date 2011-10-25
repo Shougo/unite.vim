@@ -988,6 +988,12 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
 		call unite#set_substitute_pattern('files', '\.', '*.', 1000)
 <
+		If {subst} is list, unite.vim search by some narrowing text.
+		Note: It is only once to be replaced with a list.
+>
+		call unite#set_substitute_pattern('files', '^\.v/',
+		\ [expand('~/.vim/'), unite#util#substitute_path_separator($HOME) . '/.bundle/*/'], 1000)
+<
 unite#get_substitute_pattern({buffer-name})
 						*unite#get_substitute_pattern()*
 		Gets the substitute pattern for narrowing text of a Unite buffer
@@ -1992,6 +1998,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-10-26
+- Supported list substitute pattern.
 
 2011-10-25
 - Added is_multiline attribute.
