@@ -1835,6 +1835,9 @@ NOTATION					*unite-notation*
 			is_matched		(Number)	(Optional)
 				Todo
 
+			is_multiline		(Number)	(Optional)
+				Todo
+
 			source__{name}		(Unknown)	(Optional)
 				Todo
 
@@ -1990,6 +1993,7 @@ CHANGELOG					*unite-changelog*
 2011-10-25
 - Added is_multiline attribute.
 - Improved history/yank source behavior.
+- Added is_multiline documentation.
 
 2011-10-24
 - Changed a default keymapping behavior.

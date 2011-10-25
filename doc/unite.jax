@@ -2090,6 +2090,11 @@ NOTATION					*unite-notation*
 				matcherによっては一部の候補を0にセットする。
 				これが0の場合、一部の移動時にスキップされる。
 
+			is_multiline		(数値)		(任意)
+				候補が複数行かどうか。省略すると0となる。
+				これが1の場合、abbr(abbrを省略している場合は
+				word)は改行文字で分割される。
+
 			source__{name}		(不定)		(任意)
 				source独自の付加情報。source側で自由に使用でき
 				る。
