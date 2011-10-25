@@ -1836,7 +1836,10 @@ NOTATION					*unite-notation*
 				Todo
 
 			is_multiline		(Number)	(Optional)
-				Todo
+				1 if the candiates have multiple lines. The
+				default value is 0. When this is enabled,
+				unite splits abbr (or word is abbr is missing)
+				by a newline character.
 
 			source__{name}		(Unknown)	(Optional)
 				Todo
