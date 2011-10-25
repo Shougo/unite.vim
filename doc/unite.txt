@@ -1989,6 +1989,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-25
 - Added is_multiline attribute.
+- Improved history/yank source behavior.
 
 2011-10-24
 - Changed a default keymapping behavior.

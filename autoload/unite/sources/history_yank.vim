@@ -56,8 +56,11 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
+  let max_width = winwidth(0) - 5
   return map(copy(s:yank_histories), "{
-        \ 'word' : v:val[: 150],
+        \ 'word' : v:val[: max_width],
+        \ 'abbr' : substitute(v:val[ : max_width],
+        \         '\\t', '>---', 'g'),
         \ 'kind' : 'word',
         \ 'is_multiline' : 1,
         \ }")
