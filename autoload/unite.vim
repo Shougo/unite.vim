@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Oct 2011.
+" Last Modified: 26 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2246,7 +2246,7 @@ function! s:get_substitute_input(input)"{{{
   if unite.input != '' && stridx(input, unite.input) == 0
     " Substitute after input.
     let input_save = input
-    let input = [input_save[len(unite.input) :]]
+    let input = input_save[len(unite.input) :]
     let head = input_save[: len(unite.input)-1]
   else
     " Substitute all input.

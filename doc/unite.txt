@@ -2001,6 +2001,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-26
 - Supported list substitute pattern.
+- Fixed input error.
 
 2011-10-25
 - Added is_multiline attribute.
