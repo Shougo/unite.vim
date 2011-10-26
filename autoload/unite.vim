@@ -2255,11 +2255,7 @@ function! s:get_substitute_input(input)"{{{
 
   let inputs = s:get_substitute_input_loop(input, substitute_patterns)
 
-  for input in inputs
-    let input = head . input
-  endfor
-
-  return inputs
+  return map(inputs, 'head . v:val')
 endfunction"}}}
 function! s:get_substitute_input_loop(input, substitute_patterns)"{{{
   if empty(a:substitute_patterns)
