@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Oct 2011.
+" Last Modified: 26 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -572,13 +572,20 @@ function! s:input_overwrite_method(dest, src)"{{{
         \ strftime('%y/%m/%d %H:%M', getftime(a:src)))
 
   echo 'Please select overwrite method(Upper case is all).'
-  let method = input('f[orce]/t[ime]/u[nder]/n[o]/r[ename] : ')
-  while method !~? '^\%(f\%[orce]\|t\%[ime]\|u\%[nder]\|n\%[o]\|r\%[ename]\)$'
+  let method = ''
+  while method !~? '^\%(f\%[orce]\|t\%[ime]\|u\%[nderbar]\|n\%[o]\|r\%[ename]\)$'
     " Retry.
-    let method = input('[force/time/under/no/rename] : ')
+    let method = input('f[orce]/t[ime]/u[nderbar]/n[o]/r[ename] : ',
+        \ '', 'customlist,unite#kinds#file#complete_overwrite_method')
   endwhile
 
+  redraw
+
   return method
+endfunction"}}}
+function! unite#kinds#file#complete_overwrite_method(arglead, cmdline, cursorpos)"{{{
+  return filter(['force', 'time', 'underbar', 'no', 'rename'],
+        \ 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
 function! s:move_to_other_drive(candidate, filename)"{{{
   " move command doesn't supported directory over drive move in Windows.
