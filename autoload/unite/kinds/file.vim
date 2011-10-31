@@ -191,8 +191,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
       endif
 
       " Overwrite check.
-      let [dest_filename, filename,
-            \ overwrite_method, is_reset_method, is_continue] =
+      let [dest_filename, overwrite_method, is_reset_method, is_continue] =
             \ s:check_over_write(dest_dir, filename, overwrite_method,
             \                    is_reset_method)
       if is_continue
@@ -262,8 +261,7 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
       let filename = candidate.action__path
       let dest_filename = dest_dir . fnamemodify(filename, ':t')
       " Overwrite check.
-      let [dest_filename, filename,
-            \ overwrite_method, is_reset_method, is_continue] =
+      let [dest_filename, overwrite_method, is_reset_method, is_continue] =
             \ s:check_over_write(dest_dir, filename, overwrite_method,
             \                    is_reset_method)
       if is_continue
@@ -609,13 +607,13 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
   let is_reset_method = a:is_reset_method
   let dest_filename = a:dest_dir . fnamemodify(a:filename, ':t')
   let is_continue = 0
-  let filename = a:filename
+  let filename = fnamemodify(a:filename, ':t')
   let overwrite_method = a:overwrite_method
 
   if filereadable(dest_filename) || isdirectory(dest_filename)"{{{
     if overwrite_method == ''
       let overwrite_method =
-            \ s:input_overwrite_method(dest_filename, filename)
+            \ s:input_overwrite_method(dest_filename, a:filename)
       if overwrite_method =~ '^\u'
         " Same overwrite.
         let is_reset_method = 0
@@ -625,7 +623,7 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
     if overwrite_method =~? '^f'
       " Ignore.
     elseif overwrite_method =~? '^t'
-      if getftime(filename) <= getftime(dest_filename)
+      if getftime(a:filename) <= getftime(dest_filename)
         let is_continue = 1
       endif
     elseif overwrite_method =~? '^u'
@@ -637,7 +635,8 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
 
       let is_continue = 1
     elseif overwrite_method =~? '^r'
-      let dest_filename = input(printf('New name: %s -> ', filename), filename)
+      let filename =
+            \ input(printf('New name: %s -> ', filename), filename)
     endif
 
     if is_reset_method
@@ -645,13 +644,14 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
     endif
   endif"}}}
 
+  let dest_filename = a:dest_dir . fnamemodify(filename, ':t')
+
   if dest_filename ==#
         \ a:dest_dir . fnamemodify(a:filename, ':t')
     let dest_filename = a:dest_dir
   endif
 
-  return [dest_filename, filename,
-        \ overwrite_method, is_reset_method, is_continue]
+  return [dest_filename, overwrite_method, is_reset_method, is_continue]
 endfunction"}}}
 
 let &cpo = s:save_cpo

@@ -2001,6 +2001,7 @@ CHANGELOG					*unite-changelog*
 
 2011-10-31
 - Fixed s:check_over_write() behavior.
+- Fixed copy and move behavior.
 
 2011-10-26
 - Supported list substitute pattern.
