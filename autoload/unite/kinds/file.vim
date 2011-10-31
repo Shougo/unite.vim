@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Oct 2011.
+" Last Modified: 31 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -559,8 +559,6 @@ function! s:external(command, dest_dir, src_files)"{{{
   " echomsg command_line
   let output = unite#util#system(command_line)
 
-  echon output
-
   return unite#util#get_last_status()
 endfunction"}}}
 function! s:input_overwrite_method(dest, src)"{{{
@@ -646,6 +644,11 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
       let overwrite_method = ''
     endif
   endif"}}}
+
+  if dest_filename ==#
+        \ a:dest_dir . fnamemodify(a:filename, ':t')
+    let dest_filename = a:dest_dir
+  endif
 
   return [dest_filename, filename,
         \ overwrite_method, is_reset_method, is_continue]
