@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Oct 2011.
+" Last Modified: 01 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -327,8 +327,8 @@ function! s:get_files(files, level, max_len)"{{{
       endif
 
       let child_index = 0
-      let childs = split(unite#util#substitute_path_separator(glob(file . '/*')), '\n')
-            \ + split(unite#util#substitute_path_separator(glob(file . '/.*')), '\n')
+      let childs = split(unite#util#substitute_path_separator(
+            \ globpath(file, '.*\|*')), '\n')
       for child in childs
         let child_index += 1
 
