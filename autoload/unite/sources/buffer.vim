@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Oct 2011.
+" Last Modified: 01 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -159,12 +159,12 @@ function! s:make_abbr(bufnr, flags)"{{{
   let filetype = getbufvar(a:bufnr, '&filetype')
   if filetype ==# 'vimfiler'
     let path = getbufvar(a:bufnr, 'vimfiler').current_dir
-    let path = printf('%s [%s]', bufname(a:bufnr),
+    let path = printf('%s [%s]', fnamemodify(bufname(a:bufnr), ':t'),
           \ unite#substitute_path_separator(simplify(path)))
   elseif filetype ==# 'vimshell'
     let vimshell = getbufvar(a:bufnr, 'vimshell')
     let path = vimshell.current_dir
-    let path = printf('%s: %s [%s]', bufname(a:bufnr),
+    let path = printf('%s: %s [%s]', fnamemodify(bufname(a:bufnr), ':t'),
           \ (has_key(vimshell, 'cmdline') ? vimshell.cmdline : ''),
           \ unite#substitute_path_separator(simplify(path)))
   else
