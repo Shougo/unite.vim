@@ -2001,7 +2001,6 @@ CHANGELOG					*unite-changelog*
 
 2011-11-01
 - Improved buffer abbr.
-- Improved get_files() in file_rec source.
 
 2011-10-31
 - Fixed s:check_over_write() behavior.

@@ -327,8 +327,11 @@ function! s:get_files(files, level, max_len)"{{{
       endif
 
       let child_index = 0
-      let childs = split(unite#util#substitute_path_separator(
-            \ globpath(file, '.*\|*')), '\n')
+      let childs =
+            \ split(unite#util#substitute_path_separator(
+            \       globpath(file, '*')), '\n') +
+            \ split(unite#util#substitute_path_separator(
+            \       globpath(file, '.*')), '\n')
       for child in childs
         let child_index += 1
 
