@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Oct 2011.
+" Last Modified: 04 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -593,12 +593,9 @@ function! unite#redraw_candidates() "{{{
   setlocal modifiable
 
   let lines = s:convert_lines(candidates)
+  let pos = getpos('.')
   if len(lines) < len(unite#get_current_unite().candidates)
-    let pos = getpos('.')
     silent! execute (unite#get_current_unite().prompt_linenr+1).',$delete _'
-    if pos != getpos('.')
-      call setpos('.', pos)
-    endif
   endif
   call setline(unite#get_current_unite().prompt_linenr+1, lines)
 
@@ -607,13 +604,15 @@ function! unite#redraw_candidates() "{{{
   let unite = unite#get_current_unite()
   let unite.candidates = candidates
 
-  if unite.context.auto_resize
-        \ && unite.prompt_linenr + len(candidates)
-        \      < unite.context.winheight
-        \ && winnr('$') != 1
+  if unite.context.auto_resize && winnr('$') != 1
     " Auto resize.
-    execute 'resize' unite.prompt_linenr + len(candidates)
+    let max_len = unite.prompt_linenr + len(candidates)
+    execute 'resize' min([max_len, unite.context.winheight])
     normal! zb
+  endif
+
+  if pos != getpos('.')
+    call setpos('.', pos)
   endif
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{
@@ -2001,6 +2000,10 @@ function! s:redraw(is_force, winnr) "{{{
       call unite#mappings#do_action(context.default_action, [candidates[0]])
     endif
   endif
+
+  if context.auto_preview
+    call s:do_auto_preview()
+  endif
 endfunction"}}}
 
 " Autocmd events.
@@ -2103,24 +2106,7 @@ function! s:on_cursor_moved()  "{{{
         \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
 
   if unite#get_current_unite().context.auto_preview
-    if !unite#get_current_unite().has_preview_window
-          \ && s:has_preview_window()
-      pclose!
-    endif
-
-    call unite#mappings#do_action('preview', [], {}, 0)
-
-    " Restore window size.
-    let context = unite#get_context()
-    if s:has_preview_window()
-      if context.vertical
-        if winwidth(winnr()) != context.winwidth
-          execute 'vertical resize' context.winwidth
-        endif
-      elseif winheight(winnr()) != context.winwidth
-        execute 'resize' context.winheight
-      endif
-    endif
+    call s:do_auto_preview()
   endif
 endfunction"}}}
 function! s:on_buf_unload(bufname)  "{{{
@@ -2305,6 +2291,26 @@ endfunction"}}}
 function! s:has_preview_window()"{{{
   return len(filter(range(1, winnr('$')),
           \    'getwinvar(v:val, "&previewwindow")')) > 0
+endfunction"}}}
+function! s:do_auto_preview()"{{{
+  if !unite#get_current_unite().has_preview_window
+        \ && s:has_preview_window()
+    pclose!
+  endif
+
+  call unite#mappings#do_action('preview', [], {}, 0)
+
+  " Restore window size.
+  let context = unite#get_context()
+  if s:has_preview_window()
+    if context.vertical
+      if winwidth(winnr()) != context.winwidth
+        execute 'vertical resize' context.winwidth
+      endif
+    elseif winheight(winnr()) != context.winwidth
+      execute 'resize' context.winheight
+    endif
+  endif
 endfunction"}}}
 "}}}
 
