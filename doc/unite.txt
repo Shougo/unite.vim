@@ -680,8 +680,12 @@ Normal mode mappings.
 
 <Plug>(unite_quick_match_default_action)	*<Plug>(unite_quick_match_default_action)*
 		Runs the default action of the selected candidate with using
-		quick match.   This doesn't work when there are marked
+		quick match. This doesn't work when there are marked
 		candidates.
+
+<Plug>(unite_quick_match_choose_action)		*<Plug>(unite_quick_match_choose_action)*
+		Chooses action of the selected candidate with using quick
+		match. This doesn't work when there are marked candidates.
 
 <Plug>(unite_input_directory)			*<Plug>(unite_input_directory)*
 		Narrows with inputting directory name.
@@ -769,6 +773,9 @@ Insert mode mappings.
 
 <Plug>(unite_quick_match_default_action)	*i_<Plug>(unite_quick_match_default_action)*
 		Same to |<Plug>(unite_quick_match_default_action)|.
+
+<Plug>(unite_quick_match_choose_action)		*i_<Plug>(unite_quick_match_choose_action)*
+		Same to |<Plug>(unite_quick_match_choose_action)|.
 
 <Plug>(unite_input_directory)			*i_<Plug>(unite_input_directory)*
 		Same to |<Plug>(unite_input_directory)|.
@@ -2002,6 +2009,7 @@ CHANGELOG					*unite-changelog*
 2011-11-04
 - Fixed auto_resize and auto_preview behavior.
 - Improved file_rec word.
+- Added <Plug>(unite_quick_match_choose_action) mapping.
 
 2011-11-02
 - Improved register and history/yank source.
