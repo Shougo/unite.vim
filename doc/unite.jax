@@ -260,6 +260,10 @@ http://www.ustream.tv/recorded/11240673
 		-toggle
 		同一バッファ名のuniteウインドウが表示されている場合は、閉じる。
 
+						*unite-options-quick-match*
+		-quick-match
+		クイックマッチモードで開始する。
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。

@@ -268,6 +268,10 @@ COMMANDS 					*unite-commands*
 		Close unite buffer window if this unite buffer name window is
 		exists.
 
+						*unite-options-quick-match*
+		-quick-match
+		Start with quick match mode.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
@@ -2010,6 +2014,7 @@ CHANGELOG					*unite-changelog*
 - Fixed auto_resize and auto_preview behavior.
 - Improved file_rec word.
 - Added <Plug>(unite_quick_match_choose_action) mapping.
+- Added -quick-match option.
 
 2011-11-02
 - Improved register and history/yank source.

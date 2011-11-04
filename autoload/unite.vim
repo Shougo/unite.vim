@@ -235,7 +235,7 @@ let s:unite_options = [
       \ '-winwidth=', '-winheight=',
       \ '-immediately', '-auto-preview', '-complete',
       \ '-vertical', '-horizontal', '-direction=', '-no-split',
-      \ '-verbose', '-auto-resize', '-toggle',
+      \ '-verbose', '-auto-resize', '-toggle', '-quick-match'
       \]
 "}}}
 
@@ -864,37 +864,7 @@ function! unite#start(sources, ...)"{{{
   endfor
   call unite#redraw_candidates()
 
-  if unite.context.start_insert
-    let unite.is_insert = 1
-
-    execute unite.prompt_linenr
-    normal! zb
-
-    startinsert!
-  else
-    let positions = unite#get_buffer_name_option(unite.buffer_name, 'unite__save_pos')
-    let key = unite#loaded_source_names_string()
-    let is_restore = unite.context.input == '' &&
-          \ has_key(positions, key)
-    if is_restore
-      " Restore position.
-      call setpos('.', positions[key].pos)
-      normal! zb
-    endif
-    let candidate = has_key(positions, key) ?
-          \ positions[key].candidate : {}
-
-    let unite.is_insert = 0
-
-    if !is_restore ||
-          \ candidate != unite#get_current_candidate(unite.prompt_linenr+1)
-      execute (unite.prompt_linenr+1)
-      normal! zb
-    endif
-    normal! 0
-
-    stopinsert
-  endif
+  call s:init_cursor()
 endfunction"}}}
 function! unite#start_temporary(sources, ...)"{{{
   if &filetype == 'unite'
@@ -1061,34 +1031,7 @@ function! unite#resume(buffer_name, ...)"{{{
 
   let s:current_unite = unite
 
-  if unite.context.start_insert
-    let unite.is_insert = 1
-
-    execute unite.prompt_linenr
-    normal! zb
-
-    startinsert!
-  else
-    let positions = unite#get_buffer_name_option(unite.buffer_name, 'unite__save_pos')
-    let key = unite#loaded_source_names_string()
-    let is_restore = has_key(positions, key)
-    let candidate = unite#get_current_candidate()
-
-    if is_restore
-      " Restore position.
-      call setpos('.', positions[key].pos)
-    endif
-
-    let unite.is_insert = 0
-
-    if !is_restore
-          \ || candidate != unite#get_current_candidate()
-      execute (unite.prompt_linenr+1)
-    endif
-    normal! 0zb
-
-    stopinsert
-  endif
+  call s:init_cursor()
 endfunction"}}}
 function! s:initialize_context(context)"{{{
   if !has_key(a:context, 'input')
@@ -1160,6 +1103,9 @@ function! s:initialize_context(context)"{{{
   endif
   if !has_key(a:context, 'toggle')
     let a:context.toggle = 0
+  endif
+  if !has_key(a:context, 'quick_match')
+    let a:context.quick_match = 0
   endif
   let a:context.is_redraw = 0
   let a:context.is_changed = 0
@@ -2310,6 +2256,43 @@ function! s:do_auto_preview()"{{{
     elseif winheight(winnr()) != context.winwidth
       execute 'resize' context.winheight
     endif
+  endif
+endfunction"}}}
+function! s:init_cursor()"{{{
+  let unite = unite#get_current_unite()
+
+  if unite.context.start_insert
+    let unite.is_insert = 1
+
+    execute unite.prompt_linenr
+    normal! zb
+
+    startinsert!
+  else
+    let positions = unite#get_buffer_name_option(
+          \ unite.buffer_name, 'unite__save_pos')
+    let key = unite#loaded_source_names_string()
+    let is_restore = has_key(positions, key)
+    let candidate = unite#get_current_candidate()
+
+    if is_restore
+      " Restore position.
+      call setpos('.', positions[key].pos)
+    endif
+
+    let unite.is_insert = 0
+
+    if !is_restore
+          \ || candidate != unite#get_current_candidate()
+      execute (unite.prompt_linenr+1)
+    endif
+    normal! 0zb
+
+    stopinsert
+  endif
+
+  if unite.context.quick_match
+    call unite#mappings#_quick_match(0)
   endif
 endfunction"}}}
 "}}}
