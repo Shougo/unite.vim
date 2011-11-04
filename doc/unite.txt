@@ -1454,6 +1454,9 @@ completion	An interface for completion
 
 						*unite-kind-source*
 source		unite.vim source
+		If execute this kind candiate, unite.vim start unite session in
+		current unite buffer. When you close unite buffer, restore
+		sources. So, unite.vim behaves like menu.
 
 			action__source_name	(String)	(Required)
 				The source name
@@ -2015,6 +2018,7 @@ CHANGELOG					*unite-changelog*
 - Improved file_rec word.
 - Added <Plug>(unite_quick_match_choose_action) mapping.
 - Added -quick-match option.
+- Improved source kind description.
 
 2011-11-02
 - Improved register and history/yank source.

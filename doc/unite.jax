@@ -1488,6 +1488,9 @@ completion	補完
 
 						*unite-kind-source*
 source		unite.vimのsource
+		この候補を実行すると、現在のuniteバッファで指定したsourceが起動
+		される。unite.vimのバッファを閉じるともとのsourceが復元される。
+		uniteバッファを簡易的なメニューのように使用できる。
 
 			action__source_name	(文字列)	(必須)
 				実行するsourceの名前
