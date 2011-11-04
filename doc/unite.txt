@@ -2001,6 +2001,7 @@ CHANGELOG					*unite-changelog*
 
 2011-11-04
 - Fixed auto_resize and auto_preview behavior.
+- Improved file_rec word.
 
 2011-11-02
 - Improved register and history/yank source.
