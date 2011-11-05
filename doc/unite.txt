@@ -1175,14 +1175,20 @@ file_rec/async	Same as |unite-source-file_rec|. But get files by asynchronously.
 						*unite-source-buffer*
 buffer		Nominates opened buffers as candidates, ordering by time
 		series.
-		If argument 1 is "!", displays non-listed buffer.
+		If argument 1 is "!", displays both listed and non-listed
+		buffer.
+		If argument 1 is "?", displays non-listed buffer.
 
 		Source arguments:
-		1. bang.
+		1. "!" or "?".
 
 						*unite-source-buffer_tab*
 buffer_tab	Nominates opened buffers only in the current tab as
 		candidates, ordering by time series.
+		Arguments specification is same to buffer source.
+
+		Source arguments:
+		1. "!" or "?".
 
 						*unite-source-tab*
 tab		Nominates opened tabs as candidates, regarding t:cwd as the
@@ -2012,6 +2018,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-11-05
+- Improved buffer source.
 
 2011-11-04
 - Fixed auto_resize and auto_preview behavior.

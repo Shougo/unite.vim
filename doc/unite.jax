@@ -1188,14 +1188,19 @@ file_rec/async	|unite-source-file_rec|と同じだが、候補の取得を完全
 
 						*unite-source-buffer*
 buffer		開いているバッファを候補とする。バッファは使用した順番に整列さ
-		れる。引数1が"!"ならば、|buflisted()|でないバッファも表示する。
+		れる。
+		引数1が"!"ならば、|buflisted()|でないバッファも表示する。
+		引数1が"?"ならば、|buflisted()|でないバッファのみ表示する。
 
 		source引数：
-		1. !
+		1. ! / ?
 
 						*unite-source-buffer_tab*
 buffer_tab	現在のタブで開いたバッファを候補とする。バッファは使用した順番
-		に整列される。
+		に整列される。引数はbuffer sourceと同じである。
+
+		source引数：
+		1. ! / ?
 
 						*unite-source-tab*
 tab		開いているタブを候補とする。t:cwdをカレントディレクトリ、
