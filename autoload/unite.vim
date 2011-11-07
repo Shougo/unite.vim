@@ -781,7 +781,7 @@ endfunction"}}}
 " Command functions.
 function! unite#start(sources, ...)"{{{
   " Check command line window.
-  if s:is_cmdwin()
+  if unite#util#is_cmdwin()
     echoerr 'Command line buffer is detected!'
     echoerr 'Please close command line buffer.'
     return
@@ -988,7 +988,7 @@ function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
 endfunction"}}}
 function! unite#resume(buffer_name, ...)"{{{
   " Check command line window.
-  if s:is_cmdwin()
+  if unite#util#is_cmdwin()
     echoerr 'Command line buffer is detected!'
     echoerr 'Please close command line buffer.'
     return
@@ -2242,11 +2242,6 @@ function! s:call_hook(sources, hook_name)"{{{
             \ [source.args, source.unite__context], source.hooks)
     endif
   endfor
-endfunction"}}}
-function! s:is_cmdwin()"{{{
-  silent! noautocmd wincmd p
-  silent! noautocmd wincmd p
-  return v:errmsg =~ '^E11:'
 endfunction"}}}
 function! s:has_preview_window()"{{{
   return len(filter(range(1, winnr('$')),

@@ -41,6 +41,10 @@ function! unite#sources#session#define()"{{{
 endfunction"}}}
 
 function! unite#sources#session#_save(filename)"{{{
+  if unite#util#is_cmdwin()
+    return
+  endif
+
   if !isdirectory(g:unite_source_session_path)
     call mkdir(g:unite_source_session_path, 'p')
   endif
@@ -81,7 +85,7 @@ let s:source = {
       \ 'name' : 'session',
       \ 'description' : 'candidates from session list',
       \ 'default_action' : 'load',
-      \ 'alias_table' : { 'edit' : 'open', 'narrow' : 'open' },
+      \ 'alias_table' : { 'edit' : 'open' },
       \ 'action_table' : {},
       \}
 

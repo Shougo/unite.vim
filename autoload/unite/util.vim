@@ -141,6 +141,11 @@ function! unite#util#alternate_buffer()"{{{
     bnext
   endif
 endfunction"}}}
+function! unite#util#is_cmdwin()"{{{
+  silent! noautocmd wincmd p
+  silent! noautocmd wincmd p
+  return v:errmsg =~ '^E11:'
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
