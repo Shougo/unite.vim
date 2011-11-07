@@ -30,8 +30,8 @@ set cpo&vim
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_session_default_session_name',
       \ 'default')
-" call unite#util#set_default('g:unite_source_session_options',
-      " \ 'blank,buffers,curdir,folds,help,options,tabpages,winsize')
+call unite#util#set_default('g:unite_source_session_options',
+      \ 'blank,buffers,curdir,folds,help,tabpages,winsize')
 call unite#util#set_default('g:unite_source_session_path',
       \ g:unite_data_directory . '/session')
 "}}}
@@ -47,7 +47,30 @@ function! unite#sources#session#_save(filename)"{{{
 
   let filename = s:get_session_path(a:filename)
 
+  let save_session_options = &sessionoptions
+  let &sessionoptions = g:unite_source_session_options
+
   execute 'silent mksession! ' . filename
+
+  let &sessionoptions = save_session_options
+
+  let append = []
+  for tabnr in range(1, tabpagenr('$'))
+    if v:version >= 703 && type(gettabvar(tabnr, 'cwd')) == type('')
+      call add(append, printf(
+            \ 'call settabvar(%d, "cwd", %s)', tabnr,
+            \   string(gettabvar(tabnr, 'cwd'))))
+    endif
+    if v:version >= 703 && type(gettabvar(tabnr, 'title')) == type('')
+      call add(append, printf(
+            \ 'call settabvar(%d, "title", %s)', tabnr,
+            \   string(gettabvar(tabnr, 'title'))))
+    endif
+  endfor
+
+  if !empty(append)
+    call writefile(readfile(filename)+append, filename)
+  endif
 endfunction"}}}
 function! unite#sources#session#_complete(arglead, cmdline, cursorpos)"{{{
   let sessions = split(glob(g:unite_source_session_path.'/*'), '\n')
@@ -84,24 +107,7 @@ function! s:source.action_table.load.func(candidate)"{{{
     silent! cscope kill -1
   endif
 
-  try
-    set eventignore=all
-
-    " Delete all buffers.
-    execute 'silent! 1,'.bufnr('$').'bwipeout!'
-
-    let bufnr = bufnr('%')
-    execute 'silent! source' a:candidate.action__path
-    execute 'silent! bwipeout!' bufnr
-  finally
-    set eventignore=
-    " doautoall BufRead
-    doautoall FileType
-    doautoall BufEnter
-    doautoall BufWinEnter
-    doautoall TabEnter
-    doautoall SessionLoadPost
-  endtry
+  execute 'silent! source' a:candidate.action__path
 
   if has('cscope')
     silent! cscope add .

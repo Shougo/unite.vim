@@ -590,6 +590,12 @@ g:unite_source_session_path			*g:unite_source_session_path*
 		
 		Default value is |g:unite_data_directory|; '/session'.
 
+g:unite_source_session_options			*g:unite_source_session_options*
+		Use options when execute |:mksession|.
+		Refer to 'sessionoptions'.
+		
+		Default value is "blank,buffers,curdir,folds,help,tabpages,winsize".
+
 KINDS VARIABLES					*unite-kinds-variables*
 
 g:unite_kind_jump_list_after_jump_scroll	*g:unite_kind_jump_list_after_jump_scroll*
@@ -2046,6 +2052,7 @@ CHANGELOG					*unite-changelog*
 2011-11-07
 - Added session source.
 - Fixed alias table syntax sugar.
+- Added g:unite_source_session_options variable.
 
 2011-11-05
 - Improved buffer source.
