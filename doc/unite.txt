@@ -298,8 +298,13 @@ A command of source				*:unite-sources-command*
 		parameter, the current position of the current file will be
 		stored.
 
-:UniteSessionSave [{session-name}]		*:UniteBookmarkAdd*
+:UniteSessionSave [{session-name}]		*:UniteSessionSave*
 		Save session data in {session-name}.
+		If {session-name} is omitted, use |v:this_session| or
+		|g:unite_source_session_default_session_name| is used.
+
+:UniteSessionLoad [{session-name}]		*:UniteSessionLoad*
+		Save session data from {session-name}.
 		If {session-name} is omitted, use |v:this_session| or
 		|g:unite_source_session_default_session_name| is used.
 
@@ -2041,7 +2046,7 @@ EXAMPLES					*unite-examples*
 	
 	" For unite-session.
 	" Save session automatically.
-	"autocmd VimLeavePre,CursorHold * UniteSessionSave
+	"autocmd VimLeavePre,CursorHold * if v:this_session != '' | UniteSessionSave | endif
 	
 <
 ==============================================================================
@@ -2057,6 +2062,7 @@ CHANGELOG					*unite-changelog*
 - Added session source.
 - Fixed alias table syntax sugar.
 - Added g:unite_source_session_options variable.
+- Added :UniteSessionLoad command.
 
 2011-11-05
 - Improved buffer source.

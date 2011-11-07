@@ -297,8 +297,13 @@ sourceのコマンド				*unite-sources-commands*
 		ブックマークリストにファイルを追加する。引数が指定されなかった
 		場合、現在のファイルの現在位置が記録される。
 
-:UniteSessionSave [{session-name}]		*:UniteBookmarkAdd*
+:UniteSessionSave [{session-name}]		*:UniteSessionSave*
 		{session-name}にセッションデータを保存する。
+		もし{session-name}が省略された場合、|v:this_session|か
+		|g:unite_source_session_default_session_name|を使用する。
+
+:UniteSessionLoad [{session-name}]		*:UniteSessionLoad*
+		{session-name}からセッションデータを読み出す。
 		もし{session-name}が省略された場合、|v:this_session|か
 		|g:unite_source_session_default_session_name|を使用する。
 
@@ -2346,7 +2351,7 @@ description		文字列		(任意)
 	
 	" For unite-session.
 	" Save session automatically.
-	"autocmd VimLeavePre,CursorHold * UniteSessionSave
+	"autocmd VimLeavePre,CursorHold * if v:this_session != '' | UniteSessionSave | endif
 	
 <
 ==============================================================================

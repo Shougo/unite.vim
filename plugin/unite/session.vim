@@ -34,6 +34,9 @@ set cpo&vim
 command! -nargs=? -complete=customlist,unite#sources#session#_complete
       \ UniteSessionSave call unite#sources#session#_save(<q-args>)
 
+command! -nargs=? -complete=customlist,unite#sources#session#_complete
+      \ UniteSessionLoad call unite#sources#session#_load(<q-args>)
+
 let g:loaded_unite_source_session = 1
 
 let &cpo = s:save_cpo

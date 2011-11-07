@@ -76,6 +76,18 @@ function! unite#sources#session#_save(filename)"{{{
     call writefile(readfile(filename)+append, filename)
   endif
 endfunction"}}}
+function! unite#sources#session#_load(filename)"{{{
+  if unite#util#is_cmdwin()
+    return
+  endif
+
+  let filename = s:get_session_path(a:filename)
+  if !filereadable(filename)
+    echohl WarningMsg | echomsg a:filename  . ' is not found.' | echohl None
+  endif
+
+  execute 'silent! source' filename
+endfunction"}}}
 function! unite#sources#session#_complete(arglead, cmdline, cursorpos)"{{{
   let sessions = split(glob(g:unite_source_session_path.'/*'), '\n')
   return filter(sessions, 'stridx(v:val, a:arglead) == 0')
@@ -107,6 +119,10 @@ let s:source.action_table.load = {
       \ 'description' : 'load this session',
       \ }
 function! s:source.action_table.load.func(candidate)"{{{
+  if unite#util#is_cmdwin()
+    return
+  endif
+
   if has('cscope')
     silent! cscope kill -1
   endif
