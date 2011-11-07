@@ -2063,6 +2063,7 @@ CHANGELOG					*unite-changelog*
 - Fixed alias table syntax sugar.
 - Added g:unite_source_session_options variable.
 - Added :UniteSessionLoad command.
+- Improved unite session behavior.
 
 2011-11-05
 - Improved buffer source.

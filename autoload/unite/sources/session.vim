@@ -61,14 +61,25 @@ function! unite#sources#session#_save(filename)"{{{
   let append = []
   for tabnr in range(1, tabpagenr('$'))
     if v:version >= 703 && type(gettabvar(tabnr, 'cwd')) == type('')
+          \ && gettabvar(tabnr, 'cwd') != ''
       call add(append, printf(
             \ 'call settabvar(%d, "cwd", %s)', tabnr,
             \   string(gettabvar(tabnr, 'cwd'))))
     endif
     if v:version >= 703 && type(gettabvar(tabnr, 'title')) == type('')
+          \ && gettabvar(tabnr, 'title') != ''
       call add(append, printf(
             \ 'call settabvar(%d, "title", %s)', tabnr,
             \   string(gettabvar(tabnr, 'title'))))
+    endif
+    if v:version >= 703 && type(gettabvar(tabnr, 'unite_buffer_dictionary')) == type({})
+      " Convert unite_buffer_dictionary.
+      let list = map(filter(keys(gettabvar(tabnr, 'unite_buffer_dictionary')),
+            \ 'filereadable(bufname(str2nr(v:val))) && getbufvar(v:val, "buftype") !~ "nofile"'),
+            \ 'fnamemodify(bufname(str2nr(v:val)), ":p")')
+      call add(append, printf(
+            \ 'call settabvar(%d, "unite_buffer_session", %s)', tabnr,
+            \   string(list)))
     endif
   endfor
 
@@ -81,12 +92,33 @@ function! unite#sources#session#_load(filename)"{{{
     return
   endif
 
+  if has('cscope')
+    silent! cscope kill -1
+  endif
+
   let filename = s:get_session_path(a:filename)
   if !filereadable(filename)
     echohl WarningMsg | echomsg a:filename  . ' is not found.' | echohl None
   endif
 
   execute 'silent! source' filename
+
+  for tabnr in range(1, tabpagenr('$'))
+    if v:version >= 703 && type(gettabvar(tabnr, 'unite_buffer_session')) == type([])
+      " Convert unite_buffer_dictionary.
+      let dict = {}
+      for bufnr in map(filter(gettabvar(tabnr, 'unite_buffer_session'),
+            \ 'bufnr(v:val) > 0'), 'bufnr(v:val)')
+        let dict[bufnr] = 1
+      endfor
+
+      call settabvar(tabnr, 'unite_buffer_dictionary', dict)
+    endif
+  endfor
+
+  if has('cscope')
+    silent! cscope add .
+  endif
 endfunction"}}}
 function! unite#sources#session#_complete(arglead, cmdline, cursorpos)"{{{
   let sessions = split(glob(g:unite_source_session_path.'/*'), '\n')
@@ -119,19 +151,7 @@ let s:source.action_table.load = {
       \ 'description' : 'load this session',
       \ }
 function! s:source.action_table.load.func(candidate)"{{{
-  if unite#util#is_cmdwin()
-    return
-  endif
-
-  if has('cscope')
-    silent! cscope kill -1
-  endif
-
-  execute 'silent! source' a:candidate.action__path
-
-  if has('cscope')
-    silent! cscope add .
-  endif
+  call unite#sources#session#_load(a:candidate.action__path)
 endfunction"}}}
 let s:source.action_table.delete = {
       \ 'description' : 'delete from session list',
