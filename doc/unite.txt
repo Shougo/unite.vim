@@ -2039,6 +2039,10 @@ EXAMPLES					*unite-examples*
 	" For optimize.
 	let g:unite_source_file_mru_filename_format = ''
 	
+	" For unite-session.
+	" Save session automatically.
+	"autocmd VimLeavePre,CursorHold * UniteSessionSave
+	
 <
 ==============================================================================
 USER DEFINED SOURCES				*unite-user-sources*
