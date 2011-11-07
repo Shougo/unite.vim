@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Nov 2011.
+" Last Modified: 07 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -321,7 +321,8 @@ endfunction"}}}
 function! s:get_action_table(source_name, kind_name, self_func, is_parents_action, source_table)"{{{
   let kind = unite#get_kinds(a:kind_name)
   let source = empty(a:source_table) ?
-        \ unite#get_sources(a:source_name) : get(a:source_table, a:source_name, {})
+        \ unite#get_sources(a:source_name) :
+        \ get(a:source_table, a:source_name, {})
   if empty(source)
     call unite#print_error('source "' . a:source_name . '" is not found.')
     return {}
@@ -436,19 +437,26 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
   " Filtering nop action.
   return filter(action_table, 'v:key !=# "nop"')
 endfunction"}}}
-function! unite#get_alias_table(source_name, kind)"{{{
+function! unite#get_alias_table(source_name, kind, ...)"{{{
+  let source_table = get(a:000, 0, {})
   let alias_table = {}
   for kind_name in type(a:kind) == type([]) ?
         \ a:kind : [a:kind]
     call extend(alias_table,
-          \ s:get_alias_table(a:source_name, kind_name))
+          \ s:get_alias_table(a:source_name, kind_name, source_table))
   endfor
 
   return alias_table
 endfunction"}}}
-function! s:get_alias_table(source_name, kind_name)"{{{
+function! s:get_alias_table(source_name, kind_name, source_table)"{{{
   let kind = unite#get_kinds(a:kind_name)
-  let source = unite#get_sources(a:source_name)
+  let source = empty(a:source_table) ?
+        \ unite#get_sources(a:source_name) :
+        \ get(a:source_table, a:source_name, {})
+  if empty(source)
+    call unite#print_error('source "' . a:source_name . '" is not found.')
+    return {}
+  endif
 
   let table = kind.alias_table
 
@@ -1327,6 +1335,12 @@ function! s:initialize_sources(...)"{{{
 
     if !has_key(source, 'alias_table')
       let source.alias_table = {}
+    elseif !empty(source.alias_table)
+      " Check if '*' alias_table?
+      if type(values(source.alias_table)[0]) == type('')
+        " Syntax sugar.
+        let source.alias_table = { '*' : source.alias_table }
+      endif
     endif
     if !has_key(source, 'description')
       let source.description = ''
