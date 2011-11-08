@@ -307,6 +307,7 @@ A command of source				*:unite-sources-command*
 		Save session data from {session-name}.
 		If {session-name} is omitted, use |v:this_session| or
 		|g:unite_source_session_default_session_name| is used.
+		If session data is not found, will create it.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*unite-variables*
@@ -600,6 +601,12 @@ g:unite_source_session_options			*g:unite_source_session_options*
 		Refer to 'sessionoptions'.
 		
 		Default value is "blank,buffers,curdir,folds,help,tabpages,winsize".
+
+g:unite_source_session_enable_auto_save		*g:unite_source_session_enable_auto_save*
+		Enable auto save session.
+		Note: This option must be set in .vimrc.
+		
+		Default value is "0".
 
 KINDS VARIABLES					*unite-kinds-variables*
 
@@ -2046,8 +2053,9 @@ EXAMPLES					*unite-examples*
 	
 	" For unite-session.
 	" Save session automatically.
-	"autocmd VimLeavePre,CursorHold * if v:this_session != '' | UniteSessionSave | endif
-	
+	"let g:unite_source_session_enable_auto_save = 1
+	" Load session automatically.
+	"autocmd VimEnter * UniteSessionLoad
 <
 ==============================================================================
 USER DEFINED SOURCES				*unite-user-sources*
@@ -2057,6 +2065,10 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-11-08
+- Added g:unite_source_session_enable_auto_save.
+- Improved automatically session.
 
 2011-11-07
 - Added session source.

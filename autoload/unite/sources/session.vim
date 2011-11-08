@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: session.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Nov 2011.
+" Last Modified: 08 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,7 +54,7 @@ function! unite#sources#session#_save(filename)"{{{
   let save_session_options = &sessionoptions
   let &sessionoptions = g:unite_source_session_options
 
-  execute 'silent mksession! ' . filename
+  execute 'silent mksession!' filename
 
   let &sessionoptions = save_session_options
 
@@ -98,10 +98,28 @@ function! unite#sources#session#_load(filename)"{{{
 
   let filename = s:get_session_path(a:filename)
   if !filereadable(filename)
-    echohl WarningMsg | echomsg a:filename  . ' is not found.' | echohl None
+    call unite#sources#session#_save(filename)
+    return
   endif
 
-  execute 'silent! source' filename
+  try
+    set eventignore=all
+    " Delete all buffers.
+    execute 'silent! 1,' . bufnr('$') . 'bwipeout!'
+    let bufnr = bufnr('%')
+    execute 'silent! source' filename
+    execute 'silent! bwipeout!' bufnr
+  finally
+    set eventignore=
+    doautoall BufRead
+    doautoall FileType
+    doautoall BufEnter
+    doautoall BufWinEnter
+    doautoall TabEnter
+    doautoall SessionLoadPost
+  endtry
+  setlocal nomodified
+  " execute 'silent! source' filename
 
   for tabnr in range(1, tabpagenr('$'))
     if v:version >= 703 && type(gettabvar(tabnr, 'unite_buffer_session')) == type([])

@@ -306,6 +306,7 @@ sourceのコマンド				*unite-sources-commands*
 		{session-name}からセッションデータを読み出す。
 		もし{session-name}が省略された場合、|v:this_session|か
 		|g:unite_source_session_default_session_name|を使用する。
+		セッションデータが存在しない場合、自動的に作成する。
 
 ------------------------------------------------------------------------------
 変数						*unite-variables*
@@ -600,7 +601,13 @@ g:unite_source_session_options			*g:unite_source_session_options*
 		内部で|:mksession|を実行するときに保存するオプション。
 		設定できる値は'sessionoptions'を参照せよ。
 		
-		Default value is "blank,buffers,curdir,folds,help,tabpages,winsize".
+		初期値は"blank,buffers,curdir,folds,help,tabpages,winsize"である。
+
+g:unite_source_session_enable_auto_save		*g:unite_source_session_enable_auto_save*
+		セッションを自動的に保存するかどうか指定する。
+		Note: この変数は.vimrc内でセットされなければならない。
+		
+		初期値は"0"である。
 
 kindの変数					*unite-kinds-variables*
 
@@ -2351,8 +2358,9 @@ description		文字列		(任意)
 	
 	" For unite-session.
 	" Save session automatically.
-	"autocmd VimLeavePre,CursorHold * if v:this_session != '' | UniteSessionSave | endif
-	
+	"let g:unite_source_session_enable_auto_save = 1
+	" Load session automatically.
+	"autocmd VimEnter * UniteSessionLoad
 <
 ==============================================================================
 ユーザーのsource				*unite-user-sources*
