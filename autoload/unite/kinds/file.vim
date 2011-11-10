@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2011.
+" Last Modified: 10 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -178,31 +178,22 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
       let dest_dir .= '/'
     endif
 
-    let dest_drive = matchstr(dest_dir, '^\a\+\ze:')
-    let overwrite_method = ''
-    let is_reset_method = 1
+    let candidates = []
     for candidate in a:candidates
       let filename = candidate.action__path
 
-      if isdirectory(filename) && unite#util#is_win()
+      if a:kind_name ==# 'file' &&
+            \ isdirectory(filename) && unite#util#is_win()
             \ && matchstr(filename, '^\a\+\ze:') !=? dest_drive
         call s:move_to_other_drive(candidate, filename)
-        continue
-      endif
-
-      " Overwrite check.
-      let [dest_filename, overwrite_method, is_reset_method, is_continue] =
-            \ s:check_over_write(dest_dir, filename, overwrite_method,
-            \                    is_reset_method)
-      if is_continue
-        continue
-      endif
-
-      if s:external('move', dest_filename, [filename])
-        call unite#print_error('Failed file move: ' . filename)
+      else
+        call add(candidates, candidate)
       endif
     endfor
+
+    call unite#kinds#file#do_action(candidates, dest_dir, 'move', '')
   finally
+
     if vimfiler_current_dir != ''
       lcd `=current_dir`
     endif
@@ -254,30 +245,17 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
       let dest_dir .= '/'
     endif
 
-    let overwrite_method = ''
-    let is_reset_method = 1
-    for candidate in a:candidates
-      " Overwrite check.
-      let filename = candidate.action__path
-      let dest_filename = dest_dir . fnamemodify(filename, ':t')
-      " Overwrite check.
-      let [dest_filename, overwrite_method, is_reset_method, is_continue] =
-            \ s:check_over_write(dest_dir, filename, overwrite_method,
-            \                    is_reset_method)
-      if is_continue
-        continue
-      endif
-
-      if s:external(isdirectory(filename) ?
-            \ 'copy_directory' : 'copy_file', dest_filename, [filename])
-        call unite#print_error('Failed file copy: ' . filename)
-      endif
-    endfor
+    call unite#kinds#file#do_action(a:candidates, dest_dir, 'copy',
+          \ s:SID_PREFIX().'check_copy_func')
   finally
     if vimfiler_current_dir != ''
       lcd `=current_dir`
     endif
   endtry
+endfunction"}}}
+function! s:check_copy_func(filename)"{{{
+  return isdirectory(a:filename) ?
+        \ 'copy_directory' : 'copy_file'
 endfunction"}}}
 
 let s:kind.action_table.copy = deepcopy(s:kind.action_table.vimfiler__copy)
@@ -308,19 +286,17 @@ function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
       return 1
     endif
 
-    " Execute force delete.
-    for candidate in a:candidates
-      let filename = candidate.action__path
-      if s:external(isdirectory(filename) ?
-            \ 'delete_directory' : 'delete_file', '', [filename])
-        call unite#print_error('Failed file delete: ' . filename)
-      endif
-    endfor
+    call unite#kinds#file#do_action(a:candidates, '', 'delete_func',
+          \ s:SID_PREFIX().'check_delete_func')
   finally
     if vimfiler_current_dir != ''
       lcd `=current_dir`
     endif
   endtry
+endfunction"}}}
+function! s:check_delete_func(filename)"{{{
+  return isdirectory(a:filename) ?
+        \ 'delete_directory' : 'delete_file'
 endfunction"}}}
 
 let s:kind.action_table.vimfiler__rename = {
@@ -653,6 +629,57 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
 
   return [dest_filename, overwrite_method, is_reset_method, is_continue]
 endfunction"}}}
+
+function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_func)"{{{
+  let overwrite_method = ''
+  let is_reset_method = 1
+
+  let cnt = 1
+  let max = len(a:candidates)
+
+  echo ''
+  redraw
+
+  for candidate in a:candidates
+    let filename = candidate.action__path
+
+    if a:action_name == 'move' || a:action_name == 'copy'
+      " Overwrite check.
+      let [dest_filename, overwrite_method, is_reset_method, is_continue] =
+            \ s:check_over_write(a:dest_dir, filename, overwrite_method,
+            \                    is_reset_method)
+      if is_continue
+        let cnt += 1
+        continue
+      endif
+    else
+      let dest_filename = ''
+    endif
+
+    " Print progress.
+    echo printf('%d%% %s %s%s',
+          \ ((cnt*100) / max), a:action_name,
+          \ (dest_filename == '' ? '' : dest_filename  . ' -> '),
+          \ filename)
+    redraw
+
+    let command = a:command_func == '' ?
+          \ a:action_name : call(a:command_func, [filename])
+    if s:external(command, dest_filename, [filename])
+      call unite#print_error(printf('Failed file %s: %s',
+            \ a:action_name, filename))
+    endif
+
+    let cnt += 1
+  endfor
+
+  echo ''
+  redraw
+endfunction"}}}
+
+function! s:SID_PREFIX()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
