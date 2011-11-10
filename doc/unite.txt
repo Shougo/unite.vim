@@ -2068,6 +2068,7 @@ CHANGELOG					*unite-changelog*
 
 2011-11-10
 - Improved file operations.
+- Improved session load.
 
 2011-11-08
 - Added g:unite_source_session_enable_auto_save.
