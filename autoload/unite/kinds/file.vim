@@ -182,8 +182,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
     for candidate in a:candidates
       let filename = candidate.action__path
 
-      if a:kind_name ==# 'file' &&
-            \ isdirectory(filename) && unite#util#is_win()
+      if isdirectory(filename) && unite#util#is_win()
             \ && matchstr(filename, '^\a\+\ze:') !=? dest_drive
         call s:move_to_other_drive(candidate, filename)
       else
