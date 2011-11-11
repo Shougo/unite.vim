@@ -2066,6 +2066,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-11-11
+- Fixed :VimShellPop bug.
+
 2011-11-10
 - Improved file operations.
 - Improved session load.

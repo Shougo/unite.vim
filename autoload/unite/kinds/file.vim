@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Nov 2011.
+" Last Modified: 11 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -380,29 +380,19 @@ let s:kind.action_table.vimfiler__shell = {
 function! s:kind.action_table.vimfiler__shell.func(candidate)"{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
-  if vimfiler_current_dir != ''
-    let current_dir = getcwd()
-    lcd `=vimfiler_current_dir`
+
+  if !exists(':VimShellPop')
+    shell
+    return
   endif
 
-  try
-    if !exists(':VimShellPop')
-      shell
-      return
-    endif
+  VimShellPop `=a:candidate.action__directory`
 
-    VimShellPop `=a:candidate.action__directory`
-
-    let files = unite#get_context().vimfiler__files
-    if !empty(files)
-      call setline(line('.'), getline('.') . ' ' . join(files))
-      normal! l
-    endif
-  finally
-    if vimfiler_current_dir != ''
-      lcd `=current_dir`
-    endif
-  endtry
+  let files = unite#get_context().vimfiler__files
+  if !empty(files)
+    call setline(line('.'), getline('.') . ' ' . join(files))
+    normal! l
+  endif
 endfunction"}}}
 
 let s:kind.action_table.vimfiler__shellcmd = {
