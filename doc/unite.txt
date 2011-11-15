@@ -2072,6 +2072,7 @@ CHANGELOG					*unite-changelog*
 
 2011-11-15
 - Added -create option.
+- Improved buffer name behavior.
 
 2011-11-11
 - Fixed :VimShellPop bug.

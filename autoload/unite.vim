@@ -72,6 +72,9 @@ function! unite#set_buffer_name_option(buffer_name, option_name, value)"{{{
 endfunction"}}}
 function! unite#get_buffer_name_option(buffer_name, option_name)"{{{
   let buffer_name = matchstr(a:buffer_name, '^\S\+')
+  if buffer_name =~ '@\d\+$'
+    let buffer_name = substitute(buffer_name, '@\d\+$', '', '')
+  endif
   if buffer_name == ''
     let buffer_name = 'default'
   endif
@@ -1736,22 +1739,22 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.buffer_options =
         \ s:initialize_buffer_name_options(unite.buffer_name)
 
-  " Create new real buffer name.
-  let postfix = ' - 1'
+  " Create new buffer name.
+  let postfix = '@1'
   let cnt = 1
   let tabnr = 1
   while tabnr <= tabpagenr('$')
     let buflist = map(tabpagebuflist(tabnr), 'bufname(v:val)')
     if index(buflist, buffer_name.postfix) >= 0
       let cnt += 1
-      let postfix = ' - ' . cnt
+      let postfix = '@' . cnt
     endif
 
     let tabnr += 1
   endwhile
-  let buffer_name .= postfix
+  let unite.buffer_name .= postfix
 
-  let unite.real_buffer_name = buffer_name
+  let unite.real_buffer_name = buffer_name . postfix
   let unite.prompt = context.prompt
   let unite.input = context.input
   let unite.last_input = context.input
