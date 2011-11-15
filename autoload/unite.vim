@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Nov 2011.
+" Last Modified: 15 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -235,7 +235,7 @@ let s:unite_options = [
       \ '-winwidth=', '-winheight=',
       \ '-immediately', '-auto-preview', '-complete',
       \ '-vertical', '-horizontal', '-direction=', '-no-split',
-      \ '-verbose', '-auto-resize', '-toggle', '-quick-match'
+      \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
       \]
 "}}}
 
@@ -1115,6 +1115,9 @@ function! s:initialize_context(context)"{{{
   if !has_key(a:context, 'quick_match')
     let a:context.quick_match = 0
   endif
+  if !has_key(a:context, 'create')
+    let a:context.create = 0
+  endif
   let a:context.is_redraw = 0
   let a:context.is_changed = 0
 
@@ -1688,21 +1691,23 @@ function! s:initialize_current_unite(sources, context)"{{{
     let context.input = unite#get_input()
   endif
 
-  " Search unite buffer.
-  let winnr = 1
-  while winnr <= winnr('$')
-    if getbufvar(winbufnr(winnr), '&filetype') ==# 'unite'
-      let buffer_context = getbufvar(winbufnr(winnr), 'unite').context
-      if buffer_context.buffer_name ==# context.buffer_name
-        " Quit unite buffer.
-        execute winnr 'wincmd w'
-        call unite#force_quit_session()
-        break
+  " Quit previous unite buffer.
+  if !context.create
+    let winnr = 1
+    while winnr <= winnr('$')
+      if getbufvar(winbufnr(winnr), '&filetype') ==# 'unite'
+        let buffer_context = getbufvar(winbufnr(winnr), 'unite').context
+        if buffer_context.buffer_name ==# context.buffer_name
+          " Quit unite buffer.
+          execute winnr 'wincmd w'
+          call unite#force_quit_session()
+          break
+        endif
       endif
-    endif
 
-    let winnr += 1
-  endwhile
+      let winnr += 1
+    endwhile
+  endif
 
   " The current buffer is initialized.
   let buffer_name = unite#is_win() ? '[unite]' : '*unite*'
@@ -1730,6 +1735,22 @@ function! s:initialize_current_unite(sources, context)"{{{
         \ 'default' : context.buffer_name
   let unite.buffer_options =
         \ s:initialize_buffer_name_options(unite.buffer_name)
+
+  " Create new real buffer name.
+  let postfix = ' - 1'
+  let cnt = 1
+  let tabnr = 1
+  while tabnr <= tabpagenr('$')
+    let buflist = map(tabpagebuflist(tabnr), 'bufname(v:val)')
+    if index(buflist, buffer_name.postfix) >= 0
+      let cnt += 1
+      let postfix = ' - ' . cnt
+    endif
+
+    let tabnr += 1
+  endwhile
+  let buffer_name .= postfix
+
   let unite.real_buffer_name = buffer_name
   let unite.prompt = context.prompt
   let unite.input = context.input

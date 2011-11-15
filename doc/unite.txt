@@ -272,6 +272,10 @@ COMMANDS 					*unite-commands*
 		-quick-match
 		Start with quick match mode.
 
+						*unite-options-create*
+		-create
+		Create new unite buffer.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
@@ -2065,6 +2069,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-11-15
+- Added -create option.
 
 2011-11-11
 - Fixed :VimShellPop bug.

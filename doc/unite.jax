@@ -264,6 +264,10 @@ http://www.ustream.tv/recorded/11240673
 		-quick-match
 		クイックマッチモードで開始する。
 
+						*unite-options-create*
+		-create
+		既に開いているuniteバッファは再利用せず、新しく生成する。
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。
