@@ -157,7 +157,7 @@ function! s:source.gather_candidates(args, context)"{{{
   let sessions = split(glob(g:unite_source_session_path.'/*'), '\n')
 
   let candidates = map(copy(sessions), "{
-        \ 'word' : fnamemodify(v:val, ':t:r'),
+        \ 'word' : fnamemodify(v:val, ':t'),
         \ 'kind' : 'file',
         \ 'action__path' : v:val,
         \ 'action__directory' : unite#util#path2directory(v:val),
