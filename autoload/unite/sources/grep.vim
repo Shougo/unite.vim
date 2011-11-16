@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 21 Sep 2011.
+" Last Modified: 16 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -75,26 +75,28 @@ let s:grep_source = {
       \ }
 
 function! s:grep_source.hooks.on_init(args, context) "{{{
-  let target  = get(a:args, 0, '')
-  if type(target) != type([])
-    if target == ''
-      let target = input('Target: ', '**', 'file')
-    endif
-
-    if target == '%' || target == '#'
-      let target = unite#util#escape_file_searching(bufname(target))
-    elseif target ==# '$buffers'
-      let target = join(map(filter(range(1, bufnr('$')), 'buflisted(v:val)'),
-            \ 'unite#util#escape_file_searching(bufname(v:val))'))
-    elseif target == '**'
-      " Optimized.
-      let target = '* ' . g:unite_source_grep_recursive_opt
-    endif
-
-    let a:context.source__target = [target]
+  if type(get(a:args, 0, '')) == type([])
+    let default = join(get(a:args, 0, ''))
   else
-    let a:context.source__target = target
+    let default = get(a:args, 0, '')
   endif
+  if default == ''
+    let default = '**'
+  endif
+
+  let target = input('Target: ', default, 'file')
+
+  if target == '%' || target == '#'
+    let target = unite#util#escape_file_searching(bufname(target))
+  elseif target ==# '$buffers'
+    let target = join(map(filter(range(1, bufnr('$')), 'buflisted(v:val)'),
+          \ 'unite#util#escape_file_searching(bufname(v:val))'))
+  elseif target == '**'
+    " Optimized.
+    let target = '* ' . g:unite_source_grep_recursive_opt
+  endif
+
+  let a:context.source__target = [target]
 
   let a:context.source__extra_opts = get(a:args, 1, '')
 

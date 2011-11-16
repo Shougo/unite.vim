@@ -2072,6 +2072,7 @@ CHANGELOG					*unite-changelog*
 
 2011-11-16
 - Fixed find source.
+- Fixed grep source.
 
 2011-11-15
 - Added -create option.
