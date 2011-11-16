@@ -1304,6 +1304,9 @@ find		Nominates "find" command output as candidates.
 
 		Note: This source requires vimproc.  Please install.
 		http://github.com/Shougo/vimproc/tree/master
+		
+		Note: Windows "find" command is not supported.
+		Please install UNIX Tools find for Windows.
 
 		Source arguments:
 		1. the target directory.
