@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: find.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 21 Sep 2011.
+" Last Modified: 16 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,8 +35,8 @@ let s:action_find = {
   \   'is_quit': 1,
   \   'is_invalidate_cache': 1,
   \ }
-function! s:action_find.func(candidates) "{{{
-  call unite#start([['find', 'v:val.action__directory']])
+function! s:action_find.func(candidate) "{{{
+  call unite#start([['find', a:candidate.action__directory]])
 endfunction "}}}
 if executable(g:unite_source_find_command) && unite#util#has_vimproc()
   call unite#custom_action('file,buffer', 'find', s:action_find)
@@ -104,7 +104,7 @@ function! s:find_source.async_gather_candidates(args, context) "{{{
     let a:context.is_async = 0
   endif
 
-  let candidates = map(stdout.read_lines(-1, 300),
+  let candidates = map(filter(stdout.read_lines(-1, 300), 'v:val != ""'),
         \ 'fnamemodify(iconv(v:val, &termencoding, &encoding), ":p")')
 
   if isdirectory(a:context.source__target)

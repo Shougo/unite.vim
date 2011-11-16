@@ -2070,6 +2070,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-11-16
+- Fixed find source.
+
 2011-11-15
 - Added -create option.
 - Improved buffer name behavior.
