@@ -63,7 +63,10 @@ function! s:find_source.hooks.on_init(args, context) "{{{
 
   let a:context.source__input = get(a:args, 1, '')
   if a:context.source__input == ''
-    let a:context.source__input = input('Command-line: ')
+    echo "Please input command-line(quote is needed) Ex: -name '*.vim'"
+    let a:context.source__input = input(
+          \ printf('%s %s ', g:unite_source_find_command,
+          \   a:context.source__target))
   endif
 endfunction"}}}
 function! s:find_source.hooks.on_close(args, context) "{{{
