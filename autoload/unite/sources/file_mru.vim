@@ -164,13 +164,12 @@ function! s:is_exists_path(path)  "{{{
   return getftype(a:path) != ''
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
-  let path = unite#util#substitute_path_separator(a:list[0])
   return {
-        \ 'word' : path,
-        \ 'kind' : (isdirectory(path) ? 'directory' : 'file'),
+        \ 'word' : a:list[0],
+        \ 'kind' : (isdirectory(a:list[0]) ? 'directory' : 'file'),
         \ 'source__time' : a:list[1],
-        \ 'action__path' : path,
-        \ 'action__directory' : unite#util#path2directory(path),
+        \ 'action__path' : a:list[0],
+        \ 'action__directory' : unite#util#path2directory(a:list[0]),
         \   }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{

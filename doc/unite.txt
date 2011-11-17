@@ -2075,6 +2075,7 @@ CHANGELOG					*unite-changelog*
 
 2011-11-17
 - Fixed file_mru filter.
+- Improved s:convert2dictionary().
 
 2011-11-16
 - Fixed find source.
