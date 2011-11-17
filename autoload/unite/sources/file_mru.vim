@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Nov 2011.
+" Last Modified: 17 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -67,7 +67,7 @@ function! unite#sources#file_mru#_append()"{{{
   let save_ignorecase = &ignorecase
   let &ignorecase = unite#is_win()
 
-  call insert(filter(s:mru_files, 'v:val.action__path != path'),
+  call insert(filter(s:mru_files, 'v:val.action__path !=# path'),
   \           s:convert2dictionary([path, localtime()]))
 
   let &ignorecase = save_ignorecase
