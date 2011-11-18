@@ -1498,6 +1498,7 @@ function! s:initialize_vimfiler_candidates(candidates)"{{{
     if !has_key(candidate, 'vimfiler__filetype')
       let candidate.vimfiler__filetype = vimfiler#get_filetype(candidate)
     endif
+    let candidate.vimfiler__is_marked = 0
   endfor
 
   return a:candidates
