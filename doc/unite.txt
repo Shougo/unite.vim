@@ -2073,6 +2073,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-11-18
+- Fixed mark error.
+
 2011-11-17
 - Fixed file_mru filter.
 - Improved s:convert2dictionary().

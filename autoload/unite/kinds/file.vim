@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Nov 2011.
+" Last Modified: 18 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -601,7 +601,7 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
       let is_continue = 1
     elseif overwrite_method =~? '^r'
       let filename =
-            \ input(printf('New name: %s -> ', filename), filename)
+            \ input(printf('New name: %s -> ', filename), filename, 'file')
     endif
 
     if is_reset_method
