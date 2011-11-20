@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Nov 2011.
+" Last Modified: 20 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1135,7 +1135,7 @@ function! unite#force_quit_session()  "{{{
 
   let context = unite#get_context()
   if context.temporary
-    call s:resume_from_temporary(context)
+    call unite#resume_from_temporary(context)
   endif
 endfunction"}}}
 function! unite#quit_session()  "{{{
@@ -1143,7 +1143,7 @@ function! unite#quit_session()  "{{{
 
   let context = unite#get_context()
   if context.temporary
-    call s:resume_from_temporary(context)
+    call unite#resume_from_temporary(context)
   endif
 endfunction"}}}
 function! s:quit_session(is_force)  "{{{
@@ -1207,7 +1207,7 @@ function! s:quit_session(is_force)  "{{{
     redraw!
   endif
 endfunction"}}}
-function! s:resume_from_temporary(context)  "{{{
+function! unite#resume_from_temporary(context)  "{{{
   if empty(a:context.old_buffer_info)
     return
   endif

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Nov 2011.
+" Last Modified: 20 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,15 +49,13 @@ let s:source_rec = {
       \ }
 
 function! s:source_rec.gather_candidates(args, context)"{{{
-  let directory = s:get_path(a:args, a:context)
+  let directory = a:context.source__directory
 
   call unite#print_message('[file_rec] directory: ' . directory)
 
   call s:init_continuation(a:context, directory)
 
   let continuation = s:continuation[directory]
-
-  let a:context.source__directory = directory
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
@@ -105,6 +103,9 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
   return candidates
 endfunction"}}}
 
+function! s:source_rec.hooks.on_init(args, context)"{{{
+  let a:context.source__directory = s:get_path(a:args, a:context)
+endfunction"}}}
 function! s:source_rec.hooks.on_post_filter(args, context)"{{{
   call s:on_post_filter(a:args, a:context)
 endfunction"}}}

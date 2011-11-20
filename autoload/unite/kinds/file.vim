@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Nov 2011.
+" Last Modified: 20 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -123,8 +123,20 @@ let s:kind.action_table.mkdir = {
       \ 'is_invalidate_cache' : 1,
       \ }
 function! s:kind.action_table.mkdir.func(candidate)"{{{
-  if !filereadable(a:candidate.action__path)
-    call mkdir(iconv(a:candidate.action__path, &encoding, &termencoding), 'p')
+  let dirname = input('New directory name: ', a:candidate.action__path, 'dir')
+
+  if dirname == ''
+    redraw
+    echo 'Canceled.'
+    return
+  endif
+
+  if &termencoding != '' && &termencoding != &encoding
+    let dirname = iconv(dirname, &encoding, &termencoding)
+  endif
+
+  if !filereadable(dirname)
+    call mkdir(dirname, 'p')
   endif
 endfunction"}}}
 

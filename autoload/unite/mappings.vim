@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Nov 2011.
+" Last Modified: 20 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -278,11 +278,13 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     endfor
   endif
 
-  let action_tables = s:get_action_table(a:action_name, candidates, sources)
+  let action_tables = s:get_action_table(
+        \ a:action_name, candidates, sources)
 
   if !empty(new_context)
     " Set new context.
-    let new_context = extend(deepcopy(unite#get_context()), new_context)
+    let new_context = extend(
+          \ deepcopy(unite#get_context()), new_context)
     let old_context = unite#set_context(new_context)
   endif
 
@@ -767,7 +769,8 @@ function! s:source_action.gather_candidates(args, context)"{{{
         \ '"[action] candidates: ".v:val.abbr."(".v:val.source.")"'))
 
   " Process Alias.
-  let actions = s:get_actions(candidates, unite#get_context().source__sources)
+  let actions = s:get_actions(candidates,
+        \ unite#get_context().source__sources)
 
   " Uniq.
   let uniq_actions = {}
@@ -779,11 +782,15 @@ function! s:source_action.gather_candidates(args, context)"{{{
 
   let max = max(map(values(actions), 'len(v:val.name)'))
 
+  let sources = map(copy(candidates), 'v:val.source')
+
   return sort(map(filter(values(uniq_actions), 'v:val.is_listed'), '{
-        \   "word": v:val.name,
-        \   "abbr": printf("%-' . max . 's -- %s", v:val.name, v:val.description),
-        \   "source__candidates": candidates,
-        \   "action__action": v:val,
+        \   "word" : v:val.name,
+        \   "abbr" : printf("%-' . max . 's -- %s",
+        \       v:val.name, v:val.description),
+        \   "source__candidates" : candidates,
+        \   "action__action" : v:val,
+        \   "source__sources" : sources,
         \ }'), 's:compare_word')
 endfunction"}}}
 
@@ -798,9 +805,26 @@ let s:source_action.action_table.do = {
       \ 'description' : 'do action',
       \ }
 function! s:source_action.action_table.do.func(candidate)"{{{
+  let context = unite#get_context()
   call unite#mappings#do_action(a:candidate.word,
    \ a:candidate.source__candidates, {}, 1,
-   \ unite#get_context().source__sources)
+   \ context.source__sources)
+
+  " Check quit flag.
+  if !a:candidate.action__action.is_quit
+        \ && context.temporary
+    call unite#resume_from_temporary(context)
+
+    " Check invalidate cache flag.
+    if a:candidate.action__action.is_invalidate_cache
+      for source_name in a:candidate.source__sources
+        call unite#invalidate_cache(source_name)
+      endfor
+
+      call unite#force_redraw()
+      normal! zb
+    endif
+  endif
 endfunction"}}}
 "}}}
 "}}}

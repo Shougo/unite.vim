@@ -2075,6 +2075,7 @@ CHANGELOG					*unite-changelog*
 
 2011-11-20
 - Improved history/yank and register source.
+- Fixed mapping and file_rec source.
 
 2011-11-18
 - Fixed mark error.
