@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: register.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Nov 2011.
+" Last Modified: 20 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,6 +58,7 @@ function! s:source.gather_candidates(args, context)"{{{
           \ join(readfile(g:yanktmp_file, "b"), "\n") :
           \ getreg(reg, 1)
     if register != ''
+      let register = register[: max_width * 2]
       let abbr = substitute(unite#util#truncate(register, max_width),
             \ '\t', '>---', 'g')
 
