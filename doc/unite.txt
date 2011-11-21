@@ -2095,6 +2095,7 @@ CHANGELOG					*unite-changelog*
 
 2011-11-21
 - Added g:unite_source_find_ignore_pattern and g:unite_source_grep_ignore_pattern options.
+- Fixed unite history/yank and register sources.
 - Ver.3.1 development is started.
 
 ------------------------------------------------------------------------------
