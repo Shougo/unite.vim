@@ -2093,6 +2093,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-11-22
+- Improved line source.
+
 2011-11-21
 - Added g:unite_source_find_ignore_pattern and g:unite_source_grep_ignore_pattern options.
 - Fixed unite history/yank and register sources.

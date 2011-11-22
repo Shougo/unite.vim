@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 22 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -128,7 +128,8 @@ endif
 
 " Misc.
 function! s:jump(candidate, is_highlight)"{{{
-  if !has_key(a:candidate, 'action__line') && !has_key(a:candidate, 'action__pattern')
+  if !has_key(a:candidate, 'action__line')
+        \ && !has_key(a:candidate, 'action__pattern')
     " Move to head.
     call cursor(1, 1)
     return
