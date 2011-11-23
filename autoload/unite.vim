@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Nov 2011.
+" Last Modified: 23 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,18 +33,18 @@ function! unite#version()"{{{
 endfunction"}}}
 
 " User functions."{{{
-function! unite#get_substitute_pattern(buffer_name)"{{{
-  let buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
+function! unite#get_substitute_pattern(profile_name)"{{{
+  let profile_name = (a:profile_name == '' ? 'default' : a:profile_name)
 
-  return has_key(s:buffer_name_options, buffer_name) ?
-        \ s:buffer_name_options[buffer_name].substitute_patterns : ''
+  return has_key(s:profiles, profile_name) ?
+        \ s:profiles[profile_name].substitute_patterns : ''
 endfunction"}}}
 function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
   let buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
 
   for key in split(buffer_name, ',')
-    let substitute_patterns = has_key(s:buffer_name_options, key) ?
-          \ unite#get_buffer_name_option(key, 'substitute_patterns') : {}
+    let substitute_patterns = has_key(s:profiles, key) ?
+          \ unite#get_profile(key, 'substitute_patterns') : {}
 
     if has_key(substitute_patterns, a:pattern)
           \ && a:pattern == ''
@@ -56,30 +56,34 @@ function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
             \ }
     endif
 
-    call unite#set_buffer_name_option(key, 'substitute_patterns', substitute_patterns)
+    call unite#set_profile(key, 'substitute_patterns', substitute_patterns)
   endfor
 endfunction"}}}
 function! unite#set_buffer_name_option(buffer_name, option_name, value)"{{{
-  let buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
-
-  for key in split(buffer_name, ',')
-    if !has_key(s:buffer_name_options, key)
-      let s:buffer_name_options[key] = {}
-    endif
-
-    let s:buffer_name_options[key][a:option_name] = a:value
-  endfor
+  return unite#set_profile(a:buffer_name, a:option_name, a:option_name, a:value)
 endfunction"}}}
 function! unite#get_buffer_name_option(buffer_name, option_name)"{{{
-  let buffer_name = matchstr(a:buffer_name, '^\S\+')
-  if buffer_name =~ '@\d\+$'
-    let buffer_name = substitute(buffer_name, '@\d\+$', '', '')
-  endif
-  if buffer_name == ''
-    let buffer_name = 'default'
+  return unite#get_profile(a:buffer_name, a:option_name)
+endfunction"}}}
+function! unite#set_profile(profile_name, option_name, value)"{{{
+  let profile_name =
+        \ (a:profile_name == '' ? 'default' : a:profile_name)
+
+  for key in split(profile_name, ',')
+    if !has_key(s:profiles, key)
+      let s:profiles[key] = {}
+    endif
+
+    let s:profiles[key][a:option_name] = a:value
+  endfor
+endfunction"}}}
+function! unite#get_profile(profile_name, option_name)"{{{
+  let profile_name = matchstr(a:profile_name, '^\S\+')
+  if profile_name == ''
+    let profile_name = 'default'
   endif
 
-  return s:buffer_name_options[buffer_name][a:option_name]
+  return s:profiles[profile_name][a:option_name]
 endfunction"}}}
 function! unite#custom_filters(source_name, filters)"{{{
   let filters = type(a:filters) == type([]) ?
@@ -222,18 +226,18 @@ let s:custom.filters = {}
 let s:custom.source = {}
 let s:custom.max_candidates = {}
 
-let s:buffer_name_options = {}
+let s:profiles = {}
 call unite#set_substitute_pattern('files', '^\~',
       \ substitute(unite#util#substitute_path_separator($HOME),
       \ ' ', '\\\\ ', 'g'), -100)
 call unite#set_substitute_pattern('files', '[^~.*]\ze/', '\0*', 100)
 call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
 call unite#set_substitute_pattern('files', '\.', '*.', 1000)
-call unite#set_buffer_name_option('files', 'smartcase', 0)
-call unite#set_buffer_name_option('files', 'ignorecase', 1)
+call unite#set_profile('files', 'smartcase', 0)
+call unite#set_profile('files', 'ignorecase', 1)
 
 let s:unite_options = [
-      \ '-buffer-name=', '-input=', '-prompt=',
+      \ '-buffer-name=', '-profile-name=', '-input=', '-prompt=',
       \ '-default-action=', '-start-insert','-no-start-insert', '-no-quit',
       \ '-winwidth=', '-winheight=',
       \ '-immediately', '-auto-preview', '-complete',
@@ -1069,6 +1073,9 @@ function! s:initialize_context(context)"{{{
   if !has_key(a:context, 'buffer_name')
     let a:context.buffer_name = 'default'
   endif
+  if !has_key(a:context, 'profile_name')
+    let a:context.profile_name = a:context.buffer_name
+  endif
   if !has_key(a:context, 'prompt')
     let a:context.prompt = '> '
   endif
@@ -1159,8 +1166,8 @@ function! s:quit_session(is_force)  "{{{
   let key = unite#loaded_source_names_string()
 
   " Save position.
-  let positions = unite#get_buffer_name_option(
-        \ unite.buffer_name, 'unite__save_pos')
+  let positions = unite#get_profile(
+        \ unite.profile_name, 'unite__save_pos')
   let positions[key] = {
         \ 'pos' : getpos('.'),
         \ 'candidate' : unite#get_current_candidate(),
@@ -1168,8 +1175,8 @@ function! s:quit_session(is_force)  "{{{
 
   if context.input != ''
     " Save input.
-    let inputs = unite#get_buffer_name_option(
-          \ unite.buffer_name, 'unite__inputs')
+    let inputs = unite#get_profile(
+          \ unite.profile_name, 'unite__inputs')
     if !has_key(inputs, key)
       let inputs[key] = []
     endif
@@ -1393,13 +1400,11 @@ endfunction"}}}
 function! s:initialize_filters()"{{{
   return extend(copy(s:static.filters), s:dynamic.filters)
 endfunction"}}}
-function! s:initialize_buffer_name_options(buffer_name)"{{{
-  let buffer_name = matchstr(a:buffer_name, '^\S\+')
-
-  if !has_key(s:buffer_name_options, buffer_name)
-    let s:buffer_name_options[buffer_name] = {}
+function! s:initialize_profile(profile_name)"{{{
+  if !has_key(s:profiles, a:profile_name)
+    let s:profiles[a:profile_name] = {}
   endif
-  let setting = s:buffer_name_options[buffer_name]
+  let setting = s:profiles[a:profile_name]
   if !has_key(setting, 'substitute_patterns')
     let setting.substitute_patterns = {}
   endif
@@ -1510,12 +1515,12 @@ function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
   " Save options.
   let ignorecase_save = &ignorecase
 
-  if unite#get_buffer_name_option(unite.buffer_name, 'smartcase')
+  if unite#get_profile(unite.profile_name, 'smartcase')
         \ && a:input =~ '\u'
     let &ignorecase = 0
   else
     let &ignorecase =
-          \ unite#get_buffer_name_option(unite.buffer_name, 'ignorecase')
+          \ unite#get_profile(unite.profile_name, 'ignorecase')
   endif
 
   let context = unite.context
@@ -1736,8 +1741,10 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.filters = s:initialize_filters()
   let unite.buffer_name = (context.buffer_name == '') ?
         \ 'default' : context.buffer_name
+  let unite.profile_name = (context.profile_name == '') ?
+        \ unite.buffer_name : context.profile_name
   let unite.buffer_options =
-        \ s:initialize_buffer_name_options(unite.buffer_name)
+        \ s:initialize_profile(unite.profile_name)
 
   " Create new buffer name.
   let postfix = '@1'
@@ -1768,8 +1775,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.is_finalized = 0
   let unite.is_enabled_max_candidates = 0
   let unite.previewd_buffer_list = []
-  let unite.post_filters = unite#get_buffer_name_option(
-        \ unite.buffer_name, 'filters')
+  let unite.post_filters = unite#get_profile(
+        \ unite.profile_name, 'filters')
 
   " Preview windows check.
   let unite.has_preview_window =
@@ -2210,7 +2217,7 @@ function! s:get_substitute_input(input)"{{{
 
   let unite = unite#get_current_unite()
   let substitute_patterns = reverse(unite#util#sort_by(
-        \ values(unite#get_buffer_name_option(unite.buffer_name,
+        \ values(unite#get_profile(unite.profile_name,
         \        'substitute_patterns')),
         \ 'v:val.priority'))
   if unite.input != '' && stridx(input, unite.input) == 0
@@ -2302,8 +2309,8 @@ function! s:init_cursor()"{{{
 
     startinsert!
   else
-    let positions = unite#get_buffer_name_option(
-          \ unite.buffer_name, 'unite__save_pos')
+    let positions = unite#get_profile(
+          \ unite.profile_name, 'unite__save_pos')
     let key = unite#loaded_source_names_string()
     let is_restore = has_key(positions, key)
     let candidate = unite#get_current_candidate()

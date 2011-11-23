@@ -1001,9 +1001,9 @@ unite#smart_map({narrow-map}, {select-map})			*unite#smart_map()*
 		inoremap <buffer><expr> ' unite#smart_map("'", unite#do_action('preview'))
 <
 unite#mappings#set_current_filters({filters})			*unite#mappings#set_current_filters()*
-		|unite#set_buffer_name_option()|で設定された、現在のuniteバッフ
-		ァのfilterを動的に変更する。以下のように、キーマッピングとして
-		呼び出すことも可能である。
+		|unite#set_profile()|で設定された、現在のuniteバッファのfilter
+		を動的に変更する。以下のように、キーマッピングとして呼び出すこ
+		とも可能である。
 >
   nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
         \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
@@ -1011,12 +1011,12 @@ unite#mappings#set_current_filters({filters})			*unite#mappings#set_current_filt
 unite#mappings#get_current_filters()				*unite#mappings#get_current_filters()*
 		現在のuniteバッファのfilterを取得する。
 
-unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
+unite#set_substitute_pattern({profile-name}, {pattern}, {subst} [, {priority}])
 						*unite#set_substitute_pattern()*
-		uniteのバッファ名{buffer-name}における絞込みテキストの置換パタ
-		ーンを指定する。{buffer-name}を""とすると、"default"となり、
+		uniteのバッファ名{profile-name}における絞込みテキストの置換パタ
+		ーンを指定する。{profile-name}を""とすると、"default"となり、
 		|:Unite|で-buffer-name=を省略したときに使われるbuffer-nameと同
-		じになる。{buffer-name}は","区切りで複数指定ができる。
+		じになる。{profile-name}は","区切りで複数指定ができる。
 		{pattern}は置換対象の正規表現、{subst}は置換する文字列である。
 		同じ{pattern}を複数回指定すると、設定は上書きされる。
 		{subst}を""とすると、{pattern}は無効化される。{priority}とは置
@@ -1033,7 +1033,7 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		上の設定は/を越えずに曖昧検索をするが、下の場合は/を越えて曖昧
 		検索することができる。
 		
-		初期値は次のように設定されていて、buffer_nameがfilesのバッファ
+		初期値は次のように設定されていて、profile_nameがfilesのバッファ
 		において、~を$HOME、/は部分マッチできるように、ワイルドカードを
 		付加するようになっている。
 >
@@ -1049,16 +1049,16 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		call unite#set_substitute_pattern('files', '^\.v/',
 		\ [expand('~/.vim/'), unite#util#substitute_path_separator($HOME) . '/.bundle/*/'], 1000)
 <
-unite#get_substitute_pattern({buffer-name})
+unite#get_substitute_pattern({profile-name})
 						*unite#get_substitute_pattern()*
-		uniteのバッファ名{buffer-name}における絞込みテキストの置換パタ
-		ーンを取得する。{buffer-name}に置換パターンが定義されていない
+		uniteのバッファ名{profile-name}における絞込みテキストの置換パタ
+		ーンを取得する。{profile-name}に置換パターンが定義されていない
 		と、エラーになる。デバッグ用である。
 
-unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
-						*unite#set_buffer_name_option()*
-		uniteのバッファ名{buffer-name}における{option-name}のオプショ
-		ンを{value}に設定する。
+unite#set_profile({profile-name}, {option-name}, {value})
+						*unite#set_profile()*
+		uniteのプロファイル名{buffer-name}における{option-name}のオプシ
+		ョンを{value}に設定する。
 		
 		現在、次のオプション名が有効である。
 		
@@ -1076,12 +1076,18 @@ unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
 		ignorecase			(数値)
 		uniteバッファで一時的にセットされる'ignorecase'オプションの値を
 		決定する。省略すると、'ignorecase'の値と同じになる。
-		ただし、buffer_nameが"files"の場合は初期値が"1"になっている。
+		ただし、profile_nameが"files"の場合は初期値が"1"になっている。
 		
 		smartcase			(数値)
 		大文字が入力されているときに、'ignorecase'オプションの値を無視
 		するかどうか決定する。省略すると、'smartcase'の値と同じになる。
-		ただし、buffer_nameが"files"の場合は初期値が"0"になっている。
+		ただし、profile_nameが"files"の場合は初期値が"0"になっている。
+
+unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
+						*unite#set_buffer_name_option()*
+		この関数は以前のバージョンとの互換性のために残されている。使用
+		は推奨されない。代わりに|unite#set_profile()|を使用するべきであ
+		る。
 
 unite#custom_default_action({kind}, {default-action})
 						*unite#custom_default_action()*
@@ -1103,7 +1109,8 @@ unite#custom_action({kind}, {name}, {action})
 		function! my_tabopen.func(candidates)
 		  call unite#take_action('tabopen', a:candidates)
 		
-		  let dir = isdirectory(a:candidate.word) ? a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+		  let dir = isdirectory(a:candidate.word) ?
+		  \ a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
 		  execute g:unite_kind_openable_lcd_command '`=dir`'
 		endfunction
 		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
@@ -2087,6 +2094,10 @@ NOTATION					*unite-notation*
 
 			buffer_name		(文字列)
 				uniteバッファの名前。
+
+			profile_name		(文字列)
+				uniteバッファで使用するプロファイルの名前。
+				省略されると、buffer_nameと同じになる。
 
 			prompt			(文字列)
 				uniteバッファのプロンプト文字列。

@@ -1023,16 +1023,16 @@ unite#mappings#set_current_filters({filters})			*unite#mappings#set_current_filt
 unite#mappings#get_current_filters()				*unite#mappings#get_current_filters()*
 		Get current unite buffer filters.
 
-unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
+unite#set_substitute_pattern({profile-name}, {pattern}, {subst} [, {priority}])
 						*unite#set_substitute_pattern()*
 		Specifies a replace pattern of narrowing text for a Unite
-		buffer which name is {buffer-name}.  "" is regarded as
+		buffer which name is {profile-name}.  "" is regarded as
 		"default" and is equivalent to the case when |:Unite| without
-		-buffer-name= option.  You may specify multiple {buffer-name}
-		with breaking with ",".  {pattern} is the replace target
-		regexp and {subst} is the substitute string.  If you specify a
-		same {pattern} again, the setting will just be updated.  You
-		may defeat {pattern} with giving {subst} as "".  {priority}
+		-buffer-name= option.  You may specify multiple {profile-name}
+		with breaking with ",".  {pattern} is the replace target regexp
+		and {subst} is the substitute string.  If you specify a same
+		{pattern} again, the setting will just be updated.  You may
+		defeat {pattern} with giving {subst} as "".  {priority}
 		prioritizes how this replaces.  If you skipped giving
 		{priority} it'll be 0.  Give bigger number for a {pattern}
 		which must be done earlier.  Note that the initial text of
@@ -1047,7 +1047,7 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		does over the /.
 
 		The initial value is defined as the following; on a buffer
-		which buffer_name is files, it adds a wildcard in order to
+		which profile_name is files, it adds a wildcard in order to
 		match ~ as $HOME and to match partially /.
 >
 		call unite#set_substitute_pattern('files', '^\~',
@@ -1062,15 +1062,15 @@ unite#set_substitute_pattern({buffer-name}, {pattern}, {subst} [, {priority}])
 		call unite#set_substitute_pattern('files', '^\.v/',
 		\ [expand('~/.vim/'), unite#util#substitute_path_separator($HOME) . '/.bundle/*/'], 1000)
 <
-unite#get_substitute_pattern({buffer-name})
+unite#get_substitute_pattern({profile-name})
 						*unite#get_substitute_pattern()*
 		Gets the substitute pattern for narrowing text of a Unite buffer
-		name {buffer-name}.  This causes an error if the substitute
-		pattern of {buffer-name}.  This is for debugging.
+		name {profile-name}.  This causes an error if the substitute
+		pattern of {profile-name}.  This is for debugging.
 
-unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
-						*unite#set_buffer_name_option()*
-		Set {buffer-name} specialized {option-name} to {value}.
+unite#set_profile({profile-name}, {option-name}, {value})
+						*unite#set_profile()*
+		Set {profile-name} specialized {option-name} to {value}.
 		
 		This options is available:
 		
@@ -1081,6 +1081,11 @@ unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
 		ignorecase			(Number)
 		
 		smartcase			(Number)
+
+unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
+						*unite#set_buffer_name_option()*
+		This function is deprecated. Please use
+		|unite#set_profile()| instead.
 
 unite#custom_default_action({kind}, {default-action})
 						*unite#custom_default_action()*
@@ -1881,6 +1886,9 @@ NOTATION					*unite-notation*
 			buffer_name		(String)
 				The name of unite buffer.
 
+			profile_name		(String)
+				The profile name of unite buffer.
+
 			prompt			(String)
 				The prompt string of unite buffer.
 
@@ -2095,6 +2103,7 @@ CHANGELOG					*unite-changelog*
 
 2011-11-23
 - Implemented use ls command when gather candidates(experimental).
+- Implemented profile instead of buffer_name option.
 
 2011-11-22
 - Improved line source.

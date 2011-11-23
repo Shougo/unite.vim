@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Nov 2011.
+" Last Modified: 23 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -840,8 +840,8 @@ let s:source_input = {
 
 function! s:source_input.gather_candidates(args, context)"{{{
   let context = unite#get_context()
-  let inputs = unite#get_buffer_name_option(
-        \ context.old_buffer_info[0].buffer_name, 'unite__inputs')
+  let inputs = unite#get_profile(
+        \ context.old_buffer_info[0].profile_name, 'unite__inputs')
   let key = context.old_source_names_string
   if !has_key(inputs, key)
     return []
@@ -872,8 +872,8 @@ let s:source_input.action_table.delete = {
       \ }
 function! s:source_input.action_table.delete.func(candidates)"{{{
   let context = unite#get_context()
-  let inputs = unite#get_buffer_name_option(
-        \ context.old_buffer_info[0].buffer_name, 'unite__inputs')
+  let inputs = unite#get_profile(
+        \ context.old_buffer_info[0].profile_name, 'unite__inputs')
   let key = context.old_source_names_string
   if !has_key(inputs, key)
     return
