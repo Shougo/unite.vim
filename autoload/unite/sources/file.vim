@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2011.
+" Last Modified: 23 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,6 +33,11 @@ call unite#util#set_default('g:unite_source_file_ignore_pattern',
 "}}}
 
 function! unite#sources#file#define()"{{{
+  " Check vimproc.
+  let s:use_ls_command =
+        \ 0
+        " \ unite#util#has_vimproc() && executable('ls')
+
   return s:source
 endfunction"}}}
 
@@ -87,8 +92,19 @@ function! s:source.change_candidates(args, context)"{{{
     let glob = escape(glob, '[')
   endif
   if !has_key(a:context.source__cache, glob)
-    let files = split(unite#util#substitute_path_separator(
-          \ glob(glob)), '\n')
+
+    if s:use_ls_command
+      let path = glob[: -2]
+      if path !~ '/$'
+        let path .= '/'
+      endif
+      let files = map(split(unite#util#substitute_path_separator(
+            \ vimproc#system(['ls', '-a1', path])), '\n'),
+            \ 'path.v:val')
+    else
+      let files = split(unite#util#substitute_path_separator(
+            \ glob(glob)), '\n')
+    endif
 
     if !is_vimfiler
       if g:unite_source_file_ignore_pattern != ''
@@ -148,14 +164,21 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
   let path = expand(get(a:args, 0, ''))
 
   if isdirectory(path)
+    " let start = reltime()
+
     let context = deepcopy(a:context)
     let context.is_vimfiler = 1
     let candidates = self.change_candidates(a:args, context)
 
-    " Add doted files.
-    let context.input .= '.'
-    let candidates += filter(self.change_candidates(a:args, context),
-          \ 'v:val.word !~ "/\.\.\\?$"')
+    if !s:use_ls_command
+      " Add doted files.
+      let context.input .= '.'
+      let candidates += filter(
+            \ self.change_candidates(a:args, context),
+            \ 'v:val.word !~ "/\.\.\\?$"')
+    endif
+
+    " echomsg reltimestr(reltime(start))
   elseif filereadable(path)
     let candidates = [ unite#sources#file#create_file_dict(path, 0) ]
   else

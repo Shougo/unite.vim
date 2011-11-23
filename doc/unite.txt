@@ -2093,6 +2093,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-11-23
+- Implemented use ls command when gather candidates(experimental).
+
 2011-11-22
 - Improved line source.
 
