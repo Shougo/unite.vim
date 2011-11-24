@@ -2101,6 +2101,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-11-24
+- Fixed unite#set_buffer_name_option() error.
+
 2011-11-23
 - Implemented use ls command when gather candidates(experimental).
 - Implemented profile instead of buffer_name option.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Nov 2011.
+" Last Modified: 24 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,7 +60,7 @@ function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...)"{{{
   endfor
 endfunction"}}}
 function! unite#set_buffer_name_option(buffer_name, option_name, value)"{{{
-  return unite#set_profile(a:buffer_name, a:option_name, a:option_name, a:value)
+  return unite#set_profile(a:buffer_name, a:option_name, a:value)
 endfunction"}}}
 function! unite#get_buffer_name_option(buffer_name, option_name)"{{{
   return unite#get_profile(a:buffer_name, a:option_name)
