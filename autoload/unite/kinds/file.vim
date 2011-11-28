@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Nov 2011.
+" Last Modified: 28 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -481,7 +481,13 @@ function! s:kind.action_table.vimfiler__execute.func(candidates)"{{{
 
   try
     for candidate in a:candidates
-      call s:System.open(candidate.action__path)
+      let path = candidate.action__path
+      if unite#util#is_win() && path =~ '^//'
+        " substitute separator for UNC.
+        let path = substitute(path, '/', '\\', 'g')
+      endif
+
+      call s:System.open(path)
     endfor
   finally
     if vimfiler_current_dir != ''
