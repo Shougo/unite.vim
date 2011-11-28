@@ -2101,6 +2101,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-11-28
+- Fixed for UNC path.
+
 2011-11-25
 - Improved substitute path separator.
 

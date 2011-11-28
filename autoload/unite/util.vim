@@ -49,8 +49,9 @@ function! unite#util#set_dictionary_helper(...)
   return call(s:V.set_dictionary_helper, a:000)
 endfunction
 function! unite#util#substitute_path_separator(path)
-  return unite#util#is_win() && a:path !~ '^\\\\' ?
-        \ substitute(a:path, '\\', '/', 'g') : a:path
+  return !unite#util#is_win() ? a:path
+        \ : substitute(substitute(a:path, '\\', '/', 'g'),
+        \     '^//', '\\\\', '')
 endfunction
 function! unite#util#path2directory(...)
   return call(s:V.path2directory, a:000)
