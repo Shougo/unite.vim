@@ -2103,6 +2103,7 @@ CHANGELOG					*unite-changelog*
 
 2011-11-28
 - Fixed for UNC path.
+- Fixed source line.
 
 2011-11-25
 - Improved substitute path separator.
