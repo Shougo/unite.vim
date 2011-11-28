@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Nov 2011.
+" Last Modified: 28 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -299,7 +299,7 @@ function! unite#get_context()"{{{
   return unite#get_current_unite().context
 endfunction"}}}
 function! unite#set_context(context)"{{{
-  let old_context = unite#get_current_unite().context
+  let old_context = unite#get_context()
 
   if exists('b:unite') && !s:use_current_unite
     let b:unite.context = a:context
