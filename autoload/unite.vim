@@ -1322,6 +1322,9 @@ function! s:initialize_sources(...)"{{{
     if !has_key(source, 'is_listed')
       let source.is_listed = 1
     endif
+    if !has_key(source, 'is_forced')
+      let source.is_forced = 0
+    endif
     if !has_key(source, 'required_pattern_length')
       let source.required_pattern_length = 0
     endif
@@ -1582,7 +1585,14 @@ function! s:recache_candidates_loop(context, is_force, is_vimfiler)"{{{
 
     " Set context.
     let source.unite__context.input = a:context.input
-    let source.unite__context.is_redraw = a:context.is_redraw
+    if source.required_pattern_length > 0
+          \ && !source.is_forced
+      " Forced redraw.
+      let source.unite__context.is_redraw = 1
+      let source.is_forced = 1
+    else
+      let source.unite__context.is_redraw = a:context.is_redraw
+    endif
     let source.unite__context.is_changed = a:context.is_changed
     let source.unite__context.is_invalidate = source.unite__is_invalidate
 

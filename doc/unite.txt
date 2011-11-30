@@ -2103,6 +2103,7 @@ CHANGELOG					*unite-changelog*
 
 2011-11-30
 - Fixed a bit.
+- Fixed required_pattern_length problem.
 
 2011-11-28
 - Fixed for UNC path.
