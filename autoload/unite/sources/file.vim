@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Nov 2011.
+" Last Modified: 30 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,7 +58,8 @@ function! s:source.change_candidates(args, context)"{{{
   let input_list = filter(split(a:context.input,
         \                     '\\\@<! ', 1), 'v:val !~ "!"')
   let input = empty(input_list) ? '' : input_list[0]
-  let input = substitute(substitute(a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
+  let input = substitute(substitute(
+        \ a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
 
   let path = get(a:args, 0, '')
   if path !=# '/' && path =~ '[\\/]$'
@@ -108,7 +109,8 @@ function! s:source.change_candidates(args, context)"{{{
 
     if !is_vimfiler
       if g:unite_source_file_ignore_pattern != ''
-        call filter(files, 'v:val !~ ' . string(g:unite_source_file_ignore_pattern))
+        call filter(files, 'v:val !~ '
+              \ . string(g:unite_source_file_ignore_pattern))
       endif
 
       let files = sort(filter(copy(files), 'isdirectory(v:val)'), 1) +
@@ -125,8 +127,9 @@ function! s:source.change_candidates(args, context)"{{{
     let newfile = substitute(a:context.input, '[*\\]', '', 'g')
     if !filereadable(newfile) && !isdirectory(newfile)
       " Add newfile candidate.
-      let candidates = copy(candidates) +
-            \ [unite#sources#file#create_file_dict(newfile, is_relative_path, 1)]
+      let file = unite#sources#file#create_file_dict(
+            \ newfile, is_relative_path, 1)
+      let candidates = copy(candidates) + [file]
     endif
 
     if input !~ '^\%(/\|\a\+:/\)$'
@@ -134,9 +137,9 @@ function! s:source.change_candidates(args, context)"{{{
 
       if a:context.input =~ '\.$' && isdirectory(parent . '..')
         " Add .. directory.
-        let candidates = [unite#sources#file#create_file_dict(
-              \              parent . '..', is_relative_path)]
-              \ + copy(candidates)
+        let file = unite#sources#file#create_file_dict(
+              \              parent . '..', is_relative_path)
+        let candidates = [file] + copy(candidates)
       endif
     endif
   endif
