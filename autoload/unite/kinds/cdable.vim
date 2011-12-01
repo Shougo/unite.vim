@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2011.
+" Last Modified: 01 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,6 +44,7 @@ let s:kind.action_table.cd = {
 function! s:kind.action_table.cd.func(candidate)"{{{
   if &filetype ==# 'vimfiler' || &filetype ==# 'vimshell'
     call s:external_cd(a:candidate)
+    return
   endif
 
   if a:candidate.action__directory != ''
@@ -57,10 +58,11 @@ let s:kind.action_table.lcd = {
 function! s:kind.action_table.lcd.func(candidate)"{{{
   if &filetype ==# 'vimfiler' || &filetype ==# 'vimshell'
     call s:external_cd(a:candidate)
+    return
   endif
 
   if a:candidate.action__directory != ''
-    execute g:unite_kind_openable_cd_command '`=a:candidate.action__directory`'
+    execute g:unite_kind_openable_lcd_command '`=a:candidate.action__directory`'
   endif
 endfunction"}}}
 

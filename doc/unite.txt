@@ -2105,6 +2105,7 @@ CHANGELOG					*unite-changelog*
 - Fixed dest_drive error.
 - Fixed uri kind.
 - Improved padding.
+- Fixed cd action behavior.
 
 2011-11-30
 - Fixed a bit.
