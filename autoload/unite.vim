@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Nov 2011.
+" Last Modified: 01 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1657,7 +1657,8 @@ function! s:get_source_candidates(source, is_vimfiler)"{{{
 endfunction"}}}
 function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
   let unite = unite#get_current_unite()
-  let [max_width, max_source_name] = s:adjustments(winwidth(0)-2, unite.max_source_name, 5)
+  let [max_width, max_source_name] =
+        \ s:adjustments(winwidth(0)-2, unite.max_source_name, 2)
   if unite.max_source_name == 0
     let max_width -= 1
   endif
@@ -1667,15 +1668,15 @@ function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
   " Create key table.
   let keys = {}
   for [key, number] in items(a:quick_match_table)
-    let keys[number] = key . ': '
+    let keys[number] = key . ':'
   endfor
 
   " Add number.
   let num = 0
   for candidate in a:candidates
     call add(candidates,
-          \ (has_key(keys, num) ? keys[num] : '   ')
-          \ . (unite.max_source_name == 0 ? ' ' :
+          \ (has_key(keys, num) ? keys[num] : '  ')
+          \ . (unite.max_source_name == 0 ? '' :
           \    unite#util#truncate(candidate.source, max_source_name))
           \ . unite#util#truncate_smart(candidate.abbr, max_width, max_width/3, '..'))
     let num += 1
@@ -1685,14 +1686,15 @@ function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
 endfunction"}}}
 function! s:convert_lines(candidates)"{{{
   let unite = unite#get_current_unite()
-  let [max_width, max_source_name] = s:adjustments(winwidth(0)-2, unite.max_source_name, 2)
+  let [max_width, max_source_name] =
+        \ s:adjustments(winwidth(0)-2, unite.max_source_name, 2)
   if unite.max_source_name == 0
     let max_width -= 1
   endif
 
   return map(copy(a:candidates),
-        \ "(v:val.unite__is_marked ? '*  ' : '-  ')
-        \ . (unite.max_source_name == 0 ? ' '
+        \ "(v:val.unite__is_marked ? '* ' : '- ')
+        \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(v:val.source, max_source_name))
         \ . unite#util#truncate_smart(v:val.abbr, " . max_width .  ", max_width/3, '..')")
 endfunction"}}}
@@ -1875,12 +1877,13 @@ function! s:initialize_unite_buffer()"{{{
 
     syntax clear uniteCandidateSourceName
     if unite.max_source_name > 0
-      syntax match uniteCandidateSourceName /\%4c[[:alnum:]_\/-]\+/ contained
+      syntax match uniteCandidateSourceName /\%3c[[:alnum:]_\/-]\+/ contained
     else
       syntax match uniteCandidateSourceName /^- / contained
     endif
-    let source_padding = 5
-    execute 'syntax match uniteCandidateAbbr' '/\%'.(unite.max_source_name+source_padding).'c.*/ contained'
+    let source_padding = 4
+    execute 'syntax match uniteCandidateAbbr' '/\%'
+          \ .(unite.max_source_name+source_padding).'c.*/ contained'
 
     execute 'highlight default link uniteCandidateAbbr'  g:unite_abbr_highlight
 
@@ -1889,7 +1892,8 @@ function! s:initialize_unite_buffer()"{{{
       if source.syntax != ''
         let name = len(unite.sources) > 1 ? source.name : ''
 
-        execute 'syntax match' source.syntax '/\%'.(unite.max_source_name+source_padding).'c.*/ contained'
+        execute 'syntax match' source.syntax '/\%'
+              \ .(unite.max_source_name+source_padding).'c.*/ contained'
 
         execute 'highlight default link' source.syntax g:unite_abbr_highlight
 
