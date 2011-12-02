@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Dec 2011.
+" Last Modified: 03 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -573,7 +573,8 @@ function! s:move_to_other_drive(candidate, filename)"{{{
         \ || g:unite_kind_file_copy_directory_command == ''
     call unite#print_error("Please install cp.exe.")
     return 1
-  elseif g:unite_kind_file_delete_command == ''
+  elseif g:unite_kind_file_delete_file_command == ''
+          \ || g:unite_kind_file_delete_directory_command == ''
     call unite#print_error("Please install rm.exe.")
     return 1
   endif
