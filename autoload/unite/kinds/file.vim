@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Dec 2011.
+" Last Modified: 02 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -569,7 +569,8 @@ function! unite#kinds#file#complete_overwrite_method(arglead, cmdline, cursorpos
 endfunction"}}}
 function! s:move_to_other_drive(candidate, filename)"{{{
   " move command doesn't supported directory over drive move in Windows.
-  if g:unite_kind_file_copy_command == ''
+  if g:unite_kind_file_copy_file_command == ''
+        \ || g:unite_kind_file_copy_directory_command == ''
     call unite#print_error("Please install cp.exe.")
     return 1
   elseif g:unite_kind_file_delete_command == ''
