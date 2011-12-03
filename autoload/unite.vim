@@ -1428,6 +1428,10 @@ function! s:initialize_profile(profile_name)"{{{
   endif
 endfunction"}}}
 function! s:initialize_candidates(candidates, source_name)"{{{
+  let unite = unite#get_current_unite()
+  let [max_width, max_source_name] =
+        \ s:adjustments(winwidth(0)-5, unite.max_source_name, 2)
+
   let candidates = []
   for candidate in a:candidates
     let candidate = deepcopy(candidate)
@@ -1451,25 +1455,49 @@ function! s:initialize_candidates(candidates, source_name)"{{{
     let candidate.source = a:source_name
 
     let candidate.is_multiline = get(candidate, 'is_multiline', 0)
-    if candidate.is_multiline && candidate.abbr =~ '\r\?\n'
-      let cnt = 0
-      for multi in split(candidate.abbr, '\r\?\n', 1)[:4]
-        let candidate_multi = deepcopy(candidate)
-        let candidate_multi.abbr =
-              \ (cnt == 0 ? '+ ' : '| ') . multi
-
-        if cnt != 0
-          let candidate_multi.is_dummy = 1
-        endif
-
-        call add(candidates, candidate_multi)
-
-        let cnt += 1
-      endfor
-    else
+    if !candidate.is_multiline
       let candidate.abbr = '  ' . candidate.abbr
       call add(candidates, candidate)
+      continue
     endif
+
+    if candidate.abbr !~ '\n'
+      " Auto split.
+      let abbr = candidate.abbr
+      let candidate.abbr = ''
+
+      while abbr != ''
+        let trunc_abbr = unite#util#truncate(abbr, max_width)
+        let candidate.abbr .= trunc_abbr . "~\n"
+        let abbr = abbr[len(trunc_abbr):]
+      endwhile
+
+      let candidate.abbr = substitute(candidate.abbr, '\~\n$', '', '')
+    else
+      let candidate.abbr = substitute(candidate.abbr, '\r\?\n$', '^@', '')
+    endif
+
+    if candidate.abbr !~ '\n'
+      let candidate.abbr = '  ' . candidate.abbr
+      call add(candidates, candidate)
+      continue
+    endif
+
+    " Convert multi line.
+    let cnt = 0
+    for multi in split(candidate.abbr, '\r\?\n', 1)[:4]
+      let candidate_multi = deepcopy(candidate)
+      let candidate_multi.abbr =
+            \ (cnt == 0 ? '+ ' : '| ') . multi
+
+      if cnt != 0
+        let candidate_multi.is_dummy = 1
+      endif
+
+      call add(candidates, candidate_multi)
+
+      let cnt += 1
+    endfor
   endfor
 
   return candidates
