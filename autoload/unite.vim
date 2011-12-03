@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Dec 2011.
+" Last Modified: 03 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1668,7 +1668,7 @@ function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
   " Create key table.
   let keys = {}
   for [key, number] in items(a:quick_match_table)
-    let keys[number] = key . ':'
+    let keys[number] = key . ' '
   endfor
 
   " Add number.
