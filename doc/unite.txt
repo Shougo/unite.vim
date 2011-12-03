@@ -2104,6 +2104,7 @@ CHANGELOG					*unite-changelog*
 2011-12-03
 - Improved quick match syntax.
 - Improved is_multiline behavior.
+- Improved initialize candidates.
 
 2011-12-02
 - Fixed move_to_other_drive error.

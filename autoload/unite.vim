@@ -1454,6 +1454,14 @@ function! s:initialize_candidates(candidates, source_name)"{{{
     " Force set.
     let candidate.source = a:source_name
 
+    " Delete too long abbr.
+    if len(candidate.abbr) > max_width * 3
+      let candidate.abbr = candidate.abbr[: max_width * 3]
+    endif
+
+    " Substitute tab.
+    let candidate.abbr = substitute(candidate.abbr, '\t', '>---', 'g')
+
     let candidate.is_multiline = get(candidate, 'is_multiline', 0)
     if !candidate.is_multiline
       let candidate.abbr = '  ' . candidate.abbr

@@ -58,13 +58,9 @@ function! s:source.gather_candidates(args, context)"{{{
           \ join(readfile(g:yanktmp_file, "b"), "\n") :
           \ getreg(reg, 1)
     if register != ''
-      let abbr = substitute(unite#util#strwidthpart(
-            \ register[: max_width * 2], max_width),
-            \ '\t', '>---', 'g')
-
       call add(candidates, {
             \ 'word' : register,
-            \ 'abbr' : printf('%-3s - %s', reg, abbr),
+            \ 'abbr' : printf('%-3s - %s', reg, register),
             \ 'kind' : 'word',
             \ 'is_multiline' : 1,
             \ 'action__register' : reg,
