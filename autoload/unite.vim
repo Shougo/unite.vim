@@ -1430,7 +1430,7 @@ endfunction"}}}
 function! s:initialize_candidates(candidates, source_name)"{{{
   let unite = unite#get_current_unite()
   let [max_width, max_source_name] =
-        \ s:adjustments(winwidth(0)-6, unite.max_source_name, 2)
+        \ s:adjustments(winwidth(0)-5, unite.max_source_name, 2)
 
   let candidates = []
   for candidate in a:candidates
