@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Dec 2011.
+" Last Modified: 04 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1430,7 +1430,7 @@ endfunction"}}}
 function! s:initialize_candidates(candidates, source_name)"{{{
   let unite = unite#get_current_unite()
   let [max_width, max_source_name] =
-        \ s:adjustments(winwidth(0)-5, unite.max_source_name, 2)
+        \ s:adjustments(winwidth(0)-7, unite.max_source_name, 2)
 
   let candidates = []
   for candidate in a:candidates
