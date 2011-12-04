@@ -1694,7 +1694,7 @@ endfunction"}}}
 function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
   let unite = unite#get_current_unite()
   let [max_width, max_source_name] =
-        \ s:adjustments(winwidth(0)-2, unite.max_source_name, 2)
+        \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
   if unite.max_source_name == 0
     let max_width -= 1
   endif
@@ -1723,7 +1723,7 @@ endfunction"}}}
 function! s:convert_lines(candidates)"{{{
   let unite = unite#get_current_unite()
   let [max_width, max_source_name] =
-        \ s:adjustments(winwidth(0)-2, unite.max_source_name, 2)
+        \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
   if unite.max_source_name == 0
     let max_width -= 1
   endif
