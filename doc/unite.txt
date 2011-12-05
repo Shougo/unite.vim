@@ -2101,6 +2101,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-12-05
+- Improved long abbr behavior.
+
 2011-12-03
 - Improved quick match syntax.
 - Improved is_multiline behavior.
