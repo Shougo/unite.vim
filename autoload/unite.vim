@@ -1707,7 +1707,7 @@ function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
   " Create key table.
   let keys = {}
   for [key, number] in items(a:quick_match_table)
-    let keys[number] = key . ' '
+    let keys[number] = key . '|'
   endfor
 
   " Add number.
