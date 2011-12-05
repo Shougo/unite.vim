@@ -1461,9 +1461,7 @@ function! s:initialize_candidates(candidates, source_name)"{{{
 
     " Delete too long abbr.
     if candidate.is_multiline
-      if len(candidate.abbr) > max_width * 8
-        let candidate.abbr = candidate.abbr[: max_width * 8+10]
-      endif
+      let candidate.abbr = candidate.abbr[: max_width * 8+10]
     elseif len(candidate.abbr) > max_width * 2
       let candidate.abbr = candidate.abbr[: max_width * 2]
     endif
