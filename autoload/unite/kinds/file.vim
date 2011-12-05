@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Dec 2011.
+" Last Modified: 05 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -189,6 +189,8 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
     elseif dest_dir !~ '/$'
       let dest_dir .= '/'
     endif
+    let context.action__directory = dest_dir
+
     let dest_drive = matchstr(dest_dir, '^\a\+\ze:')
 
     let candidates = []

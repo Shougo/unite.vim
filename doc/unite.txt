@@ -2103,6 +2103,7 @@ CHANGELOG					*unite-changelog*
 
 2011-12-05
 - Improved long abbr behavior.
+- Fixed move_to_other_drive behavior.
 
 2011-12-03
 - Improved quick match syntax.
