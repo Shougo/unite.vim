@@ -176,7 +176,7 @@ function! s:grep_source.async_gather_candidates(args, context) "{{{
           \ . string(g:unite_source_grep_ignore_pattern))
   endif
 
-  if a:context.source__directory != ''
+  if isdirectory(a:context.source__directory)
     let cwd = getcwd()
     lcd `=a:context.source__directory`
   endif
@@ -192,7 +192,7 @@ function! s:grep_source.async_gather_candidates(args, context) "{{{
     \   "action__text": join(v:val[1][2:], ":"),
     \ }')
 
-  if a:context.source__directory != ''
+  if isdirectory(a:context.source__directory)
     lcd `=cwd`
   endif
 endfunction "}}}
