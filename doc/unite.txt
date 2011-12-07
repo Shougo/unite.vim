@@ -2102,7 +2102,8 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 CHANGELOG					*unite-changelog*
 
 2011-12-07
-- Improved grep line.
+- Improved grep source.
+- Improved jump source.
 
 2011-12-05
 - Improved long abbr behavior.

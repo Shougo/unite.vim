@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 07 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,8 +47,6 @@ function! s:source.gather_candidates(args, context)"{{{
   redir END
 
   let result = []
-  let max_path = (winwidth(0) - 5) / 2
-  let max_text = (winwidth(0) - 5) - max_path
   for jump in split(redir, '\n')[1:]
     let list = split(jump)
     if len(list) < 4
@@ -78,14 +76,21 @@ function! s:source.gather_candidates(args, context)"{{{
       continue
     endif
 
-    let text = get(lines, 0, '')
+    call add(result, [linenr, col, file_text, path, bufnr, lines])
+  endfor
+
+  let max_path = max(map(copy(result),
+        \ 'len(printf("%s:%d-%d", v:val[3], v:val[0], v:val[1]))')) + 1
+  let _ = []
+  for [linenr, col, file_text, path, bufnr, lines] in result
+    let text = substitute(get(lines, 0, ''), '^\s\+', '', '')
 
     let dict = {
-          \ 'word' : unite#util#truncate_smart(printf('%s:%d-%d  ', path, linenr, col),
-          \           max_path, max_path/3, '..') .
-          \          unite#util#truncate_smart(text, max_text, max_text/3, '..'),
+          \ 'word' : unite#util#truncate(
+          \     printf('%s:%d-%d  ', path, linenr, col), max_path) . text,
           \ 'kind' : 'jump_list',
-          \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(expand(path), ':p')),
+          \ 'action__path' : unite#util#substitute_path_separator(
+          \     fnamemodify(expand(path), ':p')),
           \ 'action__line' : linenr,
           \ 'action__col' : col,
           \ }
@@ -94,10 +99,10 @@ function! s:source.gather_candidates(args, context)"{{{
       let dict.action__buffer_nr = bufnr
     endif
 
-    call add(result, dict)
+    call add(_, dict)
   endfor
 
-  return reverse(result)
+  return reverse(_)
 endfunction"}}}
 
 let &cpo = s:save_cpo
