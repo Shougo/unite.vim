@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 21 Nov 2011.
+" Last Modified: 07 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -108,6 +108,13 @@ function! s:grep_source.hooks.on_init(args, context) "{{{
   if a:context.source__input == ''
     let a:context.source__input = input('Pattern: ')
   endif
+
+
+  let targets = map(filter(split(target), 'v:val !~ "^-"'),
+        \ 'substitute(v:val, "*\\+$", "", "")')
+  let a:context.source__directory =
+        \ (len(targets) == 1) ?
+        \ unite#util#substitute_path_separator(expand(targets[0])) : ''
 endfunction"}}}
 function! s:grep_source.hooks.on_syntax(args, context)"{{{
   syntax case ignore
@@ -169,15 +176,25 @@ function! s:grep_source.async_gather_candidates(args, context) "{{{
           \ . string(g:unite_source_grep_ignore_pattern))
   endif
 
+  if a:context.source__directory != ''
+    let cwd = getcwd()
+    lcd `=a:context.source__directory`
+  endif
+
   return map(candidates,
     \ '{
-    \   "word": v:val[0],
+    \   "word": unite#util#substitute_path_separator(
+    \                   fnamemodify(v:val[0], ":.")),
     \   "kind": "jump_list",
     \   "action__path": unite#util#substitute_path_separator(
     \                   fnamemodify(v:val[0][:1].v:val[1][0], ":p")),
     \   "action__line": v:val[1][1],
     \   "action__text": join(v:val[1][2:], ":"),
     \ }')
+
+  if a:context.source__directory != ''
+    lcd `=cwd`
+  endif
 endfunction "}}}
 
 " vim: foldmethod=marker
