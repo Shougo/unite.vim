@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Nov 2011.
+" Last Modified: 08 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -151,12 +151,14 @@ function! s:call_unite_input_directory(args)"{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=? -complete=customlist,unite#complete_resume UniteResume call s:call_unite_resume(<q-args>)
+command! -nargs=? -complete=customlist,unite#complete_buffer_name UniteResume call s:call_unite_resume(<q-args>)
 function! s:call_unite_resume(args)"{{{
   let [args, options] = s:parse_options(a:args)
 
   call unite#resume(join(args), options)
 endfunction"}}}
+
+command! -nargs=1 -complete=customlist,unite#complete_buffer_name UniteClose call unite#close(<q-args>)
 
 function! s:parse_options(args)"{{{
   let args = []

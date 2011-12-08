@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Dec 2011.
+" Last Modified: 08 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -546,7 +546,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   return filter(sort(keys(sources))+s:unite_options,
         \ 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
-function! unite#complete_resume(arglead, cmdline, cursorpos)"{{{
+function! unite#complete_buffer_name(arglead, cmdline, cursorpos)"{{{
   let _ = map(filter(range(1, bufnr('$')), '
         \ getbufvar(v:val, "&filetype") ==# "unite" &&
         \ !getbufvar(v:val, "unite").context.temporary'),
@@ -800,37 +800,7 @@ function! unite#start(sources, ...)"{{{
   let s:use_current_unite = 1
 
   if context.toggle"{{{
-    let quit_winnr = 0
-
-    " Search unite window.
-    " Note: must escape file-pattern.
-    let buffer_name = unite#util#escape_file_searching(context.buffer_name)
-    if bufwinnr(buffer_name) > 0
-      let quit_winnr = bufwinnr(buffer_name)
-    else
-      " Search from temporary buffer.
-      let winnr = 1
-      while winnr <= winnr('$')
-        if getbufvar(winbufnr(winnr), '&filetype') ==# 'unite'
-          let buffer_context = getbufvar(winbufnr(winnr), 'unite').context
-          if buffer_context.temporary
-                \ && !empty(filter(copy(buffer_context.old_buffer_info),
-                  \ 'v:val.buffer_name ==# context.buffer_name'))
-            let quit_winnr = winnr
-            " Disable resume.
-            let buffer_context.old_buffer_info = []
-            break
-          endif
-        endif
-
-        let winnr += 1
-      endwhile
-    endif
-
-    if quit_winnr > 0
-      " Quit unite buffer.
-      silent execute quit_winnr 'wincmd w'
-      call unite#force_quit_session()
+    if unite#close(context.buffer_name)
       return
     endif
   endif"}}}
@@ -1010,17 +980,24 @@ function! unite#resume(buffer_name, ...)"{{{
 
     let bufnr = s:last_unite_bufnr
   else
+    let buffer_name = a:buffer_name
+    if buffer_name !~ '@\d\+$'
+      " Add postfix.
+      let buffer_name .= '@1'
+    endif
+
     let buffer_dict = {}
     for unite in map(filter(range(1, bufnr('$')),
-          \ 'getbufvar(v:val, "&filetype") ==# "unite" && !getbufvar(v:val, "unite").context.temporary'),
+          \ 'getbufvar(v:val, "&filetype") ==# "unite" &&
+          \  !getbufvar(v:val, "unite").context.temporary'),
           \ 'getbufvar(v:val, "unite")')
       let buffer_dict[unite.buffer_name] = unite.bufnr
     endfor
 
-    if !has_key(buffer_dict, a:buffer_name)
+    if !has_key(buffer_dict, buffer_name)
       return
     endif
-    let bufnr = buffer_dict[a:buffer_name]
+    let bufnr = buffer_dict[buffer_name]
   endif
 
   let winnr = winnr()
@@ -1132,6 +1109,50 @@ function! s:initialize_context(context)"{{{
   let a:context.is_changed = 0
 
   return a:context
+endfunction"}}}
+
+function! unite#close(buffer_name)  "{{{
+  let buffer_name = a:buffer_name
+  if buffer_name !~ '@\d\+$'
+    " Add postfix.
+    let buffer_name .= '@1'
+  endif
+
+  let quit_winnr = 0
+
+  " Search unite window.
+  " Note: must escape file-pattern.
+  let buffer_name = unite#util#escape_file_searching(buffer_name)
+
+  if bufwinnr(buffer_name) > 0
+    let quit_winnr = bufwinnr(buffer_name)
+  else
+    " Search from temporary buffer.
+    let winnr = 1
+    while winnr <= winnr('$')
+      if getbufvar(winbufnr(winnr), '&filetype') ==# 'unite'
+        let buffer_context = getbufvar(winbufnr(winnr), 'unite').context
+        if buffer_context.temporary
+              \ && !empty(filter(copy(buffer_context.old_buffer_info),
+              \ 'v:val.buffer_name ==# context.buffer_name'))
+          let quit_winnr = winnr
+          " Disable resume.
+          let buffer_context.old_buffer_info = []
+          break
+        endif
+      endif
+
+      let winnr += 1
+    endwhile
+  endif
+
+  if quit_winnr > 0
+    " Quit unite buffer.
+    silent execute quit_winnr 'wincmd w'
+    call unite#force_quit_session()
+  endif
+
+  return quit_winnr > 0
 endfunction"}}}
 
 function! unite#all_quit_session(...)  "{{{

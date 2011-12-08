@@ -288,12 +288,15 @@ COMMANDS 					*unite-commands*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the word on the cursor.
 
-:UniteResume [{options}] [{buffer-name}]		*:UniteResume*
+:UniteResume [{options}] [{buffer-name}]	*:UniteResume*
 		Reuses the unite buffer previously opened named {buffer-name}.
 		Reuses the last unite buffer you used if you skipped
 		specifying {buffer-name}.  Narrowing texts or candidates are
 		same to them. If {options} are given, context information
 		will override.
+
+:UniteClose {buffer-name}			*:UniteClose*
+		Close the unite buffer named {buffer-name}.
 
 A command of source				*:unite-sources-command*
 
@@ -2100,6 +2103,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-12-08
+- Added :UniteClose command.
 
 2011-12-07
 - Improved grep source.
