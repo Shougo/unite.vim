@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Dec 2011.
+" Last Modified: 12 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -117,7 +117,8 @@ function! s:call_unite_buffer_dir(args)"{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source UniteWithCursorWord call s:call_unite_cursor_word(<q-args>)
+command! -nargs=+ -complete=customlist,unite#complete_source
+      \ UniteWithCursorWord call s:call_unite_cursor_word(<q-args>)
 function! s:call_unite_cursor_word(args)"{{{
   let [args, options] = s:parse_options_args(a:args)
   if !has_key(options, 'input')
@@ -127,21 +128,24 @@ function! s:call_unite_cursor_word(args)"{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source UniteWithInput call s:call_unite_input(<q-args>)
+command! -nargs=+ -complete=customlist,unite#complete_source
+      \ UniteWithInput call s:call_unite_input(<q-args>)
 function! s:call_unite_input(args)"{{{
   let [args, options] = s:parse_options_args(a:args)
   if !has_key(options, 'input')
-    let options.input = escape(input('Input narrowing text: ', ''), ' ')
+    let options.input = input('Input narrowing text: ', '')
   endif
 
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source UniteWithInputDirectory call s:call_unite_input_directory(<q-args>)
+command! -nargs=+ -complete=customlist,unite#complete_source
+      \ UniteWithInputDirectory call s:call_unite_input_directory(<q-args>)
 function! s:call_unite_input_directory(args)"{{{
   let [args, options] = s:parse_options_args(a:args)
   if !has_key(options, 'input')
-    let path = unite#substitute_path_separator(input('Input narrowing directory: ', '', 'dir'))
+    let path = unite#substitute_path_separator(
+          \ input('Input narrowing directory: ', '', 'dir'))
     if isdirectory(path) && path !~ '/$'
       let path .= '/'
     endif
