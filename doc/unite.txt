@@ -284,6 +284,10 @@ COMMANDS 					*unite-commands*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the buffer's directory.
 
+:UniteWithInput [{options}] {sources}		*:UniteWithInput*
+		Equivalent to |:Unite| except that the initial narrowing text
+		is the user input.
+
 :UniteWithCursorWord [{options}] {sources}	*:UniteWithCursorWord*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the word on the cursor.
@@ -2106,6 +2110,7 @@ CHANGELOG					*unite-changelog*
 
 2011-12-12
 - Improved file_mru and directory_mru default setting.
+- Improved UniteWithInput behavior.
 
 2011-12-08
 - Added :UniteClose command.
