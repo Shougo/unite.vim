@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Dec 2011.
+" Last Modified: 13 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,7 +40,8 @@ call unite#util#set_default('g:unite_source_directory_mru_time_format', '(%c) ')
 call unite#util#set_default('g:unite_source_directory_mru_file',  g:unite_data_directory . '/directory_mru')
 call unite#util#set_default('g:unite_source_directory_mru_limit', 100)
 call unite#util#set_default('g:unite_source_directory_mru_ignore_pattern',
-      \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|^\%(\\\\\|/mnt/\|/media/\)')
+      \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
+      \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|/private/var/folders/\)')
 "}}}
 
 function! unite#sources#directory_mru#define()"{{{
