@@ -2111,6 +2111,7 @@ CHANGELOG					*unite-changelog*
 2011-12-12
 - Improved file_mru and directory_mru default setting.
 - Improved UniteWithInput behavior.
+- Fixed highlight group bug.
 
 2011-12-08
 - Added :UniteClose command.
