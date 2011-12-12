@@ -52,13 +52,16 @@ function! unite#sources#file_mru#define()"{{{
   return s:source
 endfunction"}}}
 function! unite#sources#file_mru#_append()"{{{
+"    call Dfunc("file_mru#_append(" . ")")
   let path = unite#util#substitute_path_separator(
         \ simplify(resolve(expand('%:p'))))
 
+"  call Decho("path: " . path)
   " Append the current buffer to the mru list.
   if !s:is_exists_path(path) || &buftype =~ 'help'
   \   || (g:unite_source_file_mru_ignore_pattern != ''
   \      && path =~# g:unite_source_file_mru_ignore_pattern)
+"  call Dret("file_mru#_append(" . ")" . ": early return!")
     return
   endif
 
@@ -77,6 +80,7 @@ function! unite#sources#file_mru#_append()"{{{
   endif
 
   call s:save()
+"  call Dret("file_mru#_append(" . ")")
 endfunction"}}}
 
 let s:source = {
