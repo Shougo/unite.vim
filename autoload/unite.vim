@@ -2111,7 +2111,7 @@ function! s:on_cursor_hold_i()  "{{{
       return
     endif
 
-    execute 'match' (line('.') <= prompt_linenr ?
+    silent! execute 'match' (line('.') <= prompt_linenr ?
           \ line('$') <= prompt_linenr ?
           \ 'uniteError /\%'.prompt_linenr.'l/' :
           \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
@@ -2170,7 +2170,7 @@ function! s:on_cursor_moved()  "{{{
   execute 'setlocal' line('.') == prompt_linenr ?
         \ 'modifiable' : 'nomodifiable'
 
-  execute 'match' (line('.') <= prompt_linenr ?
+  silent! execute 'match' (line('.') <= prompt_linenr ?
         \ line('$') <= prompt_linenr ?
         \ 'uniteError /\%'.prompt_linenr.'l/' :
         \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
