@@ -2110,6 +2110,7 @@ CHANGELOG					*unite-changelog*
 
 2011-12-13
 - Improved ignore pattern.
+- Implemented keyword highlight.
 
 2011-12-12
 - Improved file_mru and directory_mru default setting.

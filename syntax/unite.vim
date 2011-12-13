@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Dec 2011.
+" Last Modified: 13 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -72,6 +72,7 @@ highlight default link uniteQuickMatchTrigger  Special
 highlight default link uniteMarkedLine  Statement
 highlight default link uniteCandidateSourceName  Type
 highlight default link uniteCandidateMarker  Special
+highlight default link uniteCandidateInputKeyword  Function
 
 " The following definitions are for <Plug>(unite-choose-action).
 highlight default link uniteChooseAction  NONE
