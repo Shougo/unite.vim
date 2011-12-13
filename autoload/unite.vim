@@ -1537,7 +1537,6 @@ endfunction"}}}
 function! s:initialize_vimfiler_candidates(candidates)"{{{
   " Set default vimfiler property.
   for candidate in a:candidates
-    echomsg string(candidate)
     if !has_key(candidate, 'vimfiler__filename')
       let candidate.vimfiler__filename = candidate.word
     endif
