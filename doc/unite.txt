@@ -2111,6 +2111,7 @@ CHANGELOG					*unite-changelog*
 2011-12-13
 - Improved ignore pattern.
 - Implemented keyword highlight.
+- Improved vimfiler__mkdir action.
 
 2011-12-12
 - Improved file_mru and directory_mru default setting.
