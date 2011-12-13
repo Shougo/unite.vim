@@ -1231,14 +1231,14 @@ directory_mru	最近使用したカレントディレクトリを候補とする
 		列される。
 
 						*unite-source-file_rec*
-file_rec	入力された絞り込みテキストのディレクトリまたは、現在ディレクト
-		リ直下のファイルを再帰的に(recursive)検索し、候補とする。ディレ
-		クトリや隠しファイルは候補から除外される。候補が多すぎる場合は
-		フリーズするかもしれない。候補はsource内でキャッシュされるため、
-		キャッシュを更新するためには、|<Plug>(unite_redraw)|を用いる。
+file_rec	引数で与えられたディレクトリまたは、現在ディレクトリ直下のファ
+		イルを再帰的に(recursive)検索し、候補とする。ディレクトリや隠し
+		ファイルは候補から除外される。候補が多すぎる場合はフリーズする
+		かもしれない。候補はsource内でキャッシュされるため、キャッシュ
+		を更新するためには、|<Plug>(unite_redraw)|を用いる。
 
 		source引数：
-		1. 絞り込み文字列
+		1. 検索を開始するディレクトリ
 
 						*unite-source-file_rec/async*
 file_rec/async	|unite-source-file_rec|と同じだが、候補の取得を完全に非同期
@@ -1248,7 +1248,7 @@ file_rec/async	|unite-source-file_rec|と同じだが、候補の取得を完全
 		http://github.com/Shougo/vimproc/tree/master
 
 		source引数：
-		1. 絞り込み文字列
+		1. 検索を開始するディレクトリ
 
 						*unite-source-buffer*
 buffer		開いているバッファを候補とする。バッファは使用した順番に整列さ
