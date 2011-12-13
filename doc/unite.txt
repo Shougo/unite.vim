@@ -2108,6 +2108,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-12-14
+- Fixed highlight.
+
 2011-12-13
 - Improved ignore pattern.
 - Implemented keyword highlight.

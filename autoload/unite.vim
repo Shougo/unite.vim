@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Dec 2011.
+" Last Modified: 14 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1959,10 +1959,10 @@ function! s:initialize_unite_buffer()"{{{
 
         execute 'highlight default link' source.syntax g:unite_abbr_highlight
 
-        execute printf('syntax region %s start="^-  %s" end="$" contains=uniteCandidateMarker,%s%s',
+        execute printf('syntax region %s start="^- %s" end="$" contains=uniteCandidateMarker,%s%s',
               \ 'uniteSourceLine__'.source.syntax,
               \ (name == '' ? '' : name . '\>'),
-              \ (name == '' ? '' : 'uniteSourceNames,'), source.syntax
+              \ (name == '' ? '' : 'uniteCandidateSourceName,'), source.syntax
               \ )
 
         call s:call_hook([source], 'on_syntax')
@@ -2011,6 +2011,10 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
 endfunction"}}}
 
 function! s:redraw(is_force, winnr) "{{{
+  if unite#util#is_cmdwin()
+    return
+  endif
+
   if a:winnr > 0
     " Set current unite.
     let use_current_unite_save = s:use_current_unite
@@ -2122,9 +2126,13 @@ function! s:on_cursor_hold_i()  "{{{
       syntax clear uniteCandidateInputKeyword
 
       if unite#get_input() != ''
-        execute 'syntax match uniteCandidateInputKeyword'
-              \ '/'.escape(unite#util#escape_pattern(unite#get_input()), '/').'/'
+        let pattern = escape(unite#util#escape_pattern(unite#get_input()), '/')
+        execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
               \ 'containedin=uniteCandidateAbbr'
+        for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+          execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
+                \ 'containedin='.source.syntax
+        endfor
       endif
     endif
   endif
