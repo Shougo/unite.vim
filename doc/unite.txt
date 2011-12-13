@@ -2115,6 +2115,7 @@ CHANGELOG					*unite-changelog*
 - Fixed :match error.
 - Fixed unite#vimfiler_check_filetype().
 - Improved unite register source.
+- Fixed unite history/input source error.
 
 2011-12-12
 - Improved file_mru and directory_mru default setting.

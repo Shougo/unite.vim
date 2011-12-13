@@ -855,10 +855,12 @@ function! unite#start_temporary(sources, ...)"{{{
   if &filetype == 'unite'
     " Get current context.
     let old_context = unite#get_context()
+    let unite = unite#get_current_unite()
     let context = deepcopy(old_context)
     let context.old_buffer_info = insert(context.old_buffer_info, {
-          \ 'buffer_name' : unite#get_current_unite().buffer_name,
+          \ 'buffer_name' : unite.buffer_name,
           \ 'pos' : getpos('.'),
+          \ 'profile_name' : unite.profile_name,
           \ })
   else
     let context = {}
