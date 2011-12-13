@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Dec 2011.
+" Last Modified: 13 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -855,10 +855,12 @@ function! unite#start_temporary(sources, ...)"{{{
   if &filetype == 'unite'
     " Get current context.
     let old_context = unite#get_context()
+    let unite = unite#get_current_unite()
     let context = deepcopy(old_context)
     let context.old_buffer_info = insert(context.old_buffer_info, {
-          \ 'buffer_name' : unite#get_current_unite().buffer_name,
+          \ 'buffer_name' : unite.buffer_name,
           \ 'pos' : getpos('.'),
+          \ 'profile_name' : unite.profile_name,
           \ })
   else
     let context = {}
@@ -898,8 +900,8 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
       if !empty(ret)
         let [type, info] = ret
         if type ==# 'file'
-          let info[1] = s:initialize_candidates([info[1]], source.name)
-          let info[1] = s:initialize_vimfiler_candidates([info[1]])
+          call s:initialize_candidates([info[1]], source.name)
+          call s:initialize_vimfiler_candidates([info[1]])
         elseif type ==# 'directory'
           " nop
         elseif type ==# 'error'
@@ -2111,12 +2113,20 @@ function! s:on_cursor_hold_i()  "{{{
       return
     endif
 
-    execute 'match' (line('.') <= prompt_linenr ?
-          \ line('$') <= prompt_linenr ?
-          \ 'uniteError /\%'.prompt_linenr.'l/' :
-          \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-          \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+    if exists('b:current_syntax')
+      execute 'match' (line('.') <= prompt_linenr ?
+            \ line('$') <= prompt_linenr ?
+            \ 'uniteError /\%'.prompt_linenr.'l/' :
+            \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
+            \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+      syntax clear uniteCandidateInputKeyword
 
+      if unite#get_input() != ''
+        execute 'syntax match uniteCandidateInputKeyword'
+              \ '/'.escape(unite#util#escape_pattern(unite#get_input()), '/').'/'
+              \ 'containedin=uniteCandidateAbbr'
+      endif
+    endif
   endif
 
   " Prompt check.
@@ -2164,11 +2174,13 @@ function! s:on_cursor_moved()  "{{{
   execute 'setlocal' line('.') == prompt_linenr ?
         \ 'modifiable' : 'nomodifiable'
 
-  execute 'match' (line('.') <= prompt_linenr ?
-        \ line('$') <= prompt_linenr ?
-        \ 'uniteError /\%'.prompt_linenr.'l/' :
-        \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-        \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+  if exists('b:current_syntax')
+    silent! execute 'match' (line('.') <= prompt_linenr ?
+          \ line('$') <= prompt_linenr ?
+          \ 'uniteError /\%'.prompt_linenr.'l/' :
+          \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
+          \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+  endif
 
   if unite#get_current_unite().context.auto_preview
     call s:do_auto_preview()

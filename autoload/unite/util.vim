@@ -66,6 +66,9 @@ endfunction
 function! unite#util#get_last_status(...)
   return call(s:V.get_last_status, a:000)
 endfunction
+function! unite#util#get_last_errmsg()
+  return unite#util#has_vimproc() ? vimproc#get_last_errmsg() : ''
+endfunction
 function! unite#util#sort_by(...)
   return call(s:V.Data.List.sort_by, a:000)
 endfunction
