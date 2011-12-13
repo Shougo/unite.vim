@@ -2113,6 +2113,7 @@ CHANGELOG					*unite-changelog*
 - Implemented keyword highlight.
 - Improved vimfiler__mkdir action.
 - Fixed :match error.
+- Fixed unite#vimfiler_check_filetype().
 
 2011-12-12
 - Improved file_mru and directory_mru default setting.

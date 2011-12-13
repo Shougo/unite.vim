@@ -898,8 +898,8 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
       if !empty(ret)
         let [type, info] = ret
         if type ==# 'file'
-          let info[1] = s:initialize_candidates([info[1]], source.name)
-          let info[1] = s:initialize_vimfiler_candidates([info[1]])
+          call s:initialize_candidates([info[1]], source.name)
+          call s:initialize_vimfiler_candidates([info[1]])
         elseif type ==# 'directory'
           " nop
         elseif type ==# 'error'
@@ -1537,6 +1537,7 @@ endfunction"}}}
 function! s:initialize_vimfiler_candidates(candidates)"{{{
   " Set default vimfiler property.
   for candidate in a:candidates
+    echomsg string(candidate)
     if !has_key(candidate, 'vimfiler__filename')
       let candidate.vimfiler__filename = candidate.word
     endif
