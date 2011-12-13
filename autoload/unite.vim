@@ -2111,17 +2111,19 @@ function! s:on_cursor_hold_i()  "{{{
       return
     endif
 
-    silent! execute 'match' (line('.') <= prompt_linenr ?
-          \ line('$') <= prompt_linenr ?
-          \ 'uniteError /\%'.prompt_linenr.'l/' :
-          \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-          \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
-    syntax clear uniteCandidateInputKeyword
+    if exists('b:current_syntax')
+      execute 'match' (line('.') <= prompt_linenr ?
+            \ line('$') <= prompt_linenr ?
+            \ 'uniteError /\%'.prompt_linenr.'l/' :
+            \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
+            \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+      syntax clear uniteCandidateInputKeyword
 
-    if unite#get_input() != ''
-      execute 'syntax match uniteCandidateInputKeyword'
-            \ '/'.escape(unite#util#escape_pattern(unite#get_input()), '/').'/'
-            \ 'containedin=uniteCandidateAbbr'
+      if unite#get_input() != ''
+        execute 'syntax match uniteCandidateInputKeyword'
+              \ '/'.escape(unite#util#escape_pattern(unite#get_input()), '/').'/'
+              \ 'containedin=uniteCandidateAbbr'
+      endif
     endif
   endif
 
@@ -2170,11 +2172,13 @@ function! s:on_cursor_moved()  "{{{
   execute 'setlocal' line('.') == prompt_linenr ?
         \ 'modifiable' : 'nomodifiable'
 
-  silent! execute 'match' (line('.') <= prompt_linenr ?
-        \ line('$') <= prompt_linenr ?
-        \ 'uniteError /\%'.prompt_linenr.'l/' :
-        \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-        \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+  if exists('b:current_syntax')
+    silent! execute 'match' (line('.') <= prompt_linenr ?
+          \ line('$') <= prompt_linenr ?
+          \ 'uniteError /\%'.prompt_linenr.'l/' :
+          \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
+          \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+  endif
 
   if unite#get_current_unite().context.auto_preview
     call s:do_auto_preview()
