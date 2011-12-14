@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: changes.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Sep 2011.
+" Last Modified: 14 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,10 +58,10 @@ function! s:source.hooks.on_init(args, context)"{{{
     let [linenr, col, text] = [list[1], list[2]+1, join(list[3:])]
 
     call add(result, {
-          \ 'word' : unite#util#truncate_smart(printf('%4d-%-3d  %s', linenr, col, text),
-          \           max_width, max_width/3, '..'),
+          \ 'word' : printf('%4d-%-3d  %s', linenr, col, text),
           \ 'kind' : 'jump_list',
-          \ 'action__path' : unite#util#substitute_path_separator(fnamemodify(expand('%'), ':p')),
+          \ 'action__path' : unite#util#substitute_path_separator(
+          \         fnamemodify(expand('%'), ':p')),
           \ 'action__buffer_nr' : bufnr('%'),
           \ 'action__line' : linenr,
           \ 'action__col' : col,

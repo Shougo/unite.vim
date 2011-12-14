@@ -2111,6 +2111,7 @@ CHANGELOG					*unite-changelog*
 
 2011-12-14
 - Fixed highlight.
+- Improved change source.
 
 2011-12-13
 - Improved ignore pattern.
