@@ -2113,6 +2113,7 @@ CHANGELOG					*unite-changelog*
 - Fixed highlight.
 - Improved change source.
 - Changed for new vimfiler interface.
+- Syntax case ignore.
 
 2011-12-13
 - Improved ignore pattern.

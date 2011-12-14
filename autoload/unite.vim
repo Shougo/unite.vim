@@ -2118,6 +2118,7 @@ function! s:on_cursor_hold_i()  "{{{
     endif
 
     if exists('b:current_syntax')
+      syntax case ignore
       execute 'match' (line('.') <= prompt_linenr ?
             \ line('$') <= prompt_linenr ?
             \ 'uniteError /\%'.prompt_linenr.'l/' :
@@ -2134,6 +2135,7 @@ function! s:on_cursor_hold_i()  "{{{
                 \ 'containedin='.source.syntax
         endfor
       endif
+      syntax case match
     endif
   endif
 
