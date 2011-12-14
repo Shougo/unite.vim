@@ -2112,29 +2112,7 @@ function! s:on_cursor_hold_i()  "{{{
   if line('.') == prompt_linenr || unite.context.is_redraw
     " Redraw.
     call unite#redraw()
-
-    if &filetype !=# 'unite'
-      return
-    endif
-
-    if exists('b:current_syntax')
-      execute 'match' (line('.') <= prompt_linenr ?
-            \ line('$') <= prompt_linenr ?
-            \ 'uniteError /\%'.prompt_linenr.'l/' :
-            \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-            \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
-      syntax clear uniteCandidateInputKeyword
-
-      if unite#get_input() != ''
-        let pattern = escape(unite#util#escape_pattern(unite#get_input()), '/')
-        execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
-              \ 'containedin=uniteCandidateAbbr'
-        for source in filter(copy(unite.sources), 'v:val.syntax != ""')
-          execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
-                \ 'containedin='.source.syntax
-        endfor
-      endif
-    endif
+    call s:change_highlight()
   endif
 
   " Prompt check.
@@ -2151,6 +2129,7 @@ function! unite#_on_cursor_hold()  "{{{
   if &filetype ==# 'unite'
     " Redraw.
     call unite#redraw()
+    call s:change_highlight()
 
     if unite#get_current_unite().is_async
       " Ignore key sequences.
@@ -2234,6 +2213,34 @@ function! s:on_buf_unload(bufname)  "{{{
   " Call finalize functions.
   call s:call_hook(unite#loaded_sources_list(), 'on_close')
   let unite.is_finalized = 1
+endfunction"}}}
+function! s:change_highlight()  "{{{
+  if &filetype !=# 'unite'
+        \ || !exists('b:current_syntax')
+    return
+  endif
+
+  let unite = unite#get_current_unite()
+  let prompt_linenr = unite.prompt_linenr
+
+  syntax case ignore
+  execute 'match' (line('.') <= prompt_linenr ?
+        \ line('$') <= prompt_linenr ?
+        \ 'uniteError /\%'.prompt_linenr.'l/' :
+        \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
+        \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+  syntax clear uniteCandidateInputKeyword
+
+  if unite#get_input() != ''
+    let pattern = escape(unite#util#escape_pattern(unite#get_input()), '/')
+    execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
+          \ 'containedin=uniteCandidateAbbr'
+    for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+      execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
+            \ 'containedin='.source.syntax
+    endfor
+  endif
+  syntax case match
 endfunction"}}}
 
 " Internal helper functions."{{{
