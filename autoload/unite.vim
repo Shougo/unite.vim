@@ -618,12 +618,13 @@ function! unite#redraw_candidates() "{{{
   let &l:modifiable = l:modifiable_save
 
   let unite = unite#get_current_unite()
+  let context = unite.context
   let unite.candidates = candidates
 
-  if unite.context.auto_resize && winnr('$') != 1
+  if context.auto_resize && winnr('$') != 1
     " Auto resize.
     let max_len = unite.prompt_linenr + len(candidates)
-    execute 'resize' min([max_len, unite.context.winheight])
+    execute 'resize' min([max_len, context.winheight])
     normal! zb
   endif
 
@@ -2031,17 +2032,18 @@ function! s:redraw(is_force, winnr) "{{{
   endif
 
   let unite = unite#get_current_unite()
+  let context = unite.context
 
-  if !unite.context.is_redraw
-    let unite.context.is_redraw = a:is_force
+  if !context.is_redraw
+    let context.is_redraw = a:is_force
   endif
 
-  if unite.context.is_redraw
+  if context.is_redraw
     call unite#clear_message()
   endif
 
   let input = unite#get_input()
-  if !unite.context.is_redraw && input ==# unite.last_input
+  if !context.is_redraw && input ==# unite.last_input
         \ && !unite.is_async
     return
   endif
