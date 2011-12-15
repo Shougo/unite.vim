@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Dec 2011.
+" Last Modified: 15 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -230,8 +230,8 @@ let s:profiles = {}
 call unite#set_substitute_pattern('files', '^\~',
       \ substitute(unite#util#substitute_path_separator($HOME),
       \ ' ', '\\\\ ', 'g'), -100)
-call unite#set_substitute_pattern('files', '[^~.*]\ze/', '\0*', 100)
-call unite#set_substitute_pattern('files', '/\ze[^~.*]', '/*', 100)
+call unite#set_substitute_pattern('files', '[^~.* ]\ze/', '\0*', 100)
+call unite#set_substitute_pattern('files', '/\ze[^~.* ]', '/*', 100)
 call unite#set_substitute_pattern('files', '\.', '*.', 1000)
 call unite#set_profile('files', 'smartcase', 0)
 call unite#set_profile('files', 'ignorecase', 1)
@@ -539,7 +539,8 @@ function! s:get_default_action(source_name, kind_name)"{{{
 endfunction"}}}
 
 function! unite#escape_match(str)"{{{
-  return substitute(substitute(escape(a:str, '~\.^$[]'), '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
+  return substitute(substitute(escape(a:str, '~\.^$[]'),
+        \ '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   let sources = filter(s:initialize_sources(), 'v:val.is_listed')
@@ -2222,24 +2223,31 @@ function! s:change_highlight()  "{{{
 
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
-
-  syntax case ignore
   execute 'match' (line('.') <= prompt_linenr ?
         \ line('$') <= prompt_linenr ?
         \ 'uniteError /\%'.prompt_linenr.'l/' :
         \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
         \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+
+  if unite#get_input() == ''
+    return
+  endif
+
+  syntax case ignore
   syntax clear uniteCandidateInputKeyword
 
-  if unite#get_input() != ''
-    let pattern = escape(unite#util#escape_pattern(unite#get_input()), '/')
-    execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
-          \ 'containedin=uniteCandidateAbbr'
-    for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+  for input in s:get_substitute_input(unite#get_input())
+    for pattern in map(split(input, '\\\@<! '),
+          \ "escape(unite#escape_match(v:val), '/')")
       execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
-            \ 'containedin='.source.syntax
+            \ 'containedin=uniteCandidateAbbr contained'
+      for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+        execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
+              \ 'containedin='.source.syntax.' contained'
+      endfor
     endfor
-  endif
+  endfor
+
   syntax case match
 endfunction"}}}
 
