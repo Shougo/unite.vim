@@ -2229,12 +2229,13 @@ function! s:change_highlight()  "{{{
         \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
         \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
 
+  syntax clear uniteCandidateInputKeyword
+
   if unite#get_input() == ''
     return
   endif
 
   syntax case ignore
-  syntax clear uniteCandidateInputKeyword
 
   for input in s:get_substitute_input(unite#get_input())
     for pattern in map(split(input, '\\\@<! '),
