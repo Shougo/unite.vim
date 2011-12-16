@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: history_yank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Dec 2011.
+" Last Modified: 16 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,15 +37,17 @@ function! unite#sources#history_yank#define()"{{{
   return s:source
 endfunction"}}}
 function! unite#sources#history_yank#_append()"{{{
-  if empty(s:yank_histories) ||
-        \ s:yank_histories[0] != @"
-    " Append @" value.
-    call insert(s:yank_histories, @")
+  if get(s:yank_histories, 0, '') == @"
+        \ || len(@") < 2
+    return
+  endif
 
-    if g:unite_source_history_yank_limit > len(s:yank_histories)
-      let s:yank_histories =
-            \ s:yank_histories[ : g:unite_source_history_yank_limit - 1]
-    endif
+  " Append @" value.
+  call insert(s:yank_histories, @")
+
+  if g:unite_source_history_yank_limit > len(s:yank_histories)
+    let s:yank_histories =
+          \ s:yank_histories[ : g:unite_source_history_yank_limit - 1]
   endif
 endfunction"}}}
 
