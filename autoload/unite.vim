@@ -1109,7 +1109,9 @@ function! s:initialize_context(context)"{{{
   if !has_key(a:context, 'create')
     let a:context.create = 0
   endif
-  let a:context.is_redraw = 0
+  if !has_key(a:context, 'is_redraw')
+    let a:context.is_redraw = 0
+  endif
   let a:context.is_changed = 0
 
   return a:context
