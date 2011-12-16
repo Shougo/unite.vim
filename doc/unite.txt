@@ -2109,6 +2109,13 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-12-16
+- Improved filename completion.
+- Improved history/yank source.
+
+2011-12-15
+- Improved input highlight patterns.
+
 2011-12-14
 - Fixed highlight.
 - Improved change source.
