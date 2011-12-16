@@ -2112,6 +2112,7 @@ CHANGELOG					*unite-changelog*
 2011-12-16
 - Improved filename completion.
 - Improved history/yank source.
+- Fixed for vimfiler initialize.
 
 2011-12-15
 - Improved input highlight patterns.
