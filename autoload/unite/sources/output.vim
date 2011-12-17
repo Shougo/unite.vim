@@ -41,7 +41,7 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context)"{{{
-  let command = get(a:args, 0)
+  let command = join(a:args, ' ')
   if command == ''
     let command = input('Please input Vim command: ', '', 'command')
   endif
