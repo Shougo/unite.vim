@@ -30,7 +30,6 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-call unite#util#set_default('g:unite_source_mapping_max_candidates', 30)
 function! unite#sources#mapping#define()"{{{
   return s:source
 endfunction"}}}
@@ -38,7 +37,7 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'mapping',
       \ 'description' : 'candidates from Vim mappings',
-      \ 'max_candidates' : g:unite_source_mapping_max_candidates,
+      \ 'max_candidates' : 30,
       \ 'hooks' : {},
       \ }
 
