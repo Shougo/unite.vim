@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Dec 2011.
+" Last Modified: 17 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -621,12 +621,7 @@ function! unite#redraw_candidates() "{{{
   let context = unite.context
   let unite.candidates = candidates
 
-  if context.auto_resize && winnr('$') != 1
-    " Auto resize.
-    let max_len = unite.prompt_linenr + len(candidates)
-    execute 'resize' min([max_len, context.winheight])
-    normal! zb
-  endif
+  call unite#_resize_window()
 
   if pos != getpos('.')
     call setpos('.', pos)
@@ -1219,6 +1214,7 @@ function! s:quit_session(is_force)  "{{{
     else
       noautocmd close!
       execute unite.winnr . 'wincmd w'
+      call unite#_resize_window()
     endif
 
     call s:on_buf_unload(bufname)
@@ -2006,11 +2002,7 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
   endif
 
   if !a:context.no_split && winnr('$') != 1
-    if a:context.vertical
-      execute 'vertical resize' a:context.winwidth
-    else
-      execute 'resize' a:context.winheight
-    endif
+    call unite#_resize_window()
   endif
 endfunction"}}}
 
@@ -2064,6 +2056,7 @@ function! s:redraw(is_force, winnr) "{{{
     let s:use_current_unite = use_current_unite_save
     let s:current_unite = unite_save
     wincmd p
+    call unite#_resize_window()
   endif
 
   let context = unite#get_context()
@@ -2079,6 +2072,29 @@ function! s:redraw(is_force, winnr) "{{{
 
   if context.auto_preview
     call s:do_auto_preview()
+  endif
+endfunction"}}}
+function! unite#_resize_window() "{{{
+  if &filetype !=# 'unite' || winnr('$') == 1
+    return
+  endif
+
+  let context = unite#get_context()
+  let unite = unite#get_current_unite()
+
+  if context.auto_resize
+    " Auto resize.
+    let max_len = unite.prompt_linenr + len(unite.candidates)
+    execute 'resize' min([max_len, context.winheight])
+    normal! zb
+  elseif context.vertical
+        \ && winwidth(winnr()) != context.winwidth
+    execute 'vertical resize' context.winwidth
+    let context.winwidth = winwidth(winnr())
+  elseif !context.vertical
+        \ && winheight(winnr()) != context.winheight
+    execute 'resize' context.winheight
+    let context.winheight = winheight(winnr())
   endif
 endfunction"}}}
 
@@ -2403,13 +2419,7 @@ function! s:do_auto_preview()"{{{
   " Restore window size.
   let context = unite#get_context()
   if s:has_preview_window()
-    if context.vertical
-      if winwidth(winnr()) != context.winwidth
-        execute 'vertical resize' context.winwidth
-      endif
-    elseif winheight(winnr()) != context.winwidth
-      execute 'resize' context.winheight
-    endif
+    call unite#_resize_window()
   endif
 endfunction"}}}
 function! s:init_cursor()"{{{

@@ -2111,6 +2111,7 @@ CHANGELOG					*unite-changelog*
 
 2011-12-17
 - Fixed path bug in Windows.
+- Improved window resize.
 
 2011-12-16
 - Improved filename completion.

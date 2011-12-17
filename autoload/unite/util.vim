@@ -147,6 +147,8 @@ endfunction"}}}
 function! unite#util#is_cmdwin()"{{{
   silent! noautocmd wincmd p
   silent! noautocmd wincmd p
+
+  call unite#_resize_window()
   return v:errmsg =~ '^E11:'
 endfunction"}}}
 
