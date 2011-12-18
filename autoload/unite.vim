@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Dec 2011.
+" Last Modified: 18 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2259,7 +2259,8 @@ function! s:change_highlight()  "{{{
 
   for input in s:get_substitute_input(unite#get_input())
     for pattern in map(split(input, '\\\@<! '),
-          \ "escape(unite#escape_match(v:val), '/')")
+          \ "substitute(escape(unite#escape_match(v:val), '/'),
+          \   '\\\\\\@<!|', '\\\\|', 'g')")
       execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
             \ 'containedin=uniteCandidateAbbr contained'
       for source in filter(copy(unite.sources), 'v:val.syntax != ""')

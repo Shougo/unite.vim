@@ -100,6 +100,10 @@ You may specify multiple keywords to narrow down, separating by spaces.
 >
 	foo bar
 <
+OR matching is implemented by "|".
+>
+	foo|bar
+<
 That matches candidates that match both foo and bar.
 
 You may specify negative conditions with !.
@@ -2108,6 +2112,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-12-18
+- Implemented OR matching.
 
 2011-12-17
 - Fixed path bug in Windows.

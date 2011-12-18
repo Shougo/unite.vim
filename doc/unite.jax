@@ -1,6 +1,6 @@
 *unite.txt*	すべてのsourceを統合する究極のインタフェース
 
-Version: 3.0
+Version: 3.1
 Author : Shougo <Shougo.Matsu@gmail.com>
 Japanese Documentation Author: naoina
 License: MIT license  {{{
@@ -101,6 +101,10 @@ uniteを起動すると、デフォルトの状態ではウィンドウが水平
 <
 上記は hogeにマッチかつ、piyoにマッチする候補にマッチする。
 
+ORマッチングは"|"を用いれば可能である。
+>
+	hoge|piyo
+<
 除外パターンを!で記述できる。例えば
 >
 	hoge !piyo
