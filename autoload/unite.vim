@@ -243,7 +243,7 @@ let s:unite_options = [
       \ '-immediately', '-auto-preview', '-complete',
       \ '-vertical', '-horizontal', '-direction=', '-no-split',
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
-      \ '-cursor-line-high-light=', '-update-time=',
+      \ '-cursor-line-highlight=', '-update-time=',
       \]
 "}}}
 
