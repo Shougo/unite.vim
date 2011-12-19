@@ -111,13 +111,13 @@ function! unite#util#input_directory(message)"{{{
 endfunction"}}}
 
 function! unite#util#alternate_buffer()"{{{
-  if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
+  if bufnr('%') != bufnr('#') && s:buflisted(bufnr('#'))
     buffer #
     return
   endif
 
   let listed_buffer_len = len(filter(range(1, bufnr('$')),
-        \ 'buflisted(v:val) && getbufvar(v:val, "&filetype") !=# "unite"'))
+        \ 's:buflisted(v:val) && getbufvar(v:val, "&filetype") !=# "unite"'))
   if listed_buffer_len <= 1
     enew
     return
@@ -127,7 +127,7 @@ function! unite#util#alternate_buffer()"{{{
   let pos = 1
   let current = 0
   while pos <= bufnr('$')
-    if buflisted(pos)
+    if s:buflisted(pos)
       if pos == bufnr('%')
         let current = cnt
       endif
@@ -150,6 +150,10 @@ function! unite#util#is_cmdwin()"{{{
 
   call unite#_resize_window()
   return v:errmsg =~ '^E11:'
+endfunction"}}}
+function! s:buflisted(bufnr)"{{{
+  return !exists('t:unite_buffer_dictionary') ?
+        \ has_key(t:unite_buffer_dictionary, a:bufnr) : buflisted(a:bufnr)
 endfunction"}}}
 
 let &cpo = s:save_cpo

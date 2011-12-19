@@ -2126,6 +2126,7 @@ CHANGELOG					*unite-changelog*
 2011-12-19
 - Added -update-time and -cursor-line-high-light options.
 - Improved rename action.
+- Improved buflisted().
 
 2011-12-18
 - Implemented OR matching.
