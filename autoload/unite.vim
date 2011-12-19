@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Dec 2011.
+" Last Modified: 19 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -243,6 +243,7 @@ let s:unite_options = [
       \ '-immediately', '-auto-preview', '-complete',
       \ '-vertical', '-horizontal', '-direction=', '-no-split',
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
+      \ '-cursor-line-high-light=', '-update-time=',
       \]
 "}}}
 
@@ -1107,6 +1108,13 @@ function! s:initialize_context(context)"{{{
   if !has_key(a:context, 'is_redraw')
     let a:context.is_redraw = 0
   endif
+  if !has_key(a:context, 'cursor_line_highlight')
+    let a:context.cursor_line_highlight =
+          \ g:unite_cursor_line_highlight
+  endif
+  if !has_key(a:context, 'update_time')
+    let a:context.update_time = g:unite_update_time
+  endif
   let a:context.is_changed = 0
 
   return a:context
@@ -1920,9 +1928,9 @@ function! s:initialize_unite_buffer()"{{{
     let &redrawtime = 100
   endif
 
-  if &updatetime > g:unite_update_time
+  if &updatetime > unite.context.update_time
     let unite.update_time_save = &updatetime
-    let &updatetime = g:unite_update_time
+    let &updatetime = unite.context.update_time
   endif
 
   " User's initialization.
@@ -2176,6 +2184,7 @@ function! s:on_cursor_moved()  "{{{
   endif
 
   let prompt_linenr = unite#get_current_unite().prompt_linenr
+  let context = unite#get_context()
 
   setlocal nocursorline
 
@@ -2186,11 +2195,11 @@ function! s:on_cursor_moved()  "{{{
     silent! execute 'match' (line('.') <= prompt_linenr ?
           \ line('$') <= prompt_linenr ?
           \ 'uniteError /\%'.prompt_linenr.'l/' :
-          \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-          \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+          \ context.cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
+          \ context.cursor_line_highlight.' /\%'.line('.').'l/')
   endif
 
-  if unite#get_current_unite().context.auto_preview
+  if context.auto_preview
     call s:do_auto_preview()
   endif
 endfunction"}}}
@@ -2215,8 +2224,7 @@ function! s:on_buf_unload(bufname)  "{{{
     let &redrawtime = unite.redrawtime_save
   endif
   let &sidescrolloff = unite.sidescrolloff_save
-  if has_key(unite, 'update_time_save')
-        \ && &updatetime < unite.update_time_save
+  if &updatetime < unite.context.update_time
     let &updatetime = unite.update_time_save
   endif
 
@@ -2242,12 +2250,13 @@ function! s:change_highlight()  "{{{
   endif
 
   let unite = unite#get_current_unite()
+  let context = unite#get_context()
   let prompt_linenr = unite.prompt_linenr
   execute 'match' (line('.') <= prompt_linenr ?
         \ line('$') <= prompt_linenr ?
         \ 'uniteError /\%'.prompt_linenr.'l/' :
-        \ g:unite_cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-        \ g:unite_cursor_line_highlight.' /\%'.line('.').'l/')
+        \ context.cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
+        \ context.cursor_line_highlight.' /\%'.line('.').'l/')
 
   syntax clear uniteCandidateInputKeyword
 

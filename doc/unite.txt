@@ -280,6 +280,16 @@ COMMANDS 					*unite-commands*
 		-create
 		Create new unite buffer.
 
+						*unite-options-update-time*
+		-update-time={new-update-time}
+		Change 'updatetime' option. If this option is ommit,
+		|g:unite_update_time| is used.
+
+						*unite-options-cursor-line-highlight*
+		-cursor-line-high-light={highlight-name}
+		Change cursor line highlight. If this option is ommit,
+		|g:unite_cursor_line_highlight| is used.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
@@ -2112,6 +2122,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2011-12-19
+- Added -update-time and -cursor-line-high-light options.
 
 2011-12-18
 - Implemented OR matching.
