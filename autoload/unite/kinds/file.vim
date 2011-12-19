@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Dec 2011.
+" Last Modified: 19 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -152,7 +152,7 @@ function! s:kind.action_table.rename.func(candidates)"{{{
           \ expand(input(printf('New file name: %s -> ',
           \ candidate.action__path), candidate.action__path)))
     if filename != '' && filename !=# candidate.action__path
-      call rename(candidate.action__path, filename)
+      call s:rename(candidate.action__path, filename)
     endif
   endfor
 endfunction"}}}
@@ -335,7 +335,7 @@ function! s:kind.action_table.vimfiler__rename.func(candidate)"{{{
           \       a:candidate.action__path), a:candidate.action__path)
 
     if filename != '' && filename !=# a:candidate.action__path
-      call rename(a:candidate.action__path, filename)
+      call s:rename(a:candidate.action__path, filename)
     endif
   finally
     if vimfiler_current_dir != ''
@@ -644,6 +644,19 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
 
   return [dest_filename, overwrite_method, is_reset_method, is_continue]
 endfunction"}}}
+function! s:rename(old_filename, new_filename)
+  let bufnr = bufnr(unite#util#escape_file_searching(a:old_filename))
+  if bufnr < 0
+    call rename(a:old_filename, a:new_filename)
+    return
+  endif
+
+  let bufnr_save = bufnr('%')
+  execute 'buffer' bufnr
+  saveas! `=a:new_filename`
+  call delete(a:old_filename)
+  execute 'buffer' bufnr_save
+endfunction
 
 function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_func)"{{{
   let overwrite_method = ''
