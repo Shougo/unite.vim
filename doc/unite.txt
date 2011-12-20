@@ -2123,6 +2123,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-12-20
+- Use vimproc#read_dir() (experimental).
+
 2011-12-19
 - Added -update-time and -cursor-line-high-light options.
 - Improved rename action.

@@ -156,6 +156,13 @@ function! s:buflisted(bufnr)"{{{
         \ has_key(t:unite_buffer_dictionary, a:bufnr) : buflisted(a:bufnr)
 endfunction"}}}
 
+function! unite#util#glob(pattern)"{{{
+  return (a:pattern =~ '^[^*]\+/\*'
+        \ && unite#util#has_vimproc() && exists('*vimproc#readdir')) ?
+        \ vimproc#readdir(a:pattern[: -2]) :
+        \ split(unite#util#substitute_path_separator(glob(a:pattern)), '\n')
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
