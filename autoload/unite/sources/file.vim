@@ -91,7 +91,10 @@ function! s:source.change_candidates(args, context)"{{{
 
     " let files = split(unite#util#substitute_path_separator(
     "       \ glob(glob)), '\n')
-    let files = unite#util#glob(glob)
+    let files = is_vimfiler ?
+          \ unite#util#glob(glob) :
+          \ split(unite#util#substitute_path_separator(
+          \  glob(glob)), '\n')
 
     if !is_vimfiler
       if g:unite_source_file_ignore_pattern != ''
@@ -165,10 +168,9 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
     if !exists('*vimproc#readdir')
       " Add doted files.
       let context.input .= '.'
-      let candidates += filter(
-            \ self.change_candidates(a:args, context),
-            \ 'v:val.word !~ "/\.\.\\?$"')
+      let candidates += self.change_candidates(a:args, context)
     endif
+    call filter(candidates, 'v:val.word !~ "/\.\.\\?$"')
 
     " echomsg reltimestr(reltime(start))
   elseif filereadable(path)

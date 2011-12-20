@@ -159,7 +159,7 @@ endfunction"}}}
 function! unite#util#glob(pattern)"{{{
   return (a:pattern =~ '^[^*]\+/\*'
         \ && unite#util#has_vimproc() && exists('*vimproc#readdir')) ?
-        \ vimproc#readdir(a:pattern[: -2]) :
+        \ sort(vimproc#readdir(a:pattern[: -2])) :
         \ split(unite#util#substitute_path_separator(glob(a:pattern)), '\n')
 endfunction"}}}
 
