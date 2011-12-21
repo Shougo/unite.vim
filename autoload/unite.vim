@@ -1330,89 +1330,96 @@ function! s:initialize_sources(...)"{{{
         \ '!has_key(v:val, "is_initialized")')
   for source in type(filterd_sources) == type([]) ?
         \ filterd_sources : values(filterd_sources)
-    let source.is_initialized = 1
+    try
+      let source.is_initialized = 1
 
-    if !has_key(source, 'hooks')
-      let source.hooks = {}
-    endif
-
-    if has_key(source.hooks, 'on_pre_init')
-      " Call pre_init hook.
-
-      " Set dummey value.
-      let source.args = []
-      let source.unite__context = { 'source' : source }
-
-      " Overwrite source values.
-      call s:call_hook([source], 'on_pre_init')
-    endif
-
-    if !has_key(source, 'is_volatile')
-      let source.is_volatile = 0
-    endif
-    if !has_key(source, 'is_listed')
-      let source.is_listed = 1
-    endif
-    if !has_key(source, 'is_forced')
-      let source.is_forced = 0
-    endif
-    if !has_key(source, 'required_pattern_length')
-      let source.required_pattern_length = 0
-    endif
-
-    if !has_key(source, 'action_table')
-      let source.action_table = {}
-    elseif !empty(source.action_table)
-      let action = values(source.action_table)[0]
-
-      " Check if '*' action_table?
-      if has_key(action, 'func')
-            \ && type(action.func) == type(function('type'))
-        " Syntax sugar.
-        let source.action_table = { '*' : source.action_table }
+      if !has_key(source, 'hooks')
+        let source.hooks = {}
       endif
-    endif
 
-    if !has_key(source, 'default_action')
-      let source.default_action = {}
-    elseif type(source.default_action) == type('')
-      " Syntax sugar.
-      let source.default_action = { '*' : source.default_action }
-    endif
+      if has_key(source.hooks, 'on_pre_init')
+        " Call pre_init hook.
 
-    if !has_key(source, 'alias_table')
-      let source.alias_table = {}
-    elseif !empty(source.alias_table)
-      " Check if '*' alias_table?
-      if type(values(source.alias_table)[0]) == type('')
-        " Syntax sugar.
-        let source.alias_table = { '*' : source.alias_table }
+        " Set dummey value.
+        let source.args = []
+        let source.unite__context = { 'source' : source }
+
+        " Overwrite source values.
+        call s:call_hook([source], 'on_pre_init')
       endif
-    endif
-    if !has_key(source, 'description')
-      let source.description = ''
-    endif
-    if !has_key(source, 'syntax')
-      let source.syntax = ''
-    endif
-    if source.is_volatile
-          \ && !has_key(source, 'change_candidates')
-      let source.change_candidates = source.gather_candidates
-      call remove(source, 'gather_candidates')
-    endif
 
-    let source.filters =
-          \ has_key(s:custom.filters, source.name) ?
-          \ s:custom.filters[source.name] :
-          \ has_key(source, 'filters') ?
-          \ source.filters :
-          \ unite#filters#default#get()
-    let source.max_candidates =
-          \ has_key(s:custom.max_candidates, source.name) ?
-          \ s:custom.max_candidates[source.name] :
-          \ has_key(source, 'max_candidates') ?
-          \ source.max_candidates :
-          \ 0
+      if !has_key(source, 'is_volatile')
+        let source.is_volatile = 0
+      endif
+      if !has_key(source, 'is_listed')
+        let source.is_listed = 1
+      endif
+      if !has_key(source, 'is_forced')
+        let source.is_forced = 0
+      endif
+      if !has_key(source, 'required_pattern_length')
+        let source.required_pattern_length = 0
+      endif
+
+      if !has_key(source, 'action_table')
+        let source.action_table = {}
+      elseif !empty(source.action_table)
+        let action = values(source.action_table)[0]
+
+        " Check if '*' action_table?
+        if has_key(action, 'func')
+              \ && type(action.func) == type(function('type'))
+          " Syntax sugar.
+          let source.action_table = { '*' : source.action_table }
+        endif
+      endif
+
+      if !has_key(source, 'default_action')
+        let source.default_action = {}
+      elseif type(source.default_action) == type('')
+        " Syntax sugar.
+        let source.default_action = { '*' : source.default_action }
+      endif
+
+      if !has_key(source, 'alias_table')
+        let source.alias_table = {}
+      elseif !empty(source.alias_table)
+        " Check if '*' alias_table?
+        if type(values(source.alias_table)[0]) == type('')
+          " Syntax sugar.
+          let source.alias_table = { '*' : source.alias_table }
+        endif
+      endif
+      if !has_key(source, 'description')
+        let source.description = ''
+      endif
+      if !has_key(source, 'syntax')
+        let source.syntax = ''
+      endif
+      if source.is_volatile
+            \ && !has_key(source, 'change_candidates')
+        let source.change_candidates = source.gather_candidates
+        call remove(source, 'gather_candidates')
+      endif
+
+      let source.filters =
+            \ has_key(s:custom.filters, source.name) ?
+            \ s:custom.filters[source.name] :
+            \ has_key(source, 'filters') ?
+            \ source.filters :
+            \ unite#filters#default#get()
+      let source.max_candidates =
+            \ has_key(s:custom.max_candidates, source.name) ?
+            \ s:custom.max_candidates[source.name] :
+            \ has_key(source, 'max_candidates') ?
+            \ source.max_candidates :
+            \ 0
+    catch
+      call unite#print_error(v:throwpoint)
+      call unite#print_error(v:exception)
+      call unite#print_error('Error occured in source initialization!')
+      call unite#print_error('Plugin name is ' . source.name)
+    endtry
   endfor
 
   return sources

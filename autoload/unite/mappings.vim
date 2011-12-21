@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Nov 2011.
+" Last Modified: 21 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -301,7 +301,14 @@ function! unite#mappings#do_action(action_name, ...)"{{{
       let is_quit = 1
     endif
 
-    call add(_, table.action.func(table.candidates))
+    try
+      call add(_, table.action.func(table.candidates))
+    catch
+      call unite#print_error(v:throwpoint)
+      call unite#print_error(v:exception)
+      call unite#print_error('Error occured in executing action!')
+      call unite#print_error('Action name is ' . table.action.name)
+    endtry
 
     " Check invalidate cache flag.
     if table.action.is_invalidate_cache
