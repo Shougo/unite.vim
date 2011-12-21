@@ -1950,8 +1950,8 @@ function! s:initialize_unite_buffer()"{{{
     let &redrawtime = 100
   endif
 
+  let unite.update_time_save = &updatetime
   if &updatetime > unite.context.update_time
-    let unite.update_time_save = &updatetime
     let &updatetime = unite.context.update_time
   endif
 
@@ -2248,7 +2248,7 @@ function! s:on_buf_unload(bufname)  "{{{
     let &redrawtime = unite.redrawtime_save
   endif
   let &sidescrolloff = unite.sidescrolloff_save
-  if &updatetime < unite.context.update_time
+  if &updatetime < unite.update_time_save
     let &updatetime = unite.update_time_save
   endif
 
