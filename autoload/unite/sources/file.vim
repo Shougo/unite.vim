@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Dec 2011.
+" Last Modified: 22 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -81,20 +81,10 @@ function! s:source.change_candidates(args, context)"{{{
   let input = substitute(input, '[^/.]*$', '', '')
   let glob = input . (input =~ '\*$' ? '' : '*')
 
-  " Escape [.
-  if unite#is_win()
-    let glob = substitute(glob, '\[', '\\[[]', 'g')
-  else
-    let glob = escape(glob, '[')
-  endif
   if !has_key(a:context.source__cache, glob)
-
     " let files = split(unite#util#substitute_path_separator(
     "       \ glob(glob)), '\n')
-    let files = is_vimfiler ?
-          \ unite#util#glob(glob) :
-          \ split(unite#util#substitute_path_separator(
-          \  glob(glob)), '\n')
+    let files = unite#util#glob(glob, !is_vimfiler)
 
     if !is_vimfiler
       if g:unite_source_file_ignore_pattern != ''
@@ -170,7 +160,7 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
       let context.input .= '.'
       let candidates += self.change_candidates(a:args, context)
     endif
-    call filter(candidates, 'v:val.word !~ "/\.\.\\?$"')
+    call filter(candidates, 'v:val.word !~ "/\\.\\.\\?$"')
 
     " echomsg reltimestr(reltime(start))
   elseif filereadable(path)

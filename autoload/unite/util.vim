@@ -156,11 +156,22 @@ function! s:buflisted(bufnr)"{{{
         \ has_key(t:unite_buffer_dictionary, a:bufnr) : buflisted(a:bufnr)
 endfunction"}}}
 
-function! unite#util#glob(pattern)"{{{
-  return (a:pattern =~ '^[^*]\+/\*'
-        \ && unite#util#has_vimproc() && exists('*vimproc#readdir')) ?
-        \ sort(vimproc#readdir(a:pattern[: -2])) :
-        \ split(unite#util#substitute_path_separator(glob(a:pattern)), '\n')
+function! unite#util#glob(pattern, ...)"{{{
+  let is_force_glob = get(a:000, 0, 0)
+
+  if !is_force_glob && a:pattern =~ '^[^*]\+/\*'
+        \ && unite#util#has_vimproc() && exists('*vimproc#readdir')
+    return vimproc#readdir(a:pattern[: -2])
+  else
+    " Escape [.
+    if unite#util#is_win()
+      let glob = substitute(a:pattern, '\[', '\\[[]', 'g')
+    else
+      let glob = escape(a:pattern, '[')
+    endif
+
+    return split(unite#util#substitute_path_separator(glob(glob)), '\n')
+  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo
