@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Dec 2011.
+" Last Modified: 22 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2433,8 +2433,15 @@ function! s:call_hook(sources, hook_name)"{{{
   let _ = []
   for source in a:sources
     if has_key(source.hooks, a:hook_name)
-      call call(source.hooks[a:hook_name],
-            \ [source.args, source.unite__context], source.hooks)
+      try
+        call call(source.hooks[a:hook_name],
+              \ [source.args, source.unite__context], source.hooks)
+      catch
+        call unite#print_error(v:throwpoint)
+        call unite#print_error(v:exception)
+        call unite#print_error('Error occured in calling hook "' . a:hook_name . '"!')
+        call unite#print_error('Source name is ' . source.name)
+      endtry
     endif
   endfor
 endfunction"}}}

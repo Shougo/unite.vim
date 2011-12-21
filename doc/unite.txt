@@ -2123,6 +2123,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-12-22
+- Improved error detecton when call hook.
+
 2011-12-21
 - Improved unite#_resize_window().
 - Improved detect source and action error.
