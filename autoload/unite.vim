@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Dec 2011.
+" Last Modified: 21 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2090,7 +2090,9 @@ function! unite#_resize_window() "{{{
   let context = unite#get_context()
   let unite = unite#get_current_unite()
 
-  if context.auto_resize
+  if context.no_split
+    return
+  elseif context.auto_resize
     " Auto resize.
     let max_len = unite.prompt_linenr + len(unite.candidates)
     execute 'resize' min([max_len, context.winheight])
