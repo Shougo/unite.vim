@@ -2127,6 +2127,7 @@ CHANGELOG					*unite-changelog*
 - Improved error detecton when call hook.
 - Fixed for vimfiler.
 - Fixed updatetime error.
+- Fixed documentation.
 
 2011-12-21
 - Improved unite#_resize_window().

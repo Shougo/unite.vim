@@ -1514,7 +1514,8 @@ jump_list	ジャンプリスト
 				ファイルを開いた後に検索するパターン
 
 			action__text		(文字列)		(任意)
-				ジャンプする行の内容
+				ジャンプする行の内容。現在、replace actionでの
+				み使用される。
 
 			action__signature	(文字列)		(任意)
 				action__patternに設定するパターンや
