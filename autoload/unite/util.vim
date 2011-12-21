@@ -159,7 +159,7 @@ endfunction"}}}
 function! unite#util#glob(pattern, ...)"{{{
   let is_force_glob = get(a:000, 0, 0)
 
-  if !is_force_glob && a:pattern =~ '^[^*]\+/\*'
+  if !is_force_glob && a:pattern =~ '^[^\\*]\+/\*'
         \ && unite#util#has_vimproc() && exists('*vimproc#readdir')
     return vimproc#readdir(a:pattern[: -2])
   else
