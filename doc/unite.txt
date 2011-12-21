@@ -2126,6 +2126,7 @@ CHANGELOG					*unite-changelog*
 2011-12-21
 - Improved unite#_resize_window().
 - Improved detect source and action error.
+- Improved error detection.
 
 2011-12-20
 - Use vimproc#read_dir() (experimental).

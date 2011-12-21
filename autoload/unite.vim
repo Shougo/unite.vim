@@ -1418,7 +1418,7 @@ function! s:initialize_sources(...)"{{{
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
       call unite#print_error('Error occured in source initialization!')
-      call unite#print_error('Plugin name is ' . source.name)
+      call unite#print_error('Source name is ' . source.name)
     endtry
   endfor
 
@@ -1694,40 +1694,55 @@ endfunction"}}}
 function! s:get_source_candidates(source, is_vimfiler)"{{{
   let context = a:source.unite__context
 
-  if a:is_vimfiler
-    if context.vimfiler__is_dummy
-      return has_key(a:source, 'vimfiler_dummy_candidates') ?
-            \ copy(a:source.vimfiler_dummy_candidates(
-            \           a:source.args, a:source.unite__context)) : []
-    else
-      return has_key(a:source, 'vimfiler_gather_candidates') ?
-            \ copy(a:source.vimfiler_gather_candidates(
-            \           a:source.args, a:source.unite__context)) : []
+  let funcname = 's:get_source_candidates()'
+  try
+    if a:is_vimfiler
+      if context.vimfiler__is_dummy
+        let funcname = 'vimfiler_dummy_candidates'
+        return has_key(a:source, 'vimfiler_dummy_candidates') ?
+              \ copy(a:source.vimfiler_dummy_candidates(
+              \           a:source.args, a:source.unite__context)) : []
+      else
+        let funcname = 'vimfiler_gather_candidates'
+        return has_key(a:source, 'vimfiler_gather_candidates') ?
+              \ copy(a:source.vimfiler_gather_candidates(
+              \           a:source.args, a:source.unite__context)) : []
+      endif
     endif
-  endif
 
-  if context.is_redraw || a:source.unite__is_invalidate
-    " Recaching.
-    let a:source.unite__cached_candidates = []
+    if context.is_redraw || a:source.unite__is_invalidate
+      " Recaching.
+      let a:source.unite__cached_candidates = []
 
-    if has_key(a:source, 'gather_candidates')
+      let funcname = 'gather_candidates'
+      if has_key(a:source, 'gather_candidates')
+        let a:source.unite__cached_candidates +=
+              \ copy(a:source.gather_candidates(a:source.args, context))
+      endif
+    endif
+
+    if a:source.unite__context.is_async
+      let funcname = 'async_gather_candidates'
       let a:source.unite__cached_candidates +=
-            \ copy(a:source.gather_candidates(a:source.args, context))
+            \ a:source.async_gather_candidates(a:source.args, context)
     endif
-  endif
 
-  if a:source.unite__context.is_async
-    let a:source.unite__cached_candidates +=
-          \ a:source.async_gather_candidates(a:source.args, context)
-  endif
+    if has_key(a:source, 'change_candidates')
+          \ && (context.is_redraw || context.is_changed
+          \     || a:source.unite__is_invalidate)
+      " Recaching.
+      let funcname = 'change_candidates'
+      let a:source.unite__cached_change_candidates =
+            \ a:source.change_candidates(a:source.args, a:source.unite__context)
+    endif
+  catch
+      call unite#print_error(v:throwpoint)
+      call unite#print_error(v:exception)
+      call unite#print_error('Error occured in ' . funcname . '!')
+      call unite#print_error('Source name is ' . source.name)
 
-  if has_key(a:source, 'change_candidates')
-        \ && (context.is_redraw || context.is_changed
-        \     || a:source.unite__is_invalidate)
-    " Recaching.
-    let a:source.unite__cached_change_candidates =
-          \ a:source.change_candidates(a:source.args, a:source.unite__context)
-  endif
+      return []
+  endtry
 
   return a:source.unite__cached_candidates
         \ + a:source.unite__cached_change_candidates
