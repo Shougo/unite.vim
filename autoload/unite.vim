@@ -1428,6 +1428,9 @@ function! s:initialize_kinds()"{{{
   let kinds = extend(copy(s:static.kinds), s:dynamic.kinds)
   for kind in values(filter(copy(kinds), '!has_key(v:val, "is_initialized")'))
     let kind.is_initialized = 1
+    if !has_key(kind, 'action_table')
+      let kind.action_table = {}
+    endif
     if !has_key(kind, 'alias_table')
       let kind.alias_table = {}
     endif

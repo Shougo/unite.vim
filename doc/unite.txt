@@ -2129,6 +2129,7 @@ CHANGELOG					*unite-changelog*
 - Fixed updatetime error.
 - Fixed documentation.
 - Force use glob().
+- Set kind action_table.
 
 2011-12-21
 - Improved unite#_resize_window().
