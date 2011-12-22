@@ -2128,6 +2128,7 @@ CHANGELOG					*unite-changelog*
 - Fixed for vimfiler.
 - Fixed updatetime error.
 - Fixed documentation.
+- Force use glob().
 
 2011-12-21
 - Improved unite#_resize_window().
