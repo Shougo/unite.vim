@@ -1614,7 +1614,9 @@ function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
     let source.unite__candidates = []
   endfor
 
-  for input in s:get_substitute_input(a:input)
+  let inputs = s:get_substitute_input(a:input)
+  let context.is_list_input = len(inputs) > 1
+  for input in inputs
     let context.input = input
     call s:recache_candidates_loop(context, a:is_force, a:is_vimfiler)
   endfor
@@ -1675,6 +1677,7 @@ function! s:recache_candidates_loop(context, is_force, is_vimfiler)"{{{
     endif
     let source.unite__context.is_changed = a:context.is_changed
     let source.unite__context.is_invalidate = source.unite__is_invalidate
+    let source.unite__context.is_list_input = a:context.is_list_input
 
     let source_candidates = s:get_source_candidates(source, a:is_vimfiler)
 
@@ -1742,7 +1745,7 @@ function! s:get_source_candidates(source, is_vimfiler)"{{{
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
       call unite#print_error('Error occured in ' . funcname . '!')
-      call unite#print_error('Source name is ' . source.name)
+      call unite#print_error('Source name is ' . a:source.name)
 
       return []
   endtry

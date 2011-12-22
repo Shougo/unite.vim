@@ -102,7 +102,8 @@ function! s:source.change_candidates(args, context)"{{{
 
   let candidates = copy(a:context.source__cache[glob])
 
-  if a:context.input != '' && !is_vimfiler
+  if !a:context.is_list_input
+        \ && a:context.input != '' && !is_vimfiler
     let newfile = substitute(expand(a:context.input), '[*\\]', '', 'g')
     if !filereadable(newfile) && !isdirectory(newfile)
       " Add newfile candidate.

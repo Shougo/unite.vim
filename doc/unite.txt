@@ -2130,6 +2130,7 @@ CHANGELOG					*unite-changelog*
 - Fixed documentation.
 - Force use glob().
 - Set kind action_table.
+- Fixed substitute patterns list.
 
 2011-12-21
 - Improved unite#_resize_window().
