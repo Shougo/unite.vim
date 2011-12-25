@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: openable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Dec 2011.
+" Last Modified: 26 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -124,15 +124,22 @@ let s:kind.action_table.persist_open = {
       \ 'is_quit'     : 0,
       \ }
 function! s:kind.action_table.persist_open.func(candidate)"{{{
-  if winnr('$') == 1 || winnr('#') < 0
+  let unite = unite#get_current_unite()
+
+  let winnr = bufwinnr(unite.prev_bufnr)
+  if winnr < 0
+    let winnr = unite.prev_winnr
+  endif
+  if (unite.context.no_split && winnr('$') == 1) || winnr < 0
     new
   else
-    wincmd p
+    execute winnr 'wincmd w'
   endif
-
-  let unite_winnr = bufwinnr(unite#get_current_unite().bufnr)
+  let unite.prev_winnr = winnr()
 
   call unite#take_action('open', a:candidate)
+  let unite.prev_bufnr = bufnr('%')
+
   if g:unite_kind_openable_persist_open_blink_time != ''
     normal! V
     redraw!
@@ -140,6 +147,7 @@ function! s:kind.action_table.persist_open.func(candidate)"{{{
     execute "normal! \<ESC>"
   endif
 
+  let unite_winnr = bufwinnr(unite.bufnr)
   if unite_winnr > 0
     execute unite_winnr 'wincmd w'
   endif

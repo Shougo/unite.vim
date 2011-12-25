@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Dec 2011.
+" Last Modified: 26 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1227,11 +1227,16 @@ function! s:quit_session(is_force)  "{{{
 
     call s:on_buf_unload(bufname)
   else
-    if winnr('$') == 1 || winnr('#') < 0
+    let winnr = bufwinnr(unite.prev_bufnr)
+    if winnr < 0
+      let winnr = unite.prev_winnr
+    endif
+    if (unite.context.no_split && winnr('$') == 1) || winnr < 0
       new
     else
-      wincmd p
+      execute winnr 'wincmd w'
     endif
+    let unite.prev_winnr = winnr()
   endif
 
   if context.complete
@@ -1855,6 +1860,8 @@ function! s:initialize_current_unite(sources, context)"{{{
         \ unite.buffer_name : context.profile_name
   let unite.buffer_options =
         \ s:initialize_profile(unite.profile_name)
+  let unite.prev_bufnr = bufnr('%')
+  let unite.prev_winnr = winnr()
 
   " Create new buffer name.
   let postfix = '@1'
@@ -2053,6 +2060,7 @@ function! s:redraw(is_force, winnr) "{{{
     let s:use_current_unite = 1
     let unite = getbufvar(winbufnr(a:winnr), 'unite')
     let unite_save = s:current_unite
+    let winnr_save = winnr()
 
     execute a:winnr 'wincmd w'
   endif
@@ -2091,7 +2099,7 @@ function! s:redraw(is_force, winnr) "{{{
     " Restore current unite.
     let s:use_current_unite = use_current_unite_save
     let s:current_unite = unite_save
-    wincmd p
+    execute winnr_save 'wincmd w'
     call unite#_resize_window()
   endif
 
