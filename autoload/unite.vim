@@ -879,8 +879,15 @@ function! unite#start_temporary(sources, ...)"{{{
   " Overwrite context.
   let context = extend(context, new_context)
 
+  let unite_save = unite#get_current_unite()
+
   call unite#all_quit_session()
   call unite#start(a:sources, context)
+
+  " Overwrite unite.
+  let unite = unite#get_current_unite()
+  let unite.prev_bufnr = unite_save.prev_bufnr
+  let unite.prev_winnr = unite_save.prev_winnr
 endfunction"}}}
 function! unite#vimfiler_check_filetype(sources, ...)"{{{
   let context = get(a:000, 0, {})
@@ -1231,7 +1238,7 @@ function! s:quit_session(is_force)  "{{{
     if winnr < 0
       let winnr = unite.prev_winnr
     endif
-    if (unite.context.no_split && winnr('$') == 1) || winnr < 0
+    if winnr == winnr() || winnr < 0
       new
     else
       execute winnr 'wincmd w'
@@ -1255,11 +1262,18 @@ function! unite#resume_from_temporary(context)  "{{{
     return
   endif
 
+  let unite_save = unite#get_current_unite()
+
   " Resume unite buffer.
   let buffer_info = a:context.old_buffer_info[0]
   call unite#resume(buffer_info.buffer_name)
   call setpos('.', buffer_info.pos)
   let a:context.old_buffer_info = a:context.old_buffer_info[1:]
+
+  " Overwrite unite.
+  let unite = unite#get_current_unite()
+  let unite.prev_bufnr = unite_save.prev_bufnr
+  let unite.prev_winnr = unite_save.prev_winnr
 endfunction"}}}
 
 function! s:load_default_scripts()"{{{

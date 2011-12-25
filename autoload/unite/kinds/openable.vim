@@ -126,11 +126,13 @@ let s:kind.action_table.persist_open = {
 function! s:kind.action_table.persist_open.func(candidate)"{{{
   let unite = unite#get_current_unite()
 
+  let current_winnr = winnr()
+
   let winnr = bufwinnr(unite.prev_bufnr)
   if winnr < 0
     let winnr = unite.prev_winnr
   endif
-  if (unite.context.no_split && winnr('$') == 1) || winnr < 0
+  if winnr == winnr() || winnr < 0
     new
   else
     execute winnr 'wincmd w'
@@ -148,6 +150,9 @@ function! s:kind.action_table.persist_open.func(candidate)"{{{
   endif
 
   let unite_winnr = bufwinnr(unite.bufnr)
+  if unite_winnr < 0
+    let unite_winnr = current_winnr
+  endif
   if unite_winnr > 0
     execute unite_winnr 'wincmd w'
   endif

@@ -2125,6 +2125,7 @@ CHANGELOG					*unite-changelog*
 
 2011-12-26
 - Don't use wincmd p.
+- Improved persist_open action.
 
 2011-12-25
 - Fixed persist_open action.
