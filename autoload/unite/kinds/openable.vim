@@ -130,7 +130,8 @@ function! s:kind.action_table.persist_open.func(candidate)"{{{
     wincmd p
   endif
 
-  let unite_winnr = unite#get_current_unite().winnr
+  let unite_winnr = bufwinnr(unite#get_current_unite().bufnr)
+
   call unite#take_action('open', a:candidate)
   if g:unite_kind_openable_persist_open_blink_time != ''
     normal! V
@@ -138,7 +139,10 @@ function! s:kind.action_table.persist_open.func(candidate)"{{{
     execute 'sleep ' . g:unite_kind_openable_persist_open_blink_time
     execute "normal! \<ESC>"
   endif
-  execute unite_winnr 'wincmd w'
+
+  if unite_winnr > 0
+    execute unite_winnr 'wincmd w'
+  endif
 endfunction"}}}
 
 "}}}
