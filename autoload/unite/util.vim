@@ -157,7 +157,8 @@ function! s:buflisted(bufnr)"{{{
 endfunction"}}}
 
 function! unite#util#glob(pattern, ...)"{{{
-  let is_force_glob = get(a:000, 0, 0)
+  " let is_force_glob = get(a:000, 0, 0)
+  let is_force_glob = get(a:000, 0, 1)
 
   if !is_force_glob && a:pattern =~ '^[^\\*]\+/\*'
         \ && unite#util#has_vimproc() && exists('*vimproc#readdir')
