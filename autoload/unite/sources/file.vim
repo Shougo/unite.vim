@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Dec 2011.
+" Last Modified: 26 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -104,7 +104,7 @@ function! s:source.change_candidates(args, context)"{{{
 
   if !a:context.is_list_input
         \ && a:context.input != '' && !is_vimfiler
-    let newfile = substitute(expand(a:context.input), '[*\\]', '', 'g')
+    let newfile = expand(substitute(a:context.input, '[*\\]', '', 'g'))
     if !filereadable(newfile) && !isdirectory(newfile)
       " Add newfile candidate.
       let file = unite#sources#file#create_file_dict(
