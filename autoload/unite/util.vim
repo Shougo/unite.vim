@@ -174,6 +174,20 @@ function! unite#util#glob(pattern, ...)"{{{
     return split(unite#util#substitute_path_separator(glob(glob)), '\n')
   endif
 endfunction"}}}
+function! unite#util#command_with_restore_cursor(command)
+  let pos = getpos('.')
+  let current = winnr()
+
+  execute a:command
+  let next = winnr()
+
+  " Restore cursor.
+  execute current 'wincmd w'
+  call setpos('.', pos)
+
+  execute next 'wincmd w'
+endfunction
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
