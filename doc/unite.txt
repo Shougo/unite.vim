@@ -2125,6 +2125,7 @@ CHANGELOG					*unite-changelog*
 
 2011-12-27
 - Fixed restore cursor in actions.
+- set winfixwidth and winfixheight.
 
 2011-12-26
 - Don't use wincmd p.

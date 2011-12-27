@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Dec 2011.
+" Last Modified: 27 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1952,6 +1952,13 @@ function! s:initialize_unite_buffer()"{{{
     endif
     if exists('+colorcolumn')
       setlocal colorcolumn=0
+    endif
+
+    " Keep window width and height.
+    if unite.context.vertical
+      setlocal winfixwidth
+    else
+      setlocal winfixheight
     endif
 
     " Autocommands.
