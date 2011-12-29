@@ -1000,6 +1000,11 @@ unite#start_complete({sources}, [{context}])	*unite#start_complete()*
 		\ 'start_insert' : 0,
 		\ 'input' : vimshell#get_cur_text()})
 <
+unite#get_candidates({sources}, [, {context}])			*unite#get_candidates()*
+		Get candidates list with sources. Does not create unite buffer.
+		This function may not work in some sources. The arguments
+		feature is same to |unite#start()|.
+
 unite#get_context()				*unite#get_context()*
 		Gets the context information of the current Unite buffer.
 		This is used by functions like |unite#custom_action()| to call
