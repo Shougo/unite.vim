@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Dec 2011.
+" Last Modified: 29 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -924,31 +924,17 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
   " Not found.
   return []
 endfunction"}}}
+function! unite#get_candidates(sources, ...)"{{{
+  let context = get(a:000, 0, {})
+  call s:initialize_context(context)
+
+  return s:get_candidates(a:sources, context, 0)
+endfunction"}}}
 function! unite#get_vimfiler_candidates(sources, ...)"{{{
   let context = get(a:000, 0, {})
   call s:initialize_context(context)
 
-  try
-    call s:initialize_current_unite(a:sources, context)
-  catch /^Invalid source/
-    return []
-  endtry
-
-  " Caching.
-  let s:current_unite.last_input = context.input
-  let s:current_unite.input = context.input
-  call s:recache_candidates(context.input, context.is_redraw, 1)
-
-  let candidates = []
-  for source in unite#loaded_sources_list()
-    if !empty(source.unite__candidates)
-      let candidates += source.unite__candidates
-    endif
-  endfor
-
-  let candidates = s:initialize_vimfiler_candidates(candidates)
-
-  return candidates
+  return s:get_candidates(a:sources, context, 1)
 endfunction"}}}
 function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
   let context = {}
@@ -1126,6 +1112,31 @@ function! s:initialize_context(context)"{{{
 
   return a:context
 endfunction"}}}
+function! s:get_candidates(sources, context, is_vimfiler)
+  try
+    call s:initialize_current_unite(a:sources, a:context)
+  catch /^Invalid source/
+    return []
+  endtry
+
+  " Caching.
+  let s:current_unite.last_input = a:context.input
+  let s:current_unite.input = a:context.input
+  call s:recache_candidates(a:context.input, a:context.is_redraw, a:is_vimfiler)
+
+  let candidates = []
+  for source in unite#loaded_sources_list()
+    if !empty(source.unite__candidates)
+      let candidates += source.unite__candidates
+    endif
+  endfor
+
+  if a:is_vimfiler
+    let candidates = s:initialize_vimfiler_candidates(candidates)
+  endif
+
+  return candidates
+endfunction
 
 function! unite#close(buffer_name)  "{{{
   let buffer_name = a:buffer_name
