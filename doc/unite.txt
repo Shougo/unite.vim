@@ -2130,6 +2130,7 @@ CHANGELOG					*unite-changelog*
 
 2011-12-29
 - Added unite#get_candidates().
+- Fixed make directory action.
 
 2011-12-27
 - Fixed restore cursor in actions.
