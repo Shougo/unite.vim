@@ -2128,6 +2128,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2011-12-30
+- Improved expand bookmark name.
+
 2011-12-29
 - Added unite#get_candidates().
 - Fixed make directory action.
