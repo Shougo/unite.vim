@@ -2141,6 +2141,7 @@ CHANGELOG					*unite-changelog*
 - Improved register source.
 - Does not cd in vimfiler__mkdir action.
 - Fixed unite#get_candidates() behavior.
+- Ignore directories in file_mru source.
 
 2011-12-29
 - Added unite#get_candidates().
