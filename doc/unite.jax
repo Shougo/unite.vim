@@ -989,9 +989,11 @@ unite#start_complete({sources}, [{context}])			*unite#start_complete()*
 		\ 'input' : vimshell#get_cur_text()})
 <
 unite#get_candidates({sources}, [, {context}])			*unite#get_candidates()*
-		指定したsourceの候補をリストで得る。uniteバッファは生成されない。
-		uniteバッファが存在することを前提としているsourceによっては動か
-		ないかもしれない。引数の仕様は|unite#start()|と同一である。
+		指定したsourceの全ての候補をリストで得る。uniteバッファは生成さ
+		れない。uniteバッファが存在することを前提としているsourceによっ
+		ては動かないかもしれない。引数の仕様は|unite#start()|と同一であ
+		る。
+		Note: sourceのmax_candidatesオプションは無視される。
 
 unite#get_context()						*unite#get_context()*
 		現在のuniteバッファのコンテキスト情報を得る。

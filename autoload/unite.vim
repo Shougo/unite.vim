@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Dec 2011.
+" Last Modified: 30 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -927,12 +927,14 @@ endfunction"}}}
 function! unite#get_candidates(sources, ...)"{{{
   let context = get(a:000, 0, {})
   call s:initialize_context(context)
+  let context.no_buffer = 1
 
   return s:get_candidates(a:sources, context, 0)
 endfunction"}}}
 function! unite#get_vimfiler_candidates(sources, ...)"{{{
   let context = get(a:000, 0, {})
   call s:initialize_context(context)
+  let context.no_buffer = 1
 
   return s:get_candidates(a:sources, context, 1)
 endfunction"}}}
@@ -1107,6 +1109,9 @@ function! s:initialize_context(context)"{{{
   endif
   if !has_key(a:context, 'update_time')
     let a:context.update_time = g:unite_update_time
+  endif
+  if !has_key(a:context, 'no_buffer')
+    let a:context.no_buffer = 0
   endif
   let a:context.is_changed = 0
 
@@ -1656,7 +1661,7 @@ function! s:recache_candidates(input, is_force, is_vimfiler)"{{{
   for source in unite#loaded_sources_list()
     let source.unite__is_invalidate = 0
 
-    if !a:is_vimfiler && source.max_candidates != 0
+    if !context.no_buffer && source.max_candidates != 0
           \ && !unite.is_enabled_max_candidates
           \ && len(source.unite__candidates) > source.max_candidates
       " Filtering too many candidates.

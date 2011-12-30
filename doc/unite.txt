@@ -1006,9 +1006,10 @@ unite#start_complete({sources}, [{context}])	*unite#start_complete()*
 		\ 'input' : vimshell#get_cur_text()})
 <
 unite#get_candidates({sources}, [, {context}])			*unite#get_candidates()*
-		Get candidates list with sources. Does not create unite buffer.
-		This function may not work in some sources. The arguments
-		feature is same to |unite#start()|.
+		Get all candidates list with sources. Does not create unite
+		buffer.  This function may not work in some sources. The
+		arguments feature is same to |unite#start()|.
+		Note: Ignore sources max_candidates option.
 
 unite#get_context()				*unite#get_context()*
 		Gets the context information of the current Unite buffer.
@@ -2139,6 +2140,7 @@ CHANGELOG					*unite-changelog*
 - Fixed external command bug.
 - Improved register source.
 - Does not cd in vimfiler__mkdir action.
+- Fixed unite#get_candidates() behavior.
 
 2011-12-29
 - Added unite#get_candidates().
