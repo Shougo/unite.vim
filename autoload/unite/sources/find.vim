@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: find.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 21 Nov 2011.
+" Last Modified: 31 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,7 +92,7 @@ function! s:find_source.gather_candidates(args, context) "{{{
   endif
 
   let cmdline = printf('%s %s %s', g:unite_source_find_command,
-    \   a:context.source__target, a:context.source__input)
+    \   string(a:context.source__target), a:context.source__input)
   call unite#print_message('[find] Command-line: ' . cmdline)
   let a:context.source__proc = vimproc#pgroup_open(cmdline)
 
