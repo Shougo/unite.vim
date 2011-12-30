@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 07 Dec 2011.
+" Last Modified: 30 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -94,7 +94,8 @@ function! s:grep_source.hooks.on_init(args, context) "{{{
   if target == '%' || target == '#'
     let target = unite#util#escape_file_searching(bufname(target))
   elseif target ==# '$buffers'
-    let target = join(map(filter(range(1, bufnr('$')), 'buflisted(v:val) && filereadable(bufname(v:val))'),
+    let target = join(map(filter(range(1, bufnr('$')),
+          \ 'buflisted(v:val) && filereadable(bufname(v:val))'),
           \ 'unite#util#escape_file_searching(bufname(v:val))'))
   elseif target == '**'
     " Optimized.
@@ -122,7 +123,8 @@ function! s:grep_source.hooks.on_syntax(args, context)"{{{
   execute 'syntax match uniteSource__GrepPattern /:.*\zs'
         \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
         \ . '/ contained containedin=uniteSource__Grep'
-  execute 'highlight default link uniteSource__GrepPattern ' . g:unite_source_grep_search_word_highlight
+  execute 'highlight default link uniteSource__GrepPattern'
+        \ g:unite_source_grep_search_word_highlight
 endfunction"}}}
 function! s:grep_source.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__proc')
