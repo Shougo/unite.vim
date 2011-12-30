@@ -2137,6 +2137,7 @@ CHANGELOG					*unite-changelog*
 - Improved expand bookmark name.
 - Added g:unite_source_grep_search_word_highlight option.
 - Fixed external command bug.
+- Improved register source.
 
 2011-12-29
 - Added unite#get_candidates().
