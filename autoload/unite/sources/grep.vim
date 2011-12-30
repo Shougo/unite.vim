@@ -94,7 +94,7 @@ function! s:grep_source.hooks.on_init(args, context) "{{{
   if target == '%' || target == '#'
     let target = unite#util#escape_file_searching(bufname(target))
   elseif target ==# '$buffers'
-    let target = join(map(filter(range(1, bufnr('$')), 'buflisted(v:val)'),
+    let target = join(map(filter(range(1, bufnr('$')), 'buflisted(v:val) && filereadable(bufname(v:val))'),
           \ 'unite#util#escape_file_searching(bufname(v:val))'))
   elseif target == '**'
     " Optimized.
