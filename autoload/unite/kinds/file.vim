@@ -471,9 +471,6 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidate)"{{{
       lcd `=current_dir`
     endif
   endtry
-
-  " vimfiler cd.
-  call vimfiler#mappings#cd(dirname)
 endfunction"}}}
 
 let s:kind.action_table.vimfiler__execute = {
