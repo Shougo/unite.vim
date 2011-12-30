@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Oct 2011.
+" Last Modified: 30 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,18 +92,18 @@ function! s:source.gather_candidates(args, context)"{{{
   let bookmark_name = get(a:args, 0, 'default')
 
   let bookmark = s:load(bookmark_name)
-  return map(copy(bookmark.files), '{
-        \ "word" : (v:val[0] != "" ? "[" . v:val[0] . "] " : "") .
-        \          (fnamemodify(expand(v:val[1]), ":~:.") != "" ?
-        \           fnamemodify(expand(v:val[1]), ":~:.") : expand(v:val[1])),
-        \ "kind" : (isdirectory(expand(v:val[1])) ? "directory" : "jump_list"),
-        \ "source_bookmark_name" : bookmark_name,
-        \ "source_entry_name" : v:val[0],
-        \ "action__path" : expand(v:val[1]),
-        \ "action__line" : v:val[2],
-        \ "action__pattern" : v:val[3],
-        \ "action__directory" : unite#path2directory(expand(v:val[1])),
-        \   }')
+  return map(copy(bookmark.files), "{
+        \ 'word' : (v:val[0] != '' ? '[' . v:val[0] . '] ' : '') .
+        \          (fnamemodify(v:val[1], ':~:.') != '' ?
+        \           fnamemodify(v:val[1], ':~:.') : v:val[1]),
+        \ 'kind' : (isdirectory(v:val[1]) ? 'directory' : 'jump_list'),
+        \ 'source_bookmark_name' : bookmark_name,
+        \ 'source_entry_name' : v:val[0],
+        \ 'action__path' : v:val[1],
+        \ 'action__line' : v:val[2],
+        \ 'action__pattern' : v:val[3],
+        \ 'action__directory' : unite#path2directory(v:val[1]),
+        \   }")
 endfunction"}}}
 
 " Actions"{{{
@@ -180,6 +180,10 @@ function! s:load(filename)  "{{{
       return
     endif
     let bookmark.files = map(bookmark.files, 'split(v:val, "\t", 1)')
+    for files in bookmark.files
+      let files[1] = unite#util#substitute_path_separator(
+            \ expand(files[1]))
+    endfor
     let bookmark.file_mtime = getftime(filename)
   endif
 
