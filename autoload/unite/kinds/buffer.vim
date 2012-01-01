@@ -54,19 +54,19 @@ let s:kind.action_table.goto = {
       \ 'is_quit' : 1,
       \ }
 function! s:kind.action_table.goto.func(candidate)"{{{
-    for i in range(tabpagenr('$'))
-      let tabnr = i + 1
-      for nr in tabpagebuflist(tabnr)
-        if nr == a:candidate.action__buffer_nr
-          exe 'tabnext '.tabnr
-          while bufnr('%') != nr
-            wincmd w
-          endwhile
-          " jump to the first
-          return
-        endif
-      endfor
+  for i in range(tabpagenr('$'))
+    let tabnr = i + 1
+    for nr in tabpagebuflist(tabnr)
+      if nr == a:candidate.action__buffer_nr
+        exe 'tabnext '.tabnr
+        while bufnr('%') != nr
+          wincmd w
+        endwhile
+        " jump to the first
+        return
+      endif
     endfor
+  endfor
 endfunction"}}}
 
 let s:kind.action_table.delete = {
