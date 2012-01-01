@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Dec 2011.
+" Last Modified: 01 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,6 +68,8 @@ if !exists('g:unite_kind_file_move_command')
     let g:unite_kind_file_move_command = 'mv $srcs $dest'
   endif
 endif
+
+call unite#util#set_default('g:unite_kind_file_use_trashbox', 0)
 "}}}
 
 function! unite#kinds#file#define()"{{{
@@ -300,7 +302,7 @@ function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
       return 1
     endif
 
-    call unite#kinds#file#do_action(a:candidates, '', 'delete_func',
+    call unite#kinds#file#do_action(a:candidates, '', 'delete',
           \ s:SID_PREFIX().'check_delete_func')
   finally
     if vimfiler_current_dir != ''
@@ -529,12 +531,12 @@ function! s:execute_command(command, candidate)"{{{
 endfunction"}}}
 function! s:external(command, dest_dir, src_files)"{{{
   let dest_dir = a:dest_dir
-  if dest_dir =~ '/$'
+  if dest_dir =~ '[^:]/$'
     " Delete last /.
     let dest_dir = dest_dir[: -2]
   endif
 
-  let src_files = map(a:src_files, 'substitute(v:val, "/$", "", "")')
+  let src_files = map(a:src_files, 'substitute(v:val, "[^:]\zs/$", "", "")')
   let command_line = g:unite_kind_file_{a:command}_command
 
   " Substitute pattern.
@@ -546,7 +548,7 @@ function! s:external(command, dest_dir, src_files)"{{{
 
   " echomsg command_line
   let output = unite#util#system(command_line)
-  " echomsg command_line
+  echomsg command_line
 
   return unite#util#get_last_status()
 endfunction"}}}
@@ -693,11 +695,26 @@ function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_
           \ filename)
     redraw
 
-    let command = a:command_func == '' ?
-          \ a:action_name : call(a:command_func, [filename])
-    if s:external(command, dest_filename, [filename])
-      call unite#print_error(printf('Failed file %s: %s',
-            \ a:action_name, filename))
+    if a:action_name == 'delete' && g:unite_kind_file_use_trashbox
+      " Environment check.
+      if unite#util#is_win() && unite#util#has_vimproc() && exists('*vimproc#delete_trash')
+        let ret = vimproc#delete_trash(filename)
+        if ret
+          call unite#print_error(printf('Failed file %s: %s',
+                \ a:action_name, filename))
+          call unite#print_error(printf('Error code is %d', ret))
+        endif
+      else
+        call unite#util#print_error('Your environment is not supported vimproc#delete_trash().')
+        break
+      endif
+    else
+      let command = a:command_func == '' ?
+            \ a:action_name : call(a:command_func, [filename])
+      if s:external(command, dest_filename, [filename])
+        call unite#print_error(printf('Failed file %s: %s',
+              \ a:action_name, filename))
+      endif
     endif
 
     let cnt += 1
