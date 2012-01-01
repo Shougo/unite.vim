@@ -2136,6 +2136,7 @@ CHANGELOG					*unite-changelog*
 
 2012-01-01
 - Fixed file operation.
+- Added g:unite_kind_file_use_trashbox option.
 
 2011-12-31
 - Fixed find and grep source behavior.
