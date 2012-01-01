@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Dec 2011.
+" Last Modified: 01 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,19 +50,17 @@ function! s:kind.action_table.open.func(candidates)"{{{
 endfunction"}}}
 
 let s:kind.action_table.goto = {
-      \ 'description' : 'goto buffer',
-      \ 'is_quit' : 1,
+      \ 'description' : 'goto buffer tab',
       \ }
 function! s:kind.action_table.goto.func(candidate)"{{{
   for i in range(tabpagenr('$'))
     let tabnr = i + 1
     for nr in tabpagebuflist(tabnr)
       if nr == a:candidate.action__buffer_nr
-        exe 'tabnext '.tabnr
-        while bufnr('%') != nr
-          wincmd w
-        endwhile
-        " jump to the first
+        execute 'tabnext' tabnr
+        execute bufwinnr(nr) 'wincmd w'
+
+        " Jump to the first.
         return
       endif
     endfor

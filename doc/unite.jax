@@ -1800,6 +1800,7 @@ buffer						*unite-action-buffer*
 	unload		バッファを|:bunload|
 	bookmark	候補をブックマークに追加する
 	rename		バッファのファイル名を変更する
+	goto		バッファのタブに移動する
 
 tab						*unite-action-tab*
 このkindは|gettabvar()|が存在するときのみ、|unite-action-cdable|のアクションを
