@@ -65,6 +65,7 @@ function! s:kind.action_table.goto.func(candidate)"{{{
       endif
     endfor
   endfor
+  execute 'buffer' a:candidate.action__buffer_nr
 endfunction"}}}
 
 let s:kind.action_table.delete = {
