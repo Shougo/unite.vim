@@ -1964,6 +1964,12 @@ async_gather_candidates	関数		(任意)
 			|unite-source-attribute-gather_candidates|と同一であ
 			る。
 
+						*unite-source-attribute-complete*
+complete		関数		(任意)
+			|:Unite|のsource引数を補完するときに呼ばれる。
+			この関数は{args}, {context}, {arglead}, {cmdline},
+			{cursorpos}を引数に取る。戻り値は候補のリストである。
+
 						*unite-source-attribute-hooks*
 hooks			辞書		(任意)
 			uniteへのフック関数を指定する。キーはフックする位置、値

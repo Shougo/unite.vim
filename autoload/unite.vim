@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Dec 2011.
+" Last Modified: 02 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -544,9 +544,33 @@ function! unite#escape_match(str)"{{{
         \ '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
-  let sources = filter(s:initialize_sources(), 'v:val.is_listed')
-  return filter(sort(keys(sources))+s:unite_options,
+  let ret = unite#parse_path(join(split(a:cmdline)[1:]))
+  let source_name = ret[0]
+  let source_args = ret[1:]
+
+  let _ = []
+
+  " Option names completion.
+  let _ +=  filter(s:unite_options,
         \ 'stridx(v:val, a:arglead) == 0')
+
+  if source_name != ''
+    " Scheme args completion.
+    let _ += unite#args_complete(
+          \ [insert(copy(source_args), source_name)],
+          \ join(source_args, ':'), a:cmdline, a:cursorpos)
+  endif
+
+  if a:arglead !~ ':'
+    " Scheme name completion.
+    let _ += map(filter(keys(filter(s:initialize_sources(), 'v:val.is_listed')),
+          \ 'stridx(v:val, a:arglead) == 0'), 'v:val.":"')
+  else
+    " Add "{source-name}:".
+    let _  = map(_, 'source_name.":".v:val')
+  endif
+
+  return sort(_)
 endfunction"}}}
 function! unite#complete_buffer_name(arglead, cmdline, cursorpos)"{{{
   let _ = map(filter(range(1, bufnr('$')), '
@@ -691,6 +715,16 @@ function! unite#clear_previewed_buffer_list() "{{{
   endfor
 
   let unite.previewd_buffer_list = []
+endfunction"}}}
+function! unite#parse_path(path)"{{{
+  let source_name = matchstr(a:path, '^[^:]*\ze:')
+  let source_arg = a:path[len(source_name)+1 :]
+
+  let source_args = source_arg  == '' ? [] :
+        \  map(split(source_arg, '\\\@<!:', 1),
+        \      'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
+
+  return insert(source_args, source_name)
 endfunction"}}}
 
 " Utils.
@@ -952,6 +986,26 @@ function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
   for source in unite#loaded_sources_list()
     if has_key(source, 'vimfiler_complete')
       let _ += source.vimfiler_complete(
+            \ source.args, context, a:arglead, a:cmdline, a:cursorpos)
+    endif
+  endfor
+
+  return _
+endfunction"}}}
+function! unite#args_complete(sources, arglead, cmdline, cursorpos)"{{{
+  let context = {}
+  call s:initialize_context(context)
+
+  try
+    call s:initialize_current_unite(a:sources, context)
+  catch /^Invalid source/
+    return []
+  endtry
+
+  let _ = []
+  for source in unite#loaded_sources_list()
+    if has_key(source, 'complete')
+      let _ += source.complete(
             \ source.args, context, a:arglead, a:cmdline, a:cursorpos)
     endif
   endfor

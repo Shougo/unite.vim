@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Dec 2011.
+" Last Modified: 02 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -208,6 +208,10 @@ function! s:source_rec.vimfiler_dummy_candidates(args, context)"{{{
 endfunction"}}}
 function! s:source_rec.vimfiler_complete(args, context, arglead, cmdline, cursorpos)"{{{
   return filter(split(glob(a:arglead . '*'), '\n'), 'isdirectory(v:val)')
+endfunction"}}}
+function! s:source_rec.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  return map(split(glob(a:arglead . '*'), '\n'),
+        \ "isdirectory(v:val) ? v:val.'/' : v:val")
 endfunction"}}}
 
 " Source async.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: output.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 02 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,6 +54,16 @@ function! s:source.gather_candidates(args, context)"{{{
         \ "word" : v:val,
         \ "kind" : "word",
         \ }')
+endfunction"}}}
+function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  if !exists('*neocomplcache#sources#vim_complete#helper#command')
+    return []
+  endif
+
+  let pattern = '\.\%(\h\w*\)\?$\|' . neocomplcache#get_keyword_pattern_end('vim')
+  let [cur_keyword_pos, cur_keyword_str] = neocomplcache#match_word(a:arglead, pattern)
+  return map(neocomplcache#sources#vim_complete#helper#command(
+        \ a:arglead, cur_keyword_str), 'v:val.word')
 endfunction"}}}
 
 let &cpo = s:save_cpo
