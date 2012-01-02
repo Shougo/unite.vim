@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jan 2012.
+" Last Modified: 03 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -558,27 +558,26 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
 
   let _ = []
 
-  " Option names completion.
-  let _ +=  filter(copy(s:unite_options),
-        \ 'stridx(v:val, a:arglead) == 0')
-
-  if source_name != ''
-    " Scheme args completion.
-    let _ += unite#args_complete(
-          \ [insert(copy(source_args), source_name)],
-          \ join(source_args, ':'), a:cmdline, a:cursorpos)
-  endif
-
   if a:arglead !~ ':'
-    " Scheme name completion.
-    let _ += filter(keys(filter(s:initialize_sources(), 'v:val.is_listed')),
-          \ 'stridx(v:val, a:arglead) == 0')
+    " Option names completion.
+    let _ +=  copy(s:unite_options)
+
+    " Source name completion.
+    let _ += keys(filter(s:initialize_sources(), 'v:val.is_listed'))
   else
     " Add "{source-name}:".
     let _  = map(_, 'source_name.":".v:val')
   endif
 
-  return sort(_)
+  if source_name != ''
+    " Source args completion.
+    let args = source_name . ':' . join(source_args[: -2], ':')
+    let _ += map(unite#args_complete(
+          \ [insert(copy(source_args), source_name)],
+          \ join(source_args, ':'), a:cmdline, a:cursorpos), 'args . v:val')
+  endif
+
+  return sort(filter(_, 'stridx(v:val, a:arglead) == 0'))
 endfunction"}}}
 function! unite#complete_buffer_name(arglead, cmdline, cursorpos)"{{{
   let _ = map(filter(range(1, bufnr('$')), '
