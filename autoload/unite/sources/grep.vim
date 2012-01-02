@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 31 Dec 2011.
+" Last Modified: 02 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,10 +68,10 @@ endif
 
 function! unite#sources#grep#define() "{{{
   return executable(g:unite_source_grep_command) && unite#util#has_vimproc() ?
-        \ s:grep_source : []
+        \ s:source : []
 endfunction "}}}
 
-let s:grep_source = {
+let s:source = {
       \ 'name': 'grep',
       \ 'max_candidates': g:unite_source_grep_max_candidates,
       \ 'hooks' : {},
@@ -79,7 +79,7 @@ let s:grep_source = {
       \ 'filters' : ['matcher_regexp', 'sorter_default', 'converter_default'],
       \ }
 
-function! s:grep_source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) "{{{
   if type(get(a:args, 0, '')) == type([])
     let default = join(get(a:args, 0, ''))
   else
@@ -117,7 +117,7 @@ function! s:grep_source.hooks.on_init(args, context) "{{{
         \ (len(targets) == 1) ?
         \ unite#util#substitute_path_separator(expand(targets[0])) : ''
 endfunction"}}}
-function! s:grep_source.hooks.on_syntax(args, context)"{{{
+function! s:source.hooks.on_syntax(args, context)"{{{
   syntax case ignore
   execute 'syntax match uniteSource__GrepPattern /:.*\zs'
         \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
@@ -125,13 +125,13 @@ function! s:grep_source.hooks.on_syntax(args, context)"{{{
   execute 'highlight default link uniteSource__GrepPattern'
         \ g:unite_source_grep_search_word_highlight
 endfunction"}}}
-function! s:grep_source.hooks.on_close(args, context) "{{{
+function! s:source.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__proc')
     call a:context.source__proc.waitpid()
   endif
 endfunction "}}}
 
-function! s:grep_source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) "{{{
   if empty(a:context.source__target)
         \ || a:context.source__input == ''
     let a:context.is_async = 0
@@ -160,7 +160,7 @@ function! s:grep_source.gather_candidates(args, context) "{{{
   return []
 endfunction "}}}
 
-function! s:grep_source.async_gather_candidates(args, context) "{{{
+function! s:source.async_gather_candidates(args, context) "{{{
   let stdout = a:context.source__proc.stdout
   if stdout.eof
     " Disable async.
@@ -198,5 +198,10 @@ function! s:grep_source.async_gather_candidates(args, context) "{{{
     lcd `=cwd`
   endif
 endfunction "}}}
+
+function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  return ['%', '#', '$buffers'] + unite#sources#file#complete_directory(
+        \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
+endfunction"}}}
 
 " vim: foldmethod=marker

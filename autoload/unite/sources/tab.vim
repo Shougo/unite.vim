@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 02 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -113,6 +113,9 @@ function! s:source.gather_candidates(args, context)"{{{
   endfor
 
   return candidates
+endfunction"}}}
+function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  return ['no-current']
 endfunction"}}}
 
 " Misc

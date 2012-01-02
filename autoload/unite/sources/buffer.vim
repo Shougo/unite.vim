@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Nov 2011.
+" Last Modified: 02 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -95,6 +95,9 @@ function! s:source_buffer_all.gather_candidates(args, context)"{{{
 
   return candidates
 endfunction"}}}
+function! s:source_buffer_all.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  return ['!', '?']
+endfunction"}}}
 
 let s:source_buffer_tab = {
       \ 'name' : 'buffer_tab',
@@ -138,6 +141,9 @@ function! s:source_buffer_tab.gather_candidates(args, context)"{{{
         \}')
 
   return candidates
+endfunction"}}}
+function! s:source_buffer_tab.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  return ['!', '?']
 endfunction"}}}
 
 " Misc

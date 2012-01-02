@@ -2144,6 +2144,7 @@ CHANGELOG					*unite-changelog*
 - Added spec file.
 - Fixed complete problem.
 - Fixed unite#get_sources() error.
+- Added source complete functions.
 
 2012-01-01
 - Fixed file operation.

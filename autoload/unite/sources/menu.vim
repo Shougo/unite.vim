@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: menu.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 11 Oct 2011.
+" Last Modified: 02 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -83,6 +83,10 @@ function! s:source.gather_candidates(args, context)"{{{
   endif
 
   return sort(candidates)
+endfunction"}}}
+
+function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  return keys(g:unite_source_menu_menus)
 endfunction"}}}
 
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: find.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 31 Dec 2011.
+" Last Modified: 02 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,17 +48,17 @@ endif
 
 function! unite#sources#find#define() "{{{
   return executable(g:unite_source_find_command) && unite#util#has_vimproc() ?
-        \ s:find_source : []
+        \ s:source : []
 endfunction "}}}
 
-let s:find_source = {
+let s:source = {
       \ 'name': 'find',
       \ 'max_candidates': g:unite_source_find_max_candidates,
       \ 'hooks' : {},
       \ 'filters' : ['matcher_regexp', 'sorter_default', 'converter_relative'],
       \ }
 
-function! s:find_source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) "{{{
   let a:context.source__target = get(a:args, 0, '')
   if a:context.source__target == ''
     let a:context.source__target = input('Target: ', '.', 'dir')
@@ -73,13 +73,13 @@ function! s:find_source.hooks.on_init(args, context) "{{{
           \   a:context.source__target))
   endif
 endfunction"}}}
-function! s:find_source.hooks.on_close(args, context) "{{{
+function! s:source.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__proc')
     call a:context.source__proc.waitpid()
   endif
 endfunction "}}}
 
-function! s:find_source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) "{{{
   if empty(a:context.source__target)
         \ || a:context.source__input == ''
     let a:context.is_async = 0
@@ -103,7 +103,7 @@ function! s:find_source.gather_candidates(args, context) "{{{
   return []
 endfunction "}}}
 
-function! s:find_source.async_gather_candidates(args, context) "{{{
+function! s:source.async_gather_candidates(args, context) "{{{
   let stdout = a:context.source__proc.stdout
   if stdout.eof
     " Disable async.
@@ -139,5 +139,10 @@ function! s:find_source.async_gather_candidates(args, context) "{{{
 
   return candidates
 endfunction "}}}
+
+function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  return unite#sources#file#complete_directory(
+        \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
+endfunction"}}}
 
 " vim: foldmethod=marker

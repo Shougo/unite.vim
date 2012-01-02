@@ -207,11 +207,12 @@ function! s:source_rec.vimfiler_dummy_candidates(args, context)"{{{
   return candidates
 endfunction"}}}
 function! s:source_rec.vimfiler_complete(args, context, arglead, cmdline, cursorpos)"{{{
-  return filter(split(glob(a:arglead . '*'), '\n'), 'isdirectory(v:val)')
+  return unite#sources#file#complete_directory(
+        \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 function! s:source_rec.complete(args, context, arglead, cmdline, cursorpos)"{{{
-  return map(split(glob(a:arglead . '*'), '\n'),
-        \ "isdirectory(v:val) ? v:val.'/' : v:val")
+  return unite#sources#file#complete_directory(
+        \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 
 " Source async.
@@ -309,6 +310,11 @@ function! s:source_async.hooks.on_close(args, context) "{{{
 endfunction "}}}
 function! s:source_async.hooks.on_post_filter(args, context)"{{{
   call s:on_post_filter(a:args, a:context)
+endfunction"}}}
+
+function! s:source_async.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  return unite#sources#file#complete_directory(
+        \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 
 " Add custom action table."{{{

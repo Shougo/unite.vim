@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Dec 2011.
+" Last Modified: 02 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -104,6 +104,11 @@ function! s:source.gather_candidates(args, context)"{{{
         \ 'action__pattern' : v:val[3],
         \ 'action__directory' : unite#path2directory(v:val[1]),
         \   }")
+endfunction"}}}
+function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  return ['default'] + map(split(glob(
+        \ g:unite_source_bookmark_directory . '/' . a:arglead . '*'), '\n'),
+        \ "fnamemodify(v:val, ':t')")
 endfunction"}}}
 
 " Actions"{{{
