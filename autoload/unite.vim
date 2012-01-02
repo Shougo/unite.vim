@@ -571,8 +571,8 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
 
   if a:arglead !~ ':'
     " Scheme name completion.
-    let _ += map(filter(keys(filter(s:initialize_sources(), 'v:val.is_listed')),
-          \ 'stridx(v:val, a:arglead) == 0'), 'v:val.":"')
+    let _ += filter(keys(filter(s:initialize_sources(), 'v:val.is_listed')),
+          \ 'stridx(v:val, a:arglead) == 0')
   else
     " Add "{source-name}:".
     let _  = map(_, 'source_name.":".v:val')
