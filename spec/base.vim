@@ -8,7 +8,8 @@ function! s:should(cond, result)
   if !has_key(s:results, context)
     let s:results[context] = []
   endif
-  call add(s:results[context], a:result ? '.' : it . a:cond)
+  call add(s:results[context], a:result ? '.' :
+        \ printf('It %s : %s', it, a:cond))
 endfunction
 
 function! s:_should(it, cond)
