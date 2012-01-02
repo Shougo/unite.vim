@@ -983,6 +983,7 @@ endfunction"}}}
 function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
   let context = {}
   call s:initialize_context(context)
+  let context.is_complete = 1
 
   try
     call s:initialize_current_unite(a:sources, context)
@@ -1003,6 +1004,7 @@ endfunction"}}}
 function! unite#args_complete(sources, arglead, cmdline, cursorpos)"{{{
   let context = {}
   call s:initialize_context(context)
+  let context.is_complete = 1
 
   try
     call s:initialize_current_unite(a:sources, context)
@@ -1174,6 +1176,9 @@ function! s:initialize_context(context)"{{{
   endif
   if !has_key(a:context, 'no_buffer')
     let a:context.no_buffer = 0
+  endif
+  if !has_key(a:context, 'is_complete')
+    let a:context.is_complete = 0
   endif
   let a:context.is_changed = 0
 
@@ -1934,8 +1939,10 @@ function! s:initialize_current_unite(sources, context)"{{{
   " Check sources.
   let sources = s:initialize_loaded_sources(a:sources, a:context)
 
-  " Call initialize functions.
-  call s:call_hook(sources, 'on_init')
+  if !a:context.is_complete
+    " Call initialize functions.
+    call s:call_hook(sources, 'on_init')
+  endif
 
   " Set parameters.
   let unite = {}

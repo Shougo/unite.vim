@@ -2142,6 +2142,7 @@ CHANGELOG					*unite-changelog*
 2012-01-02
 - Added complete attribute.
 - Added spec file.
+- Fixed complete problem.
 
 2012-01-01
 - Fixed file operation.
