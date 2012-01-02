@@ -559,7 +559,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   let _ = []
 
   " Option names completion.
-  let _ +=  filter(s:unite_options,
+  let _ +=  filter(copy(s:unite_options),
         \ 'stridx(v:val, a:arglead) == 0')
 
   if source_name != ''
