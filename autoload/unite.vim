@@ -258,7 +258,7 @@ function! unite#get_kinds(...)"{{{
 endfunction"}}}
 function! unite#get_sources(...)"{{{
   let unite = unite#get_current_unite()
-  if !has_key(unite, 'source')
+  if !has_key(unite, 'sources')
     return {}
   endif
 
