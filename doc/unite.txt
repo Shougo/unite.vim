@@ -2141,6 +2141,7 @@ CHANGELOG					*unite-changelog*
 
 2012-01-03
 - Fixed complete behavior.
+- Fixed source completion.
 
 2012-01-02
 - Added complete attribute.

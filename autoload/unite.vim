@@ -574,7 +574,8 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
     let args = source_name . ':' . join(source_args[: -2], ':')
     let _ += map(unite#args_complete(
           \ [insert(copy(source_args), source_name)],
-          \ join(source_args, ':'), a:cmdline, a:cursorpos), 'args . v:val')
+          \ join(source_args, ':'), a:cmdline, a:cursorpos),
+          \ "args.escape(v:val, '\  :')")
   endif
 
   return sort(filter(_, 'stridx(v:val, a:arglead) == 0'))
