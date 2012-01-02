@@ -250,10 +250,18 @@ let s:unite_options = [
 " Core functions."{{{
 function! unite#get_kinds(...)"{{{
   let unite = unite#get_current_unite()
+  if !has_key(unite, 'kinds')
+    return {}
+  endif
+
   return a:0 == 0 ? unite.kinds : get(unite.kinds, a:1, {})
 endfunction"}}}
 function! unite#get_sources(...)"{{{
   let unite = unite#get_current_unite()
+  if !has_key(unite, 'source')
+    return {}
+  endif
+
   return a:0 == 0 ? unite.sources : get(unite.sources, a:1, {})
 endfunction"}}}
 function! unite#get_all_sources(...)"{{{
@@ -2463,7 +2471,7 @@ function! s:take_action(action_name, candidate, is_parent_action)"{{{
 
   if !has_key(action_table, a:action_name)
     " throw 'no such action ' . a:action_name
-    return
+    return 1
   endif
 
   let action = action_table[a:action_name]
