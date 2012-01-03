@@ -305,7 +305,11 @@ function! unite#mappings#do_action(action_name, ...)"{{{
       call add(_, table.action.func(table.candidates))
     catch /^Vim\%((\a\+)\)\=:E325/
       " Ignore catch.
-      throw v:exception
+      call unite#print_error(v:throwpoint)
+      call unite#print_error(v:exception)
+      call unite#print_error('Attenssion: Swap file is found in executing action!')
+      call unite#print_error('Action name is ' . table.action.name)
+      setlocal noreadonly
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
