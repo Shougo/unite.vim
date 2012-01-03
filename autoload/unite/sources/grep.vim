@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 02 Jan 2012.
+" Last Modified: 03 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,9 +45,10 @@ let s:action_grep_file = {
   \   'is_selectable': 1,
   \ }
 function! s:action_grep_file.func(candidates) "{{{
-  call unite#start([['grep', map(copy(a:candidates),
+  call unite#start([
+        \ ['grep', map(copy(a:candidates),
         \ 'string(substitute(v:val.action__path, "/$", "", "g"))'),
-        \ g:unite_source_grep_recursive_opt]], { 'no_quit' : 1 })
+        \ ]], { 'no_quit' : 1 })
 endfunction "}}}
 
 let s:action_grep_directory = {
@@ -57,8 +58,9 @@ let s:action_grep_directory = {
   \   'is_selectable': 1,
   \ }
 function! s:action_grep_directory.func(candidates) "{{{
-  call unite#start([['grep', map(copy(a:candidates), 'string(v:val.action__directory)'),
-        \ g:unite_source_grep_recursive_opt]], { 'no_quit' : 1 })
+  call unite#start([
+        \ ['grep', map(copy(a:candidates), 'string(v:val.action__directory)'),
+        \ ]], { 'no_quit' : 1 })
 endfunction "}}}
 if executable(g:unite_source_grep_command) && unite#util#has_vimproc()
   call unite#custom_action('file,buffer', 'grep', s:action_grep_file)
@@ -99,7 +101,10 @@ function! s:source.hooks.on_init(args, context) "{{{
           \ 'unite#util#escape_file_searching(bufname(v:val))'))
   elseif target == '**'
     " Optimized.
-    let target = '* ' . g:unite_source_grep_recursive_opt
+    let target = '*'
+  else
+    " Escape filename.
+    let target = string(target)
   endif
 
   let a:context.source__target = [target]
@@ -143,11 +148,12 @@ function! s:source.gather_candidates(args, context) "{{{
     let a:context.is_async = 1
   endif
 
-  let cmdline = printf('%s %s %s ''%s'' %s',
+  let cmdline = printf('%s %s %s %s %s %s',
     \   g:unite_source_grep_command,
     \   g:unite_source_grep_default_opts,
+    \   g:unite_source_grep_recursive_opt,
     \   a:context.source__extra_opts,
-    \   substitute(a:context.source__input, "'", "''", 'g'),
+    \   string(a:context.source__input),
     \   join(a:context.source__target),
     \)
   call unite#print_message('[grep] Command-line: ' . cmdline)
