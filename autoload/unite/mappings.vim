@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Dec 2011.
+" Last Modified: 03 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -303,6 +303,11 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
     try
       call add(_, table.action.func(table.candidates))
+    catch /^Vim\%((\a\+)\)\=:E325/
+      " Ignore catch.
+      call unite#print_error(v:exception)
+      call unite#print_error('Attenssion: Swap file is found in executing action!')
+      call unite#print_error('Action name is ' . table.action.name)
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)

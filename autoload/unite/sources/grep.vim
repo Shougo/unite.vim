@@ -104,7 +104,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     let target = '*'
   else
     " Escape filename.
-    let target = string(target)
+    let target = escape(target, ' ')
   endif
 
   let a:context.source__target = [target]

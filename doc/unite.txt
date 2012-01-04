@@ -2146,6 +2146,8 @@ CHANGELOG					*unite-changelog*
 - Fixed complete behavior.
 - Fixed source completion.
 - Fixed grep source.
+- Improved escape filename.
+- Fixed E325 problem.
 
 2012-01-02
 - Added complete attribute.
