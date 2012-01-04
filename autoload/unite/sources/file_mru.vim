@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Dec 2011.
+" Last Modified: 04 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -96,7 +96,7 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   highlight default link uniteSource__FileMru_Time Statement
 endfunction"}}}
 function! s:source.hooks.on_post_filter(args, context)"{{{
-  for mru in a:context.candidates
+  for mru in filter(copy(a:context.candidates), "!has_key(v:val, 'abbr')")
     let path = (g:unite_source_file_mru_filename_format == '') ?
           \ mru.action__path :
           \ unite#util#substitute_path_separator(
@@ -104,6 +104,8 @@ function! s:source.hooks.on_post_filter(args, context)"{{{
     if path == ''
       let path = mru.action__path
     endif
+
+    " Set default abbr.
     let mru.abbr = (g:unite_source_file_mru_time_format == '' ? '' :
           \ strftime(g:unite_source_file_mru_time_format, mru.source__time)) .path
   endfor

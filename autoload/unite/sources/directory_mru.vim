@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Dec 2011.
+" Last Modified: 04 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -99,7 +99,7 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   highlight default link uniteSource__DirectoryMru_Time Statement
 endfunction"}}}
 function! s:source.hooks.on_post_filter(args, context)"{{{
-  for mru in a:context.candidates
+  for mru in filter(copy(a:context.candidates), "!has_key(v:val, 'abbr')")
     let relative_path = unite#util#substitute_path_separator(fnamemodify(mru.action__path, ':~:.'))
     if relative_path == ''
       let relative_path = mru.action__path
@@ -108,6 +108,7 @@ function! s:source.hooks.on_post_filter(args, context)"{{{
       let relative_path .= '/'
     endif
 
+    " Set default abbr.
     let mru.abbr = strftime(g:unite_source_directory_mru_time_format, mru.source__time)
           \ . relative_path
   endfor
