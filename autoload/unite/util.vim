@@ -93,7 +93,8 @@ function! unite#util#input_yesno(message)"{{{
 endfunction"}}}
 function! unite#util#input_directory(message)"{{{
   echo a:message
-  let dir = unite#util#substitute_path_separator(expand(input('', '', 'dir')))
+  let dir = unite#util#substitute_path_separator(
+        \ unite#util#expand(input('', '', 'dir')))
   while !isdirectory(dir)
     redraw
     if dir == ''
@@ -104,7 +105,8 @@ function! unite#util#input_directory(message)"{{{
     " Retry.
     call unite#print_error('Invalid path.')
     echo a:message
-    let dir = unite#util#substitute_path_separator(expand(input('', '', 'dir')))
+    let dir = unite#util#substitute_path_separator(
+          \ unite#util#expand(input('', '', 'dir')))
   endwhile
 
   return dir
@@ -188,6 +190,9 @@ function! unite#util#command_with_restore_cursor(command)
 
   execute next 'wincmd w'
 endfunction
+function! unite#util#expand(path)"{{{
+  return expand(escape(a:path, '*?[]"={}'))
+endfunction"}}}
 
 
 let &cpo = s:save_cpo

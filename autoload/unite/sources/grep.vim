@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 03 Jan 2012.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -120,7 +120,8 @@ function! s:source.hooks.on_init(args, context) "{{{
         \ 'substitute(v:val, "*\\+$", "", "")')
   let a:context.source__directory =
         \ (len(targets) == 1) ?
-        \ unite#util#substitute_path_separator(expand(targets[0])) : ''
+        \ unite#util#substitute_path_separator(
+        \  unite#util#expand(targets[0])) : ''
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context)"{{{
   syntax case ignore

@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 02 Jan 2012.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,7 +43,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     execute 'highlight default link uniteSource__Line_target ' . g:source_line_search_word_highlight
     syntax case ignore
     let a:context.source__path = (&buftype =~ 'nofile') ?
-                \ expand('%:p') : bufname('%')
+                \ unite#util#expand('%:p') : bufname('%')
     let a:context.source__bufnr = bufnr('%')
     let a:context.source__linenr = line('.')
 

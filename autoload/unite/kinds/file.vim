@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jan 2012.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -151,7 +151,7 @@ let s:kind.action_table.rename = {
 function! s:kind.action_table.rename.func(candidates)"{{{
   for candidate in a:candidates
     let filename = unite#util#substitute_path_separator(
-          \ expand(input(printf('New file name: %s -> ',
+          \ unite#util#expand(input(printf('New file name: %s -> ',
           \ candidate.action__path), candidate.action__path)))
     if filename != '' && filename !=# candidate.action__path
       call s:rename(candidate.action__path, filename)

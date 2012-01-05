@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jan 2012.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -112,7 +112,7 @@ endfunction"}}}
 
 function! s:source_rec.vimfiler_check_filetype(args, context)"{{{
   let path = unite#util#substitute_path_separator(
-        \ expand(join(a:args, ':')))
+        \ unite#util#expand(join(a:args, ':')))
   let path = unite#util#substitute_path_separator(
         \ simplify(fnamemodify(path, ':p')))
 
@@ -174,7 +174,7 @@ function! s:source_rec.vimfiler_gather_candidates(args, context)"{{{
 endfunction"}}}
 function! s:source_rec.vimfiler_dummy_candidates(args, context)"{{{
   let path = unite#util#substitute_path_separator(
-        \ expand(join(a:args, ':')))
+        \ unite#util#expand(join(a:args, ':')))
   let path = unite#util#substitute_path_separator(
         \ simplify(fnamemodify(path, ':p')))
 

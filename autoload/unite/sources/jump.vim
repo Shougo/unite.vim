@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Dec 2011.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -90,7 +90,7 @@ function! s:source.gather_candidates(args, context)"{{{
           \     printf('%s:%d-%d  ', path, linenr, col), max_path) . text,
           \ 'kind' : 'jump_list',
           \ 'action__path' : unite#util#substitute_path_separator(
-          \     fnamemodify(expand(path), ':p')),
+          \     fnamemodify(unite#util#expand(path), ':p')),
           \ 'action__line' : linenr,
           \ 'action__col' : col,
           \ }

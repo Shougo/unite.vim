@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_point.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Oct 2011.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,7 +38,8 @@ let s:source = {
       \}
 function! s:source.hooks.on_init(args, context)"{{{
   let filename_pattern = '[[:alnum:];/?:@&=+$_.!~|()-]\+'
-  let filename = expand(matchstr(getline('.')[: col('.')-1], filename_pattern . '$')
+  let filename = unite#util#expand(
+        \ matchstr(getline('.')[: col('.')-1], filename_pattern . '$')
         \ . matchstr(getline('.')[col('.') :], '^'.filename_pattern))
   let a:context.source__filename =
         \ (filename =~ '^\%(https\?\|ftp\)://') ?

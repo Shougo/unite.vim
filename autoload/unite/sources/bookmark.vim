@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jan 2012.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,7 +46,7 @@ function! unite#sources#bookmark#_append(filename)"{{{
 
   if a:filename == ''
     " Append the current buffer to the bookmark list.
-    let path = expand('%:p')
+    let path = unite#util#expand('%:p')
     let linenr = line('.')
     let pattern = '^' . escape(getline('.'), '~"\.^*$[]') . '$'
   else
@@ -55,7 +55,8 @@ function! unite#sources#bookmark#_append(filename)"{{{
     let pattern = ''
   endif
 
-  let filename = (a:filename == '' ? expand('%') : a:filename)
+  let filename = (a:filename == '' ?
+        \ unite#util#expand('%') : a:filename)
   if bufexists(filename) && a:filename == ''
     " Detect vimfiler and vimshell.
     if &filetype ==# 'vimfiler'
@@ -66,7 +67,7 @@ function! unite#sources#bookmark#_append(filename)"{{{
   endif
 
   let path = unite#substitute_path_separator(
-        \ simplify(fnamemodify(expand(path), ':p')))
+        \ simplify(fnamemodify(unite#util#expand(path), ':p')))
 
   redraw
   echo 'Path: ' . path
@@ -187,7 +188,7 @@ function! s:load(filename)  "{{{
     let bookmark.files = map(bookmark.files, 'split(v:val, "\t", 1)')
     for files in bookmark.files
       let files[1] = unite#util#substitute_path_separator(
-            \ expand(files[1]))
+            \ unite#util#expand(files[1]))
     endfor
     let bookmark.file_mtime = getftime(filename)
   endif
