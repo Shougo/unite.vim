@@ -1062,19 +1062,22 @@ function! unite#resume(buffer_name, ...)"{{{
   let winnr = winnr()
   let win_rest_cmd = winrestcmd()
 
-  let unite = getbufvar(bufnr, 'unite')
-  if type(unite) != type({})
-    call unite#util#print_error('Invalid unite buffer.')
-    return
+  if type(getbufvar(bufnr, 'unite')) != type({})
+    " Unite buffer variable is released.
+    let context = {}
+    call s:initialize_context(context)
+  else
+    let context = getbufvar(bufnr, 'unite').context
   endif
-
-  call s:switch_unite_buffer(bufname(bufnr), unite.context)
 
   let new_context = get(a:000, 0, {})
   if has_key(new_context, 'no_start_insert')
         \ && new_context.no_start_insert
     let new_context.start_insert = 0
   endif
+  call extend(context, new_context)
+
+  call s:switch_unite_buffer(bufname(bufnr), context)
 
   " Set parameters.
   let unite = unite#get_current_unite()
@@ -1082,7 +1085,7 @@ function! unite#resume(buffer_name, ...)"{{{
   let unite.win_rest_cmd = win_rest_cmd
   let unite.redrawtime_save = &redrawtime
   let unite.access_time = localtime()
-  call extend(unite.context, new_context)
+  let unite.context = context
 
   let s:current_unite = unite
 
