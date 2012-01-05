@@ -224,6 +224,7 @@ function! s:kind.action_table.move.func(candidates)"{{{
     echo 'Canceled.'
     return
   endif
+  redraw
 
   return s:kind.action_table.vimfiler__move.func(a:candidates)
 endfunction"}}}
