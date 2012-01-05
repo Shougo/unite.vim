@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jan 2012.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1063,6 +1063,10 @@ function! unite#resume(buffer_name, ...)"{{{
   let win_rest_cmd = winrestcmd()
 
   let unite = getbufvar(bufnr, 'unite')
+  if type(unite) != type({})
+    call unite#util#print_error('Invalid unite buffer.')
+    return
+  endif
 
   call s:switch_unite_buffer(bufname(bufnr), unite.context)
 
