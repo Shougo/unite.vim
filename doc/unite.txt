@@ -2142,6 +2142,7 @@ CHANGELOG					*unite-changelog*
 2012-01-05
 - Improved :UniteResume behavior.
 - Fixed expand() problem.
+- Fixed -toggle option.
 
 2012-01-04
 - Fixed mru sources behavior.

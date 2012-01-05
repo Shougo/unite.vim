@@ -1042,7 +1042,10 @@ function! unite#resume(buffer_name, ...)"{{{
     let buffer_name = a:buffer_name
     if buffer_name !~ '@\d\+$'
       " Add postfix.
-      let buffer_name .= '@1'
+      let prefix = unite#util#is_win() ?
+            \ '[unite] - ' : '*unite* - '
+      let prefix .= buffer_name
+      let buffer_name .= s:get_postfix(prefix, 0)
     endif
 
     let buffer_dict = {}
@@ -1222,7 +1225,10 @@ function! unite#close(buffer_name)  "{{{
   let buffer_name = a:buffer_name
   if buffer_name !~ '@\d\+$'
     " Add postfix.
-    let buffer_name .= '@1'
+    let prefix = unite#util#is_win() ?
+          \ '[unite] - ' : '*unite* - '
+    let prefix .= buffer_name
+    let buffer_name .= s:get_postfix(prefix, 0)
   endif
 
   let quit_winnr = 0
@@ -1938,8 +1944,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   endif
 
   " The current buffer is initialized.
-  let buffer_name = unite#is_win() ? '[unite]' : '*unite*'
-  let buffer_name .= ' - ' . context.buffer_name
+  let buffer_name = unite#is_win() ? '[unite] - ' : '*unite* - '
+  let buffer_name .= context.buffer_name
 
   let winnr = winnr()
   let win_rest_cmd = winrestcmd()
@@ -1971,18 +1977,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.prev_winnr = winnr()
 
   " Create new buffer name.
-  let postfix = '@1'
-  let cnt = 1
-  let tabnr = 1
-  while tabnr <= tabpagenr('$')
-    let buflist = map(tabpagebuflist(tabnr), 'bufname(v:val)')
-    if index(buflist, buffer_name.postfix) >= 0
-      let cnt += 1
-      let postfix = '@' . cnt
-    endif
-
-    let tabnr += 1
-  endwhile
+  let postfix = s:get_postfix(buffer_name, 1)
   let unite.buffer_name .= postfix
 
   let unite.real_buffer_name = buffer_name . postfix
@@ -2627,6 +2622,32 @@ function! s:init_cursor()"{{{
   if unite.context.quick_match
     call unite#mappings#_quick_match(0)
   endif
+endfunction"}}}
+function! s:get_postfix(prefix, is_create)"{{{
+  let postfix = '@1'
+  let cnt = 1
+
+  if a:is_create
+    let tabnr = 1
+    while tabnr <= tabpagenr('$')
+      let buflist = map(tabpagebuflist(tabnr), 'bufname(v:val)')
+      if index(buflist, a:prefix.postfix) >= 0
+        let cnt += 1
+        let postfix = '@' . cnt
+      endif
+
+      let tabnr += 1
+    endwhile
+  else
+    let buflist = map(tabpagebuflist(tabpagenr()), 'bufname(v:val)')
+    for bufname in buflist
+      if stridx(bufname, a:prefix) >= 0
+        return matchstr(bufname, '@\d\+$')
+      endif
+    endfor
+  endif
+
+  return postfix
 endfunction"}}}
 "}}}
 
