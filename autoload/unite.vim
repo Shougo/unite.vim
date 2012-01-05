@@ -1063,12 +1063,13 @@ function! unite#resume(buffer_name, ...)"{{{
   let win_rest_cmd = winrestcmd()
 
   if type(getbufvar(bufnr, 'unite')) != type({})
-    " Unite buffer variable is released.
-    let context = {}
-    call s:initialize_context(context)
-  else
-    let context = getbufvar(bufnr, 'unite').context
+    " Unite buffer is released.
+    call unite#util#print_error(
+          \ printf('Invalid unite buffer(%d) is detected.', bufnr))
+    return
   endif
+
+  let context = getbufvar(bufnr, 'unite').context
 
   let new_context = get(a:000, 0, {})
   if has_key(new_context, 'no_start_insert')
