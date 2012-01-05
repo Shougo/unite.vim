@@ -549,7 +549,6 @@ function! s:external(command, dest_dir, src_files)"{{{
 
   " echomsg command_line
   let output = unite#util#system(command_line)
-  echomsg command_line
 
   return unite#util#get_last_status()
 endfunction"}}}
