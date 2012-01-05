@@ -1032,7 +1032,7 @@ function! unite#resume(buffer_name, ...)"{{{
 
   if a:buffer_name == ''
     " Use last unite buffer.
-    if !buflisted(s:last_unite_bufnr)
+    if !bufexists(s:last_unite_bufnr)
       call unite#util#print_error('No unite buffer.')
       return
     endif
@@ -1047,8 +1047,7 @@ function! unite#resume(buffer_name, ...)"{{{
 
     let buffer_dict = {}
     for unite in map(filter(range(1, bufnr('$')),
-          \ 'buflisted(v:val) &&
-          \  getbufvar(v:val, "&filetype") ==# "unite" &&
+          \ 'getbufvar(v:val, "&filetype") ==# "unite" &&
           \  !getbufvar(v:val, "unite").context.temporary'),
           \ 'getbufvar(v:val, "unite")')
       let buffer_dict[unite.buffer_name] = unite.bufnr
