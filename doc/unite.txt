@@ -2139,6 +2139,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-01-06
+- Fixed cd action behavior.
+
 2012-01-05
 - Improved :UniteResume behavior.
 - Fixed expand() problem.
