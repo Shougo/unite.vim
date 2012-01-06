@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jan 2012.
+" Last Modified: 06 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -948,7 +948,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
         let [type, info] = ret
         if type ==# 'file'
           call s:initialize_candidates([info[1]], source.name)
-          call s:initialize_vimfiler_candidates([info[1]])
+          call s:initialize_vimfiler_candidates([info[1]], source.name)
         elseif type ==# 'directory'
           " nop
         elseif type ==# 'error'
@@ -1210,13 +1210,12 @@ function! s:get_candidates(sources, context, is_vimfiler)
   let candidates = []
   for source in unite#loaded_sources_list()
     if !empty(source.unite__candidates)
-      let candidates += source.unite__candidates
+      let candidates += a:is_vimfiler ?
+            \ s:initialize_vimfiler_candidates(
+            \   source.unite__candidates, source.name) :
+            \ source.unite__candidates
     endif
   endfor
-
-  if a:is_vimfiler
-    let candidates = s:initialize_vimfiler_candidates(candidates)
-  endif
 
   return candidates
 endfunction
@@ -1670,7 +1669,7 @@ function! s:initialize_candidates(candidates, source_name)"{{{
 
   return candidates
 endfunction"}}}
-function! s:initialize_vimfiler_candidates(candidates)"{{{
+function! s:initialize_vimfiler_candidates(candidates, source_name)"{{{
   " Set default vimfiler property.
   for candidate in a:candidates
     if !has_key(candidate, 'vimfiler__filename')
@@ -1703,6 +1702,7 @@ function! s:initialize_vimfiler_candidates(candidates)"{{{
       let candidate.vimfiler__filetype = vimfiler#get_filetype(candidate)
     endif
     let candidate.vimfiler__is_marked = 0
+    let candidate.source = a:source_name
   endfor
 
   return a:candidates
