@@ -120,8 +120,9 @@ function! s:source.hooks.on_post_filter(args, context)
 
     for candidate in a:context.candidates
         let candidate.kind = "jump_list"
+        let candidate.abbr = substitute(candidate.action__text,'\t',repeat(' ',&tabstop), 'ge')
         let candidate.abbr = printf(a:context.source__format,
-                    \ candidate.action__line, candidate.action__text)
+                    \ candidate.action__line, candidate.abbr)
         let candidate.action__buffer_nr = a:context.source__bufnr
         let candidate.action__path = a:context.source__path
     endfor
