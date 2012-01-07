@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jan 2012.
+" Last Modified: 08 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1610,9 +1610,6 @@ function! s:initialize_candidates(candidates, source_name)"{{{
     " Force set.
     let candidate.source = a:source_name
 
-    " Substitute tab.
-    let candidate.abbr = substitute(candidate.abbr, '\t', '>---', 'g')
-
     let candidate.is_multiline = get(candidate, 'is_multiline', 0)
 
     " Delete too long abbr.
@@ -1621,6 +1618,10 @@ function! s:initialize_candidates(candidates, source_name)"{{{
     elseif len(candidate.abbr) > max_width * 2
       let candidate.abbr = candidate.abbr[: max_width * 2]
     endif
+
+    " Substitute tab.
+    let candidate.abbr = substitute(candidate.abbr, '\t',
+          \ repeat(' ', &tabstop), 'g')
 
     if !candidate.is_multiline
       let candidate.abbr = '  ' . candidate.abbr

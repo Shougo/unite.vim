@@ -2139,6 +2139,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-01-08
+- Improved substitute tab characters.
+
 2012-01-06
 - Fixed cd action behavior.
 - Fixed initialize vimfiler candidates.

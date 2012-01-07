@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 05 Jan 2012.
+" Last Modified: 08 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -120,9 +120,8 @@ function! s:source.hooks.on_post_filter(args, context)
 
     for candidate in a:context.candidates
         let candidate.kind = "jump_list"
-        let candidate.abbr = substitute(candidate.action__text,'\t',repeat(' ',&tabstop), 'ge')
         let candidate.abbr = printf(a:context.source__format,
-                    \ candidate.action__line, candidate.abbr)
+                    \ candidate.action__line, candidate.action__text)
         let candidate.action__buffer_nr = a:context.source__bufnr
         let candidate.action__path = a:context.source__path
     endfor
