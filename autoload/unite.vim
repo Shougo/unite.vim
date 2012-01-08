@@ -994,7 +994,16 @@ function! unite#get_candidates(sources, ...)"{{{
   call s:initialize_context(context)
   let context.no_buffer = 1
 
-  return s:get_candidates(a:sources, context, 0)
+  let candidates = s:get_candidates(a:sources, context, 0)
+
+  " Finalize.
+  let unite = unite#get_current_unite()
+
+  " Call finalize functions.
+  call s:call_hook(unite#loaded_sources_list(), 'on_close')
+  let unite.is_finalized = 1
+
+  return candidates
 endfunction"}}}
 function! unite#get_vimfiler_candidates(sources, ...)"{{{
   let context = get(a:000, 0, {})
@@ -1011,7 +1020,7 @@ function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
   try
     call s:initialize_current_unite(a:sources, context)
   catch /^Invalid source/
-    return []
+    return
   endtry
 
   let _ = []

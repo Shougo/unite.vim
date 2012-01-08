@@ -2151,6 +2151,7 @@ CHANGELOG					*unite-changelog*
 - Improved grep source.
 - Added unite#do_candidates_action().
 - Improved get asyncronous candidates behavior.
+- Fixed unite#get_candidates().
 
 2012-01-06
 - Fixed cd action behavior.

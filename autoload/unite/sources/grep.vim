@@ -91,6 +91,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     let default = '**'
   endif
 
+  echomsg string(a:args)
   if get(a:args, 0, '') == ''
     let target = input('Target: ', default, 'file')
   else
