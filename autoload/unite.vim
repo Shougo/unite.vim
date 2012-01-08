@@ -170,10 +170,10 @@ function! unite#undef_filter(name)"{{{
   endif
 endfunction"}}}
 
-function! unite#do_action(action)
+function! unite#do_action(action)"{{{
   return printf("%s:\<C-u>call unite#mappings#do_action(%s)\<CR>",
         \             (mode() ==# 'i' ? "\<C-o>" : ''), string(a:action))
-endfunction
+endfunction"}}}
 function! unite#smart_map(narrow_map, select_map)"{{{
   return (line('.') <= unite#get_current_unite().prompt_linenr && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
 endfunction"}}}
@@ -194,6 +194,29 @@ function! unite#take_action(action_name, candidate)"{{{
 endfunction"}}}
 function! unite#take_parents_action(action_name, candidate, extend_candidate)"{{{
   call s:take_action(a:action_name, extend(deepcopy(a:candidate), a:extend_candidate), 1)
+endfunction"}}}
+
+function! unite#do_candidates_action(action_name, candidates, ...)"{{{
+  let context = get(a:000, 0, {})
+  let context.is_interactive = 0
+  call s:initialize_context(context)
+
+  " Get sources.
+  let sources = {}
+  for candidate in a:candidates
+    if !has_key(sources, candidate.source)
+      let sources[candidate.source] = 1
+    endif
+  endfor
+
+  try
+    call s:initialize_current_unite(keys(sources), context)
+  catch /^Invalid source/
+    return
+  endtry
+
+  return unite#mappings#do_action(
+        \ a:action_name, a:candidates, context)
 endfunction"}}}
 "}}}
 
@@ -983,7 +1006,7 @@ endfunction"}}}
 function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
   let context = {}
   call s:initialize_context(context)
-  let context.is_complete = 1
+  let context.is_interactive = 0
 
   try
     call s:initialize_current_unite(a:sources, context)
@@ -1004,7 +1027,7 @@ endfunction"}}}
 function! unite#args_complete(sources, arglead, cmdline, cursorpos)"{{{
   let context = {}
   call s:initialize_context(context)
-  let context.is_complete = 1
+  let context.is_interactive = 0
 
   try
     call s:initialize_current_unite(a:sources, context)
@@ -1188,8 +1211,8 @@ function! s:initialize_context(context)"{{{
   if !has_key(a:context, 'no_buffer')
     let a:context.no_buffer = 0
   endif
-  if !has_key(a:context, 'is_complete')
-    let a:context.is_complete = 0
+  if !has_key(a:context, 'is_interactive')
+    let a:context.is_interactive = 1
   endif
   let a:context.is_changed = 0
 
@@ -1954,7 +1977,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   " Check sources.
   let sources = s:initialize_loaded_sources(a:sources, a:context)
 
-  if !a:context.is_complete
+  if a:context.is_interactive
     " Call initialize functions.
     call s:call_hook(sources, 'on_init')
   endif

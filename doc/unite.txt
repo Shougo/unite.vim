@@ -1005,11 +1005,17 @@ unite#start_complete({sources}, [{context}])	*unite#start_complete()*
 		\ 'start_insert' : 0,
 		\ 'input' : vimshell#get_cur_text()})
 <
-unite#get_candidates({sources}, [, {context}])			*unite#get_candidates()*
+unite#get_candidates({sources}, [, {context}])	*unite#get_candidates()*
 		Get all candidates list with sources. Does not create unite
 		buffer.  This function may not work in some sources. The
 		arguments feature is same to |unite#start()|.
 		Note: Ignore sources max_candidates option.
+
+unite#do_candidates_action({action-name}, {candidates}, [, {context}])
+						*unite#get_candidates()*
+		Do {action-name} with {candidates}. Does not create unite
+		buffer.  This function may not work in some actions.
+		Note: To get candidates, use |unite#get_candidates()|.
 
 unite#get_context()				*unite#get_context()*
 		Gets the context information of the current Unite buffer.
@@ -2142,6 +2148,8 @@ CHANGELOG					*unite-changelog*
 2012-01-08
 - Improved substitute tab characters.
 - Improved newfile action.
+- Improved grep source.
+- Added unite#do_candidates_action().
 
 2012-01-06
 - Fixed cd action behavior.

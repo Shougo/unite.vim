@@ -56,6 +56,11 @@ Context Source.run()
   It undefines source
     Should unite#undef_source(source.name) == 0
   End
+
+  let candidates = unite#get_candidates([['grep', '**', '', 'vim']])
+  It call do_candidates_action
+    call unite#do_candidates_action('replace', candidates)
+  End
 End
 
 Fin

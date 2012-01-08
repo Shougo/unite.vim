@@ -995,6 +995,13 @@ unite#get_candidates({sources}, [, {context}])			*unite#get_candidates()*
 		る。
 		Note: sourceのmax_candidatesオプションは無視される。
 
+unite#do_candidates_action({action-name}, {candidates}, [, {context}])
+								*unite#get_candidates()*
+		指定した{candidates}を利用して、{action-name}を実行する。unite
+		バッファは生成されない。uniteバッファが存在することを前提として
+		いるactionによってはうまく動作しないかもしれない。
+		Note: |unite#get_candidates()|と組み合わせて使用する。
+
 unite#get_context()						*unite#get_context()*
 		現在のuniteバッファのコンテキスト情報を得る。
 		|unite#custom_action()|などで、|unite#start()|を内部で呼び出す
