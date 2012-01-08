@@ -1868,9 +1868,17 @@ function! s:get_source_candidates(source, is_vimfiler)"{{{
     endif
 
     if a:source.unite__context.is_async
+      " Get asyncronous candidates.
       let funcname = 'async_gather_candidates'
-      let a:source.unite__cached_candidates +=
-            \ a:source.async_gather_candidates(a:source.args, context)
+      while 1
+        let a:source.unite__cached_candidates +=
+              \ a:source.async_gather_candidates(a:source.args, context)
+
+        if context.is_interactive
+              \ || !a:source.unite__context.is_async
+          break
+        endif
+      endwhile
     endif
 
     if has_key(a:source, 'change_candidates')
