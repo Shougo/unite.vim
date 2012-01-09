@@ -1850,7 +1850,7 @@ hooks			Dictionary		(Optional)
 
 			on_syntax		*unite-source-attribute-hooks-on_syntax*
 			Todo
-
+			Note: To get abbr head column, use "unite#get_current_unite().abbr_head".
 			Example:
 >
 			syntax match uniteSource_FileMru_Time /(.*)/ contained containedin=uniteSource_FileMru
@@ -2144,6 +2144,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-01-09
+- Added abbr_head.
 
 2012-01-08
 - Improved substitute tab characters.

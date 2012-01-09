@@ -1998,6 +1998,8 @@ hooks			辞書		(任意)
 			合は呼び出されない。
 			この関数は{args}と{context}を引数に取る。
 			source毎のハイライト設定はここで行う。
+			Note: "unite#get_current_unite().abbr_head"により、abbr領
+			域の先頭桁を取得することができる。
 
 			ハイライトの設定例：
 >
