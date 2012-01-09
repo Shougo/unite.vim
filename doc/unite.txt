@@ -1012,7 +1012,7 @@ unite#get_candidates({sources}, [, {context}])	*unite#get_candidates()*
 		Note: Ignore sources max_candidates option.
 
 unite#do_candidates_action({action-name}, {candidates}, [, {context}])
-						*unite#get_candidates()*
+						*unite#do_candidates_action()*
 		Do {action-name} with {candidates}. Does not create unite
 		buffer.  This function may not work in some actions.
 		Note: To get candidates, use |unite#get_candidates()|.

@@ -996,7 +996,7 @@ unite#get_candidates({sources}, [, {context}])			*unite#get_candidates()*
 		Note: sourceのmax_candidatesオプションは無視される。
 
 unite#do_candidates_action({action-name}, {candidates}, [, {context}])
-								*unite#get_candidates()*
+								*unite#do_candidates_action()*
 		指定した{candidates}を利用して、{action-name}を実行する。unite
 		バッファは生成されない。uniteバッファが存在することを前提として
 		いるactionによってはうまく動作しないかもしれない。
