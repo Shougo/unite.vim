@@ -101,6 +101,9 @@ function! s:strchars(str)"{{{
 endfunction"}}}
 
 function! s:strwidthpart(str, width)"{{{
+  if a:width <= 0
+    return ''
+  endif
   let ret = a:str
   let width = s:wcswidth(a:str)
   while width > a:width
@@ -112,6 +115,9 @@ function! s:strwidthpart(str, width)"{{{
   return ret
 endfunction"}}}
 function! s:strwidthpart_reverse(str, width)"{{{
+  if a:width <= 0
+    return ''
+  endif
   let ret = a:str
   let width = s:wcswidth(a:str)
   while width > a:width
