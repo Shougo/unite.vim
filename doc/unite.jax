@@ -2440,6 +2440,13 @@ description		文字列		(任意)
 	"let g:unite_source_session_enable_auto_save = 1
 	" Load session automatically.
 	"autocmd VimEnter * UniteSessionLoad
+	
+	" For ack.
+	if executable('ack-grep')
+	  let g:unite_source_grep_command = 'ack-grep'
+	  let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
+	  let g:unite_source_grep_recursive_opt = ''
+	endif
 <
 ==============================================================================
 ユーザーのsource				*unite-user-sources*
