@@ -92,5 +92,63 @@ function! s:has_index(list, index)
     return 0 <= a:index && a:index < len(a:list)
 endfunction
 
+" similar to Haskell's Data.List.span
+function! s:span(f, xs)
+  let border = len(a:xs)
+  for i in range(len(a:xs))
+    if !eval(substitute(a:f, 'v:val', a:xs[i], 'g'))
+      let border = i
+      break
+    endif
+  endfor
+  return border == 0 ? [[], copy(a:xs)] : [a:xs[: border - 1], a:xs[border :]]
+endfunction
+
+" similar to Haskell's Data.List.break
+function! s:break(f, xs)
+  return s:span(printf('!(%s)', a:f), a:xs)
+endfunction
+
+" similar to Haskell's Prelude.foldl
+function! s:foldl(f, init, xs)
+  let memo = a:init
+  for x in a:xs
+    let expr = substitute(a:f, 'v:val', string(x), 'g')
+    let expr = substitute(expr, 'v:memo', string(memo), 'g')
+    unlet memo
+    let memo = eval(expr)
+  endfor
+  return memo
+endfunction
+
+" similar to Haskell's Prelude.foldl1
+function! s:foldl1(f, xs)
+  if len(a:xs) == 0
+    throw 'foldl1'
+  endif
+  return s:foldl(a:f, a:xs[0], a:xs[1:])
+endfunction
+
+" similar to Haskell's Prelude.foldr
+function! s:foldr(f, init, xs)
+  let memo = a:init
+  for i in reverse(range(0, len(a:xs) - 1))
+    let x = a:xs[i]
+    let expr = substitute(a:f, 'v:val', string(x), 'g')
+    let expr = substitute(expr, 'v:memo', string(memo), 'g')
+    unlet memo
+    let memo = eval(expr)
+  endfor
+  return memo
+endfunction
+
+" similar to Haskell's Prelude.fold11
+function! s:foldr1(f, xs)
+  if len(a:xs) == 0
+    throw 'foldr1'
+  endif
+  return s:foldr(a:f, a:xs[-1], a:xs[0:-2])
+endfunction
+
 
 let &cpo = s:save_cpo

@@ -9,12 +9,12 @@ let s:is_mac = !s:is_windows && (has('mac') || has('macunix') || has('gui_macvim
 
 " Open a file.
 function! s:open(filename) "{{{
-  let filename = iconv(fnamemodify(a:filename, ':p'),
-        \ &encoding, &termencoding)
+  let filename = fnamemodify(a:filename, ':p')
 
   " Detect desktop environment.
   if s:is_windows
     " For URI only.
+    let filename = iconv(filename, &encoding, &termencoding)
     silent execute '!start rundll32 url.dll,FileProtocolHandler' filename
   elseif s:is_cygwin
     " Cygwin.

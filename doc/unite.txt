@@ -2154,6 +2154,7 @@ CHANGELOG					*unite-changelog*
 
 2012-01-11
 - Supported ack command in grep source.
+- Fixed execute problem.
 
 2012-01-09
 - Added abbr_head.

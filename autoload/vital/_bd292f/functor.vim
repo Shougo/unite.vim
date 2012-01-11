@@ -38,11 +38,11 @@ function! s:wrap(callable)
             return a:callable
         elseif type(a:callable.do) ==# s:TYPE_STRING
             return extend(a:callable, {
-            \   'do': function(a:callable),
+            \   'do': function(a:callable.do),
             \}, 'force')
         endif
     endif
-    throw 'vita Functor.wrap(): '
+    throw 'vital: Functor.wrap(): '
     \   . 'a:callable is not callable!'
 endfunction
 

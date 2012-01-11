@@ -6,7 +6,6 @@ let s:V = vital#{expand('<sfile>:h:h:t:r')}#new()
 
 " Substitute a:from => a:to by string.
 " To substitute by pattern, use substitute() instead.
-" Test: https://gist.github.com/984296
 function! s:replace(str, from, to)
     if a:str ==# '' || a:from ==# ''
         return a:str
@@ -24,7 +23,6 @@ endfunction
 
 " Substitute a:from => a:to only once.
 " cf. s:replace()
-" Test: https://gist.github.com/984296
 function! s:replace_once(str, from, to)
     if a:str ==# '' || a:from ==# ''
         return a:str
@@ -39,9 +37,22 @@ function! s:replace_once(str, from, to)
     endif
 endfunction
 
+function! s:scan(str, pattern)
+  let list = []
+  let pos = 0
+  let len = len(a:str)
+  while 0 <= pos && pos < len
+    let matched = matchstr(a:str, a:pattern, pos)
+    let pos = matchend(a:str, a:pattern, pos)
+    if !empty(matched)
+      call add(list, matched)
+    endif
+  endwhile
+  return list
+endfunction
+
 " Split to two elements of List. ([left, right])
 " e.g.: s:split_leftright("neocomplcache", "compl") returns ["neo", "cache"]
-" Test: https://gist.github.com/984356
 function! s:split_leftright(haystack, needle)
     let ERROR = ['', '']
     if a:haystack ==# '' || a:needle ==# ''
@@ -110,5 +121,35 @@ function! s:wrap(str)
         \ map(split(a:str, '\r\?\n'), 's:_split_by_wcswitdh(v:val, &columns - 1)'))
 endfunction
 
+function! s:nr2byte(nr)
+  if a:nr < 0x80
+    return nr2char(a:nr)
+  elseif a:nr < 0x800
+    return nr2char(a:nr/64+192).nr2char(a:nr%64+128)
+  else
+    return nr2char(a:nr/4096%16+224).nr2char(a:nr/64%64+128).nr2char(a:nr%64+128)
+  endif
+endfunction
+
+function! s:nr2enc_char(charcode)
+  if &encoding == 'utf-8'
+    return nr2char(a:charcode)
+  endif
+  let char = s:nr2byte(a:charcode)
+  if strlen(char) > 1
+    let char = strtrans(iconv(char, 'utf-8', &encoding))
+  endif
+  return char
+endfunction
+
+function! s:nr2hex(nr)
+  let n = a:nr
+  let r = ""
+  while n
+    let r = '0123456789ABCDEF'[n % 16] . r
+    let n = n / 16
+  endwhile
+  return r
+endfunction
 
 let &cpo = s:save_cpo

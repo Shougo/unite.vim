@@ -40,7 +40,7 @@ function! s:_import(name, scripts)
     return s:_build_module(a:name)
   endif
   if a:name =~# '^[^A-Z]' || a:name =~# '\W[^A-Z]'
-    throw 'vita module name must start with capital letter: ' . a:name
+    throw 'vital: module name must start with capital letter: ' . a:name
   endif
   let target = a:name == '' ? '' : '/' . substitute(a:name, '\W\+', '/', 'g')
   let target = substitute(target, '\l\zs\ze\u', '_', 'g') " OrderedSet -> Ordered_Set
@@ -51,7 +51,7 @@ function! s:_import(name, scripts)
     try
       source `=target`
     catch /^Vim\%((\a\+)\)\?:E484/
-      throw 'vita module not found: ' . a:name
+      throw 'vital: module not found: ' . a:name
     endtry
     let sid = len(a:scripts) + 1  " We expect that the file newly read is +1.
   endif
@@ -92,7 +92,7 @@ function! s:_build_module(sid)
     try
       call module._vital_loaded(vital#{s:self_version}#new())
     catch
-      " FIXME: Show the error message for debug.
+      " FIXME: Show an error message for debug.
     endtry
   endif
   call filter(module, 'v:key =~# "^\\a"')
