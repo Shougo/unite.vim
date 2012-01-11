@@ -590,7 +590,7 @@ function! unite#mappings#_quick_match(is_choose)"{{{
   let unite = unite#get_current_unite()
 
   if !has_key(quick_match_table, char)
-        \ && quick_match_table[char] >= len(unite.candidates)
+        \ || quick_match_table[char] >= len(unite.candidates)
     call unite#util#print_error('Canceled.')
     return
   endif
