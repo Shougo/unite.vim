@@ -2163,6 +2163,7 @@ CHANGELOG					*unite-changelog*
 - Fixed execute problem.
 - Added g:unite_source_history_yank_file option.
 - Fixed unite#get_candidates().
+- Fixed quick match.
 
 2012-01-09
 - Added abbr_head.

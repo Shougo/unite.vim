@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jan 2012.
+" Last Modified: 11 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -589,17 +589,23 @@ function! unite#mappings#_quick_match(is_choose)"{{{
 
   let unite = unite#get_current_unite()
 
-  if has_key(quick_match_table, char)
-        \ && quick_match_table[char] < len(unite.candidates)
-    let candidates = [ unite.candidates[quick_match_table[char]] ]
-    if a:is_choose
-      call unite#mappings#_choose_action(candidates)
-    else
-      call unite#mappings#do_action(
-            \ unite.context.default_action, candidates)
-    endif
-  else
+  if !has_key(quick_match_table, char)
+        \ && quick_match_table[char] >= len(unite.candidates)
     call unite#util#print_error('Canceled.')
+    return
+  endif
+
+  let candidate = unite.candidates[quick_match_table[char]]
+  if candidate.is_dummy
+    call unite#util#print_error('Canceled.')
+    return
+  endif
+
+  if a:is_choose
+    call unite#mappings#_choose_action([candidate])
+  else
+    call unite#mappings#do_action(
+          \ unite.context.default_action, [candidate])
   endif
 endfunction"}}}
 function! s:input_directory()"{{{
