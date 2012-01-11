@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: history_yank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Dec 2011.
+" Last Modified: 11 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,6 +29,10 @@ set cpo&vim
 
 " Variables  "{{{
 let s:yank_histories = []
+let s:yank_histories_file_mtime = 0  " the last modified time of the yank histories file.
+
+call unite#util#set_default('g:unite_source_history_yank_file',
+      \ g:unite_data_directory . '/history_yank')
 
 call unite#util#set_default('g:unite_source_history_yank_limit', 100)
 "}}}
@@ -37,10 +41,12 @@ function! unite#sources#history_yank#define()"{{{
   return s:source
 endfunction"}}}
 function! unite#sources#history_yank#_append()"{{{
-  if get(s:yank_histories, 0, '') == @"
+  if get(s:yank_histories, 0, '') ==# @"
         \ || len(@") < 2
     return
   endif
+
+  call s:load()
 
   " Append @" value.
   call insert(s:yank_histories, @")
@@ -49,6 +55,8 @@ function! unite#sources#history_yank#_append()"{{{
     let s:yank_histories =
           \ s:yank_histories[ : g:unite_source_history_yank_limit - 1]
   endif
+
+  call s:save()
 endfunction"}}}
 
 let s:source = {
@@ -79,6 +87,31 @@ function! s:source.action_table.delete.func(candidates)"{{{
   endfor
 endfunction"}}}
 "}}}
+
+function! s:save()  "{{{
+  if g:unite_source_history_yank_file == ''
+    return
+  endif
+
+  call writefile([string(s:yank_histories)],
+        \              g:unite_source_history_yank_file)
+  let s:yank_histories_file_mtime = getftime(g:unite_source_history_yank_file)
+endfunction"}}}
+function! s:load()  "{{{
+  if !filereadable(g:unite_source_history_yank_file)
+  \  || s:yank_histories_file_mtime == getftime(g:unite_source_history_yank_file)
+    return
+  endif
+
+  let file = readfile(g:unite_source_history_yank_file)
+  if empty(file)
+    return
+  endif
+
+  sandbox let s:yank_histories = eval(file[0])
+  let s:yank_histories_file_mtime = getftime(g:unite_source_history_yank_file)
+endfunction"}}}
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

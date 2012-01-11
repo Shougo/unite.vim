@@ -636,6 +636,12 @@ g:unite_source_history_yank_limit		*g:unite_source_history_yank_limit*
 		
 		Default value is 100.
 
+g:unite_source_history_yank_file		*g:unite_source_history_yank_file*
+		Specifies the file to write the information of yank history.
+		If this variable is empty, disabled save history.
+
+		Default value is |g:unite_data_directory|; '/history_yank'
+
 g:unite_source_session_default_session_name	*g:unite_source_session_default_session_name*
 		Default session name.
 		
@@ -2155,6 +2161,7 @@ CHANGELOG					*unite-changelog*
 2012-01-11
 - Supported ack command in grep source.
 - Fixed execute problem.
+- Added g:unite_source_history_yank_file option.
 
 2012-01-09
 - Added abbr_head.
