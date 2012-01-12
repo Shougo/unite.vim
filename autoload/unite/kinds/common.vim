@@ -105,6 +105,50 @@ function! s:kind.action_table.insert.func(candidate)"{{{
   endif
 endfunction"}}}
 
+let s:kind.action_table.insert_directory = {
+      \ 'description' : 'insert directory',
+      \ }
+function! s:kind.action_table.insert_directory.func(candidate)"{{{
+  let context = unite#get_current_unite().context
+
+  let directory = ''
+  if has_key(a:candidate,'action__directory')
+      let directory = a:candidate.action__directory
+  elseif has_key(a:candidate, 'action__path')
+      let directory = fnamemodify(a:candidate.action__path, ':p:h')
+  elseif has_key(a:candidate, 'word') && isdirectory(a:candidate.word)
+      let directory = a:candidate.word
+  else
+      return
+  endif
+
+  if !context.complete
+    " Paste.
+    let old_reg = @"
+    let @" = directory
+    normal! ""p
+    let @" = old_reg
+
+    return
+  endif
+
+  let cur_text = matchstr(getline('.'), '^.*\%'
+        \ . (context.col-1) . 'c.')
+
+  let next_line = getline('.')[context.col :]
+  call setline(line('.'),
+        \ split(cur_text . directory . next_line,
+        \            '\n\|\r\n'))
+  let next_col = len(cur_text)+len(directory)+1
+  call cursor('', next_col)
+
+  if next_col < col('$')
+    startinsert
+  else
+    startinsert!
+  endif
+endfunction"}}}
+
 let s:kind.action_table.preview = {
       \ 'description' : 'preview word',
       \ 'is_quit' : 0,
