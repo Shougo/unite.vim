@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: common.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Oct 2011.
+" Last Modified: 12 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -76,33 +76,7 @@ let s:kind.action_table.insert = {
       \ 'description' : 'insert word',
       \ }
 function! s:kind.action_table.insert.func(candidate)"{{{
-  let context = unite#get_current_unite().context
-
-  if !context.complete
-    " Paste.
-    let old_reg = @"
-    let @" = a:candidate.word
-    normal! ""p
-    let @" = old_reg
-
-    return
-  endif
-
-  let cur_text = matchstr(getline('.'), '^.*\%'
-        \ . (context.col-1) . 'c.')
-
-  let next_line = getline('.')[context.col :]
-  call setline(line('.'),
-        \ split(cur_text . a:candidate.word . next_line,
-        \            '\n\|\r\n'))
-  let next_col = len(cur_text)+len(a:candidate.word)+1
-  call cursor('', next_col)
-
-  if next_col < col('$')
-    startinsert
-  else
-    startinsert!
-  endif
+  call s:insert_word(a:candidate.word)
 endfunction"}}}
 
 let s:kind.action_table.insert_directory = {
@@ -111,42 +85,18 @@ let s:kind.action_table.insert_directory = {
 function! s:kind.action_table.insert_directory.func(candidate)"{{{
   let context = unite#get_current_unite().context
 
-  let directory = ''
   if has_key(a:candidate,'action__directory')
       let directory = a:candidate.action__directory
   elseif has_key(a:candidate, 'action__path')
-      let directory = fnamemodify(a:candidate.action__path, ':p:h')
+      let directory = unite#util#substitute_path_separator(
+            \ fnamemodify(a:candidate.action__path, ':p:h'))
   elseif has_key(a:candidate, 'word') && isdirectory(a:candidate.word)
       let directory = a:candidate.word
   else
       return
   endif
 
-  if !context.complete
-    " Paste.
-    let old_reg = @"
-    let @" = directory
-    normal! ""p
-    let @" = old_reg
-
-    return
-  endif
-
-  let cur_text = matchstr(getline('.'), '^.*\%'
-        \ . (context.col-1) . 'c.')
-
-  let next_line = getline('.')[context.col :]
-  call setline(line('.'),
-        \ split(cur_text . directory . next_line,
-        \            '\n\|\r\n'))
-  let next_col = len(cur_text)+len(directory)+1
-  call cursor('', next_col)
-
-  if next_col < col('$')
-    startinsert
-  else
-    startinsert!
-  endif
+  call s:insert_word(directory)
 endfunction"}}}
 
 let s:kind.action_table.preview = {
@@ -158,6 +108,36 @@ function! s:kind.action_table.preview.func(candidate)"{{{
   echo a:candidate.word
 endfunction"}}}
 "}}}
+
+function! s:insert_word(word)"{{{
+  let context = unite#get_current_unite().context
+
+  if !context.complete
+    " Paste.
+    let old_reg = @"
+    let @" = a:word
+    normal! ""p
+    let @" = old_reg
+
+    return
+  endif
+
+  let cur_text = matchstr(getline('.'), '^.*\%'
+        \ . (context.col-1) . 'c.')
+
+  let next_line = getline('.')[context.col :]
+  call setline(line('.'),
+        \ split(cur_text . a:word . next_line,
+        \            '\n\|\r\n'))
+  let next_col = len(cur_text)+len(a:word)+1
+  call cursor('', next_col)
+
+  if next_col < col('$')
+    startinsert
+  else
+    startinsert!
+  endif
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

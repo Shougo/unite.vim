@@ -1671,6 +1671,8 @@ internally.
 	yank_escape	Yank the escaped candidate text
 	ex		Input the escaped candidate text into command line
 	insert		Input the candidate text into the current buffer
+	insert_directory
+			Input the candidate directory into the current buffer
 	preview		Preview the candidate text.
 
 openable					*unite-action-openable*
@@ -2163,6 +2165,7 @@ CHANGELOG					*unite-changelog*
 - Fixed iconv() bug.
 - Fixed grep source error.
 - Fixed grep action.
+- Added insert_directory action.
 
 2012-01-11
 - Supported ack command in grep source.

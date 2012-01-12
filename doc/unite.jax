@@ -1759,6 +1759,8 @@ common					*unite-action-common*
 	yank_escape	エスケープした候補文字列をヤンクする
 	ex		候補をエスケープして、コマンドラインに入力した状態にする
 	insert		現在のバッファに文字列を挿入する
+	insert_directory
+			現在のバッファにディレクトリ名を挿入する
 	preview		候補の文字列を表示する
 
 openable					*unite-action-openable*
