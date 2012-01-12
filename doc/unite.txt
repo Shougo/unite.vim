@@ -2158,6 +2158,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-01-12
+- Fixed resume_from_temporary().
+
 2012-01-11
 - Supported ack command in grep source.
 - Fixed execute problem.
