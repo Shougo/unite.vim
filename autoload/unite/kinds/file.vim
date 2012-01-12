@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jan 2012.
+" Last Modified: 12 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -131,10 +131,6 @@ function! s:kind.action_table.mkdir.func(candidate)"{{{
     redraw
     echo 'Canceled.'
     return
-  endif
-
-  if &termencoding != '' && &termencoding != &encoding
-    let dirname = iconv(dirname, &encoding, &termencoding)
   endif
 
   if !filereadable(dirname) && !isdirectory(dirname)
@@ -459,10 +455,6 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidate)"{{{
       return
     endif
 
-    if &termencoding != '' && &termencoding != &encoding
-      let dirname = iconv(dirname, &encoding, &termencoding)
-    endif
-
     let dirname = unite#util#substitute_path_separator(
           \ fnamemodify(dirname, ':p'))
 
@@ -525,7 +517,7 @@ function! s:execute_command(command, candidate)"{{{
   " Auto make directory.
   if !isdirectory(dir) && unite#util#input_yesno(
         \   printf('"%s" does not exist. Create?', dir))
-    call mkdir(iconv(dir, &encoding, &termencoding), 'p')
+    call mkdir(dir, 'p')
   endif
 
   call unite#util#smart_execute_command(a:command, a:candidate.action__path)

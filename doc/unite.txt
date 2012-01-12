@@ -2160,6 +2160,7 @@ CHANGELOG					*unite-changelog*
 
 2012-01-12
 - Fixed resume_from_temporary().
+- Fixed iconv() bug.
 
 2012-01-11
 - Supported ack command in grep source.
