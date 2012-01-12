@@ -2162,6 +2162,7 @@ CHANGELOG					*unite-changelog*
 - Fixed resume_from_temporary().
 - Fixed iconv() bug.
 - Fixed grep source error.
+- Fixed grep action.
 
 2012-01-11
 - Supported ack command in grep source.
