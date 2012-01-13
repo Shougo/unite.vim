@@ -2160,6 +2160,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-01-14
+- Improved for vimfiler.
+
 2012-01-12
 - Fixed resume_from_temporary().
 - Fixed iconv() bug.
