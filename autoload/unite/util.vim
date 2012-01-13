@@ -168,11 +168,7 @@ function! unite#util#glob(pattern, ...)"{{{
     return vimproc#readdir(a:pattern[: -2])
   else
     " Escape [.
-    if unite#util#is_win()
-      let glob = substitute(a:pattern, '\[', '\\[[]', 'g')
-    else
-      let glob = escape(a:pattern, '[')
-    endif
+    let glob = escape(a:pattern, unite#util#is_win() ?  '?"={}' : '?"={}[]')
 
     return split(unite#util#substitute_path_separator(glob(glob)), '\n')
   endif
@@ -191,7 +187,8 @@ function! unite#util#command_with_restore_cursor(command)
   execute next 'wincmd w'
 endfunction
 function! unite#util#expand(path)"{{{
-  return expand(escape(a:path, '*?[]"={}'))
+  return expand(escape(a:path, unite#util#is_win() ?
+        \ '*?"={}' : '*?"={}[]'))
 endfunction"}}}
 
 

@@ -84,7 +84,7 @@ function! s:source.change_candidates(args, context)"{{{
   if !has_key(a:context.source__cache, glob)
     " let files = split(unite#util#substitute_path_separator(
     "       \ glob(glob)), '\n')
-    let files = unite#util#glob(glob, !is_vimfiler)
+    let files = unite#util#glob(glob)
 
     if !is_vimfiler
       if g:unite_source_file_ignore_pattern != ''

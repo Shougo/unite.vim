@@ -2162,6 +2162,7 @@ CHANGELOG					*unite-changelog*
 
 2012-01-14
 - Improved for vimfiler.
+- Fixed expand problem.
 
 2012-01-12
 - Fixed resume_from_temporary().
