@@ -2163,6 +2163,7 @@ CHANGELOG					*unite-changelog*
 2012-01-15
 - Deleted noautocmd.
 - Improved parse path in file source.
+- Fixed history/yank source limit.
 
 2012-01-14
 - Improved for vimfiler.
