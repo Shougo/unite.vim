@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Jan 2012.
+" Last Modified: 15 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -128,10 +128,7 @@ function! s:source.change_candidates(args, context)"{{{
   return candidates
 endfunction"}}}
 function! s:source.vimfiler_check_filetype(args, context)"{{{
-  let path = unite#util#substitute_path_separator(
-        \ unite#util#expand(join(a:args, ':')))
-  let path = unite#util#substitute_path_separator(
-        \ simplify(fnamemodify(path, ':p')))
+  let path = s:parse_path(a:args)
 
   if isdirectory(path)
     let type = 'directory'
@@ -147,8 +144,7 @@ function! s:source.vimfiler_check_filetype(args, context)"{{{
   return [type, info]
 endfunction"}}}
 function! s:source.vimfiler_gather_candidates(args, context)"{{{
-  let path = unite#util#substitute_path_separator(
-        \ unite#util#expand(join(a:args, ':')))
+  let path = s:parse_path(a:args)
 
   if isdirectory(path)
     " let start = reltime()
@@ -193,8 +189,7 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
   return candidates
 endfunction"}}}
 function! s:source.vimfiler_dummy_candidates(args, context)"{{{
-  let path = unite#util#substitute_path_separator(
-        \ unite#util#expand(join(a:args, ':')))
+  let path = s:parse_path(a:args)
 
   if path == ''
     return []
@@ -231,6 +226,15 @@ endfunction"}}}
 function! s:source.vimfiler_complete(args, context, arglead, cmdline, cursorpos)"{{{
   return unite#sources#file#complete_file(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
+endfunction"}}}
+
+function! s:parse_path(args)"{{{
+  let path = unite#util#substitute_path_separator(
+        \ unite#util#expand(join(a:args, ':')))
+  let path = unite#util#substitute_path_separator(
+        \ simplify(fnamemodify(path, ':p')))
+
+  return path
 endfunction"}}}
 
 function! unite#sources#file#create_file_dict(file, is_relative_path, ...)"{{{
