@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Jan 2012.
+" Last Modified: 15 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1360,7 +1360,7 @@ function! s:quit_session(is_force)  "{{{
     if winnr('$') == 1 || context.no_split
       call unite#util#alternate_buffer()
     else
-      noautocmd close!
+      close!
       execute unite.winnr . 'wincmd w'
       call unite#_resize_window()
     endif
