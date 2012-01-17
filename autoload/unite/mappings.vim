@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jan 2012.
+" Last Modified: 18 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -139,16 +139,18 @@ function! unite#mappings#define_default_mappings()"{{{
         \ <C-o>:<C-u>call <SID>input_directory()<CR>
   inoremap <silent><buffer><expr> <Plug>(unite_do_default_action)
         \ unite#do_action(unite#get_current_unite().context.default_action)
-  inoremap <buffer><silent> <Plug>(unite_toggle_transpose_window)
+  inoremap <silent><buffer> <Plug>(unite_toggle_transpose_window)
         \ <C-o>:<C-u>call <SID>toggle_transpose_window()<CR>
-  inoremap <buffer><silent> <Plug>(unite_toggle_auto_preview)
+  inoremap <silent><buffer> <Plug>(unite_toggle_auto_preview)
         \ <C-o>:<C-u>call <SID>toggle_auto_preview()<CR>
-  inoremap <buffer><silent> <Plug>(unite_narrowing_path)
+  inoremap <silent><buffer> <Plug>(unite_narrowing_path)
         \ <C-o>:<C-u>call <SID>narrowing_path()<CR>
-  inoremap <buffer><silent> <Plug>(unite_narrowing_input_history)
+  inoremap <silent><buffer> <Plug>(unite_narrowing_input_history)
         \ <C-o>:<C-u>call <SID>narrowing_input_history()<CR>
-  inoremap <buffer><silent> <Plug>(unite_toggle_max_candidates)
+  inoremap <silent><buffer> <Plug>(unite_toggle_max_candidates)
         \ <C-o>:<C-u>call <SID>toggle_max_candidates()<CR>
+  inoremap <silent><buffer> <Plug>(unite_redraw)
+        \ <C-o>:<C-u>call <SID>redraw()<CR>
   "}}}
 
   if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
@@ -218,6 +220,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-w>     <Plug>(unite_delete_backward_word)
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>    <Plug>(unite_move_head)
+  imap <buffer> <C-l>     <Plug>(unite_redraw)
 
   inoremap <silent><buffer><expr> d
         \ unite#smart_map('d', unite#do_action('delete'))

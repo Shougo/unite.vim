@@ -882,11 +882,14 @@ Insert mode mappings.
 <Plug>(unite_narrowing_input_history)		*i_<Plug>(unite_narrowing_input_history)*
 		Same to |<Plug>(unite_narrowing_input_history)|.
 
-<Plug>(unite_toggle_auto_preview)	*i_<Plug>(unite_toggle_auto_preview)*
+<Plug>(unite_toggle_auto_preview)		*i_<Plug>(unite_toggle_auto_preview)*
 		Same to |<Plug>(unite_toggle_auto_preview)|.
 
-<Plug>(unite_toggle_max_candidates)	*i_<Plug>(unite_toggle_max_candidates)*
+<Plug>(unite_toggle_max_candidates)		*i_<Plug>(unite_toggle_max_candidates)*
 		Same to |<Plug>(unite_toggle_max_candidates)|.
+
+<Plug>(unite_redraw)				*i_<Plug>(unite_redraw)*
+		Same to |<Plug>(unite_redraw)|.
 
 Visual mode mappings.
 
@@ -951,6 +954,7 @@ Insert mode mappings.
 <C-w>		|i_<Plug>(unite_delete_backward_word)|
 <C-a>		|i_<Plug>(unite_move_head)|
 <Home>		|i_<Plug>(unite_move_head)|
+<C-l>		|i_<Plug>(unite_redraw)|
 e		In case when you selected a candidate, runs narrow action
 d		In case when you selected a candidate, runs delete action
 t		In case when you selected a candidate, runs tabopen action
@@ -2159,6 +2163,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-01-18
+- Added i_<Plug>(unite_redraw) mapping.
 
 2012-01-17
 - Fixed autocmd problem.
