@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 18 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,6 +62,24 @@ function! s:kind.action_table.delete.func(candidates)"{{{
   for candidate in sort(a:candidates, 's:compare')
     close
   endfor
+endfunction"}}}
+
+let s:kind.action_table.preview = {
+      \ 'description' : 'preview window',
+      \ 'is_quit' : 0,
+      \ }
+function! s:kind.action_table.preview.func(candidate)"{{{
+  if !has_key(a:candidate, 'action__buffer_nr')
+    return
+  endif
+
+  let winnr = winnr()
+  execute bufwinnr(a:candidate.action__buffer_nr).'wincmd w'
+  execute 'match Search /\%'.line('.').'l/'
+  redraw
+  sleep 500m
+  match
+  execute winnr.'wincmd w'
 endfunction"}}}
 "}}}
 

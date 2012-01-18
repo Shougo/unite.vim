@@ -1739,6 +1739,7 @@ exists.
 	
 	The following action requires |gettabvar()| and t:cwd.
 	rename		Change the title of the tab
+	preview		Preview the tab
 
 directory					*unite-action-directory*
 This kind extends actions of |unite-action-file|.  This doesn't have any
@@ -1765,6 +1766,7 @@ This kind extends ctions of |unite-action-cdable|.
 	open		Move to the window
 	delete		Close the window
 	only		Close all windows besides the window
+	preview		Preview the window
 
 completion					*unite-action-completion*
 	insert		Insert the candidate
@@ -2166,6 +2168,7 @@ CHANGELOG					*unite-changelog*
 
 2012-01-18
 - Added i_<Plug>(unite_redraw) mapping.
+- Added preview action in window and tab action.
 
 2012-01-17
 - Fixed autocmd problem.
