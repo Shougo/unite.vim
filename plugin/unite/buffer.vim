@@ -25,6 +25,7 @@
 "=============================================================================
 
 if exists('g:loaded_unite_source_buffer')
+      \ || $SUDO_USER != ''
   finish
 endif
 

@@ -25,6 +25,7 @@
 "=============================================================================
 
 if exists('g:loaded_unite_source_tab')
+      \ || $SUDO_USER != ''
   finish
 endif
 
