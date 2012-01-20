@@ -2166,6 +2166,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-01-20
+- Improved cd behavior.
+
 2012-01-18
 - Added i_<Plug>(unite_redraw) mapping.
 - Added preview action in window and tab action.
