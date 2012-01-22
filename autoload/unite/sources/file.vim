@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jan 2012.
+" Last Modified: 22 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -138,7 +138,8 @@ function! s:source.vimfiler_check_filetype(args, context)"{{{
     let info = [readfile(path),
           \ unite#sources#file#create_file_dict(path, 0)]
   else
-    return [ 'error', '[file] Invalid path : ' . path ]
+    " Ignore.
+    return []
   endif
 
   return [type, info]

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jan 2012.
+" Last Modified: 22 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -964,26 +964,27 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
     return []
   endtry
 
-  for source in unite#loaded_sources_list()
-    if has_key(source, 'vimfiler_check_filetype')
-      let ret = source.vimfiler_check_filetype(source.args, context)
-      if !empty(ret)
-        let [type, info] = ret
-        if type ==# 'file'
-          call s:initialize_candidates([info[1]], source.name)
-          call s:initialize_vimfiler_candidates([info[1]], source.name)
-        elseif type ==# 'directory'
-          " nop
-        elseif type ==# 'error'
-          call unite#print_error(info[0])
-          return []
-        else
-          call unite#print_error('Invalid filetype : ' . type)
-        endif
-
-        return [type, info]
-      endif
+  for source in filter(copy(unite#loaded_sources_list()),
+        \ "has_key(v:val, 'vimfiler_check_filetype')")
+    let ret = source.vimfiler_check_filetype(source.args, context)
+    if empty(ret)
+      continue
     endif
+
+    let [type, info] = ret
+    if type ==# 'file'
+      call s:initialize_candidates([info[1]], source.name)
+      call s:initialize_vimfiler_candidates([info[1]], source.name)
+    elseif type ==# 'directory'
+      " nop
+    elseif type ==# 'error'
+      call unite#print_error(info)
+      return []
+    else
+      call unite#print_error('Invalid filetype : ' . type)
+    endif
+
+    return [type, info]
   endfor
 
   " Not found.
