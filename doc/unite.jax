@@ -1793,6 +1793,10 @@ cd可能ファイルのインタフェースを定義している。
 			|vimfiler|がインストールされている場合にのみ有効な
 			アクションである。
 	rec		そのディレクトリで|unite-source-file_rec|を起動する。
+	rec_parent	親ディレクトリで|unite-source-file_rec|を起動する。
+	rec/async	そのディレクトリで|unite-source-file_rec/async|を起動する。
+	rec_parent/async
+			親ディレクトリで|unite-source-file_rec/async|を起動する。
 	file		そのディレクトリで|unite-source-file|を起動する。
 
 file						*unite-action-file*

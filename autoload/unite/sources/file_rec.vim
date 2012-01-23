@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jan 2012.
+" Last Modified: 23 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -326,6 +326,16 @@ function! s:cdable_action_rec.func(candidate)
   call unite#start([['file_rec', a:candidate.action__directory]])
 endfunction
 
+let s:cdable_action_rec_parent = {
+      \ 'description' : 'open parent directory by file_rec source',
+      \}
+
+function! s:cdable_action_rec_parent.func(candidate)
+  call unite#start([['file_rec', unite#util#substitute_path_separator(
+        \ fnamemodify(a:candidate.action__directory, ':h'))
+        \ ]])
+endfunction
+
 let s:cdable_action_rec_async = {
       \ 'description' : 'open this directory by file_rec/async source',
       \}
@@ -334,8 +344,20 @@ function! s:cdable_action_rec_async.func(candidate)
   call unite#start([['file_rec/async', a:candidate.action__directory]])
 endfunction
 
+let s:cdable_action_rec_parent_async = {
+      \ 'description' : 'open parent directory by file_rec/async source',
+      \}
+
+function! s:cdable_action_rec_parent_async.func(candidate)
+  call unite#start([['file_rec/async', unite#util#substitute_path_separator(
+        \ fnamemodify(a:candidate.action__directory, ':h'))
+        \ ]])
+endfunction
+
 call unite#custom_action('cdable', 'rec', s:cdable_action_rec)
+call unite#custom_action('cdable', 'rec_parent', s:cdable_action_rec_parent)
 call unite#custom_action('cdable', 'rec/async', s:cdable_action_rec_async)
+call unite#custom_action('cdable', 'rec_parent/async', s:cdable_action_rec_parent_async)
 unlet! s:cdable_action_rec
 unlet! s:cdable_action_rec_async
 "}}}

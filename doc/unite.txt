@@ -1708,6 +1708,10 @@ Defines an interface for files you can move to with cd command.
 	tabvimfiler	Run |:VimFilerTab| on the directory.  This is
 			available only when you already installed |vimfiler|.
 	rec		Run |unite-source-file_rec| on the directory.
+	rec_parent	Run |unite-source-file_rec| on the parent directory.
+	rec/async	Run |unite-source-file_rec/async| on the directory.
+	rec_parent/async
+			Run |unite-source-file_rec/async| on the parent directory.
 	file		Run |unite-source-file| on the directory.
 
 file						*unite-action-file*
@@ -2165,6 +2169,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-01-23
+- Added rec_parent and rec_parent/async actions.
 
 2012-01-22
 - Ignore invalid path in file source.
