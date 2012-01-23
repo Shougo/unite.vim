@@ -2172,6 +2172,7 @@ CHANGELOG					*unite-changelog*
 
 2012-01-23
 - Added rec_parent and rec_parent/async actions.
+- Fixed for yank_history source error.
 
 2012-01-22
 - Ignore invalid path in file source.

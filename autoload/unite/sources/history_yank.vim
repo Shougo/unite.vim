@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: history_yank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jan 2012.
+" Last Modified: 23 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -108,7 +108,12 @@ function! s:load()  "{{{
     return
   endif
 
-  sandbox let s:yank_histories = eval(file[0])
+  try
+    sandbox let s:yank_histories = eval(file[0])
+  catch
+    let s:yank_histories = []
+  endtry
+
   let s:yank_histories_file_mtime = getftime(g:unite_source_history_yank_file)
 endfunction"}}}
 
