@@ -2173,6 +2173,7 @@ CHANGELOG					*unite-changelog*
 2012-01-26
 - Improved check default action.
 - Fixed set winfixheight problem.
+- Fixed parse path.
 
 2012-01-23
 - Added rec_parent and rec_parent/async actions.

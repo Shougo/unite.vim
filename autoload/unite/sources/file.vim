@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jan 2012.
+" Last Modified: 26 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -233,7 +233,7 @@ function! s:parse_path(args)"{{{
   let path = unite#util#substitute_path_separator(
         \ unite#util#expand(join(a:args, ':')))
   let path = unite#util#substitute_path_separator(
-        \ simplify(fnamemodify(path, ':p')))
+        \ fnamemodify(path, ':p'))
 
   return path
 endfunction"}}}
