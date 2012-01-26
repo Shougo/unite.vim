@@ -2170,6 +2170,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-01-26
+- Improved check default action.
+
 2012-01-23
 - Added rec_parent and rec_parent/async actions.
 - Fixed for yank_history source error.
