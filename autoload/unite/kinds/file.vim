@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jan 2012.
+" Last Modified: 27 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -149,6 +149,7 @@ function! s:kind.action_table.rename.func(candidates)"{{{
     let filename = unite#util#substitute_path_separator(
           \ unite#util#expand(input(printf('New file name: %s -> ',
           \ candidate.action__path), candidate.action__path)))
+    redraw
     if filename != '' && filename !=# candidate.action__path
       call s:rename(candidate.action__path, filename)
     endif
@@ -332,6 +333,8 @@ function! s:kind.action_table.vimfiler__rename.func(candidate)"{{{
           \ context.action__filename :
           \ input(printf('New file name: %s -> ',
           \       a:candidate.action__path), a:candidate.action__path)
+
+    redraw
 
     if filename != '' && filename !=# a:candidate.action__path
       call s:rename(a:candidate.action__path, filename)
@@ -642,16 +645,24 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
 endfunction"}}}
 function! s:rename(old_filename, new_filename)
   let bufnr = bufnr(unite#util#escape_file_searching(a:old_filename))
-  if bufnr < 0
-    call rename(a:old_filename, a:new_filename)
+  if bufnr > 0
+    " Buffer rename.
+    let bufnr_save = bufnr('%')
+    execute 'buffer' bufnr
+    saveas! `=a:new_filename`
+    call delete(a:old_filename)
+    execute 'buffer' bufnr_save
+
     return
   endif
 
-  let bufnr_save = bufnr('%')
-  execute 'buffer' bufnr
-  saveas! `=a:new_filename`
-  call delete(a:old_filename)
-  execute 'buffer' bufnr_save
+  if filereadable(a:new_filename) || isdirectory(a:new_filename)
+    " Failed.
+    call unite#print_error(printf('file: "%s" is already exists!', a:new_filename))
+    return
+  endif
+
+  call rename(a:old_filename, a:new_filename)
 endfunction
 
 function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_func)"{{{
