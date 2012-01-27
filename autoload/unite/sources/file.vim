@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jan 2012.
+" Last Modified: 27 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -152,6 +152,7 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
 
     let context = deepcopy(a:context)
     let context.is_vimfiler = 1
+    let context.input .= path
     let candidates = self.change_candidates(a:args, context)
 
     if !exists('*vimproc#readdir')
