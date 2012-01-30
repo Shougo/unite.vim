@@ -2170,6 +2170,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-01-30
+- Fixed gather_candidates().
+
 2012-01-27
 - Fixed vimfiler redraw bug.
 

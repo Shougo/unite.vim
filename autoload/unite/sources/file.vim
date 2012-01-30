@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jan 2012.
+" Last Modified: 30 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,9 +62,7 @@ function! s:source.change_candidates(args, context)"{{{
     let path = path[: -2]
   endif
 
-  if path == '/'
-    let input = path . input
-  elseif input !~ '^\%(/\|\a\+:/\)' && path != '' && path != '/'
+  if input !~ '^\%(/\|\a\+:/\)' && path != '' && path != '/'
     let input = path . '/' .  input
   endif
   let is_relative_path = input !~ '^\%(/\|\a\+:/\)' && path == ''
