@@ -2175,6 +2175,7 @@ CHANGELOG					*unite-changelog*
 
 2012-01-27
 - Fixed vimfiler redraw bug.
+- Improved file rename behavior.
 
 2012-01-26
 - Improved check default action.
