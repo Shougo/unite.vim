@@ -2172,6 +2172,7 @@ CHANGELOG					*unite-changelog*
 
 2012-02-01
 - Fixed vimfiler__shell action.
+- Fixed external cd.
 
 2012-01-30
 - Fixed gather_candidates().

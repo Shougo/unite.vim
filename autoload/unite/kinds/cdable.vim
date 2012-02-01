@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jan 2012.
+" Last Modified: 01 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -142,7 +142,7 @@ function! s:external_cd(candidate)"{{{
     call vimfiler#mappings#cd(a:candidate.action__directory)
     call s:move_vimfiler_cursor(a:candidate)
   elseif &filetype ==# 'vimshell'
-    call vimshell#switch_shell(0, a:candidate.action__directory)
+    call vimshell#switch_shell(a:candidate.action__directory)
   endif
 endfunction"}}}
 function! s:move_vimfiler_cursor(candidate)"{{{
