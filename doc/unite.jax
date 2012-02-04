@@ -743,8 +743,7 @@ g:unite_kind_openable_persist_open_blink_time	*g:unite_kind_openable_persist_ope
 		sourceの順番を逆方向に並び変える。
 
 <Plug>(unite_print_candidate)			*<Plug>(unite_print_candidate)*
-		選択している候補に対するアクションの対象を表示する。例えば、選
-		択している候補のkindが|word|の場合は、対象の内容が表示される。
+		選択している候補の内容を表示する。
 
 <Plug>(unite_cursor_top)			*<Plug>(unite_cursor_top)*
 		uniteバッファの一番上へ移動する。
