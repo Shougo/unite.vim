@@ -1239,7 +1239,7 @@ unite#filters#default#use({filters})		*unite#filters#default#use(()*
 unite#filters#matcher_default#use({matchers})	*unite#filters#matcher_default#use(()*
 		Todo:
 		Change the default match used by |unite-filter-matcher_default| 
-		into {matchers}. {matchers} must be specified with a list of macher names.
+		into {matchers}. {matchers} must be specified with a list of matcher names.
 
 unite#filters#sorter_default#use({sorters})	*unite#filters#sorter_default#use(()*
 		Todo:
@@ -1616,8 +1616,7 @@ guicmd		GUI executable commands
 FILTERS						*unite-filters*
 
 						*unite-filter-default*
-default		Todo: 
-		This default filter is used unless specified explicitly.
+default		Todo: This default filter is used unless specified explicitly. 
 		This filter is a dummy with ["matcher_glob",
 		"sorter_nothing", "converter_nothing"] registered initially.
 		This filter can be changed by calling
@@ -1628,9 +1627,7 @@ default		Todo:
 
 
 						*unite-filter-matcher_default*
-matcher_default	Todo: 
-		The default matcher used by |unite-filter-default| with
-		["matcher_glob"] set initially.
+matcher_default	Todo: The default matcher used by |unite-filter-default| with ["matcher_glob"] set initially.
 		This can be changed by calling
 		|unite#filters#matcher_default#use()|.
 		
@@ -1638,14 +1635,26 @@ matcher_default	Todo:
 		
 
 						*unite-filter-matcher_glob*
-matcher_glob	Todo:
+matcher_glob	Todo: A matcher which filters the candidates with user given glob pattern.
+		This recognizes "*" as wild card and "!" as negate.
+		Narrowing down can be done by word.
+		
 
 
 						*unite-filter-matcher_regexp*
-matcher_regexp	Todo
+matcher_regexp	Todo: A matcher which filters the candidates with user given regular expression.
+		This recognizes "!" as negate.
+		Narrowing down can be done by word.
 
 						*unite-filter-matcher_fuzzy*
-matcher_fuzzy	Todo
+
+matcher_fuzzy	Todo: A matcher which filters the candidates with user
+given fuzzy string.
+		This recognizes "!" as negate.
+		Narrowing down can be done by word.
+		Note that narrowing down might be slower if this matcher is
+		used.
+		This matcher may best effect if set as |unite-source-file_rec|.
 
 		call unite#custom_filters('file,buffer,file_rec',
 		\ ['matcher_fuzzy', 'sorter_default', 'converter_default'])
@@ -1657,7 +1666,11 @@ matcher_migemo	For Japanese migemo filter.
 		\ ['matcher_migemo', 'sorter_default', 'converter_default'])
 <
 						*unite-filter-sorter_default*
-sorter_default	Todo
+sorter_default	Todo: The default sorter used by |unite-filter-default|.
+		["sorter_nothing"] is set initially.
+		This default sorter can be changed by calling
+		|unite#filters#sorter_default#use()|.
+		
 
 						*unite-filter-sorter_nothing*
 sorter_nothing	Nothing sorter.
@@ -1670,15 +1683,24 @@ sorter_reverse	Reverse order sorter.
 
 						*unite-filter-converter_default*
 converter_default
-		Todo
-
+		Todo: The default converter used by |unite-filter-default|.
+		["converter_nothing"] is set initially.
+		This default converter can be changed by calling
+		|unite#filters#converter_default#use()|.
+		
 						*unite-filter-converter_nothing*
 converter_nothing
 		This converter is dummy.
 
 						*unite-filter-converter_relative_word*
 converter_relative_word
-		Todo
+		Todo: A converter which converts a candidate's word into a
+		corresponding relative path.
+		word can be used by matcher to narrow down the candidates and must be set in precedence of the matcher.
+		If context information contains source__directory, this
+		converter uses it as the base path in relative path
+		conversion.
+		
 >
 		call unite#custom_filters('file_rec',
 		\ ['converter_relative_word', 'matcher_default',
@@ -1687,7 +1709,10 @@ converter_relative_word
 
 						*unite-filter-converter_relative_abbr*
 converter_relative_abbr
-		Todo
+		Todo: A converter which converts a candidate's abbr into a
+		corresponding relative path.
+		Specification of this term is almost the same as that of
+		|unite-filter-converter_relative_word|.
 
 ==============================================================================
 ACTIONS						*unite-actions*
