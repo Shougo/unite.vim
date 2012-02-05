@@ -1231,17 +1231,29 @@ unite#undef_filter({name})			*unite#undef_filter()*
 
 
 unite#filters#default#use({filters})		*unite#filters#default#use(()*
-		Todo
+		Todo:
+		Change the default filter used by |unite-filter-default| 
+		into {filters}. {filters} must be specified with a list of filter names.
+
 
 unite#filters#matcher_default#use({matchers})	*unite#filters#matcher_default#use(()*
-		Todo
+		Todo:
+		Change the default match used by |unite-filter-matcher_default| 
+		into {matchers}. {matchers} must be specified with a list of macher names.
 
 unite#filters#sorter_default#use({sorters})	*unite#filters#sorter_default#use(()*
-		Todo
+		Todo:
+		Change the default sorter used by |unite-filter-sorter_default|
+		into {sourters}. {sorters} must be specified with a list of
+		sorter names.
+		
 
 						*unite#filters#converter_default#use(()*
 unite#filters#converter_default#use({converters})
-		Todo
+		Todo: 
+		Change the default converter used by
+		|unite-filter-converter_default| into {converters}.
+		{converters} must be specified with a list of converter names.
 
 ==============================================================================
 SOURCES						*unite-sources*
@@ -1604,20 +1616,37 @@ guicmd		GUI executable commands
 FILTERS						*unite-filters*
 
 						*unite-filter-default*
-default		Todo
+default		Todo: 
+		This default filter is used unless specified explicitly.
+		This filter is a dummy with ["matcher_glob",
+		"sorter_nothing", "converter_nothing"] registered initially.
+		This filter can be changed by calling
+		|unite#filters#default#use()|.
+
+		
+
+
 
 						*unite-filter-matcher_default*
-matcher_default	Todo
+matcher_default	Todo: 
+		The default matcher used by |unite-filter-default| with
+		["matcher_glob"] set initially.
+		This can be changed by calling
+		|unite#filters#matcher_default#use()|.
+		
+
+		
 
 						*unite-filter-matcher_glob*
-matcher_glob	Todo
+matcher_glob	Todo:
+
 
 						*unite-filter-matcher_regexp*
 matcher_regexp	Todo
 
 						*unite-filter-matcher_fuzzy*
 matcher_fuzzy	Todo
->
+
 		call unite#custom_filters('file,buffer,file_rec',
 		\ ['matcher_fuzzy', 'sorter_default', 'converter_default'])
 <
