@@ -2169,7 +2169,7 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 CHANGELOG					*unite-changelog*
 
 2012-02-08
-- Fixed rename behavior.
+- Fixed rename problem.
 
 2012-02-04
 - Changed <Plug>(unite_print_candidate) behavior.
