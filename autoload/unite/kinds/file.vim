@@ -337,7 +337,7 @@ function! s:kind.action_table.vimfiler__rename.func(candidate)"{{{
     redraw
 
     if filename != '' && filename !=# a:candidate.action__path
-      call unite#kinds#file#do_rename(candidate.action__path, filename)
+      call unite#kinds#file#do_rename(a:candidate.action__path, filename)
     endif
   finally
     if vimfiler_current_dir != ''
