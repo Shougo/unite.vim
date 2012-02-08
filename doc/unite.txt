@@ -2171,6 +2171,7 @@ CHANGELOG					*unite-changelog*
 2012-02-08
 - Fixed rename problem.
 - Fixed buffer rename.
+- Improved unite find input.
 
 2012-02-04
 - Changed <Plug>(unite_print_candidate) behavior.
