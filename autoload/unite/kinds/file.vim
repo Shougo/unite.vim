@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Feb 2012.
+" Last Modified: 08 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -185,7 +185,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
           \   unite#util#input_directory('Input destination directory: ')
     if dest_dir == ''
       return
-    elseif dest_dir !~ '/$'
+    elseif isdirectory(dest_dir) && dest_dir !~ '/$'
       let dest_dir .= '/'
     endif
     let context.action__directory = dest_dir
@@ -255,7 +255,7 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
           \   unite#util#input_directory('Input destination directory: ')
     if dest_dir == ''
       return
-    elseif dest_dir !~ '/$'
+    elseif isdirectory(dest_dir) && dest_dir !~ '/$'
       let dest_dir .= '/'
     endif
 
@@ -593,6 +593,28 @@ function! s:move_to_other_drive(candidate, filename)"{{{
     return 1
   endif
 endfunction"}}}
+function! s:copy_to_other_drive(candidate, filename)"{{{
+  " rename() doesn't supported case matched rename.
+  if g:unite_kind_file_copy_file_command == ''
+        \ || g:unite_kind_file_copy_directory_command == ''
+    call unite#print_error("Please install cp.exe.")
+    return 1
+  elseif g:unite_kind_file_delete_file_command == ''
+          \ || g:unite_kind_file_delete_directory_command == ''
+    call unite#print_error("Please install rm.exe.")
+    return 1
+  endif
+
+  if s:kind.action_table.vimfiler__copy.func([a:candidate])
+    call unite#print_error('Failed file move: ' . a:filename)
+    return 1
+  endif
+
+  if s:kind.action_table.vimfiler__delete.func([a:candidate])
+    call unite#print_error('Failed file delete: ' . a:filename)
+    return 1
+  endif
+endfunction"}}}
 function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_method)"{{{
   let is_reset_method = a:is_reset_method
   let dest_filename = a:dest_dir . fnamemodify(a:filename, ':t')
@@ -644,6 +666,10 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
   return [dest_filename, overwrite_method, is_reset_method, is_continue]
 endfunction"}}}
 function! s:rename(old_filename, new_filename)
+  if a:old_filename ==# a:new_filename
+    return
+  endif
+
   let bufnr = bufnr(unite#util#escape_file_searching(a:old_filename))
   if bufnr > 0
     " Buffer rename.
@@ -658,11 +684,23 @@ function! s:rename(old_filename, new_filename)
 
   if filereadable(a:new_filename) || isdirectory(a:new_filename)
     " Failed.
-    call unite#print_error(printf('file: "%s" is already exists!', a:new_filename))
+    call unite#print_error(
+          \ printf('file: "%s" is already exists!', a:new_filename))
     return
   endif
 
-  call rename(a:old_filename, a:new_filename)
+  if a:old_filename ==? a:new_filename
+    let context = unite#get_context()
+    let context.action__directory = a:new_filename
+    let candidate = {
+          \ 'action__directory' :
+          \       unite#util#path2directory(a:old_filename),
+          \ 'action__path' : a:old_filename,
+          \ }
+    call s:move_to_other_drive(candidate, a:new_filename)
+  else
+    call rename(a:old_filename, a:new_filename)
+  endif
 endfunction
 
 function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_func)"{{{
