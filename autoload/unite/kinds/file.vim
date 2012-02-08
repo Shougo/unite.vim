@@ -151,7 +151,7 @@ function! s:kind.action_table.rename.func(candidates)"{{{
           \ candidate.action__path), candidate.action__path)))
     redraw
     if filename != '' && filename !=# candidate.action__path
-      call s:rename(candidate.action__path, filename)
+      call unite#kinds#file#do_rename(candidate.action__path, filename)
     endif
   endfor
 endfunction"}}}
@@ -337,7 +337,7 @@ function! s:kind.action_table.vimfiler__rename.func(candidate)"{{{
     redraw
 
     if filename != '' && filename !=# a:candidate.action__path
-      call s:rename(a:candidate.action__path, filename)
+      call unite#kinds#file#do_rename(candidate.action__path, filename)
     endif
   finally
     if vimfiler_current_dir != ''
@@ -643,8 +643,16 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
 
   return [dest_filename, overwrite_method, is_reset_method, is_continue]
 endfunction"}}}
-function! s:rename(old_filename, new_filename)"{{{
+function! unite#kinds#file#do_rename(old_filename, new_filename)"{{{
   if a:old_filename ==# a:new_filename
+    return
+  endif
+
+  if a:old_filename !=? a:new_filename &&
+        \ (filereadable(a:new_filename) || isdirectory(a:new_filename))
+    " Failed.
+    call unite#print_error(
+          \ printf('file: "%s" is already exists!', a:new_filename))
     return
   endif
 
@@ -655,13 +663,6 @@ function! s:rename(old_filename, new_filename)"{{{
     execute 'buffer' bufnr
     saveas! `=a:new_filename`
     execute 'buffer' bufnr_save
-  endif
-
-  if filereadable(a:new_filename) || isdirectory(a:new_filename)
-    " Failed.
-    call unite#print_error(
-          \ printf('file: "%s" is already exists!', a:new_filename))
-    return
   endif
 
   call rename(a:old_filename, a:new_filename)

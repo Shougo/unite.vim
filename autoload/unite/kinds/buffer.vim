@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jan 2012.
+" Last Modified: 08 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -147,13 +147,11 @@ function! s:kind.action_table.rename.func(candidates)"{{{
 
     let old_buffer_name = bufname(candidate.action__buffer_nr)
     let buffer_name = input(printf('New buffer name: %s -> ', old_buffer_name), old_buffer_name)
-    if buffer_name != '' && buffer_name !=# old_buffer_name
-      let bufnr = bufnr('%')
-      execute 'buffer' candidate.action__buffer_nr
-      saveas! `=buffer_name`
-      call delete(candidate.action__path)
-      execute 'buffer' bufnr
+    if buffer_name == '' || buffer_name ==# old_buffer_name
+      continue
     endif
+
+    call unite#kinds#file#do_rename(old_buffer_name, buffer_name)
   endfor
 endfunction"}}}
 "}}}
