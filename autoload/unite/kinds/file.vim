@@ -627,7 +627,11 @@ function! s:case_rename(old_filename, new_filename)"{{{
     return 1
   endif
 
-  call delete(temp)
+  if s:kind.action_table.vimfiler__delete.func(
+        \ [s:filename2candidate(temp)])
+    call unite#print_error('Failed file delete: ' . temp)
+    return 1
+  endif
 endfunction"}}}
 function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_method)"{{{
   let is_reset_method = a:is_reset_method
