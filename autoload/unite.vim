@@ -2357,7 +2357,7 @@ function! s:on_cursor_hold_i()  "{{{
 
   if unite.is_async
     " Ignore key sequences.
-    call feedkeys("\<C-r>\<ESC>", 'n')
+	call feedkeys("a\<BS>",'n')
   endif
 endfunction"}}}
 function! unite#_on_cursor_hold()  "{{{
