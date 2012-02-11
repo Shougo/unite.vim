@@ -1944,22 +1944,66 @@ change_candidates	Function	(Optional)
 						*unite-source-attribute-async_gather_candidates*
 async_gather_candidates	Function	(Optional)
 			Todo:
-			This function is called asynchronously 
+			This function is called asynchronously in gathering
+			candidates.
+			You can make use of this function to split
+			time-consuming job into small jobs.
+			|g:unite_update_time| is the default timing.
+			This function takes {args} and {context} as its
+			parameter and returns a list of {candidate}.
 			
+			The specification of the parameters and the returned
+			value is the same as |unite-source-attribute-gather_candidates|.
 
 						*unite-source-attribute-complete*
 complete		Function	(Optional)
 			Todo:
+			This functions is called to complete the source
+			argument of |:Unite|.
+			This function takes {args}, {context}, {arglead},
+			{cmdline} and {cursorpos} as its parameter and returns
+			a list of candidates.
+			
+
+
 
 						*unite-source-attribute-hooks*
 hooks			Dictionary		(Optional)
 			Todo:
+			You may put hook functions in this dictionary with
+			which the key is the position to hook and and the
+			value is the reference to the function to be called.
+			The following hook functions are defined.
+			
+			
+	
+			
+			
+			
 
 			on_init			*unite-source-attribute-hooks-on_init*
 			Todo:
+			Called just before returning to unite buffer
+			after executing |:Unite| commands or calling
+			|unite#start()| but executing |:UniteResume|.
+			This function takes {args} and {context} as its
+			parameters. 
+			Note that you must be careful to select the function
+			to call because the unite
+			buffer is not still initialized in calling this hook
+			function.
+		
 
 			on_syntax		*unite-source-attribute-hooks-on_syntax*
 			Todo:
+			Called after the unite buffer is initialized and
+			syntax for each source is set but not called if
+			|unite-source-attribute-syntax| is not set.
+			This function takes {args} and {context} as its
+			parameters.  
+			Highlight configuration for each source is done by 
+			this function.
+
 			Note: To get abbr head column, use "unite#get_current_unite().abbr_head".
 			Example:
 >
@@ -1967,31 +2011,45 @@ hooks			Dictionary		(Optional)
 			highlight default link uniteSource_FileMru_Time Statement
 <
 			Todo:
+			Note you must set the containedin as same as the
+			syntax name for |unite-source-attribute-syntax|.
 
 			on_close		*unite-source-attribute-hooks-on_close*
 			Todo:
+			Called after executing <Plug>(unite_exit) or closing
+			the unite buffer following some command execution.
+			This function takes {args} and {context} as its
+			parameters.
+
+			
 
 			on_post_filter		*unite-source-attribute-hooks-on_post_filter*
 			Todo:
+			Called after filter is called to narrow down the
+			candidates.
+			This is used to set attributes after narrowing down
+			the condidates so as to avoid badly affecting the performance.
+			
 
 			on_pre_init		*unite-source-attribute-hooks-on_pre_init*
-			Todo:
+			Todo
+			
 
 						*unite-source-attribute-action_table*
 action_table		Dictionary		(Optional)
-			Todo:
+			Todo
 >
 			'action_table' : { 'buffer' : foo_action_table }
 <
-			Todo:
+			Todo
 
 						*unite-source-attribute-default_action*
 default_action		Dictionary		(Optional)
-			Todo:
+			Todo
 
 						*unite-source-attribute-alias_table*
 alias_table		Dictionary		(Optional)
-			Todo:
+			Todo
 
 						*unite-source-attribute-max_candidates*
 max_candidates		Number		(Optional)
