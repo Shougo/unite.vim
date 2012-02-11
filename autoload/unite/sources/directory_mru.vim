@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jan 2012.
+" Last Modified: 11 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -71,7 +71,7 @@ function! unite#sources#directory_mru#_append()"{{{
   call s:load()
 
   let save_ignorecase = &ignorecase
-  let &ignorecase = unite#is_win()
+  let &ignorecase = unite#util#is_windows()
 
   call insert(filter(s:mru_dirs, 'v:val.action__path != path'),
   \           s:convert2dictionary([path, localtime()]))

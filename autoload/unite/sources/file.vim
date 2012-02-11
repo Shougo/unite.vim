@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Jan 2012.
+" Last Modified: 11 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -70,7 +70,7 @@ function! s:source.change_candidates(args, context)"{{{
   " Substitute *. -> .* .
   let input = substitute(input, '\*\.', '.*', 'g')
 
-  if input !~ '\*' && unite#is_win() && getftype(input) == 'link'
+  if input !~ '\*' && unite#util#is_windows() && getftype(input) == 'link'
     " Resolve link.
     let input = resolve(input)
   endif
@@ -167,7 +167,7 @@ function! s:source.vimfiler_gather_candidates(args, context)"{{{
     let candidates = []
   endif
 
-  let exts = unite#util#is_win() ?
+  let exts = unite#util#is_windows() ?
         \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
 
   let old_dir = getcwd()
@@ -201,7 +201,7 @@ function! s:source.vimfiler_dummy_candidates(args, context)"{{{
     lcd `=path`
   endif
 
-  let exts = unite#util#is_win() ?
+  let exts = unite#util#is_windows() ?
         \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
 
   let is_relative_path = path !~ '^\%(/\|\a\+:/\)'
@@ -282,7 +282,7 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
         \ isdirectory(a:candidate.action__path)
   if !a:candidate.vimfiler__is_directory
     let a:candidate.vimfiler__is_executable =
-          \ unite#util#is_win() ?
+          \ unite#util#is_windows() ?
           \ ('.'.fnamemodify(a:candidate.vimfiler__filename, ':e') =~? a:exts) :
           \ executable(a:candidate.action__path)
     let a:candidate.vimfiler__filesize = getfsize(a:candidate.action__path)

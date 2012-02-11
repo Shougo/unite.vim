@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Feb 2012.
+" Last Modified: 11 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,7 +30,7 @@ set cpo&vim
 " Global options definition."{{{
 " External commands.
 if !exists('g:unite_kind_file_delete_file_command')
-  if unite#util#is_win() && !executable('rm')
+  if unite#util#is_windows() && !executable('rm')
     " Can't support.
     let g:unite_kind_file_delete_file_command = ''
   else
@@ -38,7 +38,7 @@ if !exists('g:unite_kind_file_delete_file_command')
   endif
 endif
 if !exists('g:unite_kind_file_delete_directory_command')
-  if unite#util#is_win() && !executable('rm')
+  if unite#util#is_windows() && !executable('rm')
     " Can't support.
     let g:unite_kind_file_delete_directory_command = ''
   else
@@ -46,7 +46,7 @@ if !exists('g:unite_kind_file_delete_directory_command')
   endif
 endif
 if !exists('g:unite_kind_file_copy_file_command')
-  if unite#util#is_win() && !executable('cp')
+  if unite#util#is_windows() && !executable('cp')
     " Can't support.
     let g:unite_kind_file_copy_file_command = ''
   else
@@ -54,7 +54,7 @@ if !exists('g:unite_kind_file_copy_file_command')
   endif
 endif
 if !exists('g:unite_kind_file_copy_directory_command')
-  if unite#util#is_win() && !executable('cp')
+  if unite#util#is_windows() && !executable('cp')
     " Can't support.
     let g:unite_kind_file_copy_directory_command = ''
   else
@@ -62,7 +62,7 @@ if !exists('g:unite_kind_file_copy_directory_command')
   endif
 endif
 if !exists('g:unite_kind_file_move_command')
-  if unite#util#is_win() && !executable('mv')
+  if unite#util#is_windows() && !executable('mv')
     let g:unite_kind_file_move_command = 'move /Y $srcs $dest'
   else
     let g:unite_kind_file_move_command = 'mv $srcs $dest'
@@ -196,7 +196,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
     for candidate in a:candidates
       let filename = candidate.action__path
 
-      if isdirectory(filename) && unite#util#is_win()
+      if isdirectory(filename) && unite#util#is_windows()
             \ && matchstr(filename, '^\a\+\ze:') !=? dest_drive
         call s:move_to_other_drive(candidate, filename)
       else
@@ -486,7 +486,7 @@ function! s:kind.action_table.vimfiler__execute.func(candidates)"{{{
   try
     for candidate in a:candidates
       let path = candidate.action__path
-      if unite#util#is_win() && path =~ '^//'
+      if unite#util#is_windows() && path =~ '^//'
         " substitute separator for UNC.
         let path = substitute(path, '/', '\\', 'g')
       endif
@@ -710,7 +710,7 @@ function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_
 
     if a:action_name == 'delete' && g:unite_kind_file_use_trashbox
       " Environment check.
-      if unite#util#is_win() && unite#util#has_vimproc() && exists('*vimproc#delete_trash')
+      if unite#util#is_windows() && unite#util#has_vimproc() && exists('*vimproc#delete_trash')
         let ret = vimproc#delete_trash(filename)
         if ret
           call unite#print_error(printf('Failed file %s: %s',

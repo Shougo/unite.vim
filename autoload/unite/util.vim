@@ -24,7 +24,7 @@ endfunction
 function! unite#util#wcswidth(...)
   return call(s:V.wcswidth, a:000)
 endfunction
-function! unite#util#is_win(...)
+function! unite#util#is_windows(...)
   return call(s:V.is_windows, a:000)
 endfunction
 function! unite#util#is_mac(...)
@@ -168,7 +168,7 @@ function! unite#util#glob(pattern, ...)"{{{
     return vimproc#readdir(a:pattern[: -2])
   else
     " Escape [.
-    let glob = escape(a:pattern, unite#util#is_win() ?  '?"={}' : '?"={}[]')
+    let glob = escape(a:pattern, unite#util#is_windows() ?  '?"={}' : '?"={}[]')
 
     return split(unite#util#substitute_path_separator(glob(glob)), '\n')
   endif
@@ -187,7 +187,7 @@ function! unite#util#command_with_restore_cursor(command)
   execute next 'wincmd w'
 endfunction
 function! unite#util#expand(path)"{{{
-  return expand(escape(a:path, unite#util#is_win() ?
+  return expand(escape(a:path, unite#util#is_windows() ?
         \ '*?"={}' : '*?"={}[]'))
 endfunction"}}}
 

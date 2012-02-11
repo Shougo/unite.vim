@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_point.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Oct 2011.
+" Last Modified: 11 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,7 @@ function! s:source.gather_candidates(args, context)"{{{
         \   'word': word,
         \   'kind': 'jump_list',
         \ }
-    if len(word) == 1 && unite#util#is_win()
+    if len(word) == 1 && unite#util#is_windows()
       let candidate.word = word . list[0]
       let list = list[1:]
     endif

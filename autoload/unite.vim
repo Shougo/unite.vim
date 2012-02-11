@@ -299,7 +299,7 @@ endfunction"}}}
 
 " Helper functions."{{{
 function! unite#is_win()"{{{
-  return unite#util#is_win()
+  return unite#util#is_windows()
 endfunction"}}}
 function! unite#loaded_source_names()"{{{
   return map(copy(unite#loaded_sources_list()), 'v:val.name')
@@ -1076,7 +1076,7 @@ function! unite#resume(buffer_name, ...)"{{{
     let buffer_name = a:buffer_name
     if buffer_name !~ '@\d\+$'
       " Add postfix.
-      let prefix = unite#util#is_win() ?
+      let prefix = unite#util#is_windows() ?
             \ '[unite] - ' : '*unite* - '
       let prefix .= buffer_name
       let buffer_name .= s:get_postfix(prefix, 0)
@@ -1262,7 +1262,7 @@ function! unite#close(buffer_name)  "{{{
   let buffer_name = a:buffer_name
   if buffer_name !~ '@\d\+$'
     " Add postfix.
-    let prefix = unite#util#is_win() ?
+    let prefix = unite#util#is_windows() ?
           \ '[unite] - ' : '*unite* - '
     let prefix .= buffer_name
     let buffer_name .= s:get_postfix(prefix, 0)
@@ -1999,7 +1999,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   endif
 
   " The current buffer is initialized.
-  let buffer_name = unite#is_win() ? '[unite] - ' : '*unite* - '
+  let buffer_name = unite#util#is_windows() ? '[unite] - ' : '*unite* - '
   let buffer_name .= context.buffer_name
 
   let winnr = winnr()

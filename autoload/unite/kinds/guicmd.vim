@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: guicmd.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jan 2012.
+" Last Modified: 11 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,15 +48,15 @@ function! s:kind.action_table.execute.func(candidate)"{{{
     let args += a:candidate.action__args
   endif
 
-  if unite#util#is_win()
+  if unite#util#is_windows()
     let args[0] = resolve(args[0])
   endif
 
-  let cmdline = unite#util#is_win() ?
+  let cmdline = unite#util#is_windows() ?
         \ join(map(args, '"\"".v:val."\""')) :
         \ args[0] . ' ' . join(map(args[1:], "''''.v:val.''''"))
 
-  if unite#util#is_win()
+  if unite#util#is_windows()
     let cmdline = iconv(cmdline, &encoding, &termencoding)
     silent execute ':!start' cmdline
   else
@@ -72,16 +72,16 @@ function! s:kind.action_table.edit.func(candidate)"{{{
     let args += a:candidate.action__args
   endif
 
-  if unite#util#is_win()
+  if unite#util#is_windows()
     let args[0] = resolve(args[0])
   endif
 
-  let cmdline = unite#util#is_win() ?
+  let cmdline = unite#util#is_windows() ?
         \ join(map(args, '"\"".v:val."\""')) :
         \ args[0] . ' ' . join(map(args[1:], "''''.v:val.''''"))
   let cmdline = input('Edit command args :', cmdline, 'file')
 
-  if unite#util#is_win()
+  if unite#util#is_windows()
     silent execute ':!start' cmdline
   else
     call system(cmdline . ' &')

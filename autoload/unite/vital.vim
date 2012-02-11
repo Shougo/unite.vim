@@ -22,7 +22,7 @@ endfunction
 function! unite#vital#wcswidth(...)
   return call('vital#_39a315#wcswidth', a:000)
 endfunction
-function! unite#vital#is_win(...)
+function! unite#vital#is_windows(...)
   return call('vital#_39a315#is_win', a:000)
 endfunction
 function! unite#vital#print_error(...)
