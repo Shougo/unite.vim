@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2012.
+" Last Modified: 12 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1423,10 +1423,11 @@ function! s:load_default_scripts()"{{{
   let s:static.filters = {}
 
   for key in ['sources', 'kinds', 'filters']
-    for name in map(split(globpath(&runtimepath, 'autoload/unite/' . key . '/*.vim'), '\n'),
+    for name in map(split(globpath(&runtimepath,
+          \ 'autoload/unite/' . key . '/*.vim'), '\n'),
           \ 'fnamemodify(v:val, ":t:r")')
 
-      let define = {'unite#' . key . '#' . name . '#define'}()
+      let define = unite#{key}#{name}#define()
       for dict in (type(define) == type([]) ? define : [define])
         if !empty(dict) && !has_key(s:static[key], dict.name)
           let s:static[key][dict.name] = dict
@@ -1441,12 +1442,14 @@ function! s:initialize_loaded_sources(sources, context)"{{{
   let sources = []
 
   let number = 0
-  for [source, args] in map(a:sources, 'type(v:val) == type([]) ? [v:val[0], v:val[1:]] : [v:val, []]')
+  for [source, args] in map(a:sources,
+        \ 'type(v:val) == type([]) ? [v:val[0], v:val[1:]] : [v:val, []]')
     if type(source) == type('')
       let source_name = source
       unlet source
       if !has_key(all_sources, source_name)
-        call unite#util#print_error('Invalid source name "' . source_name . '" is detected.')
+        call unite#util#print_error(
+              \ 'Invalid source name "' . source_name . '" is detected.')
         throw 'Invalid source'
       endif
 
