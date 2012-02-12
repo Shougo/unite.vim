@@ -1129,61 +1129,7 @@ function! unite#resume(buffer_name, ...)"{{{
 
   call s:init_cursor()
 endfunction"}}}
-function! s:initialize_context(context)"{{{
-  let default_context = {
-        \ 'input' : '',
-        \ 'complete' : 0,
-        \ 'col' : col('.'),
-        \ 'no_quit' : 0,
-        \ 'buffer_name' : 'default',
-        \ 'prompt' : '> ',
-        \ 'default_action' : 'default',
-        \ 'winwidth' : g:unite_winwidth,
-        \ 'winheight' : g:unite_winheight,
-        \ 'immediately' : 0,
-        \ 'auto_preview' : 0,
-        \ 'vertical' : g:unite_enable_split_vertically,
-        \ 'direction' : g:unite_split_rule,
-        \ 'no_split' : 0,
-        \ 'temporary' : 0,
-        \ 'verbose' : 0,
-        \ 'auto_resize' : 0,
-        \ 'old_buffer_info' : [],
-        \ 'toggle' : 0,
-        \ 'quick_match' : 0,
-        \ 'create' : 0,
-        \ 'is_redraw' : 0,
-        \ 'cursor_line_highlight' :
-        \    g:unite_cursor_line_highlight,
-        \ 'update_time' : g:unite_update_time,
-        \ 'no_buffer' : 0,
-        \ 'is_interactive' : 1,
-        \ }
-
-  let context = extend(default_context, a:context)
-
-  " Complex initializer.
-  if !has_key(context, 'start_insert')
-    let context.start_insert = context.complete ?
-          \ 1 : g:unite_enable_start_insert
-  endif
-  if has_key(context, 'no_start_insert')
-        \ && context.no_start_insert
-    " Disable start insert.
-    let context.start_insert = 0
-  endif
-  if !has_key(context, 'profile_name')
-    let context.profile_name = context.buffer_name
-  endif
-  if has_key(context, 'horizontal')
-    " Disable vertically.
-    let context.vertical = 0
-  endif
-  let context.is_changed = 0
-
-  return context
-endfunction"}}}
-function! s:get_candidates(sources, context, is_vimfiler)
+function! s:get_candidates(sources, context, is_vimfiler)"{{{
   try
     call s:initialize_current_unite(a:sources, a:context)
   catch /^Invalid source/
@@ -1210,7 +1156,7 @@ function! s:get_candidates(sources, context, is_vimfiler)
   endfor
 
   return candidates
-endfunction
+endfunction"}}}
 
 function! unite#close(buffer_name)  "{{{
   let buffer_name = a:buffer_name
@@ -1390,6 +1336,60 @@ function! s:load_default_scripts()"{{{
       unlet define
     endfor
   endfor
+endfunction"}}}
+function! s:initialize_context(context)"{{{
+  let default_context = {
+        \ 'input' : '',
+        \ 'complete' : 0,
+        \ 'col' : col('.'),
+        \ 'no_quit' : 0,
+        \ 'buffer_name' : 'default',
+        \ 'prompt' : '> ',
+        \ 'default_action' : 'default',
+        \ 'winwidth' : g:unite_winwidth,
+        \ 'winheight' : g:unite_winheight,
+        \ 'immediately' : 0,
+        \ 'auto_preview' : 0,
+        \ 'vertical' : g:unite_enable_split_vertically,
+        \ 'direction' : g:unite_split_rule,
+        \ 'no_split' : 0,
+        \ 'temporary' : 0,
+        \ 'verbose' : 0,
+        \ 'auto_resize' : 0,
+        \ 'old_buffer_info' : [],
+        \ 'toggle' : 0,
+        \ 'quick_match' : 0,
+        \ 'create' : 0,
+        \ 'is_redraw' : 0,
+        \ 'cursor_line_highlight' :
+        \    g:unite_cursor_line_highlight,
+        \ 'update_time' : g:unite_update_time,
+        \ 'no_buffer' : 0,
+        \ 'is_interactive' : 1,
+        \ }
+
+  let context = extend(default_context, a:context)
+
+  " Complex initializer.
+  if !has_key(context, 'start_insert')
+    let context.start_insert = context.complete ?
+          \ 1 : g:unite_enable_start_insert
+  endif
+  if has_key(context, 'no_start_insert')
+        \ && context.no_start_insert
+    " Disable start insert.
+    let context.start_insert = 0
+  endif
+  if !has_key(context, 'profile_name')
+    let context.profile_name = context.buffer_name
+  endif
+  if has_key(context, 'horizontal')
+    " Disable vertically.
+    let context.vertical = 0
+  endif
+  let context.is_changed = 0
+
+  return context
 endfunction"}}}
 function! s:initialize_loaded_sources(sources, context)"{{{
   let all_sources = s:initialize_sources()
