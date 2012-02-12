@@ -2032,24 +2032,53 @@ hooks			Dictionary		(Optional)
 			
 
 			on_pre_init		*unite-source-attribute-hooks-on_pre_init*
-			Todo
+			Todo:
+			Called before source is initialized.
+			{args} is empty.
+			Current source is set as "a:context.source" in
+			{context}.
+			You can dynamically initialize source by changing
+			"a:context.source" in this function.
 			
 
 						*unite-source-attribute-action_table*
 action_table		Dictionary		(Optional)
-			Todo
+			Todo:
+			Used to add source's own action table.
+			In this dictionary, the key is the kind and the value
+			is the action table. 
+			The specification of action table is as same as
+			|unite-kind-attribute-action_table|. With this
+			dictionary, you can define original
+			|unite-kind-attribute-action_table| for each kind in
+			source's own context.
+			For example,
 >
 			'action_table' : { 'buffer' : foo_action_table }
 <
-			Todo
-
+			Todo:
+			means that foo_action_table is used for kind "buffer"
+			in this source's context.
+			You can use "*" for the key to match any kind. This is
+			useful if you expect only one kind. 
+			If no key-value pair is set, this dictionary is left empty.
+			You can put action table without a corresponding key
+			and it means the key is "*". For example, the
+			following two are the same.
+			
+>
+			'action_table' : foo_action_table
+			'action_table' : { '*' : foo_action_table }
+<
+			
+			
 						*unite-source-attribute-default_action*
 default_action		Dictionary		(Optional)
-			Todo
+			Todo:
 
 						*unite-source-attribute-alias_table*
 alias_table		Dictionary		(Optional)
-			Todo
+			Todo:
 
 						*unite-source-attribute-max_candidates*
 max_candidates		Number		(Optional)
@@ -2061,36 +2090,36 @@ max_candidates		Number		(Optional)
 
 						*unite-source-attribute-required_pattern_length*
 required_pattern_length	Number		(Optional)
-			Todo
+			Todo:
 
 						*unite-source-attribute-is_volatile*
 is_volatile		Number		(Optional)
-			Todo
+			Todo:
 
 						*unite-source-attribute-is_listed*
 is_listed		Number		(Optional)
-			Todo
+			Todo:
 
 						*unite-source-attribute-description*
 description		String		(Optional)
-			Todo
+			Todo:
 
 						*unite-source-attribute-syntax*
 syntax			String		(Optional)
-			Todo
+			Todo:
 
 						*unite-source-attribute-filters*
 filters			List		(Optional)
-			Todo
+			Todo:
 
 						*unite-source-attribute-source__*
 source__		Unknown		(Optional)
-			Todo
+			Todo:
 
 NOTATION					*unite-notation*
 
 {context}					*unite-notation-{context}*
-			Todo
+			Todo:
 
 			input			(String)
 				The input string of unite buffer.
