@@ -2126,32 +2126,59 @@ is_volatile		Number		(Optional)
 			not call |unite-source-attribute-gather_candidates|
 			repeatedly and the cache is available until the unite
 			buffer is closed. To cache longer time, the source
-			must cache by itself.
+			has no choise but to cache by itself.
 			
 						*unite-source-attribute-is_listed*
 is_listed		Number		(Optional)
 			Todo:
+			Whether the source name is visible to the user.
+			If the source is internal, must be set to 0. 
+			If omitted, set to 1.
+
 
 						*unite-source-attribute-description*
 description		String		(Optional)
 			Todo:
+			The description of the source.
+			If ommitted, set to "".
+			|unite-source-source| uses this. 
 
 						*unite-source-attribute-syntax*
 syntax			String		(Optional)
 			Todo:
+			The syntax name used within the source.
+			This syntax name is defined automatically by unite
+			itself.
+			If omitted, set to "".
+			This is used to configure the source's own highlight.
+			According to the unite's naming convension to avoid the syntax name conflicted, use syntax name like "uniteSource__(source name)".
+			Configuration of highlight itself must uses
+			|unite-source-attribute-hooks-on_syntax|.
 
 						*unite-source-attribute-filters*
 filters			List		(Optional)
 			Todo:
+			The list of filters used by the source.
+			Please refer to |unite-filter-attributes| for the specification of filter. 
+			If omitted, unite uses |unite-filter-default|.
 
 						*unite-source-attribute-source__*
 source__		Unknown		(Optional)
 			Todo:
+			The Attribute unique for each source.
+			To avoid the attibute conflicting the unite's own,
+			source__ prefix must be added.
 
 NOTATION					*unite-notation*
 
 {context}					*unite-notation-{context}*
 			Todo:
+			A dictionary to give context information.
+			The followings are the primary information.
+			The global context information can be acquired by
+			|unite#get_context()|.
+			The context information is characteristic to each
+			source and you can distinguish one by a key stored in the dictionary.
 
 			input			(String)
 				The input string of unite buffer.
