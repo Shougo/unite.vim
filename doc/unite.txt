@@ -1916,7 +1916,7 @@ gather_candidates	Function	(Required)
 			unite buffer is closed and is discarded unless you
 			use |:UniteResume|. To cache persistenly regardless of
 			the life of the unite buffer, you have some source to
-			save the cache on involatile storage.
+			save the cache on non-volatile storage.
 			
 			
 			
@@ -2044,7 +2044,7 @@ hooks			Dictionary		(Optional)
 						*unite-source-attribute-action_table*
 action_table		Dictionary		(Optional)
 			Todo:
-			Used to add source's own action table.
+			Add source's own action table.
 			In this dictionary, the key is the kind and the value
 			is the action table. 
 			The specification of action table is as same as
@@ -2075,10 +2075,28 @@ action_table		Dictionary		(Optional)
 						*unite-source-attribute-default_action*
 default_action		Dictionary		(Optional)
 			Todo:
+			Add default action unique to the source.
+			In this dictionary, key is the kind and the value is
+			the default action.
+			If not given, it uses the kind's default action.
+			The default action can be in string format and it
+			means the same as 'default_action' : { '*' : action_name}.
+			
+
 
 						*unite-source-attribute-alias_table*
 alias_table		Dictionary		(Optional)
 			Todo:
+			Add an alias table unique to the source.
+			In this dictionary, the key is the kind and the value
+			is the alias table.
+			If key is '*', it matches any kinds.
+			Please refer to |unite-kind-attribute-action_table|
+			for the specification of alias table.
+			If no key-value is set, this dictionary is left
+			empty.
+			
+			
 
 						*unite-source-attribute-max_candidates*
 max_candidates		Number		(Optional)
@@ -2091,11 +2109,25 @@ max_candidates		Number		(Optional)
 						*unite-source-attribute-required_pattern_length*
 required_pattern_length	Number		(Optional)
 			Todo:
+			The least string length to narrow down the
+			candidates.
+			This attribute is optional. 
+			If not given, 0 is used as the default value and all
+			the possible candidates are collected.
+			
 
 						*unite-source-attribute-is_volatile*
 is_volatile		Number		(Optional)
 			Todo:
-
+			Whether the source recalculates the candidates everytime the input is changed.
+			This attribute is optional.
+			If not given, 0 is set as the default value. In this
+			case, canidates are cached in unite buffer and it does
+			not call |unite-source-attribute-gather_candidates|
+			repeatedly and the cache is available until the unite
+			buffer is closed. To cache longer time, the source
+			must cache by itself.
+			
 						*unite-source-attribute-is_listed*
 is_listed		Number		(Optional)
 			Todo:
