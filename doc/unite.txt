@@ -2170,6 +2170,7 @@ CHANGELOG					*unite-changelog*
 
 2012-02-12
 - Improved load_default_scripts().
+- Fixed initialize context.
 
 2012-02-11
 - Refactored is_windows.
