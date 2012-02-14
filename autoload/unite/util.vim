@@ -193,7 +193,13 @@ function! unite#util#expand(path)"{{{
   return expand(escape(a:path, unite#util#is_windows() ?
         \ '*?"={}' : '*?"={}[]'))
 endfunction"}}}
-
+function! unite#util#set_dictionary_helper(variable, keys, pattern)"{{{
+  for key in split(a:keys, '\s*,\s*')
+    if !has_key(a:variable, key)
+      let a:variable[key] = a:pattern
+    endif
+  endfor
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

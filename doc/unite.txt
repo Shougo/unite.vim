@@ -2171,6 +2171,7 @@ CHANGELOG					*unite-changelog*
 2012-02-14
 - Fixed is_win error.
 - Improved split patterns.
+- Added util function.
 
 2012-02-12
 - Improved load_default_scripts().
