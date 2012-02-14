@@ -193,11 +193,16 @@ function! unite#util#expand(path)"{{{
   return expand(escape(a:path, unite#util#is_windows() ?
         \ '*?"={}' : '*?"={}[]'))
 endfunction"}}}
-function! unite#util#set_dictionary_helper(variable, keys, pattern)"{{{
+function! unite#util#set_default_dictionary_helper(variable, keys, value)"{{{
   for key in split(a:keys, '\s*,\s*')
     if !has_key(a:variable, key)
-      let a:variable[key] = a:pattern
+      let a:variable[key] = a:value
     endif
+  endfor
+endfunction"}}}
+function! unite#util#set_dictionary_helper(variable, keys, value)"{{{
+  for key in split(a:keys, '\s*,\s*')
+    let a:variable[key] = a:value
   endfor
 endfunction"}}}
 

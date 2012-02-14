@@ -88,9 +88,8 @@ endfunction"}}}
 function! unite#custom_filters(source_name, filters)"{{{
   let filters = type(a:filters) == type([]) ?
         \ a:filters : [a:filters]
-  for key in split(a:source_name, '\s*,\s*')
-    let s:custom.filters[key] = filters
-  endfor
+  call unite#util#set_dictionary_helper(s:custom.filters,
+        \ a:source_name, filters)
 endfunction"}}}
 function! unite#custom_alias(kind, name, action)"{{{
   for key in split(a:kind, '\s*,\s*')
@@ -102,9 +101,8 @@ function! unite#custom_alias(kind, name, action)"{{{
   endfor
 endfunction"}}}
 function! unite#custom_default_action(kind, default_action)"{{{
-  for key in split(a:kind, '\s*,\s*')
-    let s:custom.default_actions[key] = a:default_action
-  endfor
+  call unite#util#set_dictionary_helper(s:custom.default_actions,
+        \ a:kind, a:default_action)
 endfunction"}}}
 function! unite#custom_action(kind, name, action)"{{{
   for key in split(a:kind, '\s*,\s*')
@@ -115,9 +113,8 @@ function! unite#custom_action(kind, name, action)"{{{
   endfor
 endfunction"}}}
 function! unite#custom_max_candidates(source_name, max)"{{{
-  for key in split(a:source_name, '\s*,\s*')
-    let s:custom.max_candidates[key] = a:max
-  endfor
+  call unite#util#set_dictionary_helper(s:custom.max_candidates,
+        \ a:source_name, a:max)
 endfunction"}}}
 function! unite#undef_custom_action(kind, name)"{{{
   for key in split(a:kind, '\s*,\s*')
