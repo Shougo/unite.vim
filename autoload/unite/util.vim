@@ -24,6 +24,9 @@ endfunction
 function! unite#util#wcswidth(...)
   return call(s:V.wcswidth, a:000)
 endfunction
+function! unite#util#is_win(...)
+  return call(s:V.is_windows, a:000)
+endfunction
 function! unite#util#is_windows(...)
   return call(s:V.is_windows, a:000)
 endfunction
