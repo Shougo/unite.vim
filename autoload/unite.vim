@@ -2284,8 +2284,6 @@ function! s:on_insert_enter()  "{{{
     normal! zb
     startinsert!
   endif
-
-  call s:save_updatetime()
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   let unite = unite#get_current_unite()
@@ -2302,8 +2300,6 @@ function! s:on_insert_leave()  "{{{
   if &filetype ==# 'unite'
     setlocal nomodifiable
   endif
-
-  call s:save_updatetime()
 endfunction"}}}
 function! s:on_cursor_hold_i()  "{{{
   let unite = unite#get_current_unite()
