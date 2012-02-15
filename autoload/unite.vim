@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Feb 2012.
+" Last Modified: 15 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2062,11 +2062,20 @@ function! s:initialize_unite_buffer()"{{{
 
     " Autocommands.
     augroup plugin-unite
-      autocmd InsertEnter <buffer>  call s:on_insert_enter()
-      autocmd InsertLeave <buffer>  call s:on_insert_leave()
-      autocmd CursorHoldI <buffer>  call s:on_cursor_hold_i()
-      autocmd CursorMoved,CursorMovedI <buffer>  nested call s:on_cursor_moved()
-      autocmd BufUnload,BufHidden <buffer>  call s:on_buf_unload(expand('<afile>'))
+      autocmd InsertEnter <buffer>
+            \ call s:on_insert_enter()
+      autocmd InsertLeave <buffer>
+            \ call s:on_insert_leave()
+      autocmd CursorHoldI <buffer>
+            \ call s:on_cursor_hold_i()
+      autocmd CursorMoved,CursorMovedI <buffer>  nested
+            \ call s:on_cursor_moved()
+      autocmd BufUnload,BufHidden <buffer>
+            \ call s:on_buf_unload(expand('<afile>'))
+      autocmd WinEnter,BufWinEnter <buffer>
+            \ call s:save_updatetime()
+      autocmd WinLeave,BufWinLeave <buffer>
+            \ call s:restore_updatetime()
     augroup END
 
     call unite#mappings#define_default_mappings()
@@ -2083,10 +2092,7 @@ function! s:initialize_unite_buffer()"{{{
     let &redrawtime = 100
   endif
 
-  let unite.update_time_save = &updatetime
-  if &updatetime > unite.context.update_time
-    let &updatetime = unite.context.update_time
-  endif
+  call s:save_updatetime()
 
   " User's initialization.
   setlocal nomodifiable
@@ -2278,6 +2284,8 @@ function! s:on_insert_enter()  "{{{
     normal! zb
     startinsert!
   endif
+
+  call s:save_updatetime()
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   let unite = unite#get_current_unite()
@@ -2294,6 +2302,8 @@ function! s:on_insert_leave()  "{{{
   if &filetype ==# 'unite'
     setlocal nomodifiable
   endif
+
+  call s:save_updatetime()
 endfunction"}}}
 function! s:on_cursor_hold_i()  "{{{
   let unite = unite#get_current_unite()
@@ -2384,9 +2394,8 @@ function! s:on_buf_unload(bufname)  "{{{
     let &redrawtime = unite.redrawtime_save
   endif
   let &sidescrolloff = unite.sidescrolloff_save
-  if &updatetime < unite.update_time_save
-    let &updatetime = unite.update_time_save
-  endif
+
+  call s:restore_updatetime()
 
   if !unite.has_preview_window
     " Close preview window.
@@ -2440,6 +2449,21 @@ function! s:change_highlight()  "{{{
   endfor
 
   syntax case match
+endfunction"}}}
+function! s:save_updatetime()  "{{{
+  let unite = unite#get_current_unite()
+
+  let unite.update_time_save = &updatetime
+  if &updatetime > unite.context.update_time
+    let &updatetime = unite.context.update_time
+  endif
+endfunction"}}}
+function! s:restore_updatetime()  "{{{
+  let unite = unite#get_current_unite()
+
+  if &updatetime < unite.update_time_save
+    let &updatetime = unite.update_time_save
+  endif
 endfunction"}}}
 
 " Internal helper functions."{{{

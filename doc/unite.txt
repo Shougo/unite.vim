@@ -2170,6 +2170,8 @@ CHANGELOG					*unite-changelog*
 
 2012-02-15
 - Fixed find source input bug.
+- Fixed vimshell action.
+- Fixed updatetime.
 
 2012-02-14
 - Fixed is_win error.
