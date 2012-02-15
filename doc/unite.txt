@@ -2168,6 +2168,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-02-15
+- Fixed find source input bug.
+
 2012-02-14
 - Fixed is_win error.
 - Improved split patterns.
