@@ -428,7 +428,7 @@ g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 		Specifies the output format of the last access time of
 		|unite-source-file_mru|.  The format is same to |strftime()|.
 
-		Default value is "(%c) ".
+		Default value is "(%Y/%m/%d %H:%M:%S) ".
 
 g:unite_source_file_mru_filename_format		*g:unite_source_file_mru_filename_format*
 		Specifies the output format of the filename of
@@ -2167,6 +2167,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-02-16
+- Improved mru default time format.
 
 2012-02-15
 - Fixed find source input bug.
