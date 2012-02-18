@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2012.
+" Last Modified: 18 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -274,22 +274,39 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...)"{{{
   return dict
 endfunction"}}}
 function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
+  let a:candidate.vimfiler__is_directory =
+        \ isdirectory(a:candidate.action__path)
+
+  if len(a:candidate.action__path) > 200
+    " Convert to relative path.
+    let directory = unite#util#substitute_path_separator(
+          \ fnamemodify(a:candidate.action__path, ':h'))
+    let current_dir_save = getcwd()
+    lcd `=directory`
+    let filename = unite#util#substitute_path_separator(
+          \ fnamemodify(a:candidate.action__path, ':.'))
+  else
+    let filename = a:candidate.action__path
+  endif
+
   let a:candidate.vimfiler__filename =
         \       fnamemodify(a:candidate.action__path, ':t')
   let a:candidate.vimfiler__abbr = a:candidate.vimfiler__filename
 
-  let a:candidate.vimfiler__is_directory =
-        \ isdirectory(a:candidate.action__path)
   if !a:candidate.vimfiler__is_directory
     let a:candidate.vimfiler__is_executable =
           \ unite#util#is_windows() ?
           \ ('.'.fnamemodify(a:candidate.vimfiler__filename, ':e') =~? a:exts) :
           \ executable(a:candidate.action__path)
-    let a:candidate.vimfiler__filesize = getfsize(a:candidate.action__path)
+    let a:candidate.vimfiler__filesize = getfsize(filename)
   endif
-  let a:candidate.vimfiler__filetime = getftime(a:candidate.action__path)
-  let a:candidate.vimfiler__ftype =
-        \ getftype(a:candidate.action__path)
+  let a:candidate.vimfiler__filetime = getftime(filename)
+  let a:candidate.vimfiler__ftype = getftype(filename)
+
+  if exists('current_dir_save')
+    " Restore path.
+    lcd `=current_dir_save`
+  endif
 endfunction"}}}
 
 function! unite#sources#file#complete_file(args, context, arglead, cmdline, cursorpos)"{{{
