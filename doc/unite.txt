@@ -2171,6 +2171,9 @@ CHANGELOG					*unite-changelog*
 2012-02-20
 - Improved check MRU path.
 
+2012-02-18
+- Fixed for long file path.
+
 2012-02-16
 - Improved mru default time format.
 
