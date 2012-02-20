@@ -2261,7 +2261,7 @@ function! unite#_resize_window() "{{{
     let max_len = unite.prompt_linenr + len(unite.candidates)
     execute 'resize' min([max_len, context.winheight])
     normal! zb
-    if mode() == 'i' && col('.') == (col('$') - 1)
+    if mode() ==# 'i' && col('.') == (col('$') - 1)
       startinsert!
     endif
   elseif context.vertical
