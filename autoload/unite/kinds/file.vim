@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Feb 2012.
+" Last Modified: 20 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -723,9 +723,11 @@ function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_
           \ filename)
     redraw
 
-    if a:action_name == 'delete' && g:unite_kind_file_use_trashbox
+    if a:action_name == 'delete'
+          \ && g:unite_kind_file_use_trashbox
       " Environment check.
-      if unite#util#is_windows() && unite#util#has_vimproc() && exists('*vimproc#delete_trash')
+      if unite#util#is_windows()
+            \ && unite#util#has_vimproc() && exists('*vimproc#delete_trash')
         let ret = vimproc#delete_trash(filename)
         if ret
           call unite#print_error(printf('Failed file %s: %s',
@@ -733,7 +735,8 @@ function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_
           call unite#print_error(printf('Error code is %d', ret))
         endif
       else
-        call unite#util#print_error('Your environment is not supported vimproc#delete_trash().')
+        call unite#util#print_error(
+              \ 'Your environment is not supported vimproc#delete_trash().')
         break
       endif
     else
