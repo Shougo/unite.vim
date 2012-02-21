@@ -78,7 +78,7 @@ let s:kind.action_table.insert = {
       \ 'description' : 'insert word or text',
       \ }
 function! s:kind.action_table.insert.func(candidate)"{{{
-  call s:insert_word(s:get_candidate_text(a:candidate.word))
+  call s:insert_word(s:get_candidate_text(a:candidate))
 endfunction"}}}
 
 let s:kind.action_table.insert_directory = {
@@ -107,7 +107,7 @@ let s:kind.action_table.preview = {
       \ }
 function! s:kind.action_table.preview.func(candidate)"{{{
   redraw
-  echo s:get_candidate_text(a:candidate.word)
+  echo s:get_candidate_text(a:candidate)
 endfunction"}}}
 "}}}
 
