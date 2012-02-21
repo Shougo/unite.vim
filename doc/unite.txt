@@ -1669,10 +1669,11 @@ common						*unite-action-common*
 Defines the common interface for all kinds.  This uses condidate.word
 internally.
 	nop		Do nothing
-	yank		Yank the candidate text
-	yank_escape	Yank the escaped candidate text
+	yank		Yank the candidate word or text
+	yank_escape	Yank the escaped candidate word or text
 	ex		Input the escaped candidate text into command line
-	insert		Input the candidate text into the current buffer
+	insert		Input the candidate word or text into the current
+			buffer
 	insert_directory
 			Input the candidate directory into the current buffer
 	preview		Preview the candidate text.
@@ -2167,6 +2168,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-02-21
+- Improved common action behavior.
 
 2012-02-20
 - Improved check MRU path.
