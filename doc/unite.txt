@@ -2171,6 +2171,7 @@ CHANGELOG					*unite-changelog*
 
 2012-02-22
 - Fixed vimfiler action error.
+- Fixed file_mru behavior.
 
 2012-02-21
 - Improved common action behavior.

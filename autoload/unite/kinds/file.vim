@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Feb 2012.
+" Last Modified: 22 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -518,7 +518,7 @@ endfunction"}}}
 function! s:execute_command(command, candidate)"{{{
   let dir = unite#util#path2directory(a:candidate.action__path)
   " Auto make directory.
-  if !isdirectory(dir) && unite#util#input_yesno(
+  if dir !~ '^\a\+:' && !isdirectory(dir) && unite#util#input_yesno(
         \   printf('"%s" does not exist. Create?', dir))
     call mkdir(dir, 'p')
   endif
