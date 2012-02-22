@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Feb 2012.
+" Last Modified: 22 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -117,7 +117,7 @@ if exists(':VimFiler')
         \ 'description' : 'open vimfiler buffer here',
         \ }
   function! s:kind.action_table.vimfiler.func(candidate)"{{{
-    call vimfiler#create_filer(a:candidate.action__directory)
+    execute 'VimFilerCreate' escape(a:candidate.action__directory, '\ ')
 
     if has_key(a:candidate, 'action__path')
           \ && a:candidate.action__directory !=# a:candidate.action__path
@@ -132,8 +132,14 @@ if exists(':VimFilerTab')
         \ 'description' : 'tabopen vimfiler buffer here',
         \ }
   function! s:kind.action_table.tabvimfiler.func(candidate)"{{{
-    tabnew | call vimfiler#create_filer(a:candidate.action__directory)
-    call s:move_vimfiler_cursor(a:candidate)
+    execute 'VimFilerTab' escape(a:candidate.action__directory, '\ ')
+
+    if has_key(a:candidate, 'action__path')
+          \ && a:candidate.action__directory !=# a:candidate.action__path
+      " Move cursor.
+      call vimfiler#mappings#search_cursor(a:candidate.action__path)
+      call s:move_vimfiler_cursor(a:candidate)
+    endif
   endfunction"}}}
 endif
 

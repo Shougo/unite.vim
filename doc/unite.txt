@@ -2169,6 +2169,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-02-22
+- Fixed vimfiler action error.
+
 2012-02-21
 - Improved common action behavior.
 
