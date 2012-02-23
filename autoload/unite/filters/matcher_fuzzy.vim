@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_fuzzy.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2011.
+" Last Modified: 23 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,23 +44,16 @@ function! s:matcher.filter(candidates, context)"{{{
   let candidates = a:candidates
   for input in split(a:context.input, '\\\@<! ')
     let input = substitute(input, '\\ ', ' ', 'g')
-
-    " Fuzzy.
-    let input = substitute(input, '[^*]\ze[[:alnum:]]', '\0*', 'g')
-
-    if input =~ '^!'
-      if input == '!'
-        continue
-      endif
-
-      " Exclusion.
-      let input = unite#escape_match(input)
-      let expr = 'v:val.word !~ ' . string(input[1:])
-    else
-      " Wildcard.
-      let input = unite#escape_match(input)
-      let expr = 'v:val.word =~ ' . string(input)
+    if input == '!'
+      continue
     endif
+
+    let input = unite#escape_match(input)
+    let input = substitute(input, '[^*!]', '\0.*', 'g')
+
+    let expr = (input =~ '^!') ?
+          \ 'v:val.word !~ ' . string(input[1:]) :
+          \ 'v:val.word =~ ' . string(input)
 
     let candidates = filter(copy(candidates), expr)
   endfor
