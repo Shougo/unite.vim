@@ -40,11 +40,20 @@ function! s:sorter.filter(candidates, context)"{{{
   if a:context.input == '' || !has('float')
     return a:candidates
   endif
-  let input = substitute(a:context.input, '\*', '', 'g')
 
-  " Calc rank.
+  " Initialize.
   for candidate in a:candidates
-    let candidate.filter__rank = s:calc_rank(candidate.word, input)
+    let candidate.filter__rank = 0
+  endfor
+
+  for input in split(a:context.input, '\\\@<! ')
+    let input = substitute(substitute(input, '\\ ', ' ', 'g'),
+          \          '\*', '', 'g')
+
+    " Calc rank.
+    for candidate in a:candidates
+      let candidate.filter__rank += s:calc_rank(candidate.word, input)
+    endfor
   endfor
 
   return unite#util#sort_by(a:candidates, 'v:val.filter__rank')
@@ -54,7 +63,7 @@ endfunction"}}}
 function! s:calc_rank(word, input)"{{{
   let pos = stridx(a:word, a:input)
   if pos < 0
-    return str2float('0.0')
+    return 0
   endif
 
   let rest = len(a:word) - len(a:input) - pos
