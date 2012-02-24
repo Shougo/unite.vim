@@ -1629,12 +1629,17 @@ matcher_migemo	For Japanese migemo filter.
 <
 						*unite-filter-sorter_default*
 sorter_default	Todo
+		In default, use sorter_rank sorter.
 
 						*unite-filter-sorter_nothing*
 sorter_nothing	Nothing sorter.
 
 						*unite-filter-sorter_word*
 sorter_word	Compare words sorter.
+
+						*unite-filter-sorter_rank*
+sorter_rank	Matched rank order sorter. If a word matched head or the
+		matched length is long, the rank will be high.
 
 						*unite-filter-sorter_reverse*
 sorter_reverse	Reverse order sorter.
@@ -2168,6 +2173,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-02-25
+- Added sorter_rank filter and changed default sorter.
 
 2012-02-24
 - Fixed matcher_fuzzy behavior.

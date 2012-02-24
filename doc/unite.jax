@@ -1703,7 +1703,7 @@ matcher_migemo	migemoを使用して、候補をフィルタリングするmatch
 <
 						*unite-filter-sorter_default*
 sorter_default	|unite-filter-default|により呼び出される、デフォルトのsorter。
-		初期状態では、["sorter_nothing"]のsorterを呼び出す。
+		初期状態では、["sorter_rank"]のsorterを呼び出す。
 		|unite#filters#sorter_default#use()|を呼び出すことで、デフォルトの
 		sorterを変更することができる。
 
@@ -1712,6 +1712,10 @@ sorter_nothing	何もsortをしないsorter。source側のsortがそのまま反
 
 						*unite-filter-sorter_word*
 sorter_word	wordを比較するsorter。
+
+						*unite-filter-sorter_rank*
+sorter_rank	入力のマッチ度を比較するsorter。マッチ位置が先頭にあるほど、マ
+		ッチ長さが長いほどマッチ度は高くなる。
 
 						*unite-filter-sorter_reverse*
 sorter_reverse	順番を反転するsorter。
