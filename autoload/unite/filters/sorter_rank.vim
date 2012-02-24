@@ -40,10 +40,11 @@ function! s:sorter.filter(candidates, context)"{{{
   if a:context.input == '' || !has('float')
     return a:candidates
   endif
+  let input = substitute(a:context.input, '\*', '', 'g')
 
   " Calc rank.
   for candidate in a:candidates
-    let candidate.filter__rank = s:calc_rank(candidate.word, a:context.input)
+    let candidate.filter__rank = s:calc_rank(candidate.word, input)
   endfor
 
   return unite#util#sort_by(a:candidates, 'v:val.filter__rank')
