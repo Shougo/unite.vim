@@ -47,12 +47,24 @@ function! s:sorter.filter(candidates, context)"{{{
   endfor
 
   for input in split(a:context.input, '\\\@<! ')
-    let input = substitute(substitute(input, '\\ ', ' ', 'g'),
-          \          '\*', '', 'g')
+    let input = substitute(substitute(input, '\\ ', ' ', 'g'), '\*', '', 'g')
+    let boundary_inputs = split(input, '\W')
 
     " Calc rank.
     for candidate in a:candidates
-      let candidate.filter__rank += s:calc_rank(candidate.word, input)
+      let candidate.filter__rank +=
+            \ s:calc_rank_sequential_match(candidate.word, input)
+    endfor
+
+    if empty(boundary_inputs)
+      continue
+    endif
+
+    for boundary_input in boundary_inputs
+      for candidate in a:candidates
+        let candidate.filter__rank +=
+              \ (s:calc_rank_sequential_match(candidate.word, boundary_input) + 1.0) / 2
+      endfor
     endfor
   endfor
 
@@ -60,7 +72,7 @@ function! s:sorter.filter(candidates, context)"{{{
 endfunction"}}}
 
 " Range of return is [0.0, 1.0]
-function! s:calc_rank(word, input)"{{{
+function! s:calc_rank_sequential_match(word, input)"{{{
   let pos = stridx(a:word, a:input)
   if pos < 0
     return 0

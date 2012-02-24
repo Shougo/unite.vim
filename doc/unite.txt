@@ -2176,6 +2176,7 @@ CHANGELOG					*unite-changelog*
 
 2012-02-25
 - Added sorter_rank filter and changed default sorter.
+- Implemented boundary matched sort.
 
 2012-02-24
 - Fixed matcher_fuzzy behavior.
