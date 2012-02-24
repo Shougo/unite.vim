@@ -33,11 +33,11 @@ Interface		|unite-interface|
   Variables		  |unite-variables|
     Sources variables	    |unite-sources-variables|
   Key mappings		  |unite-key-mappings|
-  Functions		  |unite-functions|
-  Sources		  |unite-sources|
-  Kinds			  |unite-kinds|
-  Actions		  |unite-actions|
-  Filters		  |unite-filters|
+Functions		  |unite-functions|
+Sources			|unite-sources|
+Kinds			|unite-kinds|
+Actions			|unite-actions|
+Filters			|unite-filters|
 Create source		|unite-create-source|
 Create kind		|unite-create-kind|
 Create filter		|unite-create-filter|
@@ -316,7 +316,7 @@ COMMANDS 					*unite-commands*
 :UniteClose {buffer-name}			*:UniteClose*
 		Close the unite buffer named {buffer-name}.
 
-A command of source				*:unite-sources-command*
+The commands of source				*:unite-sources-commands*
 
 :UniteBookmarkAdd [{file}]			*:UniteBookmarkAdd*
 		Adds the file into the bookmark list. Unless you specify the
@@ -2168,6 +2168,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-02-24
+- Fixed matcher_fuzzy behavior.
 
 2012-02-23
 - Improved matcher_fuzzy behavior.

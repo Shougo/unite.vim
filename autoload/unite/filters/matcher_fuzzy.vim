@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_fuzzy.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Feb 2012.
+" Last Modified: 24 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,8 +48,8 @@ function! s:matcher.filter(candidates, context)"{{{
       continue
     endif
 
-    let input = unite#escape_match(input)
-    let input = substitute(input, '[^*!]', '\0.*', 'g')
+    let input = substitute(substitute(unite#escape_match(input),
+          \ '[[:alnum:]._-]', '\0.*', 'g'), '\*\*', '*', 'g')
 
     let expr = (input =~ '^!') ?
           \ 'v:val.word !~ ' . string(input[1:]) :
