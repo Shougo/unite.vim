@@ -2176,6 +2176,7 @@ CHANGELOG					*unite-changelog*
 
 2012-02-27
 - Fixed rank sorter.
+- Improved rank sorter behavior.
 
 2012-02-25
 - Added sorter_rank filter and changed default sorter.
