@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: sorter_rank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Feb 2012.
+" Last Modified: 27 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,6 +46,8 @@ function! s:sorter.filter(candidates, context)"{{{
     let candidate.filter__rank = 0
   endfor
 
+  let max_len = len(a:candidates)
+
   for input in split(a:context.input, '\\\@<! ')
     let input = substitute(substitute(input, '\\ ', ' ', 'g'), '\*', '', 'g')
     let boundary_inputs = split(input, '\W')
@@ -55,6 +57,7 @@ function! s:sorter.filter(candidates, context)"{{{
       let candidate.filter__rank +=
             \ s:calc_rank_sequential_match(candidate.word, input)
     endfor
+    let max_len = len(a:candidates)
 
     if empty(boundary_inputs)
       continue
@@ -68,7 +71,7 @@ function! s:sorter.filter(candidates, context)"{{{
     endfor
   endfor
 
-  return unite#util#sort_by(a:candidates, 'v:val.filter__rank')
+  return reverse(unite#util#sort_by(a:candidates, 'v:val.filter__rank'))
 endfunction"}}}
 
 " Range of return is [0.0, 1.0]

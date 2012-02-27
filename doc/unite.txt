@@ -2174,6 +2174,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-02-27
+- Fixed rank sorter.
+
 2012-02-25
 - Added sorter_rank filter and changed default sorter.
 - Implemented boundary matched sort.
