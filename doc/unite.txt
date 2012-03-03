@@ -1252,6 +1252,9 @@ file		Nominates an input file as a candidate.
 		or hidden files(Example: ".gitignore").  If you want to open
 		this files, please input ".".
 
+						*unite-source-file/new*
+file/new	Nominates an input new file as a candidate.
+
 						*unite-source-file_mru*
 file_mru	Nominates files you used recently as candidates, ordering
 		by time series.
@@ -2177,6 +2180,7 @@ CHANGELOG					*unite-changelog*
 2012-03-03
 - Fixed grep source behavior.
 - Changed default sorter.
+- Added file_new source.
 
 2012-02-27
 - Fixed rank sorter.
