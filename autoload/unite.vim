@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Feb 2012.
+" Last Modified: 04 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -847,10 +847,15 @@ endfunction"}}}
 
 " Command functions.
 function! unite#start(sources, ...)"{{{
+  if empty(a:sources)
+    call unite#print_error('Source names is required.')
+    return
+  endif
+
   " Check command line window.
   if unite#util#is_cmdwin()
-    echoerr 'Command line buffer is detected!'
-    echoerr 'Please close command line buffer.'
+    call unite#print_error(
+          \ 'Command line buffer is detected! Please close command line buffer.')
     return
   endif
 
