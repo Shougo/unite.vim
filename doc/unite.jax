@@ -1155,7 +1155,7 @@ unite#custom_action({kind}, {name}, {action})
 		  \ a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
 		  execute g:unite_kind_openable_lcd_command '`=dir`'
 		endfunction
-		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
+		call unite#custom_action('file,file_new,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen
 <
 unite#undef_custom_action({kind}, {name})			*unite#undef_custom_action()*
@@ -1670,7 +1670,7 @@ matcher_fuzzy	ユーザーが入力したパターンを曖昧検索として、
 		このmatcherを使用すると、絞り込みが遅くなるので注意すること。
 		|unite-source-file_rec|に対して設定すると便利かもしれない。
 >
-		call unite#custom_filters('file,buffer,file_rec',
+		call unite#custom_filters('file,file_new,buffer,file_rec',
 		\ ['matcher_fuzzy', 'sorter_default', 'converter_default'])
 <
 						*unite-filter-matcher_migemo*
@@ -1719,7 +1719,11 @@ sorter_word	wordを比較するsorter。
 						*unite-filter-sorter_rank*
 sorter_rank	入力のマッチ度を比較するsorter。マッチ位置が先頭にあるほど、マ
 		ッチ長さが長いほどマッチ度は高くなる。
-
+		ファイルを候補とするsourceに設定すると良い。
+>
+		call unite#custom_filters('buffer,file,file_mru,file_rec',
+		\ ['matcher_default', 'sorter_rank', 'converter_relative_abbr'])
+<
 						*unite-filter-sorter_reverse*
 sorter_reverse	順番を反転するsorter。
 

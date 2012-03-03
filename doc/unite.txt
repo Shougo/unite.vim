@@ -1621,7 +1621,7 @@ matcher_regexp	Todo
 						*unite-filter-matcher_fuzzy*
 matcher_fuzzy	Todo
 >
-		call unite#custom_filters('file,buffer,file_rec',
+		call unite#custom_filters('file,file_new,buffer,file_rec',
 		\ ['matcher_fuzzy', 'sorter_default', 'converter_default'])
 <
 						*unite-filter-matcher_migemo*
@@ -1643,7 +1643,11 @@ sorter_word	Compare words sorter.
 						*unite-filter-sorter_rank*
 sorter_rank	Matched rank order sorter. If a word matched head or the
 		matched length is long, the rank will be high.
-
+		This sorter is useful for file candidates source.
+>
+		call unite#custom_filters('buffer,file,file_mru,file_rec',
+		\ ['matcher_default', 'sorter_rank', 'converter_relative_abbr'])
+<
 						*unite-filter-sorter_reverse*
 sorter_reverse	Reverse order sorter.
 
@@ -1663,7 +1667,6 @@ converter_relative_word
 		\ ['converter_relative_word', 'matcher_default',
 		\  'sorter_default', 'converter_relative_abbr'])
 <
-
 						*unite-filter-converter_relative_abbr*
 converter_relative_abbr
 		Todo
