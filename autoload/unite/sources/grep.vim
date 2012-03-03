@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 12 Jan 2012.
+" Last Modified: 03 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -89,7 +89,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     let default = get(a:args, 0, '')
 
     if default == ''
-      let default = '**'
+      let default = '.'
     endif
 
     if type(get(a:args, 0, '')) == type('')
@@ -107,7 +107,7 @@ function! s:source.hooks.on_init(args, context) "{{{
             \ 'unite#util#escape_file_searching(bufname(v:val))'))
     elseif target == '**'
       " Optimized.
-      let target = '*'
+      let target = '.'
     else
       " Escape filename.
       let target = escape(target, ' ')
@@ -197,20 +197,26 @@ function! s:source.async_gather_candidates(args, context) "{{{
     lcd `=a:context.source__directory`
   endif
 
-  return map(candidates,
-    \ '{
-    \   "word": unite#util#substitute_path_separator(
-    \                   fnamemodify(v:val[0], ":.")),
-    \   "kind": "jump_list",
-    \   "action__path": unite#util#substitute_path_separator(
-    \                   fnamemodify(v:val[0][:1].v:val[1][0], ":p")),
-    \   "action__line": v:val[1][1],
-    \   "action__text": join(v:val[1][2:], ":"),
-    \ }')
+  let _ = []
+  for candidate in candidates
+    let dict = {
+          \   'kind': 'jump_list',
+          \   'action__path': unite#util#substitute_path_separator(
+          \                   fnamemodify(candidate[0][:1].candidate[1][0], ':p')),
+          \   'action__line': candidate[1][1],
+          \   'action__text': join(candidate[1][2:], ':'),
+          \ }
+    let dict.word = unite#util#substitute_path_separator(
+          \ fnamemodify(dict.action__path, ':.')) . dict.action__text
+
+    call add(_, dict)
+  endfor
 
   if isdirectory(a:context.source__directory)
     lcd `=cwd`
   endif
+
+  return _
 endfunction "}}}
 
 function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
