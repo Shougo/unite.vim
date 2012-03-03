@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: sorter_rank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Feb 2012.
+" Last Modified: 27 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,9 +42,14 @@ function! s:sorter.filter(candidates, context)"{{{
   endif
 
   " Initialize.
+  let num = 0
   for candidate in a:candidates
     let candidate.filter__rank = 0
+    let candidate.filter__ratio = 1 - (str2float(num) / len(a:candidates))
+    let num += 1
   endfor
+
+  let max_len = len(a:candidates)
 
   for input in split(a:context.input, '\\\@<! ')
     let input = substitute(substitute(input, '\\ ', ' ', 'g'), '\*', '', 'g')
@@ -53,8 +58,10 @@ function! s:sorter.filter(candidates, context)"{{{
     " Calc rank.
     for candidate in a:candidates
       let candidate.filter__rank +=
-            \ s:calc_rank_sequential_match(candidate.word, input)
+            \ s:calc_rank_sequential_match(
+            \     candidate.word, input, candidate.filter__ratio)
     endfor
+    let max_len = len(a:candidates)
 
     if empty(boundary_inputs)
       continue
@@ -63,16 +70,17 @@ function! s:sorter.filter(candidates, context)"{{{
     for boundary_input in boundary_inputs
       for candidate in a:candidates
         let candidate.filter__rank +=
-              \ (s:calc_rank_sequential_match(candidate.word, boundary_input) + 1.0) / 2
+              \ (s:calc_rank_sequential_match(candidate.word, boundary_input,
+              \     candidate.filter__ratio) + 1.0) / 2
       endfor
     endfor
   endfor
 
-  return unite#util#sort_by(a:candidates, 'v:val.filter__rank')
+  return reverse(unite#util#sort_by(a:candidates, 'v:val.filter__rank'))
 endfunction"}}}
 
 " Range of return is [0.0, 1.0]
-function! s:calc_rank_sequential_match(word, input)"{{{
+function! s:calc_rank_sequential_match(word, input, ratio)"{{{
   let pos = stridx(a:word, a:input)
   if pos < 0
     return 0
@@ -80,6 +88,7 @@ function! s:calc_rank_sequential_match(word, input)"{{{
 
   let rest = len(a:word) - len(a:input) - pos
   return str2float(pos == 0 ? '0.5' : '0.0') + str2float('0.5') / (rest + 1)
+        \ + str2float('0.5') * a:ratio
 endfunction"}}}
 
 let &cpo = s:save_cpo
