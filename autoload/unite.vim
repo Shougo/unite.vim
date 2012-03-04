@@ -263,7 +263,7 @@ let s:unite_options = [
       \ '-immediately', '-auto-preview', '-complete',
       \ '-vertical', '-horizontal', '-direction=', '-no-split',
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
-      \ '-cursor-line-highlight=', '-update-time=',
+      \ '-cursor-line-highlight=', '-update-time=', '-hide-source-names'
       \]
 "}}}
 
@@ -1368,6 +1368,7 @@ function! s:initialize_context(context)"{{{
         \ 'update_time' : g:unite_update_time,
         \ 'no_buffer' : 0,
         \ 'is_interactive' : 1,
+        \ 'hide_source_names' : 0,
         \ }
 
   let context = extend(default_context, a:context)
@@ -2000,8 +2001,6 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.last_input = context.input
   let unite.sidescrolloff_save = &sidescrolloff
   let unite.prompt_linenr = 2
-  let unite.max_source_name = len(a:sources) > 1 ?
-        \ max(map(copy(a:sources), 'len(v:val[0])')) : 0
   let unite.is_async =
         \ len(filter(copy(sources),
         \  'v:val.unite__context.is_async')) > 0
@@ -2012,6 +2011,10 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.post_filters = unite#get_profile(
         \ unite.profile_name, 'filters')
   let unite.update_time_save = &updatetime
+
+  let unite.max_source_name =
+        \ !context.hide_source_names && len(a:sources) > 1 ?
+        \ max(map(copy(a:sources), 'len(v:val[0])')) : 0
 
   " Preview windows check.
   let unite.has_preview_window =
@@ -2112,11 +2115,13 @@ function! s:initialize_unite_buffer()"{{{
     " Set highlight.
     let match_prompt = escape(unite.prompt, '\/*~.^$[]')
     syntax clear uniteInputPrompt
-    execute 'syntax match uniteInputPrompt' '/^'.match_prompt.'/ contained'
+    execute 'syntax match uniteInputPrompt'
+          \ '/^'.match_prompt.'/ contained'
 
     syntax clear uniteCandidateSourceName
     if unite.max_source_name > 0
-      syntax match uniteCandidateSourceName /\%3c[[:alnum:]_\/-]\+/ contained
+      syntax match uniteCandidateSourceName
+            \ /\%3c[[:alnum:]_\/-]\+/ contained
     else
       syntax match uniteCandidateSourceName /^- / contained
     endif
@@ -2126,22 +2131,27 @@ function! s:initialize_unite_buffer()"{{{
     execute 'syntax match uniteCandidateAbbr' '/\%'
           \ .(unite.abbr_head).'c.*/ contained'
 
-    execute 'highlight default link uniteCandidateAbbr'  g:unite_abbr_highlight
+    execute 'highlight default link uniteCandidateAbbr'
+          \ g:unite_abbr_highlight
 
     " Set syntax.
     for source in unite.sources
       if source.syntax != ''
-        let name = len(unite.sources) > 1 ? source.name : ''
+        let name = len(unite.max_source_name) > 0 ?
+              \ source.name : ''
 
         execute 'syntax match' source.syntax '/\%'
               \ .(unite.abbr_head).'c.*/ contained'
 
-        execute 'highlight default link' source.syntax g:unite_abbr_highlight
+        execute 'highlight default link'
+              \ source.syntax g:unite_abbr_highlight
 
-        execute printf('syntax region %s start="^- %s" end="$" contains=uniteCandidateMarker,%s%s',
+        execute printf('syntax region %s start="^- %s" end="$" '.
+              \ 'contains=uniteCandidateMarker,%s%s',
               \ 'uniteSourceLine__'.source.syntax,
               \ (name == '' ? '' : name . '\>'),
-              \ (name == '' ? '' : 'uniteCandidateSourceName,'), source.syntax
+              \ (name == '' ? '' : 'uniteCandidateSourceName,'),
+              \    source.syntax
               \ )
 
         call s:call_hook([source], 'on_syntax')

@@ -282,6 +282,10 @@ http://www.ustream.tv/recorded/11240673
 		カーソル行のハイライトを変更する。このオプションが省略されると、
 		|g:unite_cursor_line_highlight|が使用される。
 
+						*unite-options-hide-source-names*
+		-hide-source-names
+		source名を表示しない。
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。

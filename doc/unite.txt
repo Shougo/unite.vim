@@ -290,6 +290,10 @@ COMMANDS 					*unite-commands*
 		Change cursor line highlight. If this option is ommit,
 		|g:unite_cursor_line_highlight| is used.
 
+						*unite-options-hide-source-names*
+		-hide-source-names
+		Hide source names.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
@@ -2182,6 +2186,7 @@ CHANGELOG					*unite-changelog*
 
 2012-03-04
 - Improved error check.
+- Added -hide-source-names option.
 
 2012-03-03
 - Fixed grep source behavior.
