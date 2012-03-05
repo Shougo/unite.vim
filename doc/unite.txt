@@ -2184,6 +2184,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-03-05
+- Improved version check.
+
 2012-03-04
 - Improved error check.
 - Added -hide-source-names option.
