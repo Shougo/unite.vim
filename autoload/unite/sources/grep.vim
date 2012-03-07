@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 03 Mar 2012.
+" Last Modified: 07 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -183,7 +183,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   endif
 
   let candidates = map(filter(map(stdout.read_lines(-1, 300),
-        \ 'iconv(v:val, &termencoding, &encoding)'),
+        \ "iconv(v:val, 'char', &encoding)"),
     \  'v:val =~ "^.\\+:.\\+:.\\+$"'),
     \ '[v:val, split(v:val[2:], ":")]')
 

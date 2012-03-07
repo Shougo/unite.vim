@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2012.
+" Last Modified: 07 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -274,7 +274,7 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
 
   let candidates = []
   for line in map(stdout.read_lines(-1, 300),
-        \ 'iconv(v:val, &termencoding, &encoding)')
+        \ "iconv(v:val, 'char', &encoding)")
     if line =~ ':$'
       " Directory name.
       let continuation.directory = line[: -2]
