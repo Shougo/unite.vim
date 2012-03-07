@@ -3,6 +3,10 @@ set cpo&vim
 
 let s:V = vital#{expand('<sfile>:h:h:t:r')}#new()
 
+function! s:_vital_depends()
+  return ['Data.String']
+endfunction
+
 let s:string = s:V.import('Data.String')
 
 function! s:__urlencode_char(c)
@@ -20,7 +24,7 @@ endfunction
 function! s:decodeURI(str)
   let ret = a:str
   let ret = substitute(ret, '+', ' ', 'g')
-  let ret = substitute(ret, '%\(\x\x\)', '\=nr2char("0x".submatch(1))', 'g')
+  let ret = substitute(ret, '%\(\x\x\)', '\=printf("%c", str2nr(submatch(1), 16))', 'g')
   return ret
 endfunction
 
@@ -85,17 +89,31 @@ function! s:get(url, ...)
   if strlen(getdatastr)
     let url .= "?" . getdatastr
   endif
-  let command = 'curl -L -s -k -i '
-  let quote = &shellxquote == '"' ?  "'" : '"'
-  for key in keys(headdata)
-    if has('win32')
-      let command .= " -H " . quote . key . ": " . substitute(headdata[key], '"', '"""', 'g') . quote
-    else
-      let command .= " -H " . quote . key . ": " . headdata[key] . quote
-	endif
-  endfor
-  let command .= " ".quote.url.quote
-  let res = system(command)
+  if executable('curl')
+    let command = 'curl -L -s -k -i '
+    let quote = &shellxquote == '"' ?  "'" : '"'
+    for key in keys(headdata)
+      if has('win32')
+        let command .= " -H " . quote . key . ": " . substitute(headdata[key], '"', '"""', 'g') . quote
+      else
+        let command .= " -H " . quote . key . ": " . headdata[key] . quote
+	  endif
+    endfor
+    let command .= " ".quote.url.quote
+    let res = system(command)
+  elseif executable('wget')
+    let command = 'wget -O- --save-headers --server-response -q -L '
+    let quote = &shellxquote == '"' ?  "'" : '"'
+    for key in keys(headdata)
+      if has('win32')
+        let command .= " --header=" . quote . key . ": " . substitute(headdata[key], '"', '"""', 'g') . quote
+      else
+        let command .= " --header=" . quote . key . ": " . headdata[key] . quote
+	  endif
+    endfor
+    let command .= " ".quote.url.quote
+    let res = system(command)
+  endif
   if res =~ '^HTTP/1.\d 3' || res =~ '^HTTP/1\.\d 200 Connection established'
     let pos = stridx(res, "\r\n\r\n")
     if pos != -1
@@ -128,19 +146,36 @@ function! s:post(url, ...)
   else
     let postdatastr = postdata
   endif
-  let command = 'curl -L -s -k -i -X '.method
-  let quote = &shellxquote == '"' ?  "'" : '"'
-  for key in keys(headdata)
-    if has('win32')
-      let command .= " -H " . quote . key . ": " . substitute(headdata[key], '"', '"""', 'g') . quote
-    else
-      let command .= " -H " . quote . key . ": " . headdata[key] . quote
-	endif
-  endfor
-  let command .= " ".quote.url.quote
-  let file = tempname()
-  call writefile(split(postdatastr, "\n"), file, "b")
-  let res = system(command . " --data-binary @" . quote.file.quote)
+  if executable('curl')
+    let command = 'curl -L -s -k -i -X '.method
+    let quote = &shellxquote == '"' ?  "'" : '"'
+    for key in keys(headdata)
+      if has('win32')
+        let command .= " -H " . quote . key . ": " . substitute(headdata[key], '"', '"""', 'g') . quote
+      else
+        let command .= " -H " . quote . key . ": " . headdata[key] . quote
+	  endif
+    endfor
+    let command .= " ".quote.url.quote
+    let file = tempname()
+    call writefile(split(postdatastr, "\n"), file, "b")
+    let res = system(command . " --data-binary @" . quote.file.quote)
+  elseif executable('wget')
+    let command = 'wget -O- --save-headers --server-response -q -L '
+    let headdata['X-HTTP-Method-Override'] = method
+    let quote = &shellxquote == '"' ?  "'" : '"'
+    for key in keys(headdata)
+      if has('win32')
+        let command .= " --header=" . quote . key . ": " . substitute(headdata[key], '"', '"""', 'g') . quote
+      else
+        let command .= " --header=" . quote . key . ": " . headdata[key] . quote
+	  endif
+    endfor
+    let command .= " ".quote.url.quote
+    let file = tempname()
+    call writefile(split(postdatastr, "\n"), file, "b")
+    let res = system(command . " --post-data @" . quote.file.quote)
+  endif
   call delete(file)
   if res =~ '^HTTP/1.\d 3' || res =~ '^HTTP/1\.\d 200 Connection established'
     let pos = stridx(res, "\r\n\r\n")

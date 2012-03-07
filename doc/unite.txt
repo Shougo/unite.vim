@@ -2187,6 +2187,7 @@ CHANGELOG					*unite-changelog*
 2012-03-07
 - Improved completion source.
 - Don't use termencoding.
+- Updated vital.
 
 2012-03-05
 - Improved version check.

@@ -5,7 +5,7 @@ set cpo&vim
 
 " Removes duplicates from a list.
 function! s:uniq(list, ...)
-  let list = a:0 ? map(a:list, printf('[v:val, %s]', a:1)) : a:list
+  let list = a:0 ? map(copy(a:list), printf('[v:val, %s]', a:1)) : copy(a:list)
   let i = 0
   let seen = {}
   while i < len(list)
@@ -109,6 +109,26 @@ function! s:break(f, xs)
   return s:span(printf('!(%s)', a:f), a:xs)
 endfunction
 
+" similar to Haskell's Prelude.all
+function! s:all(f, xs)
+  return !s:any(printf('!(%s)', a:f), a:xs)
+endfunction
+
+" similar to Haskell's Prelude.any
+function! s:any(f, xs)
+  return !empty(filter(map(copy(a:xs), a:f), 'v:val'))
+endfunction
+
+" similar to Haskell's Prelude.and
+function! s:and(xs)
+  return s:all('v:val', a:xs)
+endfunction
+
+" similar to Haskell's Prelude.or
+function! s:or(xs)
+  return s:any('v:val', a:xs)
+endfunction
+
 " similar to Haskell's Prelude.foldl
 function! s:foldl(f, init, xs)
   let memo = a:init
@@ -148,6 +168,11 @@ function! s:foldr1(f, xs)
     throw 'foldr1'
   endif
   return s:foldr(a:f, a:xs[-1], a:xs[0:-2])
+endfunction
+
+" similar to python's zip()
+function! s:zip(...)
+    return map(range(min(map(copy(a:000), 'len(v:val)'))), "map(copy(a:000), 'v:val['.v:val.']')")
 endfunction
 
 

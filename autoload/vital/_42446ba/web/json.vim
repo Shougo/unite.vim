@@ -3,6 +3,10 @@ set cpo&vim
 
 let s:V = vital#{expand('<sfile>:h:h:t:r')}#new()
 
+function! s:_vital_depends()
+  return ['Data.String']
+endfunction
+
 let s:string = s:V.import('Data.String')
 
 function! s:decode(json)

@@ -3,6 +3,10 @@ set cpo&vim
 
 let s:V = vital#{expand('<sfile>:h:h:t:r')}#new()
 
+function! s:_vital_depends()
+  return ['Data.String', 'Web.Xml', 'Web.Http']
+endfunction
+
 let s:string = s:V.import('Data.String')
 let s:xml = s:V.import('Web.Xml')
 let s:http = s:V.import('Web.Http')

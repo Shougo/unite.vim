@@ -14,7 +14,7 @@ function! s:open(filename) "{{{
   " Detect desktop environment.
   if s:is_windows
     " For URI only.
-    let filename = iconv(filename, &encoding, &termencoding)
+    let filename = iconv(filename, &encoding, 'char')
     silent execute '!start rundll32 url.dll,FileProtocolHandler' filename
   elseif s:is_cygwin
     " Cygwin.
@@ -112,6 +112,34 @@ function! s:mkdir_nothrow(...) "{{{
         return 0
     endtry
 endfunction "}}}
+
+
+" rmdir recursively.
+function! s:rmdir(path, ...)
+  let flags = a:0 ? a:1 : ''
+  if exists("*rmdir")
+    return call('rmdir', [a:path] + a:000)
+  elseif has("unix")
+    let option = ''
+    let option .= flags =~ 'f' ? ' -f' : ''
+    let option .= flags =~ 'r' ? ' -r' : ''
+    let ret = system("/bin/rm" . option . ' ' . shellescape(a:path) . ' 2>&1')
+  elseif has("win32") || has("win95") || has("win64") || has("win16")
+    let option = ''
+    if &shell =~? "sh$"
+      let option .= flags =~ 'f' ? ' -f' : ''
+      let option .= flags =~ 'r' ? ' -r' : ''
+      let ret = system("/bin/rm" . option . ' ' . shellescape(a:path) . ' 2>&1')
+    else
+      let option .= flags =~ 'f' ? ' /Q' : ''
+      let option .= flags =~ 'r' ? ' /S' : ''
+      let ret = system("rmdir " . option . ' "' . a:path . '" 2>&1')
+    endif
+  endif
+  if v:shell_error
+    throw substitute(iconv(ret, 'char', &encoding), '\n', '', 'g')
+  endif
+endfunction
 
 
 let &cpo = s:save_cpo

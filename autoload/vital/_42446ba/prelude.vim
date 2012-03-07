@@ -24,8 +24,11 @@ let [
 \   type(function('tr')),
 \   type([]),
 \   type({}),
-\   type(3.14159)
+\   has('float') ? type(str2float('0')) : -1
 \]
+" __TYPE_FLOAT = -1 when -float
+" This doesn't match to anything.
+
 " Number or Float
 function! s:is_numeric(Value)
     let _ = type(a:Value)
@@ -203,7 +206,7 @@ function! s:smart_execute_command(action, word)"{{{
 endfunction"}}}
 
 function! s:escape_file_searching(buffer_name)"{{{
-  return escape(a:buffer_name, '*[]?{},')
+  return escape(a:buffer_name, '*[]?{}, ')
 endfunction"}}}
 function! s:escape_pattern(str)"{{{
   return escape(a:str, '~"\.^$[]*')
@@ -312,10 +315,8 @@ endfunction"}}}
 function! s:system(str, ...)"{{{
   let command = a:str
   let input = a:0 >= 1 ? a:1 : ''
-  if &termencoding != '' && &termencoding != &encoding
-    let command = s:iconv(command, &encoding, &termencoding)
-    let input = s:iconv(input, &encoding, &termencoding)
-  endif
+  let command = s:iconv(command, &encoding, 'char')
+  let input = s:iconv(input, &encoding, 'char')
 
   if a:0 == 0
     let output = s:has_vimproc() ?
@@ -329,9 +330,7 @@ function! s:system(str, ...)"{{{
           \ vimproc#system(command, input, a:2) : system(command, input)
   endif
 
-  if &termencoding != '' && &termencoding != &encoding
-    let output = s:iconv(output, &termencoding, &encoding)
-  endif
+  let output = s:iconv(output, 'char', &encoding)
 
   return output
 endfunction"}}}
