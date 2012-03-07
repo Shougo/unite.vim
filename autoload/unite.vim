@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Mar 2012.
+" Last Modified: 07 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -177,9 +177,13 @@ endfunction"}}}
 function! unite#start_complete(sources, ...) "{{{
   let context = {
         \ 'col' : col('.'), 'complete' : 1,
-        \ 'direction' : 'rightbelow', 'winheight' : 10,
+        \ 'direction' : 'rightbelow',
         \ 'buffer_name' : 'completion',
         \ }
+  let context.winheight = winheight(0) - winline()
+  if context.winheight < 7
+    let context.winheight = 7
+  endif
   call extend(context, get(a:000, 0, {}))
 
   return printf("\<ESC>:call unite#start(%s, %s)\<CR>",
