@@ -180,7 +180,7 @@ function! unite#start_complete(sources, ...) "{{{
         \ 'direction' : 'rightbelow',
         \ 'buffer_name' : 'completion',
         \ }
-  let context.winheight = winheight(0) - winline()
+  let context.winheight = winheight(0) - winline() + 2
   if context.winheight < 7
     let context.winheight = 7
   endif
