@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: completion.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 07 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -75,7 +75,7 @@ function! s:kind.action_table.preview.func(candidate)"{{{
         \ a:candidate.action__complete_info_lazy() :
         \ ''
   if complete_info != ''
-    let S = vital#of('unite').import('Data.String')
+    let S = vital#of('unite.vim').import('Data.String')
     echo join(S.wrap(complete_info)[: &cmdheight-1], "\n")
   endif
 endfunction"}}}

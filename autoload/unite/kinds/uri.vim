@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: uri.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2012.
+" Last Modified: 07 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,7 +31,7 @@ function! unite#kinds#uri#define()"{{{
   return s:kind
 endfunction"}}}
 
-let s:System = vital#of('unite').import('System.File')
+let s:System = vital#of('unite.vim').import('System.File')
 
 let s:kind = {
       \ 'name' : 'uri',
