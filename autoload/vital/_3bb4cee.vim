@@ -91,9 +91,7 @@ function! s:_scripts()
   return scripts
 endfunction
 
-if has('win16') || has('win32') || has('win64') ||
-\  has('mac') || has('macunix') || has('gui_macvim') ||
-\  system('uname') =~? '^darwin'
+if filereadable(expand('<sfile>:r') . '.VIM')
   function! s:_unify_path(path)
     return tolower(resolve(fnamemodify(a:path, ':p:gs?[\\/]\+?/?')))
   endfunction
