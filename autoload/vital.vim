@@ -4,7 +4,7 @@ function! vital#of(name)
   if empty(file)
     throw 'vital: version file not found: ' . a:name
   endif
-  let ver = readfile(file[0], 'b')
+  let ver = readfile(file[0])
   if empty(ver)
     throw 'vital: invalid version file: ' . a:name
   endif
