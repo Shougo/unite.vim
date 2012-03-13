@@ -2342,14 +2342,9 @@ function! s:on_cursor_hold_i()  "{{{
     startinsert!
   endif
 
-  if unite.is_async
+  if unite.is_async && &l:modifiable
     " Ignore key sequences.
-    let modifiable_save = &l:modifiable
-    setlocal modifiable
-
     call feedkeys("a\<BS>", 'n')
-
-    let &l:modifiable = modifiable_save
   endif
 endfunction"}}}
 function! unite#_on_cursor_hold()  "{{{
