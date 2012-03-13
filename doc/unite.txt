@@ -2184,6 +2184,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-03-13
+- Fixed rename behavior.
+
 2012-03-07
 - Improved completion source.
 - Don't use termencoding.

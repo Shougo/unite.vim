@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Mar 2012.
+" Last Modified: 13 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -657,30 +657,37 @@ function! unite#kinds#file#do_rename(old_filename, new_filename)"{{{
   endif
 
   " Convert to relative path.
+  let old_filename = substitute(fnamemodify(a:old_filename, ':p'),
+        \ '[/\\]$', '', '')
   let directory = unite#util#substitute_path_separator(
-        \ fnamemodify(a:old_filename, ':p:h'))
+        \ fnamemodify(old_filename, ':h'))
   let current_dir_save = getcwd()
   lcd `=directory`
-  let old_filename = fnamemodify(a:old_filename, ':.')
-  let new_filename = fnamemodify(a:new_filename, ':.')
 
-  let bufnr = bufnr(unite#util#escape_file_searching(old_filename))
-  if bufnr > 0
-    " Buffer rename.
-    let bufnr_save = bufnr('%')
-    execute 'buffer' bufnr
-    saveas! `=new_filename`
-    execute 'buffer' bufnr_save
-  endif
+  try
+    let old_filename = unite#util#substitute_path_separator(
+          \ fnamemodify(a:old_filename, ':.'))
+    let new_filename = unite#util#substitute_path_separator(
+          \ fnamemodify(a:new_filename, ':.'))
 
-  if rename(old_filename, new_filename)
-    call unite#print_error(
-          \ printf('Failed file rename: "%s" to "%s".',
-          \   a:old_filename, a:new_filename))
-  endif
+    let bufnr = bufnr(unite#util#escape_file_searching(old_filename))
+    if bufnr > 0
+      " Buffer rename.
+      let bufnr_save = bufnr('%')
+      execute 'buffer' bufnr
+      saveas! `=new_filename`
+      execute 'buffer' bufnr_save
+    endif
 
-  " Restore path.
-  lcd `=current_dir_save`
+    if rename(old_filename, new_filename)
+      call unite#print_error(
+            \ printf('Failed file rename: "%s" to "%s".',
+            \   a:old_filename, a:new_filename))
+    endif
+  finally
+    " Restore path.
+    lcd `=current_dir_save`
+  endtry
 endfunction"}}}
 function! s:filename2candidate(filename)"{{{
   return {
