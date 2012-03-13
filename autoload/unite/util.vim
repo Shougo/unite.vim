@@ -190,8 +190,7 @@ function! unite#util#command_with_restore_cursor(command)
   execute next 'wincmd w'
 endfunction
 function! unite#util#expand(path)"{{{
-  return expand(escape(a:path, unite#util#is_windows() ?
-        \ '*?"={}' : '*?"={}[]'), 1)
+  return expand(escape(a:path, '*?"={}[]'), 1)
 endfunction"}}}
 function! unite#util#set_default_dictionary_helper(variable, keys, value)"{{{
   for key in split(a:keys, '\s*,\s*')
