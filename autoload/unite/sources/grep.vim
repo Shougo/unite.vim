@@ -207,7 +207,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
           \   'action__text': join(candidate[1][2:], ':'),
           \ }
     let dict.word = unite#util#substitute_path_separator(
-          \ fnamemodify(dict.action__path, ':.')) . ' ' . dict.action__text
+          \ fnamemodify(dict.action__path, ':.')) . ': ' . dict.action__text
 
     call add(_, dict)
   endfor
