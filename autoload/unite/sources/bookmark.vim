@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jan 2012.
+" Last Modified: 16 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,7 +46,7 @@ function! unite#sources#bookmark#_append(filename)"{{{
 
   if a:filename == ''
     " Append the current buffer to the bookmark list.
-    let path = unite#util#expand('%:p')
+    let path = expand('%:p')
     let linenr = line('.')
     let pattern = '^' . escape(getline('.'), '~"\.^*$[]') . '$'
   else
@@ -54,9 +54,10 @@ function! unite#sources#bookmark#_append(filename)"{{{
     let linenr = ''
     let pattern = ''
   endif
+  let path = unite#util#substitute_path_separator(path)
 
-  let filename = (a:filename == '' ?
-        \ unite#util#expand('%') : a:filename)
+  let filename = unite#util#substitute_path_separator(
+        \ a:filename == '' ? expand('%') : a:filename)
   if bufexists(filename) && a:filename == ''
     " Detect vimfiler and vimshell.
     if &filetype ==# 'vimfiler'
