@@ -2186,6 +2186,7 @@ CHANGELOG					*unite-changelog*
 
 2012-03-15
 - Fixed grep source.
+- Fixed expand().
 
 2012-03-13
 - Fixed rename behavior.
