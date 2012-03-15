@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Mar 2012.
+" Last Modified: 13 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -646,7 +646,8 @@ function! unite#quick_match_redraw(quick_match_table) "{{{
   setlocal modifiable
 
   call setline(unite#get_current_unite().prompt_linenr+1,
-        \ s:convert_quick_match_lines(unite#get_current_unite().candidates, a:quick_match_table))
+        \ s:convert_quick_match_lines(
+        \ unite#get_current_unite().candidates, a:quick_match_table))
   redraw
 
   let &l:modifiable = modifiable_save
@@ -2260,7 +2261,8 @@ function! s:redraw(is_force, winnr) "{{{
 
     if len(candidates) == 1
       " Default action.
-      call unite#mappings#do_action(context.default_action, [candidates[0]])
+      call unite#mappings#do_action(
+            \ context.default_action, [candidates[0]])
     endif
   endif
 
@@ -2340,9 +2342,9 @@ function! s:on_cursor_hold_i()  "{{{
     startinsert!
   endif
 
-  if unite.is_async
+  if unite.is_async && &l:modifiable
     " Ignore key sequences.
-    call feedkeys("a\<BS>",'n')
+    call feedkeys("a\<BS>", 'n')
   endif
 endfunction"}}}
 function! unite#_on_cursor_hold()  "{{{
