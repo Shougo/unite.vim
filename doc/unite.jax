@@ -1824,6 +1824,7 @@ file						*unite-action-file*
 	rename		ファイル名を変更する
 	grep		ファイルをgrepする
 	grep_directory	ディレクトリをgrepする
+	wunix		改行文字をUnix形式に変換する
 
 buffer						*unite-action-buffer*
 このkindは|unite-action-file|のアクションを継承している。
