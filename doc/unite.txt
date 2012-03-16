@@ -1735,9 +1735,10 @@ Opens a file into a new buffer.  This kind extends |unite-action-openable| and
 	preview		Open the file into preview window
 	bookmark	Add the file into your bookmark
 	mkdir		Make directory. If exists file, this action is invalid.
-	rename		Change the file name.
-	grep		grep files
-	grep_directory	grep directories
+	rename		Change the file name
+	grep		Grep files
+	grep_directory	Grep directories
+	wunix		Write by unix fileformat
 
 buffer						*unite-action-buffer*
 This kind extends |unite-action-file|.
@@ -2184,8 +2185,13 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-03-16
+- Fixed expand error.
+
 2012-03-15
+- Fixed grep source.
 - Fixed expand().
+- Added wunix action.
 
 2012-03-13
 - Fixed rename behavior.

@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 07 Mar 2012.
+" Last Modified: 15 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -207,7 +207,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
           \   'action__text': join(candidate[1][2:], ':'),
           \ }
     let dict.word = unite#util#substitute_path_separator(
-          \ fnamemodify(dict.action__path, ':.')) . dict.action__text
+          \ fnamemodify(dict.action__path, ':.')) . ': ' . dict.action__text
 
     call add(_, dict)
   endfor

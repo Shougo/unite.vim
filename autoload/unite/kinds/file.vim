@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Mar 2012.
+" Last Modified: 15 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -154,6 +154,29 @@ function! s:kind.action_table.rename.func(candidates)"{{{
       call unite#kinds#file#do_rename(candidate.action__path, filename)
     endif
   endfor
+endfunction"}}}
+
+let s:kind.action_table.wunix = {
+      \ 'description' : 'write by unix fileformat',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.wunix.func(candidates)"{{{
+  let current_bufnr = bufnr('%')
+
+  for candidate in a:candidates
+    let is_listed = buflisted(
+          \ unite#util#escape_file_searching(candidate.action__path))
+    call s:kind.action_table.open.func([candidate])
+    write ++fileformat=mac
+    if is_listed
+      call s:kind.action_table.open.func([candidate])
+    else
+      let bufnr = bufnr(unite#util#escape_file_searching(candidate.action__path))
+      silent execute bufnr 'bdelete'
+    endif
+  endfor
+
+  execute 'buffer' current_bufnr
 endfunction"}}}
 
 " For vimfiler.
