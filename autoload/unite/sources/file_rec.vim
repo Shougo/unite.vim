@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Mar 2012.
+" Last Modified: 17 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -242,7 +242,7 @@ function! s:source_async.gather_candidates(args, context)"{{{
     return continuation.files
   endif
 
-  let a:context.source__proc = vimproc#pgroup_open('ls -R1 '
+  let a:context.source__proc = vimproc#pgroup_open('ls -R1 -a '
         \ . escape(directory, ' '))
 
   " Close handles.
