@@ -2144,27 +2144,25 @@ function! s:initialize_unite_buffer()"{{{
           \ g:unite_abbr_highlight
 
     " Set syntax.
-    for source in unite.sources
-      if source.syntax != ''
-        let name = len(unite.max_source_name) > 0 ?
-              \ source.name : ''
+    for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+      let name = unite.max_source_name > 0 ?
+            \ source.name : ''
 
-        execute 'syntax match' source.syntax '/\%'
-              \ .(unite.abbr_head).'c.*/ contained'
+      execute 'syntax match' source.syntax '/\%'
+            \ .(unite.abbr_head).'c.*/ contained'
 
-        execute 'highlight default link'
-              \ source.syntax g:unite_abbr_highlight
+      execute 'highlight default link'
+            \ source.syntax g:unite_abbr_highlight
 
-        execute printf('syntax region %s start="^- %s" end="$" '.
-              \ 'contains=uniteCandidateMarker,%s%s',
-              \ 'uniteSourceLine__'.source.syntax,
-              \ (name == '' ? '' : name . '\>'),
-              \ (name == '' ? '' : 'uniteCandidateSourceName,'),
-              \    source.syntax
-              \ )
+      execute printf('syntax region %s start="^- %s" end="$" '.
+            \ 'contains=uniteCandidateMarker,%s%s',
+            \ 'uniteSourceLine__'.source.syntax,
+            \ (name == '' ? '' : name . '\>'),
+            \ (name == '' ? '' : 'uniteCandidateSourceName,'),
+            \    source.syntax
+            \ )
 
-        call s:call_hook([source], 'on_syntax')
-      endif
+      call s:call_hook([source], 'on_syntax')
     endfor
   endif
 endfunction"}}}

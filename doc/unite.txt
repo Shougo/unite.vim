@@ -2194,6 +2194,7 @@ CHANGELOG					*unite-changelog*
 - Improved file_rec filtering behavior.
 - Added matcher_hide_hidden_files filter.
 - Added on_pre_filter hook.
+- Fixed highlight problem.
 
 2012-03-16
 - Fixed expand error.
