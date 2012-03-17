@@ -1708,6 +1708,11 @@ matcher_migemo	migemoを使用して、候補をフィルタリングするmatch
 		call unite#custom_filters('line',
 		\ ['matcher_migemo', 'sorter_default', 'converter_default'])
 <
+						*unite-filter-matcher_hide_hidden_files*
+matcher_hide_hidden_files
+		隠しファイルを隠すmatcher。ユーザーの絞り込み文字列に"."が含ま
+		れていると隠しファイルは表示される。
+
 						*unite-filter-sorter_default*
 sorter_default	|unite-filter-default|により呼び出される、デフォルトのsorter。
 		初期状態では、["sorter_nothing"]のsorterを呼び出す。
@@ -2039,6 +2044,10 @@ hooks			辞書		(任意)
 			on_close		*unite-source-attribute-hooks-on_close*
 			<Plug>(unite_exit)を実行したときや、コマンドの実行後に
 			uniteバッファが閉じられた後に呼ばれる。
+			この関数は{args}と{context}を引数に取る。
+
+			on_pre_filter		*unite-source-attribute-hooks-on_pre_filter*
+			filterが呼ばれる前に呼ばれる。
 			この関数は{args}と{context}を引数に取る。
 
 			on_post_filter		*unite-source-attribute-hooks-on_post_filter*

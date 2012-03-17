@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Mar 2012.
+" Last Modified: 17 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -720,10 +720,7 @@ function! unite#gather_candidates()"{{{
   " Post filter.
   let unite = unite#get_current_unite()
   for filter_name in unite.post_filters
-    if has_key(unite.filters, filter_name)
-      let candidates =
-            \ unite.filters[filter_name].filter(candidates, unite.context)
-    endif
+    let candidates = unite#call_filter(filter_name, candidates, unite.context)
   endfor
 
   return candidates
@@ -758,6 +755,14 @@ function! unite#parse_path(path)"{{{
         \      'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
 
   return insert(source_args, source_name)
+endfunction"}}}
+function! unite#call_filter(filter_name, candidates, context)"{{{
+  let unite = unite#get_current_unite()
+  if !has_key(unite.filters, a:filter_name)
+    return a:candidates
+  endif
+
+  return unite.filters[a:filter_name].filter(a:candidates, a:context)
 endfunction"}}}
 
 " Utils.
@@ -1809,17 +1814,16 @@ function! s:recache_candidates_loop(context, is_force, is_vimfiler)"{{{
 
     let source_candidates = s:get_source_candidates(source, a:is_vimfiler)
 
-    let custom_source = has_key(s:custom.source, source.name) ?
-          \ s:custom.source[source.name] : {}
+    let custom_source = get(s:custom.source, source.name, {})
+
+    " Call pre_filter hook.
+    let source.unite__context.candidates = source_candidates
+    call s:call_hook([source], 'on_pre_filter')
 
     " Filter.
-    for filter_name in has_key(custom_source, 'filters') ?
-          \ custom_source.filters : source.filters
-      if has_key(unite.filters, filter_name)
-        let source_candidates =
-              \ unite.filters[filter_name].filter(
-              \     source_candidates, source.unite__context)
-      endif
+    for filter_name in get(custom_source, 'filters', source.filters)
+        let source_candidates = unite#call_filter(
+              \ filter_name, source_candidates, source.unite__context)
     endfor
 
     let source.unite__candidates += source_candidates
@@ -1909,7 +1913,7 @@ function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
   let num = 0
   for candidate in a:candidates
     call add(candidates,
-          \ (!candidate.is_dummy && has_key(keys, num) ? keys[num] : '  ')
+          \ (!candidate.is_dummy && get(keys, num, '  ')
           \ . (unite.max_source_name == 0 ? '' :
           \    unite#util#truncate(candidate.source, max_source_name))
           \ . unite#util#truncate_smart(candidate.abbr, max_width, max_width/3, '..'))
@@ -2615,17 +2619,19 @@ endfunction"}}}
 function! s:call_hook(sources, hook_name)"{{{
   let _ = []
   for source in a:sources
-    if has_key(source.hooks, a:hook_name)
-      try
-        call call(source.hooks[a:hook_name],
-              \ [source.args, source.unite__context], source.hooks)
-      catch
-        call unite#print_error(v:throwpoint)
-        call unite#print_error(v:exception)
-        call unite#print_error('Error occured in calling hook "' . a:hook_name . '"!')
-        call unite#print_error('Source name is ' . source.name)
-      endtry
+    if !has_key(source.hooks, a:hook_name)
+      continue
     endif
+
+    try
+      call call(source.hooks[a:hook_name],
+            \ [source.args, source.unite__context], source.hooks)
+    catch
+      call unite#print_error(v:throwpoint)
+      call unite#print_error(v:exception)
+      call unite#print_error('Error occured in calling hook "' . a:hook_name . '"!')
+      call unite#print_error('Source name is ' . source.name)
+    endtry
   endfor
 endfunction"}}}
 function! s:has_preview_window()"{{{

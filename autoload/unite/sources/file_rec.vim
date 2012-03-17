@@ -106,6 +106,9 @@ endfunction"}}}
 function! s:source_rec.hooks.on_init(args, context)"{{{
   let a:context.source__directory = s:get_path(a:args, a:context)
 endfunction"}}}
+function! s:source_rec.hooks.on_pre_filter(args, context)"{{{
+  call s:on_pre_filter(a:args, a:context)
+endfunction"}}}
 function! s:source_rec.hooks.on_post_filter(args, context)"{{{
   call s:on_post_filter(a:args, a:context)
 endfunction"}}}
@@ -308,6 +311,9 @@ function! s:source_async.hooks.on_close(args, context) "{{{
     call a:context.source__proc.waitpid()
   endif
 endfunction "}}}
+function! s:source_async.hooks.on_pre_filter(args, context)"{{{
+  call s:on_pre_filter(a:args, a:context)
+endfunction"}}}
 function! s:source_async.hooks.on_post_filter(args, context)"{{{
   call s:on_post_filter(a:args, a:context)
 endfunction"}}}
@@ -395,7 +401,7 @@ function! s:get_files(files, level, max_len)"{{{
       endif
 
       let child_index = 0
-      let childs = unite#util#glob(file.'/*')
+      let childs = unite#util#glob(file.'/*') + unite#util#glob(file.'/.*')
       for child in childs
         let child_index += 1
 
@@ -438,7 +444,7 @@ function! s:get_files(files, level, max_len)"{{{
 
   let continuation_files += a:files[files_index :]
   return [continuation_files, map(ret_files,
-        \ 'unite#util#substitute_path_separator(fnamemodify(v:val, ":p"))')]
+        \ "unite#util#substitute_path_separator(fnamemodify(v:val, ':p'))")]
 endfunction"}}}
 function! s:on_post_filter(args, context)"{{{
   let is_relative_path =
@@ -453,6 +459,10 @@ function! s:on_post_filter(args, context)"{{{
           \ candidate.abbr :
           \ unite#util#path2directory(candidate.action__path)
   endfor
+endfunction"}}}
+function! s:on_pre_filter(args, context)"{{{
+  let a:context.candidates = unite#call_filter(
+        \ 'matcher_hide_hidden_files', a:context.candidates, a:context)
 endfunction"}}}
 function! s:init_continuation(context, directory)"{{{
   if a:context.is_redraw

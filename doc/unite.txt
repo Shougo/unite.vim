@@ -1634,6 +1634,11 @@ matcher_migemo	For Japanese migemo filter.
 		call unite#custom_filters('line',
 		\ ['matcher_migemo', 'sorter_default', 'converter_default'])
 <
+						*unite-filter-matcher_hide_hidden_files*
+matcher_hide_hidden_files
+		Hide hidden files filter. If you input contains ".", hidden
+		files will be appeared.
+
 						*unite-filter-sorter_default*
 sorter_default	Todo
 		In default, use sorter_default sorter.
@@ -2184,6 +2189,11 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-03-17
+- Improved file_rec filtering behavior.
+- Added matcher_hide_hidden_files filter.
+- Added on_pre_filter hook.
 
 2012-03-16
 - Fixed expand error.
