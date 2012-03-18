@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Mar 2012.
+" Last Modified: 18 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -264,7 +264,7 @@ let s:unite_options = [
       \ '-buffer-name=', '-profile-name=', '-input=', '-prompt=',
       \ '-default-action=', '-start-insert','-no-start-insert', '-no-quit',
       \ '-winwidth=', '-winheight=',
-      \ '-immediately', '-auto-preview', '-complete',
+      \ '-immediately', '-no-empty', '-auto-preview', '-complete',
       \ '-vertical', '-horizontal', '-direction=', '-no-split',
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
       \ '-cursor-line-highlight=', '-update-time=', '-hide-source-names'
@@ -891,16 +891,15 @@ function! unite#start(sources, ...)"{{{
   let s:current_unite.input = context.input
   call s:recache_candidates(context.input, context.is_redraw, 0)
 
-  if context.immediately"{{{
-    " Immediately action.
+  if context.immediately || context.no_empty"{{{
     let candidates = unite#gather_candidates()
 
     if empty(candidates)
       " Ignore.
       let s:use_current_unite = 0
       return
-    elseif len(candidates) == 1
-      " Default action.
+    elseif context.immediately && len(candidates) == 1
+      " Immediately action.
       call unite#mappings#do_action(context.default_action, [candidates[0]])
       let s:use_current_unite = 0
       return
@@ -1361,6 +1360,7 @@ function! s:initialize_context(context)"{{{
         \ 'winwidth' : g:unite_winwidth,
         \ 'winheight' : g:unite_winheight,
         \ 'immediately' : 0,
+        \ 'no_empty' : 0,
         \ 'auto_preview' : 0,
         \ 'vertical' : g:unite_enable_split_vertically,
         \ 'direction' : g:unite_split_rule,
@@ -1399,6 +1399,10 @@ function! s:initialize_context(context)"{{{
   if has_key(context, 'horizontal')
     " Disable vertically.
     let context.vertical = 0
+  endif
+  if context.immediately
+    " Ignore empty unite buffer.
+    let context.no_empty = 1
   endif
   let context.is_changed = 0
 

@@ -224,6 +224,10 @@ COMMANDS 					*unite-commands*
 		action immediately. If candidate is empty, it doesn't open
 		unite buffer. This option also works in narrowing mode.
 
+						*unite-options-no-empty*
+		-no-empty
+		If candidate is empty, it doesn't open unite buffer.
+
 						*unite-options-auto-preview*
 		-auto-preview
 		When you selected candidate, it runs "preview" action
@@ -2189,6 +2193,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-03-18
+- Added -no-empty option.
 
 2012-03-17
 - Improved file_rec filtering behavior.

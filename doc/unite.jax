@@ -218,6 +218,10 @@ http://www.ustream.tv/recorded/11240673
 		いときにはuniteバッファを開かない。絞り込み時のときも、候補
 		が一つになったら即座に実行される。
 
+						*unite-options-no-empty*
+		-no-empty
+		候補がないときはuniteバッファを開かない。
+
 						*unite-options-auto-preview*
 		-auto-preview
 		候補を選択した際、自動的に"preview"アクションを実行する。
