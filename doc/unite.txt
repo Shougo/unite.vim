@@ -2194,6 +2194,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-03-19
+- Fixed quick match bug.
+
 2012-03-18
 - Added -no-empty option.
 
