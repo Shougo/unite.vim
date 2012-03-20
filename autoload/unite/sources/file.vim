@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Mar 2012.
+" Last Modified: 20 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -133,7 +133,6 @@ function! s:source_file.vimfiler_check_filetype(args, context)"{{{
 endfunction"}}}
 function! s:source_file.vimfiler_gather_candidates(args, context)"{{{
   let path = s:parse_path(a:args)
-  echomsg path
 
   if isdirectory(path)
     " let start = reltime()
