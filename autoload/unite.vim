@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Mar 2012.
+" Last Modified: 22 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -970,7 +970,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
   let context = s:initialize_context(context)
 
   try
-    silent call s:initialize_current_unite(a:sources, context)
+    call s:initialize_current_unite(a:sources, context)
   catch /^Invalid source/
     return []
   endtry
