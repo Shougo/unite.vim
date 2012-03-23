@@ -34,7 +34,8 @@ set cpo&vim
 
 augroup plugin-unite-source-file_mru
   autocmd!
-  autocmd BufEnter,BufWinEnter,BufFilePost * call unite#sources#file_mru#_append()
+  autocmd BufEnter,BufWinEnter,BufFilePost,BufWritePost *
+        \ call unite#sources#file_mru#_append()
 augroup END
 
 let g:loaded_unite_source_file_mru = 1
