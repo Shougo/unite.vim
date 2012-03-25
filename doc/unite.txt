@@ -2194,6 +2194,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-03-25
+- Fixed restore updatetime.
+
 2012-03-23
 - Fixed file_mru autocmd event.
 

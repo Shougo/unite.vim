@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Mar 2012.
+" Last Modified: 25 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2023,7 +2023,6 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.previewd_buffer_list = []
   let unite.post_filters = unite#get_profile(
         \ unite.profile_name, 'filters')
-  let unite.update_time_save = &updatetime
 
   let unite.max_source_name =
         \ !context.hide_source_names && len(a:sources) > 1 ?
@@ -2096,8 +2095,6 @@ function! s:initialize_unite_buffer()"{{{
             \ call s:on_cursor_moved()
       autocmd BufUnload,BufHidden <buffer>
             \ call s:on_buf_unload(expand('<afile>'))
-      autocmd WinEnter,BufWinEnter <buffer>
-            \ call s:save_updatetime()
       autocmd WinLeave,BufWinLeave <buffer>
             \ call s:restore_updatetime()
     augroup END
