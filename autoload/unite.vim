@@ -894,7 +894,7 @@ function! unite#start(sources, ...)"{{{
   " Caching.
   let s:current_unite.last_input = context.input
   let s:current_unite.input = context.input
-  call s:recache_candidates(context.input, context.is_redraw, 0)
+  call s:recache_candidates(context.input, context.is_redraw)
 
   if context.immediately || context.no_empty"{{{
     let candidates = unite#gather_candidates()
@@ -2267,7 +2267,7 @@ function! s:redraw(is_force, winnr) "{{{
   endif
 
   " Recaching.
-  call s:recache_candidates(input, a:is_force, 0)
+  call s:recache_candidates(input, a:is_force)
 
   let unite.last_input = input
 
