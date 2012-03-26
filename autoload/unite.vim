@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Mar 2012.
+" Last Modified: 25 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -970,7 +970,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
   let context = s:initialize_context(context)
 
   try
-    silent call s:initialize_current_unite(a:sources, context)
+    call s:initialize_current_unite(a:sources, context)
   catch /^Invalid source/
     return []
   endtry
@@ -1917,7 +1917,7 @@ function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
   let num = 0
   for candidate in a:candidates
     call add(candidates,
-          \ (!candidate.is_dummy && get(keys, num, '  ')
+          \ (candidate.is_dummy ? '  ' : get(keys, num, '  '))
           \ . (unite.max_source_name == 0 ? '' :
           \    unite#util#truncate(candidate.source, max_source_name))
           \ . unite#util#truncate_smart(candidate.abbr, max_width, max_width/3, '..'))
@@ -2023,7 +2023,6 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.previewd_buffer_list = []
   let unite.post_filters = unite#get_profile(
         \ unite.profile_name, 'filters')
-  let unite.update_time_save = &updatetime
 
   let unite.max_source_name =
         \ !context.hide_source_names && len(a:sources) > 1 ?
@@ -2096,8 +2095,6 @@ function! s:initialize_unite_buffer()"{{{
             \ call s:on_cursor_moved()
       autocmd BufUnload,BufHidden <buffer>
             \ call s:on_buf_unload(expand('<afile>'))
-      autocmd WinEnter,BufWinEnter <buffer>
-            \ call s:save_updatetime()
       autocmd WinLeave,BufWinLeave <buffer>
             \ call s:restore_updatetime()
     augroup END
