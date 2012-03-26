@@ -1424,8 +1424,13 @@ function! s:initialize_loaded_sources(sources, context)"{{{
       let source_name = source
       unlet source
       if !has_key(all_sources, source_name)
+        if context.is_vimfiler
+          " Ignore error.
+          continue
+        endif
+
         call unite#util#print_error(
-              \ 'Invalid source name "' . source_name . '" is detected.')
+              \ 'unite.vim: Invalid source name "' . source_name . '" is detected.')
         throw 'Invalid source'
       endif
 
