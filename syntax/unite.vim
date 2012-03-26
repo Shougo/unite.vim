@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Dec 2011.
+" Last Modified: 26 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,17 +33,12 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-syntax match uniteStatusLine /\%1l.*/
-      \  contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
 syntax match uniteSourcePrompt /^Sources/ contained nextgroup=uniteSourceSeparator
 syntax match uniteSeparator /:/ contained nextgroup=uniteSourceNames
 syntax match uniteSourceNames / [[:alnum:]_\/-]\+/ contained nextgroup=uniteSourceArgs
 syntax match uniteMessage /^\[.*\].*$/  contains=uniteMessageSource
 syntax match uniteMessageSource /^\[.*\]/ contained
 syntax match uniteSourceArgs /:\S\+/ contained
-
-syntax match uniteInputLine /\%2l.*/
-      \ contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial
 
 syntax match uniteQuickMatchLine /^.|.*/
       \ contains=uniteQuickMatchTrigger,uniteCandidateSourceName,uniteCandidateAbbr

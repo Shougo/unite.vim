@@ -289,6 +289,8 @@ http://www.ustream.tv/recorded/11240673
 						*unite-options-hide-source-names*
 		-hide-source-names
 		source名を表示しない。
+		Note: このオプションはuniteのステータスラインを表示しないように
+		する。
 
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
