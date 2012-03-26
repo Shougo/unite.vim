@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Feb 2012.
+" Last Modified: 26 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -623,6 +623,10 @@ function! s:loop_cursor_down(is_skip_not_matched)"{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
+  if line('.') <= prompt_linenr && !is_insert
+    return 'j'
+  endif
+
   if line('.') == line('$')
     " Loop.
     if is_insert
@@ -663,11 +667,15 @@ function! s:loop_cursor_up(is_skip_not_matched)"{{{
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
   if line('.') <= prompt_linenr
-    " Loop.
-    if is_insert
-      return "\<C-End>\<Home>"
+    if is_insert || line('.') <= 2
+      " Loop.
+      if is_insert
+        return "\<C-End>\<Home>"
+      else
+        return 'G'
+      endif
     else
-      return 'G'
+      return 'k'
     endif
   endif
 
