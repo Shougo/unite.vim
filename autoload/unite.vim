@@ -1383,6 +1383,7 @@ function! s:initialize_context(context)"{{{
         \ 'update_time' : g:unite_update_time,
         \ 'no_buffer' : 0,
         \ 'is_interactive' : 1,
+        \ 'is_vimfiler' : 0,
         \ 'hide_source_names' : 0,
         \ }
 
@@ -1424,7 +1425,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
       let source_name = source
       unlet source
       if !has_key(all_sources, source_name)
-        if context.is_vimfiler
+        if a:context.is_vimfiler
           " Ignore error.
           continue
         endif
