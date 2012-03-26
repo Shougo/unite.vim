@@ -2199,6 +2199,7 @@ CHANGELOG					*unite-changelog*
 - Improved cursor move behavior.
 - Changed -hide-source-names option behavior.
 - Improved vimfiler initialization.
+- Fixed directory_mru syntax pattern.
 
 2012-03-25
 - Fixed restore updatetime.
