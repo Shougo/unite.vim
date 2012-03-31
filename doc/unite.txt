@@ -2198,6 +2198,7 @@ CHANGELOG					*unite-changelog*
 2012-03-31
 - Fixed for cmdwin.
 - Improved variables initialization.
+- Fixed <Plug>(unite_insert_head) mapping.
 
 2012-03-26
 - Improved cursor move behavior.

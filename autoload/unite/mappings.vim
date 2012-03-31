@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Mar 2012.
+" Last Modified: 31 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,7 +39,8 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <expr><buffer> <Plug>(unite_insert_enter)
         \ <SID>insert_enter('i')
   nnoremap <expr><buffer> <Plug>(unite_insert_head)
-        \ <SID>insert_enter('0'.(len(unite#get_current_unite().prompt)-1).'li')
+        \ <SID>insert_enter('A'.
+        \  (repeat("\<Left>", len(substitute(unite#get_input(), '.', 'x', 'g')))))
   nnoremap <expr><buffer> <Plug>(unite_append_enter)
         \ <SID>insert_enter('a')
   nnoremap <expr><buffer> <Plug>(unite_append_end)
