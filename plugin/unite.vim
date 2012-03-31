@@ -75,9 +75,11 @@ let g:unite_abbr_highlight =
 let g:unite_cursor_line_highlight =
       \ get(g:, 'unite_cursor_line_highlight', 'PmenuSel')
 let g:unite_data_directory =
-      \ expand(get(g:, 'unite_data_directory', '~/.unite'))
-if !isdirectory(fnamemodify(g:unite_data_directory, ':p'))
-  call mkdir(fnamemodify(g:unite_data_directory, ':p'))
+      \ substitute(fnamemodify(get(
+      \   g:, 'unite_data_directory', '~/.unite'),
+      \  ':p'), '\\', '/', 'g')
+if !isdirectory(g:unite_data_directory)
+  call mkdir(g:unite_data_directory)
 endif
 "}}}
 
