@@ -150,11 +150,15 @@ function! unite#util#alternate_buffer()"{{{
   endif
 endfunction"}}}
 function! unite#util#is_cmdwin()"{{{
-  silent! noautocmd wincmd p
-  silent! noautocmd wincmd p
+  try
+    noautocmd wincmd p
+  catch /^Vim\%((\a\+)\)\=:E11:/
+    return 1
+  endtry
 
+  silent! noautocmd wincmd p
   call unite#_resize_window()
-  return v:errmsg =~ '^E11:'
+  return 0
 endfunction"}}}
 function! s:buflisted(bufnr)"{{{
   return exists('t:unite_buffer_dictionary') ?

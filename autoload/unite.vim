@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Mar 2012.
+" Last Modified: 31 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -364,7 +364,7 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
         \ unite#get_sources(a:source_name) :
         \ get(a:source_table, a:source_name, {})
   if empty(source)
-    call unite#print_error('source "' . a:source_name . '" is not found.')
+    call unite#print_error('[unite.vim] source "' . a:source_name . '" is not found.')
     return {}
   endif
 
@@ -494,7 +494,7 @@ function! s:get_alias_table(source_name, kind_name, source_table)"{{{
         \ unite#get_sources(a:source_name) :
         \ get(a:source_table, a:source_name, {})
   if empty(source)
-    call unite#print_error('source "' . a:source_name . '" is not found.')
+    call unite#print_error('[unite.vim] source "' . a:source_name . '" is not found.')
     return {}
   endif
 
@@ -863,14 +863,14 @@ endfunction"}}}
 " Command functions.
 function! unite#start(sources, ...)"{{{
   if empty(a:sources)
-    call unite#print_error('Source names is required.')
+    call unite#print_error('[unite.vim] Source names is required.')
     return
   endif
 
   " Check command line window.
   if unite#util#is_cmdwin()
     call unite#print_error(
-          \ 'Command line buffer is detected! Please close command line buffer.')
+          \ '[unite.vim] Command line buffer is detected! Please close command line buffer.')
     return
   endif
 
@@ -995,10 +995,10 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
     elseif type ==# 'directory'
       " nop
     elseif type ==# 'error'
-      call unite#print_error(info)
+      call unite#print_error('[unite.vim]' . info)
       return []
     else
-      call unite#print_error('Invalid filetype : ' . type)
+      call unite#print_error('[unite.vim] Invalid filetype : ' . type)
     endif
 
     return [type, info]
@@ -1077,8 +1077,8 @@ endfunction"}}}
 function! unite#resume(buffer_name, ...)"{{{
   " Check command line window.
   if unite#util#is_cmdwin()
-    echoerr 'Command line buffer is detected!'
-    echoerr 'Please close command line buffer.'
+    call unite#print_error(
+          \ '[unite.vim] Command line buffer is detected! Please close command line buffer.')
     return
   endif
 
@@ -1563,8 +1563,8 @@ function! s:initialize_sources(...)"{{{
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
-      call unite#print_error('Error occured in source initialization!')
-      call unite#print_error('Source name is ' . source.name)
+      call unite#print_error('[unite.vim] Error occured in source initialization!')
+      call unite#print_error('[unite.vim] Source name is ' . source.name)
     endtry
   endfor
 
@@ -1905,8 +1905,8 @@ function! s:get_source_candidates(source)"{{{
   catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
-      call unite#print_error('Error occured in ' . funcname . '!')
-      call unite#print_error('Source name is ' . a:source.name)
+      call unite#print_error('[unite.vim] Error occured in ' . funcname . '!')
+      call unite#print_error('[unite.vim] Source name is ' . a:source.name)
 
       return []
   endtry
@@ -2654,8 +2654,8 @@ function! s:call_hook(sources, hook_name)"{{{
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
-      call unite#print_error('Error occured in calling hook "' . a:hook_name . '"!')
-      call unite#print_error('Source name is ' . source.name)
+      call unite#print_error('[unite.vim] Error occured in calling hook "' . a:hook_name . '"!')
+      call unite#print_error('[unite.vim] Source name is ' . source.name)
     endtry
   endfor
 endfunction"}}}
