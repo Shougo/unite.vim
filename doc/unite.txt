@@ -2197,6 +2197,7 @@ CHANGELOG					*unite-changelog*
 
 2012-04-05
 - Fixed for vimfiler source.
+- Improved matcher_hidden_files filter.
 
 2012-03-31
 - Fixed for cmdwin.

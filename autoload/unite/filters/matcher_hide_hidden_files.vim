@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_hide_hidden_files.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Mar 2012.
+" Last Modified: 05 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,6 +38,7 @@ let s:matcher = {
 
 function! s:matcher.filter(candidates, context)"{{{
   if stridx(a:context.input, '.') >= 0
+        \ || get(a:context, 'source__directory', '') =~ '/\.\|^\.'
     return a:candidates
   endif
 
