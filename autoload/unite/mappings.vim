@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Mar 2012.
+" Last Modified: 05 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -517,8 +517,10 @@ function! unite#mappings#_choose_action(candidates)"{{{
 
   let unite = unite#get_current_unite()
 
-  call unite#start_temporary([[s:source_action] + a:candidates],
-        \ { 'source__sources' : unite.sources }, 'action')
+  call unite#start_temporary([[s:source_action] + a:candidates], {
+        \ 'source__sources' : unite.sources,
+        \ 'is_vimfiler' : 0,
+        \ }, 'action')
 endfunction"}}}
 function! s:insert_enter(key)"{{{
   setlocal modifiable
@@ -817,14 +819,14 @@ function! s:source_action.gather_candidates(args, context)"{{{
 
   let sources = map(copy(candidates), 'v:val.source')
 
-  return sort(map(filter(values(uniq_actions), 'v:val.is_listed'), '{
-        \   "word" : v:val.name,
-        \   "abbr" : printf("%-' . max . 's -- %s",
+  return sort(map(filter(values(uniq_actions), 'v:val.is_listed'), "{
+        \   'word' : v:val.name,
+        \   'abbr' : printf('%-" . max . "s -- %s',
         \       v:val.name, v:val.description),
-        \   "source__candidates" : candidates,
-        \   "action__action" : v:val,
-        \   "source__sources" : sources,
-        \ }'), 's:compare_word')
+        \   'source__candidates' : candidates,
+        \   'action__action' : v:val,
+        \   'source__sources' : sources,
+        \ }"), 's:compare_word')
 endfunction"}}}
 
 function! s:compare_word(i1, i2)

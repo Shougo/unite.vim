@@ -2195,6 +2195,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-04-05
+- Fixed for vimfiler source.
+
 2012-03-31
 - Fixed for cmdwin.
 - Improved variables initialization.
