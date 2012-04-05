@@ -955,6 +955,7 @@ function! unite#start_temporary(sources, ...)"{{{
   let context.temporary = 1
   let context.input = ''
   let context.auto_preview = 0
+  let context.is_vimfiler = 0
   let context.default_action = 'default'
 
   " Overwrite context.

@@ -519,7 +519,6 @@ function! unite#mappings#_choose_action(candidates)"{{{
 
   call unite#start_temporary([[s:source_action] + a:candidates], {
         \ 'source__sources' : unite.sources,
-        \ 'is_vimfiler' : 0,
         \ }, 'action')
 endfunction"}}}
 function! s:insert_enter(key)"{{{
