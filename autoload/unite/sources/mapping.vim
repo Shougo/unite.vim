@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mapping.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jan 2012.
+" Last Modified: 06 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,6 +39,7 @@ let s:source = {
       \ 'description' : 'candidates from Vim mappings',
       \ 'max_candidates' : 30,
       \ 'hooks' : {},
+      \ 'action_table' : {},
       \ }
 
 let s:cached_result = []
@@ -74,6 +75,7 @@ function! s:source.hooks.on_init(args, context)"{{{
           \ 'word' : line,
           \ 'kind' : 'command',
           \ 'action__command' : 'execute "normal ' . map . '"',
+          \ 'action__mapping' : map,
           \ })
   endfor
 endfunction"}}}
@@ -83,6 +85,21 @@ endfunction"}}}
 function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
   return filter(range(1, bufnr('$')), 'buflisted(v:val)')
 endfunction"}}}
+
+" Actions"{{{
+let s:source.action_table.help = {
+      \ 'description' : 'view help documentation',
+      \ }
+function! s:source.action_table.help.func(candidate)"{{{
+  if a:candidate.word !~ '<Plug>\S\+'
+    call unite#print_error('Sorry, this help format is not supported.')
+    return
+  endif
+
+  execute 'help' matchstr(
+        \ a:candidate.word, '<Plug>\S\+')
+endfunction"}}}
+"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

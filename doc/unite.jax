@@ -1912,11 +1912,14 @@ process						*unite-action-process*
 	sigterm		プロセスにSIGTERMを送る(デフォルト)
 	sigkill		プロセスにSIGKILLを送る
 
-session					*unite-action-session*
+session						*unite-action-session*
 	load		セッションを読み込む(デフォルト)
 	delete		セッションを削除する
 	open		セッションを編集する
 	rename		セッション名を変更する
+
+mapping						*unite-action-source*
+	help		ドキュメントを参照する
 
 						*unite-default-action*
 デフォルトアクション

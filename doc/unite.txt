@@ -1833,6 +1833,9 @@ session						*unite-action-session*
 	open		Open session files
 	rename		Rename session name
 
+mapping						*unite-action-source*
+	help		Read documentation
+
 						*unite-default-action*
 Default actions
 
@@ -2198,6 +2201,7 @@ CHANGELOG					*unite-changelog*
 2012-04-05
 - Fixed for vimfiler source.
 - Improved matcher_hidden_files filter.
+- Improved mapping source.
 
 2012-03-31
 - Fixed for cmdwin.
