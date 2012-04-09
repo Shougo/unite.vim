@@ -1833,7 +1833,7 @@ session						*unite-action-session*
 	open		Open session files
 	rename		Rename session name
 
-mapping						*unite-action-source*
+mapping						*unite-action-mapping*
 	help		Read documentation
 
 						*unite-default-action*

@@ -1918,7 +1918,7 @@ session						*unite-action-session*
 	open		セッションを編集する
 	rename		セッション名を変更する
 
-mapping						*unite-action-source*
+mapping						*unite-action-mapping*
 	help		ドキュメントを参照する
 
 						*unite-default-action*
