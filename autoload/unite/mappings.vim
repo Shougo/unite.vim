@@ -296,13 +296,11 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
   " Execute action.
   let is_redraw = 0
-  let is_quit = 0
   let _ = []
   for table in action_tables
     " Check quit flag.
     if table.action.is_quit
       call unite#all_quit_session(0)
-      let is_quit = 1
     endif
 
     try
