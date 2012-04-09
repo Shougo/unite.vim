@@ -2198,6 +2198,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-04-10
+- Fixed unite-action error.
+
 2012-04-05
 - Fixed for vimfiler source.
 - Improved matcher_hidden_files filter.
