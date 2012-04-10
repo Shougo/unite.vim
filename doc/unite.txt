@@ -2201,6 +2201,7 @@ CHANGELOG					*unite-changelog*
 2012-04-10
 - Fixed unite-action error.
 - Fixed unite buffer behavior.
+- Improved sudo check.
 
 2012-04-05
 - Fixed for vimfiler source.
