@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Apr 2012.
+" Last Modified: 10 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -309,7 +309,8 @@ function! unite#loaded_source_names_string()"{{{
   return join(unite#loaded_source_names())
 endfunction"}}}
 function! unite#loaded_source_names_with_args()"{{{
-  return map(copy(unite#loaded_sources_list()), 'join(insert(filter(copy(v:val.args), "type(v:val) < 1"), v:val.name), ":")')
+  return map(copy(unite#loaded_sources_list()),
+        \ 'join(insert(filter(copy(v:val.args), "type(v:val) < 1"), v:val.name), ":")')
 endfunction"}}}
 function! unite#loaded_sources_list()"{{{
   return s:get_loaded_sources()
@@ -733,6 +734,9 @@ endfunction"}}}
 function! unite#get_current_unite() "{{{
   return exists('b:unite') && !s:use_current_unite ? b:unite : s:current_unite
 endfunction"}}}
+function! unite#set_current_unite(unite) "{{{
+  let s:current_unite = a:unite
+endfunction"}}}
 function! unite#add_previewed_buffer_list(bufnr) "{{{
   let unite = unite#get_current_unite()
   call add(unite.previewd_buffer_list, a:bufnr)
@@ -781,7 +785,7 @@ function! unite#print_error(message)"{{{
   endfor
 endfunction"}}}
 function! unite#print_message(message)"{{{
-  if &filetype ==# 'unite'
+  if &filetype ==# 'unite' && !s:use_current_unite
     call s:print_buffer(a:message)
   else
     call add(s:unite_cached_message, a:message)
@@ -1144,7 +1148,7 @@ function! unite#resume(buffer_name, ...)"{{{
   let unite.access_time = localtime()
   let unite.context = context
 
-  let s:current_unite = unite
+  call unite#set_current_unite(unite)
 
   call s:init_cursor()
 endfunction"}}}
@@ -1249,8 +1253,9 @@ function! s:quit_session(is_force)  "{{{
   endif
 
   " Save unite value.
-  let s:current_unite = b:unite
-  let unite = s:current_unite
+  let unite_save = s:current_unite
+  call unite#set_current_unite(b:unite)
+  let unite = b:unite
   let context = unite.context
 
   let key = unite#loaded_source_names_string()
@@ -1313,6 +1318,9 @@ function! s:quit_session(is_force)  "{{{
     stopinsert
     redraw!
   endif
+
+  " Restore unite.
+  call unite#set_current_unite(unite_save)
 endfunction"}}}
 function! unite#resume_from_temporary(context)  "{{{
   if empty(a:context.old_buffer_info)
@@ -1434,7 +1442,8 @@ function! s:initialize_loaded_sources(sources, context)"{{{
         endif
 
         call unite#util#print_error(
-              \ 'unite.vim: Invalid source name "' . source_name . '" is detected.')
+              \ 'unite.vim: Invalid source name "' .
+              \ source_name . '" is detected.')
         throw 'Invalid source'
       endif
 
@@ -1990,7 +1999,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   endif
 
   " The current buffer is initialized.
-  let buffer_name = unite#util#is_windows() ? '[unite] - ' : '*unite* - '
+  let buffer_name = unite#util#is_windows() ?
+        \ '[unite] - ' : '*unite* - '
   let buffer_name .= context.buffer_name
 
   let winnr = winnr()
@@ -2051,11 +2061,12 @@ function! s:initialize_current_unite(sources, context)"{{{
    \ len(filter(range(1, winnr('$')),
    \  'getwinvar(v:val, "&previewwindow")')) > 0
 
-  let s:current_unite = unite
+  call unite#set_current_unite(unite)
 endfunction"}}}
 function! s:initialize_unite_buffer()"{{{
   let is_bufexists = bufexists(s:current_unite.real_buffer_name)
-  call s:switch_unite_buffer(s:current_unite.real_buffer_name, s:current_unite.context)
+  call s:switch_unite_buffer(
+        \ s:current_unite.real_buffer_name, s:current_unite.context)
 
   let b:unite = s:current_unite
   let unite = unite#get_current_unite()
@@ -2139,60 +2150,62 @@ function! s:initialize_unite_buffer()"{{{
   setlocal nocursorline
   setfiletype unite
 
-  if exists('b:current_syntax') && b:current_syntax ==# 'unite'
-    " Set highlight.
-    let match_prompt = escape(unite.prompt, '\/*~.^$[]')
-    syntax clear uniteInputPrompt
-    execute 'syntax match uniteInputPrompt'
-          \ '/^'.match_prompt.'/ contained'
+  if !exists('b:current_syntax') || b:current_syntax !=# 'unite'
+    return
+  endif
 
-    if !unite.context.hide_source_names
-      syntax match uniteStatusLine /\%1l.*/
-            \  contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
-    endif
+  " Set highlight.
+  let match_prompt = escape(unite.prompt, '\/*~.^$[]')
+  syntax clear uniteInputPrompt
+  execute 'syntax match uniteInputPrompt'
+        \ '/^'.match_prompt.'/ contained'
 
-    execute 'syntax match uniteInputLine'
-          \ '/\%'.unite.prompt_linenr.'l.*/'
-          \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+  if !unite.context.hide_source_names
+    syntax match uniteStatusLine /\%1l.*/
+          \  contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
+  endif
 
-    syntax clear uniteCandidateSourceName
-    if unite.max_source_name > 0
-      syntax match uniteCandidateSourceName
-            \ /\%3c[[:alnum:]_\/-]\+/ contained
-    else
-      syntax match uniteCandidateSourceName /^- / contained
-    endif
-    let source_padding = 4
+  execute 'syntax match uniteInputLine'
+        \ '/\%'.unite.prompt_linenr.'l.*/'
+        \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
 
-    let unite.abbr_head = unite.max_source_name+source_padding
-    execute 'syntax match uniteCandidateAbbr' '/\%'
+  syntax clear uniteCandidateSourceName
+  if unite.max_source_name > 0
+    syntax match uniteCandidateSourceName
+          \ /\%3c[[:alnum:]_\/-]\+/ contained
+  else
+    syntax match uniteCandidateSourceName /^- / contained
+  endif
+  let source_padding = 4
+
+  let unite.abbr_head = unite.max_source_name+source_padding
+  execute 'syntax match uniteCandidateAbbr' '/\%'
+        \ .(unite.abbr_head).'c.*/ contained'
+
+  execute 'highlight default link uniteCandidateAbbr'
+        \ g:unite_abbr_highlight
+
+  " Set syntax.
+  for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+    let name = unite.max_source_name > 0 ?
+          \ source.name : ''
+
+    execute 'syntax match' source.syntax '/\%'
           \ .(unite.abbr_head).'c.*/ contained'
 
-    execute 'highlight default link uniteCandidateAbbr'
-          \ g:unite_abbr_highlight
+    execute 'highlight default link'
+          \ source.syntax g:unite_abbr_highlight
 
-    " Set syntax.
-    for source in filter(copy(unite.sources), 'v:val.syntax != ""')
-      let name = unite.max_source_name > 0 ?
-            \ source.name : ''
+    execute printf('syntax region %s start="^- %s" end="$" '.
+          \ 'contains=uniteCandidateMarker,%s%s',
+          \ 'uniteSourceLine__'.source.syntax,
+          \ (name == '' ? '' : name . '\>'),
+          \ (name == '' ? '' : 'uniteCandidateSourceName,'),
+          \    source.syntax
+          \ )
 
-      execute 'syntax match' source.syntax '/\%'
-            \ .(unite.abbr_head).'c.*/ contained'
-
-      execute 'highlight default link'
-            \ source.syntax g:unite_abbr_highlight
-
-      execute printf('syntax region %s start="^- %s" end="$" '.
-            \ 'contains=uniteCandidateMarker,%s%s',
-            \ 'uniteSourceLine__'.source.syntax,
-            \ (name == '' ? '' : name . '\>'),
-            \ (name == '' ? '' : 'uniteCandidateSourceName,'),
-            \    source.syntax
-            \ )
-
-      call s:call_hook([source], 'on_syntax')
-    endfor
-  endif
+    call s:call_hook([source], 'on_syntax')
+  endfor
 endfunction"}}}
 function! s:switch_unite_buffer(buffer_name, context)"{{{
   " Search unite window.
@@ -2310,7 +2323,9 @@ function! unite#_resize_window() "{{{
 
   if context.no_split
     return
-  elseif context.auto_resize
+  endif
+
+  if context.auto_resize
     " Auto resize.
     let max_len = unite.prompt_linenr + len(unite.candidates)
     execute 'resize' min([max_len, context.winheight])
@@ -2375,6 +2390,7 @@ function! s:on_cursor_hold_i()  "{{{
   if unite.is_async && &l:modifiable
     " Ignore key sequences.
     call feedkeys("a\<BS>", 'n')
+    " call feedkeys("\<C-r>\<ESC>", 'n')
   endif
 endfunction"}}}
 function! unite#_on_cursor_hold()  "{{{
@@ -2435,8 +2451,6 @@ function! s:on_buf_unload(bufname)  "{{{
     " Invalid unite.
     return
   endif
-
-  let s:current_unite = unite
 
   if unite.is_finalized
     return
@@ -2514,6 +2528,10 @@ endfunction"}}}
 function! s:restore_updatetime()  "{{{
   let unite = unite#get_current_unite()
 
+  if !has_key(unite, 'update_time_save')
+    return
+  endif
+
   if &updatetime < unite.update_time_save
     let &updatetime = unite.update_time_save
   endif
@@ -2587,7 +2605,8 @@ function! s:get_loaded_sources(...)"{{{
   endif
 
   let unite = unite#get_current_unite()
-  return a:0 == 0 ? unite.sources : get(filter(copy(unite.sources), 'v:val.name ==# a:1'), 0, {})
+  return a:0 == 0 ? unite.sources :
+        \ get(filter(copy(unite.sources), 'v:val.name ==# a:1'), 0, {})
 endfunction"}}}
 function! s:get_substitute_input(input)"{{{
   let input = a:input
