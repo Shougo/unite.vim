@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Apr 2012.
+" Last Modified: 11 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2360,10 +2360,7 @@ endfunction"}}}
 function! s:on_insert_leave()  "{{{
   let unite = unite#get_current_unite()
 
-  if line('.') == unite.prompt_linenr
-    " Redraw.
-    call unite#redraw()
-  else
+  if line('.') != unite.prompt_linenr
     normal! 0
   endif
 

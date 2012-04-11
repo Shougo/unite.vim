@@ -2198,6 +2198,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-04-11
+- Fixed InsertLeave problem.
+
 2012-04-10
 - Fixed unite-action error.
 - Fixed unite buffer behavior.
