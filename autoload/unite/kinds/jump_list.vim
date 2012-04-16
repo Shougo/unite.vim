@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Nov 2011.
+" Last Modified: 16 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -82,15 +82,16 @@ function! s:kind.action_table.preview.func(candidate)"{{{
         \ unite#util#escape_file_searching(
         \ a:candidate.action__path))
 
-  pedit +call\ s:jump(a:candidate,1) `=a:candidate.action__path`
-  if has_key(a:candidate, 'action__buffer_nr')
-    let filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
-    if filetype != ''
-      let winnr = winnr()
-      execute bufwinnr(a:candidate.action__buffer_nr) . 'wincmd w'
-      execute 'setfiletype' filetype
-      execute winnr . 'wincmd w'
-    endif
+  let preview_windows = filter(range(1, winnr('$')),
+        \ 'getwinvar(v:val, "&previewwindow") != 0')
+  if !buflisted || empty(preview_windows)
+    pedit +call\ s:jump(a:candidate,1) `=a:candidate.action__path`
+  else
+    let winnr = winnr()
+    execute preview_windows[0].'wincmd w'
+    execute (buflisted ? 'buffer' : 'edit') a:candidate.action__path
+    call s:jump(a:candidate, 1)
+    execute winnr.'wincmd w'
   endif
 
   if !buflisted
@@ -146,7 +147,14 @@ function! s:jump(candidate, is_highlight)"{{{
     " Jump to the line number.
     let col = has_key(a:candidate, 'action__col') ?
           \ a:candidate.action__col : 0
-    call cursor(a:candidate.action__line, col)
+    if col == 0
+      if line('.') != a:candidate.action__line
+        execute a:candidate.action__line
+      endif
+    else
+      call cursor(a:candidate.action__line, col)
+    endif
+
     call s:open_current_line(a:is_highlight)
     return
   endif
@@ -155,12 +163,15 @@ function! s:jump(candidate, is_highlight)"{{{
 
   " Jump by search().
   let source = unite#get_sources(a:candidate.source)
-  if !(has_key(a:candidate, 'action__signature') && has_key(source, 'calc_signature'))
+  if !(has_key(a:candidate, 'action__signature')
+        \ && has_key(source, 'calc_signature'))
     " Not found signature.
     if has_key(a:candidate, 'action__line')
           \ && a:candidate.action__line != ''
           \ && getline(a:candidate.action__line) =~# pattern
-      execute a:candidate.action__line
+      if line('.') != a:candidate.action__line
+        execute a:candidate.action__line
+      endif
     else
       call search(pattern, 'w')
     endif
@@ -182,7 +193,8 @@ function! s:jump(candidate, is_highlight)"{{{
       let lnum = line('.')
       if lnum == start_lnum
         " Not found.
-        call unite#print_error("unite: jump_list: Target position is not found.")
+        call unite#print_error(
+              \ "unite: jump_list: Target position is not found.")
         call cursor(1, 1)
         return
       endif
