@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 15 Mar 2012.
+" Last Modified: 17 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,7 +27,7 @@
 
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_grep_command', 'grep')
-call unite#util#set_default('g:unite_source_grep_default_opts', '-Hn')
+call unite#util#set_default('g:unite_source_grep_default_opts', '-iHn')
 call unite#util#set_default('g:unite_source_grep_recursive_opt', '-R')
 call unite#util#set_default('g:unite_source_grep_max_candidates', 100)
 call unite#util#set_default('g:unite_source_grep_search_word_highlight', 'Search')
@@ -94,7 +94,8 @@ function! s:source.hooks.on_init(args, context) "{{{
 
     if type(get(a:args, 0, '')) == type('')
           \ && get(a:args, 0, '') == ''
-      let target = input('Target: ', default, 'file')
+      let target = unite#util#substitute_path_separator(
+            \ input('Target: ', default, 'file'))
     else
       let target = default
     endif
@@ -163,13 +164,11 @@ function! s:source.gather_candidates(args, context) "{{{
     \   g:unite_source_grep_recursive_opt,
     \   a:context.source__extra_opts,
     \   string(a:context.source__input),
-    \   join(a:context.source__target),
+    \   join(map(a:context.source__target,
+    \           "substitute(v:val, '/$', '', '')")),
     \)
   call unite#print_message('[grep] Command-line: ' . cmdline)
   let a:context.source__proc = vimproc#pgroup_open(cmdline, 1)
-
-  " Close handles.
-  call a:context.source__proc.stderr.close()
 
   return []
 endfunction "}}}
@@ -180,6 +179,15 @@ function! s:source.async_gather_candidates(args, context) "{{{
     " Disable async.
     call unite#print_message('[grep] Completed.')
     let a:context.is_async = 0
+  endif
+
+  let stderr = a:context.source__proc.stderr
+  if !stderr.eof
+    " Print error.
+    let errors = filter(stderr.read_lines(-1, 300), "v:val !~ '^\\s*$'")
+    if !empty(errors)
+      call unite#print_error(map(errors, "'[grep] '.v:val"))
+    endif
   endif
 
   let candidates = map(filter(map(stdout.read_lines(-1, 300),

@@ -2198,6 +2198,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-04-17
+- Improved grep source behavior.
+
 2012-04-16
 - Improved jump_list preview action.
 - Fixed -auto-preview behavior.
