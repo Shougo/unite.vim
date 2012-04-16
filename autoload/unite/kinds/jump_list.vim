@@ -82,19 +82,24 @@ function! s:kind.action_table.preview.func(candidate)"{{{
         \ unite#util#escape_file_searching(
         \ a:candidate.action__path))
 
+  let is_highlight = !unite#get_context().auto_preview
   let preview_windows = filter(range(1, winnr('$')),
         \ 'getwinvar(v:val, "&previewwindow") != 0')
-  if !buflisted || empty(preview_windows)
-    pedit +call\ s:jump(a:candidate,1) `=a:candidate.action__path`
-  else
-    let winnr = winnr()
-    execute preview_windows[0].'wincmd w'
-    if bufnr('%') != bufnr(a:candidate.action__path)
-      execute (buflisted ? 'buffer' : 'edit') a:candidate.action__path
-    endif
-    call s:jump(a:candidate, 1)
-    execute winnr.'wincmd w'
+  if empty(preview_windows)
+    pedit `=a:candidate.action__path`
+
+    let preview_windows = filter(range(1, winnr('$')),
+          \ 'getwinvar(v:val, "&previewwindow") != 0')
   endif
+
+  let winnr = winnr()
+  execute preview_windows[0].'wincmd w'
+  if bufnr('%') != bufnr(a:candidate.action__path)
+    execute (buflisted ? 'buffer' : 'edit')
+          \ a:candidate.action__path
+  endif
+  call s:jump(a:candidate, is_highlight)
+  execute winnr.'wincmd w'
 
   if !buflisted
     call unite#add_previewed_buffer_list(

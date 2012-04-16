@@ -2051,6 +2051,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.previewd_buffer_list = []
   let unite.post_filters = unite#get_profile(
         \ unite.profile_name, 'filters')
+  let unite.preview_candidate = {}
 
   let unite.max_source_name =
         \ !context.hide_source_names && len(a:sources) > 1 ?
@@ -2307,6 +2308,10 @@ function! s:redraw(is_force, winnr) "{{{
       call unite#mappings#do_action(
             \ context.default_action, [candidates[0]])
     endif
+  endif
+
+  if context.auto_preview
+    call s:do_auto_preview()
   endif
 endfunction"}}}
 function! unite#_resize_window() "{{{
@@ -2677,10 +2682,17 @@ function! s:has_preview_window()"{{{
           \    'getwinvar(v:val, "&previewwindow")')) > 0
 endfunction"}}}
 function! s:do_auto_preview()"{{{
-  if !unite#get_current_unite().has_preview_window
+  let unite = unite#get_current_unite()
+  if !unite.has_preview_window
         \ && s:has_preview_window()
     pclose!
   endif
+
+  if unite.preview_candidate == unite#get_current_candidate()
+    return
+  endif
+
+  let unite.preview_candidate = unite#get_current_candidate()
 
   call unite#mappings#do_action('preview', [], {}, 0)
 
