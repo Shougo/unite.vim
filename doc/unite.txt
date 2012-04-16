@@ -2200,6 +2200,7 @@ CHANGELOG					*unite-changelog*
 
 2012-04-16
 - Improved jump_list preview action.
+- Fixed -auto-preview behavior.
 
 2012-04-13
 - Improved unite#mappings#do_action().

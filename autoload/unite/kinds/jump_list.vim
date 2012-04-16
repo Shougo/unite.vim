@@ -89,7 +89,9 @@ function! s:kind.action_table.preview.func(candidate)"{{{
   else
     let winnr = winnr()
     execute preview_windows[0].'wincmd w'
-    execute (buflisted ? 'buffer' : 'edit') a:candidate.action__path
+    if bufnr('%') != bufnr(a:candidate.action__path)
+      execute (buflisted ? 'buffer' : 'edit') a:candidate.action__path
+    endif
     call s:jump(a:candidate, 1)
     execute winnr.'wincmd w'
   endif

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Apr 2012.
+" Last Modified: 16 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2307,10 +2307,6 @@ function! s:redraw(is_force, winnr) "{{{
       call unite#mappings#do_action(
             \ context.default_action, [candidates[0]])
     endif
-  endif
-
-  if context.auto_preview
-    call s:do_auto_preview()
   endif
 endfunction"}}}
 function! unite#_resize_window() "{{{
