@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Apr 2012.
+" Last Modified: 17 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -267,7 +267,8 @@ let s:unite_options = [
       \ '-immediately', '-no-empty', '-auto-preview', '-complete',
       \ '-vertical', '-horizontal', '-direction=', '-no-split',
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
-      \ '-cursor-line-highlight=', '-update-time=', '-hide-source-names'
+      \ '-cursor-line-highlight=', '-no-cursor-line',
+      \ '-update-time=', '-hide-source-names'
       \]
 "}}}
 
@@ -1391,6 +1392,7 @@ function! s:initialize_context(context)"{{{
         \ 'is_redraw' : 0,
         \ 'cursor_line_highlight' :
         \    g:unite_cursor_line_highlight,
+        \ 'no_cursor_line' : 0,
         \ 'update_time' : g:unite_update_time,
         \ 'no_buffer' : 0,
         \ 'is_interactive' : 1,
@@ -2428,7 +2430,7 @@ function! s:on_cursor_moved()  "{{{
   execute 'setlocal' line('.') == prompt_linenr ?
         \ 'modifiable' : 'nomodifiable'
 
-  if exists('b:current_syntax')
+  if exists('b:current_syntax') && !context.no_cursor_line
     silent! execute 'match' (line('.') <= prompt_linenr ?
           \ line('$') <= prompt_linenr ?
           \ 'uniteError /\%'.prompt_linenr.'l/' :
@@ -2486,11 +2488,13 @@ function! s:change_highlight()  "{{{
   let unite = unite#get_current_unite()
   let context = unite#get_context()
   let prompt_linenr = unite.prompt_linenr
-  execute 'match' (line('.') <= prompt_linenr ?
-        \ line('$') <= prompt_linenr ?
-        \ 'uniteError /\%'.prompt_linenr.'l/' :
-        \ context.cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-        \ context.cursor_line_highlight.' /\%'.line('.').'l/')
+  if !context.no_cursor_line
+    execute 'match' (line('.') <= prompt_linenr ?
+          \ line('$') <= prompt_linenr ?
+          \ 'uniteError /\%'.prompt_linenr.'l/' :
+          \ context.cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
+          \ context.cursor_line_highlight.' /\%'.line('.').'l/')
+  endif
 
   syntax clear uniteCandidateInputKeyword
 

@@ -294,6 +294,10 @@ COMMANDS 					*unite-commands*
 		Change cursor line highlight. If this option is ommit,
 		|g:unite_cursor_line_highlight| is used.
 
+						*unite-options-no-cursor-line*
+		-no-cursor-line
+		Disable cursor line highlight.
+
 						*unite-options-hide-source-names*
 		-hide-source-names
 		Hide source names.
@@ -2200,6 +2204,7 @@ CHANGELOG					*unite-changelog*
 
 2012-04-17
 - Improved grep source behavior.
+- Added -no-cursor-line option.
 
 2012-04-16
 - Improved jump_list preview action.

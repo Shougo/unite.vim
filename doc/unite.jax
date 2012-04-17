@@ -286,6 +286,10 @@ http://www.ustream.tv/recorded/11240673
 		カーソル行のハイライトを変更する。このオプションが省略されると、
 		|g:unite_cursor_line_highlight|が使用される。
 
+						*unite-options-no-cursor-line*
+		-no-cursor-line
+		カーソル行のハイライトを無効にする。
+
 						*unite-options-hide-source-names*
 		-hide-source-names
 		source名を表示しない。
