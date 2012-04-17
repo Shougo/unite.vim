@@ -287,7 +287,8 @@ COMMANDS 					*unite-commands*
 						*unite-options-update-time*
 		-update-time={new-update-time}
 		Change 'updatetime' option. If this option is ommit,
-		|g:unite_update_time| is used.
+		|g:unite_update_time| is used. This option is useful for
+		animation source.
 
 						*unite-options-cursor-line-highlight*
 		-cursor-line-high-light={highlight-name}
@@ -296,7 +297,8 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-no-cursor-line*
 		-no-cursor-line
-		Disable cursor line highlight.
+		Disable cursor line highlight. This option is useful for
+		animation source.
 
 						*unite-options-hide-source-names*
 		-hide-source-names
