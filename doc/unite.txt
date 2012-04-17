@@ -2207,6 +2207,7 @@ CHANGELOG					*unite-changelog*
 2012-04-17
 - Improved grep source behavior.
 - Added -no-cursor-line option.
+- Improved jump_list kind.
 
 2012-04-16
 - Improved jump_list preview action.

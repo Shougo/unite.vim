@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Apr 2012.
+" Last Modified: 17 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,101 +37,103 @@ endif
 "}}}
 
 function! unite#kinds#jump_list#define()"{{{
-  return s:kind
-endfunction"}}}
+  let kind = {
+        \ 'name' : 'jump_list',
+        \ 'default_action' : 'open',
+        \ 'action_table': {},
+        \ 'alias_table' : { 'rename' : 'replace' },
+        \ 'parents': ['openable'],
+        \}
 
-let s:kind = {
-      \ 'name' : 'jump_list',
-      \ 'default_action' : 'open',
-      \ 'action_table': {},
-      \ 'parents': ['openable'],
-      \}
-
-" Actions"{{{
-let s:kind.action_table.open = {
-      \ 'description' : 'jump to this position',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.open.func(candidates)"{{{
-  for candidate in a:candidates
-    if bufnr(unite#util#escape_file_searching(candidate.action__path)) != bufnr('%')
-      if has_key(candidate, 'action__buffer_nr')
-        execute 'buffer' candidate.action__buffer_nr
-      else
-        edit `=candidate.action__path`
-      endif
-    endif
-    call s:jump(candidate, 0)
-
-    " Open folds.
-    normal! zv
-    call s:adjust_scroll(s:best_winline())
-
-    call unite#remove_previewed_buffer_list(
-          \ bufnr(unite#util#escape_file_searching(
-          \       candidate.action__path)))
-  endfor
-endfunction"}}}
-
-let s:kind.action_table.preview = {
-      \ 'description' : 'preview this position',
-      \ 'is_quit' : 0,
-      \ }
-function! s:kind.action_table.preview.func(candidate)"{{{
-  let buflisted = buflisted(
-        \ unite#util#escape_file_searching(
-        \ a:candidate.action__path))
-
-  let is_highlight = !unite#get_context().auto_preview
-  let preview_windows = filter(range(1, winnr('$')),
-        \ 'getwinvar(v:val, "&previewwindow") != 0')
-  if empty(preview_windows)
-    pedit `=a:candidate.action__path`
-
-    let preview_windows = filter(range(1, winnr('$')),
-          \ 'getwinvar(v:val, "&previewwindow") != 0')
-  endif
-
-  let winnr = winnr()
-  execute preview_windows[0].'wincmd w'
-  if bufnr('%') != bufnr(a:candidate.action__path)
-    execute (buflisted ? 'buffer' : 'edit')
-          \ a:candidate.action__path
-  endif
-  call s:jump(a:candidate, is_highlight)
-  execute winnr.'wincmd w'
-
-  if !buflisted
-    call unite#add_previewed_buffer_list(
-        \ bufnr(unite#util#escape_file_searching(
-        \       a:candidate.action__path)))
-  endif
-endfunction"}}}
-
-if globpath(&runtimepath, 'autoload/qfreplace.vim') != ''
-  let s:kind.action_table.replace = {
-        \ 'description' : 'replace with qfreplace',
+  " Actions"{{{
+  let kind.action_table.open = {
+        \ 'description' : 'jump to this position',
         \ 'is_selectable' : 1,
         \ }
-  function! s:kind.action_table.replace.func(candidates)"{{{
-    let qflist = []
+  function! kind.action_table.open.func(candidates)"{{{
     for candidate in a:candidates
-      if has_key(candidate, 'action__line')
-            \ && has_key(candidate, 'action__text')
-        call add(qflist, {
-              \ 'filename' : candidate.action__path,
-              \ 'lnum' : candidate.action__line,
-              \ 'text' : candidate.action__text,
-              \ })
+      if bufnr(unite#util#escape_file_searching(candidate.action__path)) != bufnr('%')
+        if has_key(candidate, 'action__buffer_nr')
+          execute 'buffer' candidate.action__buffer_nr
+        else
+          edit `=candidate.action__path`
+        endif
       endif
-    endfor
+      call s:jump(candidate, 0)
 
-    if !empty(qflist)
-      call setqflist(qflist)
-      call qfreplace#start('')
+      " Open folds.
+      normal! zv
+      call s:adjust_scroll(s:best_winline())
+
+      call unite#remove_previewed_buffer_list(
+            \ bufnr(unite#util#escape_file_searching(
+            \       candidate.action__path)))
+    endfor
+  endfunction"}}}
+
+  let kind.action_table.preview = {
+        \ 'description' : 'preview this position',
+        \ 'is_quit' : 0,
+        \ }
+  function! kind.action_table.preview.func(candidate)"{{{
+    let buflisted = buflisted(
+          \ unite#util#escape_file_searching(
+          \ a:candidate.action__path))
+
+    let is_highlight = !unite#get_context().auto_preview
+    let preview_windows = filter(range(1, winnr('$')),
+          \ 'getwinvar(v:val, "&previewwindow") != 0')
+    if empty(preview_windows)
+      pedit `=a:candidate.action__path`
+
+      let preview_windows = filter(range(1, winnr('$')),
+            \ 'getwinvar(v:val, "&previewwindow") != 0')
+    endif
+
+    let winnr = winnr()
+    execute preview_windows[0].'wincmd w'
+    if bufnr('%') != bufnr(a:candidate.action__path)
+      execute (buflisted ? 'buffer' : 'edit')
+            \ a:candidate.action__path
+    endif
+    call s:jump(a:candidate, is_highlight)
+    execute winnr.'wincmd w'
+
+    if !buflisted
+      call unite#add_previewed_buffer_list(
+            \ bufnr(unite#util#escape_file_searching(
+            \       a:candidate.action__path)))
     endif
   endfunction"}}}
-endif
+
+  if globpath(&runtimepath, 'autoload/qfreplace.vim') != ''
+    let kind.action_table.replace = {
+          \ 'description' : 'replace with qfreplace',
+          \ 'is_selectable' : 1,
+          \ }
+    function! kind.action_table.replace.func(candidates)"{{{
+      let qflist = []
+      for candidate in a:candidates
+        if has_key(candidate, 'action__line')
+              \ && has_key(candidate, 'action__text')
+          call add(qflist, {
+                \ 'filename' : candidate.action__path,
+                \ 'lnum' : candidate.action__line,
+                \ 'text' : candidate.action__text,
+                \ })
+        endif
+      endfor
+
+      if !empty(qflist)
+        call setqflist(qflist)
+        call qfreplace#start('')
+      endif
+    endfunction"}}}
+  endif
+
+  return kind
+endfunction"}}}
+
 "}}}
 
 " Misc.
