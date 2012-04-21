@@ -2206,6 +2206,7 @@ CHANGELOG					*unite-changelog*
 
 2012-04-22
 - Improved unite-grep behavior.
+- Improved redraw candidates.
 
 2012-04-21
 - Fixed kind problem.
