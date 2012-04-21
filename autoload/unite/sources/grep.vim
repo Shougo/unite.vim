@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 17 Apr 2012.
+" Last Modified: 22 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -168,19 +168,12 @@ function! s:source.gather_candidates(args, context) "{{{
     \           "substitute(v:val, '/$', '', '')")),
     \)
   call unite#print_message('[grep] Command-line: ' . cmdline)
-  let a:context.source__proc = vimproc#pgroup_open(cmdline, 1)
+  let a:context.source__proc = vimproc#plineopen3(cmdline, 1)
 
   return []
 endfunction "}}}
 
 function! s:source.async_gather_candidates(args, context) "{{{
-  let stdout = a:context.source__proc.stdout
-  if stdout.eof
-    " Disable async.
-    call unite#print_message('[grep] Completed.')
-    let a:context.is_async = 0
-  endif
-
   let stderr = a:context.source__proc.stderr
   if !stderr.eof
     " Print error.
@@ -188,6 +181,13 @@ function! s:source.async_gather_candidates(args, context) "{{{
     if !empty(errors)
       call unite#print_error(map(errors, "'[grep] '.v:val"))
     endif
+  endif
+
+  let stdout = a:context.source__proc.stdout
+  if stdout.eof
+    " Disable async.
+    call unite#print_message('[grep] Completed.')
+    let a:context.is_async = 0
   endif
 
   let candidates = map(filter(map(stdout.read_lines(-1, 300),

@@ -2204,6 +2204,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-04-22
+- Improved unite-grep behavior.
+
 2012-04-21
 - Fixed kind problem.
 
