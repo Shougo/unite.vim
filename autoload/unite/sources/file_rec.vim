@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Mar 2012.
+" Last Modified: 21 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -452,7 +452,8 @@ function! s:on_post_filter(args, context)"{{{
         \   unite#util#substitute_path_separator(getcwd())
 
   for candidate in a:context.candidates
-    let candidate.kind = 'file'
+    let candidate.kind = isdirectory(candidate.action__path) ?
+          \ 'directory' : 'file'
     let candidate.abbr = candidate.word .
           \ (isdirectory(candidate.word) ? '/' : '')
     let candidate.action__directory = is_relative_path ?
