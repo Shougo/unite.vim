@@ -103,7 +103,7 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <silent><expr><buffer> <Plug>(unite_insert_leave)
         \ ((line('.') <= unite#get_current_unite().prompt_linenr) ?
         \ "\<ESC>0".(unite#get_current_unite().prompt_linenr+1)."G" : "\<ESC>0")
-        \ . ":\<C-u>call unite#redraw()\<CR>"
+        \ . ":call unite#redraw()\<CR>"
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
         \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
         \ "\<C-o>:\<C-u>call \<SID>exit()\<CR>" : "\<C-h>"
@@ -223,6 +223,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>    <Plug>(unite_move_head)
   imap <buffer> <C-l>     <Plug>(unite_redraw)
+  imap <buffer> <ESC>     <Plug>(unite_insert_leave)
 
   inoremap <silent><buffer><expr> d
         \ unite#smart_map('d', unite#do_action('delete'))

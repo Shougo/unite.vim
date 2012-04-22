@@ -932,6 +932,7 @@ x		候補を選択している場合は|<Plug>(unite_quick_match_default_action)
 インサートモードマッピング
 {lhs}		{rhs}
 --------	-----------------------------
+<ESC>		|i_<Plug>(unite_insert_leave)|
 <Tab>		|i_<Plug>(unite_choose_action)|
 <C-n>		|i_<Plug>(unite_select_next_line)|
 <Down>		|i_<Plug>(unite_select_next_line)|

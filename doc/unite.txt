@@ -953,6 +953,7 @@ x		In case when you selected a candidate, runs
 Insert mode mappings.
 {lhs}		{rhs}
 --------	-----------------------------
+<ESC>		|i_<Plug>(unite_insert_leave)|
 <Tab>		|i_<Plug>(unite_choose_action)|
 <C-n>		|i_<Plug>(unite_select_next_line)|
 <Down>		|i_<Plug>(unite_select_next_line)|
@@ -2208,6 +2209,7 @@ CHANGELOG					*unite-changelog*
 - Improved unite-grep behavior.
 - Improved redraw candidates.
 - Fixed file_rec/async source.
+- Fixed <ESC> mapping.
 
 2012-04-21
 - Fixed kind problem.
