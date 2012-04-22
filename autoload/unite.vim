@@ -1019,7 +1019,7 @@ function! unite#get_candidates(sources, ...)"{{{
   let context.no_buffer = 1
   let context.is_interactive = 0
 
-  let candidates = s:get_candidates(a:sources, context, 0)
+  let candidates = s:get_candidates(a:sources, context)
 
   " Finalize.
   let unite = unite#get_current_unite()
