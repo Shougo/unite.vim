@@ -2127,6 +2127,8 @@ function! s:initialize_unite_buffer()"{{{
             \ call s:on_cursor_moved()
       autocmd BufUnload,BufHidden <buffer>
             \ call s:on_buf_unload(expand('<afile>'))
+      autocmd WinEnter,BufWinEnter <buffer>
+            \ call s:save_updatetime()
       autocmd WinLeave,BufWinLeave <buffer>
             \ call s:restore_updatetime()
     augroup END

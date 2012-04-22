@@ -2210,6 +2210,7 @@ CHANGELOG					*unite-changelog*
 - Improved redraw candidates.
 - Fixed file_rec/async source.
 - Fixed <ESC> mapping.
+- Fixed updatetime restore problem.
 
 2012-04-21
 - Fixed kind problem.
