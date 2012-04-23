@@ -5,7 +5,8 @@ set cpo&vim
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
-let s:is_mac = !s:is_windows && (has('mac') || has('macunix') || has('gui_macvim') || system('uname') =~? '^darwin')
+let s:is_mac = !s:is_windows && (has('mac') || has('macunix')
+      \ || has('gui_macvim') || system('uname') =~? '^darwin')
 
 " Open a file.
 function! s:open(filename) "{{{
@@ -18,22 +19,28 @@ function! s:open(filename) "{{{
     silent execute '!start rundll32 url.dll,FileProtocolHandler' filename
   elseif s:is_cygwin
     " Cygwin.
-    call system(printf('%s ''%s''', 'cygstart', filename))
+    call system(printf('%s %s', 'cygstart',
+          \ shellescape(filename)))
   elseif executable('xdg-open')
     " Linux.
-    call system(printf('%s ''%s'' &', 'xdg-open', filename))
+    call system(printf('%s %s &', 'xdg-open',
+          \ shellescape(filename)))
   elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
     " KDE.
-    call system(printf('%s ''%s'' &', 'kioclien exec', filename))
+    call system(printf('%s %s &', 'kioclien exec',
+          \ shellescape(filename)))
   elseif exists('$GNOME_DESKTOP_SESSION_ID')
     " GNOME.
-    call system(printf('%s ''%s'' &', 'gnome-open', filename))
+    call system(printf('%s %s &', 'gnome-open',
+          \ shellescape(filename)))
   elseif executable('exo-open')
     " Xfce.
-    call system(printf('%s ''%s'' &', 'exo-open', filename))
+    call system(printf('%s %s &', 'exo-open',
+          \ shellescape(filename)))
   elseif s:is_mac && executable('open')
     " Mac OS.
-    call system(printf('%s ''%s'' &', 'open', filename))
+    call system(printf('%s %s &', 'open',
+          \ shellescape(filename)))
   else
     " Give up.
     throw 'Not supported.'

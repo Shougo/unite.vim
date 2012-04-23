@@ -93,7 +93,7 @@ endfunction
 
 if filereadable(expand('<sfile>:r') . '.VIM')
   function! s:_unify_path(path)
-    return tolower(resolve(fnamemodify(a:path, ':p:gs?[\\/]\+?/?')))
+    return tolower(resolve(fnamemodify(a:path, ':p:8:gs?[\\/]\+?/?')))
   endfunction
 else
   function! s:_unify_path(path)
