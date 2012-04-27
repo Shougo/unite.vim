@@ -1286,6 +1286,8 @@ file_rec	Gather Files recursive. Nominates all directory or file names
 		Vim frozen when there are too many candidates. The candidates
 		is cached by file_rec source. If you clear cache, use
 		|<Plug>(unite_redraw)| keymapping.
+		If argument 1 is "!", use the project directory instead of
+		current directory.
 
 		Source arguments:
 		1. the search directory.
@@ -2207,6 +2209,8 @@ CHANGELOG					*unite-changelog*
 - Changed timer timing.
 - Use find or dir command instead of ls.
 - Detect errors in file_rec/async source.
+- Improved file_rec and file_rec/async sources features.
+- Changed g:unite_source_file_rec_min_cache_files behavior.
 
 2012-04-24
 - Updated vital.

@@ -51,7 +51,15 @@ let s:source_rec = {
       \ }
 
 function! s:source_rec.gather_candidates(args, context)"{{{
+  let a:context.source__directory = s:get_path(a:args, a:context)
+
   let directory = a:context.source__directory
+  if directory == ''
+    " Not in project directory.
+    call unite#print_message('[file_rec] Not in project directory.')
+    let a:context.is_async = 0
+    return []
+  endif
 
   call unite#print_message('[file_rec] directory: ' . directory)
 
@@ -63,6 +71,7 @@ function! s:source_rec.gather_candidates(args, context)"{{{
     " Disable async.
     call unite#print_message('[file_rec] Directory traverse was completed.')
     let a:context.is_async = 0
+    let continuation.end = 1
   endif
 
   return continuation.files
@@ -105,9 +114,6 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
   return candidates
 endfunction"}}}
 
-function! s:source_rec.hooks.on_init(args, context)"{{{
-  let a:context.source__directory = s:get_path(a:args, a:context)
-endfunction"}}}
 function! s:source_rec.hooks.on_pre_filter(args, context)"{{{
   call s:on_pre_filter(a:args, a:context)
 endfunction"}}}
@@ -229,7 +235,15 @@ let s:source_async = {
       \ }
 
 function! s:source_async.gather_candidates(args, context)"{{{
-  let directory = s:get_path(a:args, a:context)
+  let a:context.source__directory = s:get_path(a:args, a:context)
+
+  let directory = a:context.source__directory
+  if directory == ''
+    " Not in project directory.
+    call unite#print_message('[file_rec/async] Not in project directory.')
+    let a:context.is_async = 0
+    return []
+  endif
 
   call unite#print_message('[file_rec/async] directory: ' . directory)
 
@@ -237,13 +251,12 @@ function! s:source_async.gather_candidates(args, context)"{{{
 
   let continuation = s:continuation[directory]
 
-  let a:context.source__directory = directory
-
   if empty(continuation.rest) || continuation.end
     " Disable async.
     call unite#print_message(
           \ '[file_rec/async] Directory traverse was completed.')
     let a:context.is_async = 0
+    let continuation.end = 1
 
     return continuation.files
   endif
@@ -272,6 +285,15 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
 
   let continuation = s:continuation[a:context.source__directory]
 
+  let stdout = a:context.source__proc.stdout
+  if stdout.eof
+    " Disable async.
+    call unite#print_message(
+          \ '[file_rec] Directory traverse was completed.')
+    let a:context.is_async = 0
+    let continuation.end = 1
+  endif
+
   let is_relative_path =
         \ a:context.source__directory ==
         \   unite#util#substitute_path_separator(getcwd())
@@ -281,19 +303,13 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
     lcd `=a:context.source__directory`
   endif
 
-  let stdout = a:context.source__proc.stdout
-  if stdout.eof
-    " Disable async.
-    call unite#print_message('[file_rec] Directory traverse was completed.')
-    let a:context.is_async = 0
-    let continuation.end = 1
-  endif
-
   let candidates = []
-  for filename in map(stdout.read_lines(-1, 100),
-        \ "iconv(v:val, 'char', &encoding)")
-    if g:unite_source_file_rec_ignore_pattern == ''
-          \ || filename !~ g:unite_source_file_rec_ignore_pattern
+  for filename in map(filter(
+        \ stdout.read_lines(-1, 100), 'v:val != ""'),
+        \ "fnamemodify(iconv(v:val, 'char', &encoding), ':p')")
+    if filename !~ '^\s*$' &&
+          \ (g:unite_source_file_rec_ignore_pattern == ''
+          \ || filename !~ g:unite_source_file_rec_ignore_pattern)
       call add(candidates, {
             \ 'word' : unite#util#substitute_path_separator(
             \    fnamemodify(filename, ':.')),
@@ -375,10 +391,16 @@ unlet! s:cdable_action_rec_async
 
 " Misc.
 function! s:get_path(args, context)"{{{
-  let directory = get(a:args, 0, '')
+  let directory = get(
+        \ filter(copy(a:args), "v:val != '!'"), 0, '')
   if directory == ''
     let directory = isdirectory(a:context.input) ?
           \ a:context.input : getcwd()
+  endif
+
+  if get(a:args, 0, '') == '!'
+    " Use project directory.
+    return unite#util#path2project_directory(directory, 1)
   endif
 
   return unite#util#substitute_path_separator(
@@ -472,8 +494,6 @@ endfunction"}}}
 function! s:init_continuation(context, directory)"{{{
   if a:context.is_redraw
         \ || !has_key(s:continuation, a:directory)
-        \ || len(s:continuation[a:directory].files)
-        \      < g:unite_source_file_rec_min_cache_files
     let a:context.is_async = 1
 
     let s:continuation[a:directory] = {

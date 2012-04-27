@@ -268,7 +268,8 @@ endfunction"}}}
 function! s:path2directory(path)"{{{
   return s:substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
 endfunction"}}}
-function! s:path2project_directory(path)"{{{
+function! s:path2project_directory(path, ...)"{{{
+  let is_allow_empty = get(a:000, 0, 0)
   let search_directory = s:path2directory(a:path)
   let directory = ''
 
@@ -283,7 +284,8 @@ function! s:path2project_directory(path)"{{{
 
   " Search project file.
   if directory == ''
-    for d in ['build.xml', 'prj.el', '.project', 'pom.xml', 'Makefile', 'configure', 'Rakefile', 'NAnt.build', 'tags', 'gtags']
+    for d in ['build.xml', 'prj.el', '.project', 'pom.xml',
+          \ 'Makefile', 'configure', 'Rakefile', 'NAnt.build', 'tags', 'gtags']
       let d = findfile(d, s:escape_file_searching(search_directory) . ';')
       if d != ''
         let directory = fnamemodify(d, ':p:h')
@@ -300,7 +302,8 @@ function! s:path2project_directory(path)"{{{
     endif
   endif
 
-  if directory == ''
+  if directory == '' && !is_allow_empty
+    " Use original path.
     let directory = search_directory
   endif
 
