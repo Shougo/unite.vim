@@ -35,7 +35,9 @@ call unite#util#set_default('g:unite_source_file_rec_min_cache_files', 50)
 
 function! unite#sources#file_rec#define()"{{{
   return [ s:source_rec ]
-        \ + [ executable('ls') && unite#util#has_vimproc() ? s:source_async : {} ]
+        \ + [ (unite#util#is_windows() ?
+        \        executable('dir') : executable('find'))
+        \   && unite#util#has_vimproc() ? s:source_async : {} ]
 endfunction"}}}
 
 let s:continuation = {}
@@ -239,23 +241,35 @@ function! s:source_async.gather_candidates(args, context)"{{{
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
-    call unite#print_message('[file_rec/async] Directory traverse was completed.')
+    call unite#print_message(
+          \ '[file_rec/async] Directory traverse was completed.')
     let a:context.is_async = 0
 
     return continuation.files
   endif
 
-  let a:context.source__proc = vimproc#pgroup_open('ls -R1 -a '
-        \ . escape(directory, ' '))
+  let cmdline = unite#util#is_windows() ?
+        \ 'dir ''%s'' /-n /b /s /a-d' : 'find ''%s'' -type f'
+  let a:context.source__proc = vimproc#pgroup_open(
+        \ printf(cmdline, directory))
 
   " Close handles.
   call a:context.source__proc.stdin.close()
-  call a:context.source__proc.stderr.close()
 
   return []
 endfunction"}}}
 
 function! s:source_async.async_gather_candidates(args, context)"{{{
+  let stderr = a:context.source__proc.stderr
+  if !stderr.eof
+    " Print error.
+    let errors = filter(stderr.read_lines(-1, 100),
+          \ "v:val !~ '^\\s*$'")
+    if !empty(errors)
+      call unite#print_error(map(errors, "'[file_rec] '.v:val"))
+    endif
+  endif
+
   let continuation = s:continuation[a:context.source__directory]
 
   let is_relative_path =
@@ -276,25 +290,15 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
   endif
 
   let candidates = []
-  for line in map(stdout.read_lines(-1, 100),
+  for filename in map(stdout.read_lines(-1, 100),
         \ "iconv(v:val, 'char', &encoding)")
-    if line =~ ':$'
-      " Directory name.
-      let continuation.directory = line[: -2]
-      if continuation.directory !~ '/$'
-        let continuation.directory .= '/'
-      endif
-    elseif line != ''
-      let filename = continuation.directory.line
-      if !isdirectory(filename)
-            \ && (g:unite_source_file_rec_ignore_pattern == ''
-            \ || filename !~ g:unite_source_file_rec_ignore_pattern)
-        call add(candidates, {
-              \ 'word' : unite#util#substitute_path_separator(
-              \    fnamemodify(filename, ':.')),
-              \ 'action__path' : filename,
-              \ })
-      endif
+    if g:unite_source_file_rec_ignore_pattern == ''
+          \ || filename !~ g:unite_source_file_rec_ignore_pattern
+      call add(candidates, {
+            \ 'word' : unite#util#substitute_path_separator(
+            \    fnamemodify(filename, ':.')),
+            \ 'action__path' : filename,
+            \ })
     endif
   endfor
 
