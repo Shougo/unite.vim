@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 22 Apr 2012.
+" Last Modified: 27 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -177,7 +177,8 @@ function! s:source.async_gather_candidates(args, context) "{{{
   let stderr = a:context.source__proc.stderr
   if !stderr.eof
     " Print error.
-    let errors = filter(stderr.read_lines(-1, 300), "v:val !~ '^\\s*$'")
+    let errors = filter(stderr.read_lines(-1, 100),
+          \ "v:val !~ '^\\s*$'")
     if !empty(errors)
       call unite#print_error(map(errors, "'[grep] '.v:val"))
     endif
@@ -190,7 +191,8 @@ function! s:source.async_gather_candidates(args, context) "{{{
     let a:context.is_async = 0
   endif
 
-  let candidates = map(filter(map(stdout.read_lines(-1, 300),
+  let candidates = map(filter(
+        \ map(stdout.read_lines(-1, 100),
         \ "iconv(v:val, 'char', &encoding)"),
     \  'v:val =~ "^.\\+:.\\+:.\\+$"'),
     \ '[v:val, split(v:val[2:], ":")]')
