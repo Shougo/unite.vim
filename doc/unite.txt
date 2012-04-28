@@ -1297,6 +1297,8 @@ file_rec	Gather Files recursive. Nominates all directory or file names
 file_rec/async	Same as |unite-source-file_rec|. But get files by asynchronously.
 		
 		Note: This source requires vimproc.
+		Note: Windows "find" command is not supported.
+		Please install UNIX Tools find for Windows.
 		
 		Source arguments:
 		1. the search directory.
@@ -2208,6 +2210,7 @@ CHANGELOG					*unite-changelog*
 
 2012-04-28
 - Updated vital.
+- Improved detect find command.
 
 2012-04-27
 - Changed timer timing.

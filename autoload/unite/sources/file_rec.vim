@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Apr 2012.
+" Last Modified: 28 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,8 +40,7 @@ let s:Cache = vital#of('unite.vim').import('System.Cache')
 
 function! unite#sources#file_rec#define()"{{{
   return [ s:source_rec ]
-        \ + [ (unite#util#is_windows() ?
-        \        executable('dir') : executable('find'))
+        \ + [ executable('find')
         \   && unite#util#has_vimproc() ? s:source_async : {} ]
 endfunction"}}}
 
@@ -56,6 +55,13 @@ let s:source_rec = {
       \ }
 
 function! s:source_rec.gather_candidates(args, context)"{{{
+  if unite#util#is_windows() &&
+        \ vimproc#get_command_name('find') =~? '/Windows/system.*/find\.exe$'
+    call unite#print_message('[file_rec] Detected windows find command.')
+    let a:context.is_async = 0
+    return []
+  endif
+
   let a:context.source__directory = s:get_path(a:args, a:context)
 
   let directory = a:context.source__directory
@@ -278,10 +284,8 @@ function! s:source_async.gather_candidates(args, context)"{{{
     return continuation.files
   endif
 
-  let cmdline = unite#util#is_windows() ?
-        \ 'dir ''%s'' /-n /b /s /a-d' : 'find ''%s'' -type f'
   let a:context.source__proc = vimproc#pgroup_open(
-        \ printf(cmdline, directory))
+        \ printf('find ''%s'' -type f', directory))
 
   " Close handles.
   call a:context.source__proc.stdin.close()

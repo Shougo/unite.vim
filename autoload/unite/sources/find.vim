@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: find.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 27 Apr 2012.
+" Last Modified: 28 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -82,8 +82,15 @@ endfunction "}}}
 function! s:source.gather_candidates(args, context) "{{{
   if empty(a:context.source__target)
         \ || a:context.source__input == ''
-    let a:context.is_async = 0
     call unite#print_message('[find] Completed.')
+    let a:context.is_async = 0
+    return []
+  endif
+
+  if unite#util#is_windows() &&
+        \ vimproc#get_command_name('find') =~? '/Windows/system.*/find\.exe$'
+    call unite#print_message('[find] Detected windows find command.')
+    let a:context.is_async = 0
     return []
   endif
 
