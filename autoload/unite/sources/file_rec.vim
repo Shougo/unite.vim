@@ -28,10 +28,15 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Variables  "{{{
-call unite#util#set_default('g:unite_source_file_rec_ignore_pattern',
-      \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)')
-call unite#util#set_default('g:unite_source_file_rec_min_cache_files', 50)
+call unite#util#set_default(
+      \ 'g:unite_source_file_rec_ignore_pattern',
+      \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$'.
+      \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)')
+call unite#util#set_default(
+      \ 'g:unite_source_file_rec_min_cache_files', 100)
 "}}}
+
+let s:Cache = vital#of('unite.vim').import('System.Cache')
 
 function! unite#sources#file_rec#define()"{{{
   return [ s:source_rec ]
@@ -80,10 +85,12 @@ endfunction"}}}
 function! s:source_rec.async_gather_candidates(args, context)"{{{
   let continuation = s:continuation[a:context.source__directory]
 
-  let [continuation.rest, files] = s:get_files(continuation.rest, 1, 20)
+  let [continuation.rest, files] =
+        \ s:get_files(continuation.rest, 1, 20)
 
   if empty(continuation.rest)
-    call unite#print_message('[file_rec] Directory traverse was completed.')
+    call unite#print_message(
+          \ '[file_rec] Directory traverse was completed.')
 
     " Disable async.
     let a:context.is_async = 0
@@ -110,6 +117,15 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
   endif
 
   let continuation.files += candidates
+  if empty(continuation.rest)
+        \ && g:unite_source_file_rec_min_cache_files > 0
+        \ && len(continuation.files) >
+        \ g:unite_source_file_rec_min_cache_files
+    let cache_dir = g:unite_data_directory . '/file_rec'
+
+    call s:Cache.writefile(cache_dir, a:context.source__directory,
+          \ map(copy(continuation.files), 'v:val.action__path'))
+  endif
 
   return candidates
 endfunction"}}}
@@ -240,7 +256,8 @@ function! s:source_async.gather_candidates(args, context)"{{{
   let directory = a:context.source__directory
   if directory == ''
     " Not in project directory.
-    call unite#print_message('[file_rec/async] Not in project directory.')
+    call unite#print_message(
+          \ '[file_rec/async] Not in project directory.')
     let a:context.is_async = 0
     return []
   endif
@@ -307,8 +324,7 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
   for filename in map(filter(
         \ stdout.read_lines(-1, 100), 'v:val != ""'),
         \ "fnamemodify(iconv(v:val, 'char', &encoding), ':p')")
-    if filename !~ '^\s*$' &&
-          \ (g:unite_source_file_rec_ignore_pattern == ''
+    if (g:unite_source_file_rec_ignore_pattern == ''
           \ || filename !~ g:unite_source_file_rec_ignore_pattern)
       call add(candidates, {
             \ 'word' : unite#util#substitute_path_separator(
@@ -323,6 +339,15 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
   endif
 
   let continuation.files += candidates
+  if stdout.eof
+        \ && g:unite_source_file_rec_min_cache_files > 0
+        \ && len(continuation.files) >
+        \ g:unite_source_file_rec_min_cache_files
+    let cache_dir = g:unite_data_directory . '/file_rec'
+
+    call s:Cache.writefile(cache_dir, a:context.source__directory,
+          \ map(copy(continuation.files), 'v:val.action__path'))
+  endif
 
   return candidates
 endfunction"}}}
@@ -492,6 +517,37 @@ function! s:on_pre_filter(args, context)"{{{
         \ 'matcher_hide_hidden_files', a:context.candidates, a:context)
 endfunction"}}}
 function! s:init_continuation(context, directory)"{{{
+  let cache_dir = g:unite_data_directory . '/file_rec'
+  if !has_key(s:continuation, a:directory)
+        \ && s:Cache.filereadable(cache_dir, a:directory)
+    " Use cache file.
+
+    let is_relative_path =
+          \ a:context.source__directory ==
+          \   unite#util#substitute_path_separator(getcwd())
+
+    if !is_relative_path
+      let cwd = getcwd()
+      lcd `=a:context.source__directory`
+    endif
+
+    let files = map(s:Cache.readfile(cache_dir, a:directory), "{
+          \ 'word' : unite#util#substitute_path_separator(
+          \    fnamemodify(v:val, ':.')),
+          \ 'action__path' : v:val,
+          \ }")
+
+    let s:continuation[a:directory] = {
+          \ 'files' : files,
+          \ 'rest' : [],
+          \ 'directory' : a:directory, 'end' : 1,
+          \ }
+
+    if !is_relative_path
+      lcd `=cwd`
+    endif
+  endif
+
   if a:context.is_redraw
         \ || !has_key(s:continuation, a:directory)
     let a:context.is_async = 1
