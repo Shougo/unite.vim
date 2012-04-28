@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2012.
+" Last Modified: 28 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1351,11 +1351,9 @@ function! s:load_default_scripts()"{{{
   let s:static.filters = {}
 
   for key in ['sources', 'kinds', 'filters']
-    for name in map(split(globpath(&runtimepath,
+    for define in map(split(globpath(&runtimepath,
           \ 'autoload/unite/' . key . '/*.vim'), '\n'),
-          \ 'fnamemodify(v:val, ":t:r")')
-
-      let define = unite#{key}#{name}#define()
+          \ "unite#{key}#{fnamemodify(v:val, ':t:r')}#define()")
       for dict in (type(define) == type([]) ? define : [define])
         if !empty(dict) && !has_key(s:static[key], dict.name)
           let s:static[key][dict.name] = dict
@@ -1481,6 +1479,18 @@ function! s:initialize_sources(...)"{{{
     call s:load_default_scripts()
   endif
 
+  let default_source = {
+        \ 'is_volatile' : 0,
+        \ 'is_listed' : 1,
+        \ 'is_forced' : 0,
+        \ 'required_pattern_length' : 0,
+        \ 'action_table' : {},
+        \ 'default_action' : {},
+        \ 'alias_table' : {},
+        \ 'description' : '',
+        \ 'syntax' : '',
+        \ }
+
   let sources = get(a:000, 0,
         \ extend(copy(s:static.sources), s:dynamic.sources))
 
@@ -1493,9 +1503,7 @@ function! s:initialize_sources(...)"{{{
 
       if !has_key(source, 'hooks')
         let source.hooks = {}
-      endif
-
-      if has_key(source.hooks, 'on_pre_init')
+      elseif has_key(source.hooks, 'on_pre_init')
         " Call pre_init hook.
 
         " Set dummey value.
@@ -1506,22 +1514,9 @@ function! s:initialize_sources(...)"{{{
         call s:call_hook([source], 'on_pre_init')
       endif
 
-      if !has_key(source, 'is_volatile')
-        let source.is_volatile = 0
-      endif
-      if !has_key(source, 'is_listed')
-        let source.is_listed = 1
-      endif
-      if !has_key(source, 'is_forced')
-        let source.is_forced = 0
-      endif
-      if !has_key(source, 'required_pattern_length')
-        let source.required_pattern_length = 0
-      endif
+      let source = extend(source, default_source, 'keep')
 
-      if !has_key(source, 'action_table')
-        let source.action_table = {}
-      elseif !empty(source.action_table)
+      if !empty(source.action_table)
         let action = values(source.action_table)[0]
 
         " Check if '*' action_table?
@@ -1532,27 +1527,17 @@ function! s:initialize_sources(...)"{{{
         endif
       endif
 
-      if !has_key(source, 'default_action')
-        let source.default_action = {}
-      elseif type(source.default_action) == type('')
+      if type(source.default_action) == type('')
         " Syntax sugar.
         let source.default_action = { '*' : source.default_action }
       endif
 
-      if !has_key(source, 'alias_table')
-        let source.alias_table = {}
-      elseif !empty(source.alias_table)
+      if !empty(source.alias_table)
         " Check if '*' alias_table?
         if type(values(source.alias_table)[0]) == type('')
           " Syntax sugar.
           let source.alias_table = { '*' : source.alias_table }
         endif
-      endif
-      if !has_key(source, 'description')
-        let source.description = ''
-      endif
-      if !has_key(source, 'syntax')
-        let source.syntax = ''
       endif
       if source.is_volatile
             \ && !has_key(source, 'change_candidates')
@@ -1575,8 +1560,10 @@ function! s:initialize_sources(...)"{{{
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
-      call unite#print_error('[unite.vim] Error occured in source initialization!')
-      call unite#print_error('[unite.vim] Source name is ' . source.name)
+      call unite#print_error(
+            \ '[unite.vim] Error occured in source initialization!')
+      call unite#print_error(
+            \ '[unite.vim] Source name is ' . source.name)
     endtry
   endfor
 
@@ -1584,7 +1571,8 @@ function! s:initialize_sources(...)"{{{
 endfunction"}}}
 function! s:initialize_kinds()"{{{
   let kinds = extend(copy(s:static.kinds), s:dynamic.kinds)
-  for kind in values(filter(copy(kinds), '!has_key(v:val, "is_initialized")'))
+  for kind in values(filter(copy(kinds),
+        \ '!has_key(v:val, "is_initialized")'))
     let kind.is_initialized = 1
     if !has_key(kind, 'action_table')
       let kind.action_table = {}
@@ -1633,29 +1621,23 @@ function! s:initialize_candidates(candidates, source_name)"{{{
   let [max_width, max_source_name] =
         \ s:adjustments(winwidth-5, unite.max_source_name, 2)
 
+  let default_candidate = {
+        \ 'kind' : 'common',
+        \ 'is_dummy' : 0,
+        \ 'is_matched' : 1,
+        \ 'is_multiline' : 0,
+        \ 'unite__is_marked' : 0,
+        \ }
+
   let candidates = []
   for candidate in a:candidates
-    let candidate = deepcopy(candidate)
-    if !has_key(candidate, 'abbr')
-      let candidate.abbr = candidate.word
-    endif
-    if !has_key(candidate, 'kind')
-      let candidate.kind = 'common'
-    endif
-    if !has_key(candidate, 'is_dummy')
-      let candidate.is_dummy = 0
-    endif
-    if !has_key(candidate, 'is_matched')
-      let candidate.is_matched = 1
-    endif
-    if !has_key(candidate, 'unite__is_marked')
-      let candidate.unite__is_marked = 0
-    endif
-
+    let candidate = extend(deepcopy(candidate), default_candidate, 'keep')
     " Force set.
     let candidate.source = a:source_name
 
-    let candidate.is_multiline = get(candidate, 'is_multiline', 0)
+    if !has_key(candidate, 'abbr')
+      let candidate.abbr = candidate.word
+    endif
 
     " Delete too long abbr.
     if candidate.is_multiline
@@ -1665,8 +1647,10 @@ function! s:initialize_candidates(candidates, source_name)"{{{
     endif
 
     " Substitute tab.
-    let candidate.abbr = substitute(candidate.abbr, '\t',
-          \ repeat(' ', &tabstop), 'g')
+    if candidate.abbr =~ '\t'
+      let candidate.abbr = substitute(candidate.abbr, '\t',
+            \ repeat(' ', &tabstop), 'g')
+    endif
 
     if !candidate.is_multiline
       let candidate.abbr = '  ' . candidate.abbr
