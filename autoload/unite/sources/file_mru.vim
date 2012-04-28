@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Mar 2012.
+" Last Modified: 28 Apr 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -112,6 +112,10 @@ function! s:source.hooks.on_post_filter(args, context)"{{{
     " Set default abbr.
     let mru.abbr = (g:unite_source_file_mru_time_format == '' ? '' :
           \ strftime(g:unite_source_file_mru_time_format, mru.source__time)) .path
+    let mru.action__directory =
+          \ unite#util#path2directory(mru.action__path)
+    let mru.kind =
+          \ (isdirectory(mru.action__path) ? 'directory' : 'file')
   endfor
 endfunction"}}}
 
@@ -175,13 +179,8 @@ function! s:is_exists_path(path)  "{{{
         \ (getftype(a:path) != '' && !isdirectory(a:path))
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
-  return {
-        \ 'word' : a:list[0],
-        \ 'kind' : (isdirectory(a:list[0]) ? 'directory' : 'file'),
-        \ 'source__time' : a:list[1],
-        \ 'action__path' : a:list[0],
-        \ 'action__directory' : unite#util#path2directory(a:list[0]),
-        \   }
+  return { 'word' : a:list[0], 'source__time' : a:list[1],
+        \ 'action__path' : a:list[0], }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{
   return [ a:dict.action__path, a:dict.source__time ]
