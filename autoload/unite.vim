@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Apr 2012.
+" Last Modified: 02 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -268,7 +268,8 @@ let s:unite_options = [
       \ '-vertical', '-horizontal', '-direction=', '-no-split',
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
       \ '-cursor-line-highlight=', '-no-cursor-line',
-      \ '-update-time=', '-hide-source-names'
+      \ '-update-time=', '-hide-source-names',
+      \ '-max-multi-lines=',
       \]
 "}}}
 
@@ -1396,6 +1397,7 @@ function! s:initialize_context(context)"{{{
         \ 'is_interactive' : 1,
         \ 'is_vimfiler' : 0,
         \ 'hide_source_names' : 0,
+        \ 'max_multi_lines' : 5,
         \ }
 
   let context = extend(default_context, a:context)
@@ -1616,6 +1618,7 @@ function! s:initialize_profile(profile_name)"{{{
 endfunction"}}}
 function! s:initialize_candidates(candidates, source_name)"{{{
   let unite = unite#get_current_unite()
+  let context = unite.context
   let winwidth = unite.context.vertical ?
         \ unite.context.winwidth : &columns
   let [max_width, max_source_name] =
@@ -1641,7 +1644,8 @@ function! s:initialize_candidates(candidates, source_name)"{{{
 
     " Delete too long abbr.
     if candidate.is_multiline
-      let candidate.abbr = candidate.abbr[: max_width * 8+10]
+      let candidate.abbr =
+            \ candidate.abbr[: max_width * (context.max_multi_lines + 1)+10]
     elseif len(candidate.abbr) > max_width * 2
       let candidate.abbr = candidate.abbr[: max_width * 2]
     endif
@@ -1682,7 +1686,8 @@ function! s:initialize_candidates(candidates, source_name)"{{{
 
     " Convert multi line.
     let cnt = 0
-    for multi in split(candidate.abbr, '\r\?\n', 1)[:4]
+    for multi in split(
+          \ candidate.abbr, '\r\?\n', 1)[: context.max_multi_lines-1]
       let candidate_multi = deepcopy(candidate)
       let candidate_multi.abbr =
             \ (cnt == 0 ? '+ ' : '| ') . multi

@@ -305,6 +305,11 @@ COMMANDS 					*unite-commands*
 		Hide source names.
 		Note: This option hide unite status line.
 
+						*unite-options-max-multi-lines*
+		-max-multi-lines={max-lines}
+		Specifies the max lines in multi lines candidates. If this
+		option is ommit, "5" is used.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
@@ -2207,6 +2212,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-05-02
+- Added -max-multi-lines option.
 
 2012-04-28
 - Updated vital.

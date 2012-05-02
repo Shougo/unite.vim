@@ -296,6 +296,11 @@ http://www.ustream.tv/recorded/11240673
 		Note: このオプションはuniteのステータスラインを表示しないように
 		する。
 
+						*unite-options-max-multi-lines*
+		-max-multi-lines={max-lines}
+		複数行の候補の最大行数を指定する。このオプションが省略されたと
+		き、"5"が使用される。
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		初期の絞込みテキストが現在のディレクトリである他は|:Unite|と同
 		一である。
