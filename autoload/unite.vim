@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 May 2012.
+" Last Modified: 03 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -179,11 +179,8 @@ function! unite#start_complete(sources, ...) "{{{
         \ 'col' : col('.'), 'complete' : 1,
         \ 'direction' : 'rightbelow',
         \ 'buffer_name' : 'completion',
+        \ 'here' : 1,
         \ }
-  let context.winheight = winheight(0) - winline() + 2
-  if context.winheight < 7
-    let context.winheight = 7
-  endif
   call extend(context, get(a:000, 0, {}))
 
   return printf("\<ESC>:call unite#start(%s, %s)\<CR>",
@@ -269,7 +266,7 @@ let s:unite_options = [
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
       \ '-cursor-line-highlight=', '-no-cursor-line',
       \ '-update-time=', '-hide-source-names',
-      \ '-max-multi-lines=',
+      \ '-max-multi-lines=', '-here',
       \]
 "}}}
 
@@ -1398,6 +1395,7 @@ function! s:initialize_context(context)"{{{
         \ 'is_vimfiler' : 0,
         \ 'hide_source_names' : 0,
         \ 'max_multi_lines' : 5,
+        \ 'here' : 0,
         \ }
 
   let context = extend(default_context, a:context)
@@ -1422,6 +1420,12 @@ function! s:initialize_context(context)"{{{
   if context.immediately
     " Ignore empty unite buffer.
     let context.no_empty = 1
+  endif
+  if context.here
+    let context.winheight = winheight(0) - winline() + 2
+    if context.winheight < 7
+      let context.winheight = 7
+    endif
   endif
   let context.is_changed = 0
 

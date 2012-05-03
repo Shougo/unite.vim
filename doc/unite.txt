@@ -310,6 +310,12 @@ COMMANDS 					*unite-commands*
 		Specifies the max lines in multi lines candidates. If this
 		option is ommit, "5" is used.
 
+						*unite-options-here*
+		-here
+		Open unite buffer here.
+		Note: This option is disabled if "-vertical" or "-no-split"
+		option is on.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that the initial narrowing text
 		is the current directory.
@@ -2213,9 +2219,12 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-05-03
+- Improved check command line window.
+- Added -here option.
+
 2012-05-02
 - Added -max-multi-lines option.
-- Improved check command line window.
 
 2012-04-28
 - Updated vital.
