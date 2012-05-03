@@ -1622,7 +1622,8 @@ source		unite.vim source
 uri		Files and protocols
 
 			action__path		(String)	(Required)
-				The file path
+				The file uri
+				If omitted it, "action__path" is used.
 
 						*unite-kind-guicmd*
 guicmd		GUI executable commands
@@ -2224,6 +2225,8 @@ CHANGELOG					*unite-changelog*
 - Added -here option.
 - Added unite#print_source_message() api.
 - Added unite#print_source_error() api.
+- Changed uri kind behavior.
+- Added unite-source-attribute-parents.
 
 2012-05-02
 - Added -max-multi-lines option.

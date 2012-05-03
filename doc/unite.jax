@@ -1636,8 +1636,9 @@ source		unite.vimのsource
 						*unite-kind-uri*
 uri		ファイルやhttpといったプロトコル
 
-			action__path		(文字列)		(必須)
-				ファイルのパス
+			action__uri		(文字列)		(必須)
+				ファイルのパス。省略された場合、"action__path"
+				が代わりに使用される。
 
 						*unite-kind-guicmd*
 guicmd		GUI実行ファイル
@@ -2177,6 +2178,12 @@ filters			リスト		(任意)
 			そのsourceが使用するfilterのリスト。filterの仕様は、
 			|unite-filter-attributes|を参照せよ。これが省略されると
 			|unite-filter-default|が使用される。
+
+						*unite-source-attribute-parents*
+parents			リスト		(任意)
+			source内の候補が継承するkindの名前のリストを指定
+			する。|unite-kind-attribute-parents|よりも優先度
+			が高い。省略すると[]になる。
 
 						*unite-source-attribute-source__*
 source__		不定		(任意)

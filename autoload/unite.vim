@@ -410,6 +410,11 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
   endif
 
   " Parents actions.
+  for parent in source.parents
+    let parent_kind = unite#get_kinds(parent)
+    let action_table = s:extend_actions(a:self_func, action_table,
+          \ parent_kind.action_table, parent)
+  endfor
   for parent in kind.parents
     let action_table = s:extend_actions(a:self_func, action_table,
           \ unite#get_action_table(a:source_name, parent,
@@ -1502,6 +1507,7 @@ function! s:initialize_sources(...)"{{{
         \ 'action_table' : {},
         \ 'default_action' : {},
         \ 'alias_table' : {},
+        \ 'parents' : [],
         \ 'description' : '',
         \ 'syntax' : '',
         \ }

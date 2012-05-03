@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: uri.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Mar 2012.
+" Last Modified: 03 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,7 +46,8 @@ let s:kind.action_table.start = {
       \ }
 function! s:kind.action_table.start.func(candidates)"{{{
   for candidate in a:candidates
-    let path = candidate.action__path
+    let path = get(candidate, 'action__uri',
+          \ candidate.action__path)
     if unite#util#is_windows() && path =~ '^//'
       " substitute separator for UNC.
       let path = substitute(path, '/', '\\', 'g')
