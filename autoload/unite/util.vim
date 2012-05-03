@@ -150,11 +150,10 @@ function! unite#util#alternate_buffer()"{{{
   endif
 endfunction"}}}
 function! unite#util#is_cmdwin()"{{{
-  try
-    noautocmd wincmd p
-  catch /^Vim\%((\a\+)\)\=:E11:/
+  silent! verbose noautocmd wincmd p
+  if v:errmsg =~ '^E11:'
     return 1
-  endtry
+  endif
 
   silent! noautocmd wincmd p
   call unite#_resize_window()

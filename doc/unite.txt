@@ -2215,6 +2215,7 @@ CHANGELOG					*unite-changelog*
 
 2012-05-02
 - Added -max-multi-lines option.
+- Improved check command line window.
 
 2012-04-28
 - Updated vital.
