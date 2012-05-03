@@ -783,12 +783,21 @@ function! unite#print_error(message)"{{{
     echohl WarningMsg | echomsg mes | echohl None
   endfor
 endfunction"}}}
+function! unite#print_source_error(message, source_name)"{{{
+  let message = type(a:message) == type([]) ?
+        \ a:message : [a:message]
+  call unite#print_error(map(copy(message),
+        \ "printf('[%s] %s', a:source_name, v:val)")
+endfunction"}}}
 function! unite#print_message(message)"{{{
   if &filetype ==# 'unite' && !s:use_current_unite
     call s:print_buffer(a:message)
   else
     call add(s:unite_cached_message, a:message)
   endif
+endfunction"}}}
+function! unite#print_source_message(message, source_name)"{{{
+  call unite#print_message(printf('[%s] %s', a:source_name, a:message))
 endfunction"}}}
 function! unite#clear_message()"{{{
   if &filetype ==# 'unite'

@@ -2222,6 +2222,8 @@ CHANGELOG					*unite-changelog*
 2012-05-03
 - Improved check command line window.
 - Added -here option.
+- Added unite#print_source_message() api.
+- Added unite#print_source_error() api.
 
 2012-05-02
 - Added -max-multi-lines option.

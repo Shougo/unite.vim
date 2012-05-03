@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: process.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2012.
+" Last Modified: 03 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -55,7 +55,7 @@ function! s:source.gather_candidates(args, context)"{{{
 
   if unite#util#is_windows()
     " Use tasklist.
-    call unite#print_message('[process] ' . result[1])
+    call unite#print_source_message(result[1], s:source.name)
     for line in result[3:]
       let process = split(line)
       if len(process) < 5
@@ -70,7 +70,7 @@ function! s:source.gather_candidates(args, context)"{{{
             \})
     endfor
   else
-    call unite#print_message('[process] ' . result[0])
+    call unite#print_source_message(result[0], s:source.name)
     for line in result[1:]
       let process = split(line)
       if len(process) < 2

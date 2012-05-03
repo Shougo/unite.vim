@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 16 Mar 2012.
+" Last Modified: 03 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,7 +47,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     let a:context.source__bufnr = bufnr('%')
     let a:context.source__linenr = line('.')
 
-    call unite#print_message('[line] Target: ' . a:context.source__path)
+    call unite#print_source_message('Target: ' . a:context.source__path, s:source.name)
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) "{{{
     call s:hl_refresh(a:context)
@@ -79,7 +79,7 @@ function! s:source.gather_candidates(args, context)
     endif
 
     if direction !=# 'all'
-        call unite#print_message('[line] direction: ' . direction)
+        call unite#print_source_message('direction: ' . direction, s:source.name)
     endif
 
     let lines = (direction ==# 'forward' || direction ==# 'backward') ?

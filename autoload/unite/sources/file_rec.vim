@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Apr 2012.
+" Last Modified: 03 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -55,24 +55,19 @@ let s:source_rec = {
       \ }
 
 function! s:source_rec.gather_candidates(args, context)"{{{
-  if unite#util#is_windows() &&
-        \ vimproc#get_command_name('find') =~? '/Windows/system.*/find\.exe$'
-    call unite#print_message('[file_rec] Detected windows find command.')
-    let a:context.is_async = 0
-    return []
-  endif
-
   let a:context.source__directory = s:get_path(a:args, a:context)
 
   let directory = a:context.source__directory
   if directory == ''
     " Not in project directory.
-    call unite#print_message('[file_rec] Not in project directory.')
+    call unite#print_source_message(
+          \ 'Not in project directory.', s:source_rec.name)
     let a:context.is_async = 0
     return []
   endif
 
-  call unite#print_message('[file_rec] directory: ' . directory)
+  call unite#print_source_message(
+        \ 'directory: ' . directory, s:source_rec.name)
 
   call s:init_continuation(a:context, directory)
 
@@ -80,7 +75,8 @@ function! s:source_rec.gather_candidates(args, context)"{{{
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
-    call unite#print_message('[file_rec] Directory traverse was completed.')
+    call unite#print_source_message(
+          \ 'Directory traverse was completed.', s:source_rec.name)
     let a:context.is_async = 0
     let continuation.end = 1
   endif
@@ -95,8 +91,8 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
         \ s:get_files(continuation.rest, 1, 20)
 
   if empty(continuation.rest)
-    call unite#print_message(
-          \ '[file_rec] Directory traverse was completed.')
+    call unite#print_source_message(
+          \ 'Directory traverse was completed.', s:source_rec.name)
 
     " Disable async.
     let a:context.is_async = 0
@@ -262,13 +258,14 @@ function! s:source_async.gather_candidates(args, context)"{{{
   let directory = a:context.source__directory
   if directory == ''
     " Not in project directory.
-    call unite#print_message(
-          \ '[file_rec/async] Not in project directory.')
+    call unite#print_source_message(
+          \ 'Not in project directory.', s:source_async.name)
     let a:context.is_async = 0
     return []
   endif
 
-  call unite#print_message('[file_rec/async] directory: ' . directory)
+  call unite#print_source_message(
+        \ 'directory: ' . directory, s:source_async.name)
 
   call s:init_continuation(a:context, directory)
 
@@ -276,8 +273,8 @@ function! s:source_async.gather_candidates(args, context)"{{{
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
-    call unite#print_message(
-          \ '[file_rec/async] Directory traverse was completed.')
+    call unite#print_source_message(
+          \ 'Directory traverse was completed.', s:source_async.name)
     let a:context.is_async = 0
     let continuation.end = 1
 
@@ -300,7 +297,7 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
     let errors = filter(stderr.read_lines(-1, 100),
           \ "v:val !~ '^\\s*$'")
     if !empty(errors)
-      call unite#print_error(map(errors, "'[file_rec] '.v:val"))
+      call unite#print_source_error(errors, s:source_async.name)
     endif
   endif
 
@@ -309,8 +306,8 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
   let stdout = a:context.source__proc.stdout
   if stdout.eof
     " Disable async.
-    call unite#print_message(
-          \ '[file_rec] Directory traverse was completed.')
+    call unite#print_source_message(
+          \ 'Directory traverse was completed.', s:source_async.name)
     let a:context.is_async = 0
     let continuation.end = 1
   endif
