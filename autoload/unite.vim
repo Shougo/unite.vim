@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 May 2012.
+" Last Modified: 04 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -266,7 +266,7 @@ let s:unite_options = [
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
       \ '-cursor-line-highlight=', '-no-cursor-line',
       \ '-update-time=', '-hide-source-names',
-      \ '-max-multi-lines=', '-here',
+      \ '-max-multi-lines=', '-here', '-silent',
       \]
 "}}}
 
@@ -795,6 +795,11 @@ function! unite#print_source_error(message, source_name)"{{{
         \ "printf('[%s] %s', a:source_name, v:val)")
 endfunction"}}}
 function! unite#print_message(message)"{{{
+  let context = unite#get_context()
+  if context.silent
+    return
+  endif
+
   if &filetype ==# 'unite' && !s:use_current_unite
     call s:print_buffer(a:message)
   else
@@ -1410,6 +1415,7 @@ function! s:initialize_context(context)"{{{
         \ 'hide_source_names' : 0,
         \ 'max_multi_lines' : 5,
         \ 'here' : 0,
+        \ 'silent' : 0,
         \ }
 
   let context = extend(default_context, a:context)
