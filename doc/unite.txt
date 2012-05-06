@@ -2224,6 +2224,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-05-06
+- Improved unite#get_context() implementation.
+
 2012-05-04
 - Added -silent option.
 
