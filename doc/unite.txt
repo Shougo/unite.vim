@@ -1,6 +1,6 @@
 *unite.txt*	Ultimate interface to unite all sources
 
-Version: 3.1
+Version: 4.0
 Author : Shougo <Shougo.Matsu@gmail.com>
 Documentation Author: ujihisa <ujihisa at gmail com>
 License: MIT license  {{{
@@ -2223,6 +2223,12 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-05-06
+- Ver.4.0 development is started.
+
+------------------------------------------------------------------------------
+ChangeLog unite.vim Ver.3.1:
 
 2012-05-06
 - Improved unite#get_context() implementation.
