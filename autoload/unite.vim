@@ -2197,7 +2197,7 @@ function! s:initialize_unite_buffer()"{{{
   else
     syntax match uniteCandidateSourceName /^- / contained
   endif
-  let source_padding = 4
+  let source_padding = 5
 
   let unite.abbr_head = unite.max_source_name+source_padding
   execute 'syntax match uniteCandidateAbbr' '/\%'
