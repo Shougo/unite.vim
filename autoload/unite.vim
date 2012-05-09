@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 May 2012.
+" Last Modified: 09 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1661,7 +1661,7 @@ function! s:initialize_candidates(candidates, source_name)"{{{
 
   let candidates = []
   for candidate in a:candidates
-    let candidate = extend(deepcopy(candidate), default_candidate, 'keep')
+    let candidate = extend(candidate, default_candidate, 'keep')
     " Force set.
     let candidate.source = a:source_name
 

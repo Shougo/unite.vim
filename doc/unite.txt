@@ -2465,6 +2465,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-05-09
+- Fixed mark set bug.
+
 2012-05-06
 - Ver.4.0 development is started.
 - Merged English documentation(Thanks akiradeveloper!).
