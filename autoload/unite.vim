@@ -1381,7 +1381,7 @@ endfunction"}}}
 function! s:load_default_scripts(kind, names)"{{{
   for name in empty(a:names) ? [''] : a:names
     for define in map(split(globpath(&runtimepath,
-          \ 'autoload/unite/' . a:kind . '/' . name[0:0] . '*.vim'), '\n'),
+          \ 'autoload/unite/' . a:kind . '/' . name[:1] . '*.vim'), '\n'),
           \ "unite#{a:kind}#{fnamemodify(v:val, ':t:r')}#define()")
       for dict in (type(define) == type([]) ? define : [define])
         if !empty(dict) && !has_key(s:static[a:kind], dict.name)
@@ -1464,7 +1464,10 @@ function! s:initialize_context(context)"{{{
   return context
 endfunction"}}}
 function! s:initialize_loaded_sources(sources, context)"{{{
-  let all_sources = s:initialize_sources()
+  let source_names = map(map(copy(a:sources),
+        \ "type(v:val) == type([]) ? v:val[0] : v:val"),
+        \ "type(v:val) == type('') ? v:val : v:val.name")
+  let all_sources = s:initialize_sources(source_names)
   let sources = []
 
   let number = 0
@@ -1488,7 +1491,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
       let source = deepcopy(all_sources[source_name])
     else
       " Use source dictionary.
-      call s:initialize_sources([source])
+      call s:initialize_sources(source)
     endif
 
     let source.args = args
@@ -1512,8 +1515,14 @@ function! s:initialize_loaded_sources(sources, context)"{{{
   return sources
 endfunction"}}}
 function! s:initialize_sources(...)"{{{
+  " args: source_names or source_definition
+
   " Initialize load.
-  call s:initialize_default_scripts()
+  let source_names = type(get(a:000, 0, [])) == type([]) ?
+        \ get(a:000, 0, []) : []
+  call s:load_default_scripts('sources', source_names)
+  call s:load_default_scripts('kinds', [])
+  call s:load_default_scripts('filters', [])
 
   let default_source = {
         \ 'is_volatile' : 0,
@@ -1528,8 +1537,12 @@ function! s:initialize_sources(...)"{{{
         \ 'syntax' : '',
         \ }
 
-  let sources = get(a:000, 0,
-        \ extend(copy(s:static.sources), s:dynamic.sources))
+  let sources = {}
+  let sources = extend(sources, s:static.sources)
+  let sources = extend(sources, s:dynamic.sources)
+  if type(get(a:000, 0, [])) == type({})
+    let sources[a:1.name] = a:1
+  endif
 
   let filterd_sources = filter(copy(sources),
         \ '!has_key(v:val, "is_initialized")')

@@ -2479,6 +2479,7 @@ CHANGELOG					*unite-changelog*
 - Added directory and directory/new source.
 - Improved cdable actions.
 - Changed sources initialize behavior.
+- Improved source initialization.
 
 2012-05-09
 - Fixed mark set bug.
