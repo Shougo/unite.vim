@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Feb 2012.
+" Last Modified: 12 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,6 +42,10 @@ let s:kind.action_table.cd = {
       \ 'description' : 'change current directory',
       \ }
 function! s:kind.action_table.cd.func(candidate)"{{{
+  if !s:check_is_directory(a:candidate.action__directory)
+    return
+  endif
+
   if &filetype ==# 'vimfiler' || &filetype ==# 'vimshell'
     call s:external_cd(a:candidate)
   elseif a:candidate.action__directory != ''
@@ -53,6 +57,10 @@ let s:kind.action_table.lcd = {
       \ 'description' : 'change window local current directory',
       \ }
 function! s:kind.action_table.lcd.func(candidate)"{{{
+  if !s:check_is_directory(a:candidate.action__directory)
+    return
+  endif
+
   if &filetype ==# 'vimfiler' || &filetype ==# 'vimshell'
     call s:external_cd(a:candidate)
   elseif a:candidate.action__directory != ''
@@ -64,12 +72,17 @@ let s:kind.action_table.project_cd = {
       \ 'description' : 'change current directory to project directory',
       \ }
 function! s:kind.action_table.project_cd.func(candidate)"{{{
+  if !s:check_is_directory(a:candidate.action__directory)
+    return
+  endif
+
   if a:candidate.action__directory == ''
     " Ignore.
     return
   endif
 
-  let directory = unite#util#path2project_directory(a:candidate.action__directory)
+  let directory = unite#util#path2project_directory(
+        \ a:candidate.action__directory)
 
   if isdirectory(directory)
     let candidate = copy(a:candidate)
@@ -83,6 +96,10 @@ let s:kind.action_table.narrow = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.narrow.func(candidate)"{{{
+  if !s:check_is_directory(a:candidate.action__directory)
+    return
+  endif
+
   if a:candidate.word =~ '^\.\.\?/'
     let word = a:candidate.word
   else
@@ -101,6 +118,10 @@ if exists(':VimShell')
         \ 'description' : 'open vimshell buffer here',
         \ }
   function! s:kind.action_table.vimshell.func(candidate)"{{{
+    if !s:check_is_directory(a:candidate.action__directory)
+      return
+    endif
+
     execute 'VimShell' escape(a:candidate.action__directory, '\ ')
   endfunction"}}}
 endif
@@ -109,6 +130,10 @@ if exists(':VimShellTab')
         \ 'description' : 'tabopen vimshell buffer here',
         \ }
   function! s:kind.action_table.tabvimshell.func(candidate)"{{{
+    if !s:check_is_directory(a:candidate.action__directory)
+      return
+    endif
+
     execute 'VimShellTab' escape(a:candidate.action__directory, '\ ')
   endfunction"}}}
 endif
@@ -117,6 +142,10 @@ if exists(':VimFiler')
         \ 'description' : 'open vimfiler buffer here',
         \ }
   function! s:kind.action_table.vimfiler.func(candidate)"{{{
+    if !s:check_is_directory(a:candidate.action__directory)
+      return
+    endif
+
     execute 'VimFilerCreate' escape(a:candidate.action__directory, '\ ')
 
     if has_key(a:candidate, 'action__path')
@@ -132,6 +161,10 @@ if exists(':VimFilerTab')
         \ 'description' : 'tabopen vimfiler buffer here',
         \ }
   function! s:kind.action_table.tabvimfiler.func(candidate)"{{{
+    if !s:check_is_directory(a:candidate.action__directory)
+      return
+    endif
+
     execute 'VimFilerTab' escape(a:candidate.action__directory, '\ ')
 
     if has_key(a:candidate, 'action__path')
@@ -162,6 +195,22 @@ function! s:move_vimfiler_cursor(candidate)"{{{
     call vimfiler#mappings#search_cursor(a:candidate.action__path)
   endif
 endfunction"}}}
+
+function! s:check_is_directory(directory)
+  if !isdirectory(a:directory)
+    let yesno = input(printf(
+          \ 'Directory path "%s" is not exists. Create? : ', a:directory))
+    redraw
+    if yesno !~ '^y\%[es]$'
+      echo 'Canceled.'
+      return 0
+    endif
+
+    call mkdir(a:directory, 'p')
+  endif
+
+  return 1
+endfunction
 "}}}
 
 let &cpo = s:save_cpo

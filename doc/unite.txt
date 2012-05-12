@@ -1315,10 +1315,6 @@ file/new	Nominates an input new file as a candidate.
 file_mru	Nominates files you used recently as candidates, ordering
 		by time series.
 
-						*unite-source-directory_mru*
-directory_mru	Nominates directories you used recently as candidates,
-		ordering by time series.
-
 						*unite-source-file_rec*
 file_rec	Gather Files recursive. Nominates all directory or file names
 		under the search directory(argument 1) or the current
@@ -1341,6 +1337,19 @@ file_rec/async	Same as |unite-source-file_rec|. But get files by asynchronously.
 		
 		Source arguments:
 		1. the search directory.
+
+						*unite-source-directory*
+directory	Nominates an input directory as a candidate.
+		Note: This source doesn't nominates parent directory(Example:
+		"../") or hidden directories(Example: ".git"). If you want to
+		open this directories, please input ".".
+
+						*unite-source-directory/new*
+directory/new	Nominates an input new directory as a candidate.
+
+						*unite-source-directory_mru*
+directory_mru	Nominates directories you used recently as candidates,
+		ordering by time series.
 
 						*unite-source-buffer*
 buffer		Nominates opened buffers as candidates, ordering by time
@@ -2467,6 +2476,8 @@ CHANGELOG					*unite-changelog*
 
 2012-05-12
 - Improved file kind.
+- Added directory and directory/new source.
+- Improved cdable actions.
 
 2012-05-09
 - Fixed mark set bug.

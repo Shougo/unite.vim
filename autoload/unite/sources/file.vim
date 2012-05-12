@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Mar 2012.
+" Last Modified: 12 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -219,7 +219,7 @@ endfunction"}}}
 
 let s:source_file_new = {
       \ 'name' : 'file/new',
-      \ 'description' : 'candidates from input',
+      \ 'description' : 'file candidates from input',
       \ }
 
 function! s:source_file_new.change_candidates(args, context)"{{{
@@ -284,7 +284,8 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...)"{{{
         \ 'action__path' : a:file,
         \}
 
-  let dict.action__directory =
+  let dict.action__directory = (is_newfile == 2) ?
+        \ a:file :
         \ unite#util#path2directory(a:file)
 
   if a:is_relative_path
@@ -301,12 +302,17 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...)"{{{
     endif
 
     let dict.kind = 'directory'
-  else
-    if is_newfile && !filereadable(a:file)
+  elseif is_newfile
+    if is_newfile == 1
       " New file.
       let dict.abbr = '[new file]' . a:file
+      let dict.kind = 'file'
+    elseif is_newfile == 2
+      " New directory.
+      let dict.abbr = '[new directory]' . a:file
+      let dict.kind = 'directory'
     endif
-
+  else
     let dict.kind = 'file'
   endif
 
