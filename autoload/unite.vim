@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 May 2012.
+" Last Modified: 12 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -233,6 +233,9 @@ let s:unite_cached_message = []
 let s:use_current_unite = 1
 
 let s:static = {}
+let s:static.sources = {}
+let s:static.kinds = {}
+let s:static.filters = {}
 
 let s:dynamic = {}
 let s:dynamic.sources = {}
@@ -1363,19 +1366,26 @@ function! unite#resume_from_temporary(context)  "{{{
   let unite.prev_winnr = unite_save.prev_winnr
 endfunction"}}}
 
-function! s:load_default_scripts()"{{{
+function! s:initialize_default_scripts()"{{{
   " Gathering all sources and kind name.
-  let s:static.sources = {}
-  let s:static.kinds = {}
-  let s:static.filters = {}
-
-  for key in ['sources', 'kinds', 'filters']
+  if empty(s:static.sources)
+    call s:load_default_scripts('sources', [])
+  endif
+  if empty(s:static.kinds)
+    call s:load_default_scripts('kinds', [])
+  endif
+  if empty(s:static.filters)
+    call s:load_default_scripts('filters', [])
+  endif
+endfunction"}}}
+function! s:load_default_scripts(kind, names)"{{{
+  for name in empty(a:names) ? [''] : a:names
     for define in map(split(globpath(&runtimepath,
-          \ 'autoload/unite/' . key . '/*.vim'), '\n'),
-          \ "unite#{key}#{fnamemodify(v:val, ':t:r')}#define()")
+          \ 'autoload/unite/' . a:kind . '/' . name[0:0] . '*.vim'), '\n'),
+          \ "unite#{a:kind}#{fnamemodify(v:val, ':t:r')}#define()")
       for dict in (type(define) == type([]) ? define : [define])
-        if !empty(dict) && !has_key(s:static[key], dict.name)
-          let s:static[key][dict.name] = dict
+        if !empty(dict) && !has_key(s:static[a:kind], dict.name)
+          let s:static[a:kind][dict.name] = dict
         endif
       endfor
       unlet define
@@ -1502,10 +1512,8 @@ function! s:initialize_loaded_sources(sources, context)"{{{
   return sources
 endfunction"}}}
 function! s:initialize_sources(...)"{{{
-  if empty(s:static)
-    " Initialize load.
-    call s:load_default_scripts()
-  endif
+  " Initialize load.
+  call s:initialize_default_scripts()
 
   let default_source = {
         \ 'is_volatile' : 0,
@@ -2619,10 +2627,8 @@ function! s:take_action(action_name, candidate, is_parent_action)"{{{
         \ [a:candidate] : a:candidate)
 endfunction"}}}
 function! s:get_loaded_sources(...)"{{{
-  if empty(s:static)
-    " Initialize load.
-    call s:load_default_scripts()
-  endif
+  " Initialize load.
+  call s:initialize_default_scripts()
 
   let unite = unite#get_current_unite()
   return a:0 == 0 ? unite.sources :

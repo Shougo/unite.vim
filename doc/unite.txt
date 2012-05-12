@@ -2478,6 +2478,7 @@ CHANGELOG					*unite-changelog*
 - Improved file kind.
 - Added directory and directory/new source.
 - Improved cdable actions.
+- Changed sources initialize behavior.
 
 2012-05-09
 - Fixed mark set bug.
