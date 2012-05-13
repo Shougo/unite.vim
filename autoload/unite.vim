@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 May 2012.
+" Last Modified: 13 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1683,51 +1683,53 @@ function! s:initialize_candidates(candidates, source_name)"{{{
   let candidates = []
   for candidate in a:candidates
     let candidate = extend(candidate, default_candidate, 'keep')
+
     " Force set.
     let candidate.source = a:source_name
 
-    if !has_key(candidate, 'abbr')
-      let candidate.abbr = candidate.word
-    endif
+    let candidate.unite__abbr =
+          \ get(candidate, 'abbr', candidate.word)
 
     " Delete too long abbr.
     if candidate.is_multiline
-      let candidate.abbr =
-            \ candidate.abbr[: max_width * (context.max_multi_lines + 1)+10]
-    elseif len(candidate.abbr) > max_width * 2
-      let candidate.abbr = candidate.abbr[: max_width * 2]
+      let candidate.unite__abbr =
+            \ candidate.unite__abbr[: max_width * (context.max_multi_lines + 1)+10]
+    elseif len(candidate.unite__abbr) > max_width * 2
+      let candidate.unite__abbr = candidate.unite__abbr[: max_width * 2]
     endif
 
     " Substitute tab.
-    if candidate.abbr =~ '\t'
-      let candidate.abbr = substitute(candidate.abbr, '\t',
+    if candidate.unite__abbr =~ '\t'
+      let candidate.unite__abbr = substitute(candidate.unite__abbr, '\t',
             \ repeat(' ', &tabstop), 'g')
     endif
 
     if !candidate.is_multiline
-      let candidate.abbr = '  ' . candidate.abbr
+      let candidate.unite__abbr = '  ' . candidate.unite__abbr
       call add(candidates, candidate)
       continue
     endif
 
-    if candidate.abbr !~ '\n'
+    if candidate.unite__abbr !~ '\n'
       " Auto split.
-      let abbr = candidate.abbr
-      let candidate.abbr = ''
+      let abbr = candidate.unite__abbr
+      let candidate.unite__abbr = ''
 
       while abbr != ''
         let trunc_abbr = unite#util#strwidthpart(abbr, max_width)
-        let candidate.abbr .= trunc_abbr . "~\n"
+        let candidate.unite__abbr .= trunc_abbr . "~\n"
         let abbr = abbr[len(trunc_abbr):]
       endwhile
 
-      let candidate.abbr = substitute(candidate.abbr, '\~\n$', '', '')
+      let candidate.unite__abbr =
+            \ substitute(candidate.unite__abbr, '\~\n$', '', '')
     else
-      let candidate.abbr = substitute(candidate.abbr, '\r\?\n$', '^@', '')
+      let candidate.unite__abbr =
+            \ substitute(candidate.unite__abbr, '\r\?\n$', '^@', '')
     endif
 
-    if candidate.abbr !~ '\n'
-      let candidate.abbr = '  ' . candidate.abbr
+    if candidate.unite__abbr !~ '\n'
+      let candidate.unite__abbr = '  ' . candidate.unite__abbr
       call add(candidates, candidate)
       continue
     endif
@@ -1735,9 +1737,9 @@ function! s:initialize_candidates(candidates, source_name)"{{{
     " Convert multi line.
     let cnt = 0
     for multi in split(
-          \ candidate.abbr, '\r\?\n', 1)[: context.max_multi_lines-1]
+          \ candidate.unite__abbr, '\r\?\n', 1)[: context.max_multi_lines-1]
       let candidate_multi = deepcopy(candidate)
-      let candidate_multi.abbr =
+      let candidate_multi.unite__abbr =
             \ (cnt == 0 ? '+ ' : '| ') . multi
 
       if cnt != 0
@@ -1986,7 +1988,7 @@ function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
           \ (candidate.is_dummy ? '  ' : get(keys, num, '  '))
           \ . (unite.max_source_name == 0 ? '' :
           \    unite#util#truncate(candidate.source, max_source_name))
-          \ . unite#util#truncate_smart(candidate.abbr, max_width, max_width/3, '..'))
+          \ . unite#util#truncate_smart(candidate.unite__abbr, max_width, max_width/3, '..'))
     let num += 1
   endfor
 
@@ -2004,7 +2006,8 @@ function! s:convert_lines(candidates)"{{{
         \ "(v:val.unite__is_marked ? '* ' : '- ')
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(v:val.source, max_source_name))
-        \ . unite#util#truncate_smart(v:val.abbr, " . max_width .  ", max_width/3, '..')")
+        \ . unite#util#truncate_smart(v:val.unite__abbr, " . max_width
+        \    .  ", max_width/3, '..')")
 endfunction"}}}
 
 function! s:initialize_current_unite(sources, context)"{{{
