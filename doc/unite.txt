@@ -2386,9 +2386,9 @@ CREATE FILTER					*unite-create-filter*
 
 Todo
 
-Note: To optimize load filter files, if "matcher_foo" filter name is detected,
-unite.vim loads "autoload/unite/filters/matcher_foo*.vim" files.  The filter
-file name must be filter name prefix(Ex: foo).
+Note: To optimize load filter files, if "matcher_foo_bar" filter name is
+detected, unite.vim loads "autoload/unite/filters/matcher_foo*.vim" files.  The
+filter file name must be filter name prefix(Ex: matcher_foo).
 
 ------------------------------------------------------------------------------
 FILTER ATTRIBUTES				*unite-filter-attributes*
