@@ -1381,8 +1381,8 @@ function! s:load_default_scripts(kind, names)"{{{
   for name in empty(a:names) ? [''] : a:names
     let name = (a:kind ==# 'filters') ?
           \ substitute(name,
-          \'\%(matcher\|sorter\|converter\)_[^/_]\+\zs[/_].*$', '', '') :
-          \ substitute(name, '[/_].*$', '', '')
+          \'^\%(matcher\|sorter\|converter\)_[^/_]\+\zs[/_].*$', '', '') :
+          \ substitute(name, '^[^/_]\+\zs[/_].*$', '', '')
 
     for define in map(split(globpath(&runtimepath,
           \ 'autoload/unite/'.a:kind.'/'.name.'*.vim'), '\n'),

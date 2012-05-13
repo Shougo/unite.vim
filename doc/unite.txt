@@ -1948,6 +1948,10 @@ source.  Each return value can be a list so you can return an empty list
 to avoid adding undesireble sources.  To add your own sources
 dynamically, you can use |unite#define_source()|.
 
+Note: To optimize load source files, if "buffer/rec" source name is detected,
+unite.vim loads "autoload/unite/sources/buffer*.vim" files.  The source file
+name must be source name prefix(Ex: buffer).
+
 ------------------------------------------------------------------------------
 SOURCE ATTRIBUTES				*unite-source-attributes*
 
@@ -2298,6 +2302,10 @@ CREATE KIND					*unite-create-kind*
 
 Todo
 
+Note: To optimize load kind files, if "foo" kind name is detected, unite.vim
+loads "autoload/unite/kinds/foo*.vim" files.  The kind file name must be kind
+name prefix(Ex: foo).
+
 ------------------------------------------------------------------------------
 KIND ATTRIBUTES					*unite-kind-attributes*
 
@@ -2378,6 +2386,10 @@ CREATE FILTER					*unite-create-filter*
 
 Todo
 
+Note: To optimize load filter files, if "matcher_foo" filter name is detected,
+unite.vim loads "autoload/unite/filters/matcher_foo*.vim" files.  The filter
+file name must be filter name prefix(Ex: foo).
+
 ------------------------------------------------------------------------------
 FILTER ATTRIBUTES				*unite-filter-attributes*
 
@@ -2454,6 +2466,7 @@ CHANGELOG					*unite-changelog*
 2012-05-14
 - Improved completion behavior.
 - Fixed load filters.
+- Fixed document.
 
 2012-05-13
 - Fixed redraw behavior.
