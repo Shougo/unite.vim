@@ -742,7 +742,8 @@ function! unite#gather_candidates()"{{{
   " Post filter.
   let unite = unite#get_current_unite()
   for filter_name in unite.post_filters
-    let candidates = unite#call_filter(filter_name, candidates, unite.context)
+    let candidates = unite#call_filter(
+          \ filter_name, candidates, unite.context)
   endfor
 
   return candidates
@@ -1378,7 +1379,10 @@ endfunction"}}}
 
 function! s:load_default_scripts(kind, names)"{{{
   for name in empty(a:names) ? [''] : a:names
-    let name = substitute(name, '[/_].*$', '', '')
+    let name = (a:kind ==# 'filters') ?
+          \ substitute(name,
+          \'\%(matcher\|sorter\|converter\)_[^/_]\+\zs[/_].*$', '', '') :
+          \ substitute(name, '[/_].*$', '', '')
 
     for define in map(split(globpath(&runtimepath,
           \ 'autoload/unite/'.a:kind.'/'.name.'*.vim'), '\n'),

@@ -2453,6 +2453,7 @@ CHANGELOG					*unite-changelog*
 
 2012-05-14
 - Improved completion behavior.
+- Fixed load filters.
 
 2012-05-13
 - Fixed redraw behavior.
