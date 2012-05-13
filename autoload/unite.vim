@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 May 2012.
+" Last Modified: 14 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -209,7 +209,7 @@ function! unite#do_candidates_action(action_name, candidates, ...)"{{{
 
   try
     call s:initialize_current_unite(keys(sources), context)
-  catch /^Invalid source/
+  catch /^unite.vim: Invalid source/
     return
   endtry
 
@@ -922,7 +922,7 @@ function! unite#start(sources, ...)"{{{
 
   try
     call s:initialize_current_unite(a:sources, context)
-  catch /^Invalid source/
+  catch /^unite.vim: Invalid source/
     return
   endtry
 
@@ -1013,7 +1013,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
 
   try
     call s:initialize_current_unite(a:sources, context)
-  catch /^Invalid source/
+  catch /^unite.vim: Invalid source/
     return []
   endtry
 
@@ -1072,10 +1072,11 @@ function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
   let context = {}
   let context = s:initialize_context(context)
   let context.is_interactive = 0
+  let context.is_complete = 1
 
   try
     call s:initialize_current_unite(a:sources, context)
-  catch /^Invalid source/
+  catch /^unite.vim: Invalid source/
     return
   endtry
 
@@ -1093,10 +1094,11 @@ function! unite#args_complete(sources, arglead, cmdline, cursorpos)"{{{
   let context = {}
   let context = s:initialize_context(context)
   let context.is_interactive = 0
+  let context.is_complete = 1
 
   try
     call s:initialize_current_unite(a:sources, context)
-  catch /^Invalid source/
+  catch /^unite.vim: Invalid source/
     return []
   endtry
 
@@ -1186,7 +1188,7 @@ endfunction"}}}
 function! s:get_candidates(sources, context)"{{{
   try
     call s:initialize_current_unite(a:sources, a:context)
-  catch /^Invalid source/
+  catch /^unite.vim: Invalid source/
     return []
   endtry
 
@@ -1421,6 +1423,7 @@ function! s:initialize_context(context)"{{{
         \ 'update_time' : g:unite_update_time,
         \ 'no_buffer' : 0,
         \ 'is_interactive' : 1,
+        \ 'is_complete' : 1,
         \ 'is_vimfiler' : 0,
         \ 'hide_source_names' : 0,
         \ 'max_multi_lines' : 5,
@@ -1475,7 +1478,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
       let source_name = source
       unlet source
       if !has_key(all_sources, source_name)
-        if a:context.is_vimfiler
+        if a:context.is_vimfiler || a:context.is_complete
           " Ignore error.
           continue
         endif
@@ -1483,7 +1486,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
         call unite#util#print_error(
               \ 'unite.vim: Invalid source name "' .
               \ source_name . '" is detected.')
-        throw 'Invalid source'
+        throw 'unite.vim: Invalid source'
       endif
 
       let source = deepcopy(all_sources[source_name])
@@ -2626,7 +2629,7 @@ function! s:take_action(action_name, candidate, is_parent_action)"{{{
         \ : a:action_name
 
   if !has_key(action_table, a:action_name)
-    " throw 'no such action ' . a:action_name
+    " throw 'unite.vim: no such action ' . a:action_name
     return 1
   endif
 
