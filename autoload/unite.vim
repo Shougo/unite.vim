@@ -275,12 +275,14 @@ let s:unite_options = [
 
 " Core functions."{{{
 function! unite#get_kinds(...)"{{{
-  let unite = unite#get_current_unite()
-  if !has_key(unite, 'kinds')
-    return {}
+  if a:0 == 0
+    call s:load_default_scripts('kinds', [])
+  else
+    call s:load_default_scripts('kinds', [a:1])
   endif
 
-  return a:0 == 0 ? unite.kinds : get(unite.kinds, a:1, {})
+  let kinds = s:initialize_kinds()
+  return (a:0 == 0) ? kinds : get(kinds, a:1, {})
 endfunction"}}}
 function! unite#get_sources(...)"{{{
   let unite = unite#get_current_unite()
@@ -295,8 +297,14 @@ function! unite#get_all_sources(...)"{{{
   return a:0 == 0 ? all_sources : get(all_sources, a:1, {})
 endfunction"}}}
 function! unite#get_filters(...)"{{{
-  let all_filters = s:initialize_filters()
-  return a:0 == 0 ? all_filters : get(all_filters, a:1, {})
+  if a:0 == 0
+    call s:load_default_scripts('filters', [])
+  else
+    call s:load_default_scripts('filters', [a:1])
+  endif
+
+  let filters = s:initialize_filters()
+  return a:0 == 0 ? filters : get(filters, a:1, {})
 endfunction"}}}
 "}}}
 
@@ -775,12 +783,12 @@ function! unite#parse_path(path)"{{{
   return insert(source_args, source_name)
 endfunction"}}}
 function! unite#call_filter(filter_name, candidates, context)"{{{
-  let unite = unite#get_current_unite()
-  if !has_key(unite.filters, a:filter_name)
+  let filter = unite#get_filters(a:filter_name)
+  if empty(filter)
     return a:candidates
   endif
 
-  return unite.filters[a:filter_name].filter(a:candidates, a:context)
+  return filter.filter(a:candidates, a:context)
 endfunction"}}}
 
 " Utils.
@@ -1366,22 +1374,12 @@ function! unite#resume_from_temporary(context)  "{{{
   let unite.prev_winnr = unite_save.prev_winnr
 endfunction"}}}
 
-function! s:initialize_default_scripts()"{{{
-  " Gathering all sources and kind name.
-  if empty(s:static.sources)
-    call s:load_default_scripts('sources', [])
-  endif
-  if empty(s:static.kinds)
-    call s:load_default_scripts('kinds', [])
-  endif
-  if empty(s:static.filters)
-    call s:load_default_scripts('filters', [])
-  endif
-endfunction"}}}
 function! s:load_default_scripts(kind, names)"{{{
   for name in empty(a:names) ? [''] : a:names
+    let name = substitute(name, '[/_].*$', '', '')
+
     for define in map(split(globpath(&runtimepath,
-          \ 'autoload/unite/' . a:kind . '/' . name[:1] . '*.vim'), '\n'),
+          \ 'autoload/unite/'.a:kind.'/'.name.'*.vim'), '\n'),
           \ "unite#{a:kind}#{fnamemodify(v:val, ':t:r')}#define()")
       for dict in (type(define) == type([]) ? define : [define])
         if !empty(dict) && !has_key(s:static[a:kind], dict.name)
@@ -1521,8 +1519,6 @@ function! s:initialize_sources(...)"{{{
   let source_names = type(get(a:000, 0, [])) == type([]) ?
         \ get(a:000, 0, []) : []
   call s:load_default_scripts('sources', source_names)
-  call s:load_default_scripts('kinds', [])
-  call s:load_default_scripts('filters', [])
 
   let default_source = {
         \ 'is_volatile' : 0,
@@ -2063,8 +2059,6 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.context = context
   let unite.candidates = []
   let unite.sources = sources
-  let unite.kinds = s:initialize_kinds()
-  let unite.filters = s:initialize_filters()
   let unite.buffer_name = (context.buffer_name == '') ?
         \ 'default' : context.buffer_name
   let unite.profile_name = (context.profile_name == '') ?
@@ -2644,8 +2638,6 @@ function! s:take_action(action_name, candidate, is_parent_action)"{{{
 endfunction"}}}
 function! s:get_loaded_sources(...)"{{{
   " Initialize load.
-  call s:initialize_default_scripts()
-
   let unite = unite#get_current_unite()
   return a:0 == 0 ? unite.sources :
         \ get(filter(copy(unite.sources), 'v:val.name ==# a:1'), 0, {})
