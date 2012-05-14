@@ -2467,6 +2467,7 @@ CHANGELOG					*unite-changelog*
 - Improved completion behavior.
 - Fixed load filters.
 - Fixed document.
+- Improved load default scripts.
 
 2012-05-13
 - Fixed redraw behavior.

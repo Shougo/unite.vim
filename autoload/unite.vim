@@ -1379,6 +1379,10 @@ endfunction"}}}
 
 function! s:load_default_scripts(kind, names)"{{{
   for name in empty(a:names) ? [''] : a:names
+    if name != '' && has_key(s:static[a:kind], name)
+      continue
+    endif
+
     let name = (a:kind ==# 'filters') ?
           \ substitute(name,
           \'^\%(matcher\|sorter\|converter\)_[^/_]\+\zs[/_].*$', '', '') :
