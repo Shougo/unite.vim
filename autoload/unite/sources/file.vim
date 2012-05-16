@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 May 2012.
+" Last Modified: 16 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -209,8 +209,8 @@ function! s:source_file.vimfiler_dummy_candidates(args, context)"{{{
   return candidates
 endfunction"}}}
 function! s:source_file.complete(args, context, arglead, cmdline, cursorpos)"{{{
-  return map(split(glob(a:arglead . '*'), '\n'),
-        \ "isdirectory(v:val) ? v:val.'/' : v:val")
+  return unite#sources#file#complete_file(
+        \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 function! s:source_file.vimfiler_complete(args, context, arglead, cmdline, cursorpos)"{{{
   return unite#sources#file#complete_file(
@@ -355,11 +355,19 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
 endfunction"}}}
 
 function! unite#sources#file#complete_file(args, context, arglead, cmdline, cursorpos)"{{{
-  return map(split(glob(a:arglead . '*'), '\n'),
-        \ "isdirectory(v:val) ? v:val.'/' : v:val")
+  let files = unite#util#glob(a:arglead . '*')
+  let home_pattern = '^'.
+        \ unite#util#substitute_path_separator(expand('~')).'/'
+  call map(files, "isdirectory(v:val) ? v:val.'/' : v:val")
+  call map(files, "escape(substitute(v:val, home_pattern, '\\~/', ''), ' \\')")
+  return files
 endfunction"}}}
 function! unite#sources#file#complete_directory(args, context, arglead, cmdline, cursorpos)"{{{
-  return filter(split(glob(a:arglead . '*'), '\n'), 'isdirectory(v:val)')
+  let files = unite#util#glob(a:arglead . '*')
+  let home_pattern = '^'.
+        \ unite#util#substitute_path_separator(expand('~')).'/'
+  call map(files, "escape(substitute(v:val, home_pattern, '\\~/', ''), ' \\')")
+  return filter(files, 'isdirectory(v:val)')
 endfunction"}}}
 
 " Add custom action table."{{{
