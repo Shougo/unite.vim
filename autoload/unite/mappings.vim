@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2012.
+" Last Modified: 16 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -826,7 +826,7 @@ function! s:source_action.gather_candidates(args, context)"{{{
 
   return sort(map(filter(values(uniq_actions), 'v:val.is_listed'), "{
         \   'word' : v:val.name,
-        \   'unite__abbr' : printf('%-" . max . "s -- %s',
+        \   'abbr' : printf('%-" . max . "s -- %s',
         \       v:val.name, v:val.description),
         \   'source__candidates' : candidates,
         \   'action__action' : v:val,
