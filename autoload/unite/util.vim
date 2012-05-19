@@ -166,6 +166,21 @@ function! s:buflisted(bufnr)"{{{
 endfunction"}}}
 
 function! unite#util#glob(pattern, ...)"{{{
+  if a:pattern =~ "'"
+    " Use glob('*').
+    let cwd = getcwd()
+    let base = unite#util#substitute_path_separator(
+          \ fnamemodify(a:pattern, ':h'))
+    lcd `=base`
+
+    let files = map(split(unite#util#substitute_path_separator(
+          \ glob('*')), '\n'), "base . '/' . v:val")
+
+    lcd `=cwd`
+
+    return files
+  endif
+
   " let is_force_glob = get(a:000, 0, 0)
   let is_force_glob = get(a:000, 0, 1)
 

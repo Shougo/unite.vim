@@ -2463,6 +2463,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-05-19
+- Fixed unite#util#glob().
+
 2012-05-17
 - Fixed highlight patterns.
 
