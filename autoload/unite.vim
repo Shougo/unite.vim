@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 May 2012.
+" Last Modified: 21 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1293,6 +1293,13 @@ function! s:quit_session(is_force)  "{{{
   let context = unite.context
 
   let key = unite#loaded_source_names_string()
+
+  " Clear mark.
+  for source in unite#loaded_sources_list()
+    for candidate in source.unite__cached_candidates
+      let candidate.unite__is_marked = 0
+    endfor
+  endfor
 
   " Save position.
   let positions = unite#get_profile(
