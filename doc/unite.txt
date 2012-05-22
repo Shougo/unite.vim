@@ -2239,30 +2239,47 @@ NOTATION					*unite-notation*
 				The prompt string of unite buffer.
 
 			is_insert		(Number)
-				Todo
+				If unite buffer loaded from
+				insert mode.
 
 			immediately		(Number)
-				Todo
+				If unite buffer loaded from
+				|unite-options-immediately|.
 
 			is_redraw		(Number)
-				Todo
+				If user pressed
+				|<Plug>(unite_redraw)| or
+				invalidated cache after executed
+				actions.
+				Note: User use
+				|<Plug>(unite_redraw)| mapping
+				to remove cache files.
 
 			is_invalidate		(Number)
-				1 if action disables a cache. This is
+				If action disables a cache. This is
 				also 1 in initialization of unite
 				buffer.
 
 			is_async		(Number)
-				Todo
+				If the source gather candidates
+				asynchronously.
+				If source set this to 0, will
+				disable asynchronous.
 
 			source			(Dictionary)
-				Todo
+				Gathering candidates source
+				information.
 
 			candidates		(List)
-				Todo
+				Filtered candidates.
+				Note: This key is valid in
+				|unite-source-attribute-hooks-on_post_filter|
+				only.
 
 			source__{name}		(Unknown)		(Optional)
-				Todo
+				Additional source information.
+				Note: Recommend sources save
+				variables instead of s: variables.
 
 {candidate}					*unite-notation-{candidate}*
 			Todo
