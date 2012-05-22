@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 May 2012.
+" Last Modified: 22 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,8 +42,8 @@ syntax match uniteSourceArgs /:\S\+/ contained
 
 syntax match uniteQuickMatchLine /^.|.*/
       \ contains=uniteQuickMatchTrigger,uniteCandidateSourceName,uniteCandidateAbbr
-syntax region uniteMarkedLine start=/^\*/ end='$'
-syntax match uniteNonMarkedLine /^- .*/
+syntax region uniteMarkedLine start=/^\*/ end='$' keepend
+syntax region uniteNonMarkedLine start=/^- / end='$' keepend
       \ contains=uniteCandidateMarker,uniteCandidateSourceName,uniteCandidateAbbr
 syntax match uniteCandidateMarker /^- / contained
 syntax match uniteQuickMatchTrigger /^.|/ contained
