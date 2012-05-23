@@ -2482,6 +2482,7 @@ CHANGELOG					*unite-changelog*
 
 2012-05-23
 - Improved mapping source.
+- Fixed toggle mark behavior.
 
 2012-05-22
 - Fixed syntax.
