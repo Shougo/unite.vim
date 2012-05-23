@@ -2480,6 +2480,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-05-23
+- Improved mapping source.
+
 2012-05-22
 - Fixed syntax.
 
