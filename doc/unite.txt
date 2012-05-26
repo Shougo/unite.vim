@@ -2482,6 +2482,7 @@ CHANGELOG					*unite-changelog*
 
 2012-05-26
 - Improved for profile.
+- Fixed load default scripts problem.
 
 2012-05-23
 - Improved mapping source.

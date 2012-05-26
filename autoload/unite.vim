@@ -1393,10 +1393,13 @@ function! unite#resume_from_temporary(context)  "{{{
 endfunction"}}}
 
 function! s:load_default_scripts(kind, names)"{{{
-  for name in empty(a:names) ? [''] : a:names
-    if name != '' && has_key(s:static[a:kind], name)
-      continue
-    endif
+  let names = empty(a:names) ? [''] : a:names
+  if a:kind ==# 'sources' && !empty(a:names)
+    call add(names, 'alias')
+  endif
+
+  for name in filter(names,
+        \ "v:val == '' || !has_key(s:static[a:kind], v:val)")
 
     let name = (a:kind ==# 'filters') ?
           \ substitute(name,
