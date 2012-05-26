@@ -2282,25 +2282,50 @@ NOTATION					*unite-notation*
 				variables instead of s: variables.
 
 {candidate}					*unite-notation-{candidate}*
-			Todo
+			A dictionary for candidates.
+			The followings are the primary information.
 
 			word			(String)
-				Todo
+				String Displayed in unite buffer.
+				Matcher used word attribute to
+				filter.
 
 			abbr			(String)	(Optional)
-				Todo
+				String Displayed in unite buffer.
+				If it is omit, used word attribute
+				instead.
+				The attribute is not used for
+				matcher.
 
 			source			(String)	(Optional)
-				Todo
+				Generated candidates source name.
+				Note: This attribute is set
+				automatically.
 
 			kind			(String/List)	(Optional)
-				Todo
+				The candidate kind name.
+				If it is omit, "common" is used.
+				Kind name list is acceptable.
+				Ex: ["file", "directory"]
+				If you use list, you have not to
+				define parents kind action.
+				Unite search kinds action from list
+				head.
+				Ex: If you set kind attribute to
+				["file", "command"], "command"
+				(default) action overwrite "file"
+				action.
+				You should use source default
+				action instead of kind.
 
 			is_dummy		(Number)	(Optional)
-				Todo
+				If the candidate is dummy.
+				candidate. The default value is 0.
+				Note: When cursor move, skip dummy
+				candidates.
 
 			is_matched		(Number)	(Optional)
-				Todo
+				If the candidate is filtered.
 
 			is_multiline		(Number)	(Optional)
 				1 if the candiates have multiple lines.
@@ -2487,6 +2512,7 @@ CHANGELOG					*unite-changelog*
 2012-05-23
 - Improved mapping source.
 - Fixed toggle mark behavior.
+- Improved document.
 
 2012-05-22
 - Fixed syntax.
