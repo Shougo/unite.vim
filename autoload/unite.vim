@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 May 2012.
+" Last Modified: 26 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -304,7 +304,12 @@ function! unite#get_filters(...)"{{{
   endif
 
   let filters = s:initialize_filters()
-  return a:0 == 0 ? filters : get(filters, a:1, {})
+
+  if a:0 == 0
+    return filters
+  endif
+
+  return get(filters, a:1, {})
 endfunction"}}}
 "}}}
 
@@ -1304,20 +1309,23 @@ function! s:quit_session(is_force)  "{{{
   " Save position.
   let positions = unite#get_profile(
         \ unite.profile_name, 'unite__save_pos')
-  let positions[key] = {
-        \ 'pos' : getpos('.'),
-        \ 'candidate' : unite#get_current_candidate(),
-        \ }
+  if key != ''
+    let positions[key] = {
+          \ 'pos' : getpos('.'),
+          \ 'candidate' : unite#get_current_candidate(),
+          \ }
 
-  if context.input != ''
-    " Save input.
-    let inputs = unite#get_profile(
-          \ unite.profile_name, 'unite__inputs')
-    if !has_key(inputs, key)
-      let inputs[key] = []
+    if context.input != ''
+      " Save input.
+      let inputs = unite#get_profile(
+            \ unite.profile_name, 'unite__inputs')
+      if !has_key(inputs, key)
+        let inputs[key] = []
+      endif
+      call insert(filter(inputs[key],
+            \ 'v:val !=# unite.context.input'), context.input)
     endif
-    call insert(filter(inputs[key],
-          \ 'v:val !=# unite.context.input'), context.input)
+
   endif
 
   if a:is_force || !context.no_quit
