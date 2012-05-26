@@ -293,8 +293,12 @@ function! unite#get_sources(...)"{{{
   return a:0 == 0 ? unite.sources : get(unite.sources, a:1, {})
 endfunction"}}}
 function! unite#get_all_sources(...)"{{{
-  let all_sources = s:initialize_sources()
-  return a:0 == 0 ? all_sources : get(all_sources, a:1, {})
+  if a:0 == 0
+    return s:initialize_sources()
+  endif
+
+  let all_sources = s:initialize_sources([], a:1)
+  return get(all_sources, a:1, {})
 endfunction"}}}
 function! unite#get_filters(...)"{{{
   if a:0 == 0
@@ -609,7 +613,8 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
     let _ +=  copy(s:unite_options)
 
     " Source name completion.
-    let _ += keys(filter(s:initialize_sources(), 'v:val.is_listed'))
+    let _ += keys(filter(s:initialize_sources([], a:arglead),
+          \ 'v:val.is_listed'))
   else
     " Add "{source-name}:".
     let _  = map(_, 'source_name.":".v:val')
@@ -1547,6 +1552,10 @@ function! s:initialize_sources(...)"{{{
   " Initialize load.
   let source_names = type(get(a:000, 0, [])) == type([]) ?
         \ get(a:000, 0, []) : []
+  let head_name = get(a:000, 1, '')
+  if empty(source_names) && head_name != ''
+    let source_names = [head_name]
+  endif
   call s:load_default_scripts('sources', source_names)
 
   let default_source = {
