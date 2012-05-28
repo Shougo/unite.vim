@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 May 2012.
+" Last Modified: 29 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -294,6 +294,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     let new_context = extend(
           \ deepcopy(unite#get_context()), new_context)
     let old_context = unite#set_context(new_context)
+    let unite = unite#get_current_unite()
   endif
 
   let context = unite#get_context()
@@ -333,7 +334,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
   if !empty(new_context)
     " Restore context.
-    call unite#set_context(old_context)
+    let unite.context = old_context
   endif
 
   if is_redraw
