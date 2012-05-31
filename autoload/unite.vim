@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 May 2012.
+" Last Modified: 31 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -626,7 +626,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
     let _ += map(unite#args_complete(
           \ [insert(copy(source_args), source_name)],
           \ join(source_args, ':'), a:cmdline, a:cursorpos),
-          \ "args.escape(v:val, '\  :')")
+          \ "args.escape(v:val, ':')")
   endif
 
   return sort(filter(_, 'stridx(v:val, a:arglead) == 0'))
