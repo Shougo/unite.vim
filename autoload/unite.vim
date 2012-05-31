@@ -1448,6 +1448,7 @@ function! s:initialize_context(context)"{{{
         \ 'quick_match' : 0,
         \ 'create' : 0,
         \ 'is_redraw' : 0,
+        \ 'is_resize' : 1,
         \ 'cursor_line_highlight' :
         \    g:unite_cursor_line_highlight,
         \ 'no_cursor_line' : 0,
@@ -2200,7 +2201,7 @@ function! s:initialize_unite_buffer()"{{{
       autocmd BufUnload,BufHidden <buffer>
             \ call s:on_buf_unload(expand('<afile>'))
       autocmd WinEnter,BufWinEnter <buffer>
-            \ call s:save_updatetime()
+            \ call s:on_bufwin_enter(bufnr(expand('<abuf>')))
       autocmd WinLeave,BufWinLeave <buffer>
             \ call s:restore_updatetime()
     augroup END
@@ -2354,11 +2355,16 @@ function! s:redraw(is_force, winnr) "{{{
   let input = unite#get_input()
   if !context.is_redraw && input ==# unite.last_input
         \ && !unite.is_async
+        \ && !context.is_resize
     return
   endif
 
-  " Recaching.
-  call s:recache_candidates(input, a:is_force)
+  if context.is_redraw
+        \ || input !=# unite.last_input
+        \ || unite.is_async
+    " Recaching.
+    call s:recache_candidates(input, a:is_force)
+  endif
 
   let unite.last_input = input
 
@@ -2410,15 +2416,30 @@ function! unite#_resize_window() "{{{
     if mode() ==# 'i' && col('.') == (col('$') - 1)
       startinsert!
     endif
+
+    let context.is_resize = 1
+    call unite#redraw()
   elseif context.vertical
         \ && winwidth(winnr()) != context.winwidth
+        \ && (context.winheight  == 0 ||
+        \     winheight(winnr()) == context.winheight)
     execute 'vertical resize' context.winwidth
     let context.winwidth = winwidth(winnr())
+
+    let context.is_resize = 1
+    call unite#redraw()
   elseif !context.vertical
         \ && winheight(winnr()) != context.winheight
+        \ && (context.winwidth  == 0 ||
+        \     winwidth(winnr()) == context.winwidth)
     execute 'resize' context.winheight
-    let context.winheight = winheight(winnr())
+
+    let context.is_resize = 1
+    call unite#redraw()
   endif
+
+  let context.winheight = winheight(winnr())
+  let context.winwidth = winwidth(winnr())
 endfunction"}}}
 
 " Autocmd events.
@@ -2465,6 +2486,25 @@ function! s:on_cursor_hold_i()  "{{{
     " Ignore key sequences.
     call feedkeys("a\<BS>", 'n')
     " call feedkeys("\<C-r>\<ESC>", 'n')
+  endif
+endfunction"}}}
+function! s:on_bufwin_enter(bufnr)  "{{{
+  let unite = getbufvar(a:bufnr, 'unite')
+  if type(unite) != type({})
+        \ || bufwinnr(a:bufnr) < 1
+    return
+  endif
+
+  if bufwinnr(a:bufnr) != winnr()
+    let winnr = winnr()
+    execute bufwinnr(a:bufnr) 'wincmd w'
+  endif
+
+  call s:save_updatetime()
+  call unite#_resize_window()
+
+  if exists('winnr')
+    execute winnr.'wincmd w'
   endif
 endfunction"}}}
 function! unite#_on_cursor_hold()  "{{{
