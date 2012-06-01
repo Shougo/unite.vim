@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 May 2012.
+" Last Modified: 01 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -359,14 +359,14 @@ function! unite#sources#file#complete_file(args, context, arglead, cmdline, curs
   let home_pattern = '^'.
         \ unite#util#substitute_path_separator(expand('~')).'/'
   call map(files, "isdirectory(v:val) ? v:val.'/' : v:val")
-  call map(files, "escape(substitute(v:val, home_pattern, '\\~/', ''), ' \\')")
+  call map(files, "escape(v:val, ' \\')")
   return files
 endfunction"}}}
 function! unite#sources#file#complete_directory(args, context, arglead, cmdline, cursorpos)"{{{
   let files = unite#util#glob(a:arglead . '*')
   let home_pattern = '^'.
         \ unite#util#substitute_path_separator(expand('~')).'/'
-  call map(files, "escape(substitute(v:val, home_pattern, '\\~/', ''), ' \\')")
+  call map(files, "escape(v:val, ' \\')")
   return filter(files, 'isdirectory(v:val)')
 endfunction"}}}
 
