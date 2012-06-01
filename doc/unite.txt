@@ -2507,6 +2507,7 @@ CHANGELOG					*unite-changelog*
 
 2012-06-01
 - Fixed for vimfiler completion.
+- Fixed for vimfiler choose action.
 
 2012-05-31
 - Fixed for completion.

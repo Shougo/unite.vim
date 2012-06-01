@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 May 2012.
+" Last Modified: 01 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -514,17 +514,20 @@ function! s:choose_action()"{{{
 
   call unite#mappings#_choose_action(candidates)
 endfunction"}}}
-function! unite#mappings#_choose_action(candidates)"{{{
-  call filter(a:candidates, '!has_key(v:val, "is_dummy") || !v:val.is_dummy')
+function! unite#mappings#_choose_action(candidates, ...)"{{{
+  call filter(a:candidates,
+        \ '!has_key(v:val, "is_dummy") || !v:val.is_dummy')
   if empty(a:candidates)
     return
   endif
 
   let unite = unite#get_current_unite()
+  let context = get(a:000, 0, {})
+  let context.source__sources = unite.sources
 
-  call unite#start_temporary([[s:source_action] + a:candidates], {
-        \ 'source__sources' : unite.sources,
-        \ }, 'action')
+  call unite#start_temporary(
+        \ [[s:source_action] + a:candidates],
+        \ context, 'action')
 endfunction"}}}
 function! s:insert_enter(key)"{{{
   setlocal modifiable
