@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Mar 2012.
+" Last Modified: 02 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -144,11 +144,14 @@ let s:buffer_bookmark_action = {
       \ 'description' : 'append buffers to bookmark list',
       \ }
 function! s:buffer_bookmark_action.func(candidate)"{{{
-  let filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
+  let filetype = getbufvar(
+        \ a:candidate.action__buffer_nr, '&filetype')
   if filetype ==# 'vimfiler'
-    let filename = getbufvar(a:candidate.action__buffer_nr, 'vimfiler').current_dir
+    let filename = getbufvar(
+          \ a:candidate.action__buffer_nr, 'vimfiler').current_dir
   elseif filetype ==# 'vimshell'
-    let filename = getbufvar(a:candidate.action__buffer_nr, 'vimshell').current_dir
+    let filename = getbufvar(
+          \ a:candidate.action__buffer_nr, 'vimshell').current_dir
   else
     let filename = a:candidate.action__path
   endif

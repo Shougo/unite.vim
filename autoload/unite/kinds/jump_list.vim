@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Apr 2012.
+" Last Modified: 02 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -138,8 +138,8 @@ endfunction"}}}
 
 " Misc.
 function! s:jump(candidate, is_highlight)"{{{
-  if !has_key(a:candidate, 'action__line')
-        \ && !has_key(a:candidate, 'action__pattern')
+  if !get(a:candidate, 'action__line', '') == ''
+        \ && !get(a:candidate, 'action__pattern', '') == ''
     " Move to head.
     call cursor(1, 1)
     return
@@ -152,10 +152,9 @@ function! s:jump(candidate, is_highlight)"{{{
     return
   endif
 
-  if !has_key(a:candidate, 'action__pattern')
+  if get(a:candidate, 'action__pattern', '') == ''
     " Jump to the line number.
-    let col = has_key(a:candidate, 'action__col') ?
-          \ a:candidate.action__col : 0
+    let col = get(a:candidate, 'action__col', 0)
     if col == 0
       if line('.') != a:candidate.action__line
         execute a:candidate.action__line
