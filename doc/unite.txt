@@ -2339,15 +2339,21 @@ NOTATION					*unite-notation*
 				abbr is missing) by a newline character.
 
 			source__{name}		(Unknown)	(Optional)
-				Todo
+				Attributes added by sources.
 
 			action__{name}		(Unknown)	(Optional)
-				Todo
+				Attributes added by actions.
+				For example, "action__path" attribute is file
+				path. If you learn standard action attributes,
+				please refer to |unite-kind|.
 
 ==============================================================================
 CREATE KIND					*unite-create-kind*
 
-Todo
+The files in autoload/unite/kinds are automatically loaded and it calls
+unite#kinds#{kind_name}#define() whose return value is the kind.  Each return
+value can be a list so you can return an empty list to avoid adding undesireble
+kinds.  To add your own kinds dynamically, you can use |unite#define_kind()|.
 
 Note: To optimize load kind files, if "foo" kind name is detected, unite.vim
 loads "autoload/unite/kinds/foo*.vim" files.  The kind file name must be kind
@@ -2413,7 +2419,9 @@ Todo
 ------------------------------------------------------------------------------
 ACTION RESOLUTION ORDER				*unite-action-resolution-order*
 
-Todo
+For example, you fire actions from kind "file" candidate gathered
+by source "file", unite search actions by below order.
+Note: kind "file" extends "openable" and "cdable" kind.
 
 (1) Custom action table for kind "source/file/file".
 (2) Default action table for kind "source/file/file".
@@ -2431,7 +2439,11 @@ Todo
 ==============================================================================
 CREATE FILTER					*unite-create-filter*
 
-Todo
+The files in autoload/unite/filters are automatically loaded and it calls
+unite#filters#{filter_name}#define() whose return value is the filter.  Each
+return value can be a list so you can return an empty list to avoid adding
+undesireble filter. To add your own filters dynamically, you can use
+|unite#define_filter()|.
 
 Note: To optimize load filter files, if "matcher_foo_bar" filter name is
 detected, unite.vim loads "autoload/unite/filters/matcher_foo*.vim" files.  The
@@ -2446,11 +2458,18 @@ name			String		(Required)
 
 						*unite-filter-attribute-filter*
 filter			Function		(Required)
-			Todo
+			This function is called after gathering
+			candidates by unite.
+			This function takes {candidates} and
+			{context} as its parameter and returns a
+			list of {candidate}.
+			The specification of the parameters and the
+			returned value is the same as
+			|unite-source-attribute-gather_candidates|.
 
 						*unite-filter-attribute-description*
 description		String		(Optional)
-			Todo
+			The filter description string.
 
 ==============================================================================
 EXAMPLES					*unite-examples*
@@ -2513,6 +2532,7 @@ CHANGELOG					*unite-changelog*
 2012-06-04
 - Improved asyncronous behavior.
 - Added -keep-focus option.
+- Improved English documentation.
 
 2012-06-02
 - Improved jump_list.
