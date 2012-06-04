@@ -208,6 +208,11 @@ COMMANDS 					*unite-commands*
 		you specify it, a unite buffer will be closed when you
 		selected an action which is "is_quit".
 
+						*unite-options-keep-focus*
+		-keep-focus
+		Keep focus on unite buffer after firing an action.
+		Note: This option is used with "-no-quit" option.
+
 						*unite-options-winwidth*
 		-winwidth={window-width}
 		Specifies the width of a unite buffer.  Unless you specify
@@ -2507,6 +2512,7 @@ CHANGELOG					*unite-changelog*
 
 2012-06-04
 - Improved asyncronous behavior.
+- Added -keep-focus option.
 
 2012-06-02
 - Improved jump_list.

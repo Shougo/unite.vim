@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jun 2012.
+" Last Modified: 04 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -331,6 +331,15 @@ function! unite#mappings#do_action(action_name, ...)"{{{
       let is_redraw = 1
     endif
   endfor
+
+  if unite.context.keep_focus
+    let winnr = bufwinnr(unite.bufnr)
+
+    if winnr > 0
+      " Restore focus.
+      execute winnr 'wincmd w'
+    endif
+  endif
 
   if !empty(new_context)
     " Restore context.

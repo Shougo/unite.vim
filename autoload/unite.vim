@@ -274,7 +274,7 @@ let s:unite_options = [
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
       \ '-cursor-line-highlight=', '-no-cursor-line',
       \ '-update-time=', '-hide-source-names',
-      \ '-max-multi-lines=', '-here', '-silent',
+      \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
       \]
 "}}}
 
@@ -1466,6 +1466,7 @@ function! s:initialize_context(context)"{{{
         \ 'max_multi_lines' : 5,
         \ 'here' : 0,
         \ 'silent' : 0,
+        \ 'keep_focus' : 0,
         \ }
 
   let context = extend(default_context, a:context)
