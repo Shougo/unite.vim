@@ -1680,30 +1680,30 @@ guicmd		GUI executable commands
 FILTERS						*unite-filters*
 
 						*unite-filter-default*
-default		Todo: This default filter is used unless specified explicitly.
+default		This default filter is used unless specified explicitly.
 		This filter is a dummy with ["matcher_glob",
 		"sorter_nothing", "converter_nothing"] registered initially.
 		This filter can be changed by calling
 		|unite#filters#default#use()|.
 
 						*unite-filter-matcher_default*
-matcher_default	Todo: The default matcher used by |unite-filter-default| with
+matcher_default	The default matcher used by |unite-filter-default| with
 		["matcher_glob"] set initially.
 		This can be changed by calling
 		|unite#filters#matcher_default#use()|.
 
 						*unite-filter-matcher_glob*
-matcher_glob	Todo: A matcher which filters the candidates with user given
+matcher_glob	A matcher which filters the candidates with user given
 		glob pattern.  This recognizes "*" as wild card and "!" as
 		negate.  Narrowing down can be done by word.
 
 						*unite-filter-matcher_regexp*
-matcher_regexp	Todo: A matcher which filters the candidates with user given
+matcher_regexp	A matcher which filters the candidates with user given
 		regular expression. This recognizes "!" as negate.
 		Narrowing down can be done by word.
 
 						*unite-filter-matcher_fuzzy*
-matcher_fuzzy	Todo: A matcher which filters the candidates with user
+matcher_fuzzy	A matcher which filters the candidates with user
 		given fuzzy string.
 		This recognizes "!" as negate.
 		Narrowing down can be done by word.
@@ -1726,7 +1726,7 @@ matcher_hide_hidden_files
 		files will be appeared.
 
 						*unite-filter-sorter_default*
-sorter_default	Todo: The default sorter used by |unite-filter-default|.
+sorter_default	The default sorter used by |unite-filter-default|.
 		["sorter_nothing"] is set initially.
 		This default sorter can be changed by calling
 		|unite#filters#sorter_default#use()|.
@@ -1750,7 +1750,7 @@ sorter_reverse	Reverse order sorter.
 
 						*unite-filter-converter_default*
 converter_default
-		Todo: The default converter used by |unite-filter-default|.
+		The default converter used by |unite-filter-default|.
 		["converter_nothing"] is set initially.
 		This default converter can be changed by calling
 		|unite#filters#converter_default#use()|.
@@ -1761,7 +1761,7 @@ converter_nothing
 
 						*unite-filter-converter_relative_word*
 converter_relative_word
-		Todo: A converter which converts a candidate's word into a
+		A converter which converts a candidate's word into a
 		corresponding relative path.
 		word can be used by matcher to narrow down the candidates and must be set in precedence of the matcher.
 		If context information contains source__directory, this
@@ -1774,7 +1774,7 @@ converter_relative_word
 <
 						*unite-filter-converter_relative_abbr*
 converter_relative_abbr
-		Todo: A converter which converts a candidate's abbr into a
+		A converter which converts a candidate's abbr into a
 		corresponding relative path.
 		Specification of this term is almost the same as
 		|unite-filter-converter_relative_word|.
@@ -2315,7 +2315,7 @@ NOTATION					*unite-notation*
 				If you use list, you have not to
 				define parents kind action.
 				Unite search kinds action from list
-				head.
+				tail.
 				Ex: If you set kind attribute to
 				["file", "command"], "command"
 				(default) action overwrite "file"
@@ -2377,42 +2377,77 @@ name			String		(Required)
 
 						*unite-kind-attribute-default_action*
 default_action		String		(Required)
-			Todo
+			Specifies default action name when execute
+			|<Plug>(unite_do_default_action)|.  If omit this
+			attribute, error occurred. But this hack is used in
+			parents only actions.
 
 						*unite-kind-attribute-action_table*
 action_table		Dictionary		(Required)
-			Todo
+			Add an action table unique to the kind.  In
+			this dictionary, the key is the action name and the
+			value is below dictionary attributes.
+			If the value is "nop", disabled the actions.
+			Note: "default" and "nop" names are keyword. You cannot
+			use them.
 			
 			func			(Function)
-				Todo
+				This function is called when execute actions.
+				This function takes {candidate}.
+				If "is_selectable" attribute is "1",
+				{candidate} are candidate list({candidates}).
+				Note: This {candidate} is cached by unite, so
+				you cannot modify it. If you modify it, you
+				must use |deepcopy()|.
 
 			description		(String)	(Optional)
-				Todo
+				The kind description string.
 
 			is_quit			(Number)		(Optional)
-				Todo
+				If this attribute is "1", close unite buffer
+				before executing actions. If omit this
+				attribute, "1" is used.
 
 			is_selectable		(Number)		(Optional)
-				Todo
+				If this attribute is "1", the action can
+				execute multiple candidates.  If omit this
+				attribute, "0" is used.
 
 			is_invalidate_cache	(Number)		(Optional)
-				Todo
+				If this attribute is "1", unite invalidate
+				source cache when execute the action.  If omit
+				this attribute, "0" is used.
 
 			is_listed		(Number)		(Optional)
-				Todo
+				If this attribute is "1", the action is listed
+				in |<Plug>(unite_choose_action)|.  If omit this
+				attribute, "1" is used.
 
 						*unite-kind-attribute-alias_table*
 alias_table		Dictionary		(Optional)
-			Todo
+			Add an alias table unique to the kind.  In
+			this dictionary, the key is the action name and the
+			value is the overwrite action name.
+			If the value is "nop", disabled the actions.
 
 						*unite-kind-attribute-parents*
 parents			List		(Optional)
-			Todo
+			Specifies parents list. If omit this attribute,
+			["common"] is used.
+			Unite search actions from list tail(head actions are
+			overwritten).
+			Note: Unite search actions from parents list
+			recursively. You must check infinity loop.
 
 ------------------------------------------------------------------------------
 IMPLICIT KIND					*unite-implicit-kind-for-a-source*
 
-Todo
+Unite can define actions in implicit kind.  The implicit kind name is
+"source/{name}/{kind}". The {name} is source name.  If the {kind} is "*", it
+matches any kinds.
+
+For example, if you want to add "delete" action in source "file", execute below
+command.
 >
 	call unite#custom_action('source/file/*', 'delete', function('...'))
 <
