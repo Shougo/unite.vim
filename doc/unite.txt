@@ -2566,6 +2566,7 @@ CHANGELOG					*unite-changelog*
 
 2012-06-05
 - Changed asyncronous update behavior.
+- Fixed cmdwin check.
 
 2012-06-04
 - Improved asyncronous behavior.

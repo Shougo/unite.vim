@@ -150,8 +150,10 @@ function! unite#util#alternate_buffer()"{{{
   endif
 endfunction"}}}
 function! unite#util#is_cmdwin()"{{{
+  let errmsg_save = v:errmsg
   silent! verbose noautocmd wincmd p
-  if v:errmsg =~ '^E11:'
+  if errmsg_save !=# v:errmsg
+        \ && v:errmsg =~ '^E11:'
     return 1
   endif
 
