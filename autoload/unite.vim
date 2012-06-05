@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jun 2012.
+" Last Modified: 05 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2518,28 +2518,32 @@ function! s:on_bufwin_enter(bufnr)  "{{{
   endif
 endfunction"}}}
 function! unite#_on_cursor_hold()  "{{{
+  let is_async = 0
+
   if &filetype ==# 'unite'
     " Redraw.
     call unite#redraw()
     call s:change_highlight()
 
-    if unite#get_current_unite().is_async
-      " Ignore key sequences.
-      call feedkeys("g\<ESC>", 'n')
-    endif
+    let is_async = unite#get_current_unite().is_async
+  else
+    " Search other unite window.
+    for winnr in filter(range(1, winnr('$')),
+          \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
+      let unite = getbufvar(winbufnr(winnr), 'unite')
+      if unite.is_async
+        " Redraw unite buffer.
+        call unite#redraw(winnr)
 
-    return
+        let is_async = unite.is_async
+      endif
+    endfor
   endif
 
-  " Search other unite window.
-  for winnr in filter(range(1, winnr('$')),
-        \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
-    let unite = getbufvar(winbufnr(winnr), 'unite')
-    if unite.is_async
-      " Redraw unite buffer.
-      call unite#redraw(winnr)
-    endif
-  endfor
+  if is_async
+    " Ignore key sequences.
+    call feedkeys("g\<ESC>", 'n')
+  endif
 endfunction"}}}
 function! s:on_cursor_moved()  "{{{
   if &filetype !=# 'unite'
