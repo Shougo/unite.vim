@@ -106,21 +106,7 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   highlight default link uniteSource__DirectoryMru_Time Statement
 endfunction"}}}
 function! s:source.hooks.on_post_filter(args, context)"{{{
-  for mru in filter(copy(a:context.candidates), "!has_key(v:val, 'abbr')")
-    let relative_path = unite#util#substitute_path_separator(
-          \ fnamemodify(mru.action__path,
-          \   g:unite_source_directory_mru_filename_format))
-    if relative_path == ''
-      let relative_path = mru.action__path
-    endif
-    if relative_path !~ '/$'
-      let relative_path .= '/'
-    endif
-
-    " Set default abbr.
-    let mru.abbr = strftime(g:unite_source_directory_mru_time_format,
-          \ mru.source__time)
-          \ . relative_path
+  for mru in a:context.candidates
     let mru.action__directory =
           \ unite#util#path2directory(mru.action__path)
   endfor
@@ -145,6 +131,33 @@ function! s:source.action_table.delete.func(candidates)"{{{
 
   call s:save()
 endfunction"}}}
+"}}}
+
+" Filters"{{{
+function! s:source.source__converter(candidates, context)"{{{
+  for mru in filter(copy(a:context.candidates), "!has_key(v:val, 'abbr')")
+    let relative_path = unite#util#substitute_path_separator(
+          \ fnamemodify(mru.action__path,
+          \   g:unite_source_directory_mru_filename_format))
+    if relative_path == ''
+      let relative_path = mru.action__path
+    endif
+    if relative_path !~ '/$'
+      let relative_path .= '/'
+    endif
+
+    " Set default abbr.
+    let mru.abbr = strftime(g:unite_source_directory_mru_time_format,
+          \ mru.source__time)
+          \ . relative_path
+  endfor
+
+  return a:candidates
+endfunction"}}}
+
+let s:source.filters =
+      \ ['matcher_default', 'sorter_default',
+      \      s:source.source__converter]
 "}}}
 
 " Misc

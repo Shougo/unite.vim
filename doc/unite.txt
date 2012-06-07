@@ -2210,10 +2210,11 @@ syntax			String		(Optional)
 
 						*unite-source-attribute-filters*
 filters			List		(Optional)
-			The list of filters used by the source.  Please
-			refer to |unite-filter-attributes| for the
-			specification of filter.  If omitted, unite uses
-			|unite-filter-default|.
+			The list of filters used by the source. The elements
+			are filter name or function reference (accepted
+			dictionary function in current source). Please refer to
+			|unite-filter-attributes| for the specification of
+			filter. If omitted, unite uses |unite-filter-default|.
 
 						*unite-source-attribute-source__*
 source__		Unknown		(Optional)
@@ -2568,6 +2569,7 @@ CHANGELOG					*unite-changelog*
 2012-06-07
 - Fixed window size problem.
 - Added g:unite_source_directory_mru_filename_format option.
+- Changed filters behavior.
 
 2012-06-05
 - Changed asyncronous update behavior.

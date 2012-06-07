@@ -1939,15 +1939,16 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     call s:call_hook([source], 'on_pre_filter')
 
     " Filter.
-    for filter in get(custom_source, 'filters', source.filters)
-      if type(filter) == type('')
+    for Filter in get(custom_source, 'filters', source.filters)
+      if type(Filter) == type('')
         let source_candidates = unite#call_filter(
-              \ filter, source_candidates, source.unite__context)
+              \ Filter, source_candidates, source.unite__context)
       else
-        call call(filter, source_candidates, source.unite__context)
+        let source_candidates = call(Filter,
+              \ [source_candidates, source.unite__context], source)
       endif
 
-      unlet filter
+      unlet Filter
     endfor
 
     let source.unite__candidates += source_candidates
@@ -2805,8 +2806,10 @@ function! s:call_hook(sources, hook_name)"{{{
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
-      call unite#print_error('[unite.vim] Error occured in calling hook "' . a:hook_name . '"!')
-      call unite#print_error('[unite.vim] Source name is ' . source.name)
+      call unite#print_error(
+            \ '[unite.vim] Error occured in calling hook "' . a:hook_name . '"!')
+      call unite#print_error(
+            \ '[unite.vim] Source name is ' . source.name)
     endtry
   endfor
 endfunction"}}}

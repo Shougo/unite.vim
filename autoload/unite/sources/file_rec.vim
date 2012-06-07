@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 May 2012.
+" Last Modified: 07 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -415,6 +415,24 @@ unlet! s:cdable_action_rec
 unlet! s:cdable_action_rec_async
 "}}}
 
+" Filters"{{{
+function! s:source_rec.source__converter(candidates, context)"{{{
+  return s:converter(a:candidates, a:context)
+endfunction"}}}
+
+let s:source_rec.filters =
+      \ ['matcher_default', 'sorter_default',
+      \      s:source_rec.source__converter]
+
+function! s:source_async.source__converter(candidates, context)"{{{
+  return s:converter(a:candidates, a:context)
+endfunction"}}}
+
+let s:source_async.filters =
+      \ ['matcher_default', 'sorter_default',
+      \      s:source_async.source__converter]
+"}}}
+
 " Misc.
 function! s:get_path(args, context)"{{{
   let directory = get(
@@ -500,16 +518,9 @@ function! s:get_files(files, level, max_len)"{{{
         \ "unite#util#substitute_path_separator(fnamemodify(v:val, ':p'))")]
 endfunction"}}}
 function! s:on_post_filter(args, context)"{{{
-  let is_relative_path =
-        \ a:context.source__directory ==
-        \   unite#util#substitute_path_separator(getcwd())
-
   for candidate in a:context.candidates
     let candidate.kind = 'file'
-    let candidate.abbr = candidate.word .
-          \ (isdirectory(candidate.word) ? '/' : '')
-    let candidate.action__directory = is_relative_path ?
-          \ candidate.abbr :
+    let candidate.action__directory =
           \ unite#util#path2directory(candidate.action__path)
   endfor
 endfunction"}}}
@@ -558,6 +569,18 @@ function! s:init_continuation(context, directory)"{{{
           \ 'directory' : a:directory, 'end' : 0,
           \ }
   endif
+endfunction"}}}
+function! s:converter(candidates, context)"{{{
+  let is_relative_path =
+        \ a:context.source__directory ==
+        \   unite#util#substitute_path_separator(getcwd())
+
+  for candidate in a:candidates
+    let candidate.abbr = candidate.word .
+          \ (isdirectory(candidate.word) ? '/' : '')
+  endfor
+
+  return a:candidates
 endfunction"}}}
 
 let &cpo = s:save_cpo

@@ -100,18 +100,8 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   highlight default link uniteSource__FileMru_Time Statement
 endfunction"}}}
 function! s:source.hooks.on_post_filter(args, context)"{{{
-  for mru in filter(copy(a:context.candidates), "!has_key(v:val, 'abbr')")
-    let path = (g:unite_source_file_mru_filename_format == '') ?
-          \ mru.action__path :
-          \ unite#util#substitute_path_separator(
-          \     fnamemodify(mru.action__path, g:unite_source_file_mru_filename_format))
-    if path == ''
-      let path = mru.action__path
-    endif
-
-    " Set default abbr.
-    let mru.abbr = (g:unite_source_file_mru_time_format == '' ? '' :
-          \ strftime(g:unite_source_file_mru_time_format, mru.source__time)) .path
+  for mru in filter(copy(a:context.candidates),
+        \ "!has_key(v:val, 'abbr')")
     let mru.action__directory =
           \ unite#util#path2directory(mru.action__path)
     let mru.kind =
@@ -139,6 +129,32 @@ function! s:source.action_table.delete.func(candidates)"{{{
 
   call s:save()
 endfunction"}}}
+"}}}
+
+" Filters"{{{
+function! s:source.source__converter(candidates, context)"{{{
+  for mru in filter(copy(a:candidates),
+        \ "!has_key(v:val, 'abbr')")
+    let path = (g:unite_source_file_mru_filename_format == '') ?
+          \ mru.action__path :
+          \ unite#util#substitute_path_separator(
+          \     fnamemodify(mru.action__path,
+          \      g:unite_source_file_mru_filename_format))
+    if path == ''
+      let path = mru.action__path
+    endif
+
+    " Set default abbr.
+    let mru.abbr = (g:unite_source_file_mru_time_format == '' ? '' :
+          \ strftime(g:unite_source_file_mru_time_format, mru.source__time)) .path
+  endfor
+
+  return a:candidates
+endfunction"}}}
+
+let s:source.filters =
+      \ ['matcher_default', 'sorter_default',
+      \      s:source.source__converter]
 "}}}
 
 " Misc
@@ -185,27 +201,6 @@ endfunction"}}}
 function! s:convert2list(dict)  "{{{
   return [ a:dict.action__path, a:dict.source__time ]
 endfunction"}}}
-
-function! s:source.source__converter(candidates, context)
-  for mru in filter(copy(a:candidates), "!has_key(v:val, 'abbr')")
-    let path = (g:unite_source_file_mru_filename_format == '') ?
-          \ mru.action__path :
-          \ unite#util#substitute_path_separator(
-          \     fnamemodify(mru.action__path,
-          \      g:unite_source_file_mru_filename_format))
-    if path == ''
-      let path = mru.action__path
-    endif
-
-    " Set default abbr.
-    let mru.abbr = (g:unite_source_file_mru_time_format == '' ? '' :
-          \ strftime(g:unite_source_file_mru_time_format, mru.source__time)) .path
-    let mru.action__directory =
-          \ unite#util#path2directory(mru.action__path)
-    let mru.kind =
-          \ (isdirectory(mru.action__path) ? 'directory' : 'file')
-  endfor
-endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
