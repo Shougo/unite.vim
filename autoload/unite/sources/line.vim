@@ -39,8 +39,6 @@ let s:source = {
       \ 'syntax' : 'uniteSource__Line',
       \ 'hooks' : {},
       \ 'max_candidates': 100,
-      \ 'filters' :
-      \    ['matcher_regexp', 'sorter_default', 'converter_default'],
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
@@ -133,6 +131,7 @@ function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
   return ['all', 'forward', 'backward']
 endfunction"}}}
 
+" Filters.
 function! s:source.source__converter(candidates, context)"{{{
   for candidate in a:candidates
     let candidate.abbr = printf(a:context.source__format,
@@ -143,7 +142,7 @@ function! s:source.source__converter(candidates, context)"{{{
 endfunction"}}}
 
 let s:source.filters =
-      \ ['matcher_default', 'sorter_default',
+      \ ['matcher_regexp', 'sorter_default',
       \      s:source.source__converter]
 
 " vim: expandtab:ts=2:sts=2:sw=2

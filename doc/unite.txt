@@ -2570,6 +2570,7 @@ CHANGELOG					*unite-changelog*
 - Fixed window size problem.
 - Added g:unite_source_directory_mru_filename_format option.
 - Changed filters behavior.
+- Fixed line filter.
 
 2012-06-05
 - Changed asyncronous update behavior.
