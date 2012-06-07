@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jun 2012.
+" Last Modified: 07 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1467,6 +1467,8 @@ function! s:initialize_context(context)"{{{
         \ 'here' : 0,
         \ 'silent' : 0,
         \ 'keep_focus' : 0,
+        \ 'old_winwidth' : 0,
+        \ 'old_winheight' : 0,
         \ }
 
   let context = extend(default_context, a:context)
@@ -2431,25 +2433,22 @@ function! unite#_resize_window() "{{{
     call unite#redraw()
   elseif context.vertical
         \ && winwidth(winnr()) != context.winwidth
-        \ && (context.winheight  == 0 ||
+        \ && (context.old_winwidth  == 0 ||
         \     winheight(winnr()) == context.winheight)
     execute 'vertical resize' context.winwidth
-    let context.winwidth = winwidth(winnr())
 
     let context.is_resize = 1
-    call unite#redraw()
   elseif !context.vertical
         \ && winheight(winnr()) != context.winheight
-        \ && (context.winwidth  == 0 ||
+        \ && (context.old_winheight  == 0 ||
         \     winwidth(winnr()) == context.winwidth)
     execute 'resize' context.winheight
 
     let context.is_resize = 1
-    call unite#redraw()
   endif
 
-  let context.winheight = winheight(winnr())
-  let context.winwidth = winwidth(winnr())
+  let context.old_winheight = winheight(winnr())
+  let context.old_winwidth = winwidth(winnr())
 endfunction"}}}
 
 " Autocmd events.

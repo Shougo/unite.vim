@@ -2564,6 +2564,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-06-07
+- Fixed window size problem.
+
 2012-06-05
 - Changed asyncronous update behavior.
 - Fixed cmdwin check.
