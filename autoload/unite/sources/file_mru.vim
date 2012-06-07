@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 May 2012.
+" Last Modified: 07 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -185,6 +185,27 @@ endfunction"}}}
 function! s:convert2list(dict)  "{{{
   return [ a:dict.action__path, a:dict.source__time ]
 endfunction"}}}
+
+function! s:source.source__converter(candidates, context)
+  for mru in filter(copy(a:candidates), "!has_key(v:val, 'abbr')")
+    let path = (g:unite_source_file_mru_filename_format == '') ?
+          \ mru.action__path :
+          \ unite#util#substitute_path_separator(
+          \     fnamemodify(mru.action__path,
+          \      g:unite_source_file_mru_filename_format))
+    if path == ''
+      let path = mru.action__path
+    endif
+
+    " Set default abbr.
+    let mru.abbr = (g:unite_source_file_mru_time_format == '' ? '' :
+          \ strftime(g:unite_source_file_mru_time_format, mru.source__time)) .path
+    let mru.action__directory =
+          \ unite#util#path2directory(mru.action__path)
+    let mru.kind =
+          \ (isdirectory(mru.action__path) ? 'directory' : 'file')
+  endfor
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

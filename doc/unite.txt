@@ -495,13 +495,14 @@ g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
 		value.
 
 g:unite_source_directory_mru_time_format	*g:unite_source_directory_mru_time_format*
+g:unite_source_directory_mru_filename_format	*g:unite_source_directory_mru_filename_format*
 g:unite_source_directory_mru_directory		*g:unite_source_directory_mru_directory*
 g:unite_source_directory_mru_limit		*g:unite_source_directory_mru_limit*
 g:unite_source_directory_mru_ignore_pattern	*g:unite_source_directory_mru_ignore_pattern*
 		They are same to |unite-source-file_mru| except for the
 		targets are |unite-source-directory_mru|.
 
-g:unite_source_bookmark_directory			*g:unite_source_bookmark_directory*
+g:unite_source_bookmark_directory		*g:unite_source_bookmark_directory*
 		Specifies the directory that |unite-source-bookmark| writes its
 		bookmarks.
 
@@ -2566,6 +2567,7 @@ CHANGELOG					*unite-changelog*
 
 2012-06-07
 - Fixed window size problem.
+- Added g:unite_source_directory_mru_filename_format option.
 
 2012-06-05
 - Changed asyncronous update behavior.

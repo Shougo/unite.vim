@@ -1939,9 +1939,15 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     call s:call_hook([source], 'on_pre_filter')
 
     " Filter.
-    for filter_name in get(custom_source, 'filters', source.filters)
+    for filter in get(custom_source, 'filters', source.filters)
+      if type(filter) == type('')
         let source_candidates = unite#call_filter(
-              \ filter_name, source_candidates, source.unite__context)
+              \ filter, source_candidates, source.unite__context)
+      else
+        call call(filter, source_candidates, source.unite__context)
+      endif
+
+      unlet filter
     endfor
 
     let source.unite__candidates += source_candidates

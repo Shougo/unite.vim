@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 May 2012.
+" Last Modified: 07 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,6 +38,8 @@ let s:mru_file_mtime = 0  " the last modified time of the mru file.
 
 call unite#util#set_default('g:unite_source_directory_mru_time_format',
       \ '(%Y/%m/%d %H:%M:%S) ')
+call unite#util#set_default('g:unite_source_directory_mru_filename_format',
+      \ ':~:.')
 call unite#util#set_default('g:unite_source_directory_mru_file',
       \ g:unite_data_directory . '/directory_mru')
 call unite#util#set_default('g:unite_source_directory_mru_limit', 100)
@@ -106,7 +108,8 @@ endfunction"}}}
 function! s:source.hooks.on_post_filter(args, context)"{{{
   for mru in filter(copy(a:context.candidates), "!has_key(v:val, 'abbr')")
     let relative_path = unite#util#substitute_path_separator(
-          \ fnamemodify(mru.action__path, ':~:.'))
+          \ fnamemodify(mru.action__path,
+          \   g:unite_source_directory_mru_filename_format))
     if relative_path == ''
       let relative_path = mru.action__path
     endif
