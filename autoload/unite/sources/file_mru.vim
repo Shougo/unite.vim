@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Jun 2012.
+" Last Modified: 08 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -100,8 +100,7 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   highlight default link uniteSource__FileMru_Time Statement
 endfunction"}}}
 function! s:source.hooks.on_post_filter(args, context)"{{{
-  for mru in filter(copy(a:context.candidates),
-        \ "!has_key(v:val, 'abbr')")
+  for mru in a:context.candidates
     let mru.action__directory =
           \ unite#util#path2directory(mru.action__path)
     let mru.kind =

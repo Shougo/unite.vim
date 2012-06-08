@@ -2566,6 +2566,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-06-08
+- Fixed file_mru error.
+
 2012-06-07
 - Fixed window size problem.
 - Added g:unite_source_directory_mru_filename_format option.
