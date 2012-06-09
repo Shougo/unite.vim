@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 29 May 2012.
+" Last Modified: 09 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -79,6 +79,7 @@ let s:source = {
       \ 'hooks' : {},
       \ 'syntax' : 'uniteSource__Grep',
       \ 'filters' : ['matcher_regexp', 'sorter_default', 'converter_default'],
+      \ 'ignore_pattern' : g:unite_source_grep_ignore_pattern,
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
@@ -196,11 +197,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
         \ "iconv(v:val, 'char', &encoding)"),
     \  'v:val =~ "^.\\+:.\\+:.\\+$"'),
     \ '[v:val, split(v:val[2:], ":")]')
-
-  if g:unite_source_grep_ignore_pattern != ''
-    call filter(candidates, 'v:val[0][:1].v:val[1][0] !~ '
-          \ . string(g:unite_source_grep_ignore_pattern))
-  endif
 
   if isdirectory(a:context.source__directory)
     let cwd = getcwd()

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: find.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 02 Jun 2012.
+" Last Modified: 09 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,6 +58,7 @@ let s:source = {
       \ 'max_candidates': g:unite_source_find_max_candidates,
       \ 'hooks' : {},
       \ 'filters' : ['matcher_regexp', 'sorter_default', 'converter_relative'],
+      \ 'ignore_pattern' : g:unite_source_find_ignore_pattern,
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
@@ -123,11 +124,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
   let candidates = map(filter(
         \ stdout.read_lines(-1, 100), 'v:val != ""'),
         \ "fnamemodify(iconv(v:val, 'char', &encoding), ':p')")
-
-  if g:unite_source_find_ignore_pattern != ''
-    call filter(candidates, 'v:val !~ '
-          \ . string(g:unite_source_find_ignore_pattern))
-  endif
 
   if isdirectory(a:context.source__target)
     let cwd = getcwd()

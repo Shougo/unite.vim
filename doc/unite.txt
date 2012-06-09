@@ -452,12 +452,10 @@ g:unite_no_default_keymappings			*g:unite_no_default_keymappings*
 SOURCES VARIABLES 				*unite-sources-variables*
 
 g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
-		Specifies a regex pattern for ignoring some specific candidates
-		in |unite-source-file|.  This matches on the full path of each
-		files.  If the variable isn't empty string, unite filters with
-		the regex pattern on the results.
-
 		Refer autoload/unite/sources/file.vim about the default value.
+		Note: This function is deprecated. Please use
+		|unite#custom_source()| instead.
+		Note: This variable must be set before using |unite|.
 
 g:unite_source_file_mru_time_format		*g:unite_source_file_mru_time_format*
 		Specifies the output format of the last access time of
@@ -485,14 +483,11 @@ g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
 		Default value is 100.
 
 g:unite_source_file_mru_ignore_pattern		*g:unite_source_file_mru_ignore_pattern*
-		Specifies the regexp pattern to ignore candidates of
-		|unite-source-file_mru|.  This applies on the full path of each
-		files.  Unless this variable value is an empty string, Unite
-		filters out the result with the regexp.  Regardless of
-		|g:unite_enable_ignore_case| value, it's case sensitive.
-
 		Refer autoload/unite/sources/file_mru.vim about the default
 		value.
+		Note: This function is deprecated. Please use
+		|unite#custom_source()| instead.
+		Note: This variable must be set before using |unite|.
 
 g:unite_source_directory_mru_time_format	*g:unite_source_directory_mru_time_format*
 g:unite_source_directory_mru_filename_format	*g:unite_source_directory_mru_filename_format*
@@ -509,14 +504,11 @@ g:unite_source_bookmark_directory		*g:unite_source_bookmark_directory*
 		Default value is |g:unite_data_directory|; '/bookmark'.
 
 g:unite_source_file_rec_ignore_pattern		*g:unite_source_file_rec_ignore_pattern*
-		Specifies the regexp pattern to ignore candidates of
-		|unite-source-file_rec|.  This applies on the full path of each
-		files.  Unless this variable value is an empty string, Unite
-		filters out the result with the regexp.  Regardless of
-		|g:unite_enable_ignore_case| value, it's case sensitive.
-
 		Refer autoload/unite/sources/file_rec.vim about the default
 		value.
+		Note: This variable is deprecated. Please use
+		|unite#custom_source()| instead.
+		Note: This variable must be set before using |unite|.
 
 g:unite_source_file_rec_min_cache_files		*g:unite_source_file_rec_min_cache_files*
 		Specifies the minimum number of files that
@@ -551,14 +543,11 @@ g:unite_source_grep_max_candidates		*g:unite_source_grep_max_candidates*
 		Default value is 100.
 
 g:unite_source_grep_ignore_pattern		*g:unite_source_grep_ignore_pattern*
-		Specifies the regexp pattern to ignore candidates of
-		|unite-source-grep|.  This applies on the full path of each
-		files.  Unless this variable value is an empty string, Unite
-		filters out the result with the regexp.  Regardless of
-		|g:unite_enable_ignore_case| value, it's case sensitive.
-
 		Refer autoload/unite/sources/grep.vim about the default
 		value.
+		Note: This variable is deprecated. Please use
+		|unite#custom_source()| instead.
+		Note: This variable must be set before using |unite|.
 
 g:unite_source_grep_search_word_highlight	*g:unite_source_grep_search_word_highlight*
 		Specifies the search word highlight.
@@ -576,14 +565,11 @@ g:unite_source_find_max_candidates		*g:unite_source_find_max_candidates*
 		Default value is 100.
 
 g:unite_source_find_ignore_pattern		*g:unite_source_find_ignore_pattern*
-		Specifies the regexp pattern to ignore candidates of
-		|unite-source-find|.  This applies on the full path of each
-		files.  Unless this variable value is an empty string, Unite
-		filters out the result with the regexp.  Regardless of
-		|g:unite_enable_ignore_case| value, it's case sensitive.
-
 		Refer autoload/unite/sources/find.vim about the default
 		value.
+		Note: This variable is deprecated. Please use
+		|unite#custom_source()| instead.
+		Note: This variable must be set before using |unite|.
 
 g:unite_source_line_enable_highlight		*g:unite_source_line_enable_highlight*
 		Control whether search keyword is highlighted in unite
@@ -1232,12 +1218,37 @@ unite#custom_filters({source-name}, {filters})	*unite#custom_filters()*
 		may specify multiple sources with separating "," in
 		{source-name}.  {filters} is a name of filter or a list of
 		the names.
+		Note: This function is deprecated. Please use
+		|unite#custom_source()| instead.
 
 unite#custom_max_candidates({source-name}, {max})
 						*unite#custom_max_candidates()*
-		Changes the max candidates of {source-name} into {max}. You
-		may specify multiple sources with separating "," in
-		{source-name}. If {max} is 0, all candidates is displayed.
+		Changes the max candidates of {source-name} into
+		{max}. You may specify multiple sources with
+		separating "," in {source-name}.
+		Note: This function is deprecated. Please use
+		|unite#custom_source()| instead.
+
+unite#custom_source({source-name}, {option-name}, {value})
+						*unite#custom_source()*
+		Set {source-name} source specialized {option-name}
+		to {value}.
+		
+		This options is available:
+		
+		filters				(List)
+		Specifies filter names list. The filters overwrite
+		source default filters.
+		
+		max_candidates			(Number)
+		Changes the max candidates into {value}. If {value}
+		is 0, all candidates is displayed.
+		
+		ignore_pattern			(String)
+		Specifies the regexp pattern to ignore candidates
+		of the source.  This applies on the word attribute
+		of candidates.  Regardless of |g:unite_enable_ignore_case|
+		value, it's case sensitive.
 
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
@@ -2568,6 +2579,8 @@ CHANGELOG					*unite-changelog*
 
 2012-06-09
 - Split automatically when &l:modified && !&l:hidden.
+- Added unite#custom_source().
+- Changed ignore pattern behavior.
 
 2012-06-08
 - Fixed file_mru error.

@@ -117,15 +117,20 @@ function! unite#custom_action(kind, name, action)"{{{
     let s:custom.actions[key][a:name] = a:action
   endfor
 endfunction"}}}
-function! unite#custom_max_candidates(source_name, max)"{{{
-  call unite#util#set_dictionary_helper(s:custom.max_candidates,
-        \ a:source_name, a:max)
-endfunction"}}}
 function! unite#undef_custom_action(kind, name)"{{{
   for key in split(a:kind, '\s*,\s*')
     if has_key(s:custom.actions, key)
       call remove(s:custom.actions, key)
     endif
+  endfor
+endfunction"}}}
+function! unite#custom_source(source_name, option_name, value)"{{{
+  for key in split(a:source_name, '\s*,\s*')
+    if has_key(s:custom.source, key)
+      let s:custom.source[key] = {}
+    endif
+
+    let s:custom.source[key][a:option_name] = a:value
   endfor
 endfunction"}}}
 
@@ -253,7 +258,6 @@ let s:custom.default_actions = {}
 let s:custom.aliases = {}
 let s:custom.filters = {}
 let s:custom.source = {}
-let s:custom.max_candidates = {}
 
 let s:profiles = {}
 call unite#set_substitute_pattern('files', '^\~',
@@ -1582,6 +1586,7 @@ function! s:initialize_sources(...)"{{{
         \ 'parents' : [],
         \ 'description' : '',
         \ 'syntax' : '',
+        \ 'ignore_pattern' : '',
         \ }
 
   let sources = {}
@@ -1642,6 +1647,8 @@ function! s:initialize_sources(...)"{{{
         call remove(source, 'gather_candidates')
       endif
 
+      let custom_source = get(s:custom.source, source.name, {})
+
       let source.filters =
             \ has_key(s:custom.filters, source.name) ?
             \ s:custom.filters[source.name] :
@@ -1649,11 +1656,8 @@ function! s:initialize_sources(...)"{{{
             \ source.filters :
             \ unite#filters#default#get()
       let source.max_candidates =
-            \ has_key(s:custom.max_candidates, source.name) ?
-            \ s:custom.max_candidates[source.name] :
-            \ has_key(source, 'max_candidates') ?
-            \ source.max_candidates :
-            \ 0
+            \ get(custom_source, 'max_candidates',
+            \    get(source, 'max_candidates', 0))
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
@@ -1937,6 +1941,11 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     let source_candidates = s:get_source_candidates(source)
 
     let custom_source = get(s:custom.source, source.name, {})
+    let ignore_pattern = get(custom_source, 'ignore_pattern',
+          \ source.ignore_pattern)
+    if ignore_pattern != ''
+      call filter(source_candidates, 'v:val.word !~# ignore_pattern')
+    endif
 
     " Call pre_filter hook.
     let source.unite__context.candidates = source_candidates

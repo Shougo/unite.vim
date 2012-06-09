@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Jun 2012.
+" Last Modified: 09 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,8 +68,6 @@ function! unite#sources#directory_mru#_append()"{{{
 
   " Append the current buffer to the mru list.
   if !isdirectory(path) || &buftype =~ 'help'
-  \   || (g:unite_source_directory_mru_ignore_pattern != ''
-  \      && path =~# g:unite_source_directory_mru_ignore_pattern)
     return
   endif
 
@@ -97,6 +95,8 @@ let s:source = {
       \ 'hooks' : {},
       \ 'action_table' : {},
       \ 'syntax' : 'uniteSource__DirectoryMru',
+      \ 'ignore_pattern' :
+      \    g:unite_source_directory_mru_ignore_pattern,
       \}
 
 function! s:source.hooks.on_syntax(args, context)"{{{

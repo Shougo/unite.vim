@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jun 2012.
+" Last Modified: 09 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,8 +62,6 @@ function! unite#sources#file_mru#_append()"{{{
 
   " Append the current buffer to the mru list.
   if !s:is_exists_path(path) || &buftype =~ 'help'
-  \   || (g:unite_source_file_mru_ignore_pattern != ''
-  \      && path =~# g:unite_source_file_mru_ignore_pattern)
     return
   endif
 
@@ -91,6 +89,7 @@ let s:source = {
       \ 'hooks' : {},
       \ 'action_table' : {},
       \ 'syntax' : 'uniteSource__FileMru',
+      \ 'ignore_pattern' : g:unite_source_file_mru_ignore_pattern,
       \}
 
 function! s:source.hooks.on_syntax(args, context)"{{{
