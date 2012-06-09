@@ -2566,6 +2566,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-06-09
+- Split automatically when &l:modified && !&l:hidden.
+
 2012-06-08
 - Fixed file_mru error.
 

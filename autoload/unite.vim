@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Jun 2012.
+" Last Modified: 09 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1499,6 +1499,10 @@ function! s:initialize_context(context)"{{{
     if context.winheight < 7
       let context.winheight = 7
     endif
+  endif
+  if &l:modified && !&l:hidden
+    " Split automatically.
+    let context.no_split = 0
   endif
   let context.is_changed = 0
 
