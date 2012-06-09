@@ -1586,7 +1586,6 @@ function! s:initialize_sources(...)"{{{
         \ 'parents' : [],
         \ 'description' : '',
         \ 'syntax' : '',
-        \ 'ignore_pattern' : '',
         \ }
 
   let sources = {}
@@ -1658,6 +1657,9 @@ function! s:initialize_sources(...)"{{{
       let source.max_candidates =
             \ get(custom_source, 'max_candidates',
             \    get(source, 'max_candidates', 0))
+      let source.ignore_pattern =
+            \ get(custom_source, 'ignore_pattern',
+            \    get(source, 'ignore_pattern', ''))
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
@@ -1941,10 +1943,9 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     let source_candidates = s:get_source_candidates(source)
 
     let custom_source = get(s:custom.source, source.name, {})
-    let ignore_pattern = get(custom_source, 'ignore_pattern',
-          \ source.ignore_pattern)
-    if ignore_pattern != ''
-      call filter(source_candidates, 'v:val.word !~# ignore_pattern')
+    if source.ignore_pattern != ''
+      call filter(source_candidates,
+            \ 'v:val.word !~# source.ignore_pattern')
     endif
 
     " Call pre_filter hook.
