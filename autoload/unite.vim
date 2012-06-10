@@ -126,7 +126,7 @@ function! unite#undef_custom_action(kind, name)"{{{
 endfunction"}}}
 function! unite#custom_source(source_name, option_name, value)"{{{
   for key in split(a:source_name, '\s*,\s*')
-    if has_key(s:custom.source, key)
+    if !has_key(s:custom.source, key)
       let s:custom.source[key] = {}
     endif
 
