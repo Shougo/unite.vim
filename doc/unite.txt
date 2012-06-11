@@ -2579,6 +2579,7 @@ CHANGELOG					*unite-changelog*
 
 2012-06-11
 - Fixed for auto resize error.
+- Fixed unite#print_error() error.
 
 2012-06-09
 - Split automatically when &l:modified && !&l:hidden.
