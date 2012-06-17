@@ -2579,6 +2579,7 @@ CHANGELOG					*unite-changelog*
 
 2012-06-17
 - Improved documentation.
+- Improved call filters.
 
 2012-06-12
 - Fixed unite#custom_source().
