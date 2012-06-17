@@ -33,7 +33,7 @@ Interface		|unite-interface|
   Variables		  |unite-variables|
     Sources variables	    |unite-sources-variables|
   Key mappings		  |unite-key-mappings|
-Functions		  |unite-functions|
+  Functions		  |unite-functions|
 Sources			|unite-sources|
 Kinds			|unite-kinds|
 Actions			|unite-actions|
@@ -993,7 +993,7 @@ Visual mode mappings.
 --------	-----------------------------
 <Space>		|v_<Plug>(unite_toggle_mark_selected_candidates)|
 
-==============================================================================
+------------------------------------------------------------------------------
 FUNCTIONS					*unite-functions*
 
 CORE						*unite-functions-core*
@@ -2576,6 +2576,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-06-17
+- Improved documentation.
 
 2012-06-12
 - Fixed unite#custom_source().
