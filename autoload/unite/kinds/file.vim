@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 May 2012.
+" Last Modified: 20 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -202,10 +202,12 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
     endif
 
     let context = unite#get_context()
-    let dest_dir = has_key(context, 'action__directory')
-          \ && context.action__directory != '' ?
-          \   context.action__directory :
-          \   unite#util#input_directory('Input destination directory: ')
+    let dest_dir = get(context, 'action__directory', '')
+    if dest_dir == ''
+      let dest_dir = unite#util#input_directory(
+            \ 'Input destination directory: ')
+    endif
+
     if dest_dir == ''
       return
     elseif isdirectory(dest_dir) && dest_dir !~ '/$'
@@ -278,10 +280,12 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
     endif
 
     let context = unite#get_context()
-    let dest_dir = has_key(context, 'action__directory')
-          \ && context.action__directory != '' ?
-          \   context.action__directory :
-          \   unite#util#input_directory('Input destination directory: ')
+    let dest_dir = get(context, 'action__directory', '')
+    if dest_dir == ''
+      let dest_dir = unite#util#input_directory(
+            \ 'Input destination directory: ')
+    endif
+
     if dest_dir == ''
       return
     elseif isdirectory(dest_dir) && dest_dir !~ '/$'
@@ -290,8 +294,8 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
 
     if dest_dir =~ '^\h\w\+:'
       " Use protocol move method.
-      let protocol = matchstr(dest_dir, '^\h\w\+:')
-      call unite#sources#{protocol}#copy_files(dest_dir, candidates)
+      let protocol = matchstr(dest_dir, '^\h\w\+')
+      call unite#sources#{protocol}#copy_files(dest_dir, a:candidates)
     else
       call unite#kinds#file#do_action(a:candidates, dest_dir, 'copy',
             \ s:SID_PREFIX().'check_copy_func')

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jun 2012.
+" Last Modified: 20 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -138,47 +138,37 @@ endfunction"}}}
 
 " Misc.
 function! s:jump(candidate, is_highlight)"{{{
-  if !get(a:candidate, 'action__line', '') == ''
-        \ && !get(a:candidate, 'action__pattern', '') == ''
-    " Move to head.
-    call cursor(1, 1)
-    return
-  endif
+  let line = get(a:candidate, 'action__line', 1)
+  let pattern = get(a:candidate, 'action__pattern', '')
 
-  if has_key(a:candidate, 'action__line')
-        \ && a:candidate.action__line != ''
-        \ && a:candidate.action__line !~ '^\d\+$'
+  if line !~ '^\d\+$'
     call unite#print_error('unite: jump_list: Invalid action__line format.')
     return
   endif
 
-  if get(a:candidate, 'action__pattern', '') == ''
+  if !has_key(a:candidate, 'action__pattern')
     " Jump to the line number.
     let col = get(a:candidate, 'action__col', 0)
     if col == 0
-      if line('.') != a:candidate.action__line
-        execute a:candidate.action__line
+      if line('.') != line
+        execute line
       endif
     else
-      call cursor(a:candidate.action__line, col)
+      call cursor(line, col)
     endif
 
     call s:open_current_line(a:is_highlight)
     return
   endif
 
-  let pattern = a:candidate.action__pattern
-
   " Jump by search().
   let source = unite#get_sources(a:candidate.source)
   if !(has_key(a:candidate, 'action__signature')
         \ && has_key(source, 'calc_signature'))
     " Not found signature.
-    if has_key(a:candidate, 'action__line')
-          \ && a:candidate.action__line != ''
-          \ && getline(a:candidate.action__line) =~# pattern
-      if line('.') != a:candidate.action__line
-        execute a:candidate.action__line
+    if line != '' && getline(line) =~# pattern
+      if line('.') != line
+        execute line
       endif
     else
       call search(pattern, 'w')
