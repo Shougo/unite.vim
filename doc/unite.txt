@@ -2579,6 +2579,7 @@ CHANGELOG					*unite-changelog*
 
 2012-06-20
 - Fixed for unite-ssh.
+- Fixed jump_list.
 
 2012-06-12
 - Fixed unite#custom_source().
