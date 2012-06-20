@@ -138,17 +138,10 @@ endfunction"}}}
 
 " Misc.
 function! s:jump(candidate, is_highlight)"{{{
-  let line = get(a:candidate, 'action__line', '')
+  let line = get(a:candidate, 'action__line', 1)
   let pattern = get(a:candidate, 'action__pattern', '')
 
-  if line == '' && pattern == ''
-    " Move to head.
-    call cursor(1, 1)
-    return
-  endif
-
-  if has_key(a:candidate, 'action__line')
-        \ && line !~ '^\d\+$'
+  if line !~ '^\d\+$'
     call unite#print_error('unite: jump_list: Invalid action__line format.')
     return
   endif
@@ -157,11 +150,11 @@ function! s:jump(candidate, is_highlight)"{{{
     " Jump to the line number.
     let col = get(a:candidate, 'action__col', 0)
     if col == 0
-      if line('.') != a:candidate.action__line
-        execute a:candidate.action__line
+      if line('.') != line
+        execute line
       endif
     else
-      call cursor(a:candidate.action__line, col)
+      call cursor(line, col)
     endif
 
     call s:open_current_line(a:is_highlight)
@@ -174,8 +167,8 @@ function! s:jump(candidate, is_highlight)"{{{
         \ && has_key(source, 'calc_signature'))
     " Not found signature.
     if line != '' && getline(line) =~# pattern
-      if line('.') != a:candidate.action__line
-        execute a:candidate.action__line
+      if line('.') != line
+        execute line
       endif
     else
       call search(pattern, 'w')
