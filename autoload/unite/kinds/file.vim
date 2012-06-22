@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jun 2012.
+" Last Modified: 23 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -762,10 +762,10 @@ function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_
     endif
 
     " Print progress.
-    echo printf('%d%% %s %s%s',
+    echo printf('%d%% %s %s',
           \ ((cnt*100) / max), a:action_name,
-          \ (dest_filename == '' ? '' : dest_filename  . ' -> '),
-          \ filename)
+          \ (filename . (dest_filename == '' ? '' :
+          \              ' -> ' . dest_filename)))
     redraw
 
     if a:action_name == 'delete'
