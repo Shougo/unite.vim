@@ -1925,6 +1925,7 @@ function! s:recache_candidates_loop(context, is_force)"{{{
 
   let input_len = unite#util#strchars(a:context.input)
 
+  let candidate_sources = []
   for source in unite#loaded_sources_list()
     " Check required pattern length.
     if input_len < source.required_pattern_length
@@ -1966,7 +1967,8 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     let filters = []
     for Filter in get(custom_source, 'filters', source.filters)
       if type(Filter) == type('') &&
-            \ get(unite#get_filters(Filter), 'name', '') =~# '^matcher_'
+            \ get(unite#get_filters(Filter),
+            \              'name', '') =~# '^matcher_'
         call add(matchers, Filter)
       else
         call add(filters, Filter)
@@ -1988,7 +1990,16 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     endfor
 
     let source.unite__candidates += source_candidates
+    if !empty(source_candidates)
+      call add(candidate_sources, source.name)
+    endif
   endfor
+
+  if !a:context.hide_source_names
+        \ && !empty(unite#loaded_sources_list())
+    let unite.max_source_name =
+          \ max(map(candidate_sources, 'len(v:val)')) + 1
+  endif
 endfunction"}}}
 function! s:get_source_candidates(source)"{{{
   let context = a:source.unite__context
@@ -2184,10 +2195,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.post_filters = unite#get_profile(
         \ unite.profile_name, 'filters')
   let unite.preview_candidate = {}
-
-  let unite.max_source_name =
-        \ !context.hide_source_names && len(a:sources) > 1 ?
-        \ max(map(copy(a:sources), 'len(v:val[0])')) + 1 : 0
+  let unite.max_source_name = 0
 
   " Preview windows check.
   let unite.has_preview_window =

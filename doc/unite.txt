@@ -2578,6 +2578,7 @@ CHANGELOG					*unite-changelog*
 
 2012-06-23
 - Fixed display candidates.
+- Improved display source names behavior.
 
 2012-06-22
 - Improved for multiline behavior.
