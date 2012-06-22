@@ -2580,6 +2580,7 @@ CHANGELOG					*unite-changelog*
 - Fixed display candidates.
 - Improved display source names behavior.
 - Fixed print progress.
+- Fixed window delete action.
 
 2012-06-22
 - Improved for multiline behavior.
