@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jun 2012.
+" Last Modified: 22 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1724,6 +1724,7 @@ function! s:initialize_candidates(candidates, source_name)"{{{
         \ unite.context.winwidth : &columns
   let [max_width, max_source_name] =
         \ s:adjustments(winwidth-5, unite.max_source_name, 2)
+  let is_multiline = 0
 
   let default_candidate = {
         \ 'kind' : 'common',
@@ -1758,7 +1759,6 @@ function! s:initialize_candidates(candidates, source_name)"{{{
     endif
 
     if !candidate.is_multiline
-      let candidate.unite__abbr = '  ' . candidate.unite__abbr
       call add(candidates, candidate)
       continue
     endif
@@ -1782,7 +1782,7 @@ function! s:initialize_candidates(candidates, source_name)"{{{
     endif
 
     if candidate.unite__abbr !~ '\n'
-      let candidate.unite__abbr = '  ' . candidate.unite__abbr
+      let candidate.is_multiline = 0
       call add(candidates, candidate)
       continue
     endif
@@ -1799,11 +1799,20 @@ function! s:initialize_candidates(candidates, source_name)"{{{
         let candidate_multi.is_dummy = 1
       endif
 
+      let is_multiline = 1
       call add(candidates, candidate_multi)
 
       let cnt += 1
     endfor
   endfor
+
+  " Multiline check.
+  if is_multiline
+    for candidate in filter(copy(candidates),
+          \ '!v:val.is_multiline')
+      let candidate.unite__abbr = '  ' . candidate.unite__abbr
+    endfor
+  endif
 
   return candidates
 endfunction"}}}
