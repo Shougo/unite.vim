@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jun 2012.
+" Last Modified: 23 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -364,6 +364,16 @@ function! unite#sources#file#complete_directory(args, context, arglead, cmdline,
         \ unite#util#substitute_path_separator(expand('~')).'/'
   call map(files, "escape(v:val, ' \\')")
   return filter(files, 'isdirectory(v:val)')
+endfunction"}}}
+
+function! unite#sources#file#copy_files(dest, srcs)"{{{
+  return unite#kinds#file#do_action(a:srcs, a:dest, 'copy')
+endfunction"}}}
+function! unite#sources#file#move_files(dest, srcs)"{{{
+  return unite#kinds#file#do_action(a:srcs, a:dest, 'move')
+endfunction"}}}
+function! unite#sources#file#delete_files(srcs)"{{{
+  return unite#kinds#file#do_action(a:srcs, '', 'delete')
 endfunction"}}}
 
 " Add custom action table."{{{

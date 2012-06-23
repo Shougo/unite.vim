@@ -234,7 +234,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
       let protocol = matchstr(dest_dir, '^\h\w\+:')
       call unite#sources#{protocol}#move_files(dest_dir, candidates)
     else
-      call unite#kinds#file#do_action(candidates, dest_dir, 'move', '')
+      call unite#kinds#file#do_action(candidates, dest_dir, 'move')
     endif
   finally
 
@@ -297,8 +297,7 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
       let protocol = matchstr(dest_dir, '^\h\w\+')
       call unite#sources#{protocol}#copy_files(dest_dir, a:candidates)
     else
-      call unite#kinds#file#do_action(a:candidates, dest_dir, 'copy',
-            \ s:SID_PREFIX().'check_copy_func')
+      call unite#kinds#file#do_action(a:candidates, dest_dir, 'copy')
     endif
   finally
     if vimfiler_current_dir != ''
@@ -339,8 +338,7 @@ function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
       return 1
     endif
 
-    call unite#kinds#file#do_action(a:candidates, '', 'delete',
-          \ s:SID_PREFIX().'check_delete_func')
+    call unite#kinds#file#do_action(a:candidates, '', 'delete')
   finally
     if vimfiler_current_dir != ''
       lcd `=current_dir`
@@ -735,7 +733,7 @@ function! s:filename2candidate(filename)"{{{
         \ }
 endfunction"}}}
 
-function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_func)"{{{
+function! unite#kinds#file#do_action(candidates, dest_dir, action_name)"{{{
   let overwrite_method = ''
   let is_reset_method = 1
 
@@ -750,9 +748,10 @@ function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_
 
     if a:action_name == 'move' || a:action_name == 'copy'
       " Overwrite check.
-      let [dest_filename, overwrite_method, is_reset_method, is_continue] =
-            \ s:check_over_write(a:dest_dir, filename, overwrite_method,
-            \                    is_reset_method)
+      let [dest_filename, overwrite_method,
+            \ is_reset_method, is_continue] =
+            \ s:check_over_write(a:dest_dir, filename,
+            \    overwrite_method, is_reset_method)
       if is_continue
         let cnt += 1
         continue
@@ -785,8 +784,14 @@ function! unite#kinds#file#do_action(candidates, dest_dir, action_name, command_
         break
       endif
     else
-      let command = a:command_func == '' ?
-            \ a:action_name : call(a:command_func, [filename])
+      let command = a:action_name
+
+      if a:action_name ==# 'copy'
+        let command = s:check_copy_func(filename)
+      elseif a:action_name ==# 'delete'
+        let command = s:check_delete_func(filename)
+      endif
+
       if s:external(command, dest_filename, [filename])
         call unite#print_error(printf('Failed file %s: %s',
               \ a:action_name, filename))

@@ -2582,6 +2582,7 @@ CHANGELOG					*unite-changelog*
 - Fixed print progress.
 - Fixed window delete action.
 - Fixed source candidates.
+- Improved file actions.
 
 2012-06-22
 - Improved for multiline behavior.
