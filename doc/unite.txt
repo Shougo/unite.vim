@@ -2581,6 +2581,7 @@ CHANGELOG					*unite-changelog*
 - Improved display source names behavior.
 - Fixed print progress.
 - Fixed window delete action.
+- Fixed source candidates.
 
 2012-06-22
 - Improved for multiline behavior.

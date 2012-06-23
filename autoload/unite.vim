@@ -1996,7 +1996,7 @@ function! s:recache_candidates_loop(context, is_force)"{{{
   endfor
 
   if !a:context.hide_source_names
-        \ && !empty(unite#loaded_sources_list())
+        \ && len(unite#loaded_sources_list()) > 1
     let unite.max_source_name =
           \ max(map(candidate_sources, 'len(v:val)')) + 1
   endif
