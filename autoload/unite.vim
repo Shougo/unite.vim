@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jun 2012.
+" Last Modified: 28 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2319,7 +2319,7 @@ function! s:initialize_unite_buffer()"{{{
   else
     syntax match uniteCandidateSourceName /^- / contained
   endif
-  let source_padding = 5
+  let source_padding = 3
 
   let unite.abbr_head = unite.max_source_name+source_padding
   execute 'syntax region uniteCandidateAbbr' 'start=/\%'
