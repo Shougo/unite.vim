@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jan 2012.
+" Last Modified: 03 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -163,26 +163,32 @@ function! s:make_word(bufnr)"{{{
   return path
 endfunction"}}}
 function! s:make_abbr(bufnr, flags)"{{{
+  let bufname = fnamemodify(bufname(a:bufnr), ':t')
+  if bufname == ''
+    let bufname = bufname(a:bufnr)
+  endif
+
   let filetype = getbufvar(a:bufnr, '&filetype')
   if filetype ==# 'vimfiler'
-    let path = getbufvar(a:bufnr, 'vimfiler').current_dir
-    let path = printf('%s [%s]', fnamemodify(bufname(a:bufnr), ':t'),
-          \ unite#substitute_path_separator(simplify(path)))
+    let vimfiler = getbufvar(a:bufnr, 'vimfiler')
+    let path = vimfiler.current_dir
+    if path =~ '^//'
+      let path = vimfiler.source . ':' . path
+    endif
+    let path = printf('%s : [%s]', bufname, path)
   elseif filetype ==# 'vimshell'
     let vimshell = getbufvar(a:bufnr, 'vimshell')
     let path = vimshell.current_dir
-    let path = printf('%s: %s [%s]', fnamemodify(bufname(a:bufnr), ':t'),
-          \ (has_key(vimshell, 'cmdline') ? vimshell.cmdline : ''),
-          \ unite#substitute_path_separator(simplify(path)))
+    let path = printf('%s : %s [%s]', bufname,
+          \ (get(vimshell, 'cmdline', ''), simplify(path))
   else
-    let path = unite#substitute_path_separator(
-          \ simplify(fnamemodify(bufname(a:bufnr), ':~:.')))
+    let path = simplify(fnamemodify(bufname(a:bufnr), ':~:.'))
     if a:flags != ''
       let path .= ' [' . a:flags . ']'
     endif
   endif
 
-  return path
+  return unite#util#substitute_path_separator(path)
 endfunction"}}}
 function! s:compare(candidate_a, candidate_b)"{{{
   return a:candidate_b.source__time - a:candidate_a.source__time
