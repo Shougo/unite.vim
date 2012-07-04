@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jul 2012.
+" Last Modified: 04 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -180,7 +180,7 @@ function! s:make_abbr(bufnr, flags)"{{{
     let vimshell = getbufvar(a:bufnr, 'vimshell')
     let path = vimshell.current_dir
     let path = printf('%s : %s [%s]', bufname,
-          \ (get(vimshell, 'cmdline', ''), simplify(path))
+          \ get(vimshell, 'cmdline', ''), simplify(path))
   else
     let path = simplify(fnamemodify(bufname(a:bufnr), ':~:.'))
     if a:flags != ''
