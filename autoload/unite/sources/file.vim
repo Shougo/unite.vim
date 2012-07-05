@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jun 2012.
+" Last Modified: 05 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -352,18 +352,25 @@ endfunction"}}}
 
 function! unite#sources#file#complete_file(args, context, arglead, cmdline, cursorpos)"{{{
   let files = unite#util#glob(a:arglead . '*')
-  let home_pattern = '^'.
-        \ unite#util#substitute_path_separator(expand('~')).'/'
+  if a:arglead =~ '^\~'
+    let home_pattern = '^'.
+          \ unite#util#substitute_path_separator(expand('~')).'/'
+    call map(files, "substitute(v:val, home_pattern, '~/', '')")
+  endif
   call map(files, "isdirectory(v:val) ? v:val.'/' : v:val")
   call map(files, "escape(v:val, ' \\')")
   return files
 endfunction"}}}
 function! unite#sources#file#complete_directory(args, context, arglead, cmdline, cursorpos)"{{{
   let files = unite#util#glob(a:arglead . '*')
-  let home_pattern = '^'.
-        \ unite#util#substitute_path_separator(expand('~')).'/'
+  let files = filter(files, 'isdirectory(v:val)')
+  if a:arglead =~ '^\~'
+    let home_pattern = '^'.
+          \ unite#util#substitute_path_separator(expand('~')).'/'
+    call map(files, "substitute(v:val, home_pattern, '~/', '')")
+  endif
   call map(files, "escape(v:val, ' \\')")
-  return filter(files, 'isdirectory(v:val)')
+  return files
 endfunction"}}}
 
 function! unite#sources#file#copy_files(dest, srcs)"{{{
