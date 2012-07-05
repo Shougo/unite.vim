@@ -2,7 +2,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:V = vital#of('unite.vim')
-let s:List = vital#of('vimfiler').import('Data.List')
+let s:List = vital#of('unite.vim').import('Data.List')
 
 function! unite#util#truncate_smart(...)
   return call(s:V.truncate_smart, a:000)
