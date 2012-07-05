@@ -2,7 +2,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:V = vital#of('unite.vim')
-call s:V.load('Data.List')
+let s:List = vital#of('vimfiler').import('Data.List')
+
 function! unite#util#truncate_smart(...)
   return call(s:V.truncate_smart, a:000)
 endfunction
@@ -73,10 +74,10 @@ function! unite#util#get_last_errmsg()
   return unite#util#has_vimproc() ? vimproc#get_last_errmsg() : ''
 endfunction
 function! unite#util#sort_by(...)
-  return call(s:V.Data.List.sort_by, a:000)
+  return call(s:List.sort_by, a:000)
 endfunction
 function! unite#util#uniq(...)
-  return call(s:V.Data.List.uniq, a:000)
+  return call(s:List.uniq, a:000)
 endfunction
 function! unite#util#input_yesno(message)"{{{
   let yesno = input(a:message . ' [yes/no] : ')
