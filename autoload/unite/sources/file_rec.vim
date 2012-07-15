@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jun 2012.
+" Last Modified: 15 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -556,9 +556,7 @@ function! s:init_continuation(context, directory)"{{{
     if !is_relative_path
       lcd `=cwd`
     endif
-  endif
-
-  if a:context.is_redraw
+  elseif a:context.is_redraw
         \ || !has_key(s:continuation, a:directory)
     let a:context.is_async = 1
 
