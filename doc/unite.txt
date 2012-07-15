@@ -2580,6 +2580,7 @@ CHANGELOG					*unite-changelog*
 - Vesting tests.
 - Fixed file_rec problem.
 - Delete old cache files.
+- Fixed file_rec cache problem.
 
 2012-07-06
 - Improved grep source.
