@@ -5,8 +5,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 " }}}
 
-source spec/base.vim
-
 let kind = {
       \ 'name' : 'hoge',
       \ 'default_action' : 'open',
@@ -34,7 +32,8 @@ function! source.gather_candidates(args, context)"{{{
         \}')
 
   if g:unite_source_file_ignore_pattern != ''
-    call filter(candidates, 'v:val.word !~ ' . string(g:unite_source_file_ignore_pattern))
+    call filter(candidates, 'v:val.word !~ ' .
+          \ string(g:unite_source_file_ignore_pattern))
   endif
 
   return candidates
@@ -57,7 +56,7 @@ Context Source.run()
     Should unite#undef_source(source.name) == 0
   End
 
-  let candidates = unite#get_candidates([['grep', '**', '', 'vim']])
+  let candidates = unite#get_candidates([['grep', '.', '', 'hoge']])
   It call do_candidates_action
     call unite#do_candidates_action('replace', candidates)
   End

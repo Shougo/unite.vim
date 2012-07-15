@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jul 2012.
+" Last Modified: 15 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2155,10 +2155,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   " Check sources.
   let sources = s:initialize_loaded_sources(a:sources, a:context)
 
-  if a:context.is_interactive
-    " Call initialize functions.
-    call s:call_hook(sources, 'on_init')
-  endif
+  call s:call_hook(sources, 'on_init')
 
   " Set parameters.
   let unite = {}
