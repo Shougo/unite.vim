@@ -342,13 +342,17 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
 
   let continuation.files += candidates
   if stdout.eof
-        \ && g:unite_source_file_rec_min_cache_files > 0
+    if g:unite_source_file_rec_min_cache_files > 0
         \ && len(continuation.files) >
         \ g:unite_source_file_rec_min_cache_files
-    let cache_dir = g:unite_data_directory . '/file_rec'
+      let cache_dir = g:unite_data_directory . '/file_rec'
 
-    call s:Cache.writefile(cache_dir, a:context.source__directory,
-          \ map(copy(continuation.files), 'v:val.action__path'))
+      call s:Cache.writefile(cache_dir, a:context.source__directory,
+            \ map(copy(continuation.files), 'v:val.action__path'))
+    elseif s:Cache.filereadable(cache_dir, a:context.source__directory)
+      " Delete old cache files.
+      call s:Cache.delete(cache_dir, a:context.source__directory)
+    endif
   endif
 
   return candidates

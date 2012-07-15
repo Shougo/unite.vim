@@ -2579,6 +2579,7 @@ CHANGELOG					*unite-changelog*
 2012-07-15
 - Vesting tests.
 - Fixed file_rec problem.
+- Delete old cache files.
 
 2012-07-06
 - Improved grep source.
