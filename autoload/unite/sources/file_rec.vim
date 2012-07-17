@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jul 2012.
+" Last Modified: 17 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -121,13 +121,8 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
 
   let continuation.files += candidates
   if empty(continuation.rest)
-        \ && g:unite_source_file_rec_min_cache_files > 0
-        \ && len(continuation.files) >
-        \ g:unite_source_file_rec_min_cache_files
-    let cache_dir = g:unite_data_directory . '/file_rec'
-
-    call s:Cache.writefile(cache_dir, a:context.source__directory,
-          \ map(copy(continuation.files), 'v:val.action__path'))
+    call s:write_cache(a:context.source__directory,
+          \ continuation.files)
   endif
 
   return deepcopy(candidates)
@@ -342,17 +337,8 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
 
   let continuation.files += candidates
   if stdout.eof
-    if g:unite_source_file_rec_min_cache_files > 0
-        \ && len(continuation.files) >
-        \ g:unite_source_file_rec_min_cache_files
-      let cache_dir = g:unite_data_directory . '/file_rec'
-
-      call s:Cache.writefile(cache_dir, a:context.source__directory,
-            \ map(copy(continuation.files), 'v:val.action__path'))
-    elseif s:Cache.filereadable(cache_dir, a:context.source__directory)
-      " Delete old cache files.
-      call s:Cache.delete(cache_dir, a:context.source__directory)
-    endif
+    call s:write_cache(a:context.source__directory,
+          \ continuation.files)
   endif
 
   return deepcopy(candidates)
@@ -581,6 +567,19 @@ function! s:converter(candidates, context)"{{{
   endfor
 
   return a:candidates
+endfunction"}}}
+function! s:write_cache(directory, files)"{{{
+  let cache_dir = g:unite_data_directory . '/file_rec'
+
+  if g:unite_source_file_rec_min_cache_files > 0
+        \ && len(a:files) >
+        \ g:unite_source_file_rec_min_cache_files
+    call s:Cache.writefile(cache_dir, a:directory,
+          \ map(copy(a:files), 'v:val.action__path'))
+  elseif s:Cache.filereadable(cache_dir, a:directory)
+    " Delete old cache files.
+    call s:Cache.delete(cache_dir, a:directory)
+  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo
