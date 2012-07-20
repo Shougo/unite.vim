@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jun 2012.
+" Last Modified: 20 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -252,7 +252,8 @@ endfunction"}}}
 function! unite#mappings#do_action(action_name, ...)"{{{
   call unite#redraw()
 
-  let candidates = get(a:000, 0, unite#get_marked_candidates())
+  let candidates = get(a:000, 0,
+        \ unite#get_marked_candidates())
   let new_context = get(a:000, 1, {})
   let is_clear_marks = get(a:000, 2, 1)
   let sources = get(a:000, 3, {})
