@@ -632,6 +632,9 @@ function! unite#complete_source(arglead, cmdline, cursorpos)"{{{
   if source_name != ''
     " Source args completion.
     let args = source_name . ':' . join(source_args[: -2], ':')
+    if args !~ ':$'
+      let args .= ':'
+    endif
     let _ += map(unite#args_complete(
           \ [insert(copy(source_args), source_name)],
           \ join(source_args, ':'), a:cmdline, a:cursorpos),
