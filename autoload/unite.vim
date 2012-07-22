@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jul 2012.
+" Last Modified: 22 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -338,7 +338,8 @@ function! unite#loaded_source_names_string()"{{{
 endfunction"}}}
 function! unite#loaded_source_names_with_args()"{{{
   return map(copy(unite#loaded_sources_list()),
-        \ 'join(insert(filter(copy(v:val.args), "type(v:val) < 1"), v:val.name), ":")')
+        \ 'join(insert(filter(copy(v:val.args),
+        \  "type(v:val) < 1"), v:val.name), ":")')
 endfunction"}}}
 function! unite#loaded_sources_list()"{{{
   return s:get_loaded_sources()
@@ -1067,6 +1068,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
   return []
 endfunction"}}}
 function! unite#get_candidates(sources, ...)"{{{
+  let unite_save = unite#get_current_unite()
   let context = get(a:000, 0, {})
   let context = s:initialize_context(context)
   let context.no_buffer = 1
@@ -1080,6 +1082,9 @@ function! unite#get_candidates(sources, ...)"{{{
   " Call finalize functions.
   call s:call_hook(unite#loaded_sources_list(), 'on_close')
   let unite.is_finalized = 1
+
+  " Restore unite variables.
+  call unite#set_current_unite(unite_save)
 
   return candidates
 endfunction"}}}
