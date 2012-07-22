@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: session.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Nov 2011.
+" Last Modified: 22 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -157,7 +157,7 @@ function! s:source.gather_candidates(args, context)"{{{
   let sessions = split(glob(g:unite_source_session_path.'/*'), '\n')
 
   let candidates = map(copy(sessions), "{
-        \ 'word' : fnamemodify(v:val, ':t'),
+        \ 'word' : fnamemodify(v:val, ':t:r'),
         \ 'kind' : 'file',
         \ 'action__path' : v:val,
         \ 'action__directory' : unite#util#path2directory(v:val),
