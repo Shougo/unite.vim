@@ -2576,9 +2576,10 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
-2012-07-23
+2012-07-22
 - Fixed unite#get_candidates().
 - Improved session behavior.
+- Supported over 4GB files.
 
 2012-07-20
 - Improved for resume.

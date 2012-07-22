@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jul 2012.
+" Last Modified: 22 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -339,9 +339,12 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
           \ unite#util#is_windows() ?
           \ ('.'.fnamemodify(a:candidate.vimfiler__filename, ':e') =~? a:exts) :
           \ executable(a:candidate.action__path)
-    let a:candidate.vimfiler__filesize = getfsize(filename)
+
+    let a:candidate.vimfiler__filesize =
+          \ getfsize(a:candidate.action__path)
   endif
-  let a:candidate.vimfiler__filetime = getftime(filename)
+  let a:candidate.vimfiler__filetime =
+        \ s:get_filetime(a:candidate.action__path)
   let a:candidate.vimfiler__ftype = getftype(filename)
 
   if exists('current_dir_save')
@@ -395,6 +398,25 @@ endfunction
 call unite#custom_action('cdable', 'file', s:cdable_action_file)
 unlet! s:cdable_action_file
 "}}}
+
+
+function! s:get_filetime(filename)"{{{
+  let filetime = getftime(a:filename)
+  if filetime < 0 && has('python')"{{{
+    " Use python.
+python <<END
+import os
+import os.path
+import vim
+os.stat_float_times(False)
+vim.command('let filetime = ' +\
+str(os.path.getctime(vim.eval('a:filename'))))
+END
+  echomsg string(filetime)
+  endif"}}}
+
+return filetime
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
