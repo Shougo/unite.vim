@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jul 2012.
+" Last Modified: 26 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -412,10 +412,9 @@ os.stat_float_times(False)
 vim.command('let filetime = ' +\
 str(os.path.getctime(vim.eval('a:filename'))))
 END
-  echomsg string(filetime)
   endif"}}}
 
-return filetime
+  return filetime
 endfunction"}}}
 
 let &cpo = s:save_cpo
