@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jun 2012.
+" Last Modified: 26 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -460,8 +460,11 @@ function! s:kind.action_table.vimfiler__shellcmd.func(candidate)"{{{
 
   try
     let command = unite#get_context().vimfiler__command
+    let output = split(unite#util#system(command), '\n\|\r\n')
 
-    echo unite#util#system(command)
+    if !empty(output)
+      call unite#start([['output', output]])
+    endif
   finally
     if vimfiler_current_dir != ''
       lcd `=current_dir`

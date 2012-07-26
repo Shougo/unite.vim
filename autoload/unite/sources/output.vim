@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: output.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jan 2012.
+" Last Modified: 26 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,16 +41,23 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context)"{{{
-  let command = join(a:args, ' ')
-  if command == ''
-    let command = input('Please input Vim command: ', '', 'command')
+  if type(get(a:args, 0, '')) == type([])
+    " Use args directly.
+    let result = a:args[0]
+  else
+    let command = join(a:args, ' ')
+    if command == ''
+      let command = input('Please input Vim command: ', '', 'command')
+    endif
+
+    redir => output
+    silent execute command
+    redir END
+
+    let result = split(output, '\r\n\|\n')
   endif
 
-  redir => result
-  silent execute command
-  redir END
-
-  return map(split(result, '\r\n\|\n'), '{
+  return map(result, '{
         \ "word" : v:val,
         \ "kind" : "word",
         \ }')
