@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jul 2012.
+" Last Modified: 26 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1055,7 +1055,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
     elseif type ==# 'directory'
       " nop
     elseif type ==# 'error'
-      call unite#print_error('[unite.vim]' . info)
+      call unite#print_error('[unite.vim] ' . info)
       return []
     else
       call unite#print_error('[unite.vim] Invalid filetype : ' . type)

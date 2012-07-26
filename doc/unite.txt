@@ -2579,6 +2579,7 @@ CHANGELOG					*unite-changelog*
 2012-07-26
 - Deleted debug message.
 - Improved output source behavior.
+- Improved error message.
 
 2012-07-22
 - Fixed unite#get_candidates().
