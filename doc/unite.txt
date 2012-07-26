@@ -2580,6 +2580,7 @@ CHANGELOG					*unite-changelog*
 - Deleted debug message.
 - Improved output source behavior.
 - Improved error message.
+- Fixed for symbolic link problem.
 
 2012-07-22
 - Fixed unite#get_candidates().

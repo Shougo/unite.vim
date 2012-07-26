@@ -399,10 +399,10 @@ call unite#custom_action('cdable', 'file', s:cdable_action_file)
 unlet! s:cdable_action_file
 "}}}
 
-
 function! s:get_filetime(filename)"{{{
   let filetime = getftime(a:filename)
-  if filetime < 0 && has('python')"{{{
+  if filetime < 0 && getftype(a:filename) !=# 'link'
+        \ && has('python')"{{{
     " Use python.
 python <<END
 import os
