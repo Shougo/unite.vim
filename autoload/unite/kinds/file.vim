@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jul 2012.
+" Last Modified: 27 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -231,10 +231,12 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
 
     if dest_dir =~ '^\h\w\+:'
       " Use protocol move method.
-      let protocol = matchstr(dest_dir, '^\h\w\+:')
-      call unite#sources#{protocol}#move_files(dest_dir, candidates)
+      let protocol = matchstr(dest_dir, '^\h\w\+')
+      call unite#sources#{protocol}#move_files(
+            \ dest_dir, candidates)
     else
-      call unite#kinds#file#do_action(candidates, dest_dir, 'move')
+      call unite#kinds#file#do_action(
+            \ candidates, dest_dir, 'move')
     endif
   finally
 
@@ -244,7 +246,8 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
   endtry
 endfunction"}}}
 
-let s:kind.action_table.move = deepcopy(s:kind.action_table.vimfiler__move)
+let s:kind.action_table.move =
+      \ deepcopy(s:kind.action_table.vimfiler__move)
 let s:kind.action_table.move.is_listed = 1
 function! s:kind.action_table.move.func(candidates)"{{{
   if !unite#util#input_yesno('Really move files?')
@@ -580,8 +583,8 @@ function! s:external(command, dest_dir, src_files)"{{{
         \   map(src_files, '''"''.v:val.''"''')), '&'), 'g')
   let command_line = substitute(command_line,
         \'\$dest\>', escape('"'.dest_dir.'"', '&'), 'g')
-
   " echomsg command_line
+
   let output = unite#util#system(command_line)
 
   return unite#util#get_last_status()
