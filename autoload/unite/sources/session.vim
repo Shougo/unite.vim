@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: session.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jul 2012.
+" Last Modified: 28 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,28 +60,50 @@ function! unite#sources#session#_save(filename)"{{{
 
   let append = []
   for tabnr in range(1, tabpagenr('$'))
-    if v:version >= 703 && type(gettabvar(tabnr, 'cwd')) == type('')
-          \ && gettabvar(tabnr, 'cwd') != ''
-      call add(append, printf(
-            \ 'call settabvar(%d, "cwd", %s)', tabnr,
-            \   string(gettabvar(tabnr, 'cwd'))))
-    endif
-    if v:version >= 703 && type(gettabvar(tabnr, 'title')) == type('')
-          \ && gettabvar(tabnr, 'title') != ''
-      call add(append, printf(
-            \ 'call settabvar(%d, "title", %s)', tabnr,
-            \   string(gettabvar(tabnr, 'title'))))
-    endif
-    if v:version >= 703 && type(gettabvar(tabnr, 'unite_buffer_dictionary')) == type({})
-      " Convert unite_buffer_dictionary.
-      let list = map(filter(keys(gettabvar(tabnr, 'unite_buffer_dictionary')),
-            \ 'filereadable(bufname(str2nr(v:val))) && getbufvar(v:val, "buftype") !~ "nofile"'),
-            \ 'fnamemodify(bufname(str2nr(v:val)), ":p")')
-      call add(append, printf(
-            \ 'call settabvar(%d, "unite_buffer_session", %s)', tabnr,
-            \   string(list)))
+    if v:version >= 703
+      if type(gettabvar(tabnr, 'cwd')) == type('')
+            \ && gettabvar(tabnr, 'cwd') != ''
+        call add(append, printf(
+              \ 'call settabvar(%d, "cwd", %s)', tabnr,
+              \   string(gettabvar(tabnr, 'cwd'))))
+      endif
+      if type(gettabvar(tabnr, 'title')) == type('')
+            \ && gettabvar(tabnr, 'title') != ''
+        call add(append, printf(
+              \ 'call settabvar(%d, "title", %s)', tabnr,
+              \   string(gettabvar(tabnr, 'title'))))
+      endif
+      if type(gettabvar(tabnr, 'unite_buffer_dictionary')) == type({})
+        " Convert unite_buffer_dictionary.
+        let list = map(gettabvar(tabnr, 'unite_buffer_dictionary'),
+              \ 'bufname(str2nr(v:val))')
+        call add(append, printf(
+              \ 'call settabvar(%d, "unite_buffer_session", %s)', tabnr,
+              \   string(list)))
+      endif
     endif
   endfor
+  for bufnr in range(1, bufnr('$'))
+    let filetype = getbufvar(bufnr, '&filetype')
+    if filetype ==# 'vimfiler'
+      let context = getbufvar(bufnr, 'vimfiler').context
+
+      call add(append, printf(
+            \ 'call vimfiler#switch_filer(%s, %s)',
+            \ string(context.path), string(context)))
+    elseif filetype ==# 'vimshell'
+      let context = getbufvar(bufnr, 'vimshell').context
+      let current_dir = getbufvar(bufnr, 'vimshell').current_dir
+
+      call add(append, printf(
+            \ 'call vimfiler#switch_shell(%s, %s)',
+            \ string(current_dir), string(context)))
+    endif
+  endfor
+
+  " For vimfiler and vimshell.
+  let lines = filter(readfile(filename),
+        \ "v:val !~ '^\\%(badd +\\d\\+\\|file\\) \\*\h\w*\\*'")
 
   if !empty(append)
     call writefile(readfile(filename)+append, filename)
