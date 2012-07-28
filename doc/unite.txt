@@ -357,17 +357,6 @@ The commands of source				*:unite-sources-commands*
 		parameter, the current position of the current file is
 		stored.
 
-:UniteSessionSave [{session-name}]		*:UniteSessionSave*
-		Saves session data in {session-name}.
-		If {session-name} is omitted, |v:this_session| or
-		|g:unite_source_session_default_session_name| is used.
-
-:UniteSessionLoad [{session-name}]		*:UniteSessionLoad*
-		Loads session data from {session-name}.
-		If {session-name} is omitted, |v:this_session| or
-		|g:unite_source_session_default_session_name| is used.
-		If session data is not found, it is created.
-
 ------------------------------------------------------------------------------
 VARIABLES 					*unite-variables*
 
@@ -663,29 +652,6 @@ g:unite_source_history_yank_file		*g:unite_source_history_yank_file*
 		If this variable is empty, saving history is disabled.
 
 		The default value is |g:unite_data_directory|; '/history_yank'
-
-g:unite_source_session_default_session_name	*g:unite_source_session_default_session_name*
-		Default session name.
-		
-		The default value is "default".
-
-g:unite_source_session_path			*g:unite_source_session_path*
-		Path to save session in.
-		
-		The default value is |g:unite_data_directory|; '/session'.
-
-g:unite_source_session_options			*g:unite_source_session_options*
-		Uses options when executing |:mksession|.
-		Refer to 'sessionoptions'.
-		
-		The default value is
-		"blank,buffers,curdir,folds,help,tabpages,winsize".
-
-g:unite_source_session_enable_auto_save		*g:unite_source_session_enable_auto_save*
-		Enables auto save session.
-		Note: This option must be set in .vimrc.
-		
-		The default value is "0".
 
 KINDS VARIABLES					*unite-kinds-variables*
 
@@ -1533,9 +1499,6 @@ process		Nominates processes.
 		Note: This source is required "ps" command or "tasklist"
 		command(in Windows).
 
-						*unite-source-session*
-session		Nominates sessions.
-
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -1931,12 +1894,6 @@ register					*unite-action-register*
 process						*unite-action-process*
 	sigterm		Send SIGTERM to the process(default)
 	sigkill		Send SIGKILL to the process
-
-session						*unite-action-session*
-	load		Load session(default)
-	delete		Delete sessions
-	open		Open session files
-	rename		Rename a session name
 
 mapping						*unite-action-mapping*
 	help		Read documentation
@@ -2554,12 +2511,6 @@ EXAMPLES					*unite-examples*
 	" For optimize.
 	let g:unite_source_file_mru_filename_format = ''
 	
-	" For unite-session.
-	" Save session automatically.
-	"let g:unite_source_session_enable_auto_save = 1
-	" Load session automatically.
-	"autocmd VimEnter * UniteSessionLoad
-	
 	" For ack.
 	if executable('ack-grep')
 	  let g:unite_source_grep_command = 'ack-grep'
@@ -2579,6 +2530,7 @@ CHANGELOG					*unite-changelog*
 2012-07-28
 - Fixed for vimfiler and vimshell in unite-session.
 - Improved unite-sesion (But chaotic...)
+- Splitted session source.
 
 2012-07-26
 - Deleted debug message.
