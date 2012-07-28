@@ -31,13 +31,13 @@ set cpo&vim
 call unite#util#set_default('g:unite_source_session_default_session_name',
       \ 'default')
 call unite#util#set_default('g:unite_source_session_options',
-      \ 'blank,buffers,curdir,folds,help,tabpages,winsize')
+      \ 'blank,curdir,folds,help,winsize')
 call unite#util#set_default('g:unite_source_session_path',
       \ g:unite_data_directory . '/session')
 "}}}
 
 function! unite#sources#session#define()"{{{
-  return s:source
+  return v:version >= 703 ? s:source : {}
 endfunction"}}}
 
 function! unite#sources#session#_save(filename)"{{{
@@ -59,55 +59,64 @@ function! unite#sources#session#_save(filename)"{{{
   let &sessionoptions = save_session_options
 
   let append = []
+
+  " Append tab pages.
   for tabnr in range(1, tabpagenr('$'))
-    if v:version >= 703
-      if type(gettabvar(tabnr, 'cwd')) == type('')
-            \ && gettabvar(tabnr, 'cwd') != ''
-        call add(append, printf(
-              \ 'call settabvar(%d, "cwd", %s)', tabnr,
-              \   string(gettabvar(tabnr, 'cwd'))))
-      endif
-      if type(gettabvar(tabnr, 'title')) == type('')
-            \ && gettabvar(tabnr, 'title') != ''
-        call add(append, printf(
-              \ 'call settabvar(%d, "title", %s)', tabnr,
-              \   string(gettabvar(tabnr, 'title'))))
-      endif
-      if type(gettabvar(tabnr, 'unite_buffer_dictionary')) == type({})
-        " Convert unite_buffer_dictionary.
-        let list = map(gettabvar(tabnr, 'unite_buffer_dictionary'),
-              \ 'bufname(str2nr(v:val))')
-        call add(append, printf(
-              \ 'call settabvar(%d, "unite_buffer_session", %s)', tabnr,
-              \   string(list)))
-      endif
+    if tabnr != 1
+      call add(append, 'tabnew')
     endif
-  endfor
-  for bufnr in range(1, bufnr('$'))
-    let filetype = getbufvar(bufnr, '&filetype')
-    if filetype ==# 'vimfiler'
-      let context = getbufvar(bufnr, 'vimfiler').context
 
-      call add(append, printf(
-            \ 'call vimfiler#switch_filer(%s, %s)',
-            \ string(context.path), string(context)))
-    elseif filetype ==# 'vimshell'
-      let context = getbufvar(bufnr, 'vimshell').context
-      let current_dir = getbufvar(bufnr, 'vimshell').current_dir
+    let cwd = gettabvar(tabnr, 'cwd')
+    let title = gettabvar(tabnr, 'title')
+    let unite_buffer_dictionary =
+          \ gettabvar(tabnr, 'unite_buffer_dictionary')
 
+    if type(cwd) == type('') && cwd != ''
       call add(append, printf(
-            \ 'call vimfiler#switch_shell(%s, %s)',
-            \ string(current_dir), string(context)))
+            \ 'call settabvar(%d, "cwd", %s)', tabnr,
+            \   string(cwd)))
     endif
+    if type('title') == type('') && title != ''
+      call add(append, printf(
+            \ 'call settabvar(%d, "title", %s)', tabnr,
+            \   string(title)))
+    endif
+    if type(unite_buffer_dictionary) == type({})
+      for bufnr in keys(unite_buffer_dictionary)
+        let filetype = getbufvar(bufnr, '&filetype')
+        if filetype ==# 'vimfiler'
+          let context = getbufvar(bufnr, 'vimfiler').context
+          let context.create = 1
+
+          call add(append, printf(
+                \ 'call vimfiler#switch_filer(%s, %s)',
+                \ string(context.path), string(context)))
+        elseif filetype ==# 'vimshell'
+          let context = getbufvar(bufnr, 'vimshell').context
+          let context.create = 1
+          let current_dir = getbufvar(bufnr, 'vimshell').current_dir
+
+          call add(append, printf(
+                \ 'call vimshell#switch_shell(%s, %s)',
+                \ string(current_dir), string(context)))
+        elseif filereadable(fnamemodify(bufname(bufnr), ':p'))
+          " Append buffers.
+          call add(append, 'edit `='.string(bufname(bufnr)).'`')
+        endif
+      endfor
+    endif
+
+    unlet cwd
+    unlet title
+    unlet unite_buffer_dictionary
   endfor
 
-  " For vimfiler and vimshell.
+  call add(append, 'tabnext '.tabpagenr())
+
   let lines = filter(readfile(filename),
-        \ "v:val !~ '^\\%(badd +\\d\\+\\|file\\) \\*\h\w*\\*'")
+        \ "v:val !~ '^\%(badd\|file\|edit\) '")
 
-  if !empty(append)
-    call writefile(readfile(filename)+append, filename)
-  endif
+  call writefile(lines + append, filename)
 endfunction"}}}
 function! unite#sources#session#_load(filename)"{{{
   if unite#util#is_cmdwin()
@@ -146,7 +155,8 @@ function! unite#sources#session#_load(filename)"{{{
   endfor
 
   for tabnr in range(1, tabpagenr('$'))
-    if v:version >= 703 && type(gettabvar(tabnr, 'unite_buffer_session')) == type([])
+    if v:version >= 703 &&
+          \ type(gettabvar(tabnr, 'unite_buffer_session')) == type([])
       " Convert unite_buffer_dictionary.
       let dict = {}
       for bufnr in map(filter(gettabvar(tabnr, 'unite_buffer_session'),

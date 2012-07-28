@@ -25,7 +25,7 @@
 "=============================================================================
 
 if exists('g:loaded_unite_source_session')
-      \ || $SUDO_USER != ''
+      \ || $SUDO_USER != '' || v:version < 703
   finish
 endif
 
