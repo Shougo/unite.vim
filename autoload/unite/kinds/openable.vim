@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: openable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Dec 2011.
+" Last Modified: 05 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,6 +50,25 @@ function! s:kind.action_table.tabopen.func(candidates)"{{{
   for candidate in a:candidates
     tabnew
     call unite#take_action('open', candidate)
+  endfor
+endfunction"}}}
+
+let s:kind.action_table.tabdrop = {
+      \ 'description' : 'open files by ":tab drop" command',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.tabdrop.func(candidates)"{{{
+  let bufpath = unite#util#substitute_path_separator(expand('%:p'))
+
+  for candidate in a:candidates
+    if bufpath !=# candidate.action__path
+      call unite#util#smart_execute_command('tab drop',
+            \ candidate.action__path)
+
+      call unite#remove_previewed_buffer_list(
+            \ bufnr(unite#util#escape_file_searching(
+            \       candidate.action__path)))
+    endif
   endfor
 endfunction"}}}
 

@@ -1775,6 +1775,7 @@ openable					*unite-action-openable*
 Defines an interface for files that can be open.  This requires an inheriting
 kind to define open action.
 	tabopen		Open the file in a new tab
+	tabdrop		Open the file by ":tab drop" command
 	split		Open the file, splitting horizontally
 	vsplit		Open the file, splitting vertically
 	left		Open the file in the left, splitting vertically
@@ -2526,6 +2527,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-08-05
+- Added tabdrop action.
 
 2012-08-01
 - Fixed auto preview behavior.
