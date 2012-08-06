@@ -775,7 +775,7 @@ function! unite#gather_candidates()"{{{
           \ filter_name, candidates, unite.context)
   endfor
 
-  return candidates
+  return s:initialize_candidates(candidates[ :winheight(0)])
 endfunction"}}}
 function! unite#gather_candidates_pos(offset)"{{{
   let unite = unite#get_current_unite()
