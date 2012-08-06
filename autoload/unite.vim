@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2012.
+" Last Modified: 07 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -713,7 +713,7 @@ function! unite#redraw_candidates() "{{{
 
   let lines = s:convert_lines(candidates)
   let pos = getpos('.')
-  if len(lines) < len(unite#get_current_unite().candidates)
+  if len(lines) < len(unite#get_current_unite().current_candidates)
     silent! execute (unite#get_current_unite().prompt_linenr+1).',$delete _'
   endif
   call setline(unite#get_current_unite().prompt_linenr+1, lines)
@@ -722,7 +722,7 @@ function! unite#redraw_candidates() "{{{
 
   let unite = unite#get_current_unite()
   let context = unite.context
-  let unite.candidates = candidates
+  let unite.current_candidates = candidates
 
   call unite#_resize_window()
 
@@ -2200,7 +2200,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.winnr = winnr
   let unite.win_rest_cmd = win_rest_cmd
   let unite.context = context
-  let unite.candidates = []
+  let unite.current_candidates = []
   let unite.sources = sources
   let unite.buffer_name = (context.buffer_name == '') ?
         \ 'default' : context.buffer_name
@@ -2514,7 +2514,7 @@ function! unite#_resize_window() "{{{
 
   if context.auto_resize
     " Auto resize.
-    let max_len = unite.prompt_linenr + len(unite.candidates)
+    let max_len = unite.prompt_linenr + len(unite.current_candidates)
     execute 'resize' min([max_len, context.winheight])
     normal! zb
     if mode() ==# 'i' && col('.') == (col('$') - 1)

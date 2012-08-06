@@ -2528,6 +2528,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-08-07
+- Fixed candidates bug.
+
 2012-08-06
 - Optimized redraw candidates.
 - Improved unite#gather_candidates().
