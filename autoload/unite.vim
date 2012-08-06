@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Aug 2012.
+" Last Modified: 06 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -769,7 +769,7 @@ function! unite#gather_candidates()"{{{
           \ filter_name, candidates, unite.context)
   endfor
 
-  return candidates
+  return s:initialize_candidates(candidates[ :winheight(0)])
 endfunction"}}}
 function! unite#get_current_unite() "{{{
   return exists('b:unite') && !s:use_current_unite ?
@@ -1050,8 +1050,10 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
 
     let [type, info] = ret
     if type ==# 'file'
-      call s:initialize_candidates([info[1]], source.name)
-      call s:initialize_vimfiler_candidates([info[1]], source.name)
+      let infos = s:initialize_candidates_source([info[1]], source.name)
+      let infos = s:initialize_candidates(infos)
+      let infos = s:initialize_vimfiler_candidates(infos, source.name)
+      let info = infos[0]
     elseif type ==# 'directory'
       " nop
     elseif type ==# 'error'
@@ -1727,15 +1729,7 @@ function! s:initialize_profile(profile_name)"{{{
     let setting.unite__inputs = {}
   endif
 endfunction"}}}
-function! s:initialize_candidates(candidates, source_name)"{{{
-  let unite = unite#get_current_unite()
-  let context = unite.context
-  let winwidth = unite.context.vertical ?
-        \ unite.context.winwidth : &columns
-  let [max_width, max_source_name] =
-        \ s:adjustments(winwidth-5, unite.max_source_name, 2)
-  let is_multiline = 0
-
+function! s:initialize_candidates_source(candidates, source_name)"{{{
   let default_candidate = {
         \ 'kind' : 'common',
         \ 'is_dummy' : 0,
@@ -1747,10 +1741,24 @@ function! s:initialize_candidates(candidates, source_name)"{{{
   let candidates = []
   for candidate in a:candidates
     let candidate = extend(candidate, default_candidate, 'keep')
-
-    " Force set.
     let candidate.source = a:source_name
 
+    call add(candidates, candidate)
+  endfor
+
+  return candidates
+endfunction"}}}
+function! s:initialize_candidates(candidates)"{{{
+  let unite = unite#get_current_unite()
+  let context = unite.context
+  let winwidth = unite.context.vertical ?
+        \ unite.context.winwidth : &columns
+  let [max_width, max_source_name] =
+        \ s:adjustments(winwidth-5, unite.max_source_name, 2)
+  let is_multiline = 0
+
+  let candidates = []
+  for candidate in a:candidates
     let candidate.unite__abbr =
           \ get(candidate, 'abbr', candidate.word)
 
@@ -1818,8 +1826,7 @@ function! s:initialize_candidates(candidates, source_name)"{{{
 
   " Multiline check.
   if is_multiline
-    for candidate in filter(copy(candidates),
-          \ '!v:val.is_multiline')
+    for candidate in filter(copy(candidates), '!v:val.is_multiline')
       let candidate.unite__abbr = '  ' . candidate.unite__abbr
     endfor
   endif
@@ -1919,7 +1926,7 @@ function! s:recache_candidates(input, is_force)"{{{
           \ source.unite__candidates
     call s:call_hook([source], 'on_post_filter')
 
-    let source.unite__candidates = s:initialize_candidates(
+    let source.unite__candidates = s:initialize_candidates_source(
           \ source.unite__candidates, source.name)
   endfor
 
@@ -2269,6 +2276,8 @@ function! s:initialize_unite_buffer()"{{{
             \ call s:on_insert_leave()
       autocmd CursorHoldI <buffer>
             \ call s:on_cursor_hold_i()
+      autocmd CursorMovedI <buffer>
+            \ call s:on_cursor_moved_i()
       autocmd CursorMoved,CursorMovedI <buffer>  nested
             \ call s:on_cursor_moved()
       autocmd BufUnload,BufHidden <buffer>
@@ -2537,6 +2546,15 @@ function! s:on_insert_leave()  "{{{
 endfunction"}}}
 function! s:on_cursor_hold_i()  "{{{
   let unite = unite#get_current_unite()
+
+  if unite.is_async && &l:modifiable
+    " Ignore key sequences.
+    call feedkeys("a\<BS>", 'n')
+    " call feedkeys("\<C-r>\<ESC>", 'n')
+  endif
+endfunction"}}}
+function! s:on_cursor_moved_i()  "{{{
+  let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
   if line('.') == prompt_linenr || unite.context.is_redraw
     " Redraw.
@@ -2547,12 +2565,6 @@ function! s:on_cursor_hold_i()  "{{{
   " Prompt check.
   if line('.') == prompt_linenr && col('.') <= len(unite.prompt)
     startinsert!
-  endif
-
-  if unite.is_async && &l:modifiable
-    " Ignore key sequences.
-    call feedkeys("a\<BS>", 'n')
-    " call feedkeys("\<C-r>\<ESC>", 'n')
   endif
 endfunction"}}}
 function! s:on_bufwin_enter(bufnr)  "{{{
