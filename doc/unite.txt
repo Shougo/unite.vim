@@ -2533,6 +2533,7 @@ CHANGELOG					*unite-changelog*
 - Improved mapping behavior.
 - Improved autocmd.
 - Improved matcher.
+- Improved line source.
 
 2012-08-06
 - Optimized redraw candidates.
