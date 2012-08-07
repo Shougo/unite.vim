@@ -237,9 +237,6 @@ function! unite#mappings#define_default_mappings()"{{{
         \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <silent><buffer><expr> x
         \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
-
-  autocmd unite CursorMoved,CursorMovedI <buffer>
-        \ call s:check_lines()
 endfunction"}}}
 
 function! unite#mappings#narrowing(word)"{{{
@@ -800,39 +797,6 @@ endfunction"}}}
 
 function! unite#mappings#complete_actions(arglead, cmdline, cursorpos)"{{{
   return filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(a:arglead)))
-endfunction"}}}
-
-function! s:check_lines()"{{{
-  if line('.') + winheight(0) / 2 < line('$')
-    return
-  endif
-
-  let candidates = unite#gather_candidates_pos(winheight(0))
-  if empty(candidates)
-    " Nothing.
-    return
-  endif
-
-  let modifiable_save = &l:modifiable
-  setlocal modifiable
-
-  try
-    let lines = unite#convert_lines(candidates)
-    let pos = getpos('.')
-    call setline('$', lines)
-  finally
-    let &l:modifiable = l:modifiable_save
-  endtry
-
-  let unite = unite#get_current_unite()
-  let context = unite.context
-  let unite.current_candidates = candidates
-
-  call unite#_resize_window()
-
-  if pos != getpos('.')
-    call setpos('.', pos)
-  endif
 endfunction"}}}
 
 " Unite action source."{{{

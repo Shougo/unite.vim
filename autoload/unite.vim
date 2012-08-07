@@ -2646,8 +2646,9 @@ function! s:on_cursor_moved()  "{{{
     return
   endif
 
-  let prompt_linenr = unite#get_current_unite().prompt_linenr
-  let context = unite#get_context()
+  let unite = unite#get_current_unite()
+  let prompt_linenr = unite.prompt_linenr
+  let context = unite.context
 
   setlocal nocursorline
 
@@ -2665,6 +2666,37 @@ function! s:on_cursor_moved()  "{{{
   if context.auto_preview
     call s:do_auto_preview()
   endif
+
+  " Check lines."{{{
+  if line('.') + winheight(0) / 2 < line('$')
+    return
+  endif
+
+  let candidates = unite#gather_candidates_pos(winheight(0))
+  if empty(candidates)
+    " Nothing.
+    return
+  endif
+
+  let modifiable_save = &l:modifiable
+  setlocal modifiable
+
+  try
+    let lines = unite#convert_lines(candidates)
+    let pos = getpos('.')
+    call setline('$', lines)
+  finally
+    let &l:modifiable = l:modifiable_save
+  endtry
+
+  let context = unite.context
+  let unite.current_candidates = candidates
+
+  call unite#_resize_window()
+
+  if pos != getpos('.')
+    call setpos('.', pos)
+  endif"}}}
 endfunction"}}}
 function! s:on_buf_unload(bufname)  "{{{
   match
