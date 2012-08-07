@@ -57,16 +57,18 @@ function! unite#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>print_candidate()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
         \ unite#get_current_unite().prompt_linenr.'G0z.'
-  " nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
-  "       \ <SID>loop_cursor_down(0)
-  nnoremap <buffer><silent> <Plug>(unite_loop_cursor_down)
-        \ :call <SID>cursor_down(0)<CR>
+  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
+        \ <SID>loop_cursor_down(0)
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)
         \ <SID>loop_cursor_up(0)
   nnoremap <buffer><expr> <Plug>(unite_skip_cursor_down)
         \ <SID>loop_cursor_down(1)
   nnoremap <buffer><expr> <Plug>(unite_skip_cursor_up)
         \ <SID>loop_cursor_up(1)
+  nnoremap <buffer><silent> <Plug>(unite_next_screen)
+        \ :<C-u>call <SID>move_screen(1)<CR>
+  nnoremap <buffer><silent> <Plug>(unite_next_half_screen)
+        \ :<C-u>call <SID>move_half_screen(1)<CR>
   nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)
         \ :<C-u>call unite#mappings#_quick_match(0)<CR>
   nnoremap <silent><buffer> <Plug>(unite_quick_match_choose_action)
@@ -235,6 +237,9 @@ function! unite#mappings#define_default_mappings()"{{{
         \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <silent><buffer><expr> x
         \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
+
+  autocmd unite CursorMoved,CursorMovedI <buffer>
+        \ call s:check_lines()
 endfunction"}}}
 
 function! unite#mappings#narrowing(word)"{{{
@@ -797,61 +802,15 @@ function! unite#mappings#complete_actions(arglead, cmdline, cursorpos)"{{{
   return filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 
-function! s:cursor_down(is_skip_not_matched)"{{{
-  let is_insert = mode() ==# 'i'
-  let prompt_linenr = unite#get_current_unite().prompt_linenr
-
-  if line('.') <= prompt_linenr && !is_insert
-    normal! j
+function! s:check_lines()"{{{
+  if line('.') + winheight(0) / 2 < line('$')
     return
   endif
 
-  if line('.') == line('$')
-    if unite#mappings#print_lines(2)
-      " Loop.
-      if is_insert
-        execute 'normal!' "\<C-Home>\<End>".
-              \ repeat("\<Down>", prompt_linenr-1)."\<End>"
-      else
-        execute 'normal!' prompt_linenr.'G0z.'
-      endif
-    else
-      normal! j
-    endif
-
-    return
-  endif
-
-  let num = line('.') - (prompt_linenr + 1)
-  let cnt = 1
-  if line('.') <= prompt_linenr
-    let cnt += prompt_linenr - line('.')
-  endif
-  if is_insert && line('.') == prompt_linenr
-    let cnt += 1
-  endif
-
-  while 1
-    let candidate = get(unite#get_unite_candidates(), num + cnt, {})
-    if !empty(candidate) && (candidate.is_dummy
-          \ || (a:is_skip_not_matched && !candidate.is_matched))
-      let cnt += 1
-      continue
-    endif
-
-    break
-  endwhile
-
-  if is_insert
-    execute 'normal!' "\<Home>" . repeat("\<Down>", cnt)
-  else
-    execute 'normal!' repeat('j', cnt)
-  endif
-endfunction"}}}
-function! unite#mappings#print_lines(lines)"{{{
-  let candidates = unite#gather_candidates_pos(a:lines)
+  let candidates = unite#gather_candidates_pos(winheight(0))
   if empty(candidates)
-    return 1
+    " Nothing.
+    return
   endif
 
   let modifiable_save = &l:modifiable
