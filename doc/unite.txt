@@ -2532,6 +2532,7 @@ CHANGELOG					*unite-changelog*
 - Fixed candidates bug.
 - Improved mapping behavior.
 - Improved autocmd.
+- Improved matcher.
 
 2012-08-06
 - Optimized redraw candidates.

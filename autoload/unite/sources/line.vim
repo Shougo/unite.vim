@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 20 Jun 2012.
+" Last Modified: 07 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -95,8 +95,6 @@ function! s:source.gather_candidates(args, context)
         \ 'word' : v:val[1],
         \ 'action__line' : v:val[0],
         \ 'action__text' : v:val[1],
-        \ 'action__pattern' :
-        \     unite#util#escape_pattern(v:val[1]),
         \ }")
   let a:context.source__format = '%' . strlen(len(_)) . 'd: %s'
 
