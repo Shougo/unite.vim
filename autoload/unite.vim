@@ -677,7 +677,7 @@ function! unite#redraw_line(...) "{{{
   setlocal modifiable
 
   let candidate = unite#get_unite_candidates()[linenr - (unite#get_current_unite().prompt_linenr+1)]
-  call setline(linenr, s:convert_lines([candidate])[0])
+  call setline(linenr, unite#convert_lines([candidate])[0])
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
@@ -711,7 +711,7 @@ function! unite#redraw_candidates() "{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
 
-  let lines = s:convert_lines(candidates)
+  let lines = unite#convert_lines(candidates)
   let pos = getpos('.')
   if len(lines) < len(unite#get_current_unite().current_candidates)
     silent! execute (unite#get_current_unite().prompt_linenr+1).',$delete _'
@@ -763,11 +763,14 @@ function! unite#gather_candidates()"{{{
     let unite.candidates += source.unite__candidates
   endfor
 
-  let unite.candidates_pos = winheight(0)
   let unite.max_candidates = len(unite.candidates)
 
+  if unite.context.is_redraw || unite.candidates_pos == 0
+    let unite.candidates_pos = winheight(0)
+  endif
+
   let candidates = s:initialize_candidates(
-        \ unite.candidates[ :winheight(0)])
+        \ unite.candidates[: unite.candidates_pos])
 
   " Post filter.
   for filter_name in unite.post_filters
@@ -775,7 +778,7 @@ function! unite#gather_candidates()"{{{
           \ filter_name, candidates, unite.context)
   endfor
 
-  return s:initialize_candidates(candidates[ :winheight(0)])
+  return candidates
 endfunction"}}}
 function! unite#gather_candidates_pos(offset)"{{{
   let unite = unite#get_current_unite()
@@ -2136,7 +2139,7 @@ function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
 
   return candidates
 endfunction"}}}
-function! s:convert_lines(candidates)"{{{
+function! unite#convert_lines(candidates)"{{{
   let unite = unite#get_current_unite()
   let [max_width, max_source_name] =
         \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)

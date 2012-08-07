@@ -57,8 +57,10 @@ function! unite#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>print_candidate()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
         \ unite#get_current_unite().prompt_linenr.'G0z.'
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
-        \ <SID>loop_cursor_down(0)
+  " nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
+  "       \ <SID>loop_cursor_down(0)
+  nnoremap <buffer><silent> <Plug>(unite_loop_cursor_down)
+        \ :call <SID>cursor_down(0)<CR>
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)
         \ <SID>loop_cursor_up(0)
   nnoremap <buffer><expr> <Plug>(unite_skip_cursor_down)
@@ -793,6 +795,85 @@ endfunction"}}}
 
 function! unite#mappings#complete_actions(arglead, cmdline, cursorpos)"{{{
   return filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(a:arglead)))
+endfunction"}}}
+
+function! s:cursor_down(is_skip_not_matched)"{{{
+  let is_insert = mode() ==# 'i'
+  let prompt_linenr = unite#get_current_unite().prompt_linenr
+
+  if line('.') <= prompt_linenr && !is_insert
+    normal! j
+    return
+  endif
+
+  if line('.') == line('$')
+    if unite#mappings#print_lines(2)
+      " Loop.
+      if is_insert
+        execute 'normal!' "\<C-Home>\<End>".
+              \ repeat("\<Down>", prompt_linenr-1)."\<End>"
+      else
+        execute 'normal!' prompt_linenr.'G0z.'
+      endif
+    else
+      normal! j
+    endif
+
+    return
+  endif
+
+  let num = line('.') - (prompt_linenr + 1)
+  let cnt = 1
+  if line('.') <= prompt_linenr
+    let cnt += prompt_linenr - line('.')
+  endif
+  if is_insert && line('.') == prompt_linenr
+    let cnt += 1
+  endif
+
+  while 1
+    let candidate = get(unite#get_unite_candidates(), num + cnt, {})
+    if !empty(candidate) && (candidate.is_dummy
+          \ || (a:is_skip_not_matched && !candidate.is_matched))
+      let cnt += 1
+      continue
+    endif
+
+    break
+  endwhile
+
+  if is_insert
+    execute 'normal!' "\<Home>" . repeat("\<Down>", cnt)
+  else
+    execute 'normal!' repeat('j', cnt)
+  endif
+endfunction"}}}
+function! unite#mappings#print_lines(lines)"{{{
+  let candidates = unite#gather_candidates_pos(a:lines)
+  if empty(candidates)
+    return 1
+  endif
+
+  let modifiable_save = &l:modifiable
+  setlocal modifiable
+
+  try
+    let lines = unite#convert_lines(candidates)
+    let pos = getpos('.')
+    call setline('$', lines)
+  finally
+    let &l:modifiable = l:modifiable_save
+  endtry
+
+  let unite = unite#get_current_unite()
+  let context = unite.context
+  let unite.current_candidates = candidates
+
+  call unite#_resize_window()
+
+  if pos != getpos('.')
+    call setpos('.', pos)
+  endif
 endfunction"}}}
 
 " Unite action source."{{{
