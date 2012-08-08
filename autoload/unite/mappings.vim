@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jul 2012.
+" Last Modified: 07 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,6 +65,10 @@ function! unite#mappings#define_default_mappings()"{{{
         \ <SID>loop_cursor_down(1)
   nnoremap <buffer><expr> <Plug>(unite_skip_cursor_up)
         \ <SID>loop_cursor_up(1)
+  nnoremap <buffer><silent> <Plug>(unite_next_screen)
+        \ :<C-u>call <SID>move_screen(1)<CR>
+  nnoremap <buffer><silent> <Plug>(unite_next_half_screen)
+        \ :<C-u>call <SID>move_half_screen(1)<CR>
   nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)
         \ :<C-u>call unite#mappings#_quick_match(0)<CR>
   nnoremap <silent><buffer> <Plug>(unite_quick_match_choose_action)
@@ -616,12 +620,12 @@ function! unite#mappings#_quick_match(is_choose)"{{{
   let unite = unite#get_current_unite()
 
   if !has_key(quick_match_table, char)
-        \ || quick_match_table[char] >= len(unite.candidates)
+        \ || quick_match_table[char] >= len(unite.current_candidates)
     call unite#util#print_error('Canceled.')
     return
   endif
 
-  let candidate = unite.candidates[quick_match_table[char]]
+  let candidate = unite.current_candidates[quick_match_table[char]]
   if candidate.is_dummy
     call unite#util#print_error('Canceled.')
     return

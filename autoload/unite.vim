@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2012.
+" Last Modified: 09 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -677,7 +677,7 @@ function! unite#redraw_line(...) "{{{
   setlocal modifiable
 
   let candidate = unite#get_unite_candidates()[linenr - (unite#get_current_unite().prompt_linenr+1)]
-  call setline(linenr, s:convert_lines([candidate])[0])
+  call setline(linenr, unite#convert_lines([candidate])[0])
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
@@ -711,9 +711,9 @@ function! unite#redraw_candidates() "{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
 
-  let lines = s:convert_lines(candidates)
+  let lines = unite#convert_lines(candidates)
   let pos = getpos('.')
-  if len(lines) < len(unite#get_current_unite().candidates)
+  if len(lines) < len(unite#get_current_unite().current_candidates)
     silent! execute (unite#get_current_unite().prompt_linenr+1).',$delete _'
   endif
   call setline(unite#get_current_unite().prompt_linenr+1, lines)
@@ -722,7 +722,7 @@ function! unite#redraw_candidates() "{{{
 
   let unite = unite#get_current_unite()
   let context = unite.context
-  let unite.candidates = candidates
+  let unite.current_candidates = candidates
 
   call unite#_resize_window()
 
@@ -763,11 +763,14 @@ function! unite#gather_candidates()"{{{
     let unite.candidates += source.unite__candidates
   endfor
 
-  let unite.candidates_pos = winheight(0)
   let unite.max_candidates = len(unite.candidates)
 
+  if unite.context.is_redraw || unite.candidates_pos == 0
+    let unite.candidates_pos = winheight(0)
+  endif
+
   let candidates = s:initialize_candidates(
-        \ unite.candidates[ :winheight(0)])
+        \ unite.candidates[: unite.candidates_pos])
 
   " Post filter.
   for filter_name in unite.post_filters
@@ -1071,9 +1074,8 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
 
     let [type, info] = ret
     if type ==# 'file'
-      let infos = s:initialize_candidates_source([info[1]], source.name)
-      let infos = s:initialize_vimfiler_candidates(infos, source.name)
-      let info = infos[0]
+      call s:initialize_candidates_source([info[1]], source.name)
+      call s:initialize_vimfiler_candidates([info[1]], source.name)
     elseif type ==# 'directory'
       " nop
     elseif type ==# 'error'
@@ -2136,7 +2138,7 @@ function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
 
   return candidates
 endfunction"}}}
-function! s:convert_lines(candidates)"{{{
+function! unite#convert_lines(candidates)"{{{
   let unite = unite#get_current_unite()
   let [max_width, max_source_name] =
         \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
@@ -2200,7 +2202,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.winnr = winnr
   let unite.win_rest_cmd = win_rest_cmd
   let unite.context = context
-  let unite.candidates = []
+  let unite.current_candidates = []
   let unite.sources = sources
   let unite.buffer_name = (context.buffer_name == '') ?
         \ 'default' : context.buffer_name
@@ -2514,7 +2516,7 @@ function! unite#_resize_window() "{{{
 
   if context.auto_resize
     " Auto resize.
-    let max_len = unite.prompt_linenr + len(unite.candidates)
+    let max_len = unite.prompt_linenr + len(unite.current_candidates)
     execute 'resize' min([max_len, context.winheight])
     normal! zb
     if mode() ==# 'i' && col('.') == (col('$') - 1)
@@ -2643,8 +2645,9 @@ function! s:on_cursor_moved()  "{{{
     return
   endif
 
-  let prompt_linenr = unite#get_current_unite().prompt_linenr
-  let context = unite#get_context()
+  let unite = unite#get_current_unite()
+  let prompt_linenr = unite.prompt_linenr
+  let context = unite.context
 
   setlocal nocursorline
 
@@ -2662,6 +2665,37 @@ function! s:on_cursor_moved()  "{{{
   if context.auto_preview
     call s:do_auto_preview()
   endif
+
+  " Check lines."{{{
+  if line('.') + winheight(0) / 2 < line('$')
+    return
+  endif
+
+  let candidates = unite#gather_candidates_pos(winheight(0))
+  if empty(candidates)
+    " Nothing.
+    return
+  endif
+
+  let modifiable_save = &l:modifiable
+  setlocal modifiable
+
+  try
+    let lines = unite#convert_lines(candidates)
+    let pos = getpos('.')
+    call setline('$', lines)
+  finally
+    let &l:modifiable = l:modifiable_save
+  endtry
+
+  let context = unite.context
+  let unite.current_candidates = candidates
+
+  call unite#_resize_window()
+
+  if pos != getpos('.')
+    call setpos('.', pos)
+  endif"}}}
 endfunction"}}}
 function! s:on_buf_unload(bufname)  "{{{
   match

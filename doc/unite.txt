@@ -2528,6 +2528,16 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-08-08
+- Fixed for vimfiler.
+
+2012-08-07
+- Fixed candidates bug.
+- Improved mapping behavior.
+- Improved autocmd.
+- Improved matcher.
+- Improved line source.
+
 2012-08-06
 - Optimized redraw candidates.
 - Improved unite#gather_candidates().
