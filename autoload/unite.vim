@@ -757,19 +757,40 @@ function! unite#get_self_functions()"{{{
   return split(matchstr(expand('<sfile>'), '^function \zs.*$'), '\.\.')[: -2]
 endfunction"}}}
 function! unite#gather_candidates()"{{{
-  let candidates = []
+  let unite = unite#get_current_unite()
+  let unite.candidates = []
   for source in unite#loaded_sources_list()
-    let candidates += source.unite__candidates
+    let unite.candidates += source.unite__candidates
   endfor
 
+  let unite.candidates_pos = winheight(0)
+  let unite.max_candidates = len(unite.candidates)
+
+  let candidates = s:initialize_candidates(
+        \ unite.candidates[ :winheight(0)])
+
   " Post filter.
-  let unite = unite#get_current_unite()
   for filter_name in unite.post_filters
     let candidates = unite#call_filter(
           \ filter_name, candidates, unite.context)
   endfor
 
-  return s:initialize_candidates(candidates[ :winheight(0)])
+  return candidates
+endfunction"}}}
+function! unite#gather_candidates_pos(offset)"{{{
+  let unite = unite#get_current_unite()
+  let candidates = unite.candidates[unite.candidates_pos :
+        \ unite.candidates_pos + a:offset]
+
+  " Post filter.
+  for filter_name in unite.post_filters
+    let candidates = unite#call_filter(
+          \ filter_name, candidates, unite.context)
+  endfor
+
+  let unite.candidates_pos += len(candidates)
+
+  return s:initialize_candidates(candidates)
 endfunction"}}}
 function! unite#get_current_unite() "{{{
   return exists('b:unite') && !s:use_current_unite ?
@@ -1051,7 +1072,6 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
     let [type, info] = ret
     if type ==# 'file'
       let infos = s:initialize_candidates_source([info[1]], source.name)
-      let infos = s:initialize_candidates(infos)
       let infos = s:initialize_vimfiler_candidates(infos, source.name)
       let info = infos[0]
     elseif type ==# 'directory'
@@ -1926,8 +1946,9 @@ function! s:recache_candidates(input, is_force)"{{{
           \ source.unite__candidates
     call s:call_hook([source], 'on_post_filter')
 
-    let source.unite__candidates = s:initialize_candidates_source(
-          \ source.unite__candidates, source.name)
+    let source.unite__candidates =
+          \ s:initialize_candidates_source(
+          \   source.unite__candidates, source.name)
   endfor
 
   " Update async state.
@@ -2211,6 +2232,9 @@ function! s:initialize_current_unite(sources, context)"{{{
         \ unite.profile_name, 'filters')
   let unite.preview_candidate = {}
   let unite.max_source_name = 0
+  let unite.candidates_pos = 0
+  let unite.max_candidates = 0
+  let unite.candidates = []
 
   " Preview windows check.
   let unite.has_preview_window =
