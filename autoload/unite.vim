@@ -1966,6 +1966,7 @@ function! s:recache_candidates_loop(context, is_force)"{{{
   let input_len = unite#util#strchars(a:context.input)
 
   let candidate_sources = []
+  let unite.max_source_candidates = 0
   for source in unite#loaded_sources_list()
     " Check required pattern length.
     if input_len < source.required_pattern_length
@@ -2001,6 +2002,8 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     " Call pre_filter hook.
     let source.unite__context.candidates = source_candidates
     call s:call_hook([source], 'on_pre_filter')
+
+    let unite.max_source_candidates += len(source_candidates)
 
     " Call filters.
     let matchers = []
@@ -2237,6 +2240,7 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.candidates_pos = 0
   let unite.max_candidates = 0
   let unite.candidates = []
+  let unite.max_source_candidates = 0
 
   " Preview windows check.
   let unite.has_preview_window =
@@ -2573,6 +2577,10 @@ endfunction"}}}
 function! s:on_cursor_hold_i()  "{{{
   let unite = unite#get_current_unite()
 
+  if unite.max_source_candidates > 4000
+    call s:check_redraw()
+  endif
+
   if unite.is_async && &l:modifiable
     " Ignore key sequences.
     call feedkeys("a\<BS>", 'n')
@@ -2582,10 +2590,9 @@ endfunction"}}}
 function! s:on_cursor_moved_i()  "{{{
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
-  if line('.') == prompt_linenr || unite.context.is_redraw
-    " Redraw.
-    call unite#redraw()
-    call s:change_highlight()
+
+  if unite.max_source_candidates < 4000
+    call s:check_redraw()
   endif
 
   " Prompt check.
@@ -2593,6 +2600,15 @@ function! s:on_cursor_moved_i()  "{{{
     startinsert!
   endif
 endfunction"}}}
+function! s:check_redraw()
+  let unite = unite#get_current_unite()
+  let prompt_linenr = unite.prompt_linenr
+  if line('.') == prompt_linenr || unite.context.is_redraw
+    " Redraw.
+    call unite#redraw()
+    call s:change_highlight()
+  endif
+endfunction
 function! s:on_bufwin_enter(bufnr)  "{{{
   let unite = getbufvar(a:bufnr, 'unite')
   if type(unite) != type({})

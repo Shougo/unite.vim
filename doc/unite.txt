@@ -2530,6 +2530,7 @@ CHANGELOG					*unite-changelog*
 
 2012-08-09
 - Fixed for multiline behavior.
+- Fixed for many candidates behavior.
 
 2012-08-08
 - Fixed for vimfiler.
