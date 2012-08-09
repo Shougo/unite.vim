@@ -349,7 +349,7 @@ function! unite#get_vimfiler_source_names()"{{{
         \ 'has_key(v:val, "vimfiler_check_filetype")'), 'v:val.name')
 endfunction"}}}
 function! unite#get_unite_candidates()"{{{
-  return unite#get_current_unite().candidates
+  return unite#get_current_unite().current_candidates
 endfunction"}}}
 function! unite#get_current_candidate(...)"{{{
   let linenr = a:0 > 1? a:1 : line('.')
