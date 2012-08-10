@@ -2528,6 +2528,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-08-10
+- Improved file_mru.
+
 2012-08-05
 - Added tabdrop action.
 
