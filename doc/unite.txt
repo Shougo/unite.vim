@@ -1440,6 +1440,8 @@ find		Nominates "find" command output as candidates.
 line		Nominates current buffer lines as candidates.
 		Note: This source is created by t9md.
 
+		Note: This source makes cache of last executed lines.
+
 		Source arguments:
 		1. the search direction. "all" or "forward" or "backward".
 		Max candidates: 100
@@ -2534,6 +2536,7 @@ CHANGELOG					*unite-changelog*
 - Improved call filters.
 - Optimized filters.
 - Improved matcher_migemo matcher.
+- Use cache in line source.
 
 2012-08-09
 - Fixed for multiline behavior.
