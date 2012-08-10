@@ -2533,6 +2533,7 @@ CHANGELOG					*unite-changelog*
 - Updated vital.
 - Improved call filters.
 - Optimized filters.
+- Improved matcher_migemo matcher.
 
 2012-08-09
 - Fixed for multiline behavior.

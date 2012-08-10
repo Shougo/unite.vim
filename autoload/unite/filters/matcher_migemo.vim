@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_migemo.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Oct 2011.
+" Last Modified: 10 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -91,18 +91,19 @@ function! s:matcher.filter(candidates, context)"{{{
         continue
       endif
       " Exclusion match.
-      try
-        let candidates = filter(copy(candidates),
-              \ 'v:val.word !~ ' . string(s:get_migemo_pattern(input[1:])))
-      catch
-      endtry
+      let expr = 'v:val.word !~ ' .
+            \ string(s:get_migemo_pattern(input[1:]))
     else
-      try
-        let candidates = filter(copy(candidates),
-              \ 'v:val.word =~ ' . string(s:get_migemo_pattern(input)))
-      catch
-      endtry
+      let expr = 'v:val.word =~ ' .
+            \ string(s:get_migemo_pattern(input))
     endif
+
+    try
+      let candidates = unite#util#filter_matcher(
+            \ candidates, expr, a:context)
+    catch
+      let candidates = []
+    endtry
   endfor
 
   return candidates
@@ -114,7 +115,8 @@ function! s:get_migemo_pattern(input)
     return migemo(a:input)
   else
     " Use cmigemo.
-    return vimproc#system('cmigemo -v -w "'.a:input.'" -d "'.s:migemodict.'"')
+    return vimproc#system(
+          \ 'cmigemo -v -w "'.a:input.'" -d "'.s:migemodict.'"')
   endif
 endfunction
 

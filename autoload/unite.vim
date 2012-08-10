@@ -767,7 +767,9 @@ function! unite#gather_candidates()"{{{
   let unite.max_candidates = len(unite.candidates)
 
   if unite.context.is_redraw || unite.candidates_pos == 0
-    let unite.candidates_pos = unite.context.winheight
+    let height = unite.context.no_split ?
+          \ winheight(0) : unite.context.winheight
+    let unite.candidates_pos = height
   endif
 
   let candidates = s:initialize_candidates(
@@ -2707,7 +2709,9 @@ function! s:on_cursor_moved()  "{{{
     return
   endif
 
-  let candidates = unite#gather_candidates_pos(context.winheight)
+  let height = unite.context.no_split ?
+        \ winheight(0) : unite.context.winheight
+  let candidates = unite#gather_candidates_pos(height)
   if empty(candidates)
     " Nothing.
     return
