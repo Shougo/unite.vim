@@ -11,34 +11,34 @@ endfunction
 " Substitute a:from => a:to by string.
 " To substitute by pattern, use substitute() instead.
 function! s:replace(str, from, to)
-    if a:str ==# '' || a:from ==# ''
-        return a:str
-    endif
-    let str = a:str
+  if a:str ==# '' || a:from ==# ''
+    return a:str
+  endif
+  let str = a:str
+  let idx = stridx(str, a:from)
+  while idx !=# -1
+    let left  = idx ==# 0 ? '' : str[: idx - 1]
+    let right = str[idx + strlen(a:from) :]
+    let str = left . a:to . right
     let idx = stridx(str, a:from)
-    while idx !=# -1
-        let left  = idx ==# 0 ? '' : str[: idx - 1]
-        let right = str[idx + strlen(a:from) :]
-        let str = left . a:to . right
-        let idx = stridx(str, a:from)
-    endwhile
-    return str
+  endwhile
+  return str
 endfunction
 
 " Substitute a:from => a:to only once.
 " cf. s:replace()
 function! s:replace_once(str, from, to)
-    if a:str ==# '' || a:from ==# ''
-        return a:str
-    endif
-    let idx = stridx(a:str, a:from)
-    if idx ==# -1
-        return a:str
-    else
-        let left  = idx ==# 0 ? '' : a:str[: idx - 1]
-        let right = a:str[idx + strlen(a:from) :]
-        return left . a:to . right
-    endif
+  if a:str ==# '' || a:from ==# ''
+    return a:str
+  endif
+  let idx = stridx(a:str, a:from)
+  if idx ==# -1
+    return a:str
+  else
+    let left  = idx ==# 0 ? '' : a:str[: idx - 1]
+    let right = a:str[idx + strlen(a:from) :]
+    return left . a:to . right
+  endif
 endfunction
 
 function! s:scan(str, pattern)
@@ -56,58 +56,64 @@ function! s:scan(str, pattern)
 endfunction
 
 " Split to two elements of List. ([left, right])
-" e.g.: s:split_leftright('neocomplcache', 'compl') returns ['neo', 'cache']
-function! s:split_leftright(haystack, needle)
-    let ERROR = ['', '']
-    if a:haystack ==# '' || a:needle ==# ''
-        return ERROR
-    endif
-    let idx = stridx(a:haystack, a:needle)
-    if idx ==# -1
-        return ERROR
-    endif
-    let left  = idx ==# 0 ? '' : a:haystack[: idx - 1]
-    let right = a:haystack[idx + strlen(a:needle) :]
-    return [left, right]
+" e.g.: s:split3('neocomplcache', 'compl') returns ['neo', 'compl', 'cache']
+function! s:split_leftright(expr, pattern)
+  let [left, _, right] = s:split3(a:expr, a:pattern)
+  return [left, right]
+endfunction
+
+function! s:split3(expr, pattern)
+  let ERROR = ['', '', '']
+  if a:expr ==# '' || a:pattern ==# ''
+    return ERROR
+  endif
+  let begin = match(a:expr, a:pattern)
+  if begin is -1
+    return ERROR
+  endif
+  let end   = matchend(a:expr, a:pattern)
+  let left  = begin <=# 0 ? '' : a:expr[: begin - 1]
+  let right = a:expr[end :]
+  return [left, a:expr[begin : end-1], right]
 endfunction
 
 " Slices into strings determines the number of substrings.
 " e.g.: s:splitn("neo compl cache", 2, '\s') returns ['neo', 'compl cache']
 function! s:nsplit(expr, n, ...)
-    let pattern = get(a:000, 0, '\s')
-    let keepempty = get(a:000, 1, 1)
-    let ret = []
-    let expr = a:expr
-    if a:n <= 1
-        return [expr]
+  let pattern = get(a:000, 0, '\s')
+  let keepempty = get(a:000, 1, 1)
+  let ret = []
+  let expr = a:expr
+  if a:n <= 1
+    return [expr]
+  endif
+  while 1
+    let pos = match(expr, pattern)
+    if pos == -1
+      if expr !~ pattern || keepempty
+        call add(ret, expr)
+      endif
+      break
+    elseif pos >= 0
+      let left = pos > 0 ? expr[:pos-1] : ''
+      if pos > 0 || keepempty
+        call add(ret, left)
+      endif
+      let ml = len(matchstr(expr, pattern))
+      if pos == 0 && ml == 0
+        let pos = 1
+      endif
+      let expr = expr[pos+ml :]
     endif
-    while 1
-        let pos = match(expr, pattern)
-        if pos == -1
-            if expr !~ pattern || keepempty
-                call add(ret, expr)
-            endif
-            break
-        elseif pos >= 0
-            let left = pos > 0 ? expr[:pos-1] : ''
-            if pos > 0 || keepempty
-                call add(ret, left)
-            endif
-            let ml = len(matchstr(expr, pattern))
-            if pos == 0 && ml == 0
-                let pos = 1
-            endif
-            let expr = expr[pos+ml :]
-        endif
-        if len(expr) == 0
-            break
-        endif
-        if len(ret) == a:n - 1
-            call add(ret, expr)
-            break
-        endif
-    endwhile
-    return ret
+    if len(expr) == 0
+      break
+    endif
+    if len(ret) == a:n - 1
+      call add(ret, expr)
+      break
+    endif
+  endwhile
+  return ret
 endfunction
 
 " Returns the number of character in a:str.
@@ -115,22 +121,22 @@ endfunction
 " even if a:str contains multibyte character(s).
 " s:strchars(str) {{{
 if exists('*strchars')
-    " TODO: Why can't I write like this?
-    " let s:strchars = function('strchars')
-    function! s:strchars(str)
-        return strchars(a:str)
-    endfunction
+  " TODO: Why can't I write like this?
+  " let s:strchars = function('strchars')
+  function! s:strchars(str)
+    return strchars(a:str)
+  endfunction
 else
-    function! s:strchars(str)
-        return strlen(substitute(copy(a:str), '.', 'x', 'g'))
-    endfunction
+  function! s:strchars(str)
+    return strlen(substitute(copy(a:str), '.', 'x', 'g'))
+  endfunction
 endif "}}}
 
 " Remove last character from a:str.
 " NOTE: This returns proper value
 " even if a:str contains multibyte character(s).
 function! s:chop(str) "{{{
-    return substitute(a:str, '.$', '', '')
+  return substitute(a:str, '.$', '', '')
 endfunction "}}}
 
 " wrap() and its internal functions
@@ -195,4 +201,21 @@ function! s:nr2hex(nr)
   return r
 endfunction
 
+" If a ==# b, returns -1.
+" If a !=# b, returns first index of diffrent character.
+function! s:diffidx(a, b)
+  let [a, b] = [split(a:a, '\zs'), split(a:b, '\zs')]
+  let [al, bl] = [len(a), len(b)]
+  let l = max([al, bl])
+  for i in range(l)
+    " if `i` is out of range, a[i] returns empty string.
+    if i >= al || i >= bl || a[i] !=# b[i]
+      return i > 0 ? strlen(join(a[:i-1], '')) : 0
+    endif
+  endfor
+  return -1
+endfunction
+
 let &cpo = s:save_cpo
+
+" vim:set et ts=2 sts=2 sw=2 tw=0:

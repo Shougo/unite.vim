@@ -2530,6 +2530,7 @@ CHANGELOG					*unite-changelog*
 
 2012-08-10
 - Fixed quick match error.
+- Updated vital.
 
 2012-08-09
 - Fixed for multiline behavior.
