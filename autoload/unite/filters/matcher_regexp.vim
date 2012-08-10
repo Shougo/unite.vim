@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_regexp.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Aug 2012.
+" Last Modified: 10 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,28 +38,27 @@ let s:matcher = {
 
 function! s:matcher.filter(candidates, context)"{{{
   if a:context.input == ''
-    return a:candidates
+    return unite#util#filter_matcher(
+          \ a:candidates, '', a:context)
   endif
 
   let candidates = a:candidates
   for input in split(a:context.input, '\\\@<! ')
-    call unite#filters#matcher_regexp#regexp_matcher(candidates, input)
+    let candidates = unite#filters#matcher_regexp#regexp_matcher(
+          \ candidates, input, a:context)
   endfor
 
   return candidates
 endfunction"}}}
 
-function! unite#filters#matcher_regexp#regexp_matcher(candidates, input)"{{{
+function! unite#filters#matcher_regexp#regexp_matcher(candidates, input, context)"{{{
   let input = a:input
   if input =~ '^!'
     if input == '!'
       return
     endif
     " Exclusion match.
-    try
-      call filter(a:candidates, 'v:val.word !~ '.string(input[1:]))
-    catch
-    endtry
+    let expr = 'v:val.word !~ '.string(input[1:])
   elseif input !~ '[~\\.^$[\]*]'
     " Optimized filter.
     let input = substitute(input, '\\\(.\)', '\1', 'g')
@@ -68,14 +67,15 @@ function! unite#filters#matcher_regexp#regexp_matcher(candidates, input)"{{{
           \    string(tolower(input))) :
           \ printf('stridx(v:val.word, %s) != -1',
           \    string(input))
-
-    call filter(a:candidates, expr)
   else
-    try
-      call filter(a:candidates, 'v:val.word =~ '.string(input))
-    catch
-    endtry
+    let expr = 'v:val.word =~ '.string(input)
   endif
+
+  try
+    return unite#util#filter_matcher(a:candidates, expr, a:context)
+  catch
+    return []
+  endtry
 endfunction"}}}
 
 let &cpo = s:save_cpo

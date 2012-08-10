@@ -2532,6 +2532,7 @@ CHANGELOG					*unite-changelog*
 - Fixed quick match error.
 - Updated vital.
 - Improved call filters.
+- Optimized filters.
 
 2012-08-09
 - Fixed for multiline behavior.

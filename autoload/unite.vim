@@ -767,7 +767,7 @@ function! unite#gather_candidates()"{{{
   let unite.max_candidates = len(unite.candidates)
 
   if unite.context.is_redraw || unite.candidates_pos == 0
-    let unite.candidates_pos = winheight(0)
+    let unite.candidates_pos = unite.context.winheight
   endif
 
   let candidates = s:initialize_candidates(
@@ -2002,16 +2002,14 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     let context.candidates = source_candidates
     call s:call_hook([source], 'on_pre_filter')
 
-    let unite.max_source_candidates += len(source_candidates)
-
-    " Call filters.
+    " Set filters.
     let matchers = []
     let sorters = []
     let filters = []
     for Filter in get(custom_source, 'filters', source.filters)
       if type(Filter) == type('')
         let name = get(unite#get_filters(Filter),
-            \              'name', '')
+              \              'name', '')
         if name =~# '^matcher_'
           call add(matchers, Filter)
         elseif name =~# '^sorter_'
@@ -2031,12 +2029,17 @@ function! s:recache_candidates_loop(context, is_force)"{{{
       unlet Filter
     endfor
 
-    if sorters == ['sorter_nothing']
+    if sorters ==# ['sorter_nothing']
       let sorters = []
     endif
 
     let context.unite__is_sort_nothing = empty(sorters)
+    let context.unite__max_candidates = source.max_candidates
+    let unite.max_source_candidates +=
+          \ (context.unite__is_sort_nothing && source.max_candidates > 0) ?
+          \ source.max_candidates : len(source_candidates)
 
+    " Call filters.
     for Filter in matchers + sorters + filters
       if type(Filter) == type('')
         let source_candidates = unite#call_filter(
@@ -2115,14 +2118,14 @@ function! s:get_source_candidates(source)"{{{
             \     a:source.args, a:source.unite__context)
     endif
   catch
-      call unite#print_error(v:throwpoint)
-      call unite#print_error(v:exception)
-      call unite#print_error(
-            \ '[unite.vim] Error occured in ' . funcname . '!')
-      call unite#print_error(
-            \ '[unite.vim] Source name is ' . a:source.name)
+    call unite#print_error(v:throwpoint)
+    call unite#print_error(v:exception)
+    call unite#print_error(
+          \ '[unite.vim] Error occured in ' . funcname . '!')
+    call unite#print_error(
+          \ '[unite.vim] Source name is ' . a:source.name)
 
-      return []
+    return []
   endtry
 
   return a:source.unite__cached_candidates
@@ -2261,8 +2264,8 @@ function! s:initialize_current_unite(sources, context)"{{{
 
   " Preview windows check.
   let unite.has_preview_window =
-   \ len(filter(range(1, winnr('$')),
-   \  'getwinvar(v:val, "&previewwindow")')) > 0
+        \ len(filter(range(1, winnr('$')),
+        \  'getwinvar(v:val, "&previewwindow")')) > 0
 
   call unite#set_current_unite(unite)
 endfunction"}}}
@@ -2704,7 +2707,7 @@ function! s:on_cursor_moved()  "{{{
     return
   endif
 
-  let candidates = unite#gather_candidates_pos(winheight(0))
+  let candidates = unite#gather_candidates_pos(context.winheight)
   if empty(candidates)
     " Nothing.
     return
@@ -2969,7 +2972,7 @@ function! s:call_hook(sources, hook_name)"{{{
 endfunction"}}}
 function! s:has_preview_window()"{{{
   return len(filter(range(1, winnr('$')),
-          \    'getwinvar(v:val, "&previewwindow")')) > 0
+        \    'getwinvar(v:val, "&previewwindow")')) > 0
 endfunction"}}}
 function! s:do_auto_preview()"{{{
   let unite = unite#get_current_unite()
