@@ -2530,6 +2530,7 @@ CHANGELOG					*unite-changelog*
 
 2012-08-10
 - Improved file_mru.
+- Improved new file.
 
 2012-08-05
 - Added tabdrop action.
