@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Aug 2012.
+" Last Modified: 10 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -687,7 +687,8 @@ function! unite#quick_match_redraw(quick_match_table) "{{{
 
   call setline(unite#get_current_unite().prompt_linenr+1,
         \ s:convert_quick_match_lines(
-        \ unite#get_current_unite().candidates, a:quick_match_table))
+        \ unite#get_current_unite().current_candidates,
+        \ a:quick_match_table))
   redraw
 
   let &l:modifiable = modifiable_save
