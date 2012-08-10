@@ -2012,9 +2012,9 @@ function! s:recache_candidates_loop(context, is_force)"{{{
       if type(Filter) == type('')
         let name = get(unite#get_filters(Filter),
               \              'name', '')
-        if name =~# '^matcher_'
+        if name =~# '\%(^\|_\)matcher_'
           call add(matchers, Filter)
-        elseif name =~# '^sorter_'
+        elseif name =~# '\%(^\|_\)sorter_'
           if name ==# 'sorter_default'
             let sorters += unite#filters#sorter_default#get()
           else
