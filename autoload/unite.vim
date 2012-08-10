@@ -2311,15 +2311,6 @@ function! s:initialize_unite_buffer()"{{{
       setlocal colorcolumn=0
     endif
 
-    " Keep window width and height.
-    if !unite.context.no_split
-      if unite.context.vertical
-        setlocal winfixwidth
-      else
-        setlocal winfixheight
-      endif
-    endif
-
     " Autocommands.
     augroup plugin-unite
       autocmd InsertEnter <buffer>
@@ -2425,29 +2416,30 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
   let buffer_name = unite#util#escape_file_searching(a:buffer_name)
   if !a:context.no_split && bufwinnr(buffer_name) > 0
     silent execute bufwinnr(buffer_name) 'wincmd w'
+    return
+  endif
+
+  if !a:context.no_split
+    " Split window.
+    execute a:context.direction (bufexists(a:buffer_name) ?
+          \ ((a:context.vertical) ? 'vsplit' : 'split') :
+          \ ((a:context.vertical) ? 'vnew' : 'new'))
+  endif
+
+  if bufexists(a:buffer_name)
+    " Search buffer name.
+    let bufnr = 1
+    let max = bufnr('$')
+    while bufnr <= max
+      if bufname(bufnr) ==# a:buffer_name
+        silent execute bufnr 'buffer'
+        break
+      endif
+
+      let bufnr += 1
+    endwhile
   else
-    if !a:context.no_split
-      " Split window.
-      execute a:context.direction (bufexists(a:buffer_name) ?
-            \ ((a:context.vertical) ? 'vsplit' : 'split') :
-            \ ((a:context.vertical) ? 'vnew' : 'new'))
-    endif
-
-    if bufexists(a:buffer_name)
-      " Search buffer name.
-      let bufnr = 1
-      let max = bufnr('$')
-      while bufnr <= max
-        if bufname(bufnr) ==# a:buffer_name
-          silent execute bufnr 'buffer'
-          break
-        endif
-
-        let bufnr += 1
-      endwhile
-    else
-      silent! edit `=a:buffer_name`
-    endif
+    silent! edit `=a:buffer_name`
   endif
 
   if !a:context.no_split && winnr('$') != 1

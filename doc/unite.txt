@@ -2536,6 +2536,7 @@ CHANGELOG					*unite-changelog*
 - Optimized filters.
 - Improved matcher_migemo matcher.
 - Use cache in line source.
+- Improved line source behavior.
 
 2012-08-09
 - Fixed for multiline behavior.
