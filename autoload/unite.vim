@@ -1975,22 +1975,20 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     endif
 
     " Set context.
-    let source.unite__context.input = a:context.input
+    let context = source.unite__context
+    let context.input = a:context.input
+
     if source.required_pattern_length > 0
           \ && !source.is_forced
       " Forced redraw.
-      let source.unite__context.is_redraw = 1
+      let context.is_redraw = 1
       let source.is_forced = 1
     else
-      let source.unite__context.is_redraw =
-            \ a:context.is_redraw
+      let context.is_redraw = a:context.is_redraw
     endif
-    let source.unite__context.is_changed =
-          \ a:context.is_changed
-    let source.unite__context.is_invalidate =
-          \ source.unite__is_invalidate
-    let source.unite__context.is_list_input =
-          \ a:context.is_list_input
+    let context.is_changed = a:context.is_changed
+    let context.is_invalidate = source.unite__is_invalidate
+    let context.is_list_input = a:context.is_list_input
 
     let source_candidates = s:get_source_candidates(source)
 
@@ -2001,33 +1999,51 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     endif
 
     " Call pre_filter hook.
-    let source.unite__context.candidates = source_candidates
+    let context.candidates = source_candidates
     call s:call_hook([source], 'on_pre_filter')
 
     let unite.max_source_candidates += len(source_candidates)
 
     " Call filters.
     let matchers = []
+    let sorters = []
     let filters = []
     for Filter in get(custom_source, 'filters', source.filters)
-      if type(Filter) == type('') &&
-            \ get(unite#get_filters(Filter),
-            \              'name', '') =~# '^matcher_'
-        call add(matchers, Filter)
-      else
-        call add(filters, Filter)
+      if type(Filter) == type('')
+        let name = get(unite#get_filters(Filter),
+            \              'name', '')
+        if name =~# '^matcher_'
+          call add(matchers, Filter)
+        elseif name =~# '^sorter_'
+          if name ==# 'sorter_default'
+            let sorters += unite#filters#sorter_default#get()
+          else
+            call add(sorters, Filter)
+          endif
+        endif
+
+        unlet Filter
+        continue
       endif
+
+      call add(filters, Filter)
 
       unlet Filter
     endfor
 
-    for Filter in matchers + filters
+    if sorters == ['sorter_nothing']
+      let sorters = []
+    endif
+
+    let context.unite__is_sort_nothing = empty(sorters)
+
+    for Filter in matchers + sorters + filters
       if type(Filter) == type('')
         let source_candidates = unite#call_filter(
-              \ Filter, source_candidates, source.unite__context)
+              \ Filter, source_candidates, context)
       else
         let source_candidates = call(Filter,
-              \ [source_candidates, source.unite__context], source)
+              \ [source_candidates, context], source)
       endif
 
       unlet Filter
