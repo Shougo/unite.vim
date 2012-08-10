@@ -55,7 +55,7 @@ function! unite#filters#matcher_regexp#regexp_matcher(candidates, input, context
   let input = a:input
   if input =~ '^!'
     if input == '!'
-      return
+      return a:candidates
     endif
     " Exclusion match.
     let expr = 'v:val.word !~ '.string(input[1:])
