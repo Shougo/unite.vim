@@ -231,6 +231,35 @@ function! unite#util#set_dictionary_helper(variable, keys, value)"{{{
   endfor
 endfunction"}}}
 
+" filter() for matchers.
+function! unite#util#filter_matcher(list, expr, context)"{{{
+  if !a:context.unite__is_sort_nothing ||
+        \ a:context.unite__max_candidates <= 0
+
+    return a:expr == '' ? a:list : filter(a:list, a:expr)
+  endif
+
+  if a:expr == ''
+    return a:list[: a:context.unite__max_candidates]
+  endif
+
+  let _ = []
+  let len = 0
+  let max = a:context.unite__max_candidates
+  let offset = max*4
+  for cnt in range(0, len(a:list) / offset)
+    let list = filter(a:list[cnt*offset : cnt*offset + offset], a:expr)
+    let len += len(list)
+    let _ += list
+
+    if len >= max
+      break
+    endif
+  endfor
+
+  return _[: max]
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

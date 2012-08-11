@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 07 Aug 2012.
+" Last Modified: 10 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,6 +31,12 @@ call unite#util#set_default('g:source_line_enable_highlight', 1)
 call unite#util#set_default('g:source_line_search_word_highlight', 'Search')
 
 function! unite#sources#line#define() "{{{
+  let s:last_result = {
+        \ 'direction' : '',
+        \ 'bufnr' : -1,
+        \ 'lines' : [],
+        \ }
+
   return s:source
 endfunction "}}}
 
@@ -42,12 +48,15 @@ let s:source = {
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
-  execute 'highlight default link uniteSource__Line_target ' . g:source_line_search_word_highlight
+  execute 'highlight default link uniteSource__Line_target '
+        \ . g:source_line_search_word_highlight
   syntax case ignore
   let a:context.source__path = unite#util#substitute_path_separator(
         \ (&buftype =~ 'nofile') ? expand('%:p') : bufname('%'))
   let a:context.source__bufnr = bufnr('%')
   let a:context.source__linenr = line('.')
+  let a:context.source__is_bang =
+        \ (get(a:args, 0, '') ==# '!')
 
   call unite#print_source_message('Target: ' . a:context.source__path, s:source.name)
 endfunction"}}}
@@ -73,7 +82,8 @@ let s:supported_search_direction = ['forward', 'backward', 'all']
 function! s:source.gather_candidates(args, context)
   call s:hl_refresh(a:context)
 
-  let direction = get(a:args, 0, '')
+  let direction = get(filter(copy(a:args),
+        \ "v:val != '!'"), 0, '')
   if direction == ''
     let direction = 'all'
   endif
@@ -86,16 +96,32 @@ function! s:source.gather_candidates(args, context)
     call unite#print_source_message('direction: ' . direction, s:source.name)
   endif
 
-  let lines = (direction ==# 'forward' || direction ==# 'backward') ?
-        \ s:get_lines(a:context, direction) :
-        \ (s:get_lines(a:context, 'forward')
-        \  + s:get_lines(a:context, 'backward')[: -2])
+  if a:context.source__is_bang
+        \ && s:last_result.bufnr == a:context.source__bufnr
+        \ && s:last_result.direction ==# direction
+        \ && !a:context.is_redraw
+    " Use last lines.
+    let _ = s:last_result.lines
+  else
+    let lines = (direction ==# 'forward' || direction ==# 'backward') ?
+          \ s:get_lines(a:context, direction) :
+          \ (s:get_lines(a:context, 'forward')
+          \  + s:get_lines(a:context, 'backward')[: -2])
 
-  let _ = map(lines, "{
-        \ 'word' : v:val[1],
-        \ 'action__line' : v:val[0],
-        \ 'action__text' : v:val[1],
-        \ }")
+    let _ = map(lines, "{
+          \ 'word' : v:val[1],
+          \ 'action__line' : v:val[0],
+          \ 'action__text' : v:val[1],
+          \ }")
+    if a:context.source__is_bang
+      let s:last_result = {
+            \ 'direction' : direction,
+            \ 'bufnr' : a:context.source__bufnr,
+            \ 'lines' : _,
+            \ }
+    endif
+  endif
+
   let a:context.source__format = '%' . strlen(len(_)) . 'd: %s'
 
   return _

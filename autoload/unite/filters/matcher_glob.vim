@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_glob.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Aug 2012.
+" Last Modified: 10 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,23 +38,25 @@ let s:matcher = {
 
 function! s:matcher.filter(candidates, context)"{{{
   if a:context.input == ''
-    return a:candidates
+    return unite#util#filter_matcher(
+          \ a:candidates, '', a:context)
   endif
 
   let candidates = a:candidates
   for input in split(a:context.input, '\\\@<! ')
-    call unite#filters#matcher_glob#glob_matcher(candidates, input)
+    let candidates = unite#filters#matcher_glob#glob_matcher(
+          \ candidates, input, a:context)
   endfor
 
   return candidates
 endfunction"}}}
 
-function! unite#filters#matcher_glob#glob_matcher(candidates, input)"{{{
+function! unite#filters#matcher_glob#glob_matcher(candidates, input, context)"{{{
   let input = substitute(a:input, '\\ ', ' ', 'g')
 
   if input =~ '^!'
     if input == '!'
-      continue
+      return a:candidates
     endif
 
     " Exclusion.
@@ -75,7 +77,7 @@ function! unite#filters#matcher_glob#glob_matcher(candidates, input)"{{{
           \     string(input))
   endif
 
-  call filter(a:candidates, expr)
+  return unite#util#filter_matcher(a:candidates, expr, a:context)
 endfunction"}}}
 
 let &cpo = s:save_cpo

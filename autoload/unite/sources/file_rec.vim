@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jul 2012.
+" Last Modified: 11 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -109,9 +109,11 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
     lcd `=a:context.source__directory`
   endif
 
+  let mods = a:context.input == '' ? ':.' : ':p'
+
   let candidates = map(files, "{
         \ 'word' : unite#util#substitute_path_separator(
-        \    fnamemodify(v:val, ':.')),
+        \    fnamemodify(v:val, mods)),
         \ 'action__path' : v:val,
         \ }")
 
@@ -128,9 +130,6 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
   return deepcopy(candidates)
 endfunction"}}}
 
-function! s:source_rec.hooks.on_pre_filter(args, context)"{{{
-  call s:on_pre_filter(a:args, a:context)
-endfunction"}}}
 function! s:source_rec.hooks.on_post_filter(args, context)"{{{
   call s:on_post_filter(a:args, a:context)
 endfunction"}}}
@@ -318,6 +317,8 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
     lcd `=a:context.source__directory`
   endif
 
+  let mods = a:context.input == '' ? ':.' : ':p'
+
   let candidates = []
   for filename in map(filter(
         \ stdout.read_lines(-1, 100), 'v:val != ""'),
@@ -325,7 +326,7 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
     if filename !~ '/\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
       call add(candidates, {
             \ 'word' : unite#util#substitute_path_separator(
-            \    fnamemodify(filename, ':.')),
+            \    fnamemodify(filename, mods)),
             \ 'action__path' : filename,
             \ })
     endif
@@ -349,9 +350,6 @@ function! s:source_async.hooks.on_close(args, context) "{{{
     call a:context.source__proc.waitpid()
   endif
 endfunction "}}}
-function! s:source_async.hooks.on_pre_filter(args, context)"{{{
-  call s:on_pre_filter(a:args, a:context)
-endfunction"}}}
 function! s:source_async.hooks.on_post_filter(args, context)"{{{
   call s:on_post_filter(a:args, a:context)
 endfunction"}}}
@@ -412,16 +410,18 @@ function! s:source_rec.source__converter(candidates, context)"{{{
 endfunction"}}}
 
 let s:source_rec.filters =
-      \ ['matcher_default', 'sorter_default',
-      \      s:source_rec.source__converter]
+      \ ['matcher_default', 'matcher_hide_hidden_files',
+      \  'sorter_default',
+      \  s:source_rec.source__converter]
 
 function! s:source_async.source__converter(candidates, context)"{{{
   return s:converter(a:candidates, a:context)
 endfunction"}}}
 
 let s:source_async.filters =
-      \ ['matcher_default', 'sorter_default',
-      \      s:source_async.source__converter]
+      \ ['matcher_default', 'matcher_hide_hidden_files',
+      \  'sorter_default',
+      \  s:source_async.source__converter]
 "}}}
 
 " Misc.
@@ -512,10 +512,6 @@ function! s:on_post_filter(args, context)"{{{
           \ unite#util#path2directory(candidate.action__path)
   endfor
 endfunction"}}}
-function! s:on_pre_filter(args, context)"{{{
-  let a:context.candidates = unite#call_filter(
-        \ 'matcher_hide_hidden_files', a:context.candidates, a:context)
-endfunction"}}}
 function! s:init_continuation(context, directory)"{{{
   let cache_dir = g:unite_data_directory . '/file_rec'
   if !has_key(s:continuation, a:directory)
@@ -531,9 +527,11 @@ function! s:init_continuation(context, directory)"{{{
       lcd `=a:context.source__directory`
     endif
 
+    let mods = a:context.input == '' ? ':.' : ':p'
+
     let files = map(s:Cache.readfile(cache_dir, a:directory), "{
           \ 'word' : unite#util#substitute_path_separator(
-          \    fnamemodify(v:val, ':.')),
+          \    fnamemodify(v:val, mods)),
           \ 'action__path' : v:val,
           \ }")
 
