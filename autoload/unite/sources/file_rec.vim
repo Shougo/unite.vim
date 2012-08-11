@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2012.
+" Last Modified: 11 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -109,9 +109,11 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
     lcd `=a:context.source__directory`
   endif
 
+  let mods = a:context.input == '' ? ':.' : ':p'
+
   let candidates = map(files, "{
         \ 'word' : unite#util#substitute_path_separator(
-        \    fnamemodify(v:val, ':.')),
+        \    fnamemodify(v:val, mods)),
         \ 'action__path' : v:val,
         \ }")
 
@@ -315,6 +317,8 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
     lcd `=a:context.source__directory`
   endif
 
+  let mods = a:context.input == '' ? ':.' : ':p'
+
   let candidates = []
   for filename in map(filter(
         \ stdout.read_lines(-1, 100), 'v:val != ""'),
@@ -322,7 +326,7 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
     if filename !~ '/\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
       call add(candidates, {
             \ 'word' : unite#util#substitute_path_separator(
-            \    fnamemodify(filename, ':.')),
+            \    fnamemodify(filename, mods)),
             \ 'action__path' : filename,
             \ })
     endif
@@ -523,9 +527,11 @@ function! s:init_continuation(context, directory)"{{{
       lcd `=a:context.source__directory`
     endif
 
+    let mods = a:context.input == '' ? ':.' : ':p'
+
     let files = map(s:Cache.readfile(cache_dir, a:directory), "{
           \ 'word' : unite#util#substitute_path_separator(
-          \    fnamemodify(v:val, ':.')),
+          \    fnamemodify(v:val, mods)),
           \ 'action__path' : v:val,
           \ }")
 
