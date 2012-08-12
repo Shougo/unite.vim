@@ -2534,6 +2534,7 @@ CHANGELOG					*unite-changelog*
 - Fixed execute actions error for vimfiler.
 - Fixed for vimfiler.
 - Improved matcher_fuzzy.
+- Fixed converter problem.
 
 2012-08-11
 - Improved file_rec source behavior.

@@ -2016,7 +2016,8 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     let post_filters = []
     for Filter in get(custom_source, 'filters', source.filters)
       if type(Filter) != type('')
-        call add(filters, Filter)
+        call add((empty(matchers) ?
+              \ prev_filters : post_filters), Filter)
 
         unlet Filter
         continue
@@ -2033,7 +2034,8 @@ function! s:recache_candidates_loop(context, is_force)"{{{
           call add(sorters, Filter)
         endif
       else
-        call add(sorters, Filter)
+        call add((empty(matchers) ?
+              \ prev_filters : post_filters), Filter)
       endif
       unlet Filter
     endfor

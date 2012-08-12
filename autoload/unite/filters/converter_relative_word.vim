@@ -37,7 +37,6 @@ let s:converter = {
       \}
 
 function! s:converter.filter(candidates, context)"{{{
-  echomsg 'hoge'
   try
     let directory = unite#util#substitute_path_separator(getcwd())
     if has_key(a:context, 'source__directory')
