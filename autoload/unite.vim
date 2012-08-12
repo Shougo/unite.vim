@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2012.
+" Last Modified: 12 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -3025,30 +3025,14 @@ function! s:init_cursor()"{{{
   endif
 endfunction"}}}
 function! s:get_postfix(prefix, is_create)"{{{
-  let postfix = '@1'
-  let cnt = 1
-
-  if a:is_create
-    let tabnr = 1
-    while tabnr <= tabpagenr('$')
-      let buflist = map(tabpagebuflist(tabnr), 'bufname(v:val)')
-      if index(buflist, a:prefix.postfix) >= 0
-        let cnt += 1
-        let postfix = '@' . cnt
-      endif
-
-      let tabnr += 1
-    endwhile
-  else
-    let buflist = map(tabpagebuflist(tabpagenr()), 'bufname(v:val)')
-    for bufname in buflist
-      if stridx(bufname, a:prefix) >= 0
-        return matchstr(bufname, '@\d\+$')
-      endif
-    endfor
+  let buflist = sort(filter(map(range(1, bufnr('$')),
+        \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'))
+  if empty(buflist)
+    return '@1'
   endif
 
-  return postfix
+  return a:is_create ? '@'.(matchstr(buflist[-1], '@\zs\d\+$') + 1)
+        \ : matchstr(buflist[0], '@\d\+$')
 endfunction"}}}
 "}}}
 
