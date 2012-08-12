@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Aug 2012.
+" Last Modified: 12 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -384,8 +384,10 @@ function! s:get_action_table(action_name, candidates, sources)"{{{
     endif
 
     if !has_key(action_table, action_name)
-      call unite#util#print_error(candidate.unite__abbr . '(' . candidate.source . ')')
-      call unite#util#print_error('No such action : ' . action_name)
+      call unite#util#print_error(
+            \ candidate.unite__abbr . '(' . candidate.source . ')')
+      call unite#util#print_error(
+            \ 'No such action : ' . action_name)
       return []
     endif
 
@@ -393,8 +395,10 @@ function! s:get_action_table(action_name, candidates, sources)"{{{
 
     " Check selectable flag.
     if !action.is_selectable && len(a:candidates) > 1
-      call unite#util#print_error(candidate.unite__abbr . '(' . candidate.source . ')')
-      call unite#util#print_error('Not selectable action : ' . action_name)
+      call unite#util#print_error(
+            \ candidate.unite__abbr . '(' . candidate.source . ')')
+      call unite#util#print_error(
+            \ 'Not selectable action : ' . action_name)
       return []
     endif
 
