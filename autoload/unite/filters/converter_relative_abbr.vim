@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: converter_relative_abbr.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 12 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,7 +41,8 @@ function! s:converter.filter(candidates, context)"{{{
     let directory = unite#util#substitute_path_separator(getcwd())
     if has_key(a:context, 'source__directory')
       let old_dir = directory
-      let directory = substitute(a:context.source__directory, '*', '', 'g')
+      let directory = substitute(
+            \ a:context.source__directory, '*', '', 'g')
 
       if directory !=# old_dir
         lcd `=directory`

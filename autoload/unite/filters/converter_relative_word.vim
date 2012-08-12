@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: converter_relative_word.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 12 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,6 +37,7 @@ let s:converter = {
       \}
 
 function! s:converter.filter(candidates, context)"{{{
+  echomsg 'hoge'
   try
     let directory = unite#util#substitute_path_separator(getcwd())
     if has_key(a:context, 'source__directory')

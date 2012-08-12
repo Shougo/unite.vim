@@ -2533,6 +2533,7 @@ CHANGELOG					*unite-changelog*
 - Fixed postfix problem.
 - Fixed execute actions error for vimfiler.
 - Fixed for vimfiler.
+- Improved matcher_fuzzy.
 
 2012-08-11
 - Improved file_rec source behavior.

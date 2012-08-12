@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_fuzzy.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Feb 2012.
+" Last Modified: 12 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,7 +38,8 @@ let s:matcher = {
 
 function! s:matcher.filter(candidates, context)"{{{
   if a:context.input == ''
-    return a:candidates
+    return unite#util#filter_matcher(
+          \ a:candidates, '', a:context)
   endif
 
   let candidates = a:candidates
@@ -55,7 +56,8 @@ function! s:matcher.filter(candidates, context)"{{{
           \ 'v:val.word !~ ' . string(input[1:]) :
           \ 'v:val.word =~ ' . string(input)
 
-    let candidates = filter(copy(candidates), expr)
+    let candidates = unite#util#filter_matcher(
+          \ a:candidates, expr, a:context)
   endfor
 
   return candidates

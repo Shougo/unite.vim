@@ -2012,27 +2012,29 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     " Set filters.
     let matchers = []
     let sorters = []
-    let filters = []
+    let prev_filters = []
+    let post_filters = []
     for Filter in get(custom_source, 'filters', source.filters)
-      if type(Filter) == type('')
-        let name = get(unite#get_filters(Filter),
-              \              'name', '')
-        if name =~# '\%(^\|_\)matcher_'
-          call add(matchers, Filter)
-        elseif name =~# '\%(^\|_\)sorter_'
-          if name ==# 'sorter_default'
-            let sorters += unite#filters#sorter_default#get()
-          else
-            call add(sorters, Filter)
-          endif
-        endif
+      if type(Filter) != type('')
+        call add(filters, Filter)
 
         unlet Filter
         continue
       endif
 
-      call add(filters, Filter)
-
+      let name = get(unite#get_filters(Filter),
+            \              'name', '')
+      if name =~# '\%(^\|_\)matcher_'
+        call add(matchers, Filter)
+      elseif name =~# '\%(^\|_\)sorter_'
+        if name ==# 'sorter_default'
+          let sorters += unite#filters#sorter_default#get()
+        else
+          call add(sorters, Filter)
+        endif
+      else
+        call add(sorters, Filter)
+      endif
       unlet Filter
     endfor
 
@@ -2047,7 +2049,7 @@ function! s:recache_candidates_loop(context, is_force)"{{{
           \ source.max_candidates : len(source_candidates)
 
     " Call filters.
-    for Filter in matchers + sorters + filters
+    for Filter in prev_filters + matchers + sorters + post_filters
       if type(Filter) == type('')
         let source_candidates = unite#call_filter(
               \ Filter, source_candidates, context)
