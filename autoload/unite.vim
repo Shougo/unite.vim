@@ -1873,6 +1873,9 @@ function! s:initialize_vimfiler_candidates(candidates, source_name)"{{{
     if !has_key(candidate, 'vimfiler__is_executable')
       let candidate.vimfiler__is_executable = 0
     endif
+    if !has_key(candidate, 'vimfiler__is_writable')
+      let candidate.vimfiler__is_writable = 1
+    endif
     if !has_key(candidate, 'vimfiler__filesize')
       let candidate.vimfiler__filesize = -1
     endif
