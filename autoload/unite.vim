@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Aug 2012.
+" Last Modified: 14 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1278,6 +1278,7 @@ function! unite#close(buffer_name)  "{{{
     let prefix .= buffer_name
     let buffer_name .= s:get_postfix(prefix, 0)
   endif
+  echomsg buffer_name
 
   let quit_winnr = 0
 
@@ -2248,7 +2249,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.prev_winnr = winnr()
 
   " Create new buffer name.
-  let postfix = s:get_postfix(buffer_name, 1)
+  let postfix = s:get_postfix(
+        \ buffer_name, unite.context.create)
   let unite.buffer_name .= postfix
 
   let unite.real_buffer_name = buffer_name . postfix
