@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Aug 2012.
+" Last Modified: 15 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -207,21 +207,9 @@ endfunction"}}}
 function! unite#do_candidates_action(action_name, candidates, ...)"{{{
   let context = get(a:000, 0, {})
   let context = s:initialize_context(context)
-  let context.is_interactive = 0
-
-  " Get sources.
-  let sources = {}
-  for candidate in a:candidates
-    if !has_key(sources, candidate.source)
-      let sources[candidate.source] = 1
-    endif
-  endfor
-
-  try
-    call s:initialize_current_unite(keys(sources), context)
-  catch /^unite.vim: Invalid source/
-    return
-  endtry
+  let context.unite__is_interactive = 0
+  let context.unite__disable_hooks = 1
+  call unite#set_context(context)
 
   return unite#mappings#do_action(
         \ a:action_name, a:candidates, context)
@@ -1041,7 +1029,7 @@ function! unite#start_temporary(sources, ...)"{{{
   let context.temporary = 1
   let context.input = ''
   let context.auto_preview = 0
-  let context.is_vimfiler = 0
+  let context.unite__is_vimfiler = 0
   let context.default_action = 'default'
 
   " Overwrite context.
@@ -1060,7 +1048,7 @@ endfunction"}}}
 function! unite#vimfiler_check_filetype(sources, ...)"{{{
   let context = get(a:000, 0, {})
   let context = s:initialize_context(context)
-  let context.is_vimfiler = 1
+  let context.unite__is_vimfiler = 1
 
   try
     call s:initialize_current_unite(a:sources, context)
@@ -1099,7 +1087,7 @@ function! unite#get_candidates(sources, ...)"{{{
   let context = get(a:000, 0, {})
   let context = s:initialize_context(context)
   let context.no_buffer = 1
-  let context.is_interactive = 0
+  let context.unite__is_interactive = 0
 
   " Finalize.
   let unite = unite#get_current_unite()
@@ -1120,15 +1108,15 @@ function! unite#get_vimfiler_candidates(sources, ...)"{{{
   let context = get(a:000, 0, {})
   let context = s:initialize_context(context)
   let context.no_buffer = 1
-  let context.is_vimfiler = 1
+  let context.unite__is_vimfiler = 1
 
   return s:get_candidates(a:sources, context)
 endfunction"}}}
 function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
   let context = {}
   let context = s:initialize_context(context)
-  let context.is_interactive = 0
-  let context.is_complete = 1
+  let context.unite__is_interactive = 0
+  let context.unite__is_complete = 1
 
   try
     call s:initialize_current_unite(a:sources, context)
@@ -1149,8 +1137,8 @@ endfunction"}}}
 function! unite#args_complete(sources, arglead, cmdline, cursorpos)"{{{
   let context = {}
   let context = s:initialize_context(context)
-  let context.is_interactive = 0
-  let context.is_complete = 1
+  let context.unite__is_interactive = 0
+  let context.unite__is_complete = 1
 
   try
     call s:initialize_current_unite(a:sources, context)
@@ -1249,10 +1237,6 @@ function! s:get_candidates(sources, context)"{{{
     return []
   endtry
 
-  " Call initialize functions.
-  let unite = unite#get_current_unite()
-  call s:call_hook(unite.sources, 'on_init')
-
   " Caching.
   let s:current_unite.last_input = a:context.input
   let s:current_unite.input = a:context.input
@@ -1261,7 +1245,7 @@ function! s:get_candidates(sources, context)"{{{
   let candidates = []
   for source in unite#loaded_sources_list()
     if !empty(source.unite__candidates)
-      let candidates += a:context.is_vimfiler ?
+      let candidates += a:context.unite__is_vimfiler ?
             \ s:initialize_vimfiler_candidates(
             \   source.unite__candidates, source.name) :
             \ source.unite__candidates
@@ -1496,23 +1480,24 @@ function! s:initialize_context(context)"{{{
         \ 'toggle' : 0,
         \ 'quick_match' : 0,
         \ 'create' : 0,
-        \ 'is_redraw' : 0,
-        \ 'is_resize' : 1,
         \ 'cursor_line_highlight' :
         \    g:unite_cursor_line_highlight,
         \ 'no_cursor_line' : 0,
         \ 'update_time' : g:unite_update_time,
         \ 'no_buffer' : 0,
-        \ 'is_interactive' : 1,
-        \ 'is_complete' : 1,
-        \ 'is_vimfiler' : 0,
         \ 'hide_source_names' : 0,
         \ 'max_multi_lines' : 5,
         \ 'here' : 0,
         \ 'silent' : 0,
         \ 'keep_focus' : 0,
-        \ 'old_winwidth' : 0,
-        \ 'old_winheight' : 0,
+        \ 'is_redraw' : 0,
+        \ 'is_resize' : 1,
+        \ 'unite__is_interactive' : 1,
+        \ 'unite__is_complete' : 1,
+        \ 'unite__is_vimfiler' : 0,
+        \ 'unite__old_winwidth' : 0,
+        \ 'unite__old_winheight' : 0,
+        \ 'unite__disable_hooks' : 0,
         \ }
 
   let context = extend(default_context, a:context)
@@ -1566,7 +1551,7 @@ function! s:initialize_loaded_sources(sources, context)"{{{
       let source_name = source
       unlet source
       if !has_key(all_sources, source_name)
-        if a:context.is_vimfiler || a:context.is_complete
+        if a:context.unite__is_vimfiler || a:context.unite__is_complete
           " Ignore error.
           continue
         endif
@@ -2051,7 +2036,7 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     endif
 
     let context.unite__is_sort_nothing =
-          \ empty(sorters) && context.is_interactive
+          \ empty(sorters) && context.unite__is_interactive
     let context.unite__max_candidates = source.max_candidates
     let unite.max_source_candidates +=
           \ (context.unite__is_sort_nothing
@@ -2088,7 +2073,7 @@ function! s:get_source_candidates(source)"{{{
 
   let funcname = 's:get_source_candidates()'
   try
-    if context.is_vimfiler
+    if context.unite__is_vimfiler
       if context.vimfiler__is_dummy
         let funcname = 'vimfiler_dummy_candidates'
         return has_key(a:source, 'vimfiler_dummy_candidates') ?
@@ -2120,7 +2105,7 @@ function! s:get_source_candidates(source)"{{{
         let a:source.unite__cached_candidates +=
               \ a:source.async_gather_candidates(a:source.args, context)
 
-        if context.is_interactive
+        if context.unite__is_interactive
               \ || !a:source.unite__context.is_async
           break
         endif
@@ -2237,8 +2222,6 @@ function! s:initialize_current_unite(sources, context)"{{{
   " Check sources.
   let sources = s:initialize_loaded_sources(a:sources, a:context)
 
-  call s:call_hook(sources, 'on_init')
-
   " Set parameters.
   let unite = {}
   let unite.winnr = winnr
@@ -2288,6 +2271,8 @@ function! s:initialize_current_unite(sources, context)"{{{
         \  'getwinvar(v:val, "&previewwindow")')) > 0
 
   call unite#set_current_unite(unite)
+
+  call s:call_hook(sources, 'on_init')
 endfunction"}}}
 function! s:initialize_unite_buffer()"{{{
   let is_bufexists = bufexists(s:current_unite.real_buffer_name)
@@ -2557,22 +2542,22 @@ function! unite#_resize_window() "{{{
     let context.is_resize = 1
   elseif context.vertical
         \ && winwidth(winnr()) != context.winwidth
-        \ && (context.old_winwidth  == 0 ||
+        \ && (context.unite__old_winwidth  == 0 ||
         \     winheight(winnr()) == context.winheight)
     execute 'vertical resize' context.winwidth
 
     let context.is_resize = 1
   elseif !context.vertical
         \ && winheight(winnr()) != context.winheight
-        \ && (context.old_winheight  == 0 ||
+        \ && (context.unite__old_winheight  == 0 ||
         \     winwidth(winnr()) == context.winwidth)
     execute 'resize' context.winheight
 
     let context.is_resize = 1
   endif
 
-  let context.old_winheight = winheight(winnr())
-  let context.old_winwidth = winwidth(winnr())
+  let context.unite__old_winheight = winheight(winnr())
+  let context.unite__old_winwidth = winwidth(winnr())
 endfunction"}}}
 
 " Autocmd events.
@@ -2973,6 +2958,11 @@ function! s:get_substitute_input_loop(input, substitute_patterns)"{{{
   return inputs
 endfunction"}}}
 function! s:call_hook(sources, hook_name)"{{{
+  let context = unite#get_context()
+  if context.unite__disable_hooks
+    return
+  endif
+
   let _ = []
   for source in a:sources
     if !has_key(source.hooks, a:hook_name)

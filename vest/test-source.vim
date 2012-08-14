@@ -81,9 +81,13 @@ Context Source.run()
     let candidates = unite#get_candidates([['my_file_rec']])
     Should len(filter(copy(candidates), "v:val.source ==# 'my_file'"))
           \ == len(copy(candidates))
+
     let candidates = unite#get_candidates(['file_mru'])
     Should len(candidates) == len(readfile(
           \ g:unite_data_directory . '/file_mru'))-1
+
+    let candidates = unite#get_candidates([['grep', 'unite.vim', '', 'vim']])
+    call unite#do_candidates_action('replace', candidates)
   End
 End
 
