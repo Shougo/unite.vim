@@ -82,7 +82,6 @@ Context Source.run()
     Should len(filter(copy(candidates), "v:val.source ==# 'my_file'"))
           \ == len(copy(candidates))
     let candidates = unite#get_candidates(['file_mru'])
-    echomsg len(candidates)
     Should len(candidates) == len(readfile(
           \ g:unite_data_directory . '/file_mru'))-1
   End
