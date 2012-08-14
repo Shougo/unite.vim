@@ -1276,9 +1276,9 @@ function! unite#close(buffer_name)  "{{{
     let prefix = unite#util#is_windows() ?
           \ '[unite] - ' : '*unite* - '
     let prefix .= buffer_name
-    let buffer_name .= s:get_postfix(prefix, 0)
+    let buffer_name .= s:get_postfix(
+          \ prefix, 0, tabpagebuflist(tabpagenr()))
   endif
-  echomsg buffer_name
 
   let quit_winnr = 0
 
@@ -3039,7 +3039,7 @@ function! s:init_cursor()"{{{
 endfunction"}}}
 function! s:get_postfix(prefix, is_create, ...)"{{{
   let buffers = get(a:000, 0, range(1, bufnr('$')))
-  let buflist = sort(filter(map(buffers),
+  let buflist = sort(filter(map(buffers,
         \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'))
   if empty(buflist)
     return '@1'
