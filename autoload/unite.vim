@@ -2652,6 +2652,8 @@ function! s:on_bufwin_enter(bufnr)  "{{{
   if exists('winnr')
     execute winnr.'wincmd w'
   endif
+
+  let s:last_unite_bufnr = a:bufnr
 endfunction"}}}
 function! unite#_on_cursor_hold()  "{{{
   let is_async = 0
@@ -3035,8 +3037,9 @@ function! s:init_cursor()"{{{
     call unite#mappings#_quick_match(0)
   endif
 endfunction"}}}
-function! s:get_postfix(prefix, is_create)"{{{
-  let buflist = sort(filter(map(range(1, bufnr('$')),
+function! s:get_postfix(prefix, is_create, ...)"{{{
+  let buffers = get(a:000, 0, range(1, bufnr('$')))
+  let buflist = sort(filter(map(buffers),
         \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'))
   if empty(buflist)
     return '@1'
