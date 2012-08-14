@@ -2537,6 +2537,7 @@ CHANGELOG					*unite-changelog*
 - Improved for resume.
 - Changed postfix behavior.
 - Improved jump_list kind actions.
+- Fixed unite#get_candidates().
 
 2012-08-12
 - Fixed postfix problem.

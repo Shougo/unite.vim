@@ -1101,10 +1101,11 @@ function! unite#get_candidates(sources, ...)"{{{
   let context.no_buffer = 1
   let context.is_interactive = 0
 
-  let candidates = s:get_candidates(a:sources, context)
-
   " Finalize.
   let unite = unite#get_current_unite()
+  let unite.is_enabled_max_candidates = 1
+
+  let candidates = s:get_candidates(a:sources, context)
 
   " Call finalize functions.
   call s:call_hook(unite#loaded_sources_list(), 'on_close')
@@ -1942,7 +1943,7 @@ function! s:recache_candidates(input, is_force)"{{{
     let source.unite__is_invalidate = 0
 
     if !context.no_buffer && source.max_candidates != 0
-          \ && !unite.is_enabled_max_candidates
+          \ && unite.is_enabled_max_candidates
           \ && len(source.unite__candidates) > source.max_candidates
       " Filtering too many candidates.
       let source.unite__candidates =
@@ -2049,10 +2050,12 @@ function! s:recache_candidates_loop(context, is_force)"{{{
       let sorters = []
     endif
 
-    let context.unite__is_sort_nothing = empty(sorters)
+    let context.unite__is_sort_nothing =
+          \ empty(sorters) && context.is_interactive
     let context.unite__max_candidates = source.max_candidates
     let unite.max_source_candidates +=
-          \ (context.unite__is_sort_nothing && source.max_candidates > 0) ?
+          \ (context.unite__is_sort_nothing
+          \    && source.max_candidates > 0) ?
           \ source.max_candidates : len(source_candidates)
 
     " Call filters.
@@ -2268,7 +2271,7 @@ function! s:initialize_current_unite(sources, context)"{{{
         \  'v:val.unite__context.is_async')) > 0
   let unite.access_time = localtime()
   let unite.is_finalized = 0
-  let unite.is_enabled_max_candidates = 0
+  let unite.is_enabled_max_candidates = 1
   let unite.previewd_buffer_list = []
   let unite.post_filters = unite#get_profile(
         \ unite.profile_name, 'filters')
