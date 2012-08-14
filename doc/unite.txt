@@ -2534,6 +2534,7 @@ CHANGELOG					*unite-changelog*
 - Fixed last unite bufnr.
 - Fixed :UniteClose.
 - Improved for resume.
+- Changed postfix behavior.
 
 2012-08-12
 - Fixed postfix problem.

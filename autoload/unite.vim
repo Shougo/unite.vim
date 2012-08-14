@@ -3047,7 +3047,7 @@ function! s:get_postfix(prefix, is_create, ...)"{{{
   let buflist = sort(filter(map(buffers,
         \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'))
   if empty(buflist)
-    return '@1'
+    return ''
   endif
 
   return a:is_create ? '@'.(matchstr(buflist[-1], '@\zs\d\+$') + 1)
