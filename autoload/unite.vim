@@ -2770,8 +2770,13 @@ function! s:on_buf_unload(bufname)  "{{{
   call s:restore_updatetime()
 
   if !unite.has_preview_window
-    " Close preview window.
-    pclose!
+    let preview_windows = filter(range(1, winnr('$')),
+          \ 'getwinvar(v:val, "&previewwindow") != 0')
+    if !empty(preview_windows)
+      " Close preview window.
+      pclose!
+
+    endif
   endif
 
   call unite#clear_previewed_buffer_list()

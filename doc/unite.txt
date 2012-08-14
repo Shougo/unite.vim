@@ -1552,6 +1552,7 @@ word		A String that can be inserted
 						*unite-kind-jump_list*
 jump_list	An interface for jump lists.  This kind inherits openable,
 		so this requires that it requires.
+		Note: The action__path or action__buffer_nr is required.
 
 			action__path		(String)	(Required)
 				The path of the file that you'll jump into.
@@ -2535,6 +2536,7 @@ CHANGELOG					*unite-changelog*
 - Fixed :UniteClose.
 - Improved for resume.
 - Changed postfix behavior.
+- Improved jump_list kind actions.
 
 2012-08-12
 - Fixed postfix problem.

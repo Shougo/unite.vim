@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jun 2012.
+" Last Modified: 14 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,22 +52,14 @@ function! unite#kinds#jump_list#define()"{{{
         \ }
   function! kind.action_table.open.func(candidates)"{{{
     for candidate in a:candidates
-      if bufnr(unite#util#escape_file_searching(candidate.action__path)) != bufnr('%')
-        if has_key(candidate, 'action__buffer_nr')
-          execute 'buffer' candidate.action__buffer_nr
-        else
-          edit `=candidate.action__path`
-        endif
-      endif
+      let bufnr = s:open(candidate)
       call s:jump(candidate, 0)
 
       " Open folds.
       normal! zv
       call s:adjust_scroll(s:best_winline())
 
-      call unite#remove_previewed_buffer_list(
-            \ bufnr(unite#util#escape_file_searching(
-            \       candidate.action__path)))
+      call unite#remove_previewed_buffer_list(bufnr)
     endfor
   endfunction"}}}
 
@@ -76,33 +68,24 @@ function! unite#kinds#jump_list#define()"{{{
         \ 'is_quit' : 0,
         \ }
   function! kind.action_table.preview.func(candidate)"{{{
-    let buflisted = buflisted(
-          \ unite#util#escape_file_searching(
-          \ a:candidate.action__path))
-
     let is_highlight = !unite#get_context().auto_preview
     let preview_windows = filter(range(1, winnr('$')),
           \ 'getwinvar(v:val, "&previewwindow") != 0')
     if empty(preview_windows)
-      pedit `=a:candidate.action__path`
-
+      let filename = s:get_filename(a:candidate)
+      pedit! `=filename`
       let preview_windows = filter(range(1, winnr('$')),
             \ 'getwinvar(v:val, "&previewwindow") != 0')
     endif
 
     let winnr = winnr()
     execute preview_windows[0].'wincmd w'
-    if bufnr('%') != bufnr(a:candidate.action__path)
-      execute (buflisted ? 'buffer' : 'edit')
-            \ a:candidate.action__path
-    endif
+    let bufnr = s:open(a:candidate)
     call s:jump(a:candidate, is_highlight)
     execute winnr.'wincmd w'
 
-    if !buflisted
-      call unite#add_previewed_buffer_list(
-            \ bufnr(unite#util#escape_file_searching(
-            \       a:candidate.action__path)))
+    if !buflisted(bufnr)
+      call unite#add_previewed_buffer_list(bufnr)
     endif
   endfunction"}}}
 
@@ -116,8 +99,9 @@ function! unite#kinds#jump_list#define()"{{{
       for candidate in a:candidates
         if has_key(candidate, 'action__line')
               \ && has_key(candidate, 'action__text')
+          let filename = s:get_filename(candidate)
           call add(qflist, {
-                \ 'filename' : candidate.action__path,
+                \ 'filename' : filename,
                 \ 'lnum' : candidate.action__line,
                 \ 'text' : candidate.action__text,
                 \ })
@@ -186,7 +170,8 @@ function! s:jump(candidate, is_highlight)"{{{
   if lnum != lnum_prev
     " Detected same pattern lines!!
     let start_lnum = lnum
-    while source.calc_signature(lnum) !=# a:candidate.action__signature
+    while source.calc_signature(lnum) !=#
+          \ a:candidate.action__signature
       call search(pattern, 'w')
       let lnum = line('.')
       if lnum == start_lnum
@@ -232,6 +217,30 @@ function! s:open_current_line(is_highlight)"{{{
   if a:is_highlight
     execute 'match Search /\%'.line('.').'l/'
   endif
+endfunction"}}}
+
+function! s:open(candidate)"{{{
+  let bufnr = s:get_bufnr(a:candidate)
+  if bufnr != bufnr('%')
+    if has_key(a:candidate, 'action__buffer_nr')
+      execute 'buffer' bufnr
+    else
+      edit `=a:candidate.action__path`
+    endif
+  endif
+
+  return bufnr
+endfunction"}}}
+function! s:get_filename(candidate)"{{{
+  return has_key(a:candidate, 'action__path') ?
+            \ a:candidate.action__path :
+            \ bufname(a:candidate.action__buffer_nr)
+endfunction"}}}
+function! s:get_bufnr(candidate)"{{{
+  return has_key(a:candidate, 'action__buffer_nr') ?
+        \ a:candidate.action__buffer_nr :
+        \ bufnr(unite#util#escape_file_searching(
+        \     a:candidate.action__path))
 endfunction"}}}
 
 let &cpo = s:save_cpo

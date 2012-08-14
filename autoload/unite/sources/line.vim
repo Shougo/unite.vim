@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 10 Aug 2012.
+" Last Modified: 14 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -72,9 +72,9 @@ function! s:hl_refresh(context)
   endif
 
   for word in split(a:context.input, '\\\@<! ')
-    execute "syntax match uniteSource__Line_target '"
-          \ . unite#escape_match(word)
-          \ . "' contained containedin=uniteSource__Line"
+    execute "syntax match uniteSource__Line_target "
+          \ . string(unite#escape_match(word))
+          \ . " contained containedin=uniteSource__Line"
   endfor
 endfunction
 
@@ -146,9 +146,8 @@ endfunction"}}}
 
 function! s:source.hooks.on_post_filter(args, context)
   for candidate in a:context.candidates
-    let candidate.kind = "jump_list"
+    let candidate.kind = 'jump_list'
     let candidate.action__buffer_nr = a:context.source__bufnr
-    let candidate.action__path = a:context.source__path
   endfor
 endfunction
 
