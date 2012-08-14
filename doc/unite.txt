@@ -2533,6 +2533,7 @@ CHANGELOG					*unite-changelog*
 - Fixed create new buffer name.
 - Fixed last unite bufnr.
 - Fixed :UniteClose.
+- Improved for resume.
 
 2012-08-12
 - Fixed postfix problem.

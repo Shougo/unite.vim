@@ -237,7 +237,6 @@ let s:LNUM_STATUS = 1
 
 " Variables  "{{{
 " buffer number of the unite buffer
-let s:last_unite_bufnr = -1
 let s:current_unite = {}
 let s:unite_cached_message = []
 let s:use_current_unite = 1
@@ -998,6 +997,7 @@ function! unite#start(sources, ...)"{{{
   endif"}}}
 
   call s:initialize_unite_buffer()
+  call s:on_bufwin_enter(bufnr('%'))
 
   let s:use_current_unite = 0
 
@@ -1177,12 +1177,13 @@ function! unite#resume(buffer_name, ...)"{{{
 
   if a:buffer_name == ''
     " Use last unite buffer.
-    if !bufexists(s:last_unite_bufnr)
+    if !exists('t:unite') ||
+          \ !bufexists(t:unite.last_unite_bufnr)
       call unite#util#print_error('No unite buffer.')
       return
     endif
 
-    let bufnr = s:last_unite_bufnr
+    let bufnr = t:unite.last_unite_bufnr
   else
     let buffer_name = a:buffer_name
     if buffer_name !~ '@\d\+$'
@@ -1902,6 +1903,9 @@ function! s:initialize_vimfiler_candidates(candidates, source_name)"{{{
 
   return a:candidates
 endfunction"}}}
+function! s:initialize_tab_variable()  "{{{
+  let t:unite = { 'last_unite_bufnr' : -1 }
+endfunction"}}}
 
 function! s:recache_candidates(input, is_force)"{{{
   let unite = unite#get_current_unite()
@@ -2290,9 +2294,6 @@ function! s:initialize_unite_buffer()"{{{
   let b:unite = s:current_unite
   let unite = unite#get_current_unite()
 
-  if !unite.context.temporary
-    let s:last_unite_bufnr = bufnr('%')
-  endif
   let unite.bufnr = bufnr('%')
 
   " Note: If unite buffer initialize is incomplete, &modified or &wrap.
@@ -2453,9 +2454,7 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
     silent! edit `=a:buffer_name`
   endif
 
-  if !a:context.no_split && winnr('$') != 1
-    call unite#_resize_window()
-  endif
+  call s:on_bufwin_enter(bufnr('%'))
 endfunction"}}}
 
 function! s:redraw(is_force, winnr) "{{{
@@ -2647,13 +2646,19 @@ function! s:on_bufwin_enter(bufnr)  "{{{
   endif
 
   call s:save_updatetime()
-  call unite#_resize_window()
+
+  if !unite.context.no_split && winnr('$') != 1
+    call unite#_resize_window()
+  endif
 
   if exists('winnr')
     execute winnr.'wincmd w'
   endif
 
-  let s:last_unite_bufnr = a:bufnr
+  if !exists('t:unite')
+    call s:initialize_tab_variable()
+  endif
+  let t:unite.last_unite_bufnr = a:bufnr
 endfunction"}}}
 function! unite#_on_cursor_hold()  "{{{
   let is_async = 0
