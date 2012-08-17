@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Aug 2012.
+" Last Modified: 17 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2643,6 +2643,8 @@ function! s:on_bufwin_enter(bufnr)  "{{{
     execute winnr.'wincmd w'
   endif
 
+  setlocal nomodifiable
+
   if !exists('t:unite')
     call s:initialize_tab_variable()
   endif
@@ -2748,6 +2750,8 @@ function! s:on_buf_unload(bufname)  "{{{
   if unite.is_finalized
     return
   endif
+
+  setlocal nomodifiable
 
   " Restore options.
   if exists('&redrawtime')
