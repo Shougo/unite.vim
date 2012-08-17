@@ -2532,6 +2532,7 @@ CHANGELOG					*unite-changelog*
 
 2012-08-17
 - Setlocal nomodified.
+- Fixed unite#get_context().
 
 2012-08-15
 - Fixed unite#do_candidates_action().

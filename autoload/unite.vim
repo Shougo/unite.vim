@@ -347,7 +347,8 @@ function! unite#get_current_candidate(...)"{{{
 endfunction"}}}
 function! unite#get_context()"{{{
   let unite = unite#get_current_unite()
-  return empty(unite) ? s:initialize_context({}) : unite.context
+  return has_key(unite, 'context') ?
+        \ unite.context : s:initialize_context({})
 endfunction"}}}
 function! unite#set_context(context)"{{{
   let old_context = unite#get_context()
@@ -2182,6 +2183,8 @@ function! unite#convert_lines(candidates)"{{{
 endfunction"}}}
 
 function! s:initialize_current_unite(sources, context)"{{{
+  call unite#set_context(a:context)
+
   let s:unite_cached_message = []
 
   let context = a:context
