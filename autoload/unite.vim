@@ -2749,8 +2749,6 @@ function! s:on_buf_unload(bufname)  "{{{
     return
   endif
 
-  setlocal nomodifiable
-
   " Restore options.
   if exists('&redrawtime')
     let &redrawtime = unite.redrawtime_save
