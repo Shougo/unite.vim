@@ -2643,8 +2643,6 @@ function! s:on_bufwin_enter(bufnr)  "{{{
     execute winnr.'wincmd w'
   endif
 
-  setlocal nomodifiable
-
   if !exists('t:unite')
     call s:initialize_tab_variable()
   endif
