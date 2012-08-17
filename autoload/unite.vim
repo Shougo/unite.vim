@@ -2639,6 +2639,8 @@ function! s:on_bufwin_enter(bufnr)  "{{{
     call unite#_resize_window()
   endif
 
+  setlocal nomodified
+
   if exists('winnr')
     execute winnr.'wincmd w'
   endif
