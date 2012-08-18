@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Aug 2012.
+" Last Modified: 18 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,7 +29,7 @@ set cpo&vim
 
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_file_ignore_pattern',
-      \'^\%(/\|\a\+:/\)$\|\%(^\|/\)\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|sw[po]\)$')
+      \'\%(^\|/\)\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|sw[po]\)$')
 "}}}
 
 function! unite#sources#file#define()"{{{
@@ -56,6 +56,7 @@ function! s:source_file.change_candidates(args, context)"{{{
   let input = empty(input_list) ? '' : input_list[0]
   let input = substitute(substitute(
         \ a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
+
 
   let path = join(a:args, ':')
   if path !=# '/' && path =~ '[\\/]$'
