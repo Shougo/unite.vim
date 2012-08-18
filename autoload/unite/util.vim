@@ -115,6 +115,9 @@ function! unite#util#input_directory(message)"{{{
 
   return dir
 endfunction"}}}
+function! unite#util#iconv(...)
+  return call(s:V.iconv, a:000)
+endfunction
 
 function! unite#util#alternate_buffer()"{{{
   if bufnr('%') != bufnr('#') && s:buflisted(bufnr('#'))

@@ -2538,6 +2538,7 @@ CHANGELOG					*unite-changelog*
 - Fixed unite#get_vimfiler_candidates().
 - Fixed ignore pattern in file source.
 - Added -auto-quit option.
+- Use unite#util#iconv().
 
 2012-08-17
 - Setlocal nomodified.

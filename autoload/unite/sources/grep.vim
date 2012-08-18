@@ -237,7 +237,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
   let candidates = map(filter(
         \ map(stdout.read_lines(-1, 100),
-        \ "iconv(v:val, 'char', &encoding)"),
+        \ "unite#util#iconv(v:val, 'char', &encoding)"),
     \  'v:val =~ "^.\\+:.\\+:.\\+$"'),
     \ '[v:val, split(v:val[2:], ":")]')
 

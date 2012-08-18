@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Aug 2012.
+" Last Modified: 18 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -322,7 +322,7 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
   let candidates = []
   for filename in map(filter(
         \ stdout.read_lines(-1, 100), 'v:val != ""'),
-        \ "fnamemodify(iconv(v:val, 'char', &encoding), ':p')")
+        \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
     if filename !~ '/\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
       call add(candidates, {
             \ 'word' : unite#util#substitute_path_separator(
