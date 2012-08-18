@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2012.
+" Last Modified: 18 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1085,33 +1085,43 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
 endfunction"}}}
 function! unite#get_candidates(sources, ...)"{{{
   let unite_save = unite#get_current_unite()
-  let context = get(a:000, 0, {})
-  let context = s:initialize_context(context)
-  let context.no_buffer = 1
-  let context.unite__is_interactive = 0
 
-  " Finalize.
-  let unite = unite#get_current_unite()
-  let unite.is_enabled_max_candidates = 1
+  try
+    let context = get(a:000, 0, {})
+    let context = s:initialize_context(context)
+    let context.no_buffer = 1
+    let context.unite__is_interactive = 0
 
-  let candidates = s:get_candidates(a:sources, context)
+    " Finalize.
+    let unite = unite#get_current_unite()
+    let unite.is_enabled_max_candidates = 1
 
-  " Call finalize functions.
-  call s:call_hook(unite#loaded_sources_list(), 'on_close')
-  let unite.is_finalized = 1
+    let candidates = s:get_candidates(a:sources, context)
 
-  " Restore unite variables.
-  call unite#set_current_unite(unite_save)
+    " Call finalize functions.
+    call s:call_hook(unite#loaded_sources_list(), 'on_close')
+    let unite.is_finalized = 1
+  finally
+    call unite#set_current_unite(unite_save)
+  endtry
 
   return candidates
 endfunction"}}}
 function! unite#get_vimfiler_candidates(sources, ...)"{{{
-  let context = get(a:000, 0, {})
-  let context = s:initialize_context(context)
-  let context.no_buffer = 1
-  let context.unite__is_vimfiler = 1
+  let unite_save = unite#get_current_unite()
 
-  return s:get_candidates(a:sources, context)
+  try
+    let context = get(a:000, 0, {})
+    let context = s:initialize_context(context)
+    let context.no_buffer = 1
+    let context.unite__is_vimfiler = 1
+
+    let candidates = s:get_candidates(a:sources, context)
+  finally
+    call unite#set_current_unite(unite_save)
+  endtry
+
+  return candidates
 endfunction"}}}
 function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos)"{{{
   let context = {}
