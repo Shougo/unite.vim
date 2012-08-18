@@ -266,6 +266,7 @@ let s:unite_options = [
       \ '-cursor-line-highlight=', '-no-cursor-line',
       \ '-update-time=', '-hide-source-names',
       \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
+      \ '-auto-quit',
       \]
 "}}}
 
@@ -970,7 +971,8 @@ function! unite#start(sources, ...)"{{{
   let s:current_unite.input = context.input
   call s:recache_candidates(context.input, context.is_redraw)
 
-  if context.immediately || context.no_empty"{{{
+  if !s:current_unite.is_async &&
+        \ (context.immediately || context.no_empty)"{{{
     let candidates = unite#gather_candidates()
 
     if empty(candidates)
@@ -1501,6 +1503,7 @@ function! s:initialize_context(context)"{{{
         \ 'here' : 0,
         \ 'silent' : 0,
         \ 'keep_focus' : 0,
+        \ 'auto_quit' : 0,
         \ 'is_redraw' : 0,
         \ 'is_resize' : 1,
         \ 'unite__is_interactive' : 1,
@@ -2525,6 +2528,10 @@ function! s:redraw(is_force, winnr) "{{{
       call unite#mappings#do_action(
             \ context.default_action, [candidates[0]])
     endif
+  endif
+
+  if context.auto_quit && !unite.is_async
+    call unite#force_quit_session()
   endif
 
   if context.auto_preview
