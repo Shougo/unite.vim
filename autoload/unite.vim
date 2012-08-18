@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Aug 2012.
+" Last Modified: 19 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -762,7 +762,7 @@ function! unite#gather_candidates()"{{{
   endif
 
   let candidates = s:initialize_candidates(
-        \ unite.candidates[: unite.candidates_pos])
+        \ unite.candidates[: unite.candidates_pos-1])
 
   " Post filter.
   for filter_name in unite.post_filters
@@ -1505,7 +1505,7 @@ function! s:initialize_context(context)"{{{
         \ 'keep_focus' : 0,
         \ 'auto_quit' : 0,
         \ 'is_redraw' : 0,
-        \ 'is_resize' : 1,
+        \ 'is_resize' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 1,
         \ 'unite__is_vimfiler' : 0,
@@ -1836,7 +1836,8 @@ function! s:initialize_candidates(candidates)"{{{
     let cnt = 0
     for multi in split(
           \ candidate.unite__abbr, '\r\?\n', 1)[: context.max_multi_lines-1]
-      let candidate_multi = deepcopy(candidate)
+      let candidate_multi = (cnt != 0) ?
+            \ deepcopy(candidate) : candidate
       let candidate_multi.unite__abbr =
             \ (cnt == 0 ? '+ ' : '| ') . multi
 
@@ -2497,6 +2498,7 @@ function! s:redraw(is_force, winnr) "{{{
         \ && !context.is_resize
     return
   endif
+  echomsg context.is_resize
 
   if context.is_redraw
         \ || input !=# unite.last_input
@@ -2547,6 +2549,7 @@ function! unite#_resize_window() "{{{
   let unite = unite#get_current_unite()
 
   if context.no_split
+    let context.is_resize = 0
     return
   endif
 
@@ -2574,6 +2577,8 @@ function! unite#_resize_window() "{{{
     execute 'resize' context.winheight
 
     let context.is_resize = 1
+  else
+    let context.is_resize = 0
   endif
 
   let context.unite__old_winheight = winheight(winnr())
@@ -2749,7 +2754,7 @@ function! s:on_cursor_moved()  "{{{
   endtry
 
   let context = unite.context
-  let unite.current_candidates = candidates
+  let unite.current_candidates += candidates
 
   call unite#_resize_window()
 

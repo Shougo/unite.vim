@@ -2537,6 +2537,8 @@ CHANGELOG					*unite-changelog*
 
 2012-08-19
 - Added yy mapping.
+- Fixed redraw.
+- Fixed toggle marks behavior.
 
 2012-08-18
 - Fixed unite#get_vimfiler_candidates().
