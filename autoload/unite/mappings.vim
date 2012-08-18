@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Aug 2012.
+" Last Modified: 19 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -206,6 +206,8 @@ function! unite#mappings#define_default_mappings()"{{{
         \ unite#smart_map('t', unite#do_action('tabopen'))
   inoremap <silent><buffer><expr> t
         \ unite#smart_map('t', unite#do_action('tabopen'))
+  nnoremap <silent><buffer><expr> yy
+        \ unite#smart_map('yy', unite#do_action('yank'))
 
   " Visual mode key-mappings.
   xmap <buffer> <Space>
