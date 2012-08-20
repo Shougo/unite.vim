@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 18 Aug 2012.
+" Last Modified: 20 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -144,8 +144,9 @@ function! s:source.hooks.on_init(args, context) "{{{
         \  unite#util#expand(targets[0])) : ''
 
   let a:context.source__ssh_path = ''
-  if exists('*vimfiler#get_current_vimfiler')
-    if !empty(get(b:, 'vimfiler', {}))
+  if exists('b:vimfiler') &&
+        \ exists('*vimfiler#get_current_vimfiler')
+    if !empty(b:vimfiler)
       let vimfiler = b:vimfiler
     else
       let vimfiler = vimfiler#get_current_vimfiler()
