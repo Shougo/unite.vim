@@ -124,7 +124,7 @@ function! s:insert_word(word)"{{{
     " Paste.
     let old_reg = @"
     let @" = a:word
-    normal! ""p
+    normal! ""P
     let @" = old_reg
 
     return

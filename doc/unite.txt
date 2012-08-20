@@ -2538,6 +2538,7 @@ CHANGELOG					*unite-changelog*
 2012-08-20
 - Improved yank action.
 - Improved vimfiler check in grep source.
+- Fixed insert action behavior.
 
 2012-08-19
 - Added yy mapping.
