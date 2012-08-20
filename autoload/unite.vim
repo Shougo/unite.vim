@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Aug 2012.
+" Last Modified: 20 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2498,7 +2498,6 @@ function! s:redraw(is_force, winnr) "{{{
         \ && !context.is_resize
     return
   endif
-  echomsg context.is_resize
 
   if context.is_redraw
         \ || input !=# unite.last_input

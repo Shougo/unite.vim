@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: common.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Feb 2012.
+" Last Modified: 20 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,11 +48,17 @@ endfunction"}}}
 let s:kind.action_table.yank = {
       \ 'description' : 'yank word or text',
       \ 'is_selectable' : 1,
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.yank.func(candidates)"{{{
-  let @" = join(map(copy(a:candidates), 's:get_candidate_text(v:val)'), "\n")
+  let text = join(map(copy(a:candidates),
+        \ 's:get_candidate_text(v:val)'), "\n")
+  let @" = text
+  echo 'Yanked: ' . text
+
   if has('clipboard')
-    let @* = @"
+    let @* = text
   endif
 endfunction"}}}
 
