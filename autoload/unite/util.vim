@@ -243,7 +243,7 @@ function! unite#util#filter_matcher(list, expr, context)"{{{
   endif
 
   if a:expr == ''
-    return a:list[: a:context.unite__max_candidates]
+    return a:list[: a:context.unite__max_candidates - 1]
   endif
 
   let _ = []
