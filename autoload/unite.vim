@@ -785,7 +785,6 @@ function! unite#gather_candidates_pos(offset)"{{{
     let candidates = unite#call_filter(
           \ filter_name, candidates, unite.context)
   endfor
-  echomsg len(candidates)
 
   let unite.candidates_pos += len(candidates)
 
