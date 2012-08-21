@@ -68,7 +68,7 @@ function! s:_import(name, scripts, debug)
   endif
   let path = s:_unify_path(get(paths, 0, ''))
   let sid = get(a:scripts, path, 0)
-  if !sid
+  if !sid && a:name !=# ''
     try
       source `=path`
     catch /^Vim\%((\a\+)\)\?:E484/
