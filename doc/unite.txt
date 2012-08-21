@@ -346,10 +346,11 @@ COMMANDS 					*unite-commands*
 
 :UniteResume [{options}] [{buffer-name}]	*:UniteResume*
 		Reuses the unite buffer named {buffer-name} that you opened
-		previously. Reuses the last unite buffer you used if you skip
-		specifying {buffer-name}.  Narrowing texts or candidates are
+		previously. Narrowing texts or candidates are
 		as-is. If {options} are given, context information gets
 		overridden.
+		Note: Reuses the last unite buffer you used in current tab if
+		you skip specifying {buffer-name}.
 
 :UniteClose {buffer-name}			*:UniteClose*
 		Closes the unite buffer named {buffer-name}.
@@ -2537,6 +2538,7 @@ CHANGELOG					*unite-changelog*
 
 2012-08-21
 - Updated vital.
+- Improved documentation.
 
 2012-08-20
 - Improved yank action.
