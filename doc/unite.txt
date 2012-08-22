@@ -2536,6 +2536,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-08-22
+- Deleted Japanese documentation.
+
 2012-08-21
 - Updated vital.
 - Improved documentation.
