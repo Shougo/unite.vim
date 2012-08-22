@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: output.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jul 2012.
+" Last Modified: 21 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,7 @@ function! s:source.gather_candidates(args, context)"{{{
     endif
 
     redir => output
-    silent execute command
+    silent! execute command
     redir END
 
     let result = split(output, '\r\n\|\n')

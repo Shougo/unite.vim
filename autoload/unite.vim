@@ -785,7 +785,6 @@ function! unite#gather_candidates_pos(offset)"{{{
     let candidates = unite#call_filter(
           \ filter_name, candidates, unite.context)
   endfor
-  echomsg len(candidates)
 
   let unite.candidates_pos += len(candidates)
 
@@ -2010,7 +2009,7 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     let source_candidates = s:get_source_candidates(source)
 
     let custom_source = get(s:custom.source, source.name, {})
-    if source.ignore_pattern != ''
+    if source.ignore_pattern != '' && !context.unite__is_vimfiler
       call filter(source_candidates,
             \ 'v:val.word !~# source.ignore_pattern')
     endif

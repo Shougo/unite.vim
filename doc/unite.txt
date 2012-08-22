@@ -2543,6 +2543,8 @@ CHANGELOG					*unite-changelog*
 - Updated vital.
 - Improved documentation.
 - Fixed gather candidates.
+- Fixed output source behavior.
+- Fixed ignore_pattern in vimfiler.
 
 2012-08-20
 - Improved yank action.
