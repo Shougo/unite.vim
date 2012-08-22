@@ -2538,6 +2538,7 @@ CHANGELOG					*unite-changelog*
 
 2012-08-22
 - Deleted Japanese documentation.
+- Added file kind in grep source.
 
 2012-08-21
 - Updated vital.
