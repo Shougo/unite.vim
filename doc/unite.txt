@@ -1770,8 +1770,8 @@ common						*unite-action-common*
 Defines the common interface for all kinds.  This uses condidate.word
 internally.
 	nop		Do nothing
-	yank		Yank the candidate word or text
-	yank_escape	Yank the escaped candidate word or text
+	yank		Yank the candidate "word" or "action__text"
+	yank_escape	Yank the escaped candidate "word" or "action__text"
 	ex		Input the escaped candidate text into command line
 	insert		Input the candidate word or text into the current
 			buffer
