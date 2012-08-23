@@ -124,6 +124,9 @@ function! unite#undef_custom_action(kind, name)"{{{
     endif
   endfor
 endfunction"}}}
+function! unite#custom_max_candidates(source_name, max)"{{{
+  return unite#custom_source(a:source_name, 'max_candidates', a:max)
+endfunction"}}}
 function! unite#custom_source(source_name, option_name, value)"{{{
   for key in split(a:source_name, '\s*,\s*')
     if !has_key(s:custom.source, key)
