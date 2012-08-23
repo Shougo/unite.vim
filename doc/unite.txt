@@ -2538,6 +2538,7 @@ CHANGELOG					*unite-changelog*
 
 2012-08-23
 - Fixed g:unite_source_file_ignore_pattern.
+- Deleted yank action in history/yank.
 
 2012-08-22
 - Deleted Japanese documentation.
