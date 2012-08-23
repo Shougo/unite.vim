@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Aug 2012.
+" Last Modified: 23 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -650,10 +650,10 @@ function! unite#invalidate_cache(source_name)  "{{{
   endfor
 endfunction"}}}
 function! unite#force_redraw(...) "{{{
-  call s:redraw(1, get(a:000, 0, 0))
+  call s:redraw(1, get(a:000, 0, 0), get(a:000, 1, 0))
 endfunction"}}}
 function! unite#redraw(...) "{{{
-  call s:redraw(0, get(a:000, 0, 0))
+  call s:redraw(0, get(a:000, 0, 0), get(a:000, 1, 0))
 endfunction"}}}
 function! unite#redraw_line(...) "{{{
   let linenr = a:0 > 0 ? a:1 : line('.')
@@ -695,8 +695,10 @@ function! unite#redraw_status() "{{{
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! unite#redraw_candidates() "{{{
-  let candidates = unite#gather_candidates()
+function! unite#redraw_candidates(...) "{{{
+  let is_gather_all = get(a:000, 0, 0)
+
+  let candidates = unite#gather_candidates(is_gather_all)
 
   let modifiable_save = &l:modifiable
   setlocal modifiable
@@ -746,14 +748,18 @@ endfunction"}}}
 function! unite#get_self_functions()"{{{
   return split(matchstr(expand('<sfile>'), '^function \zs.*$'), '\.\.')[: -2]
 endfunction"}}}
-function! unite#gather_candidates()"{{{
+function! unite#gather_candidates(...)"{{{
+  let is_gather_all = get(a:000, 0, 0)
+
   let unite = unite#get_current_unite()
   let unite.candidates = []
   for source in unite#loaded_sources_list()
     let unite.candidates += source.unite__candidates
   endfor
 
-  if unite.context.is_redraw || unite.candidates_pos == 0
+  if is_gather_all
+    let unite.candidates_pos = len(unite.candidates)
+  elseif unite.context.is_redraw || unite.candidates_pos == 0
     let height = unite.context.no_split ?
           \ winheight(0) : unite.context.winheight
     let unite.candidates_pos = height
@@ -2464,7 +2470,7 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
   call s:on_bufwin_enter(bufnr('%'))
 endfunction"}}}
 
-function! s:redraw(is_force, winnr) "{{{
+function! s:redraw(is_force, winnr, is_gather_all) "{{{
   if unite#util#is_cmdwin()
     return
   endif
@@ -2511,7 +2517,7 @@ function! s:redraw(is_force, winnr) "{{{
   let unite.last_input = input
 
   " Redraw.
-  call unite#redraw_candidates()
+  call unite#redraw_candidates(a:is_gather_all)
   let unite.context.is_redraw = 0
 
   if a:winnr > 0
@@ -2638,7 +2644,7 @@ function! s:on_cursor_moved_i()  "{{{
     startinsert!
   endif
 endfunction"}}}
-function! s:check_redraw()
+function! s:check_redraw()"{{{
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
   if line('.') == prompt_linenr || unite.context.is_redraw
@@ -2646,7 +2652,7 @@ function! s:check_redraw()
     call unite#redraw()
     call s:change_highlight()
   endif
-endfunction
+endfunction"}}}
 function! s:on_bufwin_enter(bufnr)  "{{{
   let unite = getbufvar(a:bufnr, 'unite')
   if type(unite) != type({})

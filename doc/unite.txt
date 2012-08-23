@@ -2542,6 +2542,7 @@ CHANGELOG					*unite-changelog*
 - Deleted yank action in history/yank.
 - Improved syntax.
 - Added diff action in kind file.
+- Fixed <Plug>(unite_toggle_mark_all_candidates) and <Plug>(unite_toggle_max_candidates) behavior.
 
 2012-08-22
 - Deleted Japanese documentation.
