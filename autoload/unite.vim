@@ -708,10 +708,11 @@ function! unite#redraw_candidates(...) "{{{
 
   let lines = unite#convert_lines(candidates)
   let pos = getpos('.')
-  if len(lines) < len(unite#get_current_unite().current_candidates)
-    silent! execute (unite#get_current_unite().prompt_linenr+1).',$delete _'
+  let unite = unite#get_current_unite()
+  if len(lines) < len(unite.current_candidates)
+    silent! execute (unite.prompt_linenr+1).',$delete _'
   endif
-  call setline(unite#get_current_unite().prompt_linenr+1, lines)
+  call setline(unite.prompt_linenr+1, lines)
 
   let &l:modifiable = l:modifiable_save
 
@@ -922,8 +923,35 @@ function! s:print_buffer(message)"{{{
   let unite = unite#get_current_unite()
   let pos = getpos('.')
 
-  let message = type(a:message) == type([]) ?
+  let winwidth = unite.context.vertical ?
+        \ unite.context.winwidth : &columns
+  let [max_width, max_source_name] =
+        \ s:adjustments(winwidth-5, unite.max_source_name, 2)
+
+  " Auto split.
+  let message = []
+  for msg in type(a:message) == type([]) ?
         \ a:message : [a:message]
+    while msg != ''
+      let trunc_msg = unite#util#strwidthpart(
+            \ msg, max_width)
+      let msg = msg[len(trunc_msg):]
+
+      if msg != ''
+        if trunc_msg =~ '^!!!'
+          " Append error marker.
+          let msg = '!!!<'.msg
+          let trunc_msg .= '>!!!'
+        else
+          " Append source name.
+          let msg = matchstr(trunc_msg, '^\[.\{-}\] ').'<'.msg
+          let trunc_msg .= '>'
+        endif
+      endif
+
+      call add(message, trunc_msg)
+    endwhile
+  endfor
 
   call append(unite.prompt_linenr-1, message)
   let unite.prompt_linenr += len(message)
@@ -942,7 +970,8 @@ function! s:print_buffer(message)"{{{
     syntax clear uniteInputLine
     execute 'syntax match uniteInputLine'
           \ '/\%'.unite.prompt_linenr.'l.*/'
-          \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+          \ 'contains=uniteInputPrompt,'
+          \ 'uniteInputPromptError,uniteInputSpecial'
   endif
 endfunction"}}}
 "}}}
@@ -1804,14 +1833,17 @@ function! s:initialize_candidates(candidates)"{{{
     " Delete too long abbr.
     if candidate.is_multiline
       let candidate.unite__abbr =
-            \ candidate.unite__abbr[: max_width * (context.max_multi_lines + 1)+10]
+            \ candidate.unite__abbr[: max_width *
+            \  (context.max_multi_lines + 1)+10]
     elseif len(candidate.unite__abbr) > max_width * 2
-      let candidate.unite__abbr = candidate.unite__abbr[: max_width * 2]
+      let candidate.unite__abbr =
+            \ candidate.unite__abbr[: max_width * 2]
     endif
 
     " Substitute tab.
     if candidate.unite__abbr =~ '\t'
-      let candidate.unite__abbr = substitute(candidate.unite__abbr, '\t',
+      let candidate.unite__abbr = substitute(
+            \ candidate.unite__abbr, '\t',
             \ repeat(' ', &tabstop), 'g')
     endif
 
@@ -1826,16 +1858,19 @@ function! s:initialize_candidates(candidates)"{{{
       let candidate.unite__abbr = ''
 
       while abbr != ''
-        let trunc_abbr = unite#util#strwidthpart(abbr, max_width)
+        let trunc_abbr = unite#util#strwidthpart(
+              \ abbr, max_width)
         let candidate.unite__abbr .= trunc_abbr . "~\n"
         let abbr = abbr[len(trunc_abbr):]
       endwhile
 
       let candidate.unite__abbr =
-            \ substitute(candidate.unite__abbr, '\~\n$', '', '')
+            \ substitute(candidate.unite__abbr,
+            \    '\~\n$', '', '')
     else
       let candidate.unite__abbr =
-            \ substitute(candidate.unite__abbr, '\r\?\n$', '^@', '')
+            \ substitute(candidate.unite__abbr,
+            \    '\r\?\n$', '^@', '')
     endif
 
     if candidate.unite__abbr !~ '\n'
@@ -1847,7 +1882,8 @@ function! s:initialize_candidates(candidates)"{{{
     " Convert multi line.
     let cnt = 0
     for multi in split(
-          \ candidate.unite__abbr, '\r\?\n', 1)[: context.max_multi_lines-1]
+          \ candidate.unite__abbr, '\r\?\n', 1)[:
+          \   context.max_multi_lines-1]
       let candidate_multi = (cnt != 0) ?
             \ deepcopy(candidate) : candidate
       let candidate_multi.unite__abbr =

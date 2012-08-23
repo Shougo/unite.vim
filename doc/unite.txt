@@ -2544,6 +2544,7 @@ CHANGELOG					*unite-changelog*
 - Added diff action in kind file.
 - Fixed <Plug>(unite_toggle_mark_all_candidates) and <Plug>(unite_toggle_max_candidates) behavior.
 - Fixed unite#custom_max_candidates() error.
+- Improved print message behavior.
 
 2012-08-22
 - Deleted Japanese documentation.
