@@ -461,9 +461,10 @@ function! s:get_files(files, level, max_len)"{{{
       endif
 
       let child_index = 0
-      let childs = unite#util#glob(file.'/*') +
+      let children = unite#util#glob(file.'/*') +
             \ unite#util#glob(file.'/.*')
-      for child in childs
+      for child in children
+        let child = substitute(child, '\/$', '', '')
         let child_index += 1
 
         if child =~ '/\.\+$\|/\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
@@ -486,7 +487,7 @@ function! s:get_files(files, level, max_len)"{{{
           let ret_files_len += 1
 
           if ret_files_len > a:max_len
-            let continuation_files += childs[child_index :]
+            let continuation_files += children[child_index :]
             break
           endif
         endif
