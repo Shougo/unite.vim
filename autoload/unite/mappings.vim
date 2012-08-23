@@ -785,6 +785,11 @@ endfunction"}}}
 function! s:toggle_max_candidates()"{{{
   let unite = unite#get_current_unite()
   let unite.is_enabled_max_candidates = !unite.is_enabled_max_candidates
+  if unite.is_enabled_max_candidates
+    echo 'Enabled max candidates.'
+  else
+    echo 'Disabled max candidates.'
+  endif
   call s:force_redraw_all_candidates()
 endfunction"}}}
 function! s:narrowing_path()"{{{
