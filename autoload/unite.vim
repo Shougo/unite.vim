@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Aug 2012.
+" Last Modified: 25 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -701,6 +701,8 @@ endfunction"}}}
 function! unite#redraw_candidates(...) "{{{
   let is_gather_all = get(a:000, 0, 0)
 
+  call unite#_resize_window()
+
   let candidates = unite#gather_candidates(is_gather_all)
 
   let modifiable_save = &l:modifiable
@@ -719,8 +721,6 @@ function! unite#redraw_candidates(...) "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
   let unite.current_candidates = candidates
-
-  call unite#_resize_window()
 
   if pos != getpos('.')
     call setpos('.', pos)
@@ -2600,6 +2600,16 @@ function! unite#_resize_window() "{{{
     return
   endif
 
+  if context.unite__old_winwidth != 0
+        \ && context.unite__old_winheight != 0
+        \ && winheight(0) != context.unite__old_winheight
+        \ && winwidth(0) != context.unite__old_winwidth
+    " Disabled auto resize.
+    let context.winwidth = 0
+    let context.winheight = 0
+    return
+  endif
+
   if context.auto_resize
     " Auto resize.
     let max_len = unite.prompt_linenr + len(unite.current_candidates)
@@ -2769,17 +2779,22 @@ function! s:on_cursor_moved()  "{{{
   endif
 
   " Check lines."{{{
-  if line('.') + winheight(0) / 2 < line('$')
+  if winheight(0) < line('$') &&
+        \ line('.') + winheight(0) / 2 < line('$')
     return
   endif
 
-  let height = unite.context.no_split ?
+  let height = winheight(0) < line('$') ?
+        \ len(unite.candidates) :
+        \ unite.context.no_split ?
         \ winheight(0) : unite.context.winheight
   let candidates = unite#gather_candidates_pos(height)
   if empty(candidates)
     " Nothing.
     return
   endif
+
+  call unite#_resize_window()
 
   let modifiable_save = &l:modifiable
   try
@@ -2793,8 +2808,6 @@ function! s:on_cursor_moved()  "{{{
 
   let context = unite.context
   let unite.current_candidates += candidates
-
-  call unite#_resize_window()
 
   if pos != getpos('.')
     call setpos('.', pos)
