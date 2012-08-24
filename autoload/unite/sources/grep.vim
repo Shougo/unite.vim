@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 20 Aug 2012.
+" Last Modified: 22 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -177,6 +177,15 @@ function! s:source.hooks.on_close(args, context) "{{{
     call a:context.source__proc.waitpid()
   endif
 endfunction "}}}
+function! s:source.hooks.on_post_filter(args, context)"{{{
+  for candidate in a:context.candidates
+    let candidate.kind = ['jump_list',
+          \ ((a:context.source__ssh_path != '') ?
+          \ 'file/ssh' : 'file')]
+    let candidate.action__directory =
+          \ unite#util#path2directory(candidate.action__path)
+  endfor
+endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
   if empty(a:context.source__target)
@@ -256,17 +265,17 @@ function! s:source.async_gather_candidates(args, context) "{{{
   let _ = []
   for candidate in candidates
     let dict = {
-          \   'kind': 'jump_list',
-          \   'action__path': candidate[0][:1].candidate[1][0],
-          \   'action__line': candidate[1][1],
-          \   'action__text': join(candidate[1][2:], ':'),
+          \   'action__path' : candidate[0][:1].candidate[1][0],
+          \   'action__line' : candidate[1][1],
+          \   'action__text' : join(candidate[1][2:], ':'),
           \ }
     if a:context.source__ssh_path != ''
       let dict.action__path =
             \ a:context.source__ssh_path . dict.action__path
     else
-      let dict.action__path = unite#util#substitute_path_separator(
-          \  fnamemodify(dict.action__path, ':p'))
+      let dict.action__path =
+            \ unite#util#substitute_path_separator(
+            \   fnamemodify(dict.action__path, ':p'))
     endif
 
     let dict.word = printf('%s:%s:%s',

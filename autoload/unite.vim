@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Aug 2012.
+" Last Modified: 23 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -123,6 +123,9 @@ function! unite#undef_custom_action(kind, name)"{{{
       call remove(s:custom.actions, key)
     endif
   endfor
+endfunction"}}}
+function! unite#custom_max_candidates(source_name, max)"{{{
+  return unite#custom_source(a:source_name, 'max_candidates', a:max)
 endfunction"}}}
 function! unite#custom_source(source_name, option_name, value)"{{{
   for key in split(a:source_name, '\s*,\s*')
@@ -650,10 +653,10 @@ function! unite#invalidate_cache(source_name)  "{{{
   endfor
 endfunction"}}}
 function! unite#force_redraw(...) "{{{
-  call s:redraw(1, get(a:000, 0, 0))
+  call s:redraw(1, get(a:000, 0, 0), get(a:000, 1, 0))
 endfunction"}}}
 function! unite#redraw(...) "{{{
-  call s:redraw(0, get(a:000, 0, 0))
+  call s:redraw(0, get(a:000, 0, 0), get(a:000, 1, 0))
 endfunction"}}}
 function! unite#redraw_line(...) "{{{
   let linenr = a:0 > 0 ? a:1 : line('.')
@@ -695,18 +698,21 @@ function! unite#redraw_status() "{{{
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! unite#redraw_candidates() "{{{
-  let candidates = unite#gather_candidates()
+function! unite#redraw_candidates(...) "{{{
+  let is_gather_all = get(a:000, 0, 0)
+
+  let candidates = unite#gather_candidates(is_gather_all)
 
   let modifiable_save = &l:modifiable
   setlocal modifiable
 
   let lines = unite#convert_lines(candidates)
   let pos = getpos('.')
-  if len(lines) < len(unite#get_current_unite().current_candidates)
-    silent! execute (unite#get_current_unite().prompt_linenr+1).',$delete _'
+  let unite = unite#get_current_unite()
+  if len(lines) < len(unite.current_candidates)
+    silent! execute (unite.prompt_linenr+1).',$delete _'
   endif
-  call setline(unite#get_current_unite().prompt_linenr+1, lines)
+  call setline(unite.prompt_linenr+1, lines)
 
   let &l:modifiable = l:modifiable_save
 
@@ -746,14 +752,18 @@ endfunction"}}}
 function! unite#get_self_functions()"{{{
   return split(matchstr(expand('<sfile>'), '^function \zs.*$'), '\.\.')[: -2]
 endfunction"}}}
-function! unite#gather_candidates()"{{{
+function! unite#gather_candidates(...)"{{{
+  let is_gather_all = get(a:000, 0, 0)
+
   let unite = unite#get_current_unite()
   let unite.candidates = []
   for source in unite#loaded_sources_list()
     let unite.candidates += source.unite__candidates
   endfor
 
-  if unite.context.is_redraw || unite.candidates_pos == 0
+  if is_gather_all
+    let unite.candidates_pos = len(unite.candidates)
+  elseif unite.context.is_redraw || unite.candidates_pos == 0
     let height = unite.context.no_split ?
           \ winheight(0) : unite.context.winheight
     let unite.candidates_pos = height
@@ -913,8 +923,35 @@ function! s:print_buffer(message)"{{{
   let unite = unite#get_current_unite()
   let pos = getpos('.')
 
-  let message = type(a:message) == type([]) ?
+  let winwidth = unite.context.vertical ?
+        \ unite.context.winwidth : &columns
+  let [max_width, max_source_name] =
+        \ s:adjustments(winwidth-5, unite.max_source_name, 2)
+
+  " Auto split.
+  let message = []
+  for msg in type(a:message) == type([]) ?
         \ a:message : [a:message]
+    while msg != ''
+      let trunc_msg = unite#util#strwidthpart(
+            \ msg, max_width)
+      let msg = msg[len(trunc_msg):]
+
+      if msg != ''
+        if trunc_msg =~ '^!!!'
+          " Append error marker.
+          let msg = '!!!<'.msg
+          let trunc_msg .= '>!!!'
+        else
+          " Append source name.
+          let msg = matchstr(trunc_msg, '^\[.\{-}\] ').'<'.msg
+          let trunc_msg .= '>'
+        endif
+      endif
+
+      call add(message, trunc_msg)
+    endwhile
+  endfor
 
   call append(unite.prompt_linenr-1, message)
   let unite.prompt_linenr += len(message)
@@ -933,7 +970,8 @@ function! s:print_buffer(message)"{{{
     syntax clear uniteInputLine
     execute 'syntax match uniteInputLine'
           \ '/\%'.unite.prompt_linenr.'l.*/'
-          \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+          \ 'contains=uniteInputPrompt,'
+          \ 'uniteInputPromptError,uniteInputSpecial'
   endif
 endfunction"}}}
 "}}}
@@ -1795,14 +1833,17 @@ function! s:initialize_candidates(candidates)"{{{
     " Delete too long abbr.
     if candidate.is_multiline
       let candidate.unite__abbr =
-            \ candidate.unite__abbr[: max_width * (context.max_multi_lines + 1)+10]
+            \ candidate.unite__abbr[: max_width *
+            \  (context.max_multi_lines + 1)+10]
     elseif len(candidate.unite__abbr) > max_width * 2
-      let candidate.unite__abbr = candidate.unite__abbr[: max_width * 2]
+      let candidate.unite__abbr =
+            \ candidate.unite__abbr[: max_width * 2]
     endif
 
     " Substitute tab.
     if candidate.unite__abbr =~ '\t'
-      let candidate.unite__abbr = substitute(candidate.unite__abbr, '\t',
+      let candidate.unite__abbr = substitute(
+            \ candidate.unite__abbr, '\t',
             \ repeat(' ', &tabstop), 'g')
     endif
 
@@ -1817,16 +1858,19 @@ function! s:initialize_candidates(candidates)"{{{
       let candidate.unite__abbr = ''
 
       while abbr != ''
-        let trunc_abbr = unite#util#strwidthpart(abbr, max_width)
+        let trunc_abbr = unite#util#strwidthpart(
+              \ abbr, max_width)
         let candidate.unite__abbr .= trunc_abbr . "~\n"
         let abbr = abbr[len(trunc_abbr):]
       endwhile
 
       let candidate.unite__abbr =
-            \ substitute(candidate.unite__abbr, '\~\n$', '', '')
+            \ substitute(candidate.unite__abbr,
+            \    '\~\n$', '', '')
     else
       let candidate.unite__abbr =
-            \ substitute(candidate.unite__abbr, '\r\?\n$', '^@', '')
+            \ substitute(candidate.unite__abbr,
+            \    '\r\?\n$', '^@', '')
     endif
 
     if candidate.unite__abbr !~ '\n'
@@ -1838,7 +1882,8 @@ function! s:initialize_candidates(candidates)"{{{
     " Convert multi line.
     let cnt = 0
     for multi in split(
-          \ candidate.unite__abbr, '\r\?\n', 1)[: context.max_multi_lines-1]
+          \ candidate.unite__abbr, '\r\?\n', 1)[:
+          \   context.max_multi_lines-1]
       let candidate_multi = (cnt != 0) ?
             \ deepcopy(candidate) : candidate
       let candidate_multi.unite__abbr =
@@ -2464,7 +2509,7 @@ function! s:switch_unite_buffer(buffer_name, context)"{{{
   call s:on_bufwin_enter(bufnr('%'))
 endfunction"}}}
 
-function! s:redraw(is_force, winnr) "{{{
+function! s:redraw(is_force, winnr, is_gather_all) "{{{
   if unite#util#is_cmdwin()
     return
   endif
@@ -2511,7 +2556,7 @@ function! s:redraw(is_force, winnr) "{{{
   let unite.last_input = input
 
   " Redraw.
-  call unite#redraw_candidates()
+  call unite#redraw_candidates(a:is_gather_all)
   let unite.context.is_redraw = 0
 
   if a:winnr > 0
@@ -2638,7 +2683,7 @@ function! s:on_cursor_moved_i()  "{{{
     startinsert!
   endif
 endfunction"}}}
-function! s:check_redraw()
+function! s:check_redraw()"{{{
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
   if line('.') == prompt_linenr || unite.context.is_redraw
@@ -2646,7 +2691,7 @@ function! s:check_redraw()
     call unite#redraw()
     call s:change_highlight()
   endif
-endfunction
+endfunction"}}}
 function! s:on_bufwin_enter(bufnr)  "{{{
   let unite = getbufvar(a:bufnr, 'unite')
   if type(unite) != type({})

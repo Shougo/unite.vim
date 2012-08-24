@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Aug 2012.
+" Last Modified: 23 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -82,8 +82,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <silent><buffer> <Plug>(unite_restart)
         \ :<C-u>call <SID>restart()<CR>
   nnoremap <buffer><silent> <Plug>(unite_toggle_mark_all_candidates)
-        \ :<C-u>call <SID>toggle_mark_candidates(0,
-        \     len(unite#get_unite_candidates()) - 1)<CR>
+        \ :<C-u>call <SID>toggle_mark_all_candidates()<CR>
   nnoremap <buffer><silent> <Plug>(unite_toggle_transpose_window)
         \ :<C-u>call <SID>toggle_transpose_window()<CR>
   nnoremap <buffer><silent> <Plug>(unite_toggle_auto_preview)
@@ -506,20 +505,26 @@ function! s:toggle_mark()"{{{
     endif
   endwhile
 endfunction"}}}
+function! s:toggle_mark_all_candidates()"{{{
+  call s:redraw_all_candidates()
+  call s:toggle_mark_candidates(0,
+        \     len(unite#get_unite_candidates()) - 1)
+endfunction"}}}
 function! s:toggle_mark_candidates(start, end)"{{{
   if a:start < 0 || a:end >= len(unite#get_unite_candidates())
     " Ignore.
     return
   endif
 
+  let unite = unite#get_current_unite()
+  let offset = unite.prompt_linenr+1
   let cnt = a:start
   while cnt <= a:end
     let candidate = unite#get_unite_candidates()[cnt]
     let candidate.unite__is_marked = !candidate.unite__is_marked
     let candidate.unite__marked_time = localtime()
 
-    call unite#redraw_line(
-          \ cnt + unite#get_current_unite().prompt_linenr+1)
+    call unite#redraw_line(cnt + offset)
 
     let cnt += 1
   endwhile
@@ -780,7 +785,12 @@ endfunction"}}}
 function! s:toggle_max_candidates()"{{{
   let unite = unite#get_current_unite()
   let unite.is_enabled_max_candidates = !unite.is_enabled_max_candidates
-  call unite#force_redraw()
+  if unite.is_enabled_max_candidates
+    echo 'Enabled max candidates.'
+  else
+    echo 'Disabled max candidates.'
+  endif
+  call s:force_redraw_all_candidates()
 endfunction"}}}
 function! s:narrowing_path()"{{{
   if line('.') <= unite#get_current_unite().prompt_linenr
@@ -795,6 +805,12 @@ function! s:narrowing_input_history()"{{{
   call unite#start_temporary([s:source_input],
         \ { 'old_source_names_string' : unite#loaded_source_names_string() },
         \ 'history/input')
+endfunction"}}}
+function! s:force_redraw_all_candidates()"{{{
+  call unite#force_redraw(0, 1)
+endfunction"}}}
+function! s:redraw_all_candidates()"{{{
+  call unite#redraw(0, 1)
 endfunction"}}}
 
 function! s:get_quick_match_table()"{{{

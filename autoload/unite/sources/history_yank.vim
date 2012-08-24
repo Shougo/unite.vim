@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: history_yank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Aug 2012.
+" Last Modified: 23 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -76,17 +76,6 @@ endfunction"}}}
 
 " Actions"{{{
 let s:source.action_table.delete = {
-      \ 'description' : 'delete from yank history',
-      \ 'is_invalidate_cache' : 1,
-      \ 'is_quit' : 0,
-      \ 'is_selectable' : 1,
-      \ }
-function! s:source.action_table.delete.func(candidates)"{{{
-  for candidate in a:candidates
-    call filter(s:yank_histories, 'v:val !=# candidate.word')
-  endfor
-endfunction"}}}
-let s:source.action_table.yank = {
       \ 'description' : 'delete from yank history',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,

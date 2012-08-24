@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jul 2012.
+" Last Modified: 23 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -178,6 +178,24 @@ function! s:kind.action_table.wunix.func(candidates)"{{{
 
   execute 'buffer' current_bufnr
 endfunction"}}}
+
+let s:kind.action_table.diff = {
+      \ 'description' : 'diff with the other candidate or current buffer',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.diff.func(candidates)
+  if len(a:candidates) == 1
+    " :vimdiff with current buffer.
+    call s:execute_command('vert diffsplit', a:candidates[0])
+  elseif len(a:candidates) == 2
+    " :vimdiff the other candidate.
+    call s:execute_command('tabnew', a:candidates[0])
+    let t:title = 'vimdiff'
+    call s:execute_command('vert diffsplit', a:candidates[1])
+  else
+    echo 'too many candidates!'
+  endif
+endfunction
 
 " For vimfiler.
 let s:kind.action_table.vimfiler__move = {
