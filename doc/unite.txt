@@ -1435,6 +1435,7 @@ grep		Nominates "grep" command output as candidates.
 
 						*unite-source-vimgrep*
 vimgrep		Nominates |vimgrep| command output as candidates.
+		Note: The source clears quickfix list.
 
 		Source arguments:
 		1. the target directory.
