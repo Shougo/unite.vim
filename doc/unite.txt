@@ -447,7 +447,7 @@ SOURCES VARIABLES 				*unite-sources-variables*
 
 g:unite_source_file_ignore_pattern		*g:unite_source_file_ignore_pattern*
 		Refer autoload/unite/sources/file.vim about the default value.
-		Note: This function is deprecated. Please use
+		Note: This variable is deprecated. Please use
 		|unite#custom_source()| instead.
 		Note: This variable must be set before using |unite|.
 
@@ -2538,6 +2538,7 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 CHANGELOG					*unite-changelog*
 
 2012-08-24
+- Fixed typo.
 - Set is_multiline in grep and line source.
 
 2012-08-23
