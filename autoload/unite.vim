@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2012.
+" Last Modified: 24 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2363,6 +2363,7 @@ function! s:initialize_unite_buffer()"{{{
     setlocal nowrap
     setlocal foldcolumn=0
     setlocal iskeyword+=-,+,\\,!,~
+    setlocal matchpairs-=<:>
     match
     if has('conceal')
       setlocal conceallevel=3
