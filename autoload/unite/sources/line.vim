@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 14 Aug 2012.
+" Last Modified: 24 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -110,6 +110,7 @@ function! s:source.gather_candidates(args, context)
 
     let _ = map(lines, "{
           \ 'word' : v:val[1],
+          \ 'is_multiline' : 1,
           \ 'action__line' : v:val[0],
           \ 'action__text' : v:val[1],
           \ }")
