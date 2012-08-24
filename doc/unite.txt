@@ -2293,14 +2293,12 @@ NOTATION					*unite-notation*
 				Ex: ["file", "directory"]
 				If you use list, you have not to
 				define parents kind action.
-				Unite search kinds action from list
+				Note: Unite searches kinds action from list
 				tail.
-				Ex: If you set kind attribute to
-				["file", "command"], "command"
-				(default) action overwrite "file"
-				action.
-				You should use source default
-				action instead of kind.
+				Ex: If you set kind attribute to ["file",
+				"command"], "file" (default) actions will be
+				overwritten by "command" action.  You should
+				use source default action instead of kind.
 
 			is_dummy		(Number)	(Optional)
 				If the candidate is dummy.
@@ -2540,6 +2538,7 @@ CHANGELOG					*unite-changelog*
 2012-08-24
 - Fixed typo.
 - Set is_multiline in grep and line source.
+- Improved document.
 
 2012-08-23
 - Fixed g:unite_source_file_ignore_pattern.
