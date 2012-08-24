@@ -757,6 +757,7 @@ Normal mode mappings.
 
 <Plug>(unite_cursor_bottom)			*<Plug>(unite_cursor_bottom)*
 		Moves the cursor to the bottom of the Unite buffer.
+		Note: This mapping redraw all candidates.
 
 <Plug>(unite_loop_cursor_down)			*<Plug>(unite_loop_cursor_down)*
 		Goes to the next line.  Goes up to the top when you are on
