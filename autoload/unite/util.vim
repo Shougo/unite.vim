@@ -237,7 +237,8 @@ endfunction"}}}
 " filter() for matchers.
 function! unite#util#filter_matcher(list, expr, context)"{{{
   if !a:context.unite__is_sort_nothing ||
-        \ a:context.unite__max_candidates <= 0
+        \ a:context.unite__max_candidates <= 0 ||
+        \ !unite#get_current_unite().is_enabled_max_candidates
 
     return a:expr == '' ? a:list : filter(a:list, a:expr)
   endif
