@@ -755,6 +755,9 @@ Normal mode mappings.
 <Plug>(unite_cursor_top)			*<Plug>(unite_cursor_top)*
 		Moves the cursor to the top of the Unite buffer.
 
+<Plug>(unite_cursor_bottom)			*<Plug>(unite_cursor_bottom)*
+		Moves the cursor to the bottom of the Unite buffer.
+
 <Plug>(unite_loop_cursor_down)			*<Plug>(unite_loop_cursor_down)*
 		Goes to the next line.  Goes up to the top when you are on
 		the bottom.
@@ -922,6 +925,7 @@ M		|<Plug>(unite_toggle_max_candidates)|
 <C-l>		|<Plug>(unite_redraw)|
 <C-h>		|<Plug>(unite_delete_backward_path)|
 gg		|<Plug>(unite_cursor_top)|
+G		|<Plug>(unite_cursor_bottom)|
 j		|<Plug>(unite_loop_cursor_down)|
 <Down>		|<Plug>(unite_loop_cursor_down)|
 k		|<Plug>(unite_loop_cursor_up)|
@@ -2554,6 +2558,7 @@ CHANGELOG					*unite-changelog*
 - Improved document.
 - Added documentation.
 - Improved vimgrep source.
+- Added <Plug>(unite_cursor_bottom) keymapping.
 
 2012-08-23
 - Fixed g:unite_source_file_ignore_pattern.

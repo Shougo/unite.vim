@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2012.
+" Last Modified: 24 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,6 +57,8 @@ function! unite#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>print_candidate()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
         \ unite#get_current_unite().prompt_linenr.'G0z.'
+  nnoremap <buffer> <Plug>(unite_cursor_bottom)
+        \ :<C-u>call <SID>redraw_all_candidates()<CR>G
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
         \ <SID>loop_cursor_down(0)
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_up)
@@ -176,10 +178,11 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-g>     <Plug>(unite_print_candidate)
   nmap <buffer> <C-l>     <Plug>(unite_redraw)
   nmap <buffer> gg        <Plug>(unite_cursor_top)
+  nmap <buffer> G         <Plug>(unite_cursor_bottom)
   nmap <buffer> j         <Plug>(unite_loop_cursor_down)
-  nmap <buffer> <Down>         <Plug>(unite_loop_cursor_down)
+  nmap <buffer> <Down>    <Plug>(unite_loop_cursor_down)
   nmap <buffer> k         <Plug>(unite_loop_cursor_up)
-  nmap <buffer> <Up>         <Plug>(unite_loop_cursor_up)
+  nmap <buffer> <Up>      <Plug>(unite_loop_cursor_up)
   nmap <buffer> J         <Plug>(unite_skip_cursor_down)
   nmap <buffer> K         <Plug>(unite_skip_cursor_up)
   nmap <buffer> <C-h>     <Plug>(unite_delete_backward_path)
