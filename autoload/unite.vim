@@ -2636,14 +2636,6 @@ endfunction"}}}
 function! s:on_insert_enter()  "{{{
   let unite = unite#get_current_unite()
   let unite.is_insert = 1
-  setlocal modifiable
-
-  if line('.') != unite.prompt_linenr
-        \ || col('.') <= len(unite.prompt)
-    execute unite.prompt_linenr
-    normal! zb
-    startinsert!
-  endif
 endfunction"}}}
 function! s:on_insert_leave()  "{{{
   let unite = unite#get_current_unite()
