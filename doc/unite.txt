@@ -2561,6 +2561,7 @@ CHANGELOG					*unite-changelog*
 - Improved vimgrep source.
 - Added <Plug>(unite_cursor_bottom) keymapping.
 - Fixed unite#util#filter_matcher().
+- Improved resize window behavior.
 
 2012-08-23
 - Fixed g:unite_source_file_ignore_pattern.
