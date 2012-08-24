@@ -99,7 +99,7 @@ function! s:source.hooks.on_init(args, context) "{{{
           \ 'substitute(v:val, "*\\+$", "", "")')
   endif
 
-  let a:context.source__input = get(a:args, 2, '')
+  let a:context.source__input = get(a:args, 1, '')
   if a:context.source__input == ''
     let a:context.source__input = input('Pattern: ')
   endif
