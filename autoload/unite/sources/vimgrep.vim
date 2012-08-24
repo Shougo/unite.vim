@@ -142,10 +142,19 @@ function! s:source.gather_candidates(args, context) "{{{
   call unite#print_source_message(
         \ 'Command-line: ' . cmdline, s:source.name)
 
+  let buffers = range(1, bufnr('$'))
+
   try
     execute cmdline
   catch /^Vim\%((\a\+)\)\?:E480/
     " Ignore.
+  finally
+    " Delete unlisted buffers.
+    for bufnr in filter(range(1, bufnr('$')),
+          \ '!buflisted(v:val) && bufexists(v:val)
+          \   && index(buffers, v:val) < 0')
+      silent! execute 'bwipeout' bufnr
+    endfor
   endtry
 
   call unite#print_source_message('Completed.', s:source.name)

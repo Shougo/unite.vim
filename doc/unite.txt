@@ -2552,6 +2552,7 @@ CHANGELOG					*unite-changelog*
 - Set is_multiline in grep and line source.
 - Improved document.
 - Added documentation.
+- Improved vimgrep source.
 
 2012-08-23
 - Fixed g:unite_source_file_ignore_pattern.
