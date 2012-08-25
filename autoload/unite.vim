@@ -2607,6 +2607,7 @@ function! unite#_resize_window() "{{{
     " Disabled auto resize.
     let context.winwidth = 0
     let context.winheight = 0
+    let context.is_resize = 1
     return
   endif
 
@@ -2784,9 +2785,9 @@ function! s:on_cursor_moved()  "{{{
     return
   endif
 
-  let height = winheight(0) < line('$') ?
-        \ len(unite.candidates) :
-        \ unite.context.no_split ?
+  let height =
+        \ (unite.context.no_split
+        \  || unite.context.winheight == 0) ?
         \ winheight(0) : unite.context.winheight
   let candidates = unite#gather_candidates_pos(height)
   if empty(candidates)
