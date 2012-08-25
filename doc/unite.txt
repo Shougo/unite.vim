@@ -2553,6 +2553,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-08-26
+- Fixed vimgrep source.
+
 2012-08-25
 - Delted obsolute changelog.
 - Improved resize behavior.

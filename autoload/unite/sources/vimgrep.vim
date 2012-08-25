@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Aug 2012.
+" Last Modified: 26 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -144,10 +144,41 @@ function! s:source.gather_candidates(args, context) "{{{
 
   let buffers = range(1, bufnr('$'))
 
+  let _ = []
   try
     execute cmdline
+    let qflist = getqflist()
+
+    call unite#print_source_message('Completed.', s:source.name)
+
+    if isdirectory(a:context.source__directory)
+      let cwd = getcwd()
+      lcd `=a:context.source__directory`
+    endif
+
+    for qf in filter(qflist,
+          \ "v:val.bufnr != '' && bufname(v:val.bufnr) != ''")
+      let dict = {
+            \   'action__path' : unite#util#substitute_path_separator(
+            \       fnamemodify(bufname(qf.bufnr), ':p')),
+            \   'action__text' : qf.text,
+            \   'action__line' : qf.lnum,
+            \ }
+      let dict.word = printf('%s:%s:%s',
+            \  unite#util#substitute_path_separator(
+            \     fnamemodify(dict.action__path, ':.')),
+            \ dict.action__line, dict.action__text)
+
+      call add(_, dict)
+    endfor
+
+    if isdirectory(a:context.source__directory)
+      lcd `=cwd`
+    endif
   catch /^Vim\%((\a\+)\)\?:E480/
     " Ignore.
+    call unite#print_source_message('Completed.', s:source.name)
+    return []
   finally
     " Delete unlisted buffers.
     for bufnr in filter(range(1, bufnr('$')),
@@ -155,42 +186,10 @@ function! s:source.gather_candidates(args, context) "{{{
           \   && index(buffers, v:val) < 0')
       silent! execute 'bwipeout' bufnr
     endfor
+
+    " Clear qflist.
+    call setqflist([])
   endtry
-
-  call unite#print_source_message('Completed.', s:source.name)
-
-  if isdirectory(a:context.source__directory)
-    let cwd = getcwd()
-    lcd `=a:context.source__directory`
-  endif
-
-  let _ = []
-  for qf in getqflist()
-    let dict = {
-          \   'action__path' :
-          \       (qf.bufnr == 0 ? '' : bufname(qf.bufnr)),
-          \   'action__text' : qf.text,
-          \ }
-    let dict.action__line =
-          \ (dict.action__path == '') ? 0 : qf.lnum
-    let dict.action__path =
-          \ unite#util#substitute_path_separator(
-          \   fnamemodify(dict.action__path, ':p'))
-
-    let dict.word = printf('%s:%s:%s',
-          \  unite#util#substitute_path_separator(
-          \     fnamemodify(dict.action__path, ':.')),
-          \ dict.action__line, dict.action__text)
-
-    call add(_, dict)
-  endfor
-
-  if isdirectory(a:context.source__directory)
-    lcd `=cwd`
-  endif
-
-  " Clear qflist.
-  call setqflist([])
 
   return _
 endfunction "}}}
