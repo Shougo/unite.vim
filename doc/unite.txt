@@ -2556,6 +2556,7 @@ CHANGELOG					*unite-changelog*
 2012-08-25
 - Delted obsolute changelog.
 - Improved resize behavior.
+- Fixed set context in initialization.
 
 2012-08-24
 - Fixed typo.

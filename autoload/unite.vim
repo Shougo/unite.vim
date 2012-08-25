@@ -2245,8 +2245,6 @@ function! unite#convert_lines(candidates)"{{{
 endfunction"}}}
 
 function! s:initialize_current_unite(sources, context)"{{{
-  call unite#set_context(a:context)
-
   let s:unite_cached_message = []
 
   let context = a:context
@@ -2261,19 +2259,16 @@ function! s:initialize_current_unite(sources, context)"{{{
   " Quit previous unite buffer.
   if !context.create
     let winnr = 1
-    while winnr <= winnr('$')
-      if getbufvar(winbufnr(winnr), '&filetype') ==# 'unite'
-        let buffer_context = getbufvar(winbufnr(winnr), 'unite').context
-        if buffer_context.buffer_name ==# context.buffer_name
-          " Quit unite buffer.
-          execute winnr 'wincmd w'
-          call unite#force_quit_session()
-          break
-        endif
+    for winnr in filter(range(1, winnr('$')),
+          \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
+      let buffer_context = getbufvar(winbufnr(winnr), 'unite').context
+      if buffer_context.buffer_name ==# context.buffer_name
+        " Quit unite buffer.
+        execute winnr 'wincmd w'
+        call unite#force_quit_session()
+        break
       endif
-
-      let winnr += 1
-    endwhile
+    endfor
   endif
 
   " The current buffer is initialized.
@@ -2333,6 +2328,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.has_preview_window =
         \ len(filter(range(1, winnr('$')),
         \  'getwinvar(v:val, "&previewwindow")')) > 0
+
+  call unite#set_context(context)
 
   call unite#set_current_unite(unite)
 
