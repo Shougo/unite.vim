@@ -773,7 +773,24 @@ function! s:loop_cursor_up(is_skip_not_matched, mode)"{{{
     noautocmd startinsert!
   endif
 endfunction"}}}
-function! s:loop_cursor_up_expr(is_skip_not_matched)"{{{
+function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode)"{{{
+  let is_insert = a:mode ==# 'i'
+  let prompt_linenr = unite#get_current_unite().prompt_linenr
+
+  if !is_insert && line('.') > 2
+    return cursor(line('.') - 1, 0)
+  endif
+
+  " Loop.
+
+  call s:force_redraw_all_candidates()
+
+  call cursor(line('$'), 0)
+  if is_insert
+    noautocmd startinsert!
+  endif
+endfunction"}}}
+function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched)"{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
