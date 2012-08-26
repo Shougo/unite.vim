@@ -57,8 +57,8 @@ function! unite#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>print_candidate()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
         \ unite#get_current_unite().prompt_linenr.'G0z.'
-  nnoremap <buffer> <Plug>(unite_cursor_bottom)
-        \ :<C-u>call <SID>redraw_all_candidates()<CR>G
+  nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
+        \ :<C-u>call <SID>force_redraw_all_candidates()<CR>G
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
         \ <SID>loop_cursor_down(0)
   nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
