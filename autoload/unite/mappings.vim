@@ -137,8 +137,9 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <silent><buffer> <Plug>(unite_choose_action)
         \ <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <expr><buffer> <Plug>(unite_move_head)
-        \ repeat("\<Left>", len(substitute(
-        \     unite#get_input(), '.', 'x', 'g')))
+        \ <SID>smart_imap("\<ESC>".<SID>insert_enter('i'),
+        \   repeat("\<Left>", len(substitute(
+        \     unite#get_input(), '.', 'x', 'g'))))
   inoremap <silent><buffer> <Plug>(unite_quick_match_default_action)
         \ <C-o>:<C-u>call unite#mappings#_quick_match(0)<CR>
   inoremap <silent><buffer> <Plug>(unite_quick_match_choose_action)
@@ -242,6 +243,15 @@ function! unite#mappings#define_default_mappings()"{{{
         \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <silent><buffer><expr> x
         \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
+endfunction"}}}
+
+function! s:smart_imap(lhs, rhs)"{{{
+  return col('.') <= (len(unite#get_current_unite().prompt)+1) ?
+       \ a:lhs : a:rhs
+endfunction"}}}
+function! s:smart_imap2(lhs, rhs)"{{{
+  return line('.') <= unite#get_current_unite().prompt_linenr ?
+       \ a:lhs : a:rhs
 endfunction"}}}
 
 function! unite#mappings#narrowing(word)"{{{
