@@ -62,11 +62,11 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
         \ <SID>loop_cursor_down(0)
   nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
-        \ :<C-u>call <SID>loop_cursor_up(0, 'n')<CR>
+        \ <ESC>:call <SID>loop_cursor_up(0, 'n')<CR>
   nnoremap <buffer><expr> <Plug>(unite_skip_cursor_down)
         \ <SID>loop_cursor_down(1)
   nnoremap <silent><buffer> <Plug>(unite_skip_cursor_up)
-        \ :<C-u>call <SID>loop_cursor_up(1, 'n')<CR>
+        \ <ESC>:call <SID>loop_cursor_up(1, 'n')<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_screen)
         \ :<C-u>call <SID>move_screen(1)<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_half_screen)
@@ -246,7 +246,8 @@ function! unite#mappings#define_default_mappings()"{{{
 endfunction"}}}
 
 function! s:smart_imap(lhs, rhs)"{{{
-  return col('.') <= (len(unite#get_current_unite().prompt)+1) ?
+  return line('.') > unite#get_current_unite().prompt_linenr ||
+        \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
        \ a:lhs : a:rhs
 endfunction"}}}
 function! s:smart_imap2(lhs, rhs)"{{{
@@ -737,7 +738,6 @@ function! s:loop_cursor_up(is_skip_not_matched, mode)"{{{
     if is_insert
       noautocmd startinsert!
     endif
-
     return
   endif
 
@@ -764,15 +764,11 @@ function! s:loop_cursor_up(is_skip_not_matched, mode)"{{{
   if num < 0
     call cursor(prompt_linenr, 0)
 
-    if is_insert
-      noautocmd startinsert!
-    endif
-
     normal! zb
-    return
+  else
+    call cursor(line('.') - cnt, 0)
   endif
 
-  call cursor(line('.') - cnt, 0)
   if is_insert
     noautocmd startinsert!
   endif
