@@ -773,6 +773,48 @@ function! s:loop_cursor_up(is_skip_not_matched, mode)"{{{
     noautocmd startinsert!
   endif
 endfunction"}}}
+function! s:loop_cursor_up_expr(is_skip_not_matched)"{{{
+  let is_insert = mode() ==# 'i'
+  let prompt_linenr = unite#get_current_unite().prompt_linenr
+
+  let num = line('.') - (prompt_linenr + 1)
+  let cnt = 1
+  if line('.') <= prompt_linenr
+    let cnt += prompt_linenr - line('.')
+  endif
+  if is_insert && line('.') == prompt_linenr+2
+    let cnt += 1
+  endif
+
+  while 1
+    let candidate = get(unite#get_unite_candidates(), num - cnt, {})
+    if num >= cnt && !empty(candidate) && (candidate.is_dummy
+          \ || (a:is_skip_not_matched && !candidate.is_matched))
+      let cnt += 1
+      continue
+    endif
+
+    break
+  endwhile
+
+  if num < 0
+    if is_insert
+      return "\<C-Home>\<End>".repeat("\<Down>", prompt_linenr)."\<Home>"
+    else
+      return prompt_linenr.'G0z.'
+    endif
+  endif
+
+  if is_insert
+    if line('.') <= prompt_linenr + 2
+      return repeat("\<Up>", cnt) . "\<End>"
+    else
+      return "\<Home>" . repeat("\<Up>", cnt)
+    endif
+  else
+    return repeat('k', cnt)
+  endif
+endfunction"}}}
 function! s:toggle_transpose_window()"{{{
   " Toggle vertical/horizontal view.
   let context = unite#get_context()
