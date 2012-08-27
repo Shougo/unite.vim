@@ -247,9 +247,12 @@ function! s:get_buffer_list(is_bang, is_question)"{{{
   return list
 endfunction"}}}
 function! s:on_syntax(args, context)"{{{
-  syntax match uniteSource__Buffer_Directory /\[.\{-}\]\ze\s*$/
+  syntax match uniteSource__Buffer_Info /\[.\{-}\]\ze\s*$/
         \ contained containedin=uniteSource__Buffer
-  highlight default link uniteSource__Buffer_Directory PreProc
+  highlight default link uniteSource__Buffer_Info PreProc
+  syntax match uniteSource__Buffer_Modified /\[.\{-}+\]/
+        \ contained containedin=uniteSource__Buffer
+  highlight default link uniteSource__Buffer_Modified Statement
   syntax match uniteSource__Buffer_NoFile /\[nofile\]/
         \ contained containedin=uniteSource__Buffer
   highlight default link uniteSource__Buffer_NoFile Function
