@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 27 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -105,16 +105,19 @@ function! s:source.change_candidates(args, context)"{{{
 endfunction"}}}
 
 function! s:caching_from_neocomplcache_dict()"{{{
-  let dict_files = split(globpath(&runtimepath, 'autoload/neocomplcache/sources/vim_complete/commands.dict'), '\n')
+  let dict_files = split(globpath(&runtimepath,
+        \ 'autoload/neocomplcache/sources/vim_complete/commands.dict'), '\n')
   if empty(dict_files)
     return []
   endif
 
   let keyword_pattern =
-        \'^\%(-\h\w*\%(=\%(\h\w*\|[01*?+%]\)\?\)\?\|<\h[[:alnum:]_-]*>\?\|\h[[:alnum:]_:#\[]*\%([!\]]\+\|()\?\)\?\)'
+        \'^\%(-\h\w*\%(=\%(\h\w*\|[01*?+%]\)\?\)\?\|'
+        \'<\h[[:alnum:]_-]*>\?\|\h[[:alnum:]_:#\[]*\%([!\]]\+\|()\?\)\?\)'
   let keyword_list = []
   for line in readfile(dict_files[0])
-    let word = substitute(matchstr(line, keyword_pattern), '[\[\]]', '', 'g')
+    let word = substitute(
+          \ matchstr(line, keyword_pattern), '[\[\]]', '', 'g')
     call add(keyword_list, {
           \ 'word' : word,
           \ 'abbr' : line,
