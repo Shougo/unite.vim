@@ -109,13 +109,17 @@ function! unite#mappings#define_default_mappings()"{{{
         \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
         \ "\<C-o>:\<C-u>call \<SID>exit()\<CR>" : "\<C-h>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)
-        \ repeat("\<C-h>", col('.')-(len(unite#get_current_unite().prompt)+1))
+        \ <SID>smart_imap('', repeat("\<C-h>",
+        \     col('.')-(len(unite#get_current_unite().prompt)+1)))
+        " \ repeat("\<C-h>", col('.')-(len(unite#get_current_unite().prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)
-        \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
-        \ '' : "\<C-w>"
+        \ <SID>smart_imap('', "\<C-w>")
+        " \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
+        " \ '' : "\<C-w>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_path)
-        \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
-        \ '' : <SID>delete_backward_path()
+        \ <SID>smart_imap('', <SID>delete_backward_path())
+        " \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
+        " \ '' : <SID>delete_backward_path()
   inoremap <expr><buffer> <Plug>(unite_select_next_line)
         \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(0)
   inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
@@ -238,12 +242,12 @@ function! unite#mappings#define_default_mappings()"{{{
 endfunction"}}}
 
 function! s:smart_imap(lhs, rhs)"{{{
-  return line('.') > unite#get_current_unite().prompt_linenr ||
+  return line('.') != unite#get_current_unite().prompt_linenr ||
         \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
        \ a:lhs : a:rhs
 endfunction"}}}
 function! s:smart_imap2(lhs, rhs)"{{{
-  return line('.') <= unite#get_current_unite().prompt_linenr ?
+  return line('.') <= (len(unite#get_current_unite().prompt)+1) ?
        \ a:lhs : a:rhs
 endfunction"}}}
 
