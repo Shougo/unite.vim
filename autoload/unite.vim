@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Aug 2012.
+" Last Modified: 27 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2763,29 +2763,29 @@ function! s:on_cursor_moved()  "{{{
 
   execute 'setlocal' line('.') == prompt_linenr ?
         \ 'modifiable' : 'nomodifiable'
-  " if line('.') <= prompt_linenr
-  "   nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
-  "         \ <ESC>:call unite#mappings#loop_cursor_up_call(
-  "         \    0, 'n')<CR>
-  "   nnoremap <silent><buffer> <Plug>(unite_skip_cursor_up)
-  "         \ <ESC>:call unite#mappings#loop_cursor_up_call(
-  "         \    1, 'n')<CR>
-  "   inoremap <silent><buffer> <Plug>(unite_select_previous_line)
-  "         \ <ESC>:call unite#mappings#loop_cursor_up_call(
-  "         \    0, 'i')<CR>
-  "   inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
-  "         \ <ESC>:call unite#mappings#loop_cursor_up_call(
-  "         \    1, 'i')<CR>
-  " else
-  "   nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
-  "         \ unite#mappings#loop_cursor_up_expr(0)
-  "   nnoremap <silent><buffer> <Plug>(unite_skip_cursor_up)
-  "         \ unite#mappings#loop_cursor_up_expr(1)
-  "   inoremap <silent><buffer> <Plug>(unite_select_previous_line)
-  "         \ unite#mappings#loop_cursor_up_expr(0)
-  "   inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
-  "         \ unite#mappings#loop_cursor_up_expr(1)
-  " endif
+  if line('.') <= prompt_linenr
+    nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
+          \ <ESC>:call unite#mappings#loop_cursor_up_call(
+          \    0, 'n')<CR>
+    nnoremap <silent><buffer> <Plug>(unite_skip_cursor_up)
+          \ <ESC>:call unite#mappings#loop_cursor_up_call(
+          \    1, 'n')<CR>
+    inoremap <silent><buffer> <Plug>(unite_select_previous_line)
+          \ <ESC>:call unite#mappings#loop_cursor_up_call(
+          \    0, 'i')<CR>
+    inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
+          \ <ESC>:call unite#mappings#loop_cursor_up_call(
+          \    1, 'i')<CR>
+  else
+    nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
+          \ unite#mappings#loop_cursor_up_expr(0)
+    nnoremap <expr><buffer> <Plug>(unite_skip_cursor_up)
+          \ unite#mappings#loop_cursor_up_expr(1)
+    inoremap <expr><buffer> <Plug>(unite_select_previous_line)
+          \ unite#mappings#loop_cursor_up_expr(0)
+    inoremap <expr><buffer> <Plug>(unite_skip_previous_line)
+          \ unite#mappings#loop_cursor_up_expr(1)
+  endif
 
   if exists('b:current_syntax') && !context.no_cursor_line
     silent! execute 'match' (line('.') <= prompt_linenr ?

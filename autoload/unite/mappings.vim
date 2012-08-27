@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Aug 2012.
+" Last Modified: 27 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -61,12 +61,8 @@ function! unite#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>force_redraw_all_candidates()<CR>G
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
         \ <SID>loop_cursor_down(0)
-  nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
-        \ <ESC>:call <SID>loop_cursor_up(0, 'n')<CR>
   nnoremap <buffer><expr> <Plug>(unite_skip_cursor_down)
         \ <SID>loop_cursor_down(1)
-  nnoremap <silent><buffer> <Plug>(unite_skip_cursor_up)
-        \ <ESC>:call <SID>loop_cursor_up(1, 'n')<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_screen)
         \ :<C-u>call <SID>move_screen(1)<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_half_screen)
@@ -122,10 +118,6 @@ function! unite#mappings#define_default_mappings()"{{{
         \ '' : <SID>delete_backward_path()
   inoremap <expr><buffer> <Plug>(unite_select_next_line)
         \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(0)
-  inoremap <silent><buffer> <Plug>(unite_select_previous_line)
-        \ <ESC>:call <SID>loop_cursor_up(0, 'i')<CR>
-  inoremap <expr><buffer> <Plug>(unite_skip_next_line)
-        \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(1)
   inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
         \ <ESC>:call <SID>loop_cursor_up(1, 'i')<CR>
   inoremap <expr><buffer> <Plug>(unite_select_next_page)
