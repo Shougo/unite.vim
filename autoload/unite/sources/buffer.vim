@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jul 2012.
+" Last Modified: 27 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -71,9 +71,7 @@ function! s:source_buffer_all.hooks.on_init(args, context)"{{{
   return s:init_context(a:args, a:context)
 endfunction"}}}
 function! s:source_buffer_all.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSource__Buffer_Directory /\[[^\]]*\]\ze\s*$/
-        \ contained containedin=uniteSource__Buffer
-  highlight default link uniteSource__Buffer_Directory PreProc
+  return s:on_syntax(a:args, a:context)
 endfunction"}}}
 
 function! s:source_buffer_all.gather_candidates(args, context)"{{{
@@ -102,7 +100,7 @@ endfunction"}}}
 let s:source_buffer_tab = {
       \ 'name' : 'buffer_tab',
       \ 'description' : 'candidates from buffer list in current tab',
-      \ 'syntax' : 'uniteSource__BufferTab',
+      \ 'syntax' : 'uniteSource__Buffer',
       \ 'hooks' : {},
       \}
 
@@ -110,9 +108,7 @@ function! s:source_buffer_tab.hooks.on_init(args, context)"{{{
   return s:init_context(a:args, a:context)
 endfunction"}}}
 function! s:source_buffer_tab.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSource__BufferTab_Directory /\[[^\]]*\]\ze\s*$/
-        \ containedin=uniteSource__BufferTab
-  highlight default link uniteSource__BufferTab_Directory PreProc
+  return s:on_syntax(a:args, a:context)
 endfunction"}}}
 
 function! s:source_buffer_tab.gather_candidates(args, context)"{{{
@@ -188,7 +184,8 @@ function! s:make_abbr(bufnr, flags)"{{{
     endif
   endif
 
-  return unite#util#substitute_path_separator(path)
+  return (getbufvar(a:bufnr, '&buftype') =~# 'nofile' ? '[nofile] ' : '' ) .
+         \ unite#util#substitute_path_separator(path)
 endfunction"}}}
 function! s:compare(candidate_a, candidate_b)"{{{
   return a:candidate_b.source__time - a:candidate_a.source__time
@@ -249,8 +246,16 @@ function! s:get_buffer_list(is_bang, is_question)"{{{
 
   return list
 endfunction"}}}
+function! s:on_syntax(args, context)"{{{
+  syntax match uniteSource__Buffer_Directory /\[.\{-}\]\ze\s*$/
+        \ contained containedin=uniteSource__Buffer
+  highlight default link uniteSource__Buffer_Directory PreProc
+  syntax match uniteSource__Buffer_NoFile /\[nofile\]/
+        \ contained containedin=uniteSource__Buffer
+  highlight default link uniteSource__Buffer_NoFile Function
+endfunction"}}}
 
-function! s:init_context(args, context)
+function! s:init_context(args, context)"{{{
   let a:context.source__is_bang =
         \ (get(a:args, 0, '') ==# '!')
   let a:context.source__is_question =
@@ -258,16 +263,16 @@ function! s:init_context(args, context)
   let a:context.source__buffer_list =
         \ s:get_buffer_list(a:context.source__is_bang,
         \                   a:context.source__is_question)
-endfunction
+endfunction"}}}
 
-function! s:is_listed(is_bang, is_question, bufnr)
+function! s:is_listed(is_bang, is_question, bufnr)"{{{
   return bufexists(a:bufnr) &&
         \ (a:is_question ? !buflisted(a:bufnr) :
         \    (a:is_bang || buflisted(a:bufnr)))
         \ && (getbufvar(a:bufnr, '&filetype') !=# 'unite'
         \      || getbufvar(a:bufnr, 'unite').buffer_name !=#
         \         unite#get_current_unite().buffer_name)
-endfunction
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
