@@ -1449,6 +1449,8 @@ grep		Nominates "grep" command output as candidates.
 <
 						*unite-source-vimgrep*
 vimgrep		Nominates |vimgrep| command output as candidates.
+		This source is slower than |unite-source-grep|, but
+		it can recognize file encodings.
 		Note: The source clears quickfix list.
 
 		Source arguments:
