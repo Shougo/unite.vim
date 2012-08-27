@@ -1429,15 +1429,24 @@ grep		Nominates "grep" command output as candidates.
 		3. the narrowing pattern.
 		Max candidates: |g:unite_source_grep_max_candidates|
 
-		Example:
->
-	:Unite grep:~/.vim/autoload/unite/sources:-iR:file
-<
 		Special Target:
 		%         : Current buffer name
 		#         : Alternate buffer name
 		$buffers  : All buffer names
 
+		Example:
+>
+	:Unite grep:~/.vim/autoload/unite/sources:-iR:file
+<
+		Settings Example:
+>
+	" Use ack in unite grep source.
+	if executable('ack-grep')
+	  let g:unite_source_grep_command = 'ack-grep'
+	  let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
+	  let g:unite_source_grep_recursive_opt = ''
+	endif
+<
 						*unite-source-vimgrep*
 vimgrep		Nominates |vimgrep| command output as candidates.
 		Note: The source clears quickfix list.
@@ -2537,12 +2546,6 @@ EXAMPLES					*unite-examples*
 	" For optimize.
 	let g:unite_source_file_mru_filename_format = ''
 	
-	" For ack.
-	if executable('ack-grep')
-	  let g:unite_source_grep_command = 'ack-grep'
-	  let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
-	  let g:unite_source_grep_recursive_opt = ''
-	endif
 <
 ==============================================================================
 USER DEFINED SOURCES				*unite-user-sources*
