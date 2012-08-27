@@ -81,7 +81,7 @@ function! s:source.gather_candidates(args, context)"{{{
           \ 'word' : word,
           \ 'abbr' : printf('%-16s %s', word, prototype),
           \ 'kind' : 'command',
-          \ 'action__command' : word,
+          \ 'action__command' : word . ' ',
           \})
   endfor
   let s:cached_result += s:caching_from_neocomplcache_dict()
@@ -123,7 +123,7 @@ function! s:caching_from_neocomplcache_dict()"{{{
           \ 'abbr' : line,
           \ 'kind' : 'command',
           \ 'source' : 'command',
-          \ 'action__command' : word,
+          \ 'action__command' : word . ' ',
           \})
   endfor
 
