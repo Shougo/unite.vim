@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mapping.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 May 2012.
+" Last Modified: 27 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -93,17 +93,25 @@ function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
 endfunction"}}}
 
 " Actions"{{{
-let s:source.action_table.help = {
-      \ 'description' : 'view help documentation',
+let s:source.action_table.preview = {
+      \ 'description' : 'view the help documentation',
+      \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.help.func(candidate)"{{{
-  if a:candidate.word !~ '<Plug>\S\+'
-    call unite#print_error('Sorry, this help format is not supported.')
-    return
-  endif
+function! s:source.action_table.preview.func(candidate)"{{{
+  let winnr = winnr()
 
-  execute 'help' matchstr(
+  try
+    execute 'help' matchstr(
         \ a:candidate.word, '<Plug>\S\+')
+    normal! zv
+    normal! zt
+    setlocal previewwindow
+    setlocal winfixheight
+  catch /^Vim\%((\a\+)\)\?:E149/
+    " Ignore
+  endtry
+
+  execute winnr.'wincmd w'
 endfunction"}}}
 "}}}
 

@@ -1917,25 +1917,28 @@ source						*unite-action-source*
 
 Actions of each sources
 
-file_mru					*unite-action-file_mru*
+file_mru					*unite-action-source-file_mru*
 	delete		Delete from most recent used file candidates
 
-directory_mru					*unite-action-directory_mru*
+directory_mru					*unite-action-source-directory_mru*
 	delete		Delete from most recent used directory candidates
 
-bookmark					*unite-action-bookmark*
+bookmark					*unite-action-source-bookmark*
 	delete		Delete from bookmark file candidates
 
-register					*unite-action-register*
+register					*unite-action-source-register*
 	edit		Change a register value
 	delete		Clear registers
 
-process						*unite-action-process*
+process						*unite-action-source-process*
 	sigterm		Send SIGTERM to the process(default)
 	sigkill		Send SIGKILL to the process
 
-mapping						*unite-action-mapping*
-	help		Read documentation
+mapping						*unite-action-source-mapping*
+	preview		View the help documentation
+
+command						*unite-action-source-command*
+	preview		View the help documentation
 
 						*unite-default-action*
 Default actions
@@ -2564,6 +2567,7 @@ CHANGELOG					*unite-changelog*
 - Improved insert mode mappings.
 - Improved command source.
 - Improved edit action in command kind.
+- Added preview action in mapping and command sources.
 
 2012-08-26
 - Fixed vimgrep source.

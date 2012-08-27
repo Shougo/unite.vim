@@ -38,7 +38,8 @@ let s:source = {
       \ 'name' : 'command',
       \ 'description' : 'candidates from Ex command',
       \ 'default_action' : 'edit',
-      \ 'max_candidates' : 30,
+      \ 'max_candidates' : 200,
+      \ 'action_table' : {},
       \ }
 
 let s:cached_result = []
@@ -82,6 +83,7 @@ function! s:source.gather_candidates(args, context)"{{{
           \ 'abbr' : printf('%-16s %s', word, prototype),
           \ 'kind' : 'command',
           \ 'action__command' : word . ' ',
+          \ 'source__command' : ':'.word,
           \ }
     let dict.action__description = dict.abbr
 
@@ -128,11 +130,34 @@ function! s:caching_from_neocomplcache_dict()"{{{
           \ 'source' : 'command',
           \ 'action__command' : word . ' ',
           \ 'action__description' : line,
+          \ 'source__command' : ':'.word,
           \})
   endfor
 
   return keyword_list
 endfunction"}}}
+
+" Actions"{{{
+let s:source.action_table.preview = {
+      \ 'description' : 'view the help documentation',
+      \ 'is_quit' : 0,
+      \ }
+function! s:source.action_table.preview.func(candidate)"{{{
+  let winnr = winnr()
+
+  try
+    execute 'help' a:candidate.source__command
+    normal! zv
+    normal! zt
+    setlocal previewwindow
+    setlocal winfixheight
+  catch /^Vim\%((\a\+)\)\?:E149/
+    " Ignore
+  endtry
+
+  execute winnr.'wincmd w'
+endfunction"}}}
+"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
