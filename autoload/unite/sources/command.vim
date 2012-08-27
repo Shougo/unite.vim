@@ -77,12 +77,15 @@ function! s:source.gather_candidates(args, context)"{{{
       let prototype = ''
     endif
 
-    call add(s:cached_result, {
+    let dict = {
           \ 'word' : word,
           \ 'abbr' : printf('%-16s %s', word, prototype),
           \ 'kind' : 'command',
           \ 'action__command' : word . ' ',
-          \})
+          \ }
+    let dict.action__description = dict.abbr
+
+    call add(s:cached_result, dict)
   endfor
   let s:cached_result += s:caching_from_neocomplcache_dict()
 
@@ -124,6 +127,7 @@ function! s:caching_from_neocomplcache_dict()"{{{
           \ 'kind' : 'command',
           \ 'source' : 'command',
           \ 'action__command' : word . ' ',
+          \ 'action__description' : line,
           \})
   endfor
 

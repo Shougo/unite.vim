@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Oct 2011.
+" Last Modified: 27 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,7 +56,29 @@ let s:kind.action_table.edit = {
       \ 'description' : 'edit command',
       \ }
 function! s:kind.action_table.edit.func(candidate)"{{{
-  call feedkeys(':' . a:candidate.action__command, 'n')
+  if has_key(a:candidate, 'action__description')
+    " Print description.
+
+    " For function.
+    " let prototype_name = matchstr(a:candidate.action__description,
+    "       \'\%(<[sS][iI][dD]>\|[sSgGbBwWtTlL]:\)\='
+    "       \'\%(\i\|[#.]\|{.\{-1,}}\)*\s*(\ze\%([^(]\|(.\{-})\)*$')
+    let prototype_name = matchstr(a:candidate.action__description,
+          \'\<\%(\d\+\)\?\zs\h\w*\ze!\?\|'
+          \'\<\%([[:digit:],[:space:]$''<>]\+\)\?\zs\h\w*\ze/.*')
+    echon ':'
+    echohl Identifier | echon prototype_name | echohl None
+    if prototype_name != a:candidate.action__description
+      echon substitute(a:candidate.action__description[
+            \ len(prototype_name) :], '^\s\+', ' ', '')
+    endif
+  endif
+
+  let command = input(':', a:candidate.action__command, 'command')
+  if command != ''
+    execute command
+  endif
+  " call feedkeys(':' . a:candidate.action__command, 'n')
 endfunction"}}}
 "}}}
 

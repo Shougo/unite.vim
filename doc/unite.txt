@@ -2563,6 +2563,7 @@ CHANGELOG					*unite-changelog*
 - Improved move cursor behavior.
 - Improved insert mode mappings.
 - Improved command source.
+- Improved edit action in command kind.
 
 2012-08-26
 - Fixed vimgrep source.
