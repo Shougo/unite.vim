@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Aug 2012.
+" Last Modified: 28 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -695,6 +695,9 @@ function! unite#redraw_status() "{{{
 
   call setline(s:LNUM_STATUS, 'Sources: ' .
         \ join(unite#loaded_source_names_with_args(), ', '))
+  if empty(unite#loaded_sources_list())
+    call unite#print_error('[unite.vim] Sources are not found')
+  endif
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
@@ -1004,6 +1007,7 @@ function! unite#start(sources, ...)"{{{
   try
     call s:initialize_current_unite(a:sources, context)
   catch /^unite.vim: Invalid source/
+    call unite#print_error('[unite.vim] ' . v:exception)
     return
   endtry
 
@@ -1548,7 +1552,7 @@ function! s:initialize_context(context)"{{{
         \ 'is_redraw' : 0,
         \ 'is_resize' : 0,
         \ 'unite__is_interactive' : 1,
-        \ 'unite__is_complete' : 1,
+        \ 'unite__is_complete' : 0,
         \ 'unite__is_vimfiler' : 0,
         \ 'unite__old_winwidth' : 0,
         \ 'unite__old_winheight' : 0,
