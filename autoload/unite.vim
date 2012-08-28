@@ -2927,8 +2927,8 @@ endfunction"}}}
 function! s:save_updatetime()  "{{{
   let unite = unite#get_current_unite()
 
-  let unite.update_time_save = &updatetime
   if &updatetime > unite.context.update_time
+    let unite.update_time_save = &updatetime
     let &updatetime = unite.context.update_time
   endif
 endfunction"}}}
