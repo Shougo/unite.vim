@@ -2564,6 +2564,7 @@ CHANGELOG					*unite-changelog*
 2012-08-28
 - Improved unite command source.
 - Fixed error message.
+- Improved mkdir action.
 
 2012-08-27
 - Improved mapping behavior.

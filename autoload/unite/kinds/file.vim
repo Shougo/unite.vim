@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2012.
+" Last Modified: 28 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,15 +125,18 @@ let s:kind.action_table.mkdir = {
       \ 'is_invalidate_cache' : 1,
       \ }
 function! s:kind.action_table.mkdir.func(candidate)"{{{
-  let dirname = input('New directory name: ', a:candidate.action__path, 'dir')
+  let dirname = input('New directory name: ',
+        \ a:candidate.action__path, 'dir')
+  redraw
 
   if dirname == ''
-    redraw
     echo 'Canceled.'
     return
   endif
 
-  if !filereadable(dirname) && !isdirectory(dirname)
+  if filereadable(dirname) || isdirectory(dirname)
+    echo dirname . ' is already exists.'
+  else
     call mkdir(dirname, 'p')
   endif
 endfunction"}}}
@@ -501,7 +504,8 @@ let s:kind.action_table.vimfiler__mkdir = {
       \ }
 function! s:kind.action_table.vimfiler__mkdir.func(candidate)"{{{
   let vimfiler_current_dir =
-        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+        \ get(unite#get_context(),
+        \   'vimfiler__current_directory', '')
   if vimfiler_current_dir != ''
     let current_dir = getcwd()
     lcd `=vimfiler_current_dir`
@@ -509,9 +513,9 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidate)"{{{
 
   try
     let dirname = input('New directory name: ', '', 'dir')
+    redraw
 
     if dirname == ''
-      redraw
       echo 'Canceled.'
       return
     endif
@@ -519,7 +523,9 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidate)"{{{
     let dirname = unite#util#substitute_path_separator(
           \ fnamemodify(dirname, ':p'))
 
-    if !filereadable(dirname) && !isdirectory(dirname)
+    if filereadable(dirname) || isdirectory(dirname)
+      echo dirname . ' is already exists.'
+    else
       call mkdir(dirname, 'p')
     endif
   finally
