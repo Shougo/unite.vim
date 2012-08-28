@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Aug 2012.
+" Last Modified: 29 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -527,6 +527,8 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidate)"{{{
       echo dirname . ' is already exists.'
     else
       call mkdir(dirname, 'p')
+
+      silent call vimfiler#force_redraw_screen()
 
       call vimfiler#mappings#search_cursor(dirname)
     endif
