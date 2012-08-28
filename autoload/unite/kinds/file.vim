@@ -527,6 +527,8 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidate)"{{{
       echo dirname . ' is already exists.'
     else
       call mkdir(dirname, 'p')
+
+      call vimfiler#mappings#search_cursor(dirname)
     endif
   finally
     if vimfiler_current_dir != ''

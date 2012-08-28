@@ -2565,6 +2565,7 @@ CHANGELOG					*unite-changelog*
 - Improved unite command source.
 - Fixed error message.
 - Improved mkdir action.
+- Move to new directory position when vimfiler__mkdir action.
 
 2012-08-27
 - Improved mapping behavior.
