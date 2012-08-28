@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Aug 2012.
+" Last Modified: 28 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -124,8 +124,7 @@ function! s:caching_from_neocomplcache_dict()"{{{
     let word = substitute(
           \ matchstr(line, keyword_pattern), '[\[\]]', '', 'g')
     call add(keyword_list, {
-          \ 'word' : word,
-          \ 'abbr' : line,
+          \ 'word' : line,
           \ 'kind' : 'command',
           \ 'source' : 'command',
           \ 'action__command' : word . ' ',
