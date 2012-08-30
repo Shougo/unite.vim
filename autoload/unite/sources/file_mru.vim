@@ -61,7 +61,7 @@ function! unite#sources#file_mru#_append()"{{{
   endif
 
   " Append the current buffer to the mru list.
-  if !s:is_exists_path(path) || &buftype =~ 'help'
+  if !s:is_exists_path(path) || &buftype =~# 'help\|nofile'
     return
   endif
 
