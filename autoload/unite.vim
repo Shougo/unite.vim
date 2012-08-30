@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Aug 2012.
+" Last Modified: 30 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2332,6 +2332,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let unite.has_preview_window =
         \ len(filter(range(1, winnr('$')),
         \  'getwinvar(v:val, "&previewwindow")')) > 0
+
+  " Help windows check.
 
   call unite#set_context(context)
 
