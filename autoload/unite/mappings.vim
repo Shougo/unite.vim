@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Aug 2012.
+" Last Modified: 30 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -679,7 +679,8 @@ function! s:loop_cursor_down(is_skip_not_matched)"{{{
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
   if line('.') <= prompt_linenr && !is_insert
-    return 'j'
+    return line('.') == line('$') &&
+          \ empty(unite#get_unite_candidates()) ? '2G' : 'j'
   endif
 
   if line('.') == line('$')
