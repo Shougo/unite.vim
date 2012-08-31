@@ -1331,7 +1331,6 @@ unite#undef_filter({name})			*unite#undef_filter()*
 		|unite#define_filter()|.  If such a filter doesn't exist,
 		this function doesn't do anything.
 
-						*unite#set_substitute_pattern()*
 unite#filters#default#use({filters})		*unite#filters#default#use(()*
 		Changes the default filter used by
 		|unite-filter-default| into {filters}.  {filters} must be
