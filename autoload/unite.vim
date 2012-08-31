@@ -217,6 +217,18 @@ function! unite#do_candidates_action(action_name, candidates, ...)"{{{
   return unite#mappings#do_action(
         \ a:action_name, a:candidates, context)
 endfunction"}}}
+function! unite#get_unite_winnr(buffer_name)
+  for winnr in filter(range(1, winnr('$')),
+        \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
+    let buffer_context = getbufvar(
+          \ winbufnr(winnr), 'unite').context
+    if buffer_context.buffer_name ==# a:buffer_name
+      return winnr
+    endif
+  endfor
+
+  return -1
+endfunction
 "}}}
 
 " Constants"{{{
@@ -2258,7 +2270,8 @@ function! s:initialize_current_unite(sources, context)"{{{
   let context = a:context
 
   if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
-        \ && unite#get_current_unite().buffer_name ==# context.buffer_name
+        \ && unite#get_current_unite().buffer_name ==#
+        \         context.buffer_name
         \ && context.input == ''
     " Get input text.
     let context.input = unite#get_input()
@@ -2266,17 +2279,12 @@ function! s:initialize_current_unite(sources, context)"{{{
 
   " Quit previous unite buffer.
   if !context.create
-    let winnr = 1
-    for winnr in filter(range(1, winnr('$')),
-          \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
-      let buffer_context = getbufvar(winbufnr(winnr), 'unite').context
-      if buffer_context.buffer_name ==# context.buffer_name
-        " Quit unite buffer.
-        execute winnr 'wincmd w'
-        call unite#force_quit_session()
-        break
-      endif
-    endfor
+    let winnr = unite#get_unite_winnr(context.buffer_name)
+    if winnr > 0
+      " Quit unite buffer.
+      execute winnr 'wincmd w'
+      call unite#force_quit_session()
+    endif
   endif
 
   " The current buffer is initialized.
