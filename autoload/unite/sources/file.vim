@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2012.
+" Last Modified: 31 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -413,7 +413,7 @@ import os.path
 import vim
 os.stat_float_times(False)
 vim.command('let filetime = ' +\
-str(os.path.getctime(vim.eval('a:filename'))))
+str(os.path.getmtime(vim.eval('a:filename'))))
 END
   endif"}}}
 
