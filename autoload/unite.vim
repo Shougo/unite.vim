@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Aug 2012.
+" Last Modified: 31 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -889,7 +889,9 @@ function! unite#clear_message()"{{{
       silent! execute '2,'.(unite.prompt_linenr-1).'delete _'
       let pos[1] -= unite.prompt_linenr-2
       call setpos('.', pos)
-      normal! zb
+      if line('.') < winheight(0)
+        normal! zb
+      endif
       if mode() ==# 'i' && pos[2] == col('$')
         startinsert!
       endif
@@ -961,7 +963,9 @@ function! s:print_buffer(message)"{{{
 
   let pos[1] += len(message)
   call setpos('.', pos)
-  normal! zb
+  if line('.') < winheight(0)
+    normal! zb
+  endif
   if mode() ==# 'i' && pos[2] == col('$')
     startinsert!
   endif
@@ -2618,7 +2622,9 @@ function! unite#_resize_window() "{{{
     " Auto resize.
     let max_len = unite.prompt_linenr + len(unite.current_candidates)
     execute 'resize' min([max_len, context.winheight])
-    normal! zb
+    if line('.') < winheight(0)
+      normal! zb
+    endif
     if mode() ==# 'i' && col('.') == (col('$') - 1)
       startinsert!
     endif
@@ -3119,7 +3125,9 @@ function! s:init_cursor()"{{{
     let unite.is_insert = 1
 
     execute unite.prompt_linenr
-    normal! zb
+    if line('.') < winheight(0)
+      normal! zb
+    endif
     setlocal modifiable
 
     startinsert!
@@ -3141,7 +3149,11 @@ function! s:init_cursor()"{{{
           \ || candidate != unite#get_current_candidate()
       execute (unite.prompt_linenr+1)
     endif
-    normal! 0zb
+
+    normal! 0
+    if line('.') < winheight(0)
+      normal! zb
+    endif
 
     stopinsert
   endif

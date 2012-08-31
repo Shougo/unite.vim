@@ -2618,6 +2618,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-08-31
+- Improved move cursor.
+
 2012-08-30
 - Improved loop cursor down behavior.
 - Improved documentation.

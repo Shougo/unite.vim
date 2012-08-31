@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Aug 2012.
+" Last Modified: 31 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -365,7 +365,6 @@ function! unite#mappings#do_action(action_name, ...)"{{{
 
   if is_redraw
     call unite#force_redraw()
-    normal! zb
   endif
 
   return _
@@ -761,7 +760,9 @@ function! s:loop_cursor_up(is_skip_not_matched, mode)"{{{
   if num < 0
     call cursor(prompt_linenr, 0)
 
-    normal! zb
+    if line('.') < winheight(0)
+      normal! zb
+    endif
   else
     call cursor(line('.') - cnt, 0)
   endif
@@ -992,7 +993,6 @@ function! s:source_action.action_table.do.func(candidate)"{{{
       endfor
 
       call unite#force_redraw()
-      normal! zb
     endif
   endif
 endfunction"}}}
