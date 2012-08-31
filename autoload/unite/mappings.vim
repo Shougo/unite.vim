@@ -921,9 +921,12 @@ let s:source_action = {
       \}
 
 function! s:source_action.hooks.on_syntax(args, context)"{{{
-  syntax match uniteSource__ActionDescriptionLine / -- .*$/ contained containedin=uniteSource__Action
-  syntax match uniteSource__ActionDescription /.*$/ contained containedin=uniteSource__ActionDescriptionLine
-  syntax match uniteSource__ActionMarker / -- / contained containedin=uniteSource__ActionDescriptionLine
+  syntax match uniteSource__ActionDescriptionLine / -- .*$/
+        \ contained containedin=uniteSource__Action
+  syntax match uniteSource__ActionDescription /.*$/
+        \ contained containedin=uniteSource__ActionDescriptionLine
+  syntax match uniteSource__ActionMarker / -- /
+        \ contained containedin=uniteSource__ActionDescriptionLine
   highlight default link uniteSource__ActionMarker Special
   highlight default link uniteSource__ActionDescription Comment
 endfunction"}}}
