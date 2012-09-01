@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Aug 2012.
+" Last Modified: 01 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -217,18 +217,24 @@ function! unite#do_candidates_action(action_name, candidates, ...)"{{{
   return unite#mappings#do_action(
         \ a:action_name, a:candidates, context)
 endfunction"}}}
-function! unite#get_unite_winnr(buffer_name)
+function! unite#get_unite_winnr(buffer_name)"{{{
   for winnr in filter(range(1, winnr('$')),
         \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
     let buffer_context = getbufvar(
           \ winbufnr(winnr), 'unite').context
     if buffer_context.buffer_name ==# a:buffer_name
+      if buffer_context.temporary
+            \ && !empty(filter(copy(buffer_context.old_buffer_info),
+            \ 'v:val.buffer_name ==# context.buffer_name'))
+        " Disable resume.
+        let buffer_context.old_buffer_info = []
+      endif
       return winnr
     endif
   endfor
 
   return -1
-endfunction
+endfunction"}}}
 "}}}
 
 " Constants"{{{
@@ -1346,27 +1352,9 @@ function! unite#close(buffer_name)  "{{{
   " Note: must escape file-pattern.
   let buffer_name = unite#util#escape_file_searching(buffer_name)
 
-  if bufwinnr(buffer_name) > 0
-    let quit_winnr = bufwinnr(buffer_name)
-  else
-    " Search from temporary buffer.
-    let winnr = 1
-    while winnr <= winnr('$')
-      if getbufvar(winbufnr(winnr), '&filetype') ==# 'unite'
-        let buffer_context = getbufvar(winbufnr(winnr), 'unite').context
-        if buffer_context.temporary
-              \ && !empty(filter(copy(buffer_context.old_buffer_info),
-              \ 'v:val.buffer_name ==# context.buffer_name'))
-          let quit_winnr = winnr
-          " Disable resume.
-          let buffer_context.old_buffer_info = []
-          break
-        endif
-      endif
-
-      let winnr += 1
-    endwhile
-  endif
+  let quit_winnr = bufwinnr(buffer_name) > 0 ?
+        \ bufwinnr(buffer_name) :
+        \ unite#get_unite_winnr(buffer_name)
 
   if quit_winnr > 0
     " Quit unite buffer.
@@ -3179,7 +3167,7 @@ function! s:get_postfix(prefix, is_create, ...)"{{{
   endif
 
   return a:is_create ? '@'.(matchstr(buflist[-1], '@\zs\d\+$') + 1)
-        \ : matchstr(buflist[0], '@\d\+$')
+        \ : matchstr(buflist[-1], '@\d\+$')
 endfunction"}}}
 "}}}
 
