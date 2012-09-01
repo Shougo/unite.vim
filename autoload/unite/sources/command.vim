@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Aug 2012.
+" Last Modified: 01 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -90,6 +90,9 @@ function! s:source.gather_candidates(args, context)"{{{
     call add(s:cached_result, dict)
   endfor
   let s:cached_result += s:caching_from_neocomplcache_dict()
+
+  let s:cached_result = unite#util#sort_by(
+        \ s:cached_result, 'tolower(v:val.word)')
 
   return s:cached_result
 endfunction"}}}
