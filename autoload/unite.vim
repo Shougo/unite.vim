@@ -1354,7 +1354,7 @@ function! unite#close(buffer_name)  "{{{
 
   let quit_winnr = bufwinnr(buffer_name) > 0 ?
         \ bufwinnr(buffer_name) :
-        \ unite#get_unite_winnr(buffer_name)
+        \ unite#get_unite_winnr(a:buffer_name)
 
   if quit_winnr > 0
     " Quit unite buffer.
