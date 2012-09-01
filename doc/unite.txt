@@ -1467,6 +1467,8 @@ output		Nominates executed Vim command as candidates.
 
 						*unite-source-command*
 command		Nominates Vim Ex commands as candidates.
+		Note: To gather Vim internal commands, unite.vim uses
+		|neocomplcache| functions.
 
 						*unite-source-mapping*
 mapping		Nominates Vim mappings as candidates.
