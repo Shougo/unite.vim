@@ -40,6 +40,7 @@ let s:source = {
       \ 'default_action' : 'edit',
       \ 'max_candidates' : 200,
       \ 'action_table' : {},
+      \ 'filters' : ['matcher_regexp', 'sorter_default', 'converter_default'],
       \ }
 
 let s:cached_result = []

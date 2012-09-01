@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_regexp.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2012.
+" Last Modified: 01 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,7 +59,7 @@ function! unite#filters#matcher_regexp#regexp_matcher(candidates, input, context
     endif
     " Exclusion match.
     let expr = 'v:val.word !~ '.string(input[1:])
-  elseif input !~ '[~\\.^$[\]*]'
+  elseif input !~ '[~\\.^$\[\]*]'
     " Optimized filter.
     let input = substitute(input, '\\\(.\)', '\1', 'g')
     let expr = &ignorecase ?

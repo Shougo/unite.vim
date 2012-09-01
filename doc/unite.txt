@@ -2634,6 +2634,7 @@ CHANGELOG					*unite-changelog*
 
 2012-09-01
 - Improved sort in command source.
+- Changed default matcher in command source.
 
 2012-08-31
 - Improved move cursor.
