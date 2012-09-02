@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: common.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Aug 2012.
+" Last Modified: 02 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,7 +84,7 @@ let s:kind.action_table.insert = {
       \ 'description' : 'insert word or text',
       \ }
 function! s:kind.action_table.insert.func(candidate)"{{{
-  call s:insert_word(s:get_candidate_text(a:candidate))
+  call unite#kinds#common#insert_word(s:get_candidate_text(a:candidate))
 endfunction"}}}
 
 let s:kind.action_table.insert_directory = {
@@ -104,7 +104,7 @@ function! s:kind.action_table.insert_directory.func(candidate)"{{{
       return
   endif
 
-  call s:insert_word(directory)
+  call unite#kinds#common#insert_word(directory)
 endfunction"}}}
 
 let s:kind.action_table.preview = {
@@ -117,23 +117,25 @@ function! s:kind.action_table.preview.func(candidate)"{{{
 endfunction"}}}
 "}}}
 
-function! s:insert_word(word)"{{{
-  let context = unite#get_current_unite().context
+function! unite#kinds#common#insert_word(word, ...)"{{{
+  let unite = unite#get_current_unite()
+  let context = unite.context
+  let col = get(a:000, 0, context.col)
 
   if !context.complete
     " Paste.
     let old_reg = @"
     let @" = a:word
-    normal! ""P
+    execute 'normal!' (col == 1 ? 'P' : 'p')
     let @" = old_reg
 
     return
   endif
 
-  let cur_text = matchstr(getline('.'), '^.*\%'
-        \ . (context.col-1) . 'c.')
+  let cur_text = col < 0 ? '' :
+        \ matchstr(getline('.'), '^.*\%' . col . 'c.')
 
-  let next_line = getline('.')[context.col :]
+  let next_line = getline('.')[context.col-1 :]
   call setline(line('.'),
         \ split(cur_text . a:word . next_line,
         \            '\n\|\r\n'))

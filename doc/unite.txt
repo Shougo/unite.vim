@@ -2635,6 +2635,7 @@ CHANGELOG					*unite-changelog*
 2012-09-02
 - Ver.4.1 development is started.
 - Fixed for new vimshell.
+- Fixed insert word.
 
 ------------------------------------------------------------------------------
 ChangeLog unite.vim Ver.4.0:
