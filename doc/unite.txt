@@ -1470,6 +1470,11 @@ command		Nominates Vim Ex commands as candidates.
 		Note: To gather Vim internal commands, unite.vim uses
 		|neocomplcache| functions.
 
+						*unite-source-function*
+function	Nominates functions as candidates.
+		Note: To gather Vim internal functions, unite.vim uses
+		|neocomplcache| functions.
+
 						*unite-source-mapping*
 mapping		Nominates Vim mappings as candidates.
 
@@ -2000,6 +2005,10 @@ mapping						*unite-action-source-mapping*
 	preview		View the help documentation
 
 command						*unite-action-source-command*
+	preview		View the help documentation
+
+function					*unite-action-source-function*
+	call		Call the function and print result
 	preview		View the help documentation
 
 						*unite-default-action*
@@ -2636,6 +2645,7 @@ CHANGELOG					*unite-changelog*
 - Ver.4.1 development is started.
 - Fixed for new vimshell.
 - Fixed insert word.
+- Added function source.
 
 ------------------------------------------------------------------------------
 ChangeLog unite.vim Ver.4.0:

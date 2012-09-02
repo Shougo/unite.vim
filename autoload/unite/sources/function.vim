@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: command.vim
+" FILE: function.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 02 Sep 2012.
 " License: MIT license  {{{
@@ -27,17 +27,14 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Variables  "{{{
-"}}}
-
-function! unite#sources#command#define()"{{{
+function! unite#sources#function#define()"{{{
   return s:source
 endfunction"}}}
 
 let s:source = {
-      \ 'name' : 'command',
-      \ 'description' : 'candidates from Ex command',
-      \ 'default_action' : 'edit',
+      \ 'name' : 'function',
+      \ 'description' : 'candidates from functions',
+      \ 'default_action' : 'call',
       \ 'max_candidates' : 200,
       \ 'action_table' : {},
       \ 'filters' : ['matcher_regexp', 'sorter_default', 'converter_default'],
@@ -51,40 +48,28 @@ function! s:source.gather_candidates(args, context)"{{{
 
   " Get command list.
   redir => result
-  silent! command
+  silent! function
   redir END
 
   let s:cached_result = []
   for line in split(result, '\n')[1:]
-    let word = matchstr(line, '\a\w*')
+    let line = line[9:]
+    if line =~ '^<SNR>'
+      continue
+    endif
+    let orig_line = line
 
-    " Analyze prototype.
-    let end = matchend(line, '\a\w*')
-    let args = matchstr(line, '[[:digit:]?+*]', end)
-    if args != '0'
-      let prototype = matchstr(line, '\a\w*', end)
-
-      if prototype == ''
-        let prototype = 'arg'
-      endif
-
-      if args == '*'
-        let prototype = '[' . prototype . '] ...'
-      elseif args == '?'
-        let prototype = '[' . prototype . ']'
-      elseif args == '+'
-        let prototype = prototype . ' ...'
-      endif
-    else
-      let prototype = ''
+    let word = matchstr(line, '\h[[:alnum:]_:#.]*\ze()\?')
+    if word == ''
+      continue
     endif
 
     let dict = {
-          \ 'word' : word,
-          \ 'abbr' : printf('%-16s %s', word, prototype),
-          \ 'kind' : 'command',
-          \ 'action__command' : word . ' ',
-          \ 'source__command' : ':'.word,
+          \ 'word' : word  . '(',
+          \ 'abbr' : line,
+          \ 'action__description' : line,
+          \ 'action__function' : word,
+          \ 'action__text' : word . '(',
           \ }
     let dict.action__description = dict.abbr
 
@@ -97,42 +82,23 @@ function! s:source.gather_candidates(args, context)"{{{
 
   return s:cached_result
 endfunction"}}}
-function! s:source.change_candidates(args, context)"{{{
-  let dummy = substitute(a:context.input, '[*\\]', '', 'g')
-  if len(split(dummy)) > 1
-    " Add dummy result.
-    return [{
-          \ 'word' : dummy,
-          \ 'abbr' : printf('[new command] %s', dummy),
-          \ 'kind' : 'command',
-          \ 'source' : 'command',
-          \ 'action__command' : dummy,
-          \}]
-  endif
-
-  return []
-endfunction"}}}
 
 function! s:caching_from_neocomplcache_dict()"{{{
   let dict_files = split(globpath(&runtimepath,
-        \ 'autoload/neocomplcache/sources/vim_complete/commands.dict'), '\n')
+        \ 'autoload/neocomplcache/sources/vim_complete/functions.dict'), '\n')
   if empty(dict_files)
     return []
   endif
 
-  let keyword_pattern =
-        \'^\%(-\h\w*\%(=\%(\h\w*\|[01*?+%]\)\?\)\?\|'
-        \'<\h[[:alnum:]_-]*>\?\|\h[[:alnum:]_:#\[]*\%([!\]]\+\|()\?\)\?\)'
+  let keyword_pattern = '^[[:alnum:]_]\+'
   let keyword_list = []
   for line in readfile(dict_files[0])
-    let word = substitute(
-          \ matchstr(line, keyword_pattern), '[\[\]]', '', 'g')
+    let word = matchstr(line, keyword_pattern)
     call add(keyword_list, {
           \ 'word' : line,
-          \ 'kind' : 'command',
-          \ 'action__command' : word . ' ',
           \ 'action__description' : line,
-          \ 'source__command' : ':'.word,
+          \ 'action__function' : word,
+          \ 'action__text' : word . '(',
           \})
   endfor
 
@@ -148,7 +114,7 @@ function! s:source.action_table.preview.func(candidate)"{{{
   let winnr = winnr()
 
   try
-    execute 'help' a:candidate.source__command
+    execute 'help' a:candidate.source__function.'()'
     normal! zv
     normal! zt
     setlocal previewwindow
@@ -158,6 +124,30 @@ function! s:source.action_table.preview.func(candidate)"{{{
   endtry
 
   execute winnr.'wincmd w'
+endfunction"}}}
+let s:source.action_table.call = {
+      \ 'description' : 'call the function and print result',
+      \ }
+function! s:source.action_table.call.func(candidate)"{{{
+  if has_key(a:candidate, 'action__description')
+    " Print description.
+
+    " For function.
+    let prototype_name = matchstr(
+          \ a:candidate.action__description, '[^(]*')
+    echohl Identifier | echon prototype_name | echohl None
+    if prototype_name != a:candidate.action__description
+      echon substitute(a:candidate.action__description[
+            \ len(prototype_name) :], '^\s\+', ' ', '')
+    endif
+  endif
+
+  let args = input('call ' .
+        \ a:candidate.action__function.'(', '', 'expression')
+  if args != '' && args =~ ')$'
+    redraw
+    execute 'echo' a:candidate.action__function . '(' . args
+  endif
 endfunction"}}}
 "}}}
 
