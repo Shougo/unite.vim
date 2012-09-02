@@ -627,13 +627,18 @@ g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 		The default value is "{}".
 
 g:unite_source_menu_menus			*g:unite_source_menu_menus*
-		Set |unite-source-menu| settings.  This variable is dictionary.
-		The keys are menu names and the values are the following
-		attributes.
+		Set |unite-source-menu| settings.  This variable is
+		dictionary.  The keys are menu names and the values are the
+		following attributes.
 
 		candidates	(List or Dictionary)	(Required)
-		Menu candidates. If candidates are directory, keys are
+		Menu candidates. If candidates type is dictionary, keys are
 		ignored.
+
+		command_candidates
+				(List or Dictionary)	(Optional)
+		Menu candidates for commands. The key is used for word.
+		The value is command name.
 
 		map		(Function)		(Optional)
 		If this attribute is given, candidates are results of
@@ -650,7 +655,6 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		      \ }
 		let g:unite_source_menu_menus.test.candidates = {
 		      \   'ghci'      : 'VimShellInteractive ghci',
-		      \   'python'    : 'VimShellInteractive python',
 		      \ }
 		function g:unite_source_menu_menus.test.map(key, value)
 		  return {
@@ -658,6 +662,13 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		      \       'action__command' : a:value,
 		      \     }
 		endfunction
+
+		let g:unite_source_menu_menus.test2 = {
+		      \     'description' : 'Test menu2',
+		      \ }
+		let g:unite_source_menu_menus.test.command_candidates = {
+		      \   'python'    : 'VimShellInteractive python',
+		      \ }
 		
 		nnoremap <silent> fm  :<C-u>Unite menu:test<CR>
 <
@@ -2646,6 +2657,7 @@ CHANGELOG					*unite-changelog*
 - Fixed for new vimshell.
 - Fixed insert word.
 - Added function source.
+- Improved unite-menu source.
 
 ------------------------------------------------------------------------------
 ChangeLog unite.vim Ver.4.0:
