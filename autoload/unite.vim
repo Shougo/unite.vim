@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Sep 2012.
+" Last Modified: 03 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2064,7 +2064,8 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     let custom_source = get(s:custom.source, source.name, {})
     if source.ignore_pattern != '' && !context.unite__is_vimfiler
       call filter(source_candidates,
-            \ 'v:val.word !~# source.ignore_pattern')
+            \ "get(v:val, 'action__path', v:val.word)
+            \             !~# source.ignore_pattern")
     endif
 
     " Call pre_filter hook.

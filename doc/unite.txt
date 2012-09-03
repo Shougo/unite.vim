@@ -1294,10 +1294,10 @@ unite#custom_source({source-name}, {option-name}, {value})
 		is 0, all candidates is displayed.
 		
 		ignore_pattern			(String)
-		Specifies the regexp pattern to ignore candidates
-		of the source.  This applies on the word attribute
-		of candidates.  Regardless of |g:unite_enable_ignore_case|
-		value, it's case sensitive.
+		Specifies the regexp pattern to ignore candidates of the
+		source.  This applies on the path or word attribute of
+		candidates.  Regardless of |g:unite_enable_ignore_case| value,
+		it's case sensitive.
 
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
@@ -2654,6 +2654,7 @@ CHANGELOG					*unite-changelog*
 
 2012-09-03
 - Fixed function preview error.
+- Fixed ignore_pattern behavior.
 
 2012-09-02
 - Ver.4.1 development is started.

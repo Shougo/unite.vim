@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 26 Aug 2012.
+" Last Modified: 03 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
