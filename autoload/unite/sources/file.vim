@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Aug 2012.
+" Last Modified: 03 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -318,6 +318,8 @@ endfunction"}}}
 function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
   let a:candidate.vimfiler__is_directory =
         \ isdirectory(a:candidate.action__path)
+  let a:candidate.vimfiler__is_readable =
+        \ filereadable(a:candidate.action__path)
   let a:candidate.vimfiler__is_writable =
         \ filewritable(a:candidate.action__path)
 

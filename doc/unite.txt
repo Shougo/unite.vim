@@ -2655,6 +2655,7 @@ CHANGELOG					*unite-changelog*
 2012-09-03
 - Fixed function preview error.
 - Fixed ignore_pattern behavior.
+- Added readable check in file.
 
 2012-09-02
 - Ver.4.1 development is started.
