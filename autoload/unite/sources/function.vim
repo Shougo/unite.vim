@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: function.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Sep 2012.
+" Last Modified: 03 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -114,7 +114,7 @@ function! s:source.action_table.preview.func(candidate)"{{{
   let winnr = winnr()
 
   try
-    execute 'help' a:candidate.source__function.'()'
+    execute 'help' a:candidate.action__function.'()'
     normal! zv
     normal! zt
     setlocal previewwindow
