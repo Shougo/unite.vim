@@ -318,8 +318,6 @@ endfunction"}}}
 function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
   let a:candidate.vimfiler__is_directory =
         \ isdirectory(a:candidate.action__path)
-  let a:candidate.vimfiler__is_readable =
-        \ filereadable(a:candidate.action__path)
   let a:candidate.vimfiler__is_writable =
         \ filewritable(a:candidate.action__path)
 
@@ -347,6 +345,11 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
 
     let a:candidate.vimfiler__filesize =
           \ getfsize(a:candidate.action__path)
+    let a:candidate.vimfiler__is_readable =
+          \ filereadable(a:candidate.action__path)
+  else
+    let a:candidate.vimfiler__is_readable =
+          \ getfperm(a:candidate.action__path) =~# '..x$'
   endif
   let a:candidate.vimfiler__filetime =
         \ s:get_filetime(a:candidate.action__path)
