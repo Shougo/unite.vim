@@ -349,7 +349,7 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
           \ filereadable(a:candidate.action__path)
   else
     let a:candidate.vimfiler__is_readable =
-          \ getfperm(a:candidate.action__path) =~# '..x$'
+          \ getfperm(a:candidate.action__path) =~# 'r.x$'
   endif
   let a:candidate.vimfiler__filetime =
         \ s:get_filetime(a:candidate.action__path)
