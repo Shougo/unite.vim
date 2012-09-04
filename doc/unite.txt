@@ -227,7 +227,7 @@ COMMANDS 					*unite-commands*
 		-immediately
 		If the number of candidates is exactly one, it runs default
 		action immediately. If candidate is empty, it doesn't open any
-		unite buffer. This option also works in the narrowing mode.
+		unite buffer.
 
 						*unite-options-no-empty*
 		-no-empty
@@ -2658,6 +2658,7 @@ CHANGELOG					*unite-changelog*
 
 2012-09-04
 - Fixed narrowing behavior.
+- Changed -immediately behavior.
 
 2012-09-03
 - Fixed function preview error.

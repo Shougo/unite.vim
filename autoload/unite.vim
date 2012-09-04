@@ -2572,18 +2572,6 @@ function! s:redraw(is_force, winnr, is_gather_all) "{{{
     call unite#_resize_window()
   endif
 
-  let context = unite#get_context()
-  if context.immediately
-    " Immediately action.
-    let candidates = unite#gather_candidates()
-
-    if len(candidates) == 1
-      " Default action.
-      call unite#mappings#do_action(
-            \ context.default_action, [candidates[0]])
-    endif
-  endif
-
   if context.auto_quit && !unite.is_async
     call unite#force_quit_session()
   endif
