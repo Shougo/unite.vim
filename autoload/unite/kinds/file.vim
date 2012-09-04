@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2012.
+" Last Modified: 04 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -461,7 +461,8 @@ function! s:kind.action_table.vimfiler__shell.func(candidate)"{{{
     return
   endif
 
-  execute 'VimShellPop' escape(a:candidate.action__directory, '\ ')
+  call vimshell#start(a:candidate.action__directory,
+        \ { 'popup' : 1, 'toggle' : 0 })
 
   let files = unite#get_context().vimfiler__files
   if !empty(files)

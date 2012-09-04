@@ -2661,6 +2661,7 @@ CHANGELOG					*unite-changelog*
 - Changed -immediately behavior.
 - Fixed resume bug.
 - Added alias in directory kind.
+- Fixed for new vimshell.
 
 2012-09-03
 - Fixed function preview error.
