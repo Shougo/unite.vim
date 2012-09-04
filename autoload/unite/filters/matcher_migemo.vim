@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_migemo.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2012.
+" Last Modified: 04 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -85,7 +85,7 @@ function! s:matcher.filter(candidates, context)"{{{
   endif
 
   let candidates = a:candidates
-  for input in split(a:context.input, '\\\@<! ')
+  for input in a:context.input_list
     if input =~ '^!'
       if input == '!'
         continue

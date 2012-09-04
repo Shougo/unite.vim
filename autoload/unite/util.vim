@@ -238,7 +238,8 @@ endfunction"}}}
 function! unite#util#filter_matcher(list, expr, context)"{{{
   if !a:context.unite__is_sort_nothing ||
         \ a:context.unite__max_candidates <= 0 ||
-        \ !unite#get_current_unite().is_enabled_max_candidates
+        \ !unite#get_current_unite().is_enabled_max_candidates ||
+        \ len(a:context.input_list) > 1
 
     return a:expr == '' ? a:list : filter(a:list, a:expr)
   endif
@@ -249,6 +250,7 @@ function! unite#util#filter_matcher(list, expr, context)"{{{
 
   let _ = []
   let len = 0
+
   let max = a:context.unite__max_candidates
   let offset = max*4
   for cnt in range(0, len(a:list) / offset)
