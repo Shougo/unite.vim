@@ -38,6 +38,11 @@ let s:kind = {
       \ 'parents': ['file'],
       \}
 
+if exists(':VimFiler')
+  " Set alias.
+  let s:kind.alias_table = { 'tabopen' : 'tabvimfiler' }
+endif
+
 " Actions"{{{
 "}}}
 
