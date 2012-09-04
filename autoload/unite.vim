@@ -2337,9 +2337,9 @@ function! s:initialize_current_unite(sources, context)"{{{
 
   " Help windows check.
 
-  call unite#set_context(context)
-
   call unite#set_current_unite(unite)
+
+  call unite#set_context(context)
 
   call s:call_hook(sources, 'on_init')
 endfunction"}}}

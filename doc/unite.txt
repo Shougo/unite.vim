@@ -2659,6 +2659,7 @@ CHANGELOG					*unite-changelog*
 2012-09-04
 - Fixed narrowing behavior.
 - Changed -immediately behavior.
+- Fixed resume bug.
 
 2012-09-03
 - Fixed function preview error.
