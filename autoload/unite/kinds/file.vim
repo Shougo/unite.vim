@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Sep 2012.
+" Last Modified: 06 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -187,6 +187,11 @@ let s:kind.action_table.diff = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.diff.func(candidates)
+  if !empty(filter(copy(a:candidates), 'isdirectory(v:val.action__path)'))
+    echo 'Invalid files.'
+    return
+  endif
+
   if len(a:candidates) == 1
     " :vimdiff with current buffer.
     call s:execute_command('vert diffsplit', a:candidates[0])
