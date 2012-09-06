@@ -201,7 +201,7 @@ function! s:kind.action_table.diff.func(candidates)
     let t:title = 'vimdiff'
     call s:execute_command('vert diffsplit', a:candidates[1])
   else
-    echo 'too many candidates!'
+    echo 'Too many candidates!'
   endif
 endfunction
 

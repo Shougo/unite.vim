@@ -44,6 +44,20 @@ if exists(':VimFiler')
 endif
 
 " Actions"{{{
+let s:kind.action_table.diff = {
+      \ 'description' : 'diff with the other directories',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.diff.func(candidates)
+  if !empty(filter(copy(a:candidates), '!isdirectory(v:val.action__path)'))
+    echo 'Invalid directories.'
+    return
+  elseif len(a:candidates) < 1
+    echo 'Too few candidates!'
+  endif
+
+  " Todo.
+endfunction
 "}}}
 
 let &cpo = s:save_cpo
