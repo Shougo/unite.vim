@@ -1938,6 +1938,8 @@ Opens a file into a new buffer.  This kind extends |unite-action-openable| and
 	grep_directory	Grep directories
 	wunix		Write by unix fileformat
 	diff		diff with the other candidate or current buffer
+	dirdiff		|:DirDiff| with the other candidate
+			(|DirDiff.vim| plugin is needed.)
 
 buffer						*unite-action-buffer*
 This kind extends |unite-action-file|.
@@ -2655,6 +2657,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-09-07
+- Added dirdiff action.
 
 2012-09-06
 - Fixed grep check.

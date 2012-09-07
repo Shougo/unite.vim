@@ -35,29 +35,16 @@ let s:kind = {
       \ 'name' : 'directory',
       \ 'default_action' : 'narrow',
       \ 'action_table': {},
+      \ 'alias_table' : { 'diff' : 'dirdiff' },
       \ 'parents': ['file'],
       \}
 
 if exists(':VimFiler')
   " Set alias.
-  let s:kind.alias_table = { 'tabopen' : 'tabvimfiler' }
+  let s:kind.alias_table.tabopen = 'tabvimfiler'
 endif
 
 " Actions"{{{
-let s:kind.action_table.diff = {
-      \ 'description' : 'diff with the other directories',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.diff.func(candidates)
-  if !empty(filter(copy(a:candidates), '!isdirectory(v:val.action__path)'))
-    echo 'Invalid directories.'
-    return
-  elseif len(a:candidates) < 1
-    echo 'Too few candidates!'
-  endif
-
-  " Todo.
-endfunction
 "}}}
 
 let &cpo = s:save_cpo
