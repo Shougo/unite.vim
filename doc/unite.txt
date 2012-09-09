@@ -1015,6 +1015,7 @@ Insert mode mappings.
 <C-a>		|i_<Plug>(unite_move_head)|
 <Home>		|i_<Plug>(unite_move_head)|
 <C-l>		|i_<Plug>(unite_redraw)|
+<C-g>		|i_<Plug>(unite_exit)|
 e		In case when you selected a candidate, runs narrow action
 d		In case when you selected a candidate, runs delete action
 t		In case when you selected a candidate, runs tabopen action
@@ -2657,6 +2658,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-09-09
+- Added <C-g> mapping.
 
 2012-09-07
 - Added dirdiff action.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Aug 2012.
+" Last Modified: 09 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -158,7 +158,8 @@ function! unite#mappings#define_default_mappings()"{{{
         \ <C-o>:<C-u>call <SID>redraw()<CR>
   "}}}
 
-  if exists('g:unite_no_default_keymappings') && g:unite_no_default_keymappings
+  if exists('g:unite_no_default_keymappings')
+        \ && g:unite_no_default_keymappings
     return
   endif
 
@@ -230,6 +231,7 @@ function! unite#mappings#define_default_mappings()"{{{
   imap <buffer> <Home>    <Plug>(unite_move_head)
   imap <buffer> <C-l>     <Plug>(unite_redraw)
   imap <buffer> <ESC>     <Plug>(unite_insert_leave)
+  imap <buffer> <C-g>     <Plug>(unite_exit)
 
   inoremap <silent><buffer><expr> d
         \ unite#smart_map('d', unite#do_action('delete'))
