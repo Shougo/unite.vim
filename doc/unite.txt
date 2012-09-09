@@ -333,6 +333,14 @@ COMMANDS 					*unite-commands*
 		-no-focus
 		No the focus on the unite buffer after opening a unite buffer.
 
+					*unite-options-short-source-names*
+		-short-source-names
+		Use short source names.
+
+					*unite-options-long-source-names*
+		-long-source-names
+		Use long source names.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that it targets the current
 		directory for the initial narrowing text.
@@ -426,6 +434,13 @@ g:unite_abbr_highlight				*g:unite_abbr_highlight*
 		Specifies abbreviated candidates highlight.
 		
 		The default value is "Normal".
+
+g:unite_enable_use_short_source_names
+				*g:unite_enable_use_short_source_names*
+		If this variable is 1, unite buffer will show short source
+		names.
+
+		The default value is 0.
 
 g:unite_quick_match_table			*g:unite_quick_match_table*
 		The table of completion candidates of quick match list,
@@ -2666,6 +2681,8 @@ CHANGELOG					*unite-changelog*
 2012-09-09
 - Added <C-g> mapping.
 - Added -no-focus option.
+- Added -short-source-names and -long-source-names and
+  g:unite_enable_use_short_source_names option.
 
 2012-09-07
 - Added dirdiff action.

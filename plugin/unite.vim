@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Sep 2012.
+" Last Modified: 09 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,6 +74,8 @@ let g:unite_abbr_highlight =
       \ get(g:, 'unite_abbr_highlight', 'Normal')
 let g:unite_cursor_line_highlight =
       \ get(g:, 'unite_cursor_line_highlight', 'PmenuSel')
+let g:unite_enable_short_source_names =
+      \ get(g:, 'unite_enable_short_source_names', 0)
 let g:unite_data_directory =
       \ substitute(substitute(fnamemodify(get(
       \   g:, 'unite_data_directory', '~/.unite'),

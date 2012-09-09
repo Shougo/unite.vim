@@ -288,6 +288,7 @@ let s:unite_options = [
       \ '-update-time=', '-hide-source-names',
       \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
       \ '-auto-quit', '-no-focus',
+      \ '-long-source-names', '-short-source-names',
       \]
 "}}}
 
@@ -348,7 +349,7 @@ endfunction"}}}
 function! unite#loaded_source_names_with_args()"{{{
   return map(copy(unite#loaded_sources_list()),
         \ 'join(insert(filter(copy(v:val.args),
-        \  "type(v:val) < 1"), v:val.name), ":")')
+        \  "type(v:val) < 1"), s:convert_source_name(v:val.name)), ":")')
 endfunction"}}}
 function! unite#loaded_sources_list()"{{{
   return s:get_loaded_sources()
@@ -955,6 +956,11 @@ function! s:print_buffer(message)"{{{
   let message = []
   for msg in type(a:message) == type([]) ?
         \ a:message : [a:message]
+
+    " Convert source name.
+    let msg = substitute(msg, '^\[\zs.\{-}\ze\] ',
+          \ '\=s:convert_source_name(submatch(0))', '')
+
     while msg != ''
       let trunc_msg = unite#util#strwidthpart(
             \ msg, max_width)
@@ -1574,8 +1580,7 @@ function! s:initialize_context(context)"{{{
     let context.start_insert = context.complete ?
           \ 1 : g:unite_enable_start_insert
   endif
-  if has_key(context, 'no_start_insert')
-        \ && context.no_start_insert
+  if get(context, 'no_start_insert', 0)
     " Disable start insert.
     let context.start_insert = 0
   endif
@@ -1589,6 +1594,13 @@ function! s:initialize_context(context)"{{{
   if context.immediately
     " Ignore empty unite buffer.
     let context.no_empty = 1
+  endif
+  if !has_key(context, 'short_source_names')
+    let context.short_source_names = g:unite_enable_short_source_names
+  endif
+  if get(context, 'long_source_names', 0)
+    " Disable short name.
+    let context.short_source_names = 0
   endif
   if context.here
     let context.winheight = winheight(0) - winline() + 2
@@ -2135,7 +2147,8 @@ function! s:recache_candidates_loop(context, is_force)"{{{
 
     let source.unite__candidates += source_candidates
     if !empty(source_candidates)
-      call add(candidate_sources, source.name)
+      call add(candidate_sources,
+            \ s:convert_source_name(source.name))
     endif
   endfor
 
@@ -2234,7 +2247,8 @@ function! s:convert_quick_match_lines(candidates, quick_match_table)"{{{
     call add(candidates,
           \ (candidate.is_dummy ? '  ' : get(keys, num, '  '))
           \ . (unite.max_source_name == 0 ? '' :
-          \    unite#util#truncate(candidate.source, max_source_name))
+          \    unite#util#truncate(s:convert_source_name(
+          \    candidate.source), max_source_name))
           \ . unite#util#truncate_smart(candidate.unite__abbr,
           \      max_width, max_width/3, '..'))
     let num += 1
@@ -2253,7 +2267,8 @@ function! unite#convert_lines(candidates)"{{{
   return map(copy(a:candidates),
         \ "(v:val.unite__is_marked ? '* ' : '- ')
         \ . (unite.max_source_name == 0 ? ''
-        \   : unite#util#truncate(v:val.source, max_source_name))
+        \   : unite#util#truncate(s:convert_source_name(
+        \     v:val.source), max_source_name))
         \ . unite#util#truncate_smart(v:val.unite__abbr, " . max_width
         \    .  ", max_width/3, '..')")
 endfunction"}}}
@@ -2465,7 +2480,7 @@ function! s:initialize_unite_buffer()"{{{
   " Set syntax.
   for source in filter(copy(unite.sources), 'v:val.syntax != ""')
     let name = unite.max_source_name > 0 ?
-          \ source.name : ''
+          \ s:convert_source_name(source.name) : ''
 
     execute 'syntax region' source.syntax 'start=/\%'
           \ .(unite.abbr_head).'c/ end=/$/ keepend contained'
@@ -3170,6 +3185,12 @@ function! s:get_postfix(prefix, is_create, ...)"{{{
 
   return a:is_create ? '@'.(matchstr(buflist[-1], '@\zs\d\+$') + 1)
         \ : matchstr(buflist[-1], '@\d\+$')
+endfunction"}}}
+function! s:convert_source_name(source_name)"{{{
+  let context = unite#get_context()
+  return !context.short_source_names ? a:source_name :
+        \ a:source_name !~ '\A'  ? a:source_name[:1] :
+        \ substitute(a:source_name, '\a\zs\a\+', '', 'g')
 endfunction"}}}
 "}}}
 
