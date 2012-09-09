@@ -329,6 +329,10 @@ COMMANDS 					*unite-commands*
 		-auto-quit
 		Close unite buffer automatically.
 
+						*unite-options-no-focus*
+		-no-focus
+		No the focus on the unite buffer after opening a unite buffer.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that it targets the current
 		directory for the initial narrowing text.
@@ -2661,6 +2665,7 @@ CHANGELOG					*unite-changelog*
 
 2012-09-09
 - Added <C-g> mapping.
+- Added -no-focus option.
 
 2012-09-07
 - Added dirdiff action.

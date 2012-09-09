@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Sep 2012.
+" Last Modified: 09 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -287,7 +287,7 @@ let s:unite_options = [
       \ '-cursor-line-highlight=', '-no-cursor-line',
       \ '-update-time=', '-hide-source-names',
       \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
-      \ '-auto-quit',
+      \ '-auto-quit', '-no-focus',
       \]
 "}}}
 
@@ -1011,7 +1011,8 @@ function! unite#start(sources, ...)"{{{
   " Check command line window.
   if unite#util#is_cmdwin()
     call unite#print_error(
-          \ '[unite.vim] Command line buffer is detected! Please close command line buffer.')
+          \ '[unite.vim] Command line buffer is detected! '.
+          \ 'Please close command line buffer.')
     return
   endif
 
@@ -1092,7 +1093,8 @@ function! unite#start_temporary(sources, ...)"{{{
   endif
 
   let new_context = get(a:000, 0, {})
-  let buffer_name = get(a:000, 1, matchstr(context.buffer_name, '^\S\+')
+  let buffer_name = get(a:000, 1,
+        \ matchstr(context.buffer_name, '^\S\+')
         \ . ' - ' . len(context.old_buffer_info))
 
   let context.buffer_name = buffer_name
@@ -1240,7 +1242,8 @@ function! unite#resume(buffer_name, ...)"{{{
   " Check command line window.
   if unite#util#is_cmdwin()
     call unite#print_error(
-          \ '[unite.vim] Command line buffer is detected! Please close command line buffer.')
+          \ '[unite.vim] Command line buffer is detected! '.
+          \ 'Please close command line buffer.')
     return
   endif
 
@@ -1555,6 +1558,7 @@ function! s:initialize_context(context)"{{{
         \ 'auto_quit' : 0,
         \ 'is_redraw' : 0,
         \ 'is_resize' : 0,
+        \ 'no_focus' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 0,
         \ 'unite__is_vimfiler' : 0,
@@ -3107,7 +3111,15 @@ endfunction"}}}
 function! s:init_cursor()"{{{
   let unite = unite#get_current_unite()
 
-  if unite.context.start_insert
+  if unite.context.no_focus
+    if winbufnr(winnr('#')) > 0
+      wincmd p
+    else
+      execute bufwinnr(unite.prev_bufnr).'wincmd w'
+    endif
+
+    return
+  elseif unite.context.start_insert
     let unite.is_insert = 1
 
     execute unite.prompt_linenr
