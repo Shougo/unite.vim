@@ -586,6 +586,13 @@ g:unite_source_vimgrep_search_word_highlight
 		
 		The default value is "Search".
 
+g:unite_source_vimgrep_ignore_pattern	*g:unite_source_vimgrep_ignore_pattern*
+		Refer autoload/unite/sources/vimgrep.vim about the default
+		value.
+		Note: This variable is deprecated. Please use
+		|unite#custom_source()| instead.
+		Note: This variable must be set before using |unite|.
+
 g:unite_source_find_command			*g:unite_source_find_command*
 		Set find command.
 
@@ -2677,6 +2684,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-09-10
+- Added g:unite_source_vimgrep_ignore_pattern.
 
 2012-09-09
 - Added <C-g> mapping.
