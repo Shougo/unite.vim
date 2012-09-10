@@ -33,8 +33,6 @@ call unite#util#set_default('g:unite_source_vimgrep_ignore_pattern',
       \'\%(^\|/\)tags\%(-\a*\)\?$')
 "}}}
 
-call unite#sources#grep#define()
-
 " Actions "{{{
 let s:action_vimgrep_file = {
   \   'description': 'vimgrep this files',
