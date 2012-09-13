@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Sep 2012.
+" Last Modified: 13 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,48 +28,32 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Global options definition."{{{
-" External commands.
-if !exists('g:unite_kind_file_delete_file_command')
-  if unite#util#is_windows() && !executable('rm')
-    " Can't support.
-    let g:unite_kind_file_delete_file_command = ''
-  else
-    let g:unite_kind_file_delete_file_command = 'rm $srcs'
-  endif
-endif
-if !exists('g:unite_kind_file_delete_directory_command')
-  if unite#util#is_windows() && !executable('rm')
-    " Can't support.
-    let g:unite_kind_file_delete_directory_command = ''
-  else
-    let g:unite_kind_file_delete_directory_command = 'rm -r $srcs'
-  endif
-endif
-if !exists('g:unite_kind_file_copy_file_command')
-  if unite#util#is_windows() && !executable('cp')
-    " Can't support.
-    let g:unite_kind_file_copy_file_command = ''
-  else
-    let g:unite_kind_file_copy_file_command = 'cp -p $srcs $dest'
-  endif
-endif
-if !exists('g:unite_kind_file_copy_directory_command')
-  if unite#util#is_windows() && !executable('cp')
-    " Can't support.
-    let g:unite_kind_file_copy_directory_command = ''
-  else
-    let g:unite_kind_file_copy_directory_command = 'cp -p -r $srcs $dest'
-  endif
-endif
-if !exists('g:unite_kind_file_move_command')
-  if unite#util#is_windows() && !executable('mv')
-    let g:unite_kind_file_move_command = 'move /Y $srcs $dest'
-  else
-    let g:unite_kind_file_move_command = 'mv $srcs $dest'
-  endif
-endif
-
-call unite#util#set_default('g:unite_kind_file_use_trashbox', 0)
+call unite#util#set_default(
+      \ 'g:unite_kind_file_delete_file_command',
+      \ unite#util#is_windows() && !executable('rm') ? '' :
+      \ executable('trash-put') ? 'trash-put $srcs' :
+      \ executable('rmtrash') ? 'rmtrash $srcs' :
+      \ 'rm $srcs')
+call unite#util#set_default(
+      \ 'g:unite_kind_file_delete_directory_command',
+      \ unite#util#is_windows() && !executable('rm') ? '' :
+      \ executable('trash-put') ? 'trash-put $srcs' :
+      \ executable('rmtrash') ? 'rmtrash $srcs' :
+      \ 'rm -r $srcs')
+call unite#util#set_default(
+      \ 'g:unite_kind_file_copy_file_command',
+      \ unite#util#is_windows() && !executable('cp') ? '' :
+      \ 'cp -p $srcs $dest')
+call unite#util#set_default(
+      \ 'g:unite_kind_file_copy_directory_command',
+      \ unite#util#is_windows() && !executable('cp') ? '' :
+      \ 'cp -p -r $srcs $dest')
+call unite#util#set_default(
+      \ 'g:unite_kind_file_move_command',
+      \ unite#util#is_windows() && !executable('mv') ?
+      \  'move /Y $srcs $dest' : 'mv $srcs $dest')
+call unite#util#set_default('g:unite_kind_file_use_trashbox',
+      \ unite#util#is_windows() && unite#util#has_vimproc())
 "}}}
 
 function! unite#kinds#file#define()"{{{
@@ -825,20 +809,14 @@ function! unite#kinds#file#do_action(candidates, dest_dir, action_name)"{{{
     redraw
 
     if a:action_name == 'delete'
-          \ && g:unite_kind_file_use_trashbox
+          \ && g:unite_kind_file_use_trashbox && unite#util#is_windows()
+          \ && unite#util#has_vimproc() && exists('*vimproc#delete_trash')
       " Environment check.
-      if unite#util#is_windows()
-            \ && unite#util#has_vimproc() && exists('*vimproc#delete_trash')
-        let ret = vimproc#delete_trash(filename)
-        if ret
-          call unite#print_error(printf('Failed file %s: %s',
-                \ a:action_name, filename))
-          call unite#print_error(printf('Error code is %d', ret))
-        endif
-      else
-        call unite#util#print_error(
-              \ 'Your environment is not supported vimproc#delete_trash().')
-        break
+      let ret = vimproc#delete_trash(filename)
+      if ret
+        call unite#print_error(printf('Failed file %s: %s',
+              \ a:action_name, filename))
+        call unite#print_error(printf('Error code is %d', ret))
       endif
     else
       let command = a:action_name

@@ -2678,6 +2678,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-09-13
+- Use trashbox automatically in delete action.
+
 2012-09-09
 - Added <C-g> mapping.
 - Added -no-focus option.
