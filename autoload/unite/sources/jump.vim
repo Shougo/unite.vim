@@ -58,7 +58,7 @@ function! s:source.gather_candidates(args, context)"{{{
     let path = file_text
     let bufnr = bufnr(file_text)
     if empty(lines)
-      if getline(linenr) ==# file_text
+      if stridx(join(split(getline(linenr))), file_text) == 0
         let lines = [file_text]
         let path = bufname('%')
         let bufnr = bufnr('%')
