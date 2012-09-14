@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Sep 2012.
+" Last Modified: 14 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,7 +58,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
         \ unite#get_current_unite().prompt_linenr.'G0z.'
   nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
-        \ :<C-u>call <SID>force_redraw_all_candidates()<CR>G
+        \ :<C-u>call <SID>redraw_all_candidates()<CR>G
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
         \ <SID>loop_cursor_down(0)
   nnoremap <buffer><expr> <Plug>(unite_skip_cursor_down)
@@ -730,7 +730,7 @@ function! s:loop_cursor_up(is_skip_not_matched, mode)"{{{
 
     " Loop.
 
-    call s:force_redraw_all_candidates()
+    call s:redraw_all_candidates()
 
     call cursor(line('$'), 0)
     if is_insert
@@ -783,7 +783,7 @@ function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode)"{{{
 
   " Loop.
 
-  call s:force_redraw_all_candidates()
+  call s:redraw_all_candidates()
 
   call cursor(line('$'), 0)
   if is_insert
@@ -865,7 +865,7 @@ function! s:toggle_max_candidates()"{{{
   if len(unite.candidates) == len(unite.current_candidates)
     call unite#force_redraw()
   else
-    call s:force_redraw_all_candidates()
+    call s:redraw_all_candidates()
   endif
 endfunction"}}}
 function! s:narrowing_path()"{{{
@@ -882,16 +882,10 @@ function! s:narrowing_input_history()"{{{
         \ { 'old_source_names_string' : unite#loaded_source_names_string() },
         \ 'history/input')
 endfunction"}}}
-function! s:force_redraw_all_candidates()"{{{
-  let unite = unite#get_current_unite()
-  if len(unite.candidates) != len(unite.current_candidates)
-    call unite#force_redraw(0, 1)
-  endif
-endfunction"}}}
 function! s:redraw_all_candidates()"{{{
   let unite = unite#get_current_unite()
   if len(unite.candidates) != len(unite.current_candidates)
-    call unite#redraw(0, 1)
+    call unite#force_redraw(0, 1)
   endif
 endfunction"}}}
 
