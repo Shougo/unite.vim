@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Sep 2012.
+" Last Modified: 19 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -358,26 +358,13 @@ let s:kind.action_table.vimfiler__delete = {
       \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
-  let vimfiler_current_dir =
-        \ get(unite#get_context(), 'vimfiler__current_directory', '')
-  if vimfiler_current_dir != ''
-    let current_dir = getcwd()
-    lcd `=vimfiler_current_dir`
+  if g:unite_kind_file_delete_file_command == ''
+        \ || g:unite_kind_file_delete_directory_command == ''
+    call unite#print_error("Please install rm.exe.")
+    return 1
   endif
 
-  try
-    if g:unite_kind_file_delete_file_command == ''
-          \ || g:unite_kind_file_delete_directory_command == ''
-      call unite#print_error("Please install rm.exe.")
-      return 1
-    endif
-
-    call unite#kinds#file#do_action(a:candidates, '', 'delete')
-  finally
-    if vimfiler_current_dir != ''
-      lcd `=current_dir`
-    endif
-  endtry
+  call unite#kinds#file#do_action(a:candidates, '', 'delete')
 endfunction"}}}
 function! s:check_delete_func(filename)"{{{
   return isdirectory(a:filename) ?
