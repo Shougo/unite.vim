@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Sep 2012.
+" Last Modified: 10 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,9 +27,11 @@
 " Variables  "{{{
 call unite#util#set_default(
       \ 'g:unite_source_vimgrep_search_word_highlight', 'Search')
+call unite#util#set_default('g:unite_source_vimgrep_ignore_pattern',
+      \'\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$\|'.
+      \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|'.
+      \'\%(^\|/\)tags\%(-\a*\)\?$')
 "}}}
-
-call unite#sources#grep#define()
 
 " Actions "{{{
 let s:action_vimgrep_file = {
@@ -68,7 +70,7 @@ let s:source = {
       \ 'hooks' : {},
       \ 'syntax' : 'uniteSource__Vimgrep',
       \ 'filters' : ['matcher_regexp', 'sorter_default', 'converter_default'],
-      \ 'ignore_pattern' : g:unite_source_grep_ignore_pattern,
+      \ 'ignore_pattern' : g:unite_source_vimgrep_ignore_pattern,
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
