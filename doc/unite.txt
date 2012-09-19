@@ -43,6 +43,7 @@ Create kind		|unite-create-kind|
 Create filter		|unite-create-filter|
 Configulation Examples	|unite-examples|
 User defined source	|unite-user-sources|
+FAQ			|unite-faq|
 Changelog		|unite-changelog|
 
 ==============================================================================
@@ -2682,6 +2683,9 @@ USER DEFINED SOURCES				*unite-user-sources*
 
 See Wiki page(Japanese).
 https://github.com/Shougo/unite.vim/wiki/unite-plugins
+
+==============================================================================
+FAQ						*unite-faq*
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
