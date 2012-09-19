@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 06 Sep 2012.
+" Last Modified: 19 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -246,18 +246,17 @@ function! s:source.async_gather_candidates(args, context) "{{{
     let a:context.is_async = 0
   endif
 
-  if match(g:unite_source_grep_default_opts, '-l') >= 0 || match(a:context.source__extra_opts, '-l') >= 0
-    let candidates = map(filter(
-          \ map(stdout.read_lines(-1, 100),
-          \ "unite#util#iconv(v:val, 'char', &encoding)"),
-      \  'v:val != ""'),
-      \ '[v:val, [v:val[2:], 0]]')
+  let candidates = map(stdout.read_lines(-1, 100),
+          \ "unite#util#iconv(v:val, 'char', &encoding)")
+  if g:unite_source_grep_default_opts =~ '^-[^-]*l'
+        \ || a:context.source__extra_opts =~ '^-[^-]*l'
+    let candidates = map(filter(candidates,
+          \ 'v:val != ""'),
+          \ '[v:val, [v:val[2:], 0]]')
   else
-    let candidates = map(filter(
-          \ map(stdout.read_lines(-1, 100),
-          \ "unite#util#iconv(v:val, 'char', &encoding)"),
-      \  'v:val =~ "^.\\+:.\\+:.\\+$"'),
-      \ '[v:val, split(v:val[2:], ":")]')
+    let candidates = map(filter(candidates,
+          \  'v:val =~ "^.\\+:.\\+:.\\+$"'),
+          \ '[v:val, split(v:val[2:], ":")]')
   endif
 
   if isdirectory(a:context.source__directory)

@@ -2685,6 +2685,9 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-09-19
+- Fixed grep source.
+
 2012-09-14
 - Fixed redraw all candiates behavior.
 
