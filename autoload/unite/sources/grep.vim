@@ -246,11 +246,19 @@ function! s:source.async_gather_candidates(args, context) "{{{
     let a:context.is_async = 0
   endif
 
-  let candidates = map(filter(
-        \ map(stdout.read_lines(-1, 100),
-        \ "unite#util#iconv(v:val, 'char', &encoding)"),
-    \  'v:val =~ "^.\\+:.\\+:.\\+$"'),
-    \ '[v:val, split(v:val[2:], ":")]')
+  if match(g:unite_source_grep_default_opts, '-l') >= 0 || match(a:context.source__extra_opts, '-l') >= 0
+    let candidates = map(filter(
+          \ map(stdout.read_lines(-1, 100),
+          \ "unite#util#iconv(v:val, 'char', &encoding)"),
+      \  'v:val != ""'),
+      \ '[v:val, [v:val[2:], 0]]')
+  else
+    let candidates = map(filter(
+          \ map(stdout.read_lines(-1, 100),
+          \ "unite#util#iconv(v:val, 'char', &encoding)"),
+      \  'v:val =~ "^.\\+:.\\+:.\\+$"'),
+      \ '[v:val, split(v:val[2:], ":")]')
+  endif
 
   if isdirectory(a:context.source__directory)
     let cwd = getcwd()
