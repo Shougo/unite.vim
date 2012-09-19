@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: common.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Sep 2012.
+" Last Modified: 19 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -114,6 +114,14 @@ let s:kind.action_table.preview = {
 function! s:kind.action_table.preview.func(candidate)"{{{
   redraw
   echo s:get_candidate_text(a:candidate)
+endfunction"}}}
+
+let s:kind.action_table.echo = {
+      \ 'description' : 'echo candidates for debug',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.echo.func(candidates)"{{{
+  echomsg string(a:candidates)
 endfunction"}}}
 "}}}
 

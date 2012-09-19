@@ -1914,6 +1914,7 @@ internally.
 	insert_directory
 			Input the candidate directory into the current buffer
 	preview		Preview the candidate text.
+	echo		Echo candidates for debug.
 
 openable					*unite-action-openable*
 Defines an interface for files that can be open.  This requires an inheriting
@@ -2687,6 +2688,7 @@ CHANGELOG					*unite-changelog*
 
 2012-09-19
 - Fixed grep source.
+- Added echo action.
 
 2012-09-14
 - Fixed redraw all candiates behavior.
