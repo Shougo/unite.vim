@@ -57,7 +57,7 @@ function! s:source_line.hooks.on_syntax(args, context) "{{{
 endfunction"}}}
 
 function! s:source_line.gather_candidates(args, context)"{{{
-  let lines = s:on_gather_candidates(a:args, a:context)
+  let lines = s:on_gather_candidates(a:args, a:context, 0)
 
   let _ = map(lines, "{
         \ 'word' : v:val[1],
@@ -93,6 +93,7 @@ let s:source_line_fast = deepcopy(s:source_line)
 let s:source_line_fast.name = 'line/fast'
 let s:source_line_fast.syntax = 'uniteSource__LineFast'
 let s:source_line_fast.is_volatile = 1
+let s:source_line_fast.required_pattern_length = 3
 
 function! s:source_line_fast.hooks.on_init(args, context) "{{{
   call s:on_init(a:args, a:context)
@@ -101,7 +102,7 @@ function! s:source_line_fast.hooks.on_init(args, context) "{{{
         \ 'Target: ' . a:context.source__path, s:source_line_fast.name)
 endfunction"}}}
 function! s:source_line_fast.gather_candidates(args, context)"{{{
-  let lines = s:on_gather_candidates(a:args, a:context)
+  let lines = s:on_gather_candidates(a:args, a:context, 1)
 
   let _ = map(lines, "{
         \ 'word' : v:val[1],
@@ -128,7 +129,7 @@ function! s:on_init(args, context)"{{{
   let a:context.source__is_bang =
         \ (get(a:args, 0, '') ==# '!')
 endfunction"}}}
-function! s:on_gather_candidates(args, context)"{{{
+function! s:on_gather_candidates(args, context, is_fast)"{{{
   call s:hl_refresh(a:context)
 
   let direction = get(filter(copy(a:args),
@@ -147,25 +148,30 @@ function! s:on_gather_candidates(args, context)"{{{
   endif
 
   let lines = (direction ==# 'forward' || direction ==# 'backward') ?
-        \ s:get_lines(a:context, direction) :
-        \ (s:get_lines(a:context, 'forward')
-        \  + s:get_lines(a:context, 'backward')[: -2])
+        \ s:get_lines(a:context, direction, a:is_fast) :
+        \ (s:get_lines(a:context, 'forward', a:is_fast)
+        \  + s:get_lines(a:context, 'backward', a:is_fast)[: -2])
 
   return lines
 endfunction"}}}
-function! s:get_lines(context, direction)"{{{
+function! s:get_lines(context, direction, is_fast)"{{{
   let [start, end] =
         \ a:direction ==# 'forward' ?
-        \ [a:context.source__linenr, '$'] :
+        \ [a:context.source__linenr, line('$')] :
         \ [1, a:context.source__linenr]
 
   let _ = []
   let linenr = start
-  for line in getbufline(a:context.source__bufnr, start, end)
-    call add(_, [linenr, line])
+  let offset = 1000
+  while start <= end
+    for line in getbufline(a:context.source__bufnr, start, start+offset)
+      call add(_, [linenr, line])
 
-    let linenr += 1
-  endfor
+      let linenr += 1
+    endfor
+
+    let start += offset
+  endwhile
 
   return _
 endfunction"}}}
