@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 20 Sep 2012.
+" Last Modified: 21 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -100,7 +100,6 @@ let s:source_line_fast = deepcopy(s:source_line)
 let s:source_line_fast.name = 'line/fast'
 let s:source_line_fast.syntax = 'uniteSource__LineFast'
 let s:source_line_fast.is_volatile = 1
-let s:source_line_fast.required_pattern_length = 3
 
 function! s:source_line_fast.hooks.on_init(args, context) "{{{
   call s:on_init(a:args, a:context)
