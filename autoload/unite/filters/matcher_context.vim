@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: matcher_default.vim
+" FILE: matcher_context.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 20 Sep 2012.
 " License: MIT license  {{{
@@ -27,34 +27,34 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_default#define()"{{{
+function! unite#filters#matcher_context#define()"{{{
   return s:matcher
 endfunction"}}}
 
 let s:matcher = {
-      \ 'name' : 'matcher_default',
-      \ 'description' : 'default matcher',
+      \ 'name' : 'matcher_context',
+      \ 'description' : 'context matcher',
       \}
 
 function! s:matcher.filter(candidates, context)"{{{
+  if a:context.input == ''
+    return unite#util#filter_matcher(
+          \ a:candidates, '', a:context)
+  endif
+
   let candidates = a:candidates
-  for default in s:default_matchers
-    let filter = unite#get_filters(default)
-    if !empty(filter)
-      let candidates = filter.filter(candidates, a:context)
+  for input in a:context.input_list
+    if input =~# '\^.*'
+      " Search by head.
+      let candidates = unite#filters#matcher_regexp#regexp_matcher(
+            \ candidates, input, a:context)
+    else
+      let candidates = unite#filters#matcher_glob#glob_matcher(
+            \ candidates, input, a:context)
     endif
   endfor
 
   return candidates
-endfunction"}}}
-
-
-let s:default_matchers = ['matcher_context']
-function! unite#filters#matcher_default#get()"{{{
-  return s:default_matchers
-endfunction"}}}
-function! unite#filters#matcher_default#use(matchers)"{{{
-  let s:default_matchers = a:matchers
 endfunction"}}}
 
 let &cpo = s:save_cpo
