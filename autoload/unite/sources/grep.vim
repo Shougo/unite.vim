@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 19 Sep 2012.
+" Last Modified: 20 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -134,7 +134,7 @@ function! s:source.hooks.on_init(args, context) "{{{
   let a:context.source__extra_opts = get(a:args, 1, '')
 
   let a:context.source__input = get(a:args, 2, '')
-  if a:context.source__input == '' && a:context.unite__is_interactive
+  if a:context.source__input == ''
     let a:context.source__input = input('Pattern: ')
   endif
 

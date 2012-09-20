@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Sep 2012.
+" Last Modified: 20 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2360,7 +2360,9 @@ function! s:initialize_current_unite(sources, context)"{{{
 
   call unite#set_context(context)
 
-  call s:call_hook(sources, 'on_init')
+  if !context.unite__is_complete
+    call s:call_hook(sources, 'on_init')
+  endif
 endfunction"}}}
 function! s:initialize_unite_buffer()"{{{
   let is_bufexists = bufexists(s:current_unite.real_buffer_name)
