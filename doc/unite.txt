@@ -2699,6 +2699,7 @@ CHANGELOG					*unite-changelog*
 
 2012-09-20
 - Fixed complete behavior.
+- Changed insert word behavior.
 
 2012-09-19
 - Fixed grep source.

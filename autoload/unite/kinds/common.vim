@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: common.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2012.
+" Last Modified: 20 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -134,7 +134,7 @@ function! unite#kinds#common#insert_word(word, ...)"{{{
     " Paste.
     let old_reg = @"
     let @" = a:word
-    execute 'normal!' (col == 1 ? 'P' : 'p')
+    normal! P
     let @" = old_reg
 
     return
