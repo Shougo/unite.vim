@@ -1591,10 +1591,19 @@ line		Nominates current buffer lines as candidates.
 >
 	nnoremap <silent> /  :<C-u>Unite -buffer-name=search line -start-insert -no-quit<CR>
 <
-						*unite-source-resume*
-resume		Nominates unite buffers as candidates, ordering by time
-		series.
+						*unite-source-line/fast*
+line/fast	Nominates current buffer lines as candidates.
+		It is created for big line files(over 10000 lines).
+		Note: You cannot change the matcher in it.
 
+		Source arguments:
+		1. the search direction. "all" or "forward" or "backward".
+		Max candidates: 100
+
+		Example:
+>
+	nnoremap <silent> /  :<C-u>Unite -buffer-name=search line/fast -start-insert -no-quit<CR>
+<
 						*unite-source-jump*
 jump		Nominates results of |:jumps| command as candidates.
 
@@ -2701,6 +2710,9 @@ files by mistake.
 <
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-09-21
+- Added line/fast source.
 
 2012-09-20
 - Fixed complete behavior.

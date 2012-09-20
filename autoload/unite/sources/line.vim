@@ -57,7 +57,14 @@ function! s:source_line.hooks.on_syntax(args, context) "{{{
 endfunction"}}}
 
 function! s:source_line.gather_candidates(args, context)"{{{
-  let lines = s:on_gather_candidates(a:args, a:context, 0)
+  call s:hl_refresh(a:context)
+
+  let direction = a:context.source__direction
+  let start = a:context.source__linenr
+  let lines = (direction ==# 'forward' || direction ==# 'backward') ?
+        \ s:get_lines(a:context, direction, start, 0) :
+        \ (s:get_lines(a:context, 'forward', start, 0)
+        \  + s:get_lines(a:context, 'backward', start-1, 0))
 
   let _ = map(lines, "{
         \ 'word' : v:val[1],
@@ -102,14 +109,22 @@ function! s:source_line_fast.hooks.on_init(args, context) "{{{
         \ 'Target: ' . a:context.source__path, s:source_line_fast.name)
 endfunction"}}}
 function! s:source_line_fast.gather_candidates(args, context)"{{{
-  let lines = s:on_gather_candidates(a:args, a:context, 1)
+  call s:hl_refresh(a:context)
 
-  let _ = map(lines, "{
-        \ 'word' : v:val[1],
-        \ 'is_multiline' : 1,
-        \ 'action__line' : v:val[0],
-        \ 'action__text' : v:val[1],
-        \ }")
+  let direction = a:context.source__direction
+  let start = a:context.source__linenr
+  let offset = 500
+
+  let _ = s:on_gather_candidates(direction, a:context, start, offset)
+  if direction ==# 'all'
+    let _ = s:on_gather_candidates('forward', a:context, start, offset)
+
+    if len(_) <= a:context.unite__max_candidates
+      let _ += s:on_gather_candidates('backward', a:context, start-1, offset)
+    endif
+  else
+    let _ = s:on_gather_candidates(direction, a:context, start, offset)
+  endif
 
   let a:context.source__format = '%' . strlen(len(_)) . 'd: %s'
 
@@ -128,9 +143,6 @@ function! s:on_init(args, context)"{{{
   let a:context.source__linenr = line('.')
   let a:context.source__is_bang =
         \ (get(a:args, 0, '') ==# '!')
-endfunction"}}}
-function! s:on_gather_candidates(args, context, is_fast)"{{{
-  call s:hl_refresh(a:context)
 
   let direction = get(filter(copy(a:args),
         \ "v:val != '!'"), 0, '')
@@ -147,31 +159,60 @@ function! s:on_gather_candidates(args, context, is_fast)"{{{
           \ 'direction: ' . direction, s:source_line.name)
   endif
 
-  let lines = (direction ==# 'forward' || direction ==# 'backward') ?
-        \ s:get_lines(a:context, direction, a:is_fast) :
-        \ (s:get_lines(a:context, 'forward', a:is_fast)
-        \  + s:get_lines(a:context, 'backward', a:is_fast)[: -2])
-
-  return lines
+  let a:context.source__direction = direction
 endfunction"}}}
-function! s:get_lines(context, direction, is_fast)"{{{
+function! s:on_gather_candidates(direction, context, start, offset)"{{{
+  let _ = []
+  let start = a:start
+  let len = 0
+  while 1
+    let lines = map(s:get_lines(a:context, a:direction, start, a:offset), "{
+          \ 'word' : v:val[1],
+          \ 'is_multiline' : 1,
+          \ 'action__line' : v:val[0],
+          \ 'action__text' : v:val[1],
+          \ }")
+    if empty(lines) || start < 0
+      return _
+    endif
+
+    " Check match.
+    for input in a:context.input_list
+      call filter(lines,
+            \ unite#filters#matcher_regexp#get_expr(input))
+    endfor
+
+    let _ += lines
+    let len += len(lines)
+
+    if len >= a:context.unite__max_candidates
+      return _
+    endif
+
+    if a:direction ==# 'forward'
+      let start += a:offset
+    else
+      let start -= a:offset
+    endif
+  endwhile
+endfunction"}}}
+function! s:get_lines(context, direction, start, offset)"{{{
   let [start, end] =
         \ a:direction ==# 'forward' ?
-        \ [a:context.source__linenr, line('$')] :
-        \ [1, a:context.source__linenr]
+        \ [a:start, (a:offset == 0 ? '$' : a:start + a:offset)] :
+        \ [(a:offset == 0 ? 1 : a:start - a:offset),
+        \   a:context.source__linenr]
+  if start <= 0
+    let start = 0
+  endif
 
   let _ = []
   let linenr = start
-  let offset = 1000
-  while start <= end
-    for line in getbufline(a:context.source__bufnr, start, start+offset)
-      call add(_, [linenr, line])
+  for line in getbufline(a:context.source__bufnr, start, end)
+    call add(_, [linenr, line])
 
-      let linenr += 1
-    endfor
-
-    let start += offset
-  endwhile
+    let linenr += 1
+  endfor
 
   return _
 endfunction"}}}

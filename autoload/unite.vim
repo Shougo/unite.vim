@@ -2075,6 +2075,7 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     let context.is_invalidate = source.unite__is_invalidate
     let context.is_list_input = a:context.is_list_input
     let context.input_list = split(context.input, '\\\@<! ')
+    let context.unite__max_candidates = source.max_candidates
 
     let source_candidates = s:get_source_candidates(source)
 
@@ -2126,7 +2127,6 @@ function! s:recache_candidates_loop(context, is_force)"{{{
 
     let context.unite__is_sort_nothing =
           \ empty(sorters) && context.unite__is_interactive
-    let context.unite__max_candidates = source.max_candidates
     let unite.max_source_candidates +=
           \ (context.unite__is_sort_nothing
           \    && source.max_candidates > 0) ?
