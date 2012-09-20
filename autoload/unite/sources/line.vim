@@ -27,8 +27,12 @@
 
 " original verion is http://d.hatena.ne.jp/thinca/20101105/1288896674
 
-call unite#util#set_default('g:source_line_enable_highlight', 1)
-call unite#util#set_default('g:source_line_search_word_highlight', 'Search')
+call unite#util#set_default(
+      \ 'g:source_line_enable_highlight', 1)
+call unite#util#set_default(
+      \ 'g:source_line_search_word_highlight', 'Search')
+
+let s:supported_search_direction = ['forward', 'backward', 'all']
 
 function! unite#sources#line#define() "{{{
   let s:last_result = {
@@ -40,6 +44,7 @@ function! unite#sources#line#define() "{{{
   return s:source_line
 endfunction "}}}
 
+" line source.
 let s:source_line = {
       \ 'name' : 'line',
       \ 'syntax' : 'uniteSource__Line',
@@ -64,21 +69,6 @@ function! s:source_line.hooks.on_syntax(args, context) "{{{
   call s:hl_refresh(a:context)
 endfunction"}}}
 
-function! s:hl_refresh(context)"{{{
-  syntax clear uniteSource__Line_target
-  syntax case ignore
-  if a:context.input == '' || !g:source_line_enable_highlight
-    return
-  endif
-
-  for word in split(a:context.input, '\\\@<! ')
-    execute "syntax match uniteSource__Line_target "
-          \ . string(unite#escape_match(word))
-          \ . " contained containedin=uniteSource__Line"
-  endfor
-endfunction"}}}
-
-let s:supported_search_direction = ['forward', 'backward', 'all']
 function! s:source_line.gather_candidates(args, context)"{{{
   call s:hl_refresh(a:context)
 
@@ -128,6 +118,23 @@ function! s:source_line.gather_candidates(args, context)"{{{
   return _
 endfunction"}}}
 
+function! s:source_line.hooks.on_post_filter(args, context)"{{{
+  call s:post_filter(a:args, a:context)
+endfunction"}}}
+
+function! s:source_line.complete(args, context, arglead, cmdline, cursorpos)"{{{
+  return s:supported_search_direction
+endfunction"}}}
+
+function! s:source_line.source__converter(candidates, context)"{{{
+  return s:converter(a:candidates, a:context)
+endfunction"}}}
+
+let s:source_line.filters =
+      \ ['matcher_regexp', 'sorter_default',
+      \      s:source_line.source__converter]
+
+" Misc.
 function! s:get_lines(context, direction)"{{{
   let [start, end] =
         \ a:direction ==# 'forward' ?
@@ -145,22 +152,19 @@ function! s:get_lines(context, direction)"{{{
   return _
 endfunction"}}}
 
-function! s:source_line.hooks.on_post_filter(args, context)"{{{
-  call s:post_filter(a:args, a:context)
-endfunction"}}}
+function! s:hl_refresh(context)"{{{
+  syntax clear uniteSource__Line_target
+  syntax case ignore
+  if a:context.input == '' || !g:source_line_enable_highlight
+    return
+  endif
 
-function! s:source_line.complete(args, context, arglead, cmdline, cursorpos)"{{{
-  return ['all', 'forward', 'backward']
+  for word in split(a:context.input, '\\\@<! ')
+    execute "syntax match uniteSource__Line_target "
+          \ . string(unite#escape_match(word))
+          \ . " contained containedin=uniteSource__Line"
+  endfor
 endfunction"}}}
-
-" Filters.
-function! s:source_line.source__converter(candidates, context)"{{{
-  return s:converter(a:candidates, a:context)
-endfunction"}}}
-
-let s:source_line.filters =
-      \ ['matcher_regexp', 'sorter_default',
-      \      s:source_line.source__converter]
 
 function! s:converter(candidates, context)"{{{
   for candidate in a:candidates
