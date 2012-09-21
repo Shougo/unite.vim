@@ -734,6 +734,7 @@ function! unite#redraw_candidates(...) "{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
 
+  call unite#redraw_status()
   let lines = unite#convert_lines(candidates)
   let pos = getpos('.')
   let unite = unite#get_current_unite()

@@ -867,7 +867,6 @@ function! s:toggle_max_candidates()"{{{
   else
     call s:redraw_all_candidates()
   endif
-  call unite#redraw_status()
 endfunction"}}}
 function! s:narrowing_path()"{{{
   if line('.') <= unite#get_current_unite().prompt_linenr
