@@ -60,7 +60,7 @@ function! s:source.gather_candidates(args, context)"{{{
   return map(result, "{
         \ 'word' : v:val,
         \ 'kind' : 'word',
-        \ 'is_multi_line' : 1,
+        \ 'is_multiline' : 1,
         \ }")
 endfunction"}}}
 function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
