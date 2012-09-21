@@ -199,8 +199,7 @@ function! s:get_lines(context, direction, start, offset)"{{{
   let [start, end] =
         \ a:direction ==# 'forward' ?
         \ [a:start, (a:offset == 0 ? '$' : a:start + a:offset)] :
-        \ [(a:offset == 0 ? 1 : a:start - a:offset),
-        \   a:context.source__linenr]
+        \ [(a:offset == 0 ? 1 : a:start - a:offset), a:start]
   if start <= 0
     let start = 0
   endif
