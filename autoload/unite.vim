@@ -1075,13 +1075,15 @@ function! unite#start(sources, ...)"{{{
 
   setlocal modifiable
 
+  " Redraw prompt.
   silent % delete _
-  call unite#redraw_status()
+  call setline(s:LNUM_STATUS, '')
   call setline(unite.prompt_linenr, unite.prompt . unite.context.input)
   for message in s:unite_cached_message
     call s:print_buffer(message)
     unlet message
   endfor
+
   call unite#redraw_candidates()
 
   call s:init_cursor()
