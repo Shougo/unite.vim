@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Sep 2012.
+" Last Modified: 21 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -347,9 +347,13 @@ function! unite#loaded_source_names_string()"{{{
   return join(unite#loaded_source_names())
 endfunction"}}}
 function! unite#loaded_source_names_with_args()"{{{
-  return map(copy(unite#loaded_sources_list()),
-        \ 'join(insert(filter(copy(v:val.args),
-        \  "type(v:val) < 1"), s:convert_source_name(v:val.name)), ":")')
+  return map(copy(unite#loaded_sources_list()), "
+        \ join(insert(filter(copy(v:val.args),
+        \  'type(v:val) < 1'), s:convert_source_name(v:val.name)), ':')
+        \ . (v:val.unite__candidates_len == 0 ? '' :
+        \      printf('(%s/%s)', v:val.unite__candidates_len,
+        \      v:val.unite__candidates_orig_len))
+        \ ")
 endfunction"}}}
 function! unite#loaded_sources_list()"{{{
   return s:get_loaded_sources()
@@ -2131,6 +2135,7 @@ function! s:recache_candidates_loop(context, is_force)"{{{
           \ (context.unite__is_sort_nothing
           \    && source.max_candidates > 0) ?
           \ source.max_candidates : len(source_candidates)
+    let source.unite__candidates_orig_len = len(source_candidates)
 
     " Call filters.
     for Filter in prev_filters + matchers + sorters + post_filters
@@ -2146,6 +2151,7 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     endfor
 
     let source.unite__candidates += source_candidates
+    let source.unite__candidates_len = len(source_candidates)
     if !empty(source_candidates)
       call add(candidate_sources,
             \ s:convert_source_name(source.name))
