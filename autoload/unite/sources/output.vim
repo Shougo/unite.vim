@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: output.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Aug 2012.
+" Last Modified: 21 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,10 +57,11 @@ function! s:source.gather_candidates(args, context)"{{{
     let result = split(output, '\r\n\|\n')
   endif
 
-  return map(result, '{
-        \ "word" : v:val,
-        \ "kind" : "word",
-        \ }')
+  return map(result, "{
+        \ 'word' : v:val,
+        \ 'kind' : 'word',
+        \ 'is_multi_line' : 1,
+        \ }")
 endfunction"}}}
 function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
   if !exists('*neocomplcache#sources#vim_complete#helper#command')
