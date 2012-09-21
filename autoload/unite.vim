@@ -350,9 +350,9 @@ function! unite#loaded_source_names_with_args()"{{{
   return map(copy(unite#loaded_sources_list()), "
         \ join(insert(filter(copy(v:val.args),
         \  'type(v:val) < 1'), s:convert_source_name(v:val.name)), ':')
-        \ . (v:val.unite__candidates_len == 0 ? '' :
-        \      printf('(%s/%s)', v:val.unite__candidates_len,
-        \      v:val.unite__candidates_orig_len))
+        \ . (v:val.unite__len_candidates == 0 ? '' :
+        \      printf('(%s/%s)', v:val.unite__len_candidates,
+        \      v:val.unite__orig_len_candidates))
         \ ")
 endfunction"}}}
 function! unite#loaded_sources_list()"{{{
@@ -2132,11 +2132,11 @@ function! s:recache_candidates_loop(context, is_force)"{{{
 
     let context.unite__is_sort_nothing =
           \ empty(sorters) && context.unite__is_interactive
+    let source.unite__orig_len_candidates = len(source_candidates)
     let unite.max_source_candidates +=
           \ (context.unite__is_sort_nothing
           \    && source.max_candidates > 0) ?
-          \ source.max_candidates : len(source_candidates)
-    let source.unite__candidates_orig_len = len(source_candidates)
+          \ source.max_candidates : source.unite__orig_len_candidates
 
     " Call filters.
     for Filter in prev_filters + matchers + sorters + post_filters
@@ -2152,7 +2152,7 @@ function! s:recache_candidates_loop(context, is_force)"{{{
     endfor
 
     let source.unite__candidates += source_candidates
-    let source.unite__candidates_len = len(source_candidates)
+    let source.unite__len_candidates = len(source_candidates)
     if !empty(source_candidates)
       call add(candidate_sources,
             \ s:convert_source_name(source.name))
