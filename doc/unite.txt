@@ -344,6 +344,11 @@ COMMANDS 					*unite-commands*
 		-long-source-names
 		Use long source names.
 
+					*unite-options-multi-line*
+		-multi-line
+		Force use multi line. If candiate abbr is too long, unite.vim
+		will fold automatically.
+
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that it targets the current
 		directory for the initial narrowing text.
@@ -2721,6 +2726,7 @@ CHANGELOG					*unite-changelog*
 - Improved lcd for vimfiler.
 - Fixed set syntax.
 - Fixed redraw_all_candidates().
+- Added -multi-line option.
 
 2012-09-21
 - Added line/fast source.

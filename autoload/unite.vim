@@ -289,6 +289,7 @@ let s:unite_options = [
       \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
       \ '-auto-quit', '-no-focus',
       \ '-long-source-names', '-short-source-names',
+      \ '-multi-line',
       \]
 "}}}
 
@@ -1575,6 +1576,7 @@ function! s:initialize_context(context)"{{{
         \ 'is_redraw' : 0,
         \ 'is_resize' : 0,
         \ 'no_focus' : 0,
+        \ 'multi_line' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 0,
         \ 'unite__is_vimfiler' : 0,
@@ -1865,7 +1867,7 @@ function! s:initialize_candidates(candidates)"{{{
           \ get(candidate, 'abbr', candidate.word)
 
     " Delete too long abbr.
-    if candidate.is_multiline
+    if candidate.is_multiline || context.multi_line
       let candidate.unite__abbr =
             \ candidate.unite__abbr[: max_width *
             \  (context.max_multi_lines + 1)+10]
@@ -1881,7 +1883,7 @@ function! s:initialize_candidates(candidates)"{{{
             \ repeat(' ', &tabstop), 'g')
     endif
 
-    if !candidate.is_multiline
+    if !candidate.is_multiline && !context.multi_line
       call add(candidates, candidate)
       continue
     endif
@@ -1935,7 +1937,7 @@ function! s:initialize_candidates(candidates)"{{{
   endfor
 
   " Multiline check.
-  if is_multiline
+  if is_multiline || context.multi_line
     for candidate in filter(copy(candidates), '!v:val.is_multiline')
       let candidate.unite__abbr = '  ' . candidate.unite__abbr
     endfor
