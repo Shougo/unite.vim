@@ -2531,6 +2531,7 @@ function! s:redraw(is_force, winnr, is_gather_all) "{{{
   if !context.is_redraw && input ==# unite.last_input
         \ && !unite.is_async
         \ && !context.is_resize
+        \ && !a:is_gather_all
     return
   endif
 

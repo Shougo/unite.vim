@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2012.
+" Last Modified: 23 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -862,11 +862,8 @@ function! s:toggle_max_candidates()"{{{
     echo 'Disabled max candidates.'
   endif
 
-  if len(unite.candidates) == len(unite.current_candidates)
-    call unite#force_redraw()
-  else
-    call s:redraw_all_candidates()
-  endif
+  call unite#force_redraw()
+  call s:redraw_all_candidates()
 endfunction"}}}
 function! s:narrowing_path()"{{{
   if line('.') <= unite#get_current_unite().prompt_linenr
@@ -885,7 +882,7 @@ endfunction"}}}
 function! s:redraw_all_candidates()"{{{
   let unite = unite#get_current_unite()
   if len(unite.candidates) != len(unite.current_candidates)
-    call unite#force_redraw(0, 1)
+    call unite#redraw(0, 1)
   endif
 endfunction"}}}
 

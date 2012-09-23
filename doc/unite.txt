@@ -2720,6 +2720,7 @@ CHANGELOG					*unite-changelog*
 - Improved input().
 - Improved lcd for vimfiler.
 - Fixed set syntax.
+- Fixed redraw_all_candidates().
 
 2012-09-21
 - Added line/fast source.
