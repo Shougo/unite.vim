@@ -691,7 +691,8 @@ function! unite#redraw_line(...) "{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
 
-  let candidate = unite#get_unite_candidates()[linenr - (unite#get_current_unite().prompt_linenr+1)]
+  let candidate = unite#get_unite_candidates()[linenr -
+        \ (unite#get_current_unite().prompt_linenr+1)]
   call setline(linenr, unite#convert_lines([candidate])[0])
 
   let &l:modifiable = modifiable_save
@@ -752,6 +753,9 @@ function! unite#redraw_candidates(...) "{{{
   if pos != getpos('.')
     call setpos('.', pos)
   endif
+
+  " Set syntax.
+  call s:set_syntax()
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{
   return unite#util#sort_by(filter(copy(unite#get_unite_candidates()),
@@ -2456,58 +2460,7 @@ function! s:initialize_unite_buffer()"{{{
     return
   endif
 
-  " Set highlight.
-  let match_prompt = escape(unite.prompt, '\/*~.^$[]')
-  syntax clear uniteInputPrompt
-  execute 'syntax match uniteInputPrompt'
-        \ '/^'.match_prompt.'/ contained'
-
-  if !unite.context.hide_source_names
-    syntax match uniteStatusLine /\%1l.*/
-          \  contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
-  endif
-
-  execute 'syntax match uniteInputLine'
-        \ '/\%'.unite.prompt_linenr.'l.*/'
-        \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
-
-  syntax clear uniteCandidateSourceName
-  if unite.max_source_name > 0
-    syntax match uniteCandidateSourceName
-          \ /\%3c[[:alnum:]_\/-]\+/ contained
-  else
-    syntax match uniteCandidateSourceName /^- / contained
-  endif
-  let source_padding = 3
-
-  let unite.abbr_head = unite.max_source_name+source_padding
-  execute 'syntax region uniteCandidateAbbr' 'start=/\%'
-        \ .(unite.abbr_head).'c/ end=/$/ keepend contained'
-
-  execute 'highlight default link uniteCandidateAbbr'
-        \ g:unite_abbr_highlight
-
-  " Set syntax.
-  for source in filter(copy(unite.sources), 'v:val.syntax != ""')
-    let name = unite.max_source_name > 0 ?
-          \ s:convert_source_name(source.name) : ''
-
-    execute 'syntax region' source.syntax 'start=/\%'
-          \ .(unite.abbr_head).'c/ end=/$/ keepend contained'
-
-    execute 'highlight default link'
-          \ source.syntax g:unite_abbr_highlight
-
-    execute printf('syntax region %s start="^- %s" end="$" '.
-          \ 'keepend contains=uniteCandidateMarker,%s%s',
-          \ 'uniteSourceLine__'.source.syntax,
-          \ (name == '' ? '' : name . '\>'),
-          \ (name == '' ? '' : 'uniteCandidateSourceName,'),
-          \    source.syntax
-          \ )
-
-    call s:call_hook([source], 'on_syntax')
-  endfor
+  call s:set_syntax_default()
 endfunction"}}}
 function! s:switch_unite_buffer(buffer_name, context)"{{{
   " Search unite window.
@@ -3201,6 +3154,76 @@ function! s:convert_source_name(source_name)"{{{
   return !context.short_source_names ? a:source_name :
         \ a:source_name !~ '\A'  ? a:source_name[:1] :
         \ substitute(a:source_name, '\a\zs\a\+', '', 'g')
+endfunction"}}}
+function! s:convert_source_name(source_name)"{{{
+  let context = unite#get_context()
+  return !context.short_source_names ? a:source_name :
+        \ a:source_name !~ '\A'  ? a:source_name[:1] :
+        \ substitute(a:source_name, '\a\zs\a\+', '', 'g')
+endfunction"}}}
+function! s:set_syntax_default()"{{{
+  let unite = unite#get_current_unite()
+
+  " Set highlight.
+  let match_prompt = escape(unite.prompt, '\/*~.^$[]')
+  syntax clear uniteInputPrompt
+  execute 'syntax match uniteInputPrompt'
+        \ '/^'.match_prompt.'/ contained'
+
+  if !unite.context.hide_source_names
+    syntax match uniteStatusLine /\%1l.*/
+          \  contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
+  endif
+
+  execute 'syntax match uniteInputLine'
+        \ '/\%'.unite.prompt_linenr.'l.*/'
+        \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+
+  syntax clear uniteCandidateSourceName
+  if unite.max_source_name > 0
+    syntax match uniteCandidateSourceName
+          \ /\%3c[[:alnum:]_\/-]\+/ contained
+  else
+    syntax match uniteCandidateSourceName /^- / contained
+  endif
+
+  execute 'highlight default link uniteCandidateAbbr'
+        \ g:unite_abbr_highlight
+
+  " Set syntax.
+  for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+    let name = unite.max_source_name > 0 ?
+          \ s:convert_source_name(source.name) : ''
+
+    execute 'highlight default link'
+          \ source.syntax g:unite_abbr_highlight
+
+    execute printf('syntax region %s start="^- %s" end="$" '.
+          \ 'keepend contains=uniteCandidateMarker,%s%s',
+          \ 'uniteSourceLine__'.source.syntax,
+          \ (name == '' ? '' : name . '\>'),
+          \ (name == '' ? '' : 'uniteCandidateSourceName,'),
+          \    source.syntax
+          \ )
+
+    call s:call_hook([source], 'on_syntax')
+  endfor
+endfunction"}}}
+function! s:set_syntax()"{{{
+  let unite = unite#get_current_unite()
+  let source_padding = 3
+
+  let abbr_head = unite.max_source_name+source_padding
+  syntax clear uniteCandidateAbbr
+  execute 'syntax region uniteCandidateAbbr' 'start=/\%'
+        \ .(abbr_head).'c/ end=/$/ keepend contained'
+
+  " Set syntax.
+  for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+    execute 'syntax clear' source.syntax
+    execute 'syntax region' source.syntax 'start=/\%'
+          \ .(abbr_head).'c/ end=/$/ keepend contained'
+  endfor
 endfunction"}}}
 "}}}
 
