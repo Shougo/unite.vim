@@ -91,6 +91,21 @@ function! s:kind.action_table.project_cd.func(candidate)"{{{
   endif
 endfunction"}}}
 
+let s:kind.action_table.tabnew_cd = {
+      \ 'description' : 'open a new tab page here',
+      \ }
+function! s:kind.action_table.tabnew_cd.func(candidate)"{{{
+  if !s:check_is_directory(a:candidate.action__directory)
+    return
+  endif
+
+  if &filetype ==# 'vimfiler' || &filetype ==# 'vimshell'
+    tabnew | call s:external_cd(a:candidate)
+  elseif a:candidate.action__directory != ''
+    tabnew | execute g:unite_kind_openable_cd_command '`=a:candidate.action__directory`'
+  endif
+endfunction"}}}
+
 let s:kind.action_table.narrow = {
       \ 'description' : 'narrowing candidates by directory name',
       \ 'is_quit' : 0,
