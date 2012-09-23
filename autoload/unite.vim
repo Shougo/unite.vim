@@ -351,7 +351,7 @@ function! unite#loaded_source_names_with_args()"{{{
         \ join(insert(filter(copy(v:val.args),
         \  'type(v:val) < 1'), s:convert_source_name(v:val.name)), ':')
         \ . (v:val.unite__len_candidates == 0 ? '' :
-        \      printf('(%s/%s)', v:val.unite__len_candidates,
+        \      printf(' (%s/%s)', v:val.unite__len_candidates,
         \      v:val.unite__orig_len_candidates))
         \ ")
 endfunction"}}}
