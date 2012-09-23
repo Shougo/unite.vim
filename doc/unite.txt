@@ -2714,6 +2714,7 @@ CHANGELOG					*unite-changelog*
 
 2012-09-24
 - Improved input().
+- Improved lcd for vimfiler.
 
 2012-09-21
 - Added line/fast source.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2012.
+" Last Modified: 23 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -221,12 +221,14 @@ let s:kind.action_table.vimfiler__move = {
 function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
-  if vimfiler_current_dir != ''
-    let current_dir = getcwd()
-    lcd `=vimfiler_current_dir`
+  if vimfiler_current_dir == ''
+    let vimfiler_current_dir = getcwd()
   endif
+  let current_dir = getcwd()
 
   try
+    lcd `=vimfiler_current_dir`
+
     if g:unite_kind_file_move_command == ''
       call unite#print_error("Please install mv.exe.")
       return 1
@@ -270,10 +272,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
             \ candidates, dest_dir, 'move')
     endif
   finally
-
-    if vimfiler_current_dir != ''
-      lcd `=current_dir`
-    endif
+    lcd `=current_dir`
   endtry
 endfunction"}}}
 
@@ -301,12 +300,14 @@ let s:kind.action_table.vimfiler__copy = {
 function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
-  if vimfiler_current_dir != ''
-    let current_dir = getcwd()
-    lcd `=vimfiler_current_dir`
+  if vimfiler_current_dir == ''
+    let vimfiler_current_dir = getcwd()
   endif
+  let current_dir = getcwd()
 
   try
+    lcd `=vimfiler_current_dir`
+
     if g:unite_kind_file_copy_file_command == ''
           \ || g:unite_kind_file_copy_directory_command == ''
       call unite#print_error("Please install cp.exe.")
@@ -334,9 +335,7 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
       call unite#kinds#file#do_action(a:candidates, dest_dir, 'copy')
     endif
   finally
-    if vimfiler_current_dir != ''
-      lcd `=current_dir`
-    endif
+    lcd `=current_dir`
   endtry
 endfunction"}}}
 function! s:check_copy_func(filename)"{{{
@@ -380,12 +379,14 @@ let s:kind.action_table.vimfiler__rename = {
 function! s:kind.action_table.vimfiler__rename.func(candidate)"{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
-  if vimfiler_current_dir != ''
-    let current_dir = getcwd()
-    lcd `=vimfiler_current_dir`
+  if vimfiler_current_dir == ''
+    let vimfiler_current_dir = getcwd()
   endif
+  let current_dir = getcwd()
 
   try
+    lcd `=vimfiler_current_dir`
+
     let context = unite#get_context()
     let filename = has_key(context, 'action__filename') ?
           \ context.action__filename :
@@ -398,9 +399,7 @@ function! s:kind.action_table.vimfiler__rename.func(candidate)"{{{
       call unite#kinds#file#do_rename(a:candidate.action__path, filename)
     endif
   finally
-    if vimfiler_current_dir != ''
-      lcd `=current_dir`
-    endif
+    lcd `=current_dir`
   endtry
 endfunction"}}}
 
@@ -413,12 +412,14 @@ let s:kind.action_table.vimfiler__newfile = {
 function! s:kind.action_table.vimfiler__newfile.func(candidate)"{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
-  if vimfiler_current_dir != ''
-    let current_dir = getcwd()
-    lcd `=vimfiler_current_dir`
+  if vimfiler_current_dir == ''
+    let vimfiler_current_dir = getcwd()
   endif
+  let current_dir = getcwd()
 
   try
+    lcd `=vimfiler_current_dir`
+
     let filenames = input('New files name(comma separated multiple files): ',
           \               '', 'file')
     if filenames == ''
@@ -428,6 +429,8 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate)"{{{
     endif
 
     for filename in split(filenames, ',')
+      lcd `=vimfiler_current_dir`
+
       if filereadable(filename)
         redraw
         echo filename . ' is already exists.'
@@ -442,9 +445,7 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate)"{{{
       call unite#mappings#do_action(g:vimfiler_edit_action, [file])
     endfor
   finally
-    if vimfiler_current_dir != ''
-      lcd `=current_dir`
-    endif
+    lcd `=current_dir`
   endtry
 endfunction"}}}
 
@@ -475,12 +476,13 @@ let s:kind.action_table.vimfiler__shellcmd = {
 function! s:kind.action_table.vimfiler__shellcmd.func(candidate)"{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
-  if vimfiler_current_dir != ''
-    let current_dir = getcwd()
-    lcd `=vimfiler_current_dir`
+  if vimfiler_current_dir == ''
+    let vimfiler_current_dir = getcwd()
   endif
+  let current_dir = getcwd()
 
   try
+    lcd `=vimfiler_current_dir`
     let command = unite#get_context().vimfiler__command
     let output = split(unite#util#system(command), '\n\|\r\n')
 
@@ -488,9 +490,7 @@ function! s:kind.action_table.vimfiler__shellcmd.func(candidate)"{{{
       call unite#start([['output', output]])
     endif
   finally
-    if vimfiler_current_dir != ''
-      lcd `=current_dir`
-    endif
+    lcd `=current_dir`
   endtry
 endfunction"}}}
 
@@ -504,12 +504,14 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidate)"{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(),
         \   'vimfiler__current_directory', '')
-  if vimfiler_current_dir != ''
-    let current_dir = getcwd()
-    lcd `=vimfiler_current_dir`
+  if vimfiler_current_dir == ''
+    let vimfiler_current_dir = getcwd()
   endif
+  let current_dir = getcwd()
 
   try
+    lcd `=vimfiler_current_dir`
+
     let dirname = input('New directory name: ', '', 'dir')
     redraw
 
@@ -527,9 +529,7 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidate)"{{{
       call mkdir(dirname, 'p')
     endif
   finally
-    if vimfiler_current_dir != ''
-      lcd `=current_dir`
-    endif
+    lcd `=current_dir`
   endtry
 endfunction"}}}
 
@@ -541,12 +541,14 @@ let s:kind.action_table.vimfiler__execute = {
 function! s:kind.action_table.vimfiler__execute.func(candidates)"{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
-  if vimfiler_current_dir != ''
-    let current_dir = getcwd()
-    lcd `=vimfiler_current_dir`
+  if vimfiler_current_dir == ''
+    let vimfiler_current_dir = getcwd()
   endif
+  let current_dir = getcwd()
 
   try
+    lcd `=vimfiler_current_dir`
+
     for candidate in a:candidates
       let path = candidate.action__path
       if unite#util#is_windows() && path =~ '^//'
@@ -557,9 +559,7 @@ function! s:kind.action_table.vimfiler__execute.func(candidates)"{{{
       call s:System.open(path)
     endfor
   finally
-    if vimfiler_current_dir != ''
-      lcd `=current_dir`
-    endif
+    lcd `=current_dir`
   endtry
 endfunction"}}}
 
