@@ -310,6 +310,8 @@ COMMANDS 					*unite-commands*
 		-hide-source-names
 		Hide source names.
 		Note: This option hide unite status line.
+		Note: If this option is used, source highlight will be
+		overwritten by other sources.
 
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}
