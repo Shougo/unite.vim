@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2012.
+" Last Modified: 23 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1077,7 +1077,6 @@ function! unite#start(sources, ...)"{{{
 
   " Redraw prompt.
   silent % delete _
-  call setline(s:LNUM_STATUS, '')
   call setline(unite.prompt_linenr, unite.prompt . unite.context.input)
   for message in s:unite_cached_message
     call s:print_buffer(message)
