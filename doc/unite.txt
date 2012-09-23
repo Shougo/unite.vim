@@ -1952,6 +1952,8 @@ Defines an interface for files you can move to with cd command.
 	lcd		Change the current directory of the current window.
 	project_cd	Look for the project directory, and change the
 			current directory there.
+	tabnew_cd	Open a new tab page and change the current
+			directory there.
 	narrow		Narrow down candidates by the directory name
 	vimshell	Run |vimshell| on the directory.  This is available
 			only when you already installed |vimshell|.
