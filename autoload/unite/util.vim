@@ -79,6 +79,14 @@ endfunction
 function! unite#util#uniq(...)
   return call(s:List.uniq, a:000)
 endfunction
+function! unite#util#input(prompt, ...)"{{{
+  let context = unite#get_context()
+  let default = get(a:000, 0, '')
+  let completion = get(a:000, 1, '')
+
+  return context.unite__is_interactive ?
+        \ input(a:prompt, default, completion) : default
+endfunction"}}}
 function! unite#util#input_yesno(message)"{{{
   let yesno = input(a:message . ' [yes/no] : ')
   while yesno !~? '^\%(y\%[es]\|n\%[o]\)$'

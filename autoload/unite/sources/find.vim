@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: find.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 01 Sep 2012.
+" Last Modified: 23 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -64,14 +64,14 @@ let s:source = {
 function! s:source.hooks.on_init(args, context) "{{{
   let a:context.source__target = get(a:args, 0, '')
   if a:context.source__target == ''
-    let a:context.source__target = input('Target: ', '.', 'dir')
+    let a:context.source__target = unite#util#input('Target: ', '.', 'dir')
   endif
 
   let a:context.source__input = get(a:args, 1, '')
   if a:context.source__input == ''
     redraw
     echo "Please input command-line(quote is needed) Ex: -name '*.vim'"
-    let a:context.source__input = input(
+    let a:context.source__input = unite#util#input(
           \ printf('%s %s ', g:unite_source_find_command,
           \   a:context.source__target), '-name ')
   endif

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: output.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2012.
+" Last Modified: 23 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,7 +47,8 @@ function! s:source.gather_candidates(args, context)"{{{
   else
     let command = join(a:args, ' ')
     if command == ''
-      let command = input('Please input Vim command: ', '', 'command')
+      let command = unite#util#input(
+            \ 'Please input Vim command: ', '', 'command')
     endif
 
     redir => output

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 10 Sep 2012.
+" Last Modified: 23 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -87,7 +87,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     if type(get(a:args, 0, '')) == type('')
           \ && get(a:args, 0, '') == ''
       let target = unite#util#substitute_path_separator(
-            \ input('Target: ', default, 'file'))
+            \ unite#util#input('Target: ', default, 'file'))
     else
       let target = default
     endif
@@ -103,7 +103,7 @@ function! s:source.hooks.on_init(args, context) "{{{
 
   let a:context.source__input = get(a:args, 1, '')
   if a:context.source__input == ''
-    let a:context.source__input = input('Pattern: ')
+    let a:context.source__input = unite#util#input('Pattern: ')
   endif
 
   let a:context.source__directory =

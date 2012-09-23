@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jun 2012.
+" Last Modified: 23 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -72,7 +72,8 @@ function! unite#sources#bookmark#_append(filename)"{{{
 
   redraw
   echo 'Path: ' . path
-  let bookmark_name = input('Please input bookmark file name (default): ',
+  let bookmark_name = input(
+        \ 'Please input bookmark file name (default): ',
         \ '', 'customlist,' . s:SID_PREFIX() . 'complete_bookmark_filename')
   if bookmark_name == ''
     let bookmark_name = 'default'

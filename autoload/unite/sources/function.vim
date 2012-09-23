@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: function.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2012.
+" Last Modified: 23 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -142,7 +142,7 @@ function! s:source.action_table.call.func(candidate)"{{{
     endif
   endif
 
-  let args = input('call ' .
+  let args = unite#util#input('call ' .
         \ a:candidate.action__function.'(', '', 'expression')
   if args != '' && args =~ ')$'
     redraw
