@@ -83,9 +83,12 @@ function! unite#util#input(prompt, ...)"{{{
   let context = unite#get_context()
   let default = get(a:000, 0, '')
   let completion = get(a:000, 1, '')
+  let args = [a:prompt, default]
+  if completion != ''
+    call add(args, completion)
+  endif
 
-  return context.unite__is_interactive ?
-        \ input(a:prompt, default, completion) : default
+  return context.unite__is_interactive ? call('input', args) : default
 endfunction"}}}
 function! unite#util#input_yesno(message)"{{{
   let yesno = input(a:message . ' [yes/no] : ')
