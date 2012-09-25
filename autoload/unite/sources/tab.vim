@@ -58,8 +58,8 @@ function! s:source.gather_candidates(args, context)"{{{
 
   let candidates = []
   for i in list
-    let bufnrs = tabpagebuflist(i)
-    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " Get current window buffer in tabs.
+    " Get current window buffer in tabs.
+    let bufnr = tabpagebuflist(i)[tabpagewinnr(i) - 1]
 
     let bufname = unite#substitute_path_separator(
           \ (i == tabpagenr() ?
@@ -106,13 +106,17 @@ function! s:source.gather_candidates(args, context)"{{{
     endif
     let abbr .= getbufvar(bufnr('%'), '&modified') ? '[+]' : ''
 
+    let bufnames = map(tabpagebuflist(i),
+          \ "bufname(v:val) == '' ? '[No Name]' : bufname(v:val)")
+    let abbr .= "\n" . join(map(bufnames,
+          \ "repeat(' ', 1) . v:val"), "\n")
     let word = exists('*gettabvar') && gettabvar(i, 'title') != '' ?
           \ gettabvar(i, 'title') : bufname
 
     call add(candidates, {
-          \ 'word' : word,
-          \ 'abbr' : abbr,
+          \ 'word' : abbr,
           \ 'kind' : 'tab',
+          \ 'is_multiline' : 1,
           \ 'action__tab_nr' : i,
           \ 'action__directory' : cwd,
           \ })
