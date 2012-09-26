@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2012.
+" Last Modified: 27 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1776,6 +1776,10 @@ function! s:initialize_sources(...)"{{{
       let source.ignore_pattern =
             \ get(custom_source, 'ignore_pattern',
             \    get(source, 'ignore_pattern', ''))
+
+      let source.unite__len_candidates = 0
+      let source.unite__orig_len_candidates = 0
+      let source.unite__candidates = []
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)

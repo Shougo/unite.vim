@@ -2721,6 +2721,9 @@ files by mistake.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-09-27
+- Fixed initialize error.
+
 2012-09-25
 - Improved tab source.
 - Changed tab source behavior.
