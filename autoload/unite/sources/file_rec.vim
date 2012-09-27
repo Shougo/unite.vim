@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2012.
+" Last Modified: 27 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,6 +57,9 @@ let s:source_rec = {
 
 function! s:source_rec.gather_candidates(args, context)"{{{
   let a:context.source__directory = s:get_path(a:args, a:context)
+
+  call unite#print_source_message(
+        \ "hoge\npiyo\nhogera", s:source_rec.name)
 
   let directory = a:context.source__directory
   if directory == ''

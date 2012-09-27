@@ -993,7 +993,7 @@ function! s:print_buffer(message)"{{{
 
       " Append source name.
       let message += map(trunc_msgs[1:],
-            \ "matchstr(trunc_msg, '^\[.\{-}\] ') . v:val")
+            \ "matchstr(trunc_msg, '^\\[.\\{-}\\] ') . v:val")
     endwhile
   endfor
 
