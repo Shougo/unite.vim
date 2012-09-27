@@ -58,9 +58,6 @@ let s:source_rec = {
 function! s:source_rec.gather_candidates(args, context)"{{{
   let a:context.source__directory = s:get_path(a:args, a:context)
 
-  call unite#print_source_message(
-        \ "hoge\npiyo\nhogera", s:source_rec.name)
-
   let directory = a:context.source__directory
   if directory == ''
     " Not in project directory.
