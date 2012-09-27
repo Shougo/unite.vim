@@ -988,7 +988,7 @@ function! s:print_buffer(message)"{{{
         endif
       endif
 
-      call add(message, trunc_msg)
+      call add(message, split(trunc_msg, '\n'))
     endwhile
   endfor
 
