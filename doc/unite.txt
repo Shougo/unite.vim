@@ -2721,6 +2721,9 @@ files by mistake.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-09-28
+- Improved message behavior.
+
 2012-09-27
 - Fixed initialize error.
 
