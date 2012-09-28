@@ -2723,6 +2723,7 @@ CHANGELOG					*unite-changelog*
 
 2012-09-28
 - Improved message behavior.
+- Changed tab source behavior.
 
 2012-09-27
 - Fixed initialize error.

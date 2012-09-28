@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Sep 2012.
+" Last Modified: 28 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,12 +30,6 @@ set cpo&vim
 function! unite#sources#tab#define()"{{{
   return s:source
 endfunction"}}}
-function! unite#sources#tab#_append()"{{{
-  if exists('*gettabvar')
-    " Save tab access time.
-    let t:unite_tab_access_time = localtime()
-  endif
-endfunction"}}}
 
 let s:source = {
       \ 'name' : 'tab',
@@ -45,11 +39,8 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
-  let list = range(1, tabpagenr('$'))
-  unlet list[tabpagenr()-1]
-  if exists('*gettabvar')
-    call sort(list, 's:compare')
-  endif
+  let list = range(tabpagenr()+1, tabpagenr('$'))
+        \ + range(1, tabpagenr()-1)
   let arg = get(a:args, 0, '')
   if arg !=# 'no-current'
     " Add current tab.
@@ -106,10 +97,9 @@ function! s:source.gather_candidates(args, context)"{{{
     endif
     let abbr .= getbufvar(bufnr('%'), '&modified') ? '[+]' : ''
 
-    let bufnames = map(tabpagebuflist(i),
-          \ "bufname(v:val) == '' ? '[No Name]' : bufname(v:val)")
-    let abbr .= "\n" . join(map(bufnames,
-          \ "repeat(' ', 1) . v:val"), "\n")
+    let abbr .= "\n" . join(unite#util#uniq(map(tabpagebuflist(i),
+          \ "printf('%s %d: %s', repeat(' ', 1), bufwinnr(v:val),
+          \ (bufname(v:val) == '' ? '[No Name]' : bufname(v:val)))")), "\n")
     let word = exists('*gettabvar') && gettabvar(i, 'title') != '' ?
           \ gettabvar(i, 'title') : bufname
 
@@ -134,11 +124,6 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   syntax match uniteSource__Tab_directory /(.\{-})/
         \ contained containedin=uniteSource__Tab
   highlight default link uniteSource__Tab_directory PreProc
-endfunction"}}}
-
-" Misc
-function! s:compare(candidate_a, candidate_b)"{{{
-  return gettabvar(a:candidate_b, 'unite_tab_access_time') - gettabvar(a:candidate_a, 'unite_tab_access_time')
 endfunction"}}}
 
 let &cpo = s:save_cpo
