@@ -98,9 +98,14 @@ function! s:source.gather_candidates(args, context)"{{{
     let abbr .= getbufvar(bufnr('%'), '&modified') ? '[+]' : ''
 
     if len(tabpagebuflist(i)) > 1
-      let abbr .= "\n" . join(unite#util#uniq(map(tabpagebuflist(i),
-            \ "printf('%s %d: %s', repeat(' ', 1), bufwinnr(v:val),
-            \ (bufname(v:val) == '' ? '[No Name]' : bufname(v:val)))")), "\n")
+      " Get tab windows list.
+      let tabnr = tabpagenr()
+      execute 'tabnext' i
+      let abbr .= "\n" . join(map(range(1, winnr('$')),
+            \ "printf('%s %d: %s', repeat(' ', 1), v:val,
+            \ (bufname(winbufnr(v:val)) == '' ?
+            \ '[No Name]' : bufname(winbufnr(v:val))))"), "\n")
+      execute 'tabnext' tabnr
     endif
     let word = exists('*gettabvar') && gettabvar(i, 'title') != '' ?
           \ gettabvar(i, 'title') : bufname
