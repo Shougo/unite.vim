@@ -981,7 +981,7 @@ function! s:print_buffer(message)"{{{
           let msg = '!!!<'.msg
           let trunc_msg .= '>!!!'
         else
-          let source_name = matchstr(trunc_msg, '^\[\zs.\{-}\ze\] ')
+          let source_name = matchstr(trunc_msg, '^\[.\{-}\] ')
 
           " Append source name.
           let msg = source_name.'<'.msg
