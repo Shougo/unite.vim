@@ -97,9 +97,11 @@ function! s:source.gather_candidates(args, context)"{{{
     endif
     let abbr .= getbufvar(bufnr('%'), '&modified') ? '[+]' : ''
 
-    let abbr .= "\n" . join(unite#util#uniq(map(tabpagebuflist(i),
-          \ "printf('%s %d: %s', repeat(' ', 1), bufwinnr(v:val),
-          \ (bufname(v:val) == '' ? '[No Name]' : bufname(v:val)))")), "\n")
+    if len(tabpagebuflist(i)) > 1
+      let abbr .= "\n" . join(unite#util#uniq(map(tabpagebuflist(i),
+            \ "printf('%s %d: %s', repeat(' ', 1), bufwinnr(v:val),
+            \ (bufname(v:val) == '' ? '[No Name]' : bufname(v:val)))")), "\n")
+    endif
     let word = exists('*gettabvar') && gettabvar(i, 'title') != '' ?
           \ gettabvar(i, 'title') : bufname
 
