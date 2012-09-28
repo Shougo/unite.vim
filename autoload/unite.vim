@@ -188,6 +188,8 @@ function! unite#smart_map(narrow_map, select_map)"{{{
   return (line('.') <= unite#get_current_unite().prompt_linenr && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
 endfunction"}}}
 function! unite#start_complete(sources, ...) "{{{
+  let sources = type(a:sources) == type('') ?
+        \ [a:sources] : a:sources
   let context = {
         \ 'col' : col('.'), 'complete' : 1,
         \ 'direction' : 'rightbelow',
@@ -197,7 +199,16 @@ function! unite#start_complete(sources, ...) "{{{
   call extend(context, get(a:000, 0, {}))
 
   return printf("\<ESC>:call unite#start(%s, %s)\<CR>",
-        \  string(a:sources), string(context))
+        \  string(sources), string(context))
+endfunction "}}}
+function! unite#get_cur_text() "{{{
+  let cur_text =
+        \ (mode() ==# 'i' ? (col('.')-1) : col('.')) >= len(getline('.')) ?
+        \      getline('.') :
+        \      matchstr(getline('.'),
+        \         '^.*\%' . col('.') . 'c' . (mode() ==# 'i' ? '' : '.'))
+
+  return cur_text
 endfunction "}}}
 
 function! unite#take_action(action_name, candidate)"{{{

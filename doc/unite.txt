@@ -2718,6 +2718,13 @@ files by mistake.
 >
 	call unite#custom_alias('file', 'delete', 'vimfiler__delete')
 <
+Q: I want to input register values in insert mode.
+
+A: You can use below mappings.
+>
+	inoremap <silent><expr> <C-z>
+	\ unite#start_complete('register', { 'input': unite#get_cur_text() })
+<
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
@@ -2725,6 +2732,7 @@ CHANGELOG					*unite-changelog*
 - Improved message behavior.
 - Changed tab source behavior.
 - Deleted mru max_candidates.
+- Improved unite#start_complete().
 
 2012-09-27
 - Fixed initialize error.
