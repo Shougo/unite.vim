@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Aug 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,6 +65,7 @@ let s:source_buffer_all = {
       \ 'description' : 'candidates from buffer list',
       \ 'syntax' : 'uniteSource__Buffer',
       \ 'hooks' : {},
+      \ 'default_kind' : 'buffer',
       \}
 
 function! s:source_buffer_all.hooks.on_init(args, context)"{{{
@@ -82,14 +83,13 @@ function! s:source_buffer_all.gather_candidates(args, context)"{{{
           \                   a:context.source__is_question)
   endif
 
-  let candidates = map(copy(a:context.source__buffer_list), '{
-        \ "word" : s:make_word(v:val.action__buffer_nr),
-        \ "abbr" : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags),
-        \ "kind" : "buffer",
-        \ "action__path" : unite#substitute_path_separator(bufname(v:val.action__buffer_nr)),
-        \ "action__buffer_nr" : v:val.action__buffer_nr,
-        \ "action__directory" : s:get_directory(v:val.action__buffer_nr),
-        \}')
+  let candidates = map(copy(a:context.source__buffer_list), "{
+        \ 'word' : s:make_word(v:val.action__buffer_nr),
+        \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags),
+        \ 'action__path' : unite#substitute_path_separator(bufname(v:val.action__buffer_nr)),
+        \ 'action__buffer_nr' : v:val.action__buffer_nr,
+        \ 'action__directory' : s:get_directory(v:val.action__buffer_nr),
+        \}")
 
   return candidates
 endfunction"}}}
@@ -102,6 +102,7 @@ let s:source_buffer_tab = {
       \ 'description' : 'candidates from buffer list in current tab',
       \ 'syntax' : 'uniteSource__Buffer',
       \ 'hooks' : {},
+      \ 'default_kind' : 'buffer',
       \}
 
 function! s:source_buffer_tab.hooks.on_init(args, context)"{{{
@@ -126,15 +127,14 @@ function! s:source_buffer_tab.gather_candidates(args, context)"{{{
   let list = filter(copy(a:context.source__buffer_list),
         \ 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
 
-  let candidates = map(list, '{
-        \ "word" : s:make_word(v:val.action__buffer_nr),
-        \ "abbr" : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags),
-        \ "kind" : "buffer",
-        \ "action__path" : unite#substitute_path_separator(
+  let candidates = map(list, "{
+        \ 'word' : s:make_word(v:val.action__buffer_nr),
+        \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags),
+        \ 'action__path' : unite#substitute_path_separator(
         \        bufname(v:val.action__buffer_nr)),
-        \ "action__buffer_nr" : v:val.action__buffer_nr,
-        \ "action__directory" : s:get_directory(v:val.action__buffer_nr),
-        \}')
+        \ 'action__buffer_nr' : v:val.action__buffer_nr,
+        \ 'action__directory' : s:get_directory(v:val.action__buffer_nr),
+        \}")
 
   return candidates
 endfunction"}}}

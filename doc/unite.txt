@@ -2298,6 +2298,11 @@ default_action		Dictionary		(Optional)
 >
 			'default_action' : { '*' : action_name}.
 <
+					*unite-source-attribute-default_kind*
+default_kind		String			(Optional)
+			Default kind in source candidates.
+			If it's not given, the "common" is used.
+
 					*unite-source-attribute-alias_table*
 alias_table		Dictionary		(Optional)
 			Adds an alias table unique to the source.  In
@@ -2727,6 +2732,9 @@ A: You can use below mappings.
 <
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-10-02
+- Added default_kind attribute.
 
 2012-09-28
 - Improved message behavior.
