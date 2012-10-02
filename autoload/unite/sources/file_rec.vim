@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2012.
+" Last Modified: 03 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,6 +51,7 @@ let s:source_rec = {
       \ 'name' : 'file_rec',
       \ 'description' : 'candidates from directory by recursive',
       \ 'hooks' : {},
+      \ 'default_kind' : 'file',
       \ 'max_candidates' : 50,
       \ 'ignore_pattern' : g:unite_source_file_rec_ignore_pattern,
       \ }
