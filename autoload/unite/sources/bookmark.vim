@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -129,6 +129,22 @@ function! s:source.action_table.delete.func(candidates)"{{{
           \      candidate.action__line, candidate.action__pattern]))
     call s:save(candidate.source_bookmark_name, bookmark)
   endfor
+endfunction"}}}
+
+let s:source.action_table.unite__new_candidate = {
+      \ 'description' : 'add new bookmark',
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+      \ }
+function! s:source.action_table.unite__new_candidate.func(candidates)"{{{
+  let filename = input('Please input bookmark filename: ', '', 'file')
+  if filename == ''
+    redraw
+    echo 'Canceled.'
+    return
+  endif
+
+  call unite#sources#bookmark#_append(filename)
 endfunction"}}}
 "}}}
 

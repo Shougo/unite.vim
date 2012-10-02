@@ -2745,6 +2745,7 @@ CHANGELOG					*unite-changelog*
 - Set default_kind attribute in sources.
 - Added unite__new_candidate action.
 - Improved is_listed action behavior.
+- Added unite__new_candidate action in sources.
 
 2012-09-28
 - Improved message behavior.
