@@ -533,7 +533,8 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
       let action.is_invalidate_cache = 0
     endif
     if !has_key(action, 'is_listed')
-      let action.is_listed = 1
+      let action.is_listed =
+            \ (action.name !~ '^unite__\|^vimfiler__')
     endif
   endfor
 
