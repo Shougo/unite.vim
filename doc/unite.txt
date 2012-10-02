@@ -2558,6 +2558,9 @@ action_table		Dictionary		(Required)
 			If the value is "nop", the actions are disabled.
 			Note: "default" and "nop" names are keyword. You cannot
 			use them.
+			Note: If name is "unite__new_candidate", it will be
+			used for |<Plug>(unite_new_candidate)|. It adds a
+			candidate in current source.
 			
 			func			(Function)
 				This function is called when executing actions.
