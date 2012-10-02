@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: source.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Oct 2011.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,18 +35,18 @@ let s:source = {
       \ 'name' : 'source',
       \ 'description' : 'candidates from sources list',
       \ 'default_action' : 'start',
+      \ 'default_kind' : 'source',
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
   return map(copy(unite#util#sort_by(filter(
-        \ values(unite#get_all_sources()), 'v:val.is_listed'), 'v:val.name')), '{
-        \ "word" : v:val.name,
-        \ "abbr" : unite#util#truncate(v:val.name, 25) .
-        \         (v:val.description != "" ? " -- " . v:val.description : ""),
-        \ "kind" : "source",
-        \ "action__source_name" : v:val.name,
-        \ "action__source_args" : [],
-        \}')
+        \ values(unite#get_all_sources()), 'v:val.is_listed'), 'v:val.name')), "{
+        \ 'word' : v:val.name,
+        \ 'abbr' : unite#util#truncate(v:val.name, 25) .
+        \         (v:val.description != '' ? ' -- ' . v:val.description : ''),
+        \ 'action__source_name' : v:val.name,
+        \ 'action__source_args' : [],
+        \}")
 endfunction"}}}
 
 let &cpo = s:save_cpo

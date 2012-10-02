@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: launcher.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,6 +37,7 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'launcher',
       \ 'description' : 'candidates from executable files',
+      \ 'default_kind' : 'guicmd',
       \ }
 
 let s:cached_result = {}
@@ -44,7 +45,8 @@ function! s:source.gather_candidates(args, context)"{{{
   let path = get(a:args, 0, '')
   if path == ''
     " Use $PATH.
-    let path = substitute($PATH, (unite#util#is_windows() ? ';' : ':'), ',', 'g')
+    let path = substitute($PATH,
+          \ (unite#util#is_windows() ? ';' : ':'), ',', 'g')
   endif
 
   if !has_key(s:cached_result, path) || a:context.is_redraw
@@ -60,11 +62,10 @@ function! s:source.gather_candidates(args, context)"{{{
 
     call filter(files, pattern)
 
-    let s:cached_result[path] = map(files, '{
-          \ "word" : v:val,
-          \ "kind" : "guicmd",
-          \ "action__path" : v:val,
-          \ }')
+    let s:cached_result[path] = map(files, "{
+          \ 'word' : v:val,
+          \ 'action__path' : v:val,
+          \ }")
   endif
 
   return s:cached_result[path]

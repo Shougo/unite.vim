@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 May 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,6 +34,7 @@ endfunction"}}}
 let s:source_directory = {
       \ 'name' : 'directory',
       \ 'description' : 'candidates from directory list',
+      \ 'default_kind' : 'directory',
       \}
 
 function! s:source_directory.change_candidates(args, context)"{{{
@@ -106,6 +107,7 @@ endfunction"}}}
 let s:source_directory_new = {
       \ 'name' : 'directory/new',
       \ 'description' : 'directory candidates from input',
+      \ 'default_kind' : 'directory',
       \ }
 
 function! s:source_directory_new.change_candidates(args, context)"{{{

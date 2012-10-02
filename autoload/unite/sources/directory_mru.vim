@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Sep 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -94,6 +94,7 @@ let s:source = {
       \ 'hooks' : {},
       \ 'action_table' : {},
       \ 'syntax' : 'uniteSource__DirectoryMru',
+      \ 'default_kind' : 'directory',
       \ 'ignore_pattern' :
       \    g:unite_source_directory_mru_ignore_pattern,
       \}
@@ -195,7 +196,7 @@ function! s:load()  "{{{
   endif
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
-  return { 'word' : a:list[0], 'kind' : 'directory',
+  return { 'word' : a:list[0],
         \ 'source__time' : a:list[1], 'action__path' : a:list[0], }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mapping.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Aug 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,6 +40,7 @@ let s:source = {
       \ 'max_candidates' : 100,
       \ 'hooks' : {},
       \ 'action_table' : {},
+      \ 'default_kind' : 'command',
       \ }
 
 let s:cached_result = []
@@ -79,7 +80,6 @@ function! s:source.hooks.on_init(args, context)"{{{
 
     call add(s:cached_result, {
           \ 'word' : line,
-          \ 'kind' : 'command',
           \ 'action__command' : 'execute "normal ' . map . '"',
           \ 'action__mapping' : map,
           \ })

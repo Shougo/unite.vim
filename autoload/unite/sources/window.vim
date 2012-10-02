@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jan 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,6 +47,7 @@ let s:source = {
       \ 'name' : 'window',
       \ 'description' : 'candidates from window list',
       \ 'hooks' : {},
+      \ 'default_kind' : 'window',
       \}
 
 function! s:source.hooks.on_init(args, context)"{{{
@@ -82,7 +83,6 @@ function! s:source.hooks.on_init(args, context)"{{{
           \ 'abbr' : printf('[%d/%d] %s %s(%s)', i, winnr('$'),
           \      (i == winnr() ? '%' : i == winnr('#') ? '#' : ' '),
           \      bufname, window.cwd),
-          \ 'kind' : 'window',
           \ 'action__window_nr' : i,
           \ 'action__buffer_nr' : winbufnr(i),
           \ 'action__directory' : window.cwd,

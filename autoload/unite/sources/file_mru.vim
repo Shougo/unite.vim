@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Sep 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -93,6 +93,7 @@ let s:source = {
       \ 'hooks' : {},
       \ 'action_table' : {},
       \ 'syntax' : 'uniteSource__FileMru',
+      \ 'default_kind' : 'file',
       \ 'ignore_pattern' : g:unite_source_file_mru_ignore_pattern,
       \}
 

@@ -2735,6 +2735,7 @@ CHANGELOG					*unite-changelog*
 
 2012-10-02
 - Added default_kind attribute.
+- Set default_kind attribute in sources.
 
 2012-09-28
 - Improved message behavior.

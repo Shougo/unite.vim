@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Sep 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,6 +36,7 @@ let s:source = {
       \ 'description' : 'candidates from tab list',
       \ 'syntax' : 'uniteSource__Tab',
       \ 'hooks' : {},
+      \ 'default_kind' : 'tab',
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
@@ -112,7 +113,6 @@ function! s:source.gather_candidates(args, context)"{{{
 
     call add(candidates, {
           \ 'word' : abbr,
-          \ 'kind' : 'tab',
           \ 'is_multiline' : 1,
           \ 'action__tab_nr' : i,
           \ 'action__directory' : cwd,

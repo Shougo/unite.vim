@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: find.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Sep 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,6 +59,7 @@ let s:source = {
       \ 'hooks' : {},
       \ 'filters' : ['matcher_regexp', 'sorter_default', 'converter_relative'],
       \ 'ignore_pattern' : g:unite_source_find_ignore_pattern,
+      \ 'default_kind' : 'command',
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
@@ -123,7 +124,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   endif
 
   let candidates = map(filter(
-        \ stdout.read_lines(-1, 100), 'v:val != ""'),
+        \ stdout.read_lines(-1, 100), "v:val != ''"),
         \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
 
   if isdirectory(a:context.source__target)
@@ -131,14 +132,12 @@ function! s:source.async_gather_candidates(args, context) "{{{
     lcd `=a:context.source__target`
   endif
 
-  call map(candidates,
-    \ '{
-    \   "word": v:val,
-    \   "abbr": fnamemodify(v:val, ":."),
-    \   "kind": "file",
-    \   "action__path" : unite#util#substitute_path_separator(v:val),
-    \   "action__directory": unite#util#path2directory(v:val),
-    \ }')
+  call map(candidates, "{
+    \   'word': v:val,
+    \   'abbr': fnamemodify(v:val, ':.'),
+    \   'action__path' : unite#util#substitute_path_separator(v:val),
+    \   'action__directory': unite#util#path2directory(v:val),
+    \ }")
 
   if isdirectory(a:context.source__target)
     lcd `=cwd`
