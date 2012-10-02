@@ -1166,7 +1166,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
 
     let [type, info] = ret
     if type ==# 'file'
-      call s:initialize_candidates_source([info[1]], source.name)
+      call unite#initialize_candidates_source([info[1]], source.name)
       call s:initialize_vimfiler_candidates([info[1]], source.name)
     elseif type ==# 'directory'
       " nop
@@ -1850,7 +1850,7 @@ function! s:initialize_profile(profile_name)"{{{
     let setting.unite__inputs = {}
   endif
 endfunction"}}}
-function! s:initialize_candidates_source(candidates, source_name)"{{{
+function! unite#initialize_candidates_source(candidates, source_name)"{{{
   let source = s:get_loaded_sources(a:source_name)
 
   let default_candidate = {
@@ -2066,7 +2066,7 @@ function! s:recache_candidates(input, is_force)"{{{
     call s:call_hook([source], 'on_post_filter')
 
     let source.unite__candidates =
-          \ s:initialize_candidates_source(
+          \ unite#initialize_candidates_source(
           \   source.unite__candidates, source.name)
   endfor
 
