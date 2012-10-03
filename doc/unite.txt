@@ -2746,6 +2746,7 @@ CHANGELOG					*unite-changelog*
 2012-10-03
 - Added unite__new_candidate action in directory sources.
 - Added unite__new_candidate action in process sources.
+- Improved unite#util#is_cmdwin().
 
 2012-10-02
 - Added default_kind attribute.

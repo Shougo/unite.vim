@@ -165,16 +165,7 @@ function! unite#util#alternate_buffer()"{{{
   endif
 endfunction"}}}
 function! unite#util#is_cmdwin()"{{{
-  let errmsg_save = v:errmsg
-  silent! verbose noautocmd wincmd p
-  if errmsg_save !=# v:errmsg
-        \ && v:errmsg =~ '^E11:'
-    return 1
-  endif
-
-  silent! noautocmd wincmd p
-  call unite#_resize_window()
-  return 0
+  return bufname('%') ==# '[Command Line]'
 endfunction"}}}
 function! s:buflisted(bufnr)"{{{
   return exists('t:unite_buffer_dictionary') ?
