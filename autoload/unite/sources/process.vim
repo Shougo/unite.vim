@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: process.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 May 2012.
+" Last Modified: 03 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -114,12 +114,27 @@ function! s:source.action_table.sigterm.func(candidates)"{{{
   endfor
 endfunction"}}}
 
-function! s:kill(signal, pid)
+let s:source.action_table.unite__new_candidate = {
+      \ 'description' : 'create new process',
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+      \ }
+function! s:source.action_table.unite__new_candidate.func(candidate)"{{{
+  let cmdline = input('Please input command args : ', '', 'shellcmd')
+
+  if unite#util#is_windows()
+    silent execute ':!start' cmdline
+  else
+    call system(cmdline . ' &')
+  endif
+endfunction"}}}
+
+function! s:kill(signal, pid)"{{{
   call unite#util#system(unite#util#is_windows() ?
         \ printf('taskkill /PID %d', a:pid) :
         \  printf('kill %s %d', a:signal, a:pid)
         \ )
-endfunction
+endfunction"}}}
 "}}}
 
 let &cpo = s:save_cpo
