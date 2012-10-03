@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2012.
+" Last Modified: 03 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -97,6 +97,7 @@ let s:source = {
       \ 'default_kind' : 'directory',
       \ 'ignore_pattern' :
       \    g:unite_source_directory_mru_ignore_pattern,
+      \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__mkdir' },
       \}
 
 function! s:source.hooks.on_syntax(args, context)"{{{

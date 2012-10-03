@@ -2743,6 +2743,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-10-03
+- Added unite__new_candidate action in directory sources.
+
 2012-10-02
 - Added default_kind attribute.
 - Set default_kind attribute in sources.
