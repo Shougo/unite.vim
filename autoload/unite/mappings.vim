@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2012.
+" Last Modified: 06 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -951,8 +951,20 @@ function! s:source_action.gather_candidates(args, context)"{{{
   let candidates = copy(a:args)
 
   " Print candidates.
-  call unite#print_message(map(copy(candidates),
-        \ '"[action] candidates: ".v:val.unite__abbr."(".v:val.source.")"'))
+  call unite#print_source_message(map(copy(candidates),
+        \ "'candidates: '.v:val.unite__abbr.'('.v:val.source.')'"), self.name)
+
+  " Print default action.
+  let default_actions = []
+  for candidate in candidates
+    call add(default_actions, unite#get_default_action(
+          \ candidate.source, candidate.kind))
+  endfor
+  let default_actions = unite#util#uniq(default_actions)
+  if len(default_actions) == 1
+    call unite#print_source_message(
+          \ 'default_action: ' . default_actions[0], self.name)
+  endif
 
   " Process Alias.
   let actions = s:get_actions(candidates,

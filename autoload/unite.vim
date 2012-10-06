@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2012.
+" Last Modified: 06 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -328,8 +328,11 @@ function! unite#get_all_sources(...)"{{{
     return s:initialize_sources()
   endif
 
+  let unite = unite#get_current_unite()
+
   let all_sources = s:initialize_sources([], a:1)
-  return get(all_sources, a:1, {})
+  return get(all_sources, a:1,
+        \ get(get(unite, 'sources', {}), a:1, {}))
 endfunction"}}}
 function! unite#get_filters(...)"{{{
   if a:0 == 0
@@ -601,7 +604,10 @@ function! unite#get_default_action(source_name, kind)"{{{
   return s:get_default_action(a:source_name, kinds[-1])
 endfunction"}}}
 function! s:get_default_action(source_name, kind_name)"{{{
-  let source = unite#get_sources(a:source_name)
+  let source = unite#get_all_sources(a:source_name)
+  if empty(source)
+    return
+  endif
 
   let source_kind = 'source/'.a:source_name.'/'.a:kind_name
   let source_kind_wild = 'source/'.a:source_name.'/*'
@@ -917,7 +923,10 @@ function! unite#print_message(message)"{{{
   endif
 endfunction"}}}
 function! unite#print_source_message(message, source_name)"{{{
-  call unite#print_message(printf('[%s] %s', a:source_name, a:message))
+  let messages = type(a:message) == type([]) ?
+        \ a:message : [a:message]
+  call unite#print_message(map(copy(messages),
+        \ "printf('[%s] %s', a:source_name, v:val)"))
 endfunction"}}}
 function! unite#clear_message()"{{{
   if &filetype ==# 'unite'

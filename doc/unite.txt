@@ -2743,6 +2743,7 @@ CHANGELOG					*unite-changelog*
 
 2012-10-06
 - Fixed resume error.
+- Print default action in action source.
 
 2012-10-03
 - Added unite__new_candidate action in directory sources.
