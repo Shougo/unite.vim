@@ -305,10 +305,10 @@ COMMANDS 					*unite-commands*
 
 					*unite-options-hide-source-names*
 		-hide-source-names
-		Hide source names.
-		Note: This option hide unite status line.
-		Note: If this option is used, source highlight will be
-		overwritten by other sources.
+		Hides source names.
+		Note: This option doesn't only hide names but also the whole
+		unite status line.
+		Note: Source highlight will be overwritten by other sources.
 
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}
@@ -323,11 +323,12 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-silent*
 		-silent
-		Silent messages in unite buffer.
+		Shuts messages up in unite buffer.
 
 						*unite-options-auto-quit*
 		-auto-quit
-		Close unite buffer automatically.
+		Closes unite buffer automatically when all candidates are
+		shown.
 
 						*unite-options-no-focus*
 		-no-focus
