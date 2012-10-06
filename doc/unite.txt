@@ -129,9 +129,6 @@ INSTALL						*unite-install*
 Install the distributed files into Vim script directory which is usually
 ~/.vim/, or $HOME/vimfiles on Windows.
 
-In future VimJolts the Vim plugin package manager will support unite, you can
-install unite just by `jolt install unite`.
-
 You may run unite with |:Unite| command with source as parameters if you
 succeeded in installing unite.  However, it's a pain in the ass to run the
 command explicitly every time, so I recommend you to set a key mapping for the
