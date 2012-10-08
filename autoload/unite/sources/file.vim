@@ -347,12 +347,14 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
           \ getfsize(a:candidate.action__path)
     let a:candidate.vimfiler__is_readable =
           \ filereadable(a:candidate.action__path)
+    let a:candidate.vimfiler__is_writable =
+          \ getfperm(a:candidate.action__path) =~# '.wx$'
   else
     let a:candidate.vimfiler__is_readable =
           \ getfperm(a:candidate.action__path) =~# 'r.x$'
+    let a:candidate.vimfiler__is_writable =
+          \ filewritable(a:candidate.action__path)
   endif
-  let a:candidate.vimfiler__is_writable =
-        \ getfperm(a:candidate.action__path) =~# '.wx$'
 
   let a:candidate.vimfiler__filetime =
         \ s:get_filetime(a:candidate.action__path)
