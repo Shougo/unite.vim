@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jun 2012.
+" Last Modified: 03 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -91,12 +91,13 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'directory_mru',
       \ 'description' : 'candidates from directory MRU list',
-      \ 'max_candidates' : 30,
       \ 'hooks' : {},
       \ 'action_table' : {},
       \ 'syntax' : 'uniteSource__DirectoryMru',
+      \ 'default_kind' : 'directory',
       \ 'ignore_pattern' :
       \    g:unite_source_directory_mru_ignore_pattern,
+      \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__mkdir' },
       \}
 
 function! s:source.hooks.on_syntax(args, context)"{{{
@@ -196,7 +197,7 @@ function! s:load()  "{{{
   endif
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
-  return { 'word' : a:list[0], 'kind' : 'directory',
+  return { 'word' : a:list[0],
         \ 'source__time' : a:list[1], 'action__path' : a:list[0], }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{

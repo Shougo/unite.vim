@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Aug 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,15 +36,20 @@ let s:mru_files = []
 
 let s:mru_file_mtime = 0  " the last modified time of the mru file.
 
-call unite#util#set_default('g:unite_source_file_mru_time_format',
+call unite#util#set_default(
+      \ 'g:unite_source_file_mru_time_format',
       \ '(%Y/%m/%d %H:%M:%S) ')
-call unite#util#set_default('g:unite_source_file_mru_filename_format',
+call unite#util#set_default(
+      \ 'g:unite_source_file_mru_filename_format',
       \ ':~:.')
-call unite#util#set_default('g:unite_source_file_mru_file',
+call unite#util#set_default(
+      \ 'g:unite_source_file_mru_file',
       \ g:unite_data_directory . '/file_mru')
-call unite#util#set_default('g:unite_source_file_mru_limit',
+call unite#util#set_default(
+      \ 'g:unite_source_file_mru_limit',
       \ 100)
-call unite#util#set_default('g:unite_source_file_mru_ignore_pattern',
+call unite#util#set_default(
+      \ 'g:unite_source_file_mru_ignore_pattern',
       \'\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$'
       \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
       \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)')
@@ -85,10 +90,10 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'file_mru',
       \ 'description' : 'candidates from file MRU list',
-      \ 'max_candidates' : 30,
       \ 'hooks' : {},
       \ 'action_table' : {},
       \ 'syntax' : 'uniteSource__FileMru',
+      \ 'default_kind' : 'file',
       \ 'ignore_pattern' : g:unite_source_file_mru_ignore_pattern,
       \}
 

@@ -129,9 +129,6 @@ INSTALL						*unite-install*
 Install the distributed files into Vim script directory which is usually
 ~/.vim/, or $HOME/vimfiles on Windows.
 
-In future VimJolts the Vim plugin package manager will support unite, you can
-install unite just by `jolt install unite`.
-
 You may run unite with |:Unite| command with source as parameters if you
 succeeded in installing unite.  However, it's a pain in the ass to run the
 command explicitly every time, so I recommend you to set a key mapping for the
@@ -308,10 +305,10 @@ COMMANDS 					*unite-commands*
 
 					*unite-options-hide-source-names*
 		-hide-source-names
-		Hide source names.
-		Note: This option hide unite status line.
-		Note: If this option is used, source highlight will be
-		overwritten by other sources.
+		Hides source names.
+		Note: This option doesn't only hide names but also the whole
+		unite status line.
+		Note: Source highlight will be overwritten by other sources.
 
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}
@@ -326,11 +323,12 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-silent*
 		-silent
-		Silent messages in unite buffer.
+		Shuts messages up in unite buffer.
 
 						*unite-options-auto-quit*
 		-auto-quit
-		Close unite buffer automatically.
+		Closes unite buffer automatically when all candidates are
+		shown.
 
 						*unite-options-no-focus*
 		-no-focus
@@ -343,6 +341,11 @@ COMMANDS 					*unite-commands*
 					*unite-options-long-source-names*
 		-long-source-names
 		Use long source names.
+
+					*unite-options-multi-line*
+		-multi-line
+		Force use multi line. If candiate abbr is too long, unite.vim
+		will fold automatically.
 
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that it targets the current
@@ -881,6 +884,9 @@ Normal mode mappings.
 <Plug>(unite_quick_help)			*<Plug>(unite_quick_help)*
 		Views the mappings of the unite buffer.
 
+<Plug>(unite_new_candidate)			*<Plug>(unite_new_candidate)*
+		Add new candidate in cursor source.
+
 Insert mode mappings.
 
 <Plug>(unite_exit)				*i_<Plug>(unite_exit)*
@@ -976,6 +982,9 @@ Insert mode mappings.
 <Plug>(unite_redraw)				*i_<Plug>(unite_redraw)*
 		Same to |<Plug>(unite_redraw)|.
 
+<Plug>(unite_new_candidate)			*i_<Plug>(unite_new_candidate)*
+		Same to |<Plug>(unite_new_candidate)|.
+
 Visual mode mappings.
 
 <Plug>(unite_toggle_mark_selected_candidates)
@@ -1015,6 +1024,7 @@ k		|<Plug>(unite_loop_cursor_up)|
 J		|<Plug>(unite_skip_cursor_down)|
 K		|<Plug>(unite_skip_cursor_up)|
 ?		|<Plug>(unite_quick_help)|
+N		|<Plug>(unite_new_candidate)|
 <CR>		In case when you selected a candidate, runs default action
 d		In case when you selected a candidate, runs delete action
 b		In case when you selected a candidate, runs bookmark action
@@ -2293,6 +2303,11 @@ default_action		Dictionary		(Optional)
 >
 			'default_action' : { '*' : action_name}.
 <
+					*unite-source-attribute-default_kind*
+default_kind		String			(Optional)
+			Default kind in source candidates.
+			If it's not given, the "common" is used.
+
 					*unite-source-attribute-alias_table*
 alias_table		Dictionary		(Optional)
 			Adds an alias table unique to the source.  In
@@ -2541,6 +2556,9 @@ action_table		Dictionary		(Required)
 			If the value is "nop", the actions are disabled.
 			Note: "default" and "nop" names are keyword. You cannot
 			use them.
+			Note: If name is "unite__new_candidate", it will be
+			used for |<Plug>(unite_new_candidate)|. It adds a
+			candidate in current source.
 			
 			func			(Function)
 				This function is called when executing actions.
@@ -2713,14 +2731,51 @@ files by mistake.
 >
 	call unite#custom_alias('file', 'delete', 'vimfiler__delete')
 <
+Q: I want to input register values in insert mode.
+
+A: You can use below mappings.
+>
+	inoremap <silent><expr> <C-z>
+	\ unite#start_complete('register', { 'input': unite#get_cur_text() })
+<
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-10-06
+- Fixed resume error.
+- Print default action in action source.
+
+2012-10-03
+- Added unite__new_candidate action in directory sources.
+- Added unite__new_candidate action in process sources.
+- Improved unite#util#is_cmdwin().
+
+2012-10-02
+- Added default_kind attribute.
+- Set default_kind attribute in sources.
+- Added unite__new_candidate action.
+- Improved is_listed action behavior.
+- Added unite__new_candidate action in sources.
+
+2012-09-28
+- Improved message behavior.
+- Changed tab source behavior.
+- Deleted mru max_candidates.
+- Improved unite#start_complete().
+
+2012-09-27
+- Fixed initialize error.
+
+2012-09-25
+- Improved tab source.
+- Changed tab source behavior.
 
 2012-09-24
 - Improved input().
 - Improved lcd for vimfiler.
 - Fixed set syntax.
 - Fixed redraw_all_candidates().
+- Added -multi-line option.
 
 2012-09-21
 - Added line/fast source.

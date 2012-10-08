@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jan 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,24 +30,18 @@ set cpo&vim
 function! unite#sources#tab#define()"{{{
   return s:source
 endfunction"}}}
-function! unite#sources#tab#_append()"{{{
-  if exists('*gettabvar')
-    " Save tab access time.
-    let t:unite_tab_access_time = localtime()
-  endif
-endfunction"}}}
 
 let s:source = {
       \ 'name' : 'tab',
       \ 'description' : 'candidates from tab list',
+      \ 'syntax' : 'uniteSource__Tab',
+      \ 'hooks' : {},
+      \ 'default_kind' : 'tab',
       \}
 
 function! s:source.gather_candidates(args, context)"{{{
-  let list = range(1, tabpagenr('$'))
-  unlet list[tabpagenr()-1]
-  if exists('*gettabvar')
-    call sort(list, 's:compare')
-  endif
+  let list = range(tabpagenr()+1, tabpagenr('$'))
+        \ + range(1, tabpagenr()-1)
   let arg = get(a:args, 0, '')
   if arg !=# 'no-current'
     " Add current tab.
@@ -56,10 +50,12 @@ function! s:source.gather_candidates(args, context)"{{{
 
   let candidates = []
   for i in list
-    let bufnrs = tabpagebuflist(i)
-    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " Get current window buffer in tabs.
+    " Get current window buffer in tabs.
+    let bufnr = tabpagebuflist(i)[tabpagewinnr(i) - 1]
 
-    let bufname = unite#substitute_path_separator(fnamemodify((i == tabpagenr() ? bufname('#') : bufname(bufnr)), ':p'))
+    let bufname = unite#substitute_path_separator(
+          \ (i == tabpagenr() ?
+          \       bufname('#') : bufname(bufnr)))
     if bufname == ''
       let bufname = '[No Name]'
     endif
@@ -71,7 +67,8 @@ function! s:source.gather_candidates(args, context)"{{{
         let title = '[' . title . ']'
       endif
 
-      let cwd = unite#substitute_path_separator((i == tabpagenr() ? getcwd() : gettabvar(i, 'cwd')))
+      let cwd = unite#substitute_path_separator(
+            \ (i == tabpagenr() ? getcwd() : gettabvar(i, 'cwd')))
       if cwd !~ '/$'
         let cwd .= '/'
       endif
@@ -85,9 +82,9 @@ function! s:source.gather_candidates(args, context)"{{{
       if stridx(bufname, cwd) == 0
         let bufname = bufname[len(cwd) :]
       endif
-      let abbr .= bufname
+      let abbr .= (title != '' ? ' ' : '') . bufname
 
-      let abbr .= '(' . substitute(cwd, '.\zs/$', '', '') . ')'
+      let abbr .= ' (' . substitute(cwd, '.\zs/$', '', '') . ')'
     else
       let abbr .= bufname
     endif
@@ -101,12 +98,22 @@ function! s:source.gather_candidates(args, context)"{{{
     endif
     let abbr .= getbufvar(bufnr('%'), '&modified') ? '[+]' : ''
 
-    let word = exists('*gettabvar') && gettabvar(i, 'title') != '' ? gettabvar(i, 'title') : bufname
+    if len(tabpagebuflist(i)) > 1
+      " Get tab windows list.
+      let tabnr = tabpagenr()
+      execute 'tabnext' i
+      let abbr .= "\n" . join(map(range(1, winnr('$')),
+            \ "printf('%s %d: %s', repeat(' ', 1), v:val,
+            \ (bufname(winbufnr(v:val)) == '' ?
+            \ '[No Name]' : bufname(winbufnr(v:val))))"), "\n")
+      execute 'tabnext' tabnr
+    endif
+    let word = exists('*gettabvar') && gettabvar(i, 'title') != '' ?
+          \ gettabvar(i, 'title') : bufname
 
     call add(candidates, {
-          \ 'word' : word,
-          \ 'abbr' : abbr,
-          \ 'kind' : 'tab',
+          \ 'word' : abbr,
+          \ 'is_multiline' : 1,
           \ 'action__tab_nr' : i,
           \ 'action__directory' : cwd,
           \ })
@@ -117,10 +124,13 @@ endfunction"}}}
 function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
   return ['no-current']
 endfunction"}}}
-
-" Misc
-function! s:compare(candidate_a, candidate_b)"{{{
-  return gettabvar(a:candidate_b, 'unite_tab_access_time') - gettabvar(a:candidate_a, 'unite_tab_access_time')
+function! s:source.hooks.on_syntax(args, context)"{{{
+  syntax match uniteSource__Tab_title /\[.\{-}\]/
+        \ contained containedin=uniteSource__Tab
+  highlight default link uniteSource__Tab_title Function
+  syntax match uniteSource__Tab_directory /(.\{-})/
+        \ contained containedin=uniteSource__Tab
+  highlight default link uniteSource__Tab_directory PreProc
 endfunction"}}}
 
 let &cpo = s:save_cpo

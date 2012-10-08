@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2012.
+" Last Modified: 03 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -66,6 +66,7 @@ let s:kind = {
       \ 'name' : 'file',
       \ 'default_action' : 'open',
       \ 'action_table' : {},
+      \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__newfile' },
       \ 'parents' : ['openable', 'cdable', 'uri'],
       \}
 
@@ -405,13 +406,14 @@ endfunction"}}}
 
 let s:kind.action_table.vimfiler__newfile = {
       \ 'description' : 'make this file',
-      \ 'is_quit' : 1,
+      \ 'is_quit' : 0,
       \ 'is_invalidate_cache' : 1,
       \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__newfile.func(candidate)"{{{
   let vimfiler_current_dir =
-        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+        \ get(unite#get_context(),
+        \   'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
     let vimfiler_current_dir = getcwd()
   endif
@@ -442,7 +444,10 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate)"{{{
       let file.source = 'file'
 
       call writefile([], filename)
-      call unite#mappings#do_action(g:vimfiler_edit_action, [file])
+
+      call unite#mappings#do_action(
+            \ (vimfiler_current_dir == '' ? 'open' : g:vimfiler_edit_action),
+            \ [file], { 'no_quit' : 1 })
     endfor
   finally
     lcd `=current_dir`

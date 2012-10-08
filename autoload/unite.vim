@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2012.
+" Last Modified: 06 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -188,6 +188,8 @@ function! unite#smart_map(narrow_map, select_map)"{{{
   return (line('.') <= unite#get_current_unite().prompt_linenr && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
 endfunction"}}}
 function! unite#start_complete(sources, ...) "{{{
+  let sources = type(a:sources) == type('') ?
+        \ [a:sources] : a:sources
   let context = {
         \ 'col' : col('.'), 'complete' : 1,
         \ 'direction' : 'rightbelow',
@@ -197,7 +199,16 @@ function! unite#start_complete(sources, ...) "{{{
   call extend(context, get(a:000, 0, {}))
 
   return printf("\<ESC>:call unite#start(%s, %s)\<CR>",
-        \  string(a:sources), string(context))
+        \  string(sources), string(context))
+endfunction "}}}
+function! unite#get_cur_text() "{{{
+  let cur_text =
+        \ (mode() ==# 'i' ? (col('.')-1) : col('.')) >= len(getline('.')) ?
+        \      getline('.') :
+        \      matchstr(getline('.'),
+        \         '^.*\%' . col('.') . 'c' . (mode() ==# 'i' ? '' : '.'))
+
+  return cur_text
 endfunction "}}}
 
 function! unite#take_action(action_name, candidate)"{{{
@@ -289,6 +300,7 @@ let s:unite_options = [
       \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
       \ '-auto-quit', '-no-focus',
       \ '-long-source-names', '-short-source-names',
+      \ '-multi-line',
       \]
 "}}}
 
@@ -316,8 +328,11 @@ function! unite#get_all_sources(...)"{{{
     return s:initialize_sources()
   endif
 
+  let unite = unite#get_current_unite()
+
   let all_sources = s:initialize_sources([], a:1)
-  return get(all_sources, a:1, {})
+  return get(all_sources, a:1,
+        \ get(get(unite, 'sources', {}), a:1, {}))
 endfunction"}}}
 function! unite#get_filters(...)"{{{
   if a:0 == 0
@@ -521,7 +536,8 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
       let action.is_invalidate_cache = 0
     endif
     if !has_key(action, 'is_listed')
-      let action.is_listed = 1
+      let action.is_listed =
+            \ (action.name !~ '^unite__\|^vimfiler__')
     endif
   endfor
 
@@ -588,7 +604,10 @@ function! unite#get_default_action(source_name, kind)"{{{
   return s:get_default_action(a:source_name, kinds[-1])
 endfunction"}}}
 function! s:get_default_action(source_name, kind_name)"{{{
-  let source = unite#get_sources(a:source_name)
+  let source = unite#get_all_sources(a:source_name)
+  if empty(source)
+    return
+  endif
 
   let source_kind = 'source/'.a:source_name.'/'.a:kind_name
   let source_kind_wild = 'source/'.a:source_name.'/*'
@@ -904,7 +923,10 @@ function! unite#print_message(message)"{{{
   endif
 endfunction"}}}
 function! unite#print_source_message(message, source_name)"{{{
-  call unite#print_message(printf('[%s] %s', a:source_name, a:message))
+  let messages = type(a:message) == type([]) ?
+        \ a:message : [a:message]
+  call unite#print_message(map(copy(messages),
+        \ "printf('[%s] %s', a:source_name, v:val)"))
 endfunction"}}}
 function! unite#clear_message()"{{{
   if &filetype ==# 'unite'
@@ -956,21 +978,20 @@ function! s:print_buffer(message)"{{{
   let unite = unite#get_current_unite()
   let pos = getpos('.')
 
-  let winwidth = unite.context.vertical ?
-        \ unite.context.winwidth : &columns
+  let winwidth = winwidth(0)
   let [max_width, max_source_name] =
         \ s:adjustments(winwidth-5, unite.max_source_name, 2)
 
   " Auto split.
   let message = []
-  for msg in type(a:message) == type([]) ?
+  let messages = type(a:message) == type([]) ?
         \ a:message : [a:message]
 
-    " Convert source name.
-    let msg = substitute(msg, '^\[\zs.\{-}\ze\] ',
-          \ '\=s:convert_source_name(submatch(0))', '')
-
+  " Convert source name.
+  for msg in messages
     while msg != ''
+      let msg = substitute(msg, '^\[\zs.\{-}\ze\] ',
+            \ '\=s:convert_source_name(submatch(0))', '')
       let trunc_msg = unite#util#strwidthpart(
             \ msg, max_width)
       let msg = msg[len(trunc_msg):]
@@ -981,8 +1002,10 @@ function! s:print_buffer(message)"{{{
           let msg = '!!!<'.msg
           let trunc_msg .= '>!!!'
         else
+          let source_name = matchstr(trunc_msg, '^\[.\{-}\] ')
+
           " Append source name.
-          let msg = matchstr(trunc_msg, '^\[.\{-}\] ').'<'.msg
+          let msg = source_name.'<'.msg
           let trunc_msg .= '>'
         endif
       endif
@@ -1153,7 +1176,7 @@ function! unite#vimfiler_check_filetype(sources, ...)"{{{
 
     let [type, info] = ret
     if type ==# 'file'
-      call s:initialize_candidates_source([info[1]], source.name)
+      call unite#initialize_candidates_source([info[1]], source.name)
       call s:initialize_vimfiler_candidates([info[1]], source.name)
     elseif type ==# 'directory'
       " nop
@@ -1575,6 +1598,7 @@ function! s:initialize_context(context)"{{{
         \ 'is_redraw' : 0,
         \ 'is_resize' : 0,
         \ 'no_focus' : 0,
+        \ 'multi_line' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 0,
         \ 'unite__is_vimfiler' : 0,
@@ -1696,6 +1720,7 @@ function! s:initialize_sources(...)"{{{
         \ 'required_pattern_length' : 0,
         \ 'action_table' : {},
         \ 'default_action' : {},
+        \ 'default_kind' : 'common',
         \ 'alias_table' : {},
         \ 'parents' : [],
         \ 'description' : '',
@@ -1774,6 +1799,10 @@ function! s:initialize_sources(...)"{{{
       let source.ignore_pattern =
             \ get(custom_source, 'ignore_pattern',
             \    get(source, 'ignore_pattern', ''))
+
+      let source.unite__len_candidates = 0
+      let source.unite__orig_len_candidates = 0
+      let source.unite__candidates = []
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
@@ -1831,9 +1860,11 @@ function! s:initialize_profile(profile_name)"{{{
     let setting.unite__inputs = {}
   endif
 endfunction"}}}
-function! s:initialize_candidates_source(candidates, source_name)"{{{
+function! unite#initialize_candidates_source(candidates, source_name)"{{{
+  let source = s:get_loaded_sources(a:source_name)
+
   let default_candidate = {
-        \ 'kind' : 'common',
+        \ 'kind' : source.default_kind,
         \ 'is_dummy' : 0,
         \ 'is_matched' : 1,
         \ 'is_multiline' : 0,
@@ -1865,7 +1896,7 @@ function! s:initialize_candidates(candidates)"{{{
           \ get(candidate, 'abbr', candidate.word)
 
     " Delete too long abbr.
-    if candidate.is_multiline
+    if candidate.is_multiline || context.multi_line
       let candidate.unite__abbr =
             \ candidate.unite__abbr[: max_width *
             \  (context.max_multi_lines + 1)+10]
@@ -1881,7 +1912,7 @@ function! s:initialize_candidates(candidates)"{{{
             \ repeat(' ', &tabstop), 'g')
     endif
 
-    if !candidate.is_multiline
+    if !candidate.is_multiline && !context.multi_line
       call add(candidates, candidate)
       continue
     endif
@@ -1935,7 +1966,7 @@ function! s:initialize_candidates(candidates)"{{{
   endfor
 
   " Multiline check.
-  if is_multiline
+  if is_multiline || context.multi_line
     for candidate in filter(copy(candidates), '!v:val.is_multiline')
       let candidate.unite__abbr = '  ' . candidate.unite__abbr
     endfor
@@ -2045,7 +2076,7 @@ function! s:recache_candidates(input, is_force)"{{{
     call s:call_hook([source], 'on_post_filter')
 
     let source.unite__candidates =
-          \ s:initialize_candidates_source(
+          \ unite#initialize_candidates_source(
           \   source.unite__candidates, source.name)
   endfor
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2012.
+" Last Modified: 06 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -93,6 +93,8 @@ function! unite#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>toggle_max_candidates()<CR>
   nnoremap <buffer><silent> <Plug>(unite_quick_help)
         \ :<C-u>call <SID>quick_help()<CR>
+  nnoremap <buffer><silent> <Plug>(unite_new_candidate)
+        \ :<C-u>call <SID>do_new_candidate_action()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)
         \ :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1]
@@ -156,6 +158,8 @@ function! unite#mappings#define_default_mappings()"{{{
         \ <C-o>:<C-u>call <SID>toggle_max_candidates()<CR>
   inoremap <silent><buffer> <Plug>(unite_redraw)
         \ <C-o>:<C-u>call <SID>redraw()<CR>
+  inoremap <buffer><silent> <Plug>(unite_new_candidate)
+        \ <C-o>:<C-u>call <SID>do_new_candidate_action()<CR>
   "}}}
 
   if exists('g:unite_no_default_keymappings')
@@ -189,6 +193,7 @@ function! unite#mappings#define_default_mappings()"{{{
   nmap <buffer> *         <Plug>(unite_toggle_mark_all_candidates)
   nmap <buffer> M         <Plug>(unite_toggle_max_candidates)
   nmap <buffer> ?         <Plug>(unite_quick_help)
+  nmap <buffer> N         <Plug>(unite_new_candidate)
 
   nmap <silent><buffer><expr> a
         \ unite#smart_map("\<Plug>(unite_append_enter)",
@@ -253,6 +258,24 @@ function! s:smart_imap2(lhs, rhs)"{{{
        \ a:lhs : a:rhs
 endfunction"}}}
 
+function! s:do_new_candidate_action()"{{{
+  if empty(unite#get_current_candidate())
+    " Get source name.
+    if len(unite#get_sources()) != 1
+      call unite#print_error('[unite] No candidates and multiple sources.')
+      return
+    endif
+
+    " Dummy candidate.
+    let candidates = unite#initialize_candidates_source([{}],
+          \ unite#get_sources()[0].name)
+  else
+    let candidates = [unite#get_current_candidate()]
+  endif
+
+  return unite#mappings#do_action('unite__new_candidate', candidates)
+endfunction"}}}
+
 function! unite#mappings#narrowing(word)"{{{
   setlocal modifiable
   let unite = unite#get_current_unite()
@@ -280,16 +303,12 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   if empty(candidates)
     let num = (line('.') <= unite.prompt_linenr) ? 0 :
           \ (line('.') - (unite.prompt_linenr + 1))
-    if type(num) == type(0)
-      if line('$') - (unite.prompt_linenr + 1) < num
-        " Ignore.
-        return []
-      endif
-
-      let candidates = [ unite#get_current_candidate() ]
-    else
-      let candidates = [ num ]
+    if line('$') - (unite.prompt_linenr + 1) < num
+      " Ignore.
+      return []
     endif
+
+    let candidates = [ unite#get_current_candidate() ]
   endif
 
   let candidates = filter(copy(candidates),
@@ -932,8 +951,20 @@ function! s:source_action.gather_candidates(args, context)"{{{
   let candidates = copy(a:args)
 
   " Print candidates.
-  call unite#print_message(map(copy(candidates),
-        \ '"[action] candidates: ".v:val.unite__abbr."(".v:val.source.")"'))
+  call unite#print_source_message(map(copy(candidates),
+        \ "'candidates: '.v:val.unite__abbr.'('.v:val.source.')'"), self.name)
+
+  " Print default action.
+  let default_actions = []
+  for candidate in candidates
+    call add(default_actions, unite#get_default_action(
+          \ candidate.source, candidate.kind))
+  endfor
+  let default_actions = unite#util#uniq(default_actions)
+  if len(default_actions) == 1
+    call unite#print_source_message(
+          \ 'default_action: ' . default_actions[0], self.name)
+  endif
 
   " Process Alias.
   let actions = s:get_actions(candidates,

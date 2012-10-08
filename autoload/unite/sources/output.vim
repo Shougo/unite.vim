@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: output.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2012.
+" Last Modified: 02 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,6 +38,7 @@ let s:source = {
       \ 'name' : 'output',
       \ 'description' : 'candidates from Vim command output',
       \ 'default_action' : 'yank',
+      \ 'default_kind' : 'word',
       \ }
 
 function! s:source.gather_candidates(args, context)"{{{
@@ -60,7 +61,6 @@ function! s:source.gather_candidates(args, context)"{{{
 
   return map(result, "{
         \ 'word' : v:val,
-        \ 'kind' : 'word',
         \ 'is_multiline' : 1,
         \ }")
 endfunction"}}}
