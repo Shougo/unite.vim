@@ -348,12 +348,14 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts)"{{{
     let a:candidate.vimfiler__is_readable =
           \ filereadable(a:candidate.action__path)
     let a:candidate.vimfiler__is_writable =
-          \ getfperm(a:candidate.action__path) =~# '.wx$'
+          \ filewritable(a:candidate.action__path)
   else
     let a:candidate.vimfiler__is_readable =
           \ getfperm(a:candidate.action__path) =~# 'r.x$'
     let a:candidate.vimfiler__is_writable =
-          \ filewritable(a:candidate.action__path)
+          \ unite#util#is_windows() ?
+          \ (getfperm(a:candidate.action__path) =~# '.wx$')
+          \ : filewritable(a:candidate.action__path)
   endif
 
   let a:candidate.vimfiler__filetime =
@@ -423,7 +425,8 @@ import os.path
 import vim
 os.stat_float_times(False)
 vim.command('let filetime = ' +\
-str(os.path.getmtime(vim.eval('a:filename'))))
+str(os.path.getmtime(vim.eval(\
+    'unite#util#iconv(a:filename, &encoding, "char")'))))
 END
   endif"}}}
 
