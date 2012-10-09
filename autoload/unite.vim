@@ -1922,11 +1922,11 @@ function! s:initialize_candidates(candidates)"{{{
       let abbr = candidate.unite__abbr
       let candidate.unite__abbr = ''
 
-      while abbr != ''
+      while abbr !~ '^\s\+$'
         let trunc_abbr = unite#util#strwidthpart(
               \ abbr, max_width)
         let candidate.unite__abbr .= trunc_abbr . "~\n"
-        let abbr = abbr[len(trunc_abbr):]
+        let abbr = '  ' . abbr[len(trunc_abbr):]
       endwhile
 
       let candidate.unite__abbr =

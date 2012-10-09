@@ -2743,6 +2743,7 @@ CHANGELOG					*unite-changelog*
 
 2012-10-09
 - Save previous winwidth and winheight.
+- Improved auto split behavior.
 
 2012-10-06
 - Fixed resume error.
