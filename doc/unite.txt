@@ -2741,6 +2741,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-10-09
+- Save previous winwidth and winheight.
+
 2012-10-06
 - Fixed resume error.
 - Print default action in action source.

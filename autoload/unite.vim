@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Oct 2012.
+" Last Modified: 09 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2321,20 +2321,24 @@ function! s:initialize_current_unite(sources, context)"{{{
 
   let context = a:context
 
-  if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
-        \ && unite#get_current_unite().buffer_name ==#
-        \         context.buffer_name
-        \ && context.input == ''
-    " Get input text.
-    let context.input = unite#get_input()
-  endif
-
   " Quit previous unite buffer.
   if !context.create
     let winnr = unite#get_unite_winnr(context.buffer_name)
     if winnr > 0
       " Quit unite buffer.
       execute winnr 'wincmd w'
+
+      if context.input == ''
+        " Get input text.
+        let context.input = unite#get_input()
+      endif
+
+      " Get winwidth.
+      let context.winwidth = winwidth(0)
+
+      " Get winheight.
+      let context.winheight = winheight(0)
+
       call unite#force_quit_session()
     endif
   endif
