@@ -1925,11 +1925,11 @@ function! s:initialize_candidates(candidates)"{{{
       let abbr = candidate.unite__abbr
       let candidate.unite__abbr = ''
 
-      while abbr != ''
+      while abbr !~ '^\s\+$'
         let trunc_abbr = unite#util#strwidthpart(
               \ abbr, max_width)
         let candidate.unite__abbr .= trunc_abbr . "~\n"
-        let abbr = abbr[len(trunc_abbr):]
+        let abbr = '  ' . abbr[len(trunc_abbr):]
       endwhile
 
       let candidate.unite__abbr =
@@ -2324,20 +2324,24 @@ function! s:initialize_current_unite(sources, context)"{{{
 
   let context = a:context
 
-  if getbufvar(bufnr('%'), '&filetype') ==# 'unite'
-        \ && unite#get_current_unite().buffer_name ==#
-        \         context.buffer_name
-        \ && context.input == ''
-    " Get input text.
-    let context.input = unite#get_input()
-  endif
-
   " Quit previous unite buffer.
   if !context.create
     let winnr = unite#get_unite_winnr(context.buffer_name)
     if winnr > 0
       " Quit unite buffer.
       execute winnr 'wincmd w'
+
+      if context.input == ''
+        " Get input text.
+        let context.input = unite#get_input()
+      endif
+
+      " Get winwidth.
+      let context.winwidth = winwidth(0)
+
+      " Get winheight.
+      let context.winheight = winheight(0)
+
       call unite#force_quit_session()
     endif
   endif
