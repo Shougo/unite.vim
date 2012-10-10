@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Oct 2012.
+" Last Modified: 10 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -331,8 +331,11 @@ function! unite#get_all_sources(...)"{{{
   let unite = unite#get_current_unite()
 
   let all_sources = s:initialize_sources([], a:1)
-  return get(all_sources, a:1,
-        \ get(get(unite, 'sources', {}), a:1, {}))
+  let source = get(all_sources, a:1, {})
+
+  return empty(source) ?
+        \ get(filter(copy(get(unite, 'sources', [])),
+        \ 'v:val.name ==# a:1'), 0, {}) : source
 endfunction"}}}
 function! unite#get_filters(...)"{{{
   if a:0 == 0
