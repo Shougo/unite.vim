@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Oct 2012.
+" Last Modified: 11 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1118,10 +1118,11 @@ function! unite#start(sources, ...)"{{{
   call s:init_cursor()
 endfunction"}}}
 function! unite#start_temporary(sources, ...)"{{{
-  if &filetype == 'unite'
-    " Get current context.
-    let old_context = unite#get_context()
-    let unite = unite#get_current_unite()
+  " Get current context.
+  let old_context = unite#get_context()
+  let unite = unite#get_current_unite()
+
+  if !empty(unite) && !empty(old_context)
     let context = deepcopy(old_context)
     let context.old_buffer_info = insert(context.old_buffer_info, {
           \ 'buffer_name' : unite.buffer_name,
@@ -1310,8 +1311,7 @@ function! unite#resume(buffer_name, ...)"{{{
 
     let buffer_dict = {}
     for unite in map(filter(range(1, bufnr('$')),
-          \ 'getbufvar(v:val, "&filetype") ==# "unite" &&
-          \  !getbufvar(v:val, "unite").context.temporary'),
+          \ 'getbufvar(v:val, "&filetype") ==# "unite"'),
           \ 'getbufvar(v:val, "unite")')
       let buffer_dict[unite.buffer_name] = unite.bufnr
     endfor

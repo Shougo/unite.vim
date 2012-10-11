@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Oct 2012.
+" Last Modified: 11 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1004,8 +1004,23 @@ let s:source_action.action_table.do = {
       \ }
 function! s:source_action.action_table.do.func(candidate)"{{{
   let context = unite#get_context()
+
+  if !empty(context.old_buffer_info)
+    " Restore buffer_name and profile_name.
+    let buffer_name =
+          \ get(get(context.old_buffer_info, 0, {}), 'buffer_name', '')
+    if buffer_name != ''
+      let context.buffer_name = buffer_name
+    endif
+    let profile_name =
+          \ get(get(context.old_buffer_info, 0, {}), 'profile_name', '')
+    if profile_name != ''
+      let context.profile_name = profile_name
+    endif
+  endif
+
   call unite#mappings#do_action(a:candidate.word,
-   \ a:candidate.source__candidates, {}, 1,
+   \ a:candidate.source__candidates, context, 1,
    \ context.source__sources)
 
   " Check quit flag.
