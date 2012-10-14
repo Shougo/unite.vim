@@ -134,7 +134,7 @@ function! unite#kinds#common#insert_word(word, ...)"{{{
     " Paste.
     let old_reg = @"
     let @" = a:word
-    execute 'normal! ""' (col('$') - col('.') <= 1) ? 'p' : 'P'
+    execute 'normal! ""'.((col('$') - col('.') <= 1) ? 'p' : 'P')
     let @" = old_reg
 
     " Open folds.
