@@ -2741,6 +2741,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-10-16
+- Fixed choose action for vimfiler.
+
 2012-10-15
 - Fixed insert word.
 
