@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_point.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2012.
+" Last Modified: 16 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,6 +48,12 @@ endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{
   if a:context.source__filename =~ '^\%(https\?\|ftp\)://'
+    if exists('*vimproc#host_exists') &&
+          \ !vimproc#host_exists(a:context.source__filename)
+      " URI is invalid.
+      return []
+    endif
+
     " URI.
     return [{
           \   'word' : a:context.source__filename,

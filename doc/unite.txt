@@ -2743,6 +2743,7 @@ CHANGELOG					*unite-changelog*
 
 2012-10-16
 - Fixed choose action for vimfiler.
+- Added host check in file_point.
 
 2012-10-15
 - Fixed insert word.
