@@ -588,17 +588,17 @@ function! unite#mappings#_choose_action(candidates, ...)"{{{
   endif
 
   let unite = unite#get_current_unite()
-  let context = get(a:000, 0, {})
+  let context = deepcopy(get(a:000, 0, {}))
   let context.source__sources = unite.sources
+  let context.buffer_name = 'action'
+  let context.profile_name = 'action'
 
   if has_key(context, 'vimfiler__current_directory')
     call unite#start(
-          \ [[s:source_action] + a:candidates],
-          \ context, 'action')
+          \ [[s:source_action] + a:candidates], context)
   else
     call unite#start_temporary(
-          \ [[s:source_action] + a:candidates],
-          \ context, 'action')
+          \ [[s:source_action] + a:candidates], context)
   endif
 endfunction"}}}
 function! s:insert_enter(key)"{{{

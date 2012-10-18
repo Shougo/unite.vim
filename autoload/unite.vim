@@ -1158,11 +1158,7 @@ function! unite#start_temporary(sources, ...)"{{{
   endif
 
   let new_context = get(a:000, 0, {})
-  let buffer_name = get(a:000, 1,
-        \ matchstr(context.buffer_name, '^\S\+')
-        \ . ' - ' . len(context.old_buffer_info))
 
-  let context.buffer_name = buffer_name
   let context.temporary = 1
   let context.input = ''
   let context.auto_preview = 0
@@ -1171,6 +1167,12 @@ function! unite#start_temporary(sources, ...)"{{{
 
   " Overwrite context.
   let context = extend(context, new_context)
+
+  let buffer_name = get(a:000, 1,
+        \ matchstr(context.buffer_name, '^\S\+')
+        \ . ' - ' . len(context.old_buffer_info))
+
+  let context.buffer_name = buffer_name
 
   let unite_save = unite#get_current_unite()
 
@@ -1588,7 +1590,9 @@ endfunction"}}}
 function! s:initialize_context(context)"{{{
   let default_context = {
         \ 'input' : '',
+        \ 'start_insert' : g:unite_enable_start_insert,
         \ 'complete' : 0,
+        \ 'script' : 0,
         \ 'col' : col('.'),
         \ 'no_quit' : 0,
         \ 'buffer_name' : 'default',
@@ -1632,12 +1636,24 @@ function! s:initialize_context(context)"{{{
         \ 'unite__disable_hooks' : 0,
         \ }
 
+  let profile_name = get(a:context, 'profile_name',
+        \ get(a:context, 'buffer_name', 'default'))
+
+  " Overwrite default_context by profile context.
+  let default_context = extend(default_context,
+        \ unite#get_profile(profile_name, 'context'))
+
   let context = extend(default_context, a:context)
 
+  if context.temporary || context.script
+    " User can overwrite context by profile context.
+    let context = extend(context,
+          \ unite#get_profile(profile_name, 'context'))
+  endif
+
   " Complex initializer.
-  if !has_key(context, 'start_insert')
-    let context.start_insert = context.complete ?
-          \ 1 : g:unite_enable_start_insert
+  if get(context, 'complete', 1)
+    let context.start_insert = 1
   endif
   if get(context, 'no_start_insert', 0)
     " Disable start insert.
