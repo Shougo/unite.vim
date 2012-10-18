@@ -70,13 +70,31 @@ endfunction"}}}
 function! unite#get_buffer_name_option(buffer_name, option_name)"{{{
   return unite#get_profile(a:buffer_name, a:option_name)
 endfunction"}}}
+function! s:initialize_profile(profile_name)"{{{
+  if !has_key(s:profiles, a:profile_name)
+    let s:profiles[a:profile_name] = {}
+  endif
+
+  let default_profile = {
+        \ 'substitute_patterns' : {},
+        \ 'filters' : [],
+        \ 'context' : {},
+        \ 'ignorecase' : &ignorecase,
+        \ 'smartcase' : &smartcase,
+        \ 'unite__save_pos' : {},
+        \ 'unite__inputs' : {},
+        \ }
+
+  let s:profiles[a:profile_name] = extend(default_profile,
+        \ s:profiles[a:profile_name])
+endfunction"}}}
 function! unite#set_profile(profile_name, option_name, value)"{{{
   let profile_name =
         \ (a:profile_name == '' ? 'default' : a:profile_name)
 
   for key in split(profile_name, '\s*,\s*')
     if !has_key(s:profiles, key)
-      let s:profiles[key] = {}
+      call s:initialize_profile(key)
     endif
 
     let s:profiles[key][a:option_name] = a:value
@@ -86,6 +104,10 @@ function! unite#get_profile(profile_name, option_name)"{{{
   let profile_name = matchstr(a:profile_name, '^\S\+')
   if profile_name == ''
     let profile_name = 'default'
+  endif
+
+  if !has_key(s:profiles, profile_name)
+    call s:initialize_profile(profile_name)
   endif
 
   return s:profiles[profile_name][a:option_name]
@@ -1839,24 +1861,6 @@ endfunction"}}}
 function! s:initialize_filters()"{{{
   return extend(copy(s:static.filters), s:dynamic.filters)
 endfunction"}}}
-function! s:initialize_profile(profile_name)"{{{
-  if !has_key(s:profiles, a:profile_name)
-    let s:profiles[a:profile_name] = {}
-  endif
-
-  let default_profile = {
-        \ 'substitute_patterns' : {},
-        \ 'filters' : [],
-        \ 'context' : {},
-        \ 'ignorecase' : &ignorecase,
-        \ 'smartcase' : &smartcase,
-        \ 'unite__save_pos' : {},
-        \ 'unite__inputs' : {},
-        \ }
-
-  let s:profiles[a:profile_name] = extend(default_profile,
-        \ s:profiles[a:profile_name])
-endfunction"}}}
 function! unite#initialize_candidates_source(candidates, source_name)"{{{
   let source = s:get_loaded_sources(a:source_name)
 
@@ -2362,8 +2366,6 @@ function! s:initialize_current_unite(sources, context)"{{{
         \ 'default' : context.buffer_name
   let unite.profile_name = (context.profile_name == '') ?
         \ unite.buffer_name : context.profile_name
-  let unite.profile =
-        \ s:initialize_profile(unite.profile_name)
   let unite.prev_bufnr = bufnr('%')
   let unite.prev_winnr = winnr()
 
