@@ -43,14 +43,10 @@ let s:kind.action_table.execute = {
       \ 'description' : 'execute command',
       \ }
 function! s:kind.action_table.execute.func(candidate)"{{{
-  " Add history.
+  let command = a:candidate.action__command
   let type = get(a:candidate, 'action__type', ':')
-  call histadd(type, a:candidate.action__command)
-  if type ==# '/'
-    let @/ = a:candidate.action__command
-  endif
-
-  execute type.a:candidate.action__command
+  call s:add_history(type, command)
+  execute type . command
 endfunction"}}}
 let s:kind.action_table.edit = {
       \ 'description' : 'edit command',
@@ -76,11 +72,19 @@ function! s:kind.action_table.edit.func(candidate)"{{{
 
   let command = input(':', a:candidate.action__command, 'command')
   if command != ''
+    let type = get(a:candidate, 'action__type', ':')
+    call s:add_history(type, command)
     execute command
   endif
   " call feedkeys(':' . a:candidate.action__command, 'n')
 endfunction"}}}
 "}}}
+function! s:add_history(type, command)
+  call histadd(a:type, a:command)
+  if a:type ==# '/'
+    let @/ = a:command
+  endif
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
