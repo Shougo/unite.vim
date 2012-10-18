@@ -2795,6 +2795,7 @@ CHANGELOG					*unite-changelog*
 
 2012-10-18
 - Fixed clear marks behavior.
+- Improved unite#mappings#do_action().
 
 2012-10-17
 - Added examples.

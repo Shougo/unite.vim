@@ -296,8 +296,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   let candidates = get(a:000, 0,
         \ unite#get_marked_candidates())
   let new_context = get(a:000, 1, {})
-  let is_clear_marks = get(a:000, 2, 1)
-  let sources = get(a:000, 3, {})
+  let sources = get(a:000, 2, {})
 
   let unite = unite#get_current_unite()
   if empty(candidates)
@@ -311,13 +310,12 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     let candidates = [ unite#get_current_candidate() ]
   endif
 
-  if is_clear_marks || !empty(unite#get_marked_candidates())
+  let is_clear_marks = !empty(unite#get_marked_candidates())
+  if is_clear_marks
     " Clear marks.
     for candidate in candidates
       let candidate.unite__is_marked = 0
     endfor
-
-    let is_clear_marks = 1
   endif
 
   let candidates = filter(copy(candidates),
@@ -1029,8 +1027,7 @@ function! s:source_action.action_table.do.func(candidate)"{{{
   endif
 
   call unite#mappings#do_action(a:candidate.word,
-   \ a:candidate.source__candidates, context, 1,
-   \ context.source__sources)
+   \ a:candidate.source__candidates, context, context.source__sources)
 
   " Check quit flag.
   if !a:candidate.action__action.is_quit
