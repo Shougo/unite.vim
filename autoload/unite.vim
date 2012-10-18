@@ -1843,25 +1843,19 @@ function! s:initialize_profile(profile_name)"{{{
   if !has_key(s:profiles, a:profile_name)
     let s:profiles[a:profile_name] = {}
   endif
-  let setting = s:profiles[a:profile_name]
-  if !has_key(setting, 'substitute_patterns')
-    let setting.substitute_patterns = {}
-  endif
-  if !has_key(setting, 'filters')
-    let setting.filters = []
-  endif
-  if !has_key(setting, 'ignorecase')
-    let setting.ignorecase = &ignorecase
-  endif
-  if !has_key(setting, 'smartcase')
-    let setting.smartcase = &smartcase
-  endif
-  if !has_key(setting, 'unite__save_pos')
-    let setting.unite__save_pos = {}
-  endif
-  if !has_key(setting, 'unite__inputs')
-    let setting.unite__inputs = {}
-  endif
+
+  let default_profile = {
+        \ 'substitute_patterns' : {},
+        \ 'filters' : [],
+        \ 'context' : {},
+        \ 'ignorecase' : &ignorecase,
+        \ 'smartcase' : &smartcase,
+        \ 'unite__save_pos' : {},
+        \ 'unite__inputs' : {},
+        \ }
+
+  let s:profiles[a:profile_name] = extend(default_profile,
+        \ s:profiles[a:profile_name])
 endfunction"}}}
 function! unite#initialize_candidates_source(candidates, source_name)"{{{
   let source = s:get_loaded_sources(a:source_name)
@@ -2368,7 +2362,7 @@ function! s:initialize_current_unite(sources, context)"{{{
         \ 'default' : context.buffer_name
   let unite.profile_name = (context.profile_name == '') ?
         \ unite.buffer_name : context.profile_name
-  let unite.buffer_options =
+  let unite.profile =
         \ s:initialize_profile(unite.profile_name)
   let unite.prev_bufnr = bufnr('%')
   let unite.prev_winnr = winnr()
