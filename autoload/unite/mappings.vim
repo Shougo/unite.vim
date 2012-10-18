@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Oct 2012.
+" Last Modified: 18 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -311,17 +311,19 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     let candidates = [ unite#get_current_candidate() ]
   endif
 
-  let candidates = filter(copy(candidates),
-        \ '!has_key(v:val, "is_dummy") || !v:val.is_dummy')
-  if empty(candidates)
-    return []
-  endif
-
-  if is_clear_marks
+  if is_clear_marks || !empty(unite#get_marked_candidates())
     " Clear marks.
     for candidate in candidates
       let candidate.unite__is_marked = 0
     endfor
+
+    let is_clear_marks = 1
+  endif
+
+  let candidates = filter(copy(candidates),
+        \ '!has_key(v:val, "is_dummy") || !v:val.is_dummy')
+  if empty(candidates)
+    return []
   endif
 
   let action_tables = s:get_action_table(
@@ -384,7 +386,7 @@ function! unite#mappings#do_action(action_name, ...)"{{{
     let unite.context = old_context
   endif
 
-  if is_redraw
+  if is_redraw || is_clear_marks
     call unite#force_redraw()
   endif
 
@@ -420,6 +422,7 @@ function! s:get_action_table(action_name, candidates, sources)"{{{
             \ candidate.unite__abbr . '(' . candidate.source . ')')
       call unite#util#print_error(
             \ 'No such action : ' . action_name)
+
       return []
     endif
 
