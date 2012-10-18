@@ -2795,6 +2795,7 @@ CHANGELOG					*unite-changelog*
 
 2012-10-17
 - Added examples.
+- Fixed a bug that edit action didn't add history in command kind.
 
 2012-10-16
 - Fixed choose action for vimfiler.
