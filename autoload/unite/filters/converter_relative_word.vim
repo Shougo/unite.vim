@@ -44,6 +44,7 @@ function! s:converter.filter(candidates, context)"{{{
       let directory = substitute(a:context.source__directory, '*', '', 'g')
 
       if directory !=# old_dir && isdirectory(directory)
+            \ && a:context.input == ''
         lcd `=directory`
       endif
     endif

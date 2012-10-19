@@ -377,23 +377,15 @@ unlet! s:cdable_action_rec_async
 "}}}
 
 " Filters"{{{
-function! s:source_rec.source__converter(candidates, context)"{{{
-  return s:converter(a:candidates, a:context)
-endfunction"}}}
-
-let s:source_rec.filters =
-      \ ['matcher_default', 'matcher_hide_hidden_files',
-      \  'sorter_default',
-      \  s:source_rec.source__converter]
-
-function! s:source_async.source__converter(candidates, context)"{{{
-  return s:converter(a:candidates, a:context)
-endfunction"}}}
+let s:source_async.filters =
+      \ ['converter_relative_word',
+      \  'matcher_default', 'matcher_hide_hidden_files',
+      \  'sorter_default']
 
 let s:source_async.filters =
-      \ ['matcher_default', 'matcher_hide_hidden_files',
-      \  'sorter_default',
-      \  s:source_async.source__converter]
+      \ ['converter_relative_word',
+      \  'matcher_default', 'matcher_hide_hidden_files',
+      \  'sorter_default']
 "}}}
 
 " Misc.
@@ -510,30 +502,6 @@ function! s:init_continuation(context, directory)"{{{
           \ 'directory' : a:directory, 'end' : 0,
           \ }
   endif
-endfunction"}}}
-function! s:converter(candidates, context)"{{{
-  let is_relative_path = a:context.input == ''
-
-  let cwd = getcwd()
-
-  if is_relative_path && isdirectory(a:context.source__directory)
-    lcd `=a:context.source__directory`
-  endif
-
-  try
-    for candidate in a:candidates
-      if is_relative_path
-        let candidate.word = unite#util#substitute_path_separator(
-              \    fnamemodify(candidate.word, ':.'))
-      endif
-      let candidate.abbr = candidate.word .
-            \ (isdirectory(candidate.word) ? '/' : '')
-    endfor
-  finally
-      lcd `=cwd`
-  endtry
-
-  return a:candidates
 endfunction"}}}
 function! s:write_cache(directory, files)"{{{
   let cache_dir = g:unite_data_directory . '/file_rec'
