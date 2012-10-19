@@ -101,26 +101,11 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
     let continuation.end = 1
   endif
 
-  let is_relative_path =
-        \ a:context.source__directory ==
-        \   unite#util#substitute_path_separator(getcwd())
-
-  if !is_relative_path
-    let cwd = getcwd()
-    lcd `=a:context.source__directory`
-  endif
-
-  let mods = a:context.input == '' ? ':.' : ':p'
-
   let candidates = map(files, "{
         \ 'word' : unite#util#substitute_path_separator(
-        \    fnamemodify(v:val, mods)),
+        \    fnamemodify(v:val, ':p')),
         \ 'action__path' : v:val,
         \ }")
-
-  if !is_relative_path
-    lcd `=cwd`
-  endif
 
   let continuation.files += candidates
   if empty(continuation.rest)
@@ -310,17 +295,6 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
     let continuation.end = 1
   endif
 
-  let is_relative_path =
-        \ a:context.source__directory ==
-        \   unite#util#substitute_path_separator(getcwd())
-
-  if !is_relative_path
-    let cwd = getcwd()
-    lcd `=a:context.source__directory`
-  endif
-
-  let mods = a:context.input == '' ? ':.' : ':p'
-
   let candidates = []
   for filename in map(filter(
         \ stdout.read_lines(-1, 100), 'v:val != ""'),
@@ -328,15 +302,11 @@ function! s:source_async.async_gather_candidates(args, context)"{{{
     if filename !~ '/\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
       call add(candidates, {
             \ 'word' : unite#util#substitute_path_separator(
-            \    fnamemodify(filename, mods)),
+            \    fnamemodify(filename, ':p')),
             \ 'action__path' : filename,
             \ })
     endif
   endfor
-
-  if !is_relative_path
-    lcd `=cwd`
-  endif
 
   let continuation.files += candidates
   if stdout.eof
@@ -520,20 +490,9 @@ function! s:init_continuation(context, directory)"{{{
         \ && s:Cache.filereadable(cache_dir, a:directory)
     " Use cache file.
 
-    let is_relative_path =
-          \ a:context.source__directory ==
-          \   unite#util#substitute_path_separator(getcwd())
-
-    if !is_relative_path
-      let cwd = getcwd()
-      lcd `=a:context.source__directory`
-    endif
-
-    let mods = a:context.input == '' ? ':.' : ':p'
-
     let files = map(s:Cache.readfile(cache_dir, a:directory), "{
           \ 'word' : unite#util#substitute_path_separator(
-          \    fnamemodify(v:val, mods)),
+          \    fnamemodify(v:val, ':p')),
           \ 'action__path' : v:val,
           \ }")
 
@@ -542,10 +501,6 @@ function! s:init_continuation(context, directory)"{{{
           \ 'rest' : [],
           \ 'directory' : a:directory, 'end' : 1,
           \ }
-
-    if !is_relative_path
-      lcd `=cwd`
-    endif
   elseif a:context.is_redraw
         \ || !has_key(s:continuation, a:directory)
     let a:context.is_async = 1
@@ -557,14 +512,26 @@ function! s:init_continuation(context, directory)"{{{
   endif
 endfunction"}}}
 function! s:converter(candidates, context)"{{{
-  let is_relative_path =
-        \ a:context.source__directory ==
-        \   unite#util#substitute_path_separator(getcwd())
+  let is_relative_path = a:context.input == ''
 
-  for candidate in a:candidates
-    let candidate.abbr = candidate.word .
-          \ (isdirectory(candidate.word) ? '/' : '')
-  endfor
+  let cwd = getcwd()
+
+  if is_relative_path && isdirectory(a:context.source__directory)
+    lcd `=a:context.source__directory`
+  endif
+
+  try
+    for candidate in a:candidates
+      if is_relative_path
+        let candidate.word = unite#util#substitute_path_separator(
+              \    fnamemodify(candidate.word, ':.'))
+      endif
+      let candidate.abbr = candidate.word .
+            \ (isdirectory(candidate.word) ? '/' : '')
+    endfor
+  finally
+      lcd `=cwd`
+  endtry
 
   return a:candidates
 endfunction"}}}

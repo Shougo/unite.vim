@@ -2816,6 +2816,7 @@ CHANGELOG					*unite-changelog*
 2012-10-19
 - Added unite#start_script().
 - Added sorter_length.
+- Fixed converter in file_rec.
 
 2012-10-18
 - Fixed clear marks behavior.

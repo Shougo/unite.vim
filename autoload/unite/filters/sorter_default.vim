@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: sorter_default.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Mar 2012.
+" Last Modified: 19 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,7 +54,8 @@ function! unite#filters#sorter_default#get()"{{{
   return s:default_sorters
 endfunction"}}}
 function! unite#filters#sorter_default#use(sorters)"{{{
-  let s:default_sorters = a:sorters
+  let s:default_sorters = type(a:sorters) == type([]) ?
+        \ a:sorters : [a:sorters]
 endfunction"}}}
 
 let &cpo = s:save_cpo
