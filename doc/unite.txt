@@ -1899,6 +1899,9 @@ sorter_nothing	Nothing sorter.
 						*unite-filter-sorter_word*
 sorter_word	Compare word sorter.
 
+						*unite-filter-sorter_length*
+sorter_length	Compare length sorter.
+
 						*unite-filter-sorter_rank*
 sorter_rank	Matched rank order sorter.  The higher the matched word is or
 		the longer the matched length is, the higher the rank is.
@@ -2812,6 +2815,7 @@ CHANGELOG					*unite-changelog*
 
 2012-10-19
 - Added unite#start_script().
+- Added sorter_length.
 
 2012-10-18
 - Fixed clear marks behavior.
