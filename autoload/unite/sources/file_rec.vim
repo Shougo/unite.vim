@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Oct 2012.
+" Last Modified: 19 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -367,7 +367,7 @@ let s:cdable_action_rec = {
       \}
 
 function! s:cdable_action_rec.func(candidate)
-  call unite#start([['file_rec', a:candidate.action__directory]])
+  call unite#start_script([['file_rec', a:candidate.action__directory]])
 endfunction
 
 let s:cdable_action_rec_parent = {
@@ -375,7 +375,7 @@ let s:cdable_action_rec_parent = {
       \}
 
 function! s:cdable_action_rec_parent.func(candidate)
-  call unite#start([['file_rec', unite#util#substitute_path_separator(
+  call unite#start_script([['file_rec', unite#util#substitute_path_separator(
         \ fnamemodify(a:candidate.action__directory, ':h'))
         \ ]])
 endfunction
@@ -385,7 +385,7 @@ let s:cdable_action_rec_async = {
       \}
 
 function! s:cdable_action_rec_async.func(candidate)
-  call unite#start([['file_rec/async', a:candidate.action__directory]])
+  call unite#start_script([['file_rec/async', a:candidate.action__directory]])
 endfunction
 
 let s:cdable_action_rec_parent_async = {
@@ -393,7 +393,7 @@ let s:cdable_action_rec_parent_async = {
       \}
 
 function! s:cdable_action_rec_parent_async.func(candidate)
-  call unite#start([['file_rec/async', unite#util#substitute_path_separator(
+  call unite#start_script([['file_rec/async', unite#util#substitute_path_separator(
         \ fnamemodify(a:candidate.action__directory, ':h'))
         \ ]])
 endfunction

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Oct 2012.
+" Last Modified: 19 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1138,6 +1138,23 @@ function! unite#start(sources, ...)"{{{
   call unite#redraw_candidates()
 
   call s:init_cursor()
+endfunction"}}}
+function! unite#start_script(sources, ...)"{{{
+  " Start unite from script.
+
+  let context = get(a:000, 0, {})
+
+  let context.script = 1
+
+  " Set buffer-name.
+  if !has_key(context, 'buffer_name')
+    let context.buffer_name =
+          \ type(get(a:sources, 0, [])) == type([]) ?
+          \ join(map(copy(a:sources), 'v:val[0]')) :
+          \ join(a:sources)
+  endif
+
+  return unite#start(a:sources, context)
 endfunction"}}}
 function! unite#start_temporary(sources, ...)"{{{
   " Get current context.

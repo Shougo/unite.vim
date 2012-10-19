@@ -2810,6 +2810,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-10-19
+- Added unite#start_script().
+
 2012-10-18
 - Fixed clear marks behavior.
 - Improved unite#mappings#do_action().

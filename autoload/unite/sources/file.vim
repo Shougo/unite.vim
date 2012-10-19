@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Oct 2012.
+" Last Modified: 19 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -407,7 +407,7 @@ let s:cdable_action_file = {
       \}
 
 function! s:cdable_action_file.func(candidate)
-  call unite#start([['file', a:candidate.action__directory]])
+  call unite#start_script([['file', a:candidate.action__directory]])
 endfunction
 
 call unite#custom_action('cdable', 'file', s:cdable_action_file)

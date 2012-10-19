@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 23 Sep 2012.
+" Last Modified: 19 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,7 +41,7 @@ let s:action_vimgrep_file = {
   \   'is_selectable': 1,
   \ }
 function! s:action_vimgrep_file.func(candidates) "{{{
-  call unite#start([
+  call unite#start_script([
         \ ['vimgrep', map(copy(a:candidates),
         \ 'string(substitute(v:val.action__path, "/$", "", "g"))'),
         \ ]], { 'no_quit' : 1 })
@@ -54,7 +54,7 @@ let s:action_vimgrep_directory = {
   \   'is_selectable': 1,
   \ }
 function! s:action_vimgrep_directory.func(candidates) "{{{
-  call unite#start([
+  call unite#start_script([
         \ ['vimgrep', map(copy(a:candidates), 'string(v:val.action__directory)'),
         \ ]], { 'no_quit' : 1 })
 endfunction "}}}
