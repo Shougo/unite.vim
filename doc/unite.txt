@@ -2818,6 +2818,7 @@ CHANGELOG					*unite-changelog*
 - Added sorter_length.
 - Fixed converter in file_rec.
 - Improved file_rec converter.
+- Fixed for multiline behavior.
 
 2012-10-18
 - Fixed clear marks behavior.

@@ -1919,7 +1919,7 @@ function! s:initialize_candidates(candidates)"{{{
   let unite = unite#get_current_unite()
   let context = unite.context
   let winwidth = unite.context.vertical ?
-        \ unite.context.winwidth : &columns
+        \ unite.context.winwidth : winwidth(0)
   let [max_width, max_source_name] =
         \ s:adjustments(winwidth-5, unite.max_source_name, 2)
   let is_multiline = 0
