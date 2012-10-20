@@ -2813,6 +2813,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-10-20
+- Fixed file_rec filters.
+
 2012-10-19
 - Added unite#start_script().
 - Added sorter_length.

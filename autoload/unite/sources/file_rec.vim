@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Oct 2012.
+" Last Modified: 20 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,6 +54,11 @@ let s:source_rec = {
       \ 'default_kind' : 'file',
       \ 'max_candidates' : 50,
       \ 'ignore_pattern' : g:unite_source_file_rec_ignore_pattern,
+      \ 'filters' : [
+      \    'converter_relative_word',
+      \    'matcher_default', 'matcher_hide_hidden_files',
+      \    'sorter_default'
+      \  ],
       \ }
 
 function! s:source_rec.gather_candidates(args, context)"{{{
@@ -233,6 +238,11 @@ let s:source_async = {
       \ 'default_kind' : 'file',
       \ 'max_candidates' : 50,
       \ 'ignore_pattern' : g:unite_source_file_rec_ignore_pattern,
+      \ 'filters' : [
+      \    'converter_relative_word',
+      \    'matcher_default', 'matcher_hide_hidden_files',
+      \    'sorter_default'
+      \  ],
       \ }
 
 function! s:source_async.gather_candidates(args, context)"{{{
@@ -374,18 +384,6 @@ call unite#custom_action('cdable', 'rec/async', s:cdable_action_rec_async)
 call unite#custom_action('cdable', 'rec_parent/async', s:cdable_action_rec_parent_async)
 unlet! s:cdable_action_rec
 unlet! s:cdable_action_rec_async
-"}}}
-
-" Filters"{{{
-let s:source_async.filters =
-      \ ['converter_relative_word',
-      \  'matcher_default', 'matcher_hide_hidden_files',
-      \  'sorter_default']
-
-let s:source_async.filters =
-      \ ['converter_relative_word',
-      \  'matcher_default', 'matcher_hide_hidden_files',
-      \  'sorter_default']
 "}}}
 
 " Misc.
