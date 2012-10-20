@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: converter_relative_abbr.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Oct 2012.
+" Last Modified: 20 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,6 +45,7 @@ function! s:converter.filter(candidates, context)"{{{
             \ a:context.source__directory, '*', '', 'g')
 
       if directory !=# old_dir && isdirectory(directory)
+            \ && a:context.input == ''
         lcd `=directory`
       endif
     endif
