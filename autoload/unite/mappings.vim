@@ -119,9 +119,9 @@ function! unite#mappings#define_default_mappings()"{{{
         " \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
         " \ '' : "\<C-w>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_path)
+        \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
+        \ "\<C-o>:\<C-u>call \<SID>exit()\<CR>" :
         \ <SID>smart_imap('', <SID>delete_backward_path())
-        " \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
-        " \ '' : <SID>delete_backward_path()
   inoremap <expr><buffer> <Plug>(unite_select_next_line)
         \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(0)
   inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
