@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Oct 2012.
+" Last Modified: 21 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1003,9 +1003,8 @@ function! s:print_buffer(message)"{{{
   let unite = unite#get_current_unite()
   let pos = getpos('.')
 
-  let winwidth = winwidth(0)
   let [max_width, max_source_name] =
-        \ s:adjustments(winwidth-5, unite.max_source_name, 2)
+        \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
 
   " Auto split.
   let message = []
@@ -1918,10 +1917,8 @@ endfunction"}}}
 function! s:initialize_candidates(candidates)"{{{
   let unite = unite#get_current_unite()
   let context = unite.context
-  let winwidth = unite.context.vertical ?
-        \ unite.context.winwidth : winwidth(0)
   let [max_width, max_source_name] =
-        \ s:adjustments(winwidth-5, unite.max_source_name, 2)
+        \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
   let is_multiline = 0
 
   let candidates = []
