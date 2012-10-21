@@ -2813,6 +2813,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-10-21
+- Deleted max_candidates in mapping source.
+
 2012-10-20
 - Fixed file_rec filters.
 
