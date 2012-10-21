@@ -541,7 +541,13 @@ g:unite_source_file_rec_ignore_pattern
 		Refer autoload/unite/sources/file_rec.vim about the default
 		value.
 		Note: This variable is deprecated. Please use
-		|unite#custom_source()| instead.
+		|unite#custom_source()| instead like the below.
+>
+		" before
+		" let g:unite_source_file_rec_ignore_pattern = '\.abc$'
+		" after
+		call unite#custom_source('file_rec', 'ignore_pattern', '\.abc$')
+<
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_file_rec_min_cache_files
