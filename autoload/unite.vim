@@ -918,6 +918,9 @@ function! unite#call_filter(filter_name, candidates, context)"{{{
 
   return filter.filter(a:candidates, a:context)
 endfunction"}}}
+function! unite#get_source_variables(context) "{{{
+  return a:context.source.variables
+endfunction"}}}
 
 " Utils.
 function! unite#print_error(message)"{{{
@@ -1791,57 +1794,58 @@ function! s:initialize_sources(...)"{{{
     let sources[a:1.name] = a:1
   endif
 
-  let filterd_sources = filter(copy(sources),
-        \ '!has_key(v:val, "is_initialized")')
-  for source in type(filterd_sources) == type([]) ?
-        \ filterd_sources : values(filterd_sources)
+  for source in type(sources) == type([]) ?
+        \ sources : values(sources)
     try
-      let source.is_initialized = 1
+      if !get(source, 'is_initialized', 0)
+        let source.is_initialized = 1
 
-      if !has_key(source, 'hooks')
-        let source.hooks = {}
-      elseif has_key(source.hooks, 'on_pre_init')
-        " Call pre_init hook.
+        if !has_key(source, 'hooks')
+          let source.hooks = {}
+        elseif has_key(source.hooks, 'on_pre_init')
+          " Call pre_init hook.
 
-        " Set dummey value.
-        let source.args = []
-        let source.unite__context = { 'source' : source }
+          " Set dummey value.
+          let source.args = []
+          let source.unite__context = { 'source' : source }
 
-        " Overwrite source values.
-        call s:call_hook([source], 'on_pre_init')
-      endif
+          " Overwrite source values.
+          call s:call_hook([source], 'on_pre_init')
+        endif
 
-      let source = extend(source, default_source, 'keep')
+        let source = extend(source, default_source, 'keep')
 
-      if !empty(source.action_table)
-        let action = values(source.action_table)[0]
+        if !empty(source.action_table)
+          let action = values(source.action_table)[0]
 
-        " Check if '*' action_table?
-        if has_key(action, 'func')
-              \ && type(action.func) == type(function('type'))
+          " Check if '*' action_table?
+          if has_key(action, 'func')
+                \ && type(action.func) == type(function('type'))
+            " Syntax sugar.
+            let source.action_table = { '*' : source.action_table }
+          endif
+        endif
+
+        if type(source.default_action) == type('')
           " Syntax sugar.
-          let source.action_table = { '*' : source.action_table }
+          let source.default_action = { '*' : source.default_action }
+        endif
+
+        if !empty(source.alias_table)
+          " Check if '*' alias_table?
+          if type(values(source.alias_table)[0]) == type('')
+            " Syntax sugar.
+            let source.alias_table = { '*' : source.alias_table }
+          endif
+        endif
+        if source.is_volatile
+              \ && !has_key(source, 'change_candidates')
+          let source.change_candidates = source.gather_candidates
+          call remove(source, 'gather_candidates')
         endif
       endif
 
-      if type(source.default_action) == type('')
-        " Syntax sugar.
-        let source.default_action = { '*' : source.default_action }
-      endif
-
-      if !empty(source.alias_table)
-        " Check if '*' alias_table?
-        if type(values(source.alias_table)[0]) == type('')
-          " Syntax sugar.
-          let source.alias_table = { '*' : source.alias_table }
-        endif
-      endif
-      if source.is_volatile
-            \ && !has_key(source, 'change_candidates')
-        let source.change_candidates = source.gather_candidates
-        call remove(source, 'gather_candidates')
-      endif
-
+      " For custom sources.
       let custom_source = get(s:custom.source, source.name, {})
 
       let source.filters =
@@ -1856,6 +1860,9 @@ function! s:initialize_sources(...)"{{{
       let source.ignore_pattern =
             \ get(custom_source, 'ignore_pattern',
             \    get(source, 'ignore_pattern', ''))
+      let source.variables =
+            \ extend(get(custom_source, 'variables', {}),
+            \    get(source, 'variables', {}), 'keep')
 
       let source.unite__len_candidates = 0
       let source.unite__orig_len_candidates = 0

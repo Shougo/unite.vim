@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 19 Oct 2012.
+" Last Modified: 21 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,7 +62,7 @@ function! s:action_grep_directory.func(candidates) "{{{
         \ ['grep', map(copy(a:candidates), 'string(v:val.action__directory)'),
         \ ]], { 'no_quit' : 1 })
 endfunction "}}}
-if executable(g:unite_source_grep_command) && unite#util#has_vimproc()
+if unite#util#has_vimproc()
   call unite#custom_action('file,buffer',
         \ 'grep', s:action_grep_file)
   call unite#custom_action('file,buffer',
@@ -79,8 +79,7 @@ endif
 " }}}
 
 function! unite#sources#grep#define() "{{{
-  return executable(g:unite_source_grep_command) && unite#util#has_vimproc() ?
-        \ s:source : []
+  return unite#util#has_vimproc() ? s:source : []
 endfunction "}}}
 
 let s:source = {
@@ -90,6 +89,12 @@ let s:source = {
       \ 'syntax' : 'uniteSource__Grep',
       \ 'filters' : ['matcher_regexp', 'sorter_default', 'converter_default'],
       \ 'ignore_pattern' : g:unite_source_grep_ignore_pattern,
+      \ 'variables' : {
+      \      'command' : g:unite_source_grep_command,
+      \      'default_opts' : g:unite_source_grep_default_opts,
+      \      'recursive_opt' : g:unite_source_grep_recursive_opt,
+      \      'search_word_highlight' : g:unite_source_grep_search_word_highlight,
+      \   },
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
@@ -170,7 +175,7 @@ function! s:source.hooks.on_syntax(args, context)"{{{
         \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
         \ . '/ contained containedin=uniteSource__Grep'
   execute 'highlight default link uniteSource__GrepPattern'
-        \ g:unite_source_grep_search_word_highlight
+        \ unite#get_source_variables(a:context).search_word_highlight
 endfunction"}}}
 function! s:source.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__proc')
@@ -188,6 +193,13 @@ function! s:source.hooks.on_post_filter(args, context)"{{{
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
+  let variables = unite#get_source_variables(a:context)
+  if !executable(variables.command)
+    call unite#print_source_message(printf(
+          \ 'command "%s" is not executable.', variables.command), s:source.name)
+    return []
+  endif
+
   if empty(a:context.source__target)
         \ || a:context.source__input == ''
     let a:context.is_async = 0
@@ -200,9 +212,9 @@ function! s:source.gather_candidates(args, context) "{{{
   endif
 
   let cmdline = printf('%s %s %s %s %s %s',
-    \   g:unite_source_grep_command,
-    \   g:unite_source_grep_default_opts,
-    \   g:unite_source_grep_recursive_opt,
+    \   variables.command,
+    \   variables.default_opts,
+    \   variables.recursive_opt,
     \   a:context.source__extra_opts,
     \   string(a:context.source__input),
     \   join(map(a:context.source__target,
@@ -234,6 +246,8 @@ function! s:source.gather_candidates(args, context) "{{{
 endfunction "}}}
 
 function! s:source.async_gather_candidates(args, context) "{{{
+  let variables = unite#get_source_variables(a:context)
+
   if !has_key(a:context, 'source__proc')
     return []
   endif
@@ -257,7 +271,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
   let candidates = map(stdout.read_lines(-1, 100),
           \ "unite#util#iconv(v:val, 'char', &encoding)")
-  if g:unite_source_grep_default_opts =~ '^-[^-]*l'
+  if variables.default_opts =~ '^-[^-]*l'
         \ || a:context.source__extra_opts =~ '^-[^-]*l'
     let candidates = map(filter(candidates,
           \ 'v:val != ""'),

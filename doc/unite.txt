@@ -1365,6 +1365,10 @@ unite#custom_source({source-name}, {option-name}, {value})
 		source.  This applies on the path or word attribute of
 		candidates.  Regardless of |g:unite_enable_ignore_case| value,
 		it's case sensitive.
+		
+		variables			(Dictionary)
+		Changes the source custom variables. The variables are depends
+		on sources.
 
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
@@ -1576,6 +1580,12 @@ grep		Nominates "grep" command output as candidates.
 		%         : Current buffer name
 		#         : Alternate buffer name
 		$buffers  : All buffer names
+
+		Source variables:
+		command                : grep command name
+		default_opts           : default grep options
+		recursive_opt          : grep recursive options
+		search_word_highlight  : search word highlight
 
 		Example:
 >
@@ -2822,6 +2832,7 @@ CHANGELOG					*unite-changelog*
 2012-10-21
 - Deleted max_candidates in mapping source.
 - Improved adjustment behavior.
+- Added source custom variables.
 
 2012-10-20
 - Fixed file_rec filters.

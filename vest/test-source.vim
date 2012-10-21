@@ -20,8 +20,12 @@ endfunction
 let source = {
       \ 'name' : 'hoge',
       \ 'is_volatile' : 1,
+      \ 'variables' : {'foo' : 'foo'}
       \}
 function! source.gather_candidates(args, context)"{{{
+  echomsg string(unite#get_source_variables(a:context))
+  Should unite#get_source_variables(a:context).foo == 'bar'
+
   " Add dummy candidate.
   let candidates = [ a:context.input ]
 
@@ -39,21 +43,6 @@ function! source.gather_candidates(args, context)"{{{
   return candidates
 endfunction"}}}
 
-let my_file_rec = {
-      \ 'name': 'my/file_rec',
-      \ 'description': 'my files.'
-      \ }
-
-function! my_file_rec.gather_candidates(args, context)
-  return map(unite#get_candidates([['file_rec',
-      \     fnamemodify(expand('<sfile>'), ':h')]]), "{
-      \ 'word' : v:val.word,
-      \ 'action_path': v:val.action__path,
-      \ 'kind': 'file'
-      \ }")
-endfunction
-
-
 Context Source.run()
   It defines kind
     Should unite#define_kind(kind) == 0
@@ -61,7 +50,7 @@ Context Source.run()
 
   It defines source
     Should unite#define_source(source) == 0
-    Should unite#define_source(my_file_rec) == 0
+    Should !empty(unite#get_all_sources(source.name))
   End
 
   It undefines kind
@@ -70,6 +59,8 @@ Context Source.run()
 
   It undefines source
     Should unite#undef_source(source.name) == 0
+    Should empty(unite#get_all_sources(source.name))
+    Should unite#define_source(source) == 0
   End
 
   It call do_candidates_action
@@ -78,16 +69,18 @@ Context Source.run()
   End
 
   It get candidates
-    let candidates = unite#get_candidates([['my_file_rec']])
-    Should len(filter(copy(candidates), "v:val.source ==# 'my_file'"))
-          \ == len(copy(candidates))
-
     let candidates = unite#get_candidates(['file_mru'])
     Should len(candidates) == len(readfile(
           \ g:unite_data_directory . '/file_mru'))-1
 
-    let candidates = unite#get_candidates([['grep', 'unite.vim', '', 'vim']])
+    let candidates = unite#get_candidates([
+          \ ['grep', 'unite.vim/plugin', '', 'vim']])
     call unite#do_candidates_action('replace', candidates)
+  End
+
+  It check custom variables.
+    call unite#custom_source('hoge', 'variables', { 'foo' : 'bar' })
+    call unite#get_candidates([['hoge']])
   End
 End
 
