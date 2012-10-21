@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Oct 2012.
+" Last Modified: 21 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -505,7 +505,8 @@ function! s:normal_delete_backward_path()"{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
   call setline(unite#get_current_unite().prompt_linenr,
-        \ substitute(getline(unite#get_current_unite().prompt_linenr)[len(unite#get_current_unite().prompt):],
+        \ substitute(getline(unite#get_current_unite().prompt_linenr)[
+        \    len(unite#get_current_unite().prompt):],
         \                 '[^/]*.$', '', ''))
   call unite#redraw()
   let &l:modifiable = modifiable_save
