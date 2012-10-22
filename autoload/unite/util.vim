@@ -67,6 +67,10 @@ endfunction
 function! unite#util#system(...)
   return call(s:V.system, a:000)
 endfunction
+function! unite#util#system_passwd(...)
+  return call((unite#util#has_vimproc() ?
+        \ 'vimproc#system_passwd' : 'system'), a:000)
+endfunction
 function! unite#util#get_last_status(...)
   return call(s:V.get_last_status, a:000)
 endfunction
