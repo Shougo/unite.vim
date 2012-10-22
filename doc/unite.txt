@@ -2034,6 +2034,7 @@ Opens a file into a new buffer.  This kind extends |unite-action-openable| and
 	diff		diff with the other candidate or current buffer
 	dirdiff		|:DirDiff| with the other candidate
 			(|DirDiff.vim| plugin is needed.)
+	backup		Simple backup files
 
 buffer						*unite-action-buffer*
 This kind extends |unite-action-file|.
@@ -2828,6 +2829,9 @@ A: You can use below mappings.
 <
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-10-22
+- Added backup action.
 
 2012-10-21
 - Deleted max_candidates in mapping source.
