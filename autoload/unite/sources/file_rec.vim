@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Oct 2012.
+" Last Modified: 20 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,6 +54,11 @@ let s:source_rec = {
       \ 'default_kind' : 'file',
       \ 'max_candidates' : 50,
       \ 'ignore_pattern' : g:unite_source_file_rec_ignore_pattern,
+      \ 'filters' : [
+      \    'converter_relative_word',
+      \    'matcher_default', 'matcher_hide_hidden_files',
+      \    'sorter_default'
+      \  ],
       \ }
 
 function! s:source_rec.gather_candidates(args, context)"{{{
@@ -233,6 +238,11 @@ let s:source_async = {
       \ 'default_kind' : 'file',
       \ 'max_candidates' : 50,
       \ 'ignore_pattern' : g:unite_source_file_rec_ignore_pattern,
+      \ 'filters' : [
+      \    'converter_relative_word',
+      \    'matcher_default', 'matcher_hide_hidden_files',
+      \    'sorter_default'
+      \  ],
       \ }
 
 function! s:source_async.gather_candidates(args, context)"{{{
@@ -376,26 +386,6 @@ unlet! s:cdable_action_rec
 unlet! s:cdable_action_rec_async
 "}}}
 
-" Filters"{{{
-function! s:source_rec.source__converter(candidates, context)"{{{
-  return s:converter(a:candidates, a:context)
-endfunction"}}}
-
-let s:source_rec.filters =
-      \ ['matcher_default', 'matcher_hide_hidden_files',
-      \  'sorter_default',
-      \  s:source_rec.source__converter]
-
-function! s:source_async.source__converter(candidates, context)"{{{
-  return s:converter(a:candidates, a:context)
-endfunction"}}}
-
-let s:source_async.filters =
-      \ ['matcher_default', 'matcher_hide_hidden_files',
-      \  'sorter_default',
-      \  s:source_async.source__converter]
-"}}}
-
 " Misc.
 function! s:get_path(args, context)"{{{
   let directory = get(
@@ -510,30 +500,6 @@ function! s:init_continuation(context, directory)"{{{
           \ 'directory' : a:directory, 'end' : 0,
           \ }
   endif
-endfunction"}}}
-function! s:converter(candidates, context)"{{{
-  let is_relative_path = a:context.input == ''
-
-  let cwd = getcwd()
-
-  if is_relative_path && isdirectory(a:context.source__directory)
-    lcd `=a:context.source__directory`
-  endif
-
-  try
-    for candidate in a:candidates
-      if is_relative_path
-        let candidate.word = unite#util#substitute_path_separator(
-              \    fnamemodify(candidate.word, ':.'))
-      endif
-      let candidate.abbr = candidate.word .
-            \ (isdirectory(candidate.word) ? '/' : '')
-    endfor
-  finally
-      lcd `=cwd`
-  endtry
-
-  return a:candidates
 endfunction"}}}
 function! s:write_cache(directory, files)"{{{
   let cache_dir = g:unite_data_directory . '/file_rec'

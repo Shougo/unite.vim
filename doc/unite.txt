@@ -541,7 +541,13 @@ g:unite_source_file_rec_ignore_pattern
 		Refer autoload/unite/sources/file_rec.vim about the default
 		value.
 		Note: This variable is deprecated. Please use
-		|unite#custom_source()| instead.
+		|unite#custom_source()| instead like the below.
+>
+		" before
+		" let g:unite_source_file_rec_ignore_pattern = '\.abc$'
+		" after
+		call unite#custom_source('file_rec', 'ignore_pattern', '\.abc$')
+<
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_file_rec_min_cache_files
@@ -1359,6 +1365,10 @@ unite#custom_source({source-name}, {option-name}, {value})
 		source.  This applies on the path or word attribute of
 		candidates.  Regardless of |g:unite_enable_ignore_case| value,
 		it's case sensitive.
+		
+		variables			(Dictionary)
+		Changes the source custom variables. The variables are depends
+		on sources.
 
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
@@ -1570,6 +1580,12 @@ grep		Nominates "grep" command output as candidates.
 		%         : Current buffer name
 		#         : Alternate buffer name
 		$buffers  : All buffer names
+
+		Source variables:
+		command                : grep command name
+		default_opts           : default grep options
+		recursive_opt          : grep recursive options
+		search_word_highlight  : search word highlight
 
 		Example:
 >
@@ -2813,10 +2829,20 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-10-21
+- Deleted max_candidates in mapping source.
+- Improved adjustment behavior.
+- Added source custom variables.
+
+2012-10-20
+- Fixed file_rec filters.
+
 2012-10-19
 - Added unite#start_script().
 - Added sorter_length.
 - Fixed converter in file_rec.
+- Improved file_rec converter.
+- Fixed for multiline behavior.
 
 2012-10-18
 - Fixed clear marks behavior.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Oct 2012.
+" Last Modified: 22 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -113,15 +113,12 @@ function! unite#mappings#define_default_mappings()"{{{
   inoremap <expr><buffer> <Plug>(unite_delete_backward_line)
         \ <SID>smart_imap('', repeat("\<C-h>",
         \     col('.')-(len(unite#get_current_unite().prompt)+1)))
-        " \ repeat("\<C-h>", col('.')-(len(unite#get_current_unite().prompt)+1))
   inoremap <expr><buffer> <Plug>(unite_delete_backward_word)
         \ <SID>smart_imap('', "\<C-w>")
-        " \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
-        " \ '' : "\<C-w>"
   inoremap <expr><buffer> <Plug>(unite_delete_backward_path)
+        \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
+        \ "\<C-o>:\<C-u>call \<SID>exit()\<CR>" :
         \ <SID>smart_imap('', <SID>delete_backward_path())
-        " \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
-        " \ '' : <SID>delete_backward_path()
   inoremap <expr><buffer> <Plug>(unite_select_next_line)
         \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(0)
   inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
@@ -505,7 +502,8 @@ function! s:normal_delete_backward_path()"{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
   call setline(unite#get_current_unite().prompt_linenr,
-        \ substitute(getline(unite#get_current_unite().prompt_linenr)[len(unite#get_current_unite().prompt):],
+        \ substitute(getline(unite#get_current_unite().prompt_linenr)[
+        \    len(unite#get_current_unite().prompt):],
         \                 '[^/]*.$', '', ''))
   call unite#redraw()
   let &l:modifiable = modifiable_save
