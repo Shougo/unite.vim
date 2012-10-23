@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Oct 2012.
+" Last Modified: 23 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -631,7 +631,7 @@ endfunction"}}}
 function! s:get_default_action(source_name, kind_name)"{{{
   let source = unite#get_all_sources(a:source_name)
   if empty(source)
-    return
+    return ''
   endif
 
   let source_kind = 'source/'.a:source_name.'/'.a:kind_name
@@ -663,7 +663,8 @@ function! s:get_default_action(source_name, kind_name)"{{{
   endif
 
   " Kind default actions.
-  return unite#get_kinds(a:kind_name).default_action
+  let kind = unite#get_kinds(a:kind_name)
+  return get(kind, 'default_action', '')
 endfunction"}}}
 
 function! unite#escape_match(str)"{{{

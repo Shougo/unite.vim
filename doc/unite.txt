@@ -2830,6 +2830,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-10-23
+- Fixed unite#get_default_action().
+
 2012-10-22
 - Added backup action.
 
