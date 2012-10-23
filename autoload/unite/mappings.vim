@@ -967,8 +967,11 @@ function! s:source_action.gather_candidates(args, context)"{{{
   " Print default action.
   let default_actions = []
   for candidate in candidates
-    call add(default_actions, unite#get_default_action(
-          \ candidate.source, candidate.kind))
+    let default_action = unite#get_default_action(
+          \ candidate.source, candidate.kind)
+    if default_action != ''
+      call add(default_actions, default_action)
+    endif
   endfor
   let default_actions = unite#util#uniq(default_actions)
   if len(default_actions) == 1
