@@ -1926,7 +1926,7 @@ function! s:initialize_candidates(candidates)"{{{
   let unite = unite#get_current_unite()
   let context = unite.context
   let [max_width, max_source_name] =
-        \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
+        \ s:adjustments(winwidth(0)-5, unite.max_source_name, 2)
   let is_multiline = 0
 
   let candidates = []
