@@ -1048,7 +1048,7 @@ function! s:print_buffer(message)"{{{
   if line('.') < winheight(0)
     normal! zb
   endif
-  if mode() ==# 'i' && pos[2] == col('$')
+  if mode() ==# 'i' && col('.') == col('$')
     startinsert!
   endif
 
