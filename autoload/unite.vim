@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2012.
+" Last Modified: 28 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1005,7 +1005,6 @@ function! s:print_buffer(message)"{{{
   setlocal modifiable
 
   let unite = unite#get_current_unite()
-  let pos = getpos('.')
 
   let [max_width, max_source_name] =
         \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
@@ -1045,8 +1044,7 @@ function! s:print_buffer(message)"{{{
   call append(unite.prompt_linenr-1, message)
   let unite.prompt_linenr += len(message)
 
-  let pos[1] += len(message)
-  call setpos('.', pos)
+  call cursor(line('.')+len(message), 0)
   if line('.') < winheight(0)
     normal! zb
   endif
@@ -2582,50 +2580,58 @@ function! s:redraw(is_force, winnr, is_gather_all) "{{{
 
     execute a:winnr 'wincmd w'
 
+    let line_save = unite.prompt_linenr
   endif
 
-  if &filetype !=# 'unite'
-    return
-  endif
+  try
+    if &filetype !=# 'unite'
+      return
+    endif
 
-  let unite = unite#get_current_unite()
-  let context = unite.context
+    let unite = unite#get_current_unite()
+    let context = unite.context
 
-  if !context.is_redraw
-    let context.is_redraw = a:is_force
-  endif
+    if !context.is_redraw
+      let context.is_redraw = a:is_force
+    endif
 
-  if context.is_redraw
-    call unite#clear_message()
-  endif
+    if context.is_redraw
+      call unite#clear_message()
+    endif
 
-  let input = unite#get_input()
-  if !context.is_redraw && input ==# unite.last_input
-        \ && !unite.is_async
-        \ && !context.is_resize
-        \ && !a:is_gather_all
-    return
-  endif
+    let input = unite#get_input()
+    if !context.is_redraw && input ==# unite.last_input
+          \ && !unite.is_async
+          \ && !context.is_resize
+          \ && !a:is_gather_all
+      return
+    endif
 
-  if context.is_redraw
-        \ || input !=# unite.last_input
-        \ || unite.is_async
-    " Recaching.
-    call s:recache_candidates(input, a:is_force)
-  endif
+    if context.is_redraw
+          \ || input !=# unite.last_input
+          \ || unite.is_async
+      " Recaching.
+      call s:recache_candidates(input, a:is_force)
+    endif
 
-  let unite.last_input = input
+    let unite.last_input = input
 
-  " Redraw.
-  call unite#redraw_candidates(a:is_gather_all)
-  let unite.context.is_redraw = 0
+    " Redraw.
+    call unite#redraw_candidates(a:is_gather_all)
+    let unite.context.is_redraw = 0
+  finally
+    if a:winnr > 0
+      if unite.prompt_linenr != line_save
+        " Updated.
+        normal! G
+      endif
 
-  if a:winnr > 0
-    " Restore current unite.
-    let s:current_unite = unite_save
-    execute winnr_save 'wincmd w'
-    call unite#_resize_window()
-  endif
+      " Restore current unite.
+      let s:current_unite = unite_save
+      execute winnr_save 'wincmd w'
+      " call unite#_resize_window()
+    endif
+  endtry
 
   if context.auto_quit && !unite.is_async
     call unite#force_quit_session()
