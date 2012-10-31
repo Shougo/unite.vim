@@ -96,45 +96,43 @@ match a directory recursively. For example
 >
 	**/foo
 <
-matches bar/foo or buzz/bar/foo.  Note that you should consider using
-|file_rec| in most cases that will be described bellow.
+matches bar/foo or buzz/bar/foo. Note: The unite acion |file_rec| does a recursive 
+mathing by default without the need to set wildcards explicitly. 
 
-You may specify multiple keywords to narrow down, separating by spaces.
+You may also specify multiple keywords to narrow down the candidates separated
+by a space " " or a dash "|". This matches candidates that meet both conditions
+foo and bar.
 >
 	foo bar
-<
-That matches candidates that meet both foo and bar.
-
-OR matching is implemented by "|".
->
 	foo|bar
 <
-You may specify negative conditions with !.
+You can also specify negative conditions with an exclamation mark "!".
 >
 	foo !bar
 <
-That matches candidates that meet foo but doesn't meet bar.
+This matches candidates that meet foo but do not meet bar.
 
-	Wild cards are added automatically with / if you specify files on
-	-buffer-name option.  That's handy in case you select file with unite.
+Wild cards are added automatically with "/" if you specify "files" on the
+"-buffer-name" option. That's handy in case you select files with unite.
 >
 	:Unite -buffer-name=files file
 <
 See also |unite_default_key_mappings| for other actions.
 
-Screencast is available. Thanks ujihisa!
-http://www.ustream.tv/recorded/11240673
+There is also a screencast available which shows unite in action. Thanks to
+ujihisa! http://www.ustream.tv/recorded/11240673
 
 ==============================================================================
 INSTALL						*unite-install*
 
-Install the distributed files into Vim script directory which is usually
-~/.vim/, or $HOME/vimfiles on Windows.
+Install the distributed files into your Vim script directory which is usually
+~/.vim/, or $HOME/vimfiles on Windows. You should consider to use one of the
+famous package managers for Vim like vundle or neobundle to install the plugin.
 
-You may run unite with |:Unite| command with source as parameters if you
-succeeded in installing unite.  However, it's a pain in the ass to run the
-command explicitly every time, so I recommend you to set a key mapping for the
-command.
+After installation you can run unite with the |:Unite| command and append the
+sources to the command you wish to select from as parameters. However, it's a
+pain in the ass to run the command explicitly every time, so I recommend you to
+set a key mapping for the command.
 
 ==============================================================================
 INTERFACE					*unite-interface*
