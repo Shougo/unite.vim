@@ -41,7 +41,7 @@ Filters			|unite-filters|
 Create source		|unite-create-source|
 Create kind		|unite-create-kind|
 Create filter		|unite-create-filter|
-Configulation Examples	|unite-examples|
+Configuration Examples	|unite-examples|
 User defined source	|unite-user-sources|
 FAQ			|unite-faq|
 Changelog		|unite-changelog|
@@ -49,48 +49,50 @@ Changelog		|unite-changelog|
 ==============================================================================
 INTRODUCTION					*unite-introduction*
 
-*unite* or *unite.vim* searches and displays information from arbitrary sources
-like files, buffers, recently used files or registers. You can run one of
-defined actions on a target displayed.
+The *unite* or *unite.vim* plug-in can search and display information from
+arbitrary sources like files, buffers, recently used files or registers. You can
+run one of defined actions on a target displayed in the unite window.
 
-The differences between |unite| and similar plugins like |fuzzyfinder| or |ku|
+The differences between |unite| and similar plug-ins like |fuzzyfinder| or |ku|
 are that |unite| doesn't use the built-in completion interface of Vim, and
 integrates sources at the same time.
 
 ==============================================================================
 USAGE						*unite-usage*
 
-	In case when you run with files and buffers as the source
+	In case you run unite to display files and buffers as sources to pick
+	from.
 >
 	:Unite file buffer
 <
 
-	In case when you run with the initial input value foo
+	In case you run unite with an initial filter value (foo) to narrow down
+	files. 
 >
 	:Unite -input=foo file
 <
 
-The unite you started splits the window horizontally by default, opening on
-the top of the Vim.  For example,
+If you start unite it splits the window horizontally and pops up
+from the top of Vim by default. For example,
 >
 	:Unite file
 <
-lists up the files in the current directory.  You may choose one of the
-candidates by moving j or k, and typing Enter key opens the candidate in a new
-buffer.  That's the default action for candidates of which the kind is file.
-You may also select an action with <Tab> on a candidate.  See also
-|unite-action| about the actions.
+lists all the files in the current directory. You may choose one of the
+candidates by moving as usual with j or k, and then type Enter to open the file
+in a new buffer. If you type enter it triggers the default action which is open
+for candidates of the kind "file". You may also select an alternative action
+with <Tab> on a chosen candidate. See also |unite-action| about the actions.
 
-You can narrow down the candidates with a keyword.  After opening a unite
-window, the cursor goes on the right side of > in the 2nd line by typing i.
-Then you can input a keyword to narrow down the candidates.  Each single
-characters you type narrows down the candidates.  You can also use a wild
-card * as an arbitrary character sequence.  For example
+You can narrow down listed candidates by a keyword. If you change into the
+insert mode inside of an open unite window by typing "i" the cursor drops you
+behind the ">" in the second line from above, and you can start typing. Each
+single character you type, further narrows down the candidates. You can also use
+a wild card * as an arbitrary character sequence. For example
 >
 	*hisa
 <
-matches hisa, ujihisa, or ujihisahisa.  Furthermore, two consequence wild cards
-matches directory recursively.  For example
+matches hisa, ujihisa, or ujihisahisa. Furthermore, two consecutive wild cards
+match a directory recursively. For example
 >
 	**/foo
 <
