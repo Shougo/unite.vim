@@ -41,7 +41,7 @@ Filters			|unite-filters|
 Create source		|unite-create-source|
 Create kind		|unite-create-kind|
 Create filter		|unite-create-filter|
-Configulation Examples	|unite-examples|
+Configuration Examples	|unite-examples|
 User defined source	|unite-user-sources|
 FAQ			|unite-faq|
 Changelog		|unite-changelog|
@@ -49,90 +49,91 @@ Changelog		|unite-changelog|
 ==============================================================================
 INTRODUCTION					*unite-introduction*
 
-*unite* or *unite.vim* searches and displays information from arbitrary sources
-like files, buffers, recently used files or registers. You can run one of
-defined actions on a target displayed.
+The *unite* or *unite.vim* plug-in can search and display information from
+arbitrary sources like files, buffers, recently used files or registers. You can
+run one of defined actions on a target displayed in the unite window.
 
-The differences between |unite| and similar plugins like |fuzzyfinder| or |ku|
+The differences between |unite| and similar plug-ins like |fuzzyfinder| or |ku|
 are that |unite| doesn't use the built-in completion interface of Vim, and
 integrates sources at the same time.
 
 ==============================================================================
 USAGE						*unite-usage*
 
-	In case when you run with files and buffers as the source
+	In case you run unite to display files and buffers as sources to pick
+	from.
 >
 	:Unite file buffer
 <
 
-	In case when you run with the initial input value foo
+	In case you run unite with an initial filter value (foo) to narrow down
+	files. 
 >
 	:Unite -input=foo file
 <
 
-The unite you started splits the window horizontally by default, opening on
-the top of the Vim.  For example,
+If you start unite it splits the window horizontally and pops up
+from the top of Vim by default. For example,
 >
 	:Unite file
 <
-lists up the files in the current directory.  You may choose one of the
-candidates by moving j or k, and typing Enter key opens the candidate in a new
-buffer.  That's the default action for candidates of which the kind is file.
-You may also select an action with <Tab> on a candidate.  See also
-|unite-action| about the actions.
+lists all the files in the current directory. You may choose one of the
+candidates by moving as usual with j or k, and then type Enter to open the file
+in a new buffer. If you type enter it triggers the default action which is open
+for candidates of the kind "file". You may also select an alternative action
+with <Tab> on a chosen candidate. See also |unite-action| about the actions.
 
-You can narrow down the candidates with a keyword.  After opening a unite
-window, the cursor goes on the right side of > in the 2nd line by typing i.
-Then you can input a keyword to narrow down the candidates.  Each single
-characters you type narrows down the candidates.  You can also use a wild
-card * as an arbitrary character sequence.  For example
+You can narrow down listed candidates by a keyword. If you change into the
+insert mode inside of an open unite window by typing "i" the cursor drops you
+behind the ">" in the second line from above, and you can start typing. Each
+single character you type, further narrows down the candidates. You can also use
+a wild card * as an arbitrary character sequence. For example
 >
 	*hisa
 <
-matches hisa, ujihisa, or ujihisahisa.  Furthermore, two consequence wild cards
-matches directory recursively.  For example
+matches hisa, ujihisa, or ujihisahisa. Furthermore, two consecutive wild cards
+match a directory recursively. For example
 >
 	**/foo
 <
-matches bar/foo or buzz/bar/foo.  Note that you should consider using
-|file_rec| in most cases that will be described bellow.
+matches bar/foo or buzz/bar/foo. Note: The unite acion |file_rec| does a recursive 
+mathing by default without the need to set wildcards explicitly. 
 
-You may specify multiple keywords to narrow down, separating by spaces.
+You may also specify multiple keywords to narrow down the candidates separated
+by a space " " or a dash "|". This matches candidates that meet both conditions
+foo and bar.
 >
 	foo bar
-<
-That matches candidates that meet both foo and bar.
-
-OR matching is implemented by "|".
->
 	foo|bar
 <
-You may specify negative conditions with !.
+You can also specify negative conditions with an exclamation mark "!".
 >
 	foo !bar
 <
-That matches candidates that meet foo but doesn't meet bar.
+This matches candidates that meet foo but do not meet bar.
 
-	Wild cards are added automatically with / if you specify files on
-	-buffer-name option.  That's handy in case you select file with unite.
+Wild cards are added automatically with "/" if you specify "files" on the
+"-buffer-name" option. That's handy in case you select files with unite.
 >
 	:Unite -buffer-name=files file
 <
+
 See also |unite_default_key_mappings| for other actions.
 
-Screencast is available. Thanks ujihisa!
-http://www.ustream.tv/recorded/11240673
+There is also a screencast available which shows unite in action. Thanks to
+ujihisa! http://www.ustream.tv/recorded/11240673
 
 ==============================================================================
 INSTALL						*unite-install*
 
-Install the distributed files into Vim script directory which is usually
-~/.vim/, or $HOME/vimfiles on Windows.
+Install the distributed files into your Vim script directory which is usually
+~/.vim/, or $HOME/vimfiles on Windows. You should consider to use one of the
+famous package managers for Vim like vundle or neobundle to install the plugin.
 
-You may run unite with |:Unite| command with source as parameters if you
-succeeded in installing unite.  However, it's a pain in the ass to run the
-command explicitly every time, so I recommend you to set a key mapping for the
-command.
+After installation you can run unite with the |:Unite| command and append the
+sources to the command you wish to select from as parameters. However, it's a
+pain in the ass to run the command explicitly every time, so I recommend you to
+set a key mapping for the command.
 
 ==============================================================================
 INTERFACE					*unite-interface*
@@ -150,9 +151,9 @@ COMMANDS 					*unite-commands*
 		In case you are already on a unite buffer, the narrowing text
 		is stored.
 
-		You may give a list of strings, separating with ":", after
+		You may give a list of strings, separated with ":", after
 		the name of sources. You must escape ":" and "\" with "\"
-		in parameters themselves. "::" is abbreviation argument. It
+		in parameters themselves. "::" is an abbreviation argument. It
 		depends on the sources how the parameters are interpreted.
 
 		Examples:
@@ -164,9 +165,9 @@ COMMANDS 					*unite-commands*
 		                ["foo", "", "bar"].
 
 						*unite-options*
-		{options} are options for a unite buffer.  You may give the
-		following parameters for a option; you must escape with "\"
-		when it contains spaces.
+		{options} are options for a unite buffer. You may give the
+		following parameters for an option. You need to escape spaces 
+		with "\".
 		
 		Note: In unite.vim, options converts to a context dictionary.
 		The "-buffer-name" option is same to "buffer_name" key in
