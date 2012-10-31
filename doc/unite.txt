@@ -117,6 +117,7 @@ Wild cards are added automatically with "/" if you specify "files" on the
 >
 	:Unite -buffer-name=files file
 <
+
 See also |unite_default_key_mappings| for other actions.
 
 There is also a screencast available which shows unite in action. Thanks to
@@ -150,9 +151,9 @@ COMMANDS 					*unite-commands*
 		In case you are already on a unite buffer, the narrowing text
 		is stored.
 
-		You may give a list of strings, separating with ":", after
+		You may give a list of strings, separated with ":", after
 		the name of sources. You must escape ":" and "\" with "\"
-		in parameters themselves. "::" is abbreviation argument. It
+		in parameters themselves. "::" is an abbreviation argument. It
 		depends on the sources how the parameters are interpreted.
 
 		Examples:
@@ -164,9 +165,9 @@ COMMANDS 					*unite-commands*
 		                ["foo", "", "bar"].
 
 						*unite-options*
-		{options} are options for a unite buffer.  You may give the
-		following parameters for a option; you must escape with "\"
-		when it contains spaces.
+		{options} are options for a unite buffer. You may give the
+		following parameters for an option. You need to escape spaces 
+		with "\".
 		
 		Note: In unite.vim, options converts to a context dictionary.
 		The "-buffer-name" option is same to "buffer_name" key in
