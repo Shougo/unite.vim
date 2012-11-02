@@ -50,12 +50,13 @@ Changelog		|unite-changelog|
 INTRODUCTION					*unite-introduction*
 
 The *unite* or *unite.vim* plug-in can search and display information from
-arbitrary sources like files, buffers, recently used files or registers. You can
-run one of defined actions on a target displayed in the unite window.
+arbitrary sources like files, buffers, recently used files or registers. 
+You can run several pre-defined actions on a target displayed in the unite 
+window.
 
-The differences between |unite| and similar plug-ins like |fuzzyfinder| or |ku|
-are that |unite| doesn't use the built-in completion interface of Vim, and
-integrates sources at the same time.
+The difference between |unite| and similar plug-ins like |fuzzyfinder| or
+|ku| is, that |unite| doesn't use the built-in completion interface of Vim.
+Additionally |unite| is an integration interface for several sources.
 
 ==============================================================================
 USAGE						*unite-usage*
@@ -73,51 +74,53 @@ USAGE						*unite-usage*
 <
 
 If you start unite it splits the window horizontally and pops up
-from the top of Vim by default. For example,
+from the top of Vim by default. 
 >
 	:Unite file
 <
-lists all the files in the current directory. You may choose one of the
-candidates by moving as usual with j or k, and then type Enter to open the file
-in a new buffer. If you type enter it triggers the default action which is open
-for candidates of the kind "file". You may also select an alternative action
-with <Tab> on a chosen candidate. See also |unite-action| about the actions.
+The example call above lists all the files in the current directory. You can
+choose one of them in the in the unite window by moving the cursor up and down
+as usual with j and k. If you type Enter on an active candidate it will open
+it in a new buffer. Enter triggers the default action for a candidate which is
+"open" for candidates of the kind "file". You can also select an alternative
+action for a candidate with <Tab>. See also |unite-action| to read on about
+actions.
 
-You can narrow down listed candidates by a keyword. If you change into the
-insert mode inside of an open unite window by typing "i" the cursor drops you
-behind the ">" in the second line from above, and you can start typing. Each
-single character you type, further narrows down the candidates. You can also use
-a wild card * as an arbitrary character sequence. For example
+You can also narrow down the list of candidates by a keyword. If you change into
+the insert mode inside of a unite window, the cursor drops you behind the ">" in
+the second line from above. There you can start typing to filter the candidates.
+You can also use the wild card "*" as an arbitrary character sequence. For
+example
 >
 	*hisa
 <
 matches hisa, ujihisa, or ujihisahisa. Furthermore, two consecutive wild cards
-match a directory recursively. For example
+match a directory recursively. 
 >
 	**/foo
 <
-matches bar/foo or buzz/bar/foo. Note: The unite acion |file_rec| does a recursive 
-mathing by default without the need to set wildcards explicitly. 
+So the example above matches bar/foo or buzz/bar/foo. Note: The unite acion     
+|file_rec| does a recursive file matching by default without the need to set     
+wildcards.                                                                      
 
-You may also specify multiple keywords to narrow down the candidates separated
-by a space " " or a dash "|". This matches candidates that meet both conditions
-foo and bar.
+You can also specify multiple keywords to narrow down the candidates. Multiple
+keywords need to be separated either by a space " " or a dash "|". The examples
+below match for candidates that meet both conditions "foo" and "bar".
 >
 	foo bar
 	foo|bar
 <
-You can also specify negative conditions with an exclamation mark "!".
+You can also specify negative conditions with an exclamation mark "!". 
+This matches candidates that meet "foo" but do not meet "bar".
 >
 	foo !bar
 <
-This matches candidates that meet foo but do not meet bar.
-
-Wild cards are added automatically with "/" if you specify "files" on the
-"-buffer-name" option. That's handy in case you select files with unite.
+Wild cards are added automatically if you add a "/" in the filter and you have
+specified "files" as the buffer name with the option "-buffer-name". That's
+handy in case you select files with unite.
 >
 	:Unite -buffer-name=files file
 <
-
 See also |unite_default_key_mappings| for other actions.
 
 There is also a screencast available which shows unite in action. Thanks to
