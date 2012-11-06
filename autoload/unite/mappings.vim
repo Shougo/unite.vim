@@ -818,7 +818,7 @@ function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode)"{{{
     noautocmd startinsert
   endif
 
-  call cursor(line('$'), 0)
+  call cursor(line('$'), 1)
 endfunction"}}}
 function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched)"{{{
   let is_insert = mode() ==# 'i'
