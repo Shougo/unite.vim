@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2012.
+" Last Modified: 06 Nov 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -814,10 +814,11 @@ function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode)"{{{
 
   call s:redraw_all_candidates()
 
-  call cursor(line('$'), 0)
   if is_insert
-    noautocmd startinsert!
+    noautocmd startinsert
   endif
+
+  call cursor(line('$'), 0)
 endfunction"}}}
 function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched)"{{{
   let is_insert = mode() ==# 'i'
