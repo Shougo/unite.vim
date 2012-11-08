@@ -268,7 +268,7 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-direction*
 		-direction={direction}
-		Defines split position rule. The default value is the same to
+		Defines the split position rule. The default value is the same to
 		|g:unite_split_rule|.
 
 						*unite-options-no-split*
@@ -281,11 +281,11 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-auto-resize*
 		-auto-resize
-		Auto resize unite buffer height by candidates number.
+		Auto resize unite buffer height by the number of candidates.
 
 						*unite-options-toggle*
 		-toggle
-		Close unite buffer window if one of the same buffer name
+		Close unite buffer window if the same buffer name already
 		exists.
 
 						*unite-options-quick-match*
@@ -298,23 +298,23 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-update-time*
 		-update-time={new-update-time}
-		Change 'updatetime' option. If this option is ommit,
+		Change the 'updatetime' option. If this option is omitted,
 		|g:unite_update_time| is used. This option is useful for
-		animation source.
+		the animation source.
 
 					*unite-options-cursor-line-highlight*
 		-cursor-line-high-light={highlight-name}
-		Change cursor line highlight. If this option is ommit,
+		Change the cursor line highlight. If this option is omitted,
 		|g:unite_cursor_line_highlight| is used.
 
 						*unite-options-no-cursor-line*
 		-no-cursor-line
-		Disable cursor line highlight. This option is useful for
-		animation source.
+		Disable the cursor line highlight. This option is useful for
+		the animation source.
 
 					*unite-options-hide-source-names*
 		-hide-source-names
-		Hides source names.
+		Hides the source names.
 		Note: This option doesn't only hide names but also the whole
 		unite status line.
 		Note: Source highlight will be overwritten by other sources.
@@ -322,21 +322,21 @@ COMMANDS 					*unite-commands*
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}
 		Specifies the lines max in multiline candidates. If this
-		option is ommit, "5" is used.
+		option is omitted, "5" is used.
 
 						*unite-options-here*
 		-here
-		Open unite buffer at the cursor position.
+		Open a unite buffer at the cursor position.
 		Note: This option is disabled if "-vertical" or "-no-split"
 		option is on.
 
 						*unite-options-silent*
 		-silent
-		Shuts messages up in unite buffer.
+		Disables messages in unite buffer.
 
 						*unite-options-auto-quit*
 		-auto-quit
-		Closes unite buffer automatically when all candidates are
+		Closes the unite buffer automatically when all candidates are
 		shown.
 
 						*unite-options-no-focus*
@@ -353,7 +353,7 @@ COMMANDS 					*unite-commands*
 
 					*unite-options-multi-line*
 		-multi-line
-		Force use multi line. If candiate abbr is too long, unite.vim
+		Force to use multi line. If the candidate abbr is too long, unite.vim
 		will fold automatically.
 
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
