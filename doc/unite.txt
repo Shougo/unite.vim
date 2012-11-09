@@ -149,11 +149,11 @@ COMMANDS 					*unite-commands*
 		Shows the unite candidate window for {sources} with an empty 
 		initial narrowing text. You can specify multiple {sources} with
 		spaces as a separator. The order of the {sources} is equal to
-		the order of candidates. See also |unite-source| for available sources.
-		This command restores previous position.
+		the order of candidates. See also |unite-source| for available 
+		sources. This command restores previous position.
 
-		In case you are already inside a unite buffer, the narrowing text
-		is stored.
+		In case you are already inside a unite buffer, the narrowing 
+		text is stored.
 
 		You may give a list of strings, separated by a ":", after
 		the name of a source. You need to escape ":" and "\" with a "\"
@@ -170,14 +170,9 @@ COMMANDS 					*unite-commands*
 
 						*unite-options*
 		{options} are options for a unite buffer. You may give the
-<<<<<<< HEAD
 		following parameters for an option. You need to escape 
 		spaces with a "\".
-=======
-		following parameters for an option. You need to escape spaces
-		with "\".
->>>>>>> master
-		
+				
 		Note: In unite.vim, options converts to a context dictionary.
 		The "-buffer-name" option is equal to the "buffer_name" key in
 		the context.
@@ -187,8 +182,8 @@ COMMANDS 					*unite-commands*
 		Specifies a buffer name. You can share the configuration of
 		functions like |unite#set_substitute_pattern()| by giving the
 		same name to unite buffers that have the same purpose. The
-		default buffer name is 'default'.
-		Note: Spaces are not allowed in buffer names.
+		default buffer name is 'default'. Note: Spaces are not allowed 
+		in buffer names.
 
 						*unite-options-input*
 		-input={input-text}
@@ -217,13 +212,13 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-no-quit*
 		-no-quit
-		Doesn't close unite buffer after an action was fired. Unless you
-		specify it, a unite buffer gets closed when you selected an
-		action which is "is_quit".
+		Doesn't close unite buffer after an action was fired. Unless 
+		you specify it, a unite buffer gets closed when you selected 
+		an action which is "is_quit".
 
 						*unite-options-keep-focus*
 		-keep-focus
-		Keep the focus on a unite buffer after firing an action.
+		Keep the focus on a unite buffer after firing an action. 
 		Note: This option is used with the "-no-quit" option.
 
 						*unite-options-winwidth*
@@ -380,9 +375,8 @@ COMMANDS 					*unite-commands*
 
 :UniteResume [{options}] [{buffer-name}]	*:UniteResume*
 		Reuses the unite buffer named {buffer-name} that you opened
-		previously. Narrowing texts or candidates are
-		as-is. If {options} are given, context information gets
-		overridden.
+		previously. Narrowing texts or candidates are as-is. 
+		If {options} are given, context information gets overridden.
 		Note: Reuses the last unite buffer you used in current tab if
 		you skip specifying {buffer-name}.
 
