@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Oct 2012.
+" Last Modified: 16 Nov 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -390,7 +390,7 @@ function! unite#loaded_source_names_with_args()"{{{
   return map(copy(unite#loaded_sources_list()), "
         \ join(insert(filter(copy(v:val.args),
         \  'type(v:val) <= 1'), s:convert_source_name(v:val.name)), ':')
-        \ . (v:val.unite__len_candidates == 0 ? '' :
+        \ . (v:val.unite__orig_len_candidates == 0 ? '' :
         \      printf(' (%s/%s)', v:val.unite__len_candidates,
         \      v:val.unite__orig_len_candidates))
         \ ")
