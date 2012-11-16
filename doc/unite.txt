@@ -134,7 +134,7 @@ Install the distributed files into your Vim script directory which is usually
 famous package managers for Vim like vundle or neobundle to install the
 plugin.
 
-After installation you can run unite with the |:Unite| command and append the
+After the installation you can run unite with the |:Unite| command and append the
 sources to the command you wish to select from as parameters. However, it's a
 pain in the ass to run the command explicitly every time, so I recommend you
 to set a key mapping for the command.
@@ -146,44 +146,44 @@ INTERFACE					*unite-interface*
 COMMANDS 					*unite-commands*
 
 :Unite [{options}] {sources}			*:Unite*
-		Shows the candidate window of {sources} with the initial
-		narrowing text empty.  You may specify multiple {sources} with
-		spaces as a separator; the order of the {sources} is equal to
-		the order of candidates.  See also |unite-source| for sources.
-		This command restores previous position.
+		Shows the unite candidate window for {sources} with an empty 
+		initial narrowing text. You can specify multiple {sources} with
+		spaces as a separator. The order of the {sources} is equal to
+		the order of candidates. See also |unite-source| for available 
+		sources. This command restores previous position.
 
-		In case you are already on a unite buffer, the narrowing text
-		is stored.
+		In case you are already inside a unite buffer, the narrowing 
+		text is stored.
 
-		You may give a list of strings, separated with ":", after
-		the name of sources. You must escape ":" and "\" with "\"
+		You may give a list of strings, separated by a ":", after
+		the name of a source. You need to escape ":" and "\" with a "\"
 		in parameters themselves. "::" is an abbreviation argument. It
 		depends on the sources how the parameters are interpreted.
 
 		Examples:
-		"file:foo:bar": the parameters of source file are
+		"file:foo:bar": the parameters of the source file are
 		                ["foo", "bar"].
-		"file:foo\:bar": the parameter of source file is
+		"file:foo\:bar": the parameter of the source file is
 		                ["foo:bar"].
-		"file:foo::baz": the parameters of source file are
+		"file:foo::baz": the parameters of the source file are
 		                ["foo", "", "bar"].
 
 						*unite-options*
 		{options} are options for a unite buffer. You may give the
-		following parameters for an option. You need to escape spaces
-		with "\".
-		
+		following parameters for an option. You need to escape 
+		spaces with a "\".
+				
 		Note: In unite.vim, options converts to a context dictionary.
-		The "-buffer-name" option is same to "buffer_name" key in
-		context.
+		The "-buffer-name" option is equal to the "buffer_name" key in
+		the context.
 
 						*unite-options-buffer-name*
 		-buffer-name={buffer-name}
 		Specifies a buffer name. You can share the configuration of
 		functions like |unite#set_substitute_pattern()| by giving the
-		same name to unite buffers that have the same purpose.  The
-		default buffer name is 'default'.
-		Note: Buffer name must not contain any spaces.
+		same name to unite buffers that have the same purpose. The
+		default buffer name is 'default'. Note: Spaces are not allowed 
+		in buffer names.
 
 						*unite-options-input*
 		-input={input-text}
@@ -191,7 +191,8 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-prompt*
 		-prompt={prompt-text}
-		Specifies a prompt. The default value is '> '.
+		Specifies the prompt symbol in the unite window. The default 
+		value is '> '.
 
 						*unite-options-default-action*
 		-default-action={default-action}
@@ -200,29 +201,29 @@ COMMANDS 					*unite-commands*
 						*unite-options-start-insert*
 						*unite-options-no-start-insert*
 		-start-insert
-		Opens a unite buffer in the narrowing mode.
+		Opens a unite buffer in insert mode. You can directly type
+		text to narrow down the candidates.
 
 		-no-start-insert
 		Opens a unite buffer in the normal mode.
 
-		When both options are undefined, it depends on
-		|g:unite_enable_start_insert| option.
-		The behavior is undefined when both options are defined.
+		When both options are undefined, it depends on |g:unite_enable_start_insert| 
+		option. The behavior is undefined when both options are set.
 
 						*unite-options-no-quit*
 		-no-quit
-		Doesn't close unite buffer after firing an action.  Unless you
-		specify it, a unite buffer gets closed when you selected an
-		action which is "is_quit".
+		Doesn't close unite buffer after an action was fired. Unless 
+		you specify it, a unite buffer gets closed when you selected 
+		an action which is "is_quit".
 
 						*unite-options-keep-focus*
 		-keep-focus
-		Keep the focus on a unite buffer after firing an action.
-		Note: This option is used with "-no-quit" option.
+		Keep the focus on a unite buffer after firing an action. 
+		Note: This option is used with the "-no-quit" option.
 
 						*unite-options-winwidth*
 		-winwidth={window-width}
-		Specifies the width of a unite buffer.  Unless you specify
+		Specifies the width of a unite buffer. Unless you specify
 		it, |g:unite_winwidth| is used.
 
 						*unite-options-winheight*
@@ -232,22 +233,22 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-immediately*
 		-immediately
-		If the number of candidates is exactly one, it runs default
-		action immediately. If candidate is empty, it doesn't open any
-		unite buffer.
+		If the number of candidates is exactly one, the default action 
+		is called immediately. If the candidate list is empty, it 
+		doesn't open any unite buffer.
 
 						*unite-options-no-empty*
 		-no-empty
-		If candidate is empty, it doesn't open any unite buffer.
+		If the candidate list is empty, it doesn't open any unite buffer.
 
 						*unite-options-auto-preview*
 		-auto-preview
-		When you selected a candidate, it runs "preview" action
+		When you selected a candidate, it runs the "preview" action
 		automatically.
 
 						*unite-options-completion*
 		-completion
-		Uses unite completion interface. |unite-options-col| is also
+		Uses the unite completion interface. |unite-options-col| is also
 		required.
 
 						*unite-options-col*
@@ -268,7 +269,7 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-direction*
 		-direction={direction}
-		Defines split position rule. The default value is the same to
+		Defines the split position rule. The default value is the same to
 		|g:unite_split_rule|.
 
 						*unite-options-no-split*
@@ -281,11 +282,11 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-auto-resize*
 		-auto-resize
-		Auto resize unite buffer height by candidates number.
+		Auto resize unite buffer height by the number of candidates.
 
 						*unite-options-toggle*
 		-toggle
-		Close unite buffer window if one of the same buffer name
+		Close unite buffer window if the same buffer name already
 		exists.
 
 						*unite-options-quick-match*
@@ -298,23 +299,23 @@ COMMANDS 					*unite-commands*
 
 						*unite-options-update-time*
 		-update-time={new-update-time}
-		Change 'updatetime' option. If this option is ommit,
+		Change the 'updatetime' option. If this option is omitted,
 		|g:unite_update_time| is used. This option is useful for
-		animation source.
+		the animation source.
 
 					*unite-options-cursor-line-highlight*
 		-cursor-line-high-light={highlight-name}
-		Change cursor line highlight. If this option is ommit,
+		Change the cursor line highlight. If this option is omitted,
 		|g:unite_cursor_line_highlight| is used.
 
 						*unite-options-no-cursor-line*
 		-no-cursor-line
-		Disable cursor line highlight. This option is useful for
-		animation source.
+		Disable the cursor line highlight. This option is useful for
+		the animation source.
 
 					*unite-options-hide-source-names*
 		-hide-source-names
-		Hides source names.
+		Hides the source names.
 		Note: This option doesn't only hide names but also the whole
 		unite status line.
 		Note: Source highlight will be overwritten by other sources.
@@ -322,21 +323,21 @@ COMMANDS 					*unite-commands*
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}
 		Specifies the lines max in multiline candidates. If this
-		option is ommit, "5" is used.
+		option is omitted, "5" is used.
 
 						*unite-options-here*
 		-here
-		Open unite buffer at the cursor position.
+		Open a unite buffer at the cursor position.
 		Note: This option is disabled if "-vertical" or "-no-split"
 		option is on.
 
 						*unite-options-silent*
 		-silent
-		Shuts messages up in unite buffer.
+		Disables messages in unite buffer.
 
 						*unite-options-auto-quit*
 		-auto-quit
-		Closes unite buffer automatically when all candidates are
+		Closes the unite buffer automatically when all candidates are
 		shown.
 
 						*unite-options-no-focus*
@@ -353,7 +354,7 @@ COMMANDS 					*unite-commands*
 
 					*unite-options-multi-line*
 		-multi-line
-		Force use multi line. If candiate abbr is too long, unite.vim
+		Force to use multi line. If the candidate abbr is too long, unite.vim
 		will fold automatically.
 
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
@@ -374,9 +375,8 @@ COMMANDS 					*unite-commands*
 
 :UniteResume [{options}] [{buffer-name}]	*:UniteResume*
 		Reuses the unite buffer named {buffer-name} that you opened
-		previously. Narrowing texts or candidates are
-		as-is. If {options} are given, context information gets
-		overridden.
+		previously. Narrowing texts or candidates are as-is. 
+		If {options} are given, context information gets overridden.
 		Note: Reuses the last unite buffer you used in current tab if
 		you skip specifying {buffer-name}.
 
