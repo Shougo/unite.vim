@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Nov 2012.
+" Last Modified: 17 Nov 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1044,11 +1044,11 @@ function! s:print_buffer(message)"{{{
   call append(unite.prompt_linenr-1, message)
   let unite.prompt_linenr += len(message)
 
-  call cursor(line('.')+len(message), 0)
+  call cursor(line('.')+len(message)-1, 0)
   if line('.') < winheight(0)
     normal! zb
   endif
-  if mode() ==# 'i' && col('.') == col('$')
+  if mode() ==# 'i'
     startinsert!
   endif
 

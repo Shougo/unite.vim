@@ -2835,6 +2835,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-11-17
+- Fixed print message behavior.
+
 2012-11-16
 - Improved redraw status behavior.
 
