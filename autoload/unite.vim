@@ -1670,7 +1670,7 @@ function! s:initialize_context(context)"{{{
   endif
 
   " Complex initializer.
-  if get(context, 'complete', 1)
+  if get(context, 'complete', 1) && !has_key(a:context, 'start_insert')
     let context.start_insert = 1
   endif
   if get(context, 'no_start_insert', 0)
