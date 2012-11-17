@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: process.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Oct 2012.
+" Last Modified: 17 Nov 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,6 +46,8 @@ let s:source = {
 function! s:source.gather_candidates(args, context)"{{{
   " Get process list.
   let _ = []
+
+  " In Windows, use tasklist.
   let command = unite#util#is_windows() ? 'tasklist' : 'ps aux'
 
   let result = split(vimproc#system(command), '\n')
@@ -54,37 +56,26 @@ function! s:source.gather_candidates(args, context)"{{{
   endif
 
   if unite#util#is_windows()
-    " Use tasklist.
-    call unite#print_source_message(result[1], s:source.name)
-    for line in result[3:]
-      let process = split(line)
-      if len(process) < 5
-        " Invalid output.
-        continue
-      endif
-
-      call add(_, {
-            \ 'word' : process[0],
-            \ 'abbr' : line,
-            \ 'action__pid' : process[1],
-            \})
-    endfor
+    let [message_linenr, start_result, min_len] = [1, 3, 5]
   else
-    call unite#print_source_message(result[0], s:source.name)
-    for line in result[1:]
-      let process = split(line)
-      if len(process) < 2
-        " Invalid output.
-        continue
-      endif
-
-      call add(_, {
-            \ 'word' : join(process[10:]),
-            \ 'abbr' : '      ' . line,
-            \ 'action__pid' : process[1],
-            \})
-    endfor
+    let [message_linenr, start_result, min_len] = [0, 1, 2]
   endif
+
+  call unite#print_source_message(result[message_linenr], s:source.name)
+  for line in result[start_result :]
+    let process = split(line)
+    if len(process) < min_len
+      " Invalid output.
+      continue
+    endif
+
+    call add(_, {
+          \ 'word' : (unite#util#is_windows() ?
+          \           process[0] : join(process[10:])),
+          \ 'abbr' : (unite#util#is_windows() ? '' : '      ') . line,
+          \ 'action__pid' : process[1],
+          \})
+  endfor
 
   return _
 endfunction"}}}
