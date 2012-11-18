@@ -1714,24 +1714,24 @@ openable	An interface that can open.  This doesn't require any keys,
 		but a kind that inherits this requires open action.
 
 						*unite-kind-cdable*
-cdable		An interface that can cd.
+cdable		An interface that can change directory.
 
 			action__directory	(String)	(Required)
-				The target directory
+				The target directory.
 
 						*unite-kind-file*
 file		An interface for files.  This kind inherits cdable, uri
 		and openable, so this requires kinds that they require.
 
 			action__path		(String)	(Required)
-				The path of the target directory
+				The path of the target directory.
 
 						*unite-kind-buffer*
 buffer		An interface for buffers.  This kind inherits file, so
 		this requires keys that it requires.
 
 			action__buffer_nr	(String		(Required)
-				The number of the target buffer
+				The number of the target buffer.
 
 						*unite-kind-tab*
 tab		An interface for tabs.  If you can use |gettabvar()|, since
@@ -1739,21 +1739,21 @@ tab		An interface for tabs.  If you can use |gettabvar()|, since
 		require.
 
 			action__tab_nr		(String)	(Required)
-				The number of the tab
+				The number of the tab.
 
 						*unite-kind-directory*
 directory	An interface for directories.  This kind inherits file,
 		this requires keys it requires.
 
 						*unite-kind-word*
-word		A String that can be inserted
+word		A String that can be inserted.
 
 			word			(String)	(Required)
-				The string you want to insert
+				The string you want to insert.
 
 						*unite-kind-jump_list*
-jump_list	An interface for jump lists.  This kind inherits openable,
-		so this requires that it requires.
+jump_list	An interface for jumping to the file position.  This kind
+		inherits openable, so this requires that it requires.
 		Note: The action__path or action__buffer_nr is required.
 
 			action__path		(String)	(Required)
@@ -1799,30 +1799,30 @@ jump_list	An interface for jump lists.  This kind inherits openable,
 		endfunction
 <
 						*unite-kind-command*
-command		An interface for Ex commands of Vim
+command		An interface for Ex commands of Vim.
 
 			action__command		(String)	(Required)
-				The command to run
+				The command to run.
 
 						*unite-kind-window*
-window		An interface for Windows of Vim
+window		An interface for Windows of Vim.
 		This kind inherits cdable, so this requires keys that it
 		requires.
 
 			action__window_nr	(String)	(Required)
-				The target window number
+				The target window number.
 
 						*unite-kind-completion*
-completion	An interface for completion
+completion	An interface for completion.
 
 			action__complete_word	(String)	(Required)
-				The completion word
+				The completion word.
 
 			action__complete_pos	(Number)	(Required)
-				The completion position
+				The completion position.
 
 			action__complete_info	(String)	(Optional)
-				The completion information
+				The completion information.
 
 						*unite-kind-source*
 source		unite.vim source
@@ -1831,26 +1831,26 @@ source		unite.vim source
 		sources are restored. So, unite.vim behaves like menu.
 
 			action__source_name	(String)	(Required)
-				The source name
+				The source name.
 
 			action__source_name	(List)		(Optional)
-				The source arguments
+				The source arguments.
 
 						*unite-kind-uri*
-uri		Files and protocols
+uri		Files and protocols.
 
 			action__path		(String)	(Required)
-				The file uri
+				The file uri.
 				If it is omitted, "action__path" is used.
 
 						*unite-kind-guicmd*
-guicmd		GUI executable commands
+guicmd		GUI executable commands.
 
 			action__path		(String)	(Required)
-				The command path
+				The command path.
 
 			action__args		(List)		(Optional)
-				The command args
+				The command args.
 
 ==============================================================================
 FILTERS						*unite-filters*
@@ -2334,7 +2334,7 @@ action_table		Dictionary		(Optional)
 			'action_table' : foo_action_table
 			'action_table' : { '*' : foo_action_table }
 <
-					*unite-source-attribute-default_action*
+				*unite-source-attribute-default_action*
 default_action		Dictionary		(Optional)
 			Adds default action unique to the source.  In
 			this dictionary, the key is the kind and the value
@@ -2499,7 +2499,7 @@ NOTATION					*unite-notation*
 			A dictionary for candidates.
 			The followings are the primary information.
 
-			word			(String)
+			word			(String)	(Required)
 				String Displayed in unite buffer.
 				Matcher to use word attribute to
 				filter.
@@ -2551,8 +2551,8 @@ NOTATION					*unite-notation*
 			action__{name}		(Unknown)	(Optional)
 				Attributes added by actions.
 				For example, "action__path" attribute is file
-				path.  If you learn standard action attributes,
-				please refer to |unite-kind|.
+				path.  If you learn standard action
+				attributes, please refer to |unite-kind|.
 
 ==============================================================================
 CREATE KIND					*unite-create-kind*
@@ -2834,6 +2834,9 @@ A: You can use below mappings.
 <
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2012-11-19
+- Fixed documentation.
 
 2012-11-17
 - Fixed print message behavior.
