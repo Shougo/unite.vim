@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: process.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Nov 2012.
+" Last Modified: 19 Nov 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -88,9 +88,7 @@ let s:source.action_table.sigkill = {
       \ 'is_selectable' : 1,
       \ }
 function! s:source.action_table.sigkill.func(candidates)"{{{
-  for candidate in a:candidates
-    call s:kill('-KILL', candidate.action__pid)
-  endfor
+  call s:kill('KILL', a:candidates)
 endfunction"}}}
 
 let s:source.action_table.sigterm = {
@@ -100,9 +98,17 @@ let s:source.action_table.sigterm = {
       \ 'is_selectable' : 1,
       \ }
 function! s:source.action_table.sigterm.func(candidates)"{{{
-  for candidate in a:candidates
-    call s:kill('-TERM', candidate.action__pid)
-  endfor
+  call s:kill('TERM', a:candidates)
+endfunction"}}}
+
+let s:source.action_table.sigint = {
+      \ 'description' : 'send INT signal to processes',
+      \ 'is_invalidate_cache' : 1,
+      \ 'is_quit' : 0,
+      \ 'is_selectable' : 1,
+      \ }
+function! s:source.action_table.sigint.func(candidates)"{{{
+  call s:kill('INT', a:candidates)
 endfunction"}}}
 
 let s:source.action_table.unite__new_candidate = {
@@ -111,7 +117,8 @@ let s:source.action_table.unite__new_candidate = {
       \ 'is_quit' : 0,
       \ }
 function! s:source.action_table.unite__new_candidate.func(candidate)"{{{
-  let cmdline = input('Please input command args : ', '', 'shellcmd')
+  let cmdline = unite#util#input(
+        \ 'Please input command args : ', '', 'shellcmd')
 
   if unite#util#is_windows()
     silent execute ':!start' cmdline
@@ -120,11 +127,25 @@ function! s:source.action_table.unite__new_candidate.func(candidate)"{{{
   endif
 endfunction"}}}
 
-function! s:kill(signal, pid)"{{{
-  call unite#util#system(unite#util#is_windows() ?
-        \ printf('taskkill /PID %d', a:pid) :
-        \  printf('kill %s %d', a:signal, a:pid)
-        \ )
+function! s:kill(signal, candidates)"{{{
+  if !unite#util#input_yesno(
+        \ 'Really send ' . a:signal .' signal to processes?')
+    redraw
+    echo 'Canceled.'
+    return
+  endif
+
+  redraw
+
+  for candidate in a:candidates
+    call unite#util#system(unite#util#is_windows() ?
+          \ printf('taskkill /PID %d', candidate.action__pid) :
+          \  printf('kill -%s %d', a:signal, candidate.action__pid)
+          \ )
+    if unite#util#get_last_status()
+      call unite#print_error(unite#util#get_last_errmsg())
+    endif
+  endfor
 endfunction"}}}
 "}}}
 

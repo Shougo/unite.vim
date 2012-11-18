@@ -2117,6 +2117,7 @@ register					*unite-action-source-register*
 process						*unite-action-source-process*
 	sigterm		Send SIGTERM to the process(default)
 	sigkill		Send SIGKILL to the process
+	sigint		Send SIGINT to the process
 
 mapping						*unite-action-source-mapping*
 	preview		View the help documentation
@@ -2837,6 +2838,7 @@ CHANGELOG					*unite-changelog*
 
 2012-11-19
 - Fixed documentation.
+- Improved process source.
 
 2012-11-17
 - Fixed print message behavior.
