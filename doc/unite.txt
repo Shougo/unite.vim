@@ -1714,7 +1714,7 @@ openable	An interface that can open.  This doesn't require any keys,
 		but a kind that inherits this requires open action.
 
 						*unite-kind-cdable*
-cdable		An interface that can change directory.
+cdable		An interface that can change the working directory.
 
 			action__directory	(String)	(Required)
 				The target directory.
@@ -2169,7 +2169,7 @@ name			String		(Required)
 			- /
 
 			For example:
-			- "buffer" , "file_mru" and "virw/git" are
+			- "buffer" , "file_mru" and "view/git" are
 			  valid.
 			- "BadOne", "!@#$%^&*()_[]{}-|" and "" are
 			  invalid.
@@ -2581,7 +2581,7 @@ name			String		(Required)
 			- /
 
 			For example:
-			- "buffer" , "file_mru" and "virw/git" are valid.
+			- "buffer" , "file_mru" and "view/git" are valid.
 			- "BadOne", "!@#$%^&*()_[]{}-|" and "" are invalid.
 
 					*unite-kind-attribute-default_action*
