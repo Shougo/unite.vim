@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Nov 2012.
+" Last Modified: 02 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -926,7 +926,7 @@ endfunction"}}}
 " Utils.
 function! unite#print_error(message)"{{{
   let message = type(a:message) == type([]) ?
-        \ a:message : [a:message]
+        \ a:message : split(a:message, '\n')
   for mes in message
     call unite#print_message('!!!'.mes.'!!!')
 
@@ -1012,7 +1012,7 @@ function! s:print_buffer(message)"{{{
   " Auto split.
   let message = []
   let messages = type(a:message) == type([]) ?
-        \ a:message : [a:message]
+        \ a:message : split(a:message, '\n')
 
   " Convert source name.
   for msg in messages

@@ -1972,7 +1972,7 @@ ACTIONS						*unite-actions*
 Actions of each kinds
 
 common						*unite-action-common*
-Defines the common interface for all kinds.  This uses condidate.word
+Defines the common interface for all kinds.  It uses condidate.word
 internally.
 	nop		Do nothing
 	yank		Yank the candidate "word" or "action__text"
@@ -1986,8 +1986,8 @@ internally.
 	echo		Echo candidates for debug.
 
 openable					*unite-action-openable*
-Defines an interface for files that can be open.  This requires an inheriting
-kind to define open action.
+Defines an interface for files that can be opened.  It requires an inheriting
+kind to define "open" action.
 	tabopen		Open the file in a new tab
 	tabdrop		Open the file by ":tab drop" command
 	split		Open the file, splitting horizontally
