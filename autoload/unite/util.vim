@@ -95,7 +95,7 @@ function! unite#util#input(prompt, ...)"{{{
   return context.unite__is_interactive ? call('input', args) : default
 endfunction"}}}
 function! unite#util#input_yesno(message)"{{{
-  let yesno = input(a:message . ' [yes/no] : ')
+  let yesno = input(a:message . ' [yes/no]: ')
   while yesno !~? '^\%(y\%[es]\|n\%[o]\)$'
     redraw
     if yesno == ''
@@ -105,7 +105,7 @@ function! unite#util#input_yesno(message)"{{{
 
     " Retry.
     call unite#print_error('Invalid input.')
-    let yesno = input(a:message . ' [yes/no] : ')
+    let yesno = input(a:message . ' [yes/no]: ')
   endwhile
 
   return yesno =~? 'y\%[es]'
