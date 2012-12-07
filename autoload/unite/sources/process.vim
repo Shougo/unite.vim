@@ -82,7 +82,7 @@ endfunction"}}}
 
 " Actions"{{{
 let s:source.action_table.sigkill = {
-      \ 'description' : 'send KILL signal to processes',
+      \ 'description' : 'send the KILL signal to processes',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
@@ -92,7 +92,7 @@ function! s:source.action_table.sigkill.func(candidates)"{{{
 endfunction"}}}
 
 let s:source.action_table.sigterm = {
-      \ 'description' : 'send TERM signal to processes',
+      \ 'description' : 'send the TERM signal to processes',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
@@ -102,7 +102,7 @@ function! s:source.action_table.sigterm.func(candidates)"{{{
 endfunction"}}}
 
 let s:source.action_table.sigint = {
-      \ 'description' : 'send INT signal to processes',
+      \ 'description' : 'send the INT signal to processes',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
@@ -129,7 +129,7 @@ endfunction"}}}
 
 function! s:kill(signal, candidates)"{{{
   if !unite#util#input_yesno(
-        \ 'Really send ' . a:signal .' signal to processes?')
+        \ 'Really send the ' . a:signal .' signal to the processes?')
     redraw
     echo 'Canceled.'
     return
