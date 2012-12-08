@@ -1,4 +1,4 @@
-*unite.txt*	Ultimate interface to unite all sources
+*unite.txt*	Unite and create user interfaces.
 
 Version: 4.1
 Author : Shougo <Shougo.Matsu@gmail.com>
