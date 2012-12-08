@@ -53,9 +53,9 @@ The *unite* or *unite.vim* plug-in can search and display information from
 arbitrary sources like files, buffers, recently used files or registers.  You
 can run several pre-defined actions on a target displayed in the unite window.
 
-The difference between |unite| and similar plug-ins like |fuzzyfinder| or
-|ku| is, that |unite| doesn't use the built-in completion interface of Vim.
-Additionally |unite| is an integration interface for several sources.
+The difference between |unite| and similar plug-ins like |fuzzyfinder|,
+|ctrl-p| or |ku| is, |unite| provides an integration interface for several
+sources and you can create new interface using |unite|.
 
 ==============================================================================
 USAGE						*unite-usage*
