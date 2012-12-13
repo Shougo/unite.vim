@@ -958,37 +958,36 @@ function! unite#print_source_message(message, source_name) "{{{
         \ "printf('[%s] %s', a:source_name, v:val)"))
 endfunction"}}}
 function! unite#clear_message() "{{{
-  if &filetype ==# 'unite'
-    let unite = unite#get_current_unite()
-    if unite.prompt_linenr > 2
-      let modifiable_save = &l:modifiable
-      setlocal modifiable
-
-      let pos = getpos('.')
-      silent! execute '2,'.(unite.prompt_linenr-1).'delete _'
-      let pos[1] -= unite.prompt_linenr-2
-      call setpos('.', pos)
-      if line('.') < winheight(0)
-        normal! zb
-      endif
-      if mode() ==# 'i' && pos[2] == col('$')
-        startinsert!
-      endif
-
-      let unite.prompt_linenr = 2
-
-      let &l:modifiable = modifiable_save
-      call s:on_cursor_moved()
-
-      if exists('b:current_syntax') && b:current_syntax ==# 'unite'
-        syntax clear uniteInputLine
-        execute 'syntax match uniteInputLine'
-              \ '/\%'.unite.prompt_linenr.'l.*/'
-              \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
-      endif
-    endif
-  endif
   let s:unite_cached_message = []
+  let unite = unite#get_current_unite()
+  if &filetype !=# 'unite' || unite.prompt_linenr < 2
+    return
+  endif
+
+  let modifiable_save = &l:modifiable
+  setlocal modifiable
+
+  let linenr = line('.')
+  silent! execute '2,'.(unite.prompt_linenr-1).'delete _'
+  call cursor(linenr, 0)
+  if line('.') < winheight(0)
+    normal! zb
+  endif
+  if mode() ==# 'i' && pos[2] == col('$')
+    startinsert!
+  endif
+
+  let unite.prompt_linenr = 2
+
+  let &l:modifiable = modifiable_save
+  call s:on_cursor_moved()
+
+  if exists('b:current_syntax') && b:current_syntax ==# 'unite'
+    syntax clear uniteInputLine
+    execute 'syntax match uniteInputLine'
+          \ '/\%'.unite.prompt_linenr.'l.*/'
+          \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+  endif
 endfunction"}}}
 function! unite#substitute_path_separator(path) "{{{
   return unite#util#substitute_path_separator(a:path)
@@ -1041,10 +1040,11 @@ function! s:print_buffer(message) "{{{
     endwhile
   endfor
 
+  let linenr = line('.')
   call append(unite.prompt_linenr-1, message)
   let unite.prompt_linenr += len(message)
 
-  call cursor(line('.')+len(message)-1, 0)
+  call cursor(linenr+len(message)-1, 0)
   if line('.') < winheight(0)
     normal! zb
   endif
