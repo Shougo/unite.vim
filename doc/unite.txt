@@ -2839,6 +2839,7 @@ CHANGELOG					*unite-changelog*
 2012-12-13
 - Uniq in file_rec initialization.
 - Fixed print message.
+- Improved default substitute pattern.
 
 2012-11-19
 - Fixed documentation.

@@ -304,6 +304,8 @@ let s:profiles = {}
 call unite#set_substitute_pattern('files', '^\~',
       \ substitute(unite#util#substitute_path_separator($HOME),
       \ ' ', '\\\\ ', 'g'), -100)
+call unite#set_substitute_pattern('files', '\.\{2,}\ze[^/]',
+      \ "\\=repeat('../', len(submatch(0))-1)", 10000)
 call unite#set_substitute_pattern('files', '[^~.* ]\ze/', '\0*', 100)
 call unite#set_substitute_pattern('files', '/\ze[^~.* ]', '/*', 100)
 call unite#set_substitute_pattern('files', '\.', '*.', 1000)
