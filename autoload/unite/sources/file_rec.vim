@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Oct 2012.
+" Last Modified: 13 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -500,6 +500,9 @@ function! s:init_continuation(context, directory)"{{{
           \ 'directory' : a:directory, 'end' : 0,
           \ }
   endif
+
+  let s:continuation[a:directory].files =
+        \ unite#util#uniq(s:continuation[a:directory].files)
 endfunction"}}}
 function! s:write_cache(directory, files)"{{{
   let cache_dir = g:unite_data_directory . '/file_rec'
