@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#converter_nothing#define()"{{{
+function! unite#filters#converter_nothing#define() "{{{
   return s:converter
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:converter = {
       \ 'description' : 'nothing converter',
       \}
 
-function! s:converter.filter(candidates, context)"{{{
+function! s:converter.filter(candidates, context) "{{{
   " Nothing.
   return a:candidates
 endfunction"}}}

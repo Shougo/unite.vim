@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#guicmd#define()"{{{
+function! unite#kinds#guicmd#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -38,11 +38,11 @@ let s:kind = {
       \ 'alias_table' : { 'ex' : 'nop' },
       \}
 
-" Actions"{{{
+" Actions "{{{
 let s:kind.action_table.execute = {
       \ 'description' : 'execute command',
       \ }
-function! s:kind.action_table.execute.func(candidate)"{{{
+function! s:kind.action_table.execute.func(candidate) "{{{
   let args = [a:candidate.action__path]
   if has_key(a:candidate, 'action__args')
     let args += a:candidate.action__args
@@ -66,7 +66,7 @@ endfunction"}}}
 let s:kind.action_table.edit = {
       \ 'description' : 'edit command args',
       \ }
-function! s:kind.action_table.edit.func(candidate)"{{{
+function! s:kind.action_table.edit.func(candidate) "{{{
   let args = [a:candidate.action__path]
   if has_key(a:candidate, 'action__args')
     let args += a:candidate.action__args

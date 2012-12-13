@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#sorter_reverse#define()"{{{
+function! unite#filters#sorter_reverse#define() "{{{
   return s:sorter
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:sorter = {
       \ 'description' : 'sort by reverse order',
       \}
 
-function! s:sorter.filter(candidates, context)"{{{
+function! s:sorter.filter(candidates, context) "{{{
   return reverse(a:candidates)
 endfunction"}}}
 

@@ -28,8 +28,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Define default mappings.
-function! unite#mappings#define_default_mappings()"{{{
-  " Plugin keymappings"{{{
+function! unite#mappings#define_default_mappings() "{{{
+  " Plugin keymappings "{{{
   nnoremap <silent><buffer> <Plug>(unite_exit)
         \ :<C-u>call <SID>exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_all_exit)
@@ -245,17 +245,17 @@ function! unite#mappings#define_default_mappings()"{{{
         \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 endfunction"}}}
 
-function! s:smart_imap(lhs, rhs)"{{{
+function! s:smart_imap(lhs, rhs) "{{{
   return line('.') != unite#get_current_unite().prompt_linenr ||
         \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
        \ a:lhs : a:rhs
 endfunction"}}}
-function! s:smart_imap2(lhs, rhs)"{{{
+function! s:smart_imap2(lhs, rhs) "{{{
   return line('.') <= (len(unite#get_current_unite().prompt)+1) ?
        \ a:lhs : a:rhs
 endfunction"}}}
 
-function! s:do_new_candidate_action()"{{{
+function! s:do_new_candidate_action() "{{{
   if empty(unite#get_current_candidate())
     " Get source name.
     if len(unite#get_sources()) != 1
@@ -273,7 +273,7 @@ function! s:do_new_candidate_action()"{{{
   return unite#mappings#do_action('unite__new_candidate', candidates)
 endfunction"}}}
 
-function! unite#mappings#narrowing(word)"{{{
+function! unite#mappings#narrowing(word) "{{{
   setlocal modifiable
   let unite = unite#get_current_unite()
   let unite.input = escape(a:word, ' *')
@@ -287,7 +287,7 @@ function! unite#mappings#narrowing(word)"{{{
     normal! 0z.
   endif
 endfunction"}}}
-function! unite#mappings#do_action(action_name, ...)"{{{
+function! unite#mappings#do_action(action_name, ...) "{{{
   call unite#redraw()
 
   let candidates = get(a:000, 0,
@@ -388,18 +388,18 @@ function! unite#mappings#do_action(action_name, ...)"{{{
   return _
 endfunction"}}}
 
-function! unite#mappings#get_current_filters()"{{{
+function! unite#mappings#get_current_filters() "{{{
   let unite = unite#get_current_unite()
   return unite.post_filters
 endfunction"}}}
-function! unite#mappings#set_current_filters(filters)"{{{
+function! unite#mappings#set_current_filters(filters) "{{{
   let unite = unite#get_current_unite()
   let unite.post_filters = a:filters
   let unite.context.is_redraw = 1
   return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
 endfunction"}}}
 
-function! s:get_action_table(action_name, candidates, sources)"{{{
+function! s:get_action_table(action_name, candidates, sources) "{{{
   let action_tables = []
   let Self = unite#get_self_functions()[-1]
   for candidate in a:candidates
@@ -460,7 +460,7 @@ function! s:get_action_table(action_name, candidates, sources)"{{{
 
   return action_tables
 endfunction"}}}
-function! s:get_actions(candidates, sources)"{{{
+function! s:get_actions(candidates, sources) "{{{
   let Self = unite#get_self_functions()[-1]
 
   let actions = s:get_candidate_action_table(a:candidates[0], a:sources)
@@ -474,7 +474,7 @@ function! s:get_actions(candidates, sources)"{{{
 
   return actions
 endfunction"}}}
-function! s:get_candidate_action_table(candidate, sources)"{{{
+function! s:get_candidate_action_table(candidate, sources) "{{{
   let Self = unite#get_self_functions()[-1]
 
   return unite#get_action_table(a:candidate.source, a:candidate.kind, Self,
@@ -482,20 +482,20 @@ function! s:get_candidate_action_table(candidate, sources)"{{{
 endfunction"}}}
 
 " key-mappings functions.
-function! s:exit()"{{{
+function! s:exit() "{{{
   call unite#force_quit_session()
 endfunction"}}}
-function! s:all_exit()"{{{
+function! s:all_exit() "{{{
   call unite#all_quit_session()
 endfunction"}}}
-function! s:restart()"{{{
+function! s:restart() "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
   let sources = map(deepcopy(unite.sources), 'empty(v:val.args) ? v:val.name : [v:val.name, v:val.args]')
   call unite#force_quit_session()
   call unite#start(sources, context)
 endfunction"}}}
-function! s:delete_backward_path()"{{{
+function! s:delete_backward_path() "{{{
   let unite    = unite#get_current_unite()
   let prompt   = unite.prompt
   let input    = getline(unite.prompt_linenr)[len(prompt):]
@@ -503,7 +503,7 @@ function! s:delete_backward_path()"{{{
   let endcol   = virtcol('.')
   return repeat("\<C-h>", (startcol < endcol ? endcol - startcol : 0))
 endfunction"}}}
-function! s:normal_delete_backward_path()"{{{
+function! s:normal_delete_backward_path() "{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
   call setline(unite#get_current_unite().prompt_linenr,
@@ -513,7 +513,7 @@ function! s:normal_delete_backward_path()"{{{
   call unite#redraw()
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! s:toggle_mark()"{{{
+function! s:toggle_mark() "{{{
   let candidate = unite#get_current_candidate()
   if empty(candidate) || get(candidate, 'is_dummy', 0)
     return
@@ -540,12 +540,12 @@ function! s:toggle_mark()"{{{
     endif
   endwhile
 endfunction"}}}
-function! s:toggle_mark_all_candidates()"{{{
+function! s:toggle_mark_all_candidates() "{{{
   call s:redraw_all_candidates()
   call s:toggle_mark_candidates(0,
         \     len(unite#get_unite_candidates()) - 1)
 endfunction"}}}
-function! s:toggle_mark_candidates(start, end)"{{{
+function! s:toggle_mark_candidates(start, end) "{{{
   if a:start < 0 || a:end >= len(unite#get_unite_candidates())
     " Ignore.
     return
@@ -564,12 +564,12 @@ function! s:toggle_mark_candidates(start, end)"{{{
     let cnt += 1
   endwhile
 endfunction"}}}
-function! s:quick_help()"{{{
+function! s:quick_help() "{{{
   let unite = unite#get_current_unite()
 
   call unite#start_temporary([['mapping', bufnr('%')]], {}, 'mapping-help')
 endfunction"}}}
-function! s:choose_action()"{{{
+function! s:choose_action() "{{{
   let unite = unite#get_current_unite()
   if line('$') < (unite.prompt_linenr+1)
     " Ignore.
@@ -583,7 +583,7 @@ function! s:choose_action()"{{{
 
   call unite#mappings#_choose_action(candidates)
 endfunction"}}}
-function! unite#mappings#_choose_action(candidates, ...)"{{{
+function! unite#mappings#_choose_action(candidates, ...) "{{{
   call filter(a:candidates,
         \ '!has_key(v:val, "is_dummy") || !v:val.is_dummy')
   if empty(a:candidates)
@@ -604,7 +604,7 @@ function! unite#mappings#_choose_action(candidates, ...)"{{{
           \ [[s:source_action] + a:candidates], context)
   endif
 endfunction"}}}
-function! s:insert_enter(key)"{{{
+function! s:insert_enter(key) "{{{
   setlocal modifiable
 
   let unite = unite#get_current_unite()
@@ -614,13 +614,13 @@ function! s:insert_enter(key)"{{{
   endif
   return a:key
 endfunction"}}}
-function! s:redraw()"{{{
+function! s:redraw() "{{{
   call unite#clear_message()
 
   let unite = unite#get_current_unite()
   call unite#force_redraw()
 endfunction"}}}
-function! s:rotate_source(is_next)"{{{
+function! s:rotate_source(is_next) "{{{
   let unite = unite#get_current_unite()
 
   for source in unite#loaded_sources_list()
@@ -636,7 +636,7 @@ function! s:rotate_source(is_next)"{{{
   call unite#redraw_status()
   call unite#redraw_candidates()
 endfunction"}}}
-function! s:print_candidate()"{{{
+function! s:print_candidate() "{{{
   if line('.') <= unite#get_current_unite().prompt_linenr
     " Ignore.
     return
@@ -646,7 +646,7 @@ function! s:print_candidate()"{{{
   echo 'abbr: ' . candidate.unite__abbr
   echo 'word: ' . candidate.word
 endfunction"}}}
-function! s:insert_selected_candidate()"{{{
+function! s:insert_selected_candidate() "{{{
   if line('.') <= unite#get_current_unite().prompt_linenr
     " Ignore.
     return
@@ -655,7 +655,7 @@ function! s:insert_selected_candidate()"{{{
   let candidate = unite#get_current_candidate()
   call unite#mappings#narrowing(candidate.word)
 endfunction"}}}
-function! unite#mappings#_quick_match(is_choose)"{{{
+function! unite#mappings#_quick_match(is_choose) "{{{
   if !empty(unite#get_marked_candidates())
     call unite#util#print_error('Marked candidates is detected.')
     return
@@ -699,12 +699,12 @@ function! unite#mappings#_quick_match(is_choose)"{{{
           \ unite.context.default_action, [candidate])
   endif
 endfunction"}}}
-function! s:input_directory()"{{{
+function! s:input_directory() "{{{
   let path = unite#substitute_path_separator(input('Input narrowing directory: ', unite#get_input(), 'dir'))
   let path = path.(path == '' || path =~ '/$' ? '' : '/')
   call unite#mappings#narrowing(path)
 endfunction"}}}
-function! s:loop_cursor_down(is_skip_not_matched)"{{{
+function! s:loop_cursor_down(is_skip_not_matched) "{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
@@ -748,7 +748,7 @@ function! s:loop_cursor_down(is_skip_not_matched)"{{{
     return repeat('j', cnt)
   endif
 endfunction"}}}
-function! s:loop_cursor_up(is_skip_not_matched, mode)"{{{
+function! s:loop_cursor_up(is_skip_not_matched, mode) "{{{
   let is_insert = a:mode ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
@@ -802,7 +802,7 @@ function! s:loop_cursor_up(is_skip_not_matched, mode)"{{{
     noautocmd startinsert!
   endif
 endfunction"}}}
-function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode)"{{{
+function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode) "{{{
   let is_insert = a:mode ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
@@ -820,7 +820,7 @@ function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode)"{{{
 
   call cursor(line('$'), 1)
 endfunction"}}}
-function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched)"{{{
+function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched) "{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
@@ -862,7 +862,7 @@ function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched)"{{{
     return repeat('k', cnt)
   endif
 endfunction"}}}
-function! s:toggle_transpose_window()"{{{
+function! s:toggle_transpose_window() "{{{
   " Toggle vertical/horizontal view.
   let context = unite#get_context()
   let direction = context.vertical ?
@@ -873,7 +873,7 @@ function! s:toggle_transpose_window()"{{{
 
   let context.vertical = !context.vertical
 endfunction"}}}
-function! s:toggle_auto_preview()"{{{
+function! s:toggle_auto_preview() "{{{
   let context = unite#get_context()
   let context.auto_preview = !context.auto_preview
 
@@ -883,7 +883,7 @@ function! s:toggle_auto_preview()"{{{
     pclose!
   endif
 endfunction"}}}
-function! s:toggle_max_candidates()"{{{
+function! s:toggle_max_candidates() "{{{
   let unite = unite#get_current_unite()
   let unite.is_enabled_max_candidates = !unite.is_enabled_max_candidates
   if unite.is_enabled_max_candidates
@@ -895,7 +895,7 @@ function! s:toggle_max_candidates()"{{{
   call unite#force_redraw()
   call s:redraw_all_candidates()
 endfunction"}}}
-function! s:narrowing_path()"{{{
+function! s:narrowing_path() "{{{
   if line('.') <= unite#get_current_unite().prompt_linenr
     " Ignore.
     return
@@ -904,19 +904,19 @@ function! s:narrowing_path()"{{{
   let candidate = unite#get_current_candidate()
   call unite#mappings#narrowing(has_key(candidate, 'action__path')? candidate.action__path : candidate.word)
 endfunction"}}}
-function! s:narrowing_input_history()"{{{
+function! s:narrowing_input_history() "{{{
   call unite#start_temporary([s:source_input],
         \ { 'old_source_names_string' : unite#loaded_source_names_string() },
         \ 'history/input')
 endfunction"}}}
-function! s:redraw_all_candidates()"{{{
+function! s:redraw_all_candidates() "{{{
   let unite = unite#get_current_unite()
   if len(unite.candidates) != len(unite.current_candidates)
     call unite#redraw(0, 1)
   endif
 endfunction"}}}
 
-function! s:get_quick_match_table()"{{{
+function! s:get_quick_match_table() "{{{
   let offset = line('.') - unite#get_current_unite().prompt_linenr - 1
   if offset < 0
     let offset = 0
@@ -929,11 +929,11 @@ function! s:get_quick_match_table()"{{{
   return table
 endfunction"}}}
 
-function! unite#mappings#complete_actions(arglead, cmdline, cursorpos)"{{{
+function! unite#mappings#complete_actions(arglead, cmdline, cursorpos) "{{{
   return filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 
-" Unite action source."{{{
+" Unite action source. "{{{
 let s:source_action = {
       \ 'name' : 'action',
       \ 'description' : 'candidates from unite action',
@@ -943,7 +943,7 @@ let s:source_action = {
       \ 'syntax' : 'uniteSource__Action',
       \}
 
-function! s:source_action.hooks.on_syntax(args, context)"{{{
+function! s:source_action.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__ActionDescriptionLine / -- .*$/
         \ contained containedin=uniteSource__Action
   syntax match uniteSource__ActionDescription /.*$/
@@ -954,7 +954,7 @@ function! s:source_action.hooks.on_syntax(args, context)"{{{
   highlight default link uniteSource__ActionDescription Comment
 endfunction"}}}
 
-function! s:source_action.gather_candidates(args, context)"{{{
+function! s:source_action.gather_candidates(args, context) "{{{
   if empty(a:args)
     return
   endif
@@ -1010,13 +1010,13 @@ function! s:compare_word(i1, i2)
   return (a:i1.word ># a:i2.word) ? 1 : -1
 endfunction
 
-" Actions"{{{
+" Actions "{{{
 let s:source_action.action_table = {}
 
 let s:source_action.action_table.do = {
       \ 'description' : 'do action',
       \ }
-function! s:source_action.action_table.do.func(candidate)"{{{
+function! s:source_action.action_table.do.func(candidate) "{{{
   let context = unite#get_context()
 
   if !empty(context.old_buffer_info)
@@ -1054,7 +1054,7 @@ endfunction"}}}
 "}}}
 "}}}
 
-" Unite history/input source."{{{
+" Unite history/input source. "{{{
 let s:source_input = {
       \ 'name' : 'history/input',
       \ 'description' : 'candidates from unite input history',
@@ -1063,7 +1063,7 @@ let s:source_input = {
       \ 'syntax' : 'uniteSource__Action',
       \}
 
-function! s:source_input.gather_candidates(args, context)"{{{
+function! s:source_input.gather_candidates(args, context) "{{{
   let context = unite#get_context()
   let inputs = unite#get_profile(
         \ context.old_buffer_info[0].profile_name, 'unite__inputs')
@@ -1077,14 +1077,14 @@ function! s:source_input.gather_candidates(args, context)"{{{
         \ }')
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:source_input.action_table = {}
 
 let s:source_input.action_table.narrow = {
       \ 'description' : 'narrow by history',
       \ 'is_quit' : 0,
       \ }
-function! s:source_input.action_table.narrow.func(candidate)"{{{
+function! s:source_input.action_table.narrow.func(candidate) "{{{
   call unite#force_quit_session()
   call unite#mappings#narrowing(a:candidate.word)
 endfunction"}}}
@@ -1095,7 +1095,7 @@ let s:source_input.action_table.delete = {
       \ 'is_quit' : 0,
       \ 'is_invalidate_cache' : 1,
       \ }
-function! s:source_input.action_table.delete.func(candidates)"{{{
+function! s:source_input.action_table.delete.func(candidates) "{{{
   let context = unite#get_context()
   let inputs = unite#get_profile(
         \ context.old_buffer_info[0].profile_name, 'unite__inputs')

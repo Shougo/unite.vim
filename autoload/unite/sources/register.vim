@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#register#define()"{{{
+function! unite#sources#register#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -38,7 +38,7 @@ let s:source = {
       \ 'default_kind' : 'word',
       \}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   let candidates = []
 
   let max_width = winwidth(0) - 5
@@ -71,14 +71,14 @@ function! s:source.gather_candidates(args, context)"{{{
   return candidates
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:source.action_table.delete = {
       \ 'description' : 'delete registers',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:source.action_table.delete.func(candidates)"{{{
+function! s:source.action_table.delete.func(candidates) "{{{
   for candidate in a:candidates
     if candidate.action__register ==# 'yanktmp'
       call delete(g:yanktmp_file)
@@ -93,7 +93,7 @@ let s:source.action_table.edit = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.edit.func(candidate)"{{{
+function! s:source.action_table.edit.func(candidate) "{{{
   let register = (a:candidate.action__register ==# 'yanktmp') ?
         \ join(readfile(g:yanktmp_file, "b"), "\n") :
         \ getreg(a:candidate.action__register, 1)

@@ -30,7 +30,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#mapping#define()"{{{
+function! unite#sources#mapping#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -43,7 +43,7 @@ let s:source = {
       \ }
 
 let s:cached_result = []
-function! s:source.hooks.on_init(args, context)"{{{
+function! s:source.hooks.on_init(args, context) "{{{
   " Get buffer number.
   let bufnr = get(a:args, 0, bufnr('%'))
   let oldnr = bufnr('%')
@@ -84,19 +84,19 @@ function! s:source.hooks.on_init(args, context)"{{{
           \ })
   endfor
 endfunction"}}}
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   return s:cached_result
 endfunction"}}}
-function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return filter(range(1, bufnr('$')), 'buflisted(v:val)')
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:source.action_table.preview = {
       \ 'description' : 'view the help documentation',
       \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.preview.func(candidate)"{{{
+function! s:source.action_table.preview.func(candidate) "{{{
   let winnr = winnr()
 
   try

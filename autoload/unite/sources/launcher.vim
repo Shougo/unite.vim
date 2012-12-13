@@ -30,7 +30,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#launcher#define()"{{{
+function! unite#sources#launcher#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:source = {
       \ }
 
 let s:cached_result = {}
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   let path = get(a:args, 0, '')
   if path == ''
     " Use $PATH.

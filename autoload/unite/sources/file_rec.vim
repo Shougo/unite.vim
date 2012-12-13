@@ -38,7 +38,7 @@ call unite#util#set_default(
 
 let s:Cache = vital#of('unite.vim').import('System.Cache')
 
-function! unite#sources#file_rec#define()"{{{
+function! unite#sources#file_rec#define() "{{{
   return [ s:source_rec ]
         \ + [ executable('find')
         \   && unite#util#has_vimproc() ? s:source_async : {} ]
@@ -61,7 +61,7 @@ let s:source_rec = {
       \  ],
       \ }
 
-function! s:source_rec.gather_candidates(args, context)"{{{
+function! s:source_rec.gather_candidates(args, context) "{{{
   let a:context.source__directory = s:get_path(a:args, a:context)
 
   let directory = a:context.source__directory
@@ -91,7 +91,7 @@ function! s:source_rec.gather_candidates(args, context)"{{{
   return deepcopy(continuation.files)
 endfunction"}}}
 
-function! s:source_rec.async_gather_candidates(args, context)"{{{
+function! s:source_rec.async_gather_candidates(args, context) "{{{
   let continuation = s:continuation[a:context.source__directory]
 
   let [continuation.rest, files] =
@@ -121,11 +121,11 @@ function! s:source_rec.async_gather_candidates(args, context)"{{{
   return deepcopy(candidates)
 endfunction"}}}
 
-function! s:source_rec.hooks.on_post_filter(args, context)"{{{
+function! s:source_rec.hooks.on_post_filter(args, context) "{{{
   call s:on_post_filter(a:args, a:context)
 endfunction"}}}
 
-function! s:source_rec.vimfiler_check_filetype(args, context)"{{{
+function! s:source_rec.vimfiler_check_filetype(args, context) "{{{
   let path = unite#util#substitute_path_separator(
         \ unite#util#expand(join(a:args, ':')))
   let path = unite#util#substitute_path_separator(
@@ -141,7 +141,7 @@ function! s:source_rec.vimfiler_check_filetype(args, context)"{{{
 
   return [type, lines, dict]
 endfunction"}}}
-function! s:source_rec.vimfiler_gather_candidates(args, context)"{{{
+function! s:source_rec.vimfiler_gather_candidates(args, context) "{{{
   let path = s:get_path(a:args, a:context)
 
   if !isdirectory(path)
@@ -187,7 +187,7 @@ function! s:source_rec.vimfiler_gather_candidates(args, context)"{{{
 
   return deepcopy(candidates)
 endfunction"}}}
-function! s:source_rec.vimfiler_dummy_candidates(args, context)"{{{
+function! s:source_rec.vimfiler_dummy_candidates(args, context) "{{{
   let path = unite#util#substitute_path_separator(
         \ unite#util#expand(join(a:args, ':')))
   let path = unite#util#substitute_path_separator(
@@ -221,11 +221,11 @@ function! s:source_rec.vimfiler_dummy_candidates(args, context)"{{{
 
   return deepcopy(candidates)
 endfunction"}}}
-function! s:source_rec.vimfiler_complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source_rec.vimfiler_complete(args, context, arglead, cmdline, cursorpos) "{{{
   return unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
-function! s:source_rec.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source_rec.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
@@ -245,7 +245,7 @@ let s:source_async = {
       \  ],
       \ }
 
-function! s:source_async.gather_candidates(args, context)"{{{
+function! s:source_async.gather_candidates(args, context) "{{{
   let a:context.source__directory = s:get_path(a:args, a:context)
 
   let directory = a:context.source__directory
@@ -283,7 +283,7 @@ function! s:source_async.gather_candidates(args, context)"{{{
   return []
 endfunction"}}}
 
-function! s:source_async.async_gather_candidates(args, context)"{{{
+function! s:source_async.async_gather_candidates(args, context) "{{{
   let stderr = a:context.source__proc.stderr
   if !stderr.eof
     " Print error.
@@ -332,16 +332,16 @@ function! s:source_async.hooks.on_close(args, context) "{{{
     call a:context.source__proc.waitpid()
   endif
 endfunction "}}}
-function! s:source_async.hooks.on_post_filter(args, context)"{{{
+function! s:source_async.hooks.on_post_filter(args, context) "{{{
   call s:on_post_filter(a:args, a:context)
 endfunction"}}}
 
-function! s:source_async.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source_async.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 
-" Add custom action table."{{{
+" Add custom action table. "{{{
 let s:cdable_action_rec = {
       \ 'description' : 'open this directory by file_rec source',
       \}
@@ -387,7 +387,7 @@ unlet! s:cdable_action_rec_async
 "}}}
 
 " Misc.
-function! s:get_path(args, context)"{{{
+function! s:get_path(args, context) "{{{
   let directory = get(
         \ filter(copy(a:args), "v:val != '!'"), 0, '')
   if directory == ''
@@ -404,7 +404,7 @@ function! s:get_path(args, context)"{{{
         \ substitute(fnamemodify(directory, ':p'), '^\~',
         \ unite#util#substitute_path_separator($HOME), ''))
 endfunction"}}}
-function! s:get_files(files, level, max_len)"{{{
+function! s:get_files(files, level, max_len) "{{{
   let continuation_files = []
   let ret_files = []
   let files_index = 0
@@ -468,13 +468,13 @@ function! s:get_files(files, level, max_len)"{{{
   return [continuation_files, map(ret_files,
         \ "unite#util#substitute_path_separator(fnamemodify(v:val, ':p'))")]
 endfunction"}}}
-function! s:on_post_filter(args, context)"{{{
+function! s:on_post_filter(args, context) "{{{
   for candidate in a:context.candidates
     let candidate.action__directory =
           \ unite#util#path2directory(candidate.action__path)
   endfor
 endfunction"}}}
-function! s:init_continuation(context, directory)"{{{
+function! s:init_continuation(context, directory) "{{{
   let cache_dir = g:unite_data_directory . '/file_rec'
   if !has_key(s:continuation, a:directory)
         \ && s:Cache.filereadable(cache_dir, a:directory)
@@ -504,7 +504,7 @@ function! s:init_continuation(context, directory)"{{{
   let s:continuation[a:directory].files =
         \ unite#util#uniq(s:continuation[a:directory].files)
 endfunction"}}}
-function! s:write_cache(directory, files)"{{{
+function! s:write_cache(directory, files) "{{{
   let cache_dir = g:unite_data_directory . '/file_rec'
 
   if g:unite_source_file_rec_min_cache_files > 0

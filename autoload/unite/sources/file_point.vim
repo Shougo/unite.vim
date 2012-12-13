@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#file_point#define()"{{{
+function! unite#sources#file_point#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:source = {
       \ 'description' : 'file candidate from cursor point',
       \ 'hooks' : {},
       \}
-function! s:source.hooks.on_init(args, context)"{{{
+function! s:source.hooks.on_init(args, context) "{{{
   let filename_pattern = '[[:alnum:];/?:@&=+$_.!~|()#-]\+'
   let filename = unite#util#expand(
         \ matchstr(getline('.')[: col('.')-1], filename_pattern . '$')
@@ -46,7 +46,7 @@ function! s:source.hooks.on_init(args, context)"{{{
         \ filename : fnamemodify(filename, ':p')
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   if a:context.source__filename =~ '^\%(https\?\|ftp\)://'
     if exists('*vimproc#host_exists') &&
           \ !vimproc#host_exists(a:context.source__filename)

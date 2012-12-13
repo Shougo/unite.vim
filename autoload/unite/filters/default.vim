@@ -27,16 +27,16 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#default#define()"{{{
+function! unite#filters#default#define() "{{{
   " Dummy.
   return []
 endfunction"}}}
 
 let s:default = ['matcher_default', 'sorter_default', 'converter_default']
-function! unite#filters#default#get()"{{{
+function! unite#filters#default#get() "{{{
   return s:default
 endfunction"}}}
-function! unite#filters#default#use(filters)"{{{
+function! unite#filters#default#use(filters) "{{{
   let s:default = a:filters
 endfunction"}}}
 

@@ -30,7 +30,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#output#define()"{{{
+function! unite#sources#output#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:source = {
       \ 'default_kind' : 'word',
       \ }
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   if type(get(a:args, 0, '')) == type([])
     " Use args directly.
     let result = a:args[0]
@@ -64,7 +64,7 @@ function! s:source.gather_candidates(args, context)"{{{
         \ 'is_multiline' : 1,
         \ }")
 endfunction"}}}
-function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   if !exists('*neocomplcache#sources#vim_complete#helper#command')
     return []
   endif

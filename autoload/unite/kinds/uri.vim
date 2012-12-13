@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#uri#define()"{{{
+function! unite#kinds#uri#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -39,12 +39,12 @@ let s:kind = {
       \ 'action_table' : {},
       \}
 
-" Actions"{{{
+" Actions "{{{
 let s:kind.action_table.start = {
       \ 'description' : 'open files with associated program',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.start.func(candidates)"{{{
+function! s:kind.action_table.start.func(candidates) "{{{
   for candidate in a:candidates
     let path = get(candidate, 'action__uri',
           \ candidate.action__path)

@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#resume#define()"{{{
+function! unite#sources#resume#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -37,7 +37,7 @@ let s:source = {
       \ 'default_kind' : 'command',
       \}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   let a:context.source__buffer_list = filter(range(1, bufnr('$')), "
         \ getbufvar(v:val, '&filetype') ==# 'unite'
         \  && !getbufvar(v:val, 'unite').context.temporary
@@ -60,7 +60,7 @@ function! s:source.gather_candidates(args, context)"{{{
 endfunction"}}}
 
 " Misc.
-function! s:compare(candidate_a, candidate_b)"{{{
+function! s:compare(candidate_a, candidate_b) "{{{
   return a:candidate_b.source__time - a:candidate_a.source__time
 endfunction"}}}
 

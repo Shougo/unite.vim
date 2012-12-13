@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#tab#define()"{{{
+function! unite#kinds#tab#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -38,11 +38,11 @@ let s:kind = {
       \ 'alias_table': { 'edit' : 'rename' },
       \}
 
-" Actions"{{{
+" Actions "{{{
 let s:kind.action_table.open = {
       \ 'description' : 'open this tab',
       \ }
-function! s:kind.action_table.open.func(candidate)"{{{
+function! s:kind.action_table.open.func(candidate) "{{{
   execute 'tabnext' a:candidate.action__tab_nr
 endfunction"}}}
 
@@ -52,7 +52,7 @@ let s:kind.action_table.delete = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.delete.func(candidates)"{{{
+function! s:kind.action_table.delete.func(candidates) "{{{
   for candidate in sort(a:candidates, 's:compare')
     execute 'tabclose' candidate.action__tab_nr
   endfor
@@ -62,7 +62,7 @@ let s:kind.action_table.preview = {
       \ 'description' : 'preview tab',
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.preview.func(candidate)"{{{
+function! s:kind.action_table.preview.func(candidate) "{{{
   let tabnr = tabpagenr()
   execute 'tabnext' a:candidate.action__tab_nr
   redraw
@@ -75,7 +75,7 @@ let s:kind.action_table.unite__new_candidate = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.unite__new_candidate.func(candidate)"{{{
+function! s:kind.action_table.unite__new_candidate.func(candidate) "{{{
   let title = input('Please input tab title: ', '',
         \ 'customlist,' . s:SID_PREFIX() . 'history_complete')
 
@@ -110,7 +110,7 @@ if exists('*gettabvar')
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
         \ }
-  function! s:kind.action_table.rename.func(candidates)"{{{
+  function! s:kind.action_table.rename.func(candidates) "{{{
     for candidate in a:candidates
       let old_title = gettabvar(candidate.action__tab_nr, 'title')
       let title = input(printf('New title: %s -> ', old_title), old_title)
@@ -123,7 +123,7 @@ endif
 "}}}
 
 " Misc
-function! s:compare(candidate_a, candidate_b)"{{{
+function! s:compare(candidate_a, candidate_b) "{{{
   return a:candidate_b.action__tab_nr - a:candidate_a.action__tab_nr
 endfunction"}}}
 

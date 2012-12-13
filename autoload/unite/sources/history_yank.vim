@@ -37,10 +37,10 @@ call unite#util#set_default('g:unite_source_history_yank_file',
 call unite#util#set_default('g:unite_source_history_yank_limit', 100)
 "}}}
 
-function! unite#sources#history_yank#define()"{{{
+function! unite#sources#history_yank#define() "{{{
   return s:source
 endfunction"}}}
-function! unite#sources#history_yank#_append()"{{{
+function! unite#sources#history_yank#_append() "{{{
   if get(s:yank_histories, 0, '') ==# @"
         \ || len(@") < 2
     return
@@ -66,7 +66,7 @@ let s:source = {
       \ 'default_kind' : 'word',
       \}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   let max_width = winwidth(0) - 5
   return map(copy(s:yank_histories), "{
         \ 'word' : v:val,
@@ -74,14 +74,14 @@ function! s:source.gather_candidates(args, context)"{{{
         \ }")
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:source.action_table.delete = {
       \ 'description' : 'delete from yank history',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:source.action_table.delete.func(candidates)"{{{
+function! s:source.action_table.delete.func(candidates) "{{{
   for candidate in a:candidates
     call filter(s:yank_histories, 'v:val !=# candidate.word')
   endfor

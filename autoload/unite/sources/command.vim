@@ -30,7 +30,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#command#define()"{{{
+function! unite#sources#command#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -44,7 +44,7 @@ let s:source = {
       \ }
 
 let s:cached_result = []
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   if !a:context.is_redraw && !empty(s:cached_result)
     return s:cached_result
   endif
@@ -97,7 +97,7 @@ function! s:source.gather_candidates(args, context)"{{{
 
   return s:cached_result
 endfunction"}}}
-function! s:source.change_candidates(args, context)"{{{
+function! s:source.change_candidates(args, context) "{{{
   let dummy = substitute(a:context.input, '[*\\]', '', 'g')
   if len(split(dummy)) > 1
     " Add dummy result.
@@ -113,7 +113,7 @@ function! s:source.change_candidates(args, context)"{{{
   return []
 endfunction"}}}
 
-function! s:caching_from_neocomplcache_dict()"{{{
+function! s:caching_from_neocomplcache_dict() "{{{
   let dict_files = split(globpath(&runtimepath,
         \ 'autoload/neocomplcache/sources/vim_complete/commands.dict'), '\n')
   if empty(dict_files)
@@ -139,12 +139,12 @@ function! s:caching_from_neocomplcache_dict()"{{{
   return keyword_list
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:source.action_table.preview = {
       \ 'description' : 'view the help documentation',
       \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.preview.func(candidate)"{{{
+function! s:source.action_table.preview.func(candidate) "{{{
   let winnr = winnr()
 
   try

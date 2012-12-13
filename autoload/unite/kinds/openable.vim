@@ -32,7 +32,7 @@ call unite#util#set_default('g:unite_kind_openable_persist_open_blink_time', '25
 call unite#util#set_default('g:unite_kind_openable_cd_command', 'cd')
 call unite#util#set_default('g:unite_kind_openable_lcd_command', 'lcd')
 "}}}
-function! unite#kinds#openable#define()"{{{
+function! unite#kinds#openable#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -41,12 +41,12 @@ let s:kind = {
       \ 'action_table': {},
       \}
 
-" Actions"{{{
+" Actions "{{{
 let s:kind.action_table.tabopen = {
       \ 'description' : 'tabopen items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.tabopen.func(candidates)"{{{
+function! s:kind.action_table.tabopen.func(candidates) "{{{
   for candidate in a:candidates
     tabnew
     call unite#take_action('open', candidate)
@@ -57,7 +57,7 @@ let s:kind.action_table.tabdrop = {
       \ 'description' : 'open files by ":tab drop" command',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.tabdrop.func(candidates)"{{{
+function! s:kind.action_table.tabdrop.func(candidates) "{{{
   let bufpath = unite#util#substitute_path_separator(expand('%:p'))
 
   for candidate in a:candidates
@@ -76,7 +76,7 @@ let s:kind.action_table.split = {
       \ 'description' : 'horizontal split open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.split.func(candidates)"{{{
+function! s:kind.action_table.split.func(candidates) "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('split')
     call unite#take_action('open', candidate)
@@ -87,7 +87,7 @@ let s:kind.action_table.vsplit = {
       \ 'description' : 'vertical split open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.vsplit.func(candidates)"{{{
+function! s:kind.action_table.vsplit.func(candidates) "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('vsplit')
     call unite#take_action('open', candidate)
@@ -98,7 +98,7 @@ let s:kind.action_table.left = {
       \ 'description' : 'vertical left split items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.left.func(candidates)"{{{
+function! s:kind.action_table.left.func(candidates) "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('leftabove vsplit')
     call unite#take_action('open', candidate)
@@ -109,7 +109,7 @@ let s:kind.action_table.right = {
       \ 'description' : 'vertical right split open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.right.func(candidates)"{{{
+function! s:kind.action_table.right.func(candidates) "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('rightbelow vsplit')
     call unite#take_action('open', candidate)
@@ -120,7 +120,7 @@ let s:kind.action_table.above = {
       \ 'description' : 'horizontal above split open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.above.func(candidates)"{{{
+function! s:kind.action_table.above.func(candidates) "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('leftabove split')
     call unite#take_action('open', candidate)
@@ -131,7 +131,7 @@ let s:kind.action_table.below = {
       \ 'description' : 'horizontal below split open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.below.func(candidates)"{{{
+function! s:kind.action_table.below.func(candidates) "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('rightbelow split')
     call unite#take_action('open', candidate)
@@ -142,7 +142,7 @@ let s:kind.action_table.persist_open = {
       \ 'description' : 'persistent open',
       \ 'is_quit'     : 0,
       \ }
-function! s:kind.action_table.persist_open.func(candidate)"{{{
+function! s:kind.action_table.persist_open.func(candidate) "{{{
   let unite = unite#get_current_unite()
 
   let current_winnr = winnr()

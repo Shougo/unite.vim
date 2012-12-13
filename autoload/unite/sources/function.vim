@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#function#define()"{{{
+function! unite#sources#function#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:source = {
       \ }
 
 let s:cached_result = []
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   if !a:context.is_redraw && !empty(s:cached_result)
     return s:cached_result
   endif
@@ -83,7 +83,7 @@ function! s:source.gather_candidates(args, context)"{{{
   return s:cached_result
 endfunction"}}}
 
-function! s:caching_from_neocomplcache_dict()"{{{
+function! s:caching_from_neocomplcache_dict() "{{{
   let dict_files = split(globpath(&runtimepath,
         \ 'autoload/neocomplcache/sources/vim_complete/functions.dict'), '\n')
   if empty(dict_files)
@@ -105,12 +105,12 @@ function! s:caching_from_neocomplcache_dict()"{{{
   return keyword_list
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:source.action_table.preview = {
       \ 'description' : 'view the help documentation',
       \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.preview.func(candidate)"{{{
+function! s:source.action_table.preview.func(candidate) "{{{
   let winnr = winnr()
 
   try
@@ -128,7 +128,7 @@ endfunction"}}}
 let s:source.action_table.call = {
       \ 'description' : 'call the function and print result',
       \ }
-function! s:source.action_table.call.func(candidate)"{{{
+function! s:source.action_table.call.func(candidate) "{{{
   if has_key(a:candidate, 'action__description')
     " Print description.
 

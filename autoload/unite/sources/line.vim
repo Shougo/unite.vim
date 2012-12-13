@@ -38,7 +38,7 @@ function! unite#sources#line#define() "{{{
   return [s:source_line, s:source_line_fast]
 endfunction "}}}
 
-" line source."{{{
+" line source. "{{{
 let s:source_line = {
       \ 'name' : 'line',
       \ 'syntax' : 'uniteSource__Line',
@@ -57,7 +57,7 @@ function! s:source_line.hooks.on_syntax(args, context) "{{{
   call s:hl_refresh(a:context)
 endfunction"}}}
 
-function! s:source_line.gather_candidates(args, context)"{{{
+function! s:source_line.gather_candidates(args, context) "{{{
   call s:hl_refresh(a:context)
 
   let direction = a:context.source__direction
@@ -79,15 +79,15 @@ function! s:source_line.gather_candidates(args, context)"{{{
   return _
 endfunction"}}}
 
-function! s:source_line.hooks.on_post_filter(args, context)"{{{
+function! s:source_line.hooks.on_post_filter(args, context) "{{{
   call s:post_filter(a:args, a:context)
 endfunction"}}}
 
-function! s:source_line.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source_line.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return s:supported_search_direction
 endfunction"}}}
 
-function! s:source_line.source__converter(candidates, context)"{{{
+function! s:source_line.source__converter(candidates, context) "{{{
   return s:converter(a:candidates, a:context)
 endfunction"}}}
 
@@ -96,7 +96,7 @@ let s:source_line.filters =
       \      s:source_line.source__converter]
 "}}}
 
-" line/fast source."{{{
+" line/fast source. "{{{
 let s:source_line_fast = deepcopy(s:source_line)
 let s:source_line_fast.name = 'line/fast'
 let s:source_line_fast.syntax = 'uniteSource__LineFast'
@@ -108,7 +108,7 @@ function! s:source_line_fast.hooks.on_init(args, context) "{{{
   call unite#print_source_message(
         \ 'Target: ' . a:context.source__path, s:source_line_fast.name)
 endfunction"}}}
-function! s:source_line_fast.gather_candidates(args, context)"{{{
+function! s:source_line_fast.gather_candidates(args, context) "{{{
   call s:hl_refresh(a:context)
 
   let direction = a:context.source__direction
@@ -132,8 +132,8 @@ function! s:source_line_fast.gather_candidates(args, context)"{{{
 endfunction"}}}
 "}}}
 
-" Misc."{{{
-function! s:on_init(args, context)"{{{
+" Misc. "{{{
+function! s:on_init(args, context) "{{{
   execute 'highlight default link uniteSource__LineFast_target '
         \ . g:source_line_search_word_highlight
   syntax case ignore
@@ -161,7 +161,7 @@ function! s:on_init(args, context)"{{{
 
   let a:context.source__direction = direction
 endfunction"}}}
-function! s:on_gather_candidates(direction, context, start, offset)"{{{
+function! s:on_gather_candidates(direction, context, start, offset) "{{{
   let _ = []
   let start = a:start
   let len = 0
@@ -196,7 +196,7 @@ function! s:on_gather_candidates(direction, context, start, offset)"{{{
     endif
   endwhile
 endfunction"}}}
-function! s:get_lines(context, direction, start, offset)"{{{
+function! s:get_lines(context, direction, start, offset) "{{{
   let [start, end] =
         \ a:direction ==# 'forward' ?
         \ [a:start, (a:offset == 0 ? '$' : a:start + a:offset)] :
@@ -216,7 +216,7 @@ function! s:get_lines(context, direction, start, offset)"{{{
   return _
 endfunction"}}}
 
-function! s:hl_refresh(context)"{{{
+function! s:hl_refresh(context) "{{{
   silent! syntax clear uniteSource__Line_target
   syntax case ignore
   if a:context.input == '' || !g:source_line_enable_highlight
@@ -230,7 +230,7 @@ function! s:hl_refresh(context)"{{{
   endfor
 endfunction"}}}
 
-function! s:converter(candidates, context)"{{{
+function! s:converter(candidates, context) "{{{
   for candidate in a:candidates
     let candidate.abbr = printf(a:context.source__format,
           \ candidate.action__line, candidate.action__text)
@@ -238,7 +238,7 @@ function! s:converter(candidates, context)"{{{
 
   return a:candidates
 endfunction"}}}
-function! s:post_filter(args, context)"{{{
+function! s:post_filter(args, context) "{{{
   for candidate in a:context.candidates
     let candidate.action__buffer_nr = a:context.source__bufnr
   endfor

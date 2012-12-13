@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#command#define()"{{{
+function! unite#kinds#command#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -38,11 +38,11 @@ let s:kind = {
       \ 'alias_table' : { 'ex' : 'nop' },
       \}
 
-" Actions"{{{
+" Actions "{{{
 let s:kind.action_table.execute = {
       \ 'description' : 'execute command',
       \ }
-function! s:kind.action_table.execute.func(candidate)"{{{
+function! s:kind.action_table.execute.func(candidate) "{{{
   let command = a:candidate.action__command
   let type = get(a:candidate, 'action__type', ':')
   call s:add_history(type, command)
@@ -51,7 +51,7 @@ endfunction"}}}
 let s:kind.action_table.edit = {
       \ 'description' : 'edit command',
       \ }
-function! s:kind.action_table.edit.func(candidate)"{{{
+function! s:kind.action_table.edit.func(candidate) "{{{
   if has_key(a:candidate, 'action__description')
     " Print description.
 

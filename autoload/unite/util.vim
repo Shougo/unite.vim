@@ -83,7 +83,7 @@ endfunction
 function! unite#util#uniq(...)
   return call(s:List.uniq, a:000)
 endfunction
-function! unite#util#input(prompt, ...)"{{{
+function! unite#util#input(prompt, ...) "{{{
   let context = unite#get_context()
   let default = get(a:000, 0, '')
   let completion = get(a:000, 1, '')
@@ -94,7 +94,7 @@ function! unite#util#input(prompt, ...)"{{{
 
   return context.unite__is_interactive ? call('input', args) : default
 endfunction"}}}
-function! unite#util#input_yesno(message)"{{{
+function! unite#util#input_yesno(message) "{{{
   let yesno = input(a:message . ' [yes/no]: ')
   while yesno !~? '^\%(y\%[es]\|n\%[o]\)$'
     redraw
@@ -110,7 +110,7 @@ function! unite#util#input_yesno(message)"{{{
 
   return yesno =~? 'y\%[es]'
 endfunction"}}}
-function! unite#util#input_directory(message)"{{{
+function! unite#util#input_directory(message) "{{{
   echo a:message
   let dir = unite#util#substitute_path_separator(
         \ unite#util#expand(input('', '', 'dir')))
@@ -134,7 +134,7 @@ function! unite#util#iconv(...)
   return call(s:V.iconv, a:000)
 endfunction
 
-function! unite#util#alternate_buffer()"{{{
+function! unite#util#alternate_buffer() "{{{
   if bufnr('%') != bufnr('#') && s:buflisted(bufnr('#'))
     buffer #
     return
@@ -168,16 +168,16 @@ function! unite#util#alternate_buffer()"{{{
     bnext
   endif
 endfunction"}}}
-function! unite#util#is_cmdwin()"{{{
+function! unite#util#is_cmdwin() "{{{
   return bufname('%') ==# '[Command Line]'
 endfunction"}}}
-function! s:buflisted(bufnr)"{{{
+function! s:buflisted(bufnr) "{{{
   return exists('t:unite_buffer_dictionary') ?
         \ has_key(t:unite_buffer_dictionary, a:bufnr) && buflisted(a:bufnr) :
         \ buflisted(a:bufnr)
 endfunction"}}}
 
-function! unite#util#glob(pattern, ...)"{{{
+function! unite#util#glob(pattern, ...) "{{{
   if a:pattern =~ "'"
     " Use glob('*').
     let cwd = getcwd()
@@ -220,28 +220,28 @@ function! unite#util#command_with_restore_cursor(command)
 
   execute next 'wincmd w'
 endfunction
-function! unite#util#expand(path)"{{{
+function! unite#util#expand(path) "{{{
   return s:V.substitute_path_separator(
         \ (a:path =~ '^\~') ? substitute(a:path, '^\~', expand('~'), '') :
         \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
         \               '^\$\h\w*', '\=eval(submatch(0))', '') :
         \ a:path)
 endfunction"}}}
-function! unite#util#set_default_dictionary_helper(variable, keys, value)"{{{
+function! unite#util#set_default_dictionary_helper(variable, keys, value) "{{{
   for key in split(a:keys, '\s*,\s*')
     if !has_key(a:variable, key)
       let a:variable[key] = a:value
     endif
   endfor
 endfunction"}}}
-function! unite#util#set_dictionary_helper(variable, keys, value)"{{{
+function! unite#util#set_dictionary_helper(variable, keys, value) "{{{
   for key in split(a:keys, '\s*,\s*')
     let a:variable[key] = a:value
   endfor
 endfunction"}}}
 
 " filter() for matchers.
-function! unite#util#filter_matcher(list, expr, context)"{{{
+function! unite#util#filter_matcher(list, expr, context) "{{{
   if !a:context.unite__is_sort_nothing ||
         \ a:context.unite__max_candidates <= 0 ||
         \ !unite#get_current_unite().is_enabled_max_candidates ||

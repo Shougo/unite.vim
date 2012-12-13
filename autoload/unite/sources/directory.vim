@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#directory#define()"{{{
+function! unite#sources#directory#define() "{{{
   return [s:source_directory, s:source_directory_new]
 endfunction"}}}
 
@@ -38,7 +38,7 @@ let s:source_directory = {
       \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__mkdir' },
       \}
 
-function! s:source_directory.change_candidates(args, context)"{{{
+function! s:source_directory.change_candidates(args, context) "{{{
   if !has_key(a:context, 'source__cache') || a:context.is_redraw
         \ || a:context.is_invalidate
     " Initialize cache.
@@ -100,7 +100,7 @@ function! s:source_directory.change_candidates(args, context)"{{{
 
   return candidates
 endfunction"}}}
-function! s:source_directory.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source_directory.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return map(filter(split(glob(a:arglead . '*'), '\n'),
         \ 'isdirectory(v:val)'), "v:val.'/'")
 endfunction"}}}
@@ -112,7 +112,7 @@ let s:source_directory_new = {
       \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__mkdir' },
       \ }
 
-function! s:source_directory_new.change_candidates(args, context)"{{{
+function! s:source_directory_new.change_candidates(args, context) "{{{
   let input_list = filter(split(a:context.input,
         \                     '\\\@<! ', 1), 'v:val !~ "!"')
   let input = empty(input_list) ? '' : input_list[0]

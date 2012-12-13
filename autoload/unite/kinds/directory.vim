@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#directory#define()"{{{
+function! unite#kinds#directory#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -44,7 +44,7 @@ if exists(':VimFiler')
   let s:kind.alias_table.tabopen = 'tabvimfiler'
 endif
 
-" Actions"{{{
+" Actions "{{{
 "}}}
 
 let &cpo = s:save_cpo

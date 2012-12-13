@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_default#define()"{{{
+function! unite#filters#matcher_default#define() "{{{
   return s:matcher
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:matcher = {
       \ 'description' : 'default matcher',
       \}
 
-function! s:matcher.filter(candidates, context)"{{{
+function! s:matcher.filter(candidates, context) "{{{
   let candidates = a:candidates
   for default in s:default_matchers
     let filter = unite#get_filters(default)
@@ -50,10 +50,10 @@ endfunction"}}}
 
 
 let s:default_matchers = ['matcher_context']
-function! unite#filters#matcher_default#get()"{{{
+function! unite#filters#matcher_default#get() "{{{
   return s:default_matchers
 endfunction"}}}
-function! unite#filters#matcher_default#use(matchers)"{{{
+function! unite#filters#matcher_default#use(matchers) "{{{
   let s:default_matchers = type(a:matchers) == type([]) ?
         \ a:matchers : [a:matchers]
 endfunction"}}}

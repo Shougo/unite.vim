@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_context#define()"{{{
+function! unite#filters#matcher_context#define() "{{{
   return s:matcher
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:matcher = {
       \ 'description' : 'context matcher',
       \}
 
-function! s:matcher.filter(candidates, context)"{{{
+function! s:matcher.filter(candidates, context) "{{{
   if a:context.input == ''
     return unite#util#filter_matcher(
           \ a:candidates, '', a:context)

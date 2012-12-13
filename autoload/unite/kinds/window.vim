@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#window#define()"{{{
+function! unite#kinds#window#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -38,18 +38,18 @@ let s:kind = {
       \ 'parents' : ['cdable'],
       \}
 
-" Actions"{{{
+" Actions "{{{
 let s:kind.action_table.open = {
       \ 'description' : 'move to this window',
       \ }
-function! s:kind.action_table.open.func(candidate)"{{{
+function! s:kind.action_table.open.func(candidate) "{{{
   execute a:candidate.action__window_nr.'wincmd w'
 endfunction"}}}
 
 let s:kind.action_table.only = {
       \ 'description' : 'only this window',
       \ }
-function! s:kind.action_table.only.func(candidate)"{{{
+function! s:kind.action_table.only.func(candidate) "{{{
   execute a:candidate.action__window_nr.'wincmd w'
   only
 endfunction"}}}
@@ -59,7 +59,7 @@ let s:kind.action_table.delete = {
       \ 'is_selectable' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.delete.func(candidates)"{{{
+function! s:kind.action_table.delete.func(candidates) "{{{
   for candidate in sort(a:candidates, 's:compare')
     close
   endfor
@@ -69,7 +69,7 @@ let s:kind.action_table.preview = {
       \ 'description' : 'preview window',
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.preview.func(candidate)"{{{
+function! s:kind.action_table.preview.func(candidate) "{{{
   if !has_key(a:candidate, 'action__buffer_nr')
     return
   endif
@@ -85,7 +85,7 @@ endfunction"}}}
 "}}}
 
 " Misc
-function! s:compare(candidate_a, candidate_b)"{{{
+function! s:compare(candidate_a, candidate_b) "{{{
   return a:candidate_b.action__window_nr - a:candidate_a.action__window_nr
 endfunction"}}}
 

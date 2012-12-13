@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#word#define()"{{{
+function! unite#kinds#word#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -37,7 +37,7 @@ let s:kind = {
       \ 'action_table': {},
       \}
 
-" Actions"{{{
+" Actions "{{{
 "}}}
 
 let &cpo = s:save_cpo

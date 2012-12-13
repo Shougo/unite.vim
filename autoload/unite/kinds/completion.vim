@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#completion#define()"{{{
+function! unite#kinds#completion#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -37,11 +37,11 @@ let s:kind = {
       \ 'action_table': {},
       \}
 
-" Actions"{{{
+" Actions "{{{
 let s:kind.action_table.insert = {
       \ 'description' : 'insert word',
       \ }
-function! s:kind.action_table.insert.func(candidate)"{{{
+function! s:kind.action_table.insert.func(candidate) "{{{
   let word = a:candidate.action__complete_word
 
   call unite#kinds#common#insert_word(word,
@@ -52,7 +52,7 @@ let s:kind.action_table.preview = {
       \ 'description' : 'preview word in echo area',
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.preview.func(candidate)"{{{
+function! s:kind.action_table.preview.func(candidate) "{{{
   echo ''
   redraw
 

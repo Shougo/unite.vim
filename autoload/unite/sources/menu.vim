@@ -38,7 +38,7 @@ let s:source = {
       \ 'description' : 'candidates from user defined menus',
       \}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   let menu_name = get(a:args, 0, '')
   if menu_name == ''
     " All menus.
@@ -91,7 +91,7 @@ function! s:source.gather_candidates(args, context)"{{{
   return sort(candidates)
 endfunction"}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return keys(g:unite_source_menu_menus)
 endfunction"}}}
 

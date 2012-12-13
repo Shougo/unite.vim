@@ -37,7 +37,7 @@ function! unite#version() "{{{
   return str2nr(printf('%02d%02d', 4, 1))
 endfunction"}}}
 
-" User functions."{{{
+" User functions. "{{{
 function! unite#get_substitute_pattern(profile_name) "{{{
   let profile_name = (a:profile_name == '' ? 'default' : a:profile_name)
 
@@ -270,7 +270,7 @@ function! unite#get_unite_winnr(buffer_name) "{{{
 endfunction"}}}
 "}}}
 
-" Constants"{{{
+" Constants "{{{
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
 
@@ -326,7 +326,7 @@ let s:unite_options = [
       \]
 "}}}
 
-" Core functions."{{{
+" Core functions. "{{{
 function! unite#get_kinds(...) "{{{
   if a:0 == 0
     call s:load_default_scripts('kinds', [])
@@ -376,7 +376,7 @@ function! unite#get_filters(...) "{{{
 endfunction"}}}
 "}}}
 
-" Helper functions."{{{
+" Helper functions. "{{{
 function! unite#is_win() "{{{
   return unite#util#is_windows()
 endfunction"}}}
@@ -1085,7 +1085,7 @@ function! unite#start(sources, ...) "{{{
 
   let s:use_current_unite = 1
 
-  if context.toggle"{{{
+  if context.toggle "{{{
     if unite#close(context.buffer_name)
       return
     endif
@@ -2867,7 +2867,7 @@ function! s:on_cursor_moved()  "{{{
     call s:do_auto_preview()
   endif
 
-  " Check lines."{{{
+  " Check lines. "{{{
   if winheight(0) < line('$') &&
         \ line('.') + winheight(0) / 2 < line('$')
     return
@@ -3004,7 +3004,7 @@ function! s:restore_updatetime()  "{{{
   endif
 endfunction"}}}
 
-" Internal helper functions."{{{
+" Internal helper functions. "{{{
 function! s:adjustments(currentwinwidth, the_max_source_name, size) "{{{
   let max_width = a:currentwinwidth - a:the_max_source_name - a:size
   if max_width < 20

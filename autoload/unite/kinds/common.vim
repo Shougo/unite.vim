@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#common#define()"{{{
+function! unite#kinds#common#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -38,11 +38,11 @@ let s:kind = {
       \ 'parents': [],
       \}
 
-" Actions"{{{
+" Actions "{{{
 let s:kind.action_table.nop = {
       \ 'description' : 'no operation',
       \ }
-function! s:kind.action_table.nop.func(candidate)"{{{
+function! s:kind.action_table.nop.func(candidate) "{{{
 endfunction"}}}
 
 let s:kind.action_table.yank = {
@@ -51,7 +51,7 @@ let s:kind.action_table.yank = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.yank.func(candidates)"{{{
+function! s:kind.action_table.yank.func(candidates) "{{{
   let text = join(map(copy(a:candidates),
         \ 's:get_candidate_text(v:val)'), "\n")
   let @" = text
@@ -65,7 +65,7 @@ endfunction"}}}
 let s:kind.action_table.yank_escape = {
       \ 'description' : 'yank escaped word or text',
       \ }
-function! s:kind.action_table.yank_escape.func(candidate)"{{{
+function! s:kind.action_table.yank_escape.func(candidate) "{{{
   let @" = escape(s:get_candidate_text(a:candidate), " *?[{`$\\%#\"|!<>")
 endfunction"}}}
 
@@ -73,7 +73,7 @@ let s:kind.action_table.ex = {
       \ 'description' : 'insert candidates into command line',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.ex.func(candidates)"{{{
+function! s:kind.action_table.ex.func(candidates) "{{{
   " Result is ':| {candidate}', here '|' means the cursor position.
   call feedkeys(printf(": %s\<C-b>",
         \ join(map(map(copy(a:candidates), 'v:val.word'),
@@ -83,14 +83,14 @@ endfunction"}}}
 let s:kind.action_table.insert = {
       \ 'description' : 'insert word or text',
       \ }
-function! s:kind.action_table.insert.func(candidate)"{{{
+function! s:kind.action_table.insert.func(candidate) "{{{
   call unite#kinds#common#insert_word(s:get_candidate_text(a:candidate))
 endfunction"}}}
 
 let s:kind.action_table.insert_directory = {
       \ 'description' : 'insert directory',
       \ }
-function! s:kind.action_table.insert_directory.func(candidate)"{{{
+function! s:kind.action_table.insert_directory.func(candidate) "{{{
   let context = unite#get_current_unite().context
 
   if has_key(a:candidate,'action__directory')
@@ -111,7 +111,7 @@ let s:kind.action_table.preview = {
       \ 'description' : 'preview word',
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.preview.func(candidate)"{{{
+function! s:kind.action_table.preview.func(candidate) "{{{
   redraw
   echo s:get_candidate_text(a:candidate)
 endfunction"}}}
@@ -120,12 +120,12 @@ let s:kind.action_table.echo = {
       \ 'description' : 'echo candidates for debug',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.echo.func(candidates)"{{{
+function! s:kind.action_table.echo.func(candidates) "{{{
   echomsg string(a:candidates)
 endfunction"}}}
 "}}}
 
-function! unite#kinds#common#insert_word(word, ...)"{{{
+function! unite#kinds#common#insert_word(word, ...) "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
   let col = get(a:000, 0, context.col)
@@ -159,7 +159,7 @@ function! unite#kinds#common#insert_word(word, ...)"{{{
     startinsert!
   endif
 endfunction"}}}
-function! s:get_candidate_text(candidate)"{{{
+function! s:get_candidate_text(candidate) "{{{
   return get(a:candidate, 'action__text', a:candidate.word)
 endfunction"}}}
 

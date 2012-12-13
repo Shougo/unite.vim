@@ -111,7 +111,7 @@ function! s:source.hooks.on_init(args, context) "{{{
         \ unite#util#substitute_path_separator(
         \  unite#util#expand(targets[0])) : ''
 endfunction"}}}
-function! s:source.hooks.on_syntax(args, context)"{{{
+function! s:source.hooks.on_syntax(args, context) "{{{
   syntax case ignore
   execute 'syntax match uniteSource__VimgrepPattern /:.*\zs'
         \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
@@ -119,7 +119,7 @@ function! s:source.hooks.on_syntax(args, context)"{{{
   execute 'highlight default link uniteSource__VimgrepPattern'
         \ g:unite_source_vimgrep_search_word_highlight
 endfunction"}}}
-function! s:source.hooks.on_post_filter(args, context)"{{{
+function! s:source.hooks.on_post_filter(args, context) "{{{
   for candidate in a:context.candidates
     let candidate.kind = ['file', 'jump_list']
     let candidate.action__directory =
@@ -196,7 +196,7 @@ function! s:source.gather_candidates(args, context) "{{{
   return _
 endfunction "}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}

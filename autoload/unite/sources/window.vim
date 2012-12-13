@@ -27,10 +27,10 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#window#define()"{{{
+function! unite#sources#window#define() "{{{
   return s:source
 endfunction"}}}
-function! unite#sources#window#_append()"{{{
+function! unite#sources#window#_append() "{{{
   if &filetype == 'unite'
     " Ignore unite window.
     return
@@ -50,7 +50,7 @@ let s:source = {
       \ 'default_kind' : 'window',
       \}
 
-function! s:source.hooks.on_init(args, context)"{{{
+function! s:source.hooks.on_init(args, context) "{{{
   let list = range(1, winnr('$'))
   for i in list
     " Set default value.
@@ -89,15 +89,15 @@ function! s:source.hooks.on_init(args, context)"{{{
           \ })
   endfor
 endfunction"}}}
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   return a:context.source__candidates
 endfunction"}}}
-function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return ['no-current']
 endfunction"}}}
 
 " Misc
-function! s:compare(candidate_a, candidate_b)"{{{
+function! s:compare(candidate_a, candidate_b) "{{{
   return getwinvar(a:candidate_b, 'unite_window').time - getwinvar(a:candidate_a, 'unite_window').time
 endfunction"}}}
 

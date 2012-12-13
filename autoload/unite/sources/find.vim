@@ -146,7 +146,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   return candidates
 endfunction "}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}

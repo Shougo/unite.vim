@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#tab#define()"{{{
+function! unite#sources#tab#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -39,7 +39,7 @@ let s:source = {
       \ 'default_kind' : 'tab',
       \}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   let list = range(tabpagenr()+1, tabpagenr('$'))
         \ + range(1, tabpagenr()-1)
   let arg = get(a:args, 0, '')
@@ -121,10 +121,10 @@ function! s:source.gather_candidates(args, context)"{{{
 
   return candidates
 endfunction"}}}
-function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return ['no-current']
 endfunction"}}}
-function! s:source.hooks.on_syntax(args, context)"{{{
+function! s:source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__Tab_title /\[.\{-}\]/
         \ contained containedin=uniteSource__Tab
   highlight default link uniteSource__Tab_title Function

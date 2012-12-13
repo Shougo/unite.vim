@@ -40,7 +40,7 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Obsolute options check."{{{
+" Obsolute options check. "{{{
 if exists('g:unite_cd_command')
   echoerr 'g:unite_cd_command option does not work this version of unite.vim.'
 endif
@@ -48,7 +48,7 @@ if exists('g:unite_lcd_command')
   echoerr 'g:unite_lcd_command option does not work this version of unite.vim.'
 endif
 "}}}
-" Global options definition."{{{
+" Global options definition. "{{{
 let g:unite_update_time =
       \ get(g:, 'unite_update_time', 500)
 let g:unite_enable_start_insert =
@@ -90,7 +90,7 @@ endif
 command! -nargs=+ -complete=customlist,unite#complete_source
       \ Unite
       \ call s:call_unite_empty(<q-args>)
-function! s:call_unite_empty(args)"{{{
+function! s:call_unite_empty(args) "{{{
   let [args, options] = s:parse_options_args(a:args)
   call unite#start(args, options)
 endfunction"}}}
@@ -98,7 +98,7 @@ endfunction"}}}
 command! -nargs=+ -complete=customlist,unite#complete_source
       \ UniteWithCurrentDir
       \ call s:call_unite_current_dir(<q-args>)
-function! s:call_unite_current_dir(args)"{{{
+function! s:call_unite_current_dir(args) "{{{
   let [args, options] = s:parse_options_args(a:args)
   if !has_key(options, 'input')
     let path = &filetype ==# 'vimfiler' ?
@@ -116,7 +116,7 @@ endfunction"}}}
 command! -nargs=+ -complete=customlist,unite#complete_source
       \ UniteWithBufferDir
       \ call s:call_unite_buffer_dir(<q-args>)
-function! s:call_unite_buffer_dir(args)"{{{
+function! s:call_unite_buffer_dir(args) "{{{
   let [args, options] = s:parse_options_args(a:args)
   if !has_key(options, 'input')
     let path = &filetype ==# 'vimfiler' ?
@@ -133,7 +133,7 @@ endfunction"}}}
 
 command! -nargs=+ -complete=customlist,unite#complete_source
       \ UniteWithCursorWord call s:call_unite_cursor_word(<q-args>)
-function! s:call_unite_cursor_word(args)"{{{
+function! s:call_unite_cursor_word(args) "{{{
   let [args, options] = s:parse_options_args(a:args)
   if !has_key(options, 'input')
     let options.input = expand('<cword>')
@@ -144,7 +144,7 @@ endfunction"}}}
 
 command! -nargs=+ -complete=customlist,unite#complete_source
       \ UniteWithInput call s:call_unite_input(<q-args>)
-function! s:call_unite_input(args)"{{{
+function! s:call_unite_input(args) "{{{
   let [args, options] = s:parse_options_args(a:args)
   if !has_key(options, 'input')
     let options.input = input('Input narrowing text: ', '')
@@ -155,7 +155,7 @@ endfunction"}}}
 
 command! -nargs=+ -complete=customlist,unite#complete_source
       \ UniteWithInputDirectory call s:call_unite_input_directory(<q-args>)
-function! s:call_unite_input_directory(args)"{{{
+function! s:call_unite_input_directory(args) "{{{
   let [args, options] = s:parse_options_args(a:args)
   if !has_key(options, 'input')
     let path = unite#substitute_path_separator(
@@ -171,7 +171,7 @@ endfunction"}}}
 
 command! -nargs=? -complete=customlist,unite#complete_buffer_name
       \ UniteResume call s:call_unite_resume(<q-args>)
-function! s:call_unite_resume(args)"{{{
+function! s:call_unite_resume(args) "{{{
   let [args, options] = s:parse_options(a:args)
 
   call unite#resume(join(args), options)
@@ -180,7 +180,7 @@ endfunction"}}}
 command! -nargs=1 -complete=customlist,unite#complete_buffer_name
       \ UniteClose call unite#close(<q-args>)
 
-function! s:parse_options(args)"{{{
+function! s:parse_options(args) "{{{
   let args = []
   let options = {}
   for arg in split(a:args, '\%(\\\@<!\s\)\+')
@@ -202,7 +202,7 @@ function! s:parse_options(args)"{{{
 
   return [args, options]
 endfunction"}}}
-function! s:parse_options_args(args)"{{{
+function! s:parse_options_args(args) "{{{
   let _ = []
   let [args, options] = s:parse_options(a:args)
   for arg in args

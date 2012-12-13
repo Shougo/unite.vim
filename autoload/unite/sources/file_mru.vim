@@ -55,10 +55,10 @@ call unite#util#set_default(
       \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)')
 "}}}
 
-function! unite#sources#file_mru#define()"{{{
+function! unite#sources#file_mru#define() "{{{
   return s:source
 endfunction"}}}
-function! unite#sources#file_mru#_append()"{{{
+function! unite#sources#file_mru#_append() "{{{
   let path = unite#util#substitute_path_separator(expand('%:p'))
   if path !~ '\a\+:'
     let path = unite#util#substitute_path_separator(
@@ -97,13 +97,13 @@ let s:source = {
       \ 'ignore_pattern' : g:unite_source_file_mru_ignore_pattern,
       \}
 
-function! s:source.hooks.on_syntax(args, context)"{{{
+function! s:source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__FileMru_Time
         \ /([^)]*)\s\+/
         \ contained containedin=uniteSource__FileMru
   highlight default link uniteSource__FileMru_Time Statement
 endfunction"}}}
-function! s:source.hooks.on_post_filter(args, context)"{{{
+function! s:source.hooks.on_post_filter(args, context) "{{{
   for mru in a:context.candidates
     let mru.action__directory =
           \ unite#util#path2directory(mru.action__path)
@@ -112,20 +112,20 @@ function! s:source.hooks.on_post_filter(args, context)"{{{
   endfor
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   call s:load()
 
   return s:mru_files
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:source.action_table.delete = {
       \ 'description' : 'delete from file_mru list',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:source.action_table.delete.func(candidates)"{{{
+function! s:source.action_table.delete.func(candidates) "{{{
   for candidate in a:candidates
     call filter(s:mru_files, 'v:val.action__path !=# candidate.action__path')
   endfor
@@ -134,8 +134,8 @@ function! s:source.action_table.delete.func(candidates)"{{{
 endfunction"}}}
 "}}}
 
-" Filters"{{{
-function! s:source.source__converter(candidates, context)"{{{
+" Filters "{{{
+function! s:source.source__converter(candidates, context) "{{{
   for mru in filter(copy(a:candidates),
         \ "!has_key(v:val, 'abbr')")
     let path = (g:unite_source_file_mru_filename_format == '') ?

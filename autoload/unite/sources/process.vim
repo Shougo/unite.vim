@@ -30,7 +30,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#process#define()"{{{
+function! unite#sources#process#define() "{{{
   return executable('ps') || (unite#util#is_windows() && executable('tasklist')) ?
         \ s:source : {}
 endfunction"}}}
@@ -43,7 +43,7 @@ let s:source = {
       \ 'alias_table' : { 'delete' : 'sigkill' },
       \ }
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   " Get process list.
   let _ = []
 
@@ -80,14 +80,14 @@ function! s:source.gather_candidates(args, context)"{{{
   return _
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:source.action_table.sigkill = {
       \ 'description' : 'send the KILL signal to processes',
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:source.action_table.sigkill.func(candidates)"{{{
+function! s:source.action_table.sigkill.func(candidates) "{{{
   call s:kill('KILL', a:candidates)
 endfunction"}}}
 
@@ -97,7 +97,7 @@ let s:source.action_table.sigterm = {
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:source.action_table.sigterm.func(candidates)"{{{
+function! s:source.action_table.sigterm.func(candidates) "{{{
   call s:kill('TERM', a:candidates)
 endfunction"}}}
 
@@ -107,7 +107,7 @@ let s:source.action_table.sigint = {
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:source.action_table.sigint.func(candidates)"{{{
+function! s:source.action_table.sigint.func(candidates) "{{{
   call s:kill('INT', a:candidates)
 endfunction"}}}
 
@@ -116,7 +116,7 @@ let s:source.action_table.unite__new_candidate = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.unite__new_candidate.func(candidate)"{{{
+function! s:source.action_table.unite__new_candidate.func(candidate) "{{{
   let cmdline = unite#util#input(
         \ 'Please input command args : ', '', 'shellcmd')
 
@@ -127,7 +127,7 @@ function! s:source.action_table.unite__new_candidate.func(candidate)"{{{
   endif
 endfunction"}}}
 
-function! s:kill(signal, candidates)"{{{
+function! s:kill(signal, candidates) "{{{
   if !unite#util#input_yesno(
         \ 'Really send the ' . a:signal .' signal to the processes?')
     redraw

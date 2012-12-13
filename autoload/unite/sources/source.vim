@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#source#define()"{{{
+function! unite#sources#source#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -38,7 +38,7 @@ let s:source = {
       \ 'default_kind' : 'source',
       \}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   return map(copy(unite#util#sort_by(filter(
         \ values(unite#get_all_sources()), 'v:val.is_listed'), 'v:val.name')), "{
         \ 'word' : v:val.name,

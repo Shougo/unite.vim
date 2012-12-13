@@ -30,7 +30,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#change#define()"{{{
+function! unite#sources#change#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:source = {
       \ }
 
 let s:cached_result = []
-function! s:source.hooks.on_init(args, context)"{{{
+function! s:source.hooks.on_init(args, context) "{{{
   " Get changes list.
   redir => redir
   silent! changes
@@ -70,7 +70,7 @@ function! s:source.hooks.on_init(args, context)"{{{
 
   let a:context.source__result = reverse(result)
 endfunction"}}}
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   return a:context.source__result
 endfunction"}}}
 

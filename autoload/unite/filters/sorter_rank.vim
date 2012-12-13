@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#sorter_rank#define()"{{{
+function! unite#filters#sorter_rank#define() "{{{
   return s:sorter
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:sorter = {
       \ 'description' : 'sort by matched rank order',
       \}
 
-function! s:sorter.filter(candidates, context)"{{{
+function! s:sorter.filter(candidates, context) "{{{
   if a:context.input == '' || !has('float')
     return a:candidates
   endif
@@ -80,7 +80,7 @@ function! s:sorter.filter(candidates, context)"{{{
 endfunction"}}}
 
 " Range of return is [0.0, 1.0]
-function! s:calc_rank_sequential_match(word, input, ratio)"{{{
+function! s:calc_rank_sequential_match(word, input, ratio) "{{{
   let pos = stridx(a:word, a:input)
   if pos < 0
     return 0

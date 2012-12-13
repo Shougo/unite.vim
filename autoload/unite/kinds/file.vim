@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Global options definition."{{{
+" Global options definition. "{{{
 call unite#util#set_default(
       \ 'g:unite_kind_file_delete_file_command',
       \ unite#util#is_windows() && !executable('rm') ? '' :
@@ -56,7 +56,7 @@ call unite#util#set_default('g:unite_kind_file_use_trashbox',
       \ unite#util#is_windows() && unite#util#has_vimproc())
 "}}}
 
-function! unite#kinds#file#define()"{{{
+function! unite#kinds#file#define() "{{{
   return s:kind
 endfunction"}}}
 
@@ -70,12 +70,12 @@ let s:kind = {
       \ 'parents' : ['openable', 'cdable', 'uri'],
       \}
 
-" Actions"{{{
+" Actions "{{{
 let s:kind.action_table.open = {
       \ 'description' : 'open files',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.open.func(candidates)"{{{
+function! s:kind.action_table.open.func(candidates) "{{{
   for candidate in a:candidates
     call s:execute_command('edit', candidate)
 
@@ -89,7 +89,7 @@ let s:kind.action_table.preview = {
       \ 'description' : 'preview file',
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.preview.func(candidate)"{{{
+function! s:kind.action_table.preview.func(candidate) "{{{
   let buflisted = buflisted(
         \ unite#util#escape_file_searching(
         \ a:candidate.action__path))
@@ -109,7 +109,7 @@ let s:kind.action_table.mkdir = {
       \ 'is_quit' : 0,
       \ 'is_invalidate_cache' : 1,
       \ }
-function! s:kind.action_table.mkdir.func(candidate)"{{{
+function! s:kind.action_table.mkdir.func(candidate) "{{{
   let dirname = input('New directory name: ',
         \ a:candidate.action__path, 'dir')
   redraw
@@ -132,7 +132,7 @@ let s:kind.action_table.rename = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.rename.func(candidates)"{{{
+function! s:kind.action_table.rename.func(candidates) "{{{
   for candidate in a:candidates
     let filename = unite#util#substitute_path_separator(
           \ unite#util#expand(input(printf('New file name: %s -> ',
@@ -150,7 +150,7 @@ let s:kind.action_table.backup = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.backup.func(candidates)"{{{
+function! s:kind.action_table.backup.func(candidates) "{{{
   for candidate in a:candidates
     let filename = candidate.action__path . '.' . strftime('%y%m%d_%H%M')
 
@@ -162,7 +162,7 @@ let s:kind.action_table.wunix = {
       \ 'description' : 'write by unix fileformat',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.wunix.func(candidates)"{{{
+function! s:kind.action_table.wunix.func(candidates) "{{{
   let current_bufnr = bufnr('%')
 
   for candidate in a:candidates
@@ -233,7 +233,7 @@ let s:kind.action_table.vimfiler__move = {
       \ 'is_selectable' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__move.func(candidates)"{{{
+function! s:kind.action_table.vimfiler__move.func(candidates) "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -294,7 +294,7 @@ endfunction"}}}
 let s:kind.action_table.move =
       \ deepcopy(s:kind.action_table.vimfiler__move)
 let s:kind.action_table.move.is_listed = 1
-function! s:kind.action_table.move.func(candidates)"{{{
+function! s:kind.action_table.move.func(candidates) "{{{
   if !unite#util#input_yesno('Really move files?')
     redraw
     echo 'Canceled.'
@@ -312,7 +312,7 @@ let s:kind.action_table.vimfiler__copy = {
       \ 'is_selectable' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
+function! s:kind.action_table.vimfiler__copy.func(candidates) "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -353,14 +353,14 @@ function! s:kind.action_table.vimfiler__copy.func(candidates)"{{{
     lcd `=current_dir`
   endtry
 endfunction"}}}
-function! s:check_copy_func(filename)"{{{
+function! s:check_copy_func(filename) "{{{
   return isdirectory(a:filename) ?
         \ 'copy_directory' : 'copy_file'
 endfunction"}}}
 
 let s:kind.action_table.copy = deepcopy(s:kind.action_table.vimfiler__copy)
 let s:kind.action_table.copy.is_listed = 1
-function! s:kind.action_table.copy.func(candidates)"{{{
+function! s:kind.action_table.copy.func(candidates) "{{{
   return s:kind.action_table.vimfiler__copy.func(a:candidates)
 endfunction"}}}
 
@@ -371,7 +371,7 @@ let s:kind.action_table.vimfiler__delete = {
       \ 'is_selectable' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
+function! s:kind.action_table.vimfiler__delete.func(candidates) "{{{
   if g:unite_kind_file_delete_file_command == ''
         \ || g:unite_kind_file_delete_directory_command == ''
     call unite#print_error("Please install rm.exe.")
@@ -380,7 +380,7 @@ function! s:kind.action_table.vimfiler__delete.func(candidates)"{{{
 
   call unite#kinds#file#do_action(a:candidates, '', 'delete')
 endfunction"}}}
-function! s:check_delete_func(filename)"{{{
+function! s:check_delete_func(filename) "{{{
   return isdirectory(a:filename) ?
         \ 'delete_directory' : 'delete_file'
 endfunction"}}}
@@ -391,7 +391,7 @@ let s:kind.action_table.vimfiler__rename = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__rename.func(candidate)"{{{
+function! s:kind.action_table.vimfiler__rename.func(candidate) "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -424,7 +424,7 @@ let s:kind.action_table.vimfiler__newfile = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__newfile.func(candidate)"{{{
+function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(),
         \   'vimfiler__current_directory', '')
@@ -472,7 +472,7 @@ let s:kind.action_table.vimfiler__shell = {
       \ 'description' : 'popup shell',
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__shell.func(candidate)"{{{
+function! s:kind.action_table.vimfiler__shell.func(candidate) "{{{
   if !exists(':VimShellPop')
     shell
     return
@@ -492,7 +492,7 @@ let s:kind.action_table.vimfiler__shellcmd = {
       \ 'description' : 'execute shell command',
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__shellcmd.func(candidate)"{{{
+function! s:kind.action_table.vimfiler__shellcmd.func(candidate) "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -520,7 +520,7 @@ let s:kind.action_table.vimfiler__mkdir = {
       \ 'is_listed' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.vimfiler__mkdir.func(candidates)"{{{
+function! s:kind.action_table.vimfiler__mkdir.func(candidates) "{{{
   let context = unite#get_context()
   let vimfiler_current_dir = get(context, 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -563,7 +563,7 @@ let s:kind.action_table.vimfiler__execute = {
       \ 'is_selectable' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__execute.func(candidates)"{{{
+function! s:kind.action_table.vimfiler__execute.func(candidates) "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -592,7 +592,7 @@ let s:kind.action_table.vimfiler__write = {
       \ 'description' : 'save file',
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__write.func(candidate)"{{{
+function! s:kind.action_table.vimfiler__write.func(candidate) "{{{
   let context = unite#get_context()
   let lines = getline(context.vimfiler__line1, context.vimfiler__line2)
 
@@ -604,7 +604,7 @@ function! s:kind.action_table.vimfiler__write.func(candidate)"{{{
 endfunction"}}}
 "}}}
 
-function! s:execute_command(command, candidate)"{{{
+function! s:execute_command(command, candidate) "{{{
   let dir = unite#util#path2directory(a:candidate.action__path)
   " Auto make directory.
   if dir !~ '^\a\+:' && !isdirectory(dir) && unite#util#input_yesno(
@@ -614,7 +614,7 @@ function! s:execute_command(command, candidate)"{{{
 
   call unite#util#smart_execute_command(a:command, a:candidate.action__path)
 endfunction"}}}
-function! s:external(command, dest_dir, src_files)"{{{
+function! s:external(command, dest_dir, src_files) "{{{
   let dest_dir = a:dest_dir
   if dest_dir =~ '[^:]/$'
     " Delete last /.
@@ -636,7 +636,7 @@ function! s:external(command, dest_dir, src_files)"{{{
 
   return unite#util#get_last_status()
 endfunction"}}}
-function! s:input_overwrite_method(dest, src)"{{{
+function! s:input_overwrite_method(dest, src) "{{{
   redraw
   echo 'File is already exists!'
   echo printf('dest: %s %d bytes %s', a:dest, getfsize(a:dest),
@@ -656,11 +656,11 @@ function! s:input_overwrite_method(dest, src)"{{{
 
   return method
 endfunction"}}}
-function! unite#kinds#file#complete_overwrite_method(arglead, cmdline, cursorpos)"{{{
+function! unite#kinds#file#complete_overwrite_method(arglead, cmdline, cursorpos) "{{{
   return filter(['force', 'time', 'underbar', 'no', 'rename'],
         \ 'stridx(v:val, a:arglead) == 0')
 endfunction"}}}
-function! s:move_to_other_drive(candidate, filename)"{{{
+function! s:move_to_other_drive(candidate, filename) "{{{
   " move command doesn't supported directory over drive move in Windows.
   if g:unite_kind_file_copy_file_command == ''
         \ || g:unite_kind_file_copy_directory_command == ''
@@ -682,14 +682,14 @@ function! s:move_to_other_drive(candidate, filename)"{{{
     return 1
   endif
 endfunction"}}}
-function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_method)"{{{
+function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_method) "{{{
   let is_reset_method = a:is_reset_method
   let dest_filename = a:dest_dir . fnamemodify(a:filename, ':t')
   let is_continue = 0
   let filename = fnamemodify(a:filename, ':t')
   let overwrite_method = a:overwrite_method
 
-  if filereadable(dest_filename) || isdirectory(dest_filename)"{{{
+  if filereadable(dest_filename) || isdirectory(dest_filename) "{{{
     if overwrite_method == ''
       let overwrite_method =
             \ s:input_overwrite_method(dest_filename, a:filename)
@@ -732,7 +732,7 @@ function! s:check_over_write(dest_dir, filename, overwrite_method, is_reset_meth
 
   return [dest_filename, overwrite_method, is_reset_method, is_continue]
 endfunction"}}}
-function! unite#kinds#file#do_rename(old_filename, new_filename)"{{{
+function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
   if a:old_filename ==# a:new_filename
     return
   endif
@@ -778,7 +778,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename)"{{{
     lcd `=current_dir_save`
   endtry
 endfunction"}}}
-function! s:filename2candidate(filename)"{{{
+function! s:filename2candidate(filename) "{{{
   return {
         \ 'action__directory' :
         \       unite#util#path2directory(a:filename),
@@ -786,7 +786,7 @@ function! s:filename2candidate(filename)"{{{
         \ }
 endfunction"}}}
 
-function! unite#kinds#file#do_action(candidates, dest_dir, action_name)"{{{
+function! unite#kinds#file#do_action(candidates, dest_dir, action_name) "{{{
   let overwrite_method = ''
   let is_reset_method = 1
 

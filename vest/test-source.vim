@@ -22,7 +22,7 @@ let source = {
       \ 'is_volatile' : 1,
       \ 'variables' : {'foo' : 'foo'}
       \}
-function! source.gather_candidates(args, context)"{{{
+function! source.gather_candidates(args, context) "{{{
   echomsg string(unite#get_source_variables(a:context))
   Should unite#get_source_variables(a:context).foo == 'bar'
 

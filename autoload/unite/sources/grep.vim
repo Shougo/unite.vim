@@ -169,7 +169,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     endif
   endif
 endfunction"}}}
-function! s:source.hooks.on_syntax(args, context)"{{{
+function! s:source.hooks.on_syntax(args, context) "{{{
   syntax case ignore
   execute 'syntax match uniteSource__GrepPattern /:.*\zs'
         \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
@@ -182,7 +182,7 @@ function! s:source.hooks.on_close(args, context) "{{{
     call a:context.source__proc.waitpid()
   endif
 endfunction "}}}
-function! s:source.hooks.on_post_filter(args, context)"{{{
+function! s:source.hooks.on_post_filter(args, context) "{{{
   for candidate in a:context.candidates
     let candidate.kind = [((a:context.source__ssh_path != '') ?
           \ 'file/ssh' : 'file'), 'jump_list']
@@ -324,7 +324,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   return _
 endfunction "}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos)"{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return ['%', '#', '$buffers'] + unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}

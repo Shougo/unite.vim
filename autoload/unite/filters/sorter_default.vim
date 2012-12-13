@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#sorter_default#define()"{{{
+function! unite#filters#sorter_default#define() "{{{
   return s:sorter
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:sorter = {
       \ 'description' : 'default sorter',
       \}
 
-function! s:sorter.filter(candidates, context)"{{{
+function! s:sorter.filter(candidates, context) "{{{
   let candidates = a:candidates
   for default in s:default_sorters
     let filter = unite#get_filters(default)
@@ -50,10 +50,10 @@ endfunction"}}}
 
 
 let s:default_sorters = ['sorter_nothing']
-function! unite#filters#sorter_default#get()"{{{
+function! unite#filters#sorter_default#get() "{{{
   return s:default_sorters
 endfunction"}}}
-function! unite#filters#sorter_default#use(sorters)"{{{
+function! unite#filters#sorter_default#use(sorters) "{{{
   let s:default_sorters = type(a:sorters) == type([]) ?
         \ a:sorters : [a:sorters]
 endfunction"}}}

@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_migemo#define()"{{{
+function! unite#filters#matcher_migemo#define() "{{{
   if !has('migemo') && !executable('cmigemo')
     " Not supported.
     return {}
@@ -79,7 +79,7 @@ let s:matcher = {
       \ 'description' : 'migemo matcher',
       \}
 
-function! s:matcher.filter(candidates, context)"{{{
+function! s:matcher.filter(candidates, context) "{{{
   if a:context.input == ''
     return a:candidates
   endif

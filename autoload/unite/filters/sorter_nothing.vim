@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#sorter_nothing#define()"{{{
+function! unite#filters#sorter_nothing#define() "{{{
   return s:sorter
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:sorter = {
       \ 'description' : 'nothing sorter',
       \}
 
-function! s:sorter.filter(candidates, context)"{{{
+function! s:sorter.filter(candidates, context) "{{{
   " Nothing.
   return a:candidates
 endfunction"}}}
