@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Dec 2012.
+" Last Modified: 13 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1547,6 +1547,11 @@ function! s:quit_session(is_force)  "{{{
       startinsert
     else
       startinsert!
+    endif
+
+    " Skip next auto completion.
+    if exists('*neocomplcache#skip_next_complete')
+      call neocomplcache#skip_next_complete()
     endif
   else
     stopinsert
