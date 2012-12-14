@@ -962,7 +962,7 @@ endfunction"}}}
 function! unite#clear_message() "{{{
   let s:unite_cached_message = []
   let unite = unite#get_current_unite()
-  if &filetype !=# 'unite' || unite.prompt_linenr < 2
+  if &filetype !=# 'unite' || unite.prompt_linenr <= 2
     return
   endif
 
@@ -971,7 +971,7 @@ function! unite#clear_message() "{{{
 
   let linenr = line('.')
   silent! execute '2,'.(unite.prompt_linenr-1).'delete _'
-  call cursor(linenr, 0)
+  call cursor(linenr - (unite.prompt_linenr - 2), 0)
   if line('.') < winheight(0)
     normal! zb
   endif
