@@ -2836,6 +2836,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2012-12-14
+- Improved print message behavior.
+
 2012-12-13
 - Uniq in file_rec initialization.
 - Fixed print message.
