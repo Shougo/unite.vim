@@ -2014,6 +2014,8 @@ function! s:initialize_candidates(candidates) "{{{
     for candidate in filter(copy(candidates), '!v:val.is_multiline')
       let candidate.unite__abbr = '  ' . candidate.unite__abbr
     endfor
+
+    let unite.is_multi_line = 1
   endif
 
   return candidates
@@ -2437,6 +2439,7 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.candidates_pos = 0
   let unite.candidates = []
   let unite.max_source_candidates = 0
+  let unite.is_multi_line = 0
 
   " Preview windows check.
   let unite.has_preview_window =
@@ -2880,8 +2883,14 @@ function! s:on_cursor_moved()  "{{{
         \  || unite.context.winheight == 0) ?
         \ winheight(0) : unite.context.winheight
   let candidates = unite#gather_candidates_pos(height)
+  let old_unite = deepcopy(unite)
   if empty(candidates)
     " Nothing.
+    return
+  endif
+
+  if unite.is_multi_line != old_unite.is_multi_line
+    call unite#redraw_candidates()
     return
   endif
 
