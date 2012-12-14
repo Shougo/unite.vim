@@ -43,10 +43,13 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context) "{{{
-  return map(split(&runtimepath, ','), "{
-        \ 'word' : v:val,
-        \ 'action__path' : v:val,
-        \ 'action__directory' : v:val,
+  return map(map(split(&runtimepath, ','), 'unite#util#expand(v:val)'), "{
+        \ 'word' : unite#util#expand(v:val),
+        \ 'abbr' : unite#util#substitute_path_separator(
+        \         fnamemodify(unite#util#expand(v:val), ':~')),
+        \ 'action__path' : unite#util#expand(v:val),
+        \ 'action__directory' : unite#util#expand(v:val),
+        \ 'source__runtimepath' : v:val,
         \ }")
 endfunction"}}}
 
