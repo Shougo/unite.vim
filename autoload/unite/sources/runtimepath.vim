@@ -43,7 +43,7 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context) "{{{
-  return map(map(split(&runtimepath, ','), 'unite#util#expand(v:val)'), "{
+  return map(map(s:split_rtp(), 'unite#util#expand(v:val)'), "{
         \ 'word' : unite#util#expand(v:val),
         \ 'abbr' : unite#util#substitute_path_separator(
         \         fnamemodify(unite#util#expand(v:val), ':~')),
@@ -66,6 +66,15 @@ function! s:source.action_table.delete.func(candidates) "{{{
   endfor
 endfunction"}}}
 "}}}
+
+function! s:split_rtp(...) "{{{
+  let rtp = a:0 ? a:1 : &runtimepath
+  if type(rtp) == type([])
+    return rtp
+  endif
+  let split = split(rtp, '\\\@<!\%(\\\\\)*\zs,')
+  return map(split,'substitute(v:val, ''\\\([\\,]\)'', "\\1", "g")')
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
