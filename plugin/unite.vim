@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2012.
+" Last Modified: 25 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,8 +32,12 @@ elseif v:version < 702
 elseif $SUDO_USER != '' && $USER !=# $SUDO_USER
       \ && $HOME !=# expand('~'.$USER)
       \ && $HOME ==# expand('~'.$SUDO_USER)
-  echoerr '"sudo vim" and $HOME is not same to /root are detected.'
-        \.'Please use sudo.vim plugin instead of sudo command or set always_set_home in sudoers.'
+  echohl Error
+  echomsg 'unite.vim disabled: "sudo vim" is detected and $HOME is set to '
+        \.'your user''s home. '
+        \.'You may want to use the sudo.vim plugin, the "-H" option '
+        \.'with "sudo" or set always_set_home in /etc/sudoers instead.'
+  echohl None
   finish
 endif
 
