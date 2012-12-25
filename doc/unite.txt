@@ -2096,7 +2096,7 @@ completion					*unite-action-completion*
 	preview		Show the information of the candidate
 
 uri						*unite-action-uri*
-	start		Open a file with associated program.
+	start		Open uri by browser.
 
 source						*unite-action-source*
 	start		Start source
