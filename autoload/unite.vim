@@ -112,11 +112,21 @@ function! unite#get_profile(profile_name, option_name) "{{{
 
   return s:profiles[profile_name][a:option_name]
 endfunction"}}}
-function! unite#custom_filters(source_name, filters) "{{{
-  let filters = type(a:filters) == type([]) ?
-        \ a:filters : [a:filters]
+function! unite#custom_filters(source_name, expr) "{{{
   call unite#util#set_dictionary_helper(s:custom.filters,
-        \ a:source_name, filters)
+        \ a:source_name, unite#util#convert2list(a:expr))
+endfunction"}}}
+function! unite#custom_matchers(source_name, expr) "{{{
+  call unite#util#set_dictionary_helper(s:custom.matchers,
+        \ a:source_name, unite#util#convert2list(a:expr))
+endfunction"}}}
+function! unite#custom_sorters(source_name, expr) "{{{
+  call unite#util#set_dictionary_helper(s:custom.sorters,
+        \ a:source_name, unite#util#convert2list(a:expr))
+endfunction"}}}
+function! unite#custom_converters(source_name, expr) "{{{
+  call unite#util#set_dictionary_helper(s:custom.converters,
+        \ a:source_name, unite#util#convert2list(a:expr))
 endfunction"}}}
 function! unite#custom_alias(kind, name, action) "{{{
   for key in split(a:kind, '\s*,\s*')
@@ -160,31 +170,19 @@ function! unite#custom_source(source_name, option_name, value) "{{{
 endfunction"}}}
 
 function! unite#define_source(source) "{{{
-  if type(a:source) == type([])
-    for source in a:source
-      let s:dynamic.sources[source.name] = source
-    endfor
-  else
-    let s:dynamic.sources[a:source.name] = a:source
-  endif
+  for source in unite#util#convert2list(a:source)
+    let s:dynamic.sources[source.name] = source
+  endfor
 endfunction"}}}
 function! unite#define_kind(kind) "{{{
-  if type(a:kind) == type([])
-    for kind in a:kind
-      let s:dynamic.kinds[kind.name] = kind
-    endfor
-  else
-    let s:dynamic.kinds[a:kind.name] = a:kind
-  endif
+  for kind in unite#util#convert2list(a:kind)
+    let s:dynamic.kinds[kind.name] = kind
+  endfor
 endfunction"}}}
 function! unite#define_filter(filter) "{{{
-  if type(a:filter) == type([])
-    for filter in a:filter
-      let s:dynamic.filters[filter.name] = filter
-    endfor
-  else
-    let s:dynamic.filters[a:filter.name] = a:filter
-  endif
+  for filter in unite#util#convert2list(a:filter)
+    let s:dynamic.filters[filter.name] = filter
+  endfor
 endfunction"}}}
 function! unite#undef_source(name) "{{{
   if has_key(s:dynamic.sources, a:name)
@@ -298,6 +296,9 @@ let s:custom.actions = {}
 let s:custom.default_actions = {}
 let s:custom.aliases = {}
 let s:custom.filters = {}
+let s:custom.matchers = {}
+let s:custom.sorters = {}
+let s:custom.converters = {}
 let s:custom.source = {}
 
 let s:profiles = {}
@@ -436,8 +437,7 @@ function! unite#get_action_table(source_name, kind, self_func, ...) "{{{
   let source_table = get(a:000, 1, {})
 
   let action_table = {}
-  for kind_name in type(a:kind) == type([]) ?
-        \ a:kind : [a:kind]
+  for kind_name in unite#util#convert2list(a:kind)
     call extend(action_table,
           \ s:get_action_table(a:source_name,
           \                kind_name, a:self_func,
@@ -574,8 +574,7 @@ endfunction"}}}
 function! unite#get_alias_table(source_name, kind, ...) "{{{
   let source_table = get(a:000, 0, {})
   let alias_table = {}
-  for kind_name in type(a:kind) == type([]) ?
-        \ a:kind : [a:kind]
+  for kind_name in unite#util#convert2list(a:kind)
     call extend(alias_table,
           \ s:get_alias_table(a:source_name, kind_name, source_table))
   endfor
@@ -625,8 +624,7 @@ function! s:get_alias_table(source_name, kind_name, source_table) "{{{
   return table
 endfunction"}}}
 function! unite#get_default_action(source_name, kind) "{{{
-  let kinds = type(a:kind) == type([]) ?
-        \ a:kind : [a:kind]
+  let kinds = unite#util#convert2list(a:kind)
 
   return s:get_default_action(a:source_name, kinds[-1])
 endfunction"}}}
@@ -1603,7 +1601,7 @@ function! s:load_default_scripts(kind, names) "{{{
     for define in map(split(globpath(&runtimepath,
           \ 'autoload/unite/'.a:kind.'/'.name.'*.vim'), '\n'),
           \ "unite#{a:kind}#{fnamemodify(v:val, ':t:r')}#define()")
-      for dict in (type(define) == type([]) ? define : [define])
+      for dict in unite#util#convert2list(define)
         if !empty(dict) && !has_key(s:static[a:kind], dict.name)
           let s:static[a:kind][dict.name] = dict
         endif
