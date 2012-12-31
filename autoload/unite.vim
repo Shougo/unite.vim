@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Dec 2012.
+" Last Modified: 31 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1854,12 +1854,22 @@ function! s:initialize_sources(...) "{{{
       " For custom sources.
       let custom_source = get(s:custom.source, source.name, {})
 
-      let source.filters =
-            \ has_key(s:custom.filters, source.name) ?
-            \ s:custom.filters[source.name] :
-            \ has_key(source, 'filters') ?
-            \ source.filters :
-            \ unite#filters#default#get()
+      " Set filters.
+      if has_key(s:custom.filters, source.name)
+        let source.filters = s:custom.filters[source.name]
+      endif
+      if !has_key(source, 'filters')
+        if has_key(source, 'matchers') ||
+              \ has_key(source, 'sorters') || has_key(source, 'converters')
+          let source.filters =
+                \ unite#util#convert2list(get(source, 'matchers', 'matcher_default')) +
+                \ unite#util#convert2list(get(source, 'sorters', 'sorter_default')) +
+                \ unite#util#convert2list(get(source, 'converters', 'converter_default'))
+        else
+          let source.filters = unite#filters#default#get()
+        endif
+      endif
+
       let source.max_candidates =
             \ get(custom_source, 'max_candidates',
             \    get(source, 'max_candidates', 0))

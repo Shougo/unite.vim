@@ -2427,6 +2427,15 @@ filters			List		(Optional)
 			to |unite-filter-attributes| for the specification of
 			filter.  If it's omitted, unite uses
 			|unite-filter-default|.
+					*unite-source-attribute-matchers*
+matchers		List		(Optional)
+			The list of matchers used by the source.
+					*unite-source-attribute-sorters*
+filters			List		(Optional)
+			The list of sorters used by the source.
+					*unite-source-attribute-converters*
+converters		List		(Optional)
+			The list of converters used by the source.
 
 					*unite-source-attribute-source__*
 source__		Unknown		(Optional)
@@ -2841,6 +2850,7 @@ CHANGELOG					*unite-changelog*
 
 2012-12-31
 - Optimised sorter_rank.
+- Added matchers, sorters, converters.
 
 2012-12-27
 - Improved for getting filetime.

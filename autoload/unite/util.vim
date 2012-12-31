@@ -272,6 +272,10 @@ function! unite#util#filter_matcher(list, expr, context) "{{{
   return _[: max]
 endfunction"}}}
 
+function! unite#util#convert2list(expr) "{{{
+  return type(a:expr) ==# type([]) ? a:expr : [a:expr]
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

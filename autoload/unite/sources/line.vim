@@ -45,6 +45,8 @@ let s:source_line = {
       \ 'hooks' : {},
       \ 'max_candidates': 100,
       \ 'default_kind' : 'jump_list',
+      \ 'matchers' : 'matcher_regexp',
+      \ 'sorters' : 'sorter_nothing',
       \ }
 
 function! s:source_line.hooks.on_init(args, context) "{{{
@@ -91,9 +93,7 @@ function! s:source_line.source__converter(candidates, context) "{{{
   return s:converter(a:candidates, a:context)
 endfunction"}}}
 
-let s:source_line.filters =
-      \ ['matcher_regexp', 'sorter_nothing',
-      \      s:source_line.source__converter]
+let s:source_line.converters = [s:source_line.source__converter]
 "}}}
 
 " line/fast source. "{{{
