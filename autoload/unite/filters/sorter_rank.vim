@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: sorter_rank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Feb 2012.
+" Last Modified: 31 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -79,16 +79,15 @@ function! s:sorter.filter(candidates, context) "{{{
   return reverse(unite#util#sort_by(a:candidates, 'v:val.filter__rank'))
 endfunction"}}}
 
-" Range of return is [0.0, 1.0]
 function! s:calc_rank_sequential_match(word, input, ratio) "{{{
-  let pos = stridx(a:word, a:input)
+  let pos = strridx(a:word, a:input)
   if pos < 0
     return 0
   endif
 
   let rest = len(a:word) - len(a:input) - pos
-  return str2float(pos == 0 ? '0.5' : '0.0') + str2float('0.5') / (rest + 1)
-        \ + str2float('0.5') * a:ratio
+  return str2float(pos == 0 ? '0.5' : '0.0') + str2float('20.0') / (rest + 1)
+        \ + str2float('0.2') * a:ratio
 endfunction"}}}
 
 let &cpo = s:save_cpo
