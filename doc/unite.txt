@@ -1361,6 +1361,18 @@ unite#custom_source({source-name}, {option-name}, {value})
 		Specifies a list of filter names.  The filters overwrite
 		source default filters.
 		
+		matchers			(List)
+		Specifies a list of matcher names.  The filters overwrite
+		source default matchers.
+		
+		sorters				(List)
+		Specifies a list of sorter names.  The filters overwrite
+		source default sorters.
+		
+		converters			(List)
+		Specifies a list of converter names.  The filters overwrite
+		source default converters.
+		
 		max_candidates			(Number)
 		Changes the max candidates into {value}.  If {value}
 		is 0, all candidates is displayed.
@@ -1417,11 +1429,6 @@ unite#undef_filter({name})			*unite#undef_filter()*
 		Removes the filter with a name of {name} that was added by
 		|unite#define_filter()|.  If such a filter doesn't exist,
 		this function doesn't do anything.
-
-unite#filters#default#use({filters})		*unite#filters#default#use(()*
-		Changes the default filter used by
-		|unite-filter-default| into {filters}.  {filters} must be
-		specified with a list of filter names.
 
 unite#filters#matcher_default#use({matchers})
 					*unite#filters#matcher_default#use(()*
@@ -2852,6 +2859,8 @@ CHANGELOG					*unite-changelog*
 - Optimised sorter_rank.
 - Added matchers, sorters, converters.
 - Set sorter_nothing in menu source.
+- Deleted unite#filters#default#use().
+- Added custom matchers/sorters/converters.
 
 2012-12-27
 - Improved for getting filetime.

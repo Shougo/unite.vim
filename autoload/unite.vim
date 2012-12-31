@@ -116,18 +116,6 @@ function! unite#custom_filters(source_name, expr) "{{{
   call unite#util#set_dictionary_helper(s:custom.filters,
         \ a:source_name, unite#util#convert2list(a:expr))
 endfunction"}}}
-function! unite#custom_matchers(source_name, expr) "{{{
-  call unite#util#set_dictionary_helper(s:custom.matchers,
-        \ a:source_name, unite#util#convert2list(a:expr))
-endfunction"}}}
-function! unite#custom_sorters(source_name, expr) "{{{
-  call unite#util#set_dictionary_helper(s:custom.sorters,
-        \ a:source_name, unite#util#convert2list(a:expr))
-endfunction"}}}
-function! unite#custom_converters(source_name, expr) "{{{
-  call unite#util#set_dictionary_helper(s:custom.converters,
-        \ a:source_name, unite#util#convert2list(a:expr))
-endfunction"}}}
 function! unite#custom_alias(kind, name, action) "{{{
   for key in split(a:kind, '\s*,\s*')
     if !has_key(s:custom.aliases, key)
@@ -1857,15 +1845,16 @@ function! s:initialize_sources(...) "{{{
         let source.filters = s:custom.filters[source.name]
       endif
       if !has_key(source, 'filters')
-        if has_key(source, 'matchers') ||
-              \ has_key(source, 'sorters') || has_key(source, 'converters')
-          let source.filters =
-                \ unite#util#convert2list(get(source, 'matchers', 'matcher_default')) +
-                \ unite#util#convert2list(get(source, 'sorters', 'sorter_default')) +
-                \ unite#util#convert2list(get(source, 'converters', 'converter_default'))
-        else
-          let source.filters = unite#filters#default#get()
-        endif
+        let matchers = unite#util#convert2list(
+              \ get(s:custom.matchers, source.name,
+              \   get(source, 'matchers', 'matcher_default')))
+        let sorters = unite#util#convert2list(
+              \ get(s:custom.sorters, source.name,
+              \   get(source, 'sorters', 'matcher_default')))
+        let converters = unite#util#convert2list(
+              \ get(s:custom.converters, source.name,
+              \   get(source, 'converters', 'matcher_default')))
+        let source.filters = matchers + sorters + converters
       endif
 
       let source.max_candidates =
