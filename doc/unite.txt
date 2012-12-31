@@ -2851,6 +2851,7 @@ CHANGELOG					*unite-changelog*
 2012-12-31
 - Optimised sorter_rank.
 - Added matchers, sorters, converters.
+- Set sorter_nothing in menu source.
 
 2012-12-27
 - Improved for getting filetime.
