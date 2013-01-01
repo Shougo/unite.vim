@@ -684,8 +684,11 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 
 		command_candidates
 				(List or Dictionary)	(Optional)
-		Menu candidates for commands. The key is used for word.
-		The value is command name.
+		Menu candidates for commands.
+		If it is Dictionary, the key is used for word.  The value is
+		command name.
+		If it is List, the first item is used for word.  The second
+		item is command name.
 
 		map		(Function)		(Optional)
 		If this attribute is given, candidates are results of
@@ -709,13 +712,21 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		      \       'action__command' : a:value,
 		      \     }
 		endfunction
-
+		
 		let g:unite_source_menu_menus.test2 = {
 		      \     'description' : 'Test menu2',
 		      \ }
 		let g:unite_source_menu_menus.test.command_candidates = {
 		      \   'python'    : 'VimShellInteractive python',
 		      \ }
+		
+		let g:unite_source_menu_menus.test3 = {
+		      \     'description' : 'Test menu3',
+		      \ }
+		let g:unite_source_menu_menus.test.command_candidates = [
+		      \   ['ruby', 'VimShellInteractive python'],
+		      \   ['python', 'VimShellInteractive python'],
+		      \ ]
 		
 		nnoremap <silent> fm  :<C-u>Unite menu:test<CR>
 <
@@ -2853,6 +2864,9 @@ A: You can use below mappings.
 <
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-01-01
+- Fixed unite-menu behavior.
 
 2012-12-31
 - Optimised sorter_rank.
