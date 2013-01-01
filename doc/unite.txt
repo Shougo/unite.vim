@@ -1361,15 +1361,15 @@ unite#custom_source({source-name}, {option-name}, {value})
 		Specifies a list of filter names.  The filters overwrite
 		source default filters.
 		
-		matchers			(List)
+		matchers			(List) or (String)
 		Specifies a list of matcher names.  The filters overwrite
 		source default matchers.
 		
-		sorters				(List)
+		sorters				(List) or (String)
 		Specifies a list of sorter names.  The filters overwrite
 		source default sorters.
 		
-		converters			(List)
+		converters			(List) or (String)
 		Specifies a list of converter names.  The filters overwrite
 		source default converters.
 		
@@ -2434,13 +2434,13 @@ filters			List		(Optional)
 			filter.  If it's omitted, unite uses
 			|unite-filter-default|.
 					*unite-source-attribute-matchers*
-matchers		List		(Optional)
+matchers		List/String	(Optional)
 			The list of matchers used by the source.
 					*unite-source-attribute-sorters*
-filters			List		(Optional)
+filters			List/String	(Optional)
 			The list of sorters used by the source.
 					*unite-source-attribute-converters*
-converters		List		(Optional)
+converters		List/String	(Optional)
 			The list of converters used by the source.
 
 					*unite-source-attribute-source__*

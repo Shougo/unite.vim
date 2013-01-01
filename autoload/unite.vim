@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Dec 2012.
+" Last Modified: 01 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1843,8 +1843,10 @@ function! s:initialize_sources(...) "{{{
       " Set filters.
       if has_key(s:custom.filters, source.name)
         let source.filters = s:custom.filters[source.name]
-      endif
-      if !has_key(source, 'filters')
+      elseif !has_key(source, 'filters')
+            \ || has_key(s:custom.matchers, source.name)
+            \ || has_key(s:custom.sorters, source.name)
+            \ || has_key(s:custom.converters, source.name)
         let matchers = unite#util#convert2list(
               \ get(s:custom.matchers, source.name,
               \   get(source, 'matchers', 'matcher_default')))
