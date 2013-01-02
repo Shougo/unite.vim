@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jan 2013.
+" Last Modified: 02 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1852,10 +1852,10 @@ function! s:initialize_sources(...) "{{{
               \   get(source, 'matchers', 'matcher_default')))
         let sorters = unite#util#convert2list(
               \ get(s:custom.sorters, source.name,
-              \   get(source, 'sorters', 'matcher_default')))
+              \   get(source, 'sorters', 'sorter_default')))
         let converters = unite#util#convert2list(
               \ get(s:custom.converters, source.name,
-              \   get(source, 'converters', 'matcher_default')))
+              \   get(source, 'converters', 'converter_default')))
         let source.filters = matchers + sorters + converters
       endif
 

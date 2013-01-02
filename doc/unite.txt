@@ -2865,6 +2865,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-01-02
+- Improved sorter_rank behavior.
+
 2013-01-01
 - Fixed unite-menu behavior.
 

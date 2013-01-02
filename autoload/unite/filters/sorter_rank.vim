@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: sorter_rank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Dec 2012.
+" Last Modified: 02 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -71,9 +71,9 @@ function! s:calc_rank_sequential_match(word, input) "{{{
   if pos < 0
     return 0
   endif
+  let len = len(a:word)
 
-  let rest = len(a:word) - len(a:input) - pos
-  return str2float(pos == 0 ? '0.5' : '0.0') + str2float('20.0') / (rest + 1)
+  return 80.0 * (pos + len(a:input)) / len
 endfunction"}}}
 
 let &cpo = s:save_cpo
