@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Aug 2012.
+" Last Modified: 03 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -89,31 +89,34 @@ function! unite#kinds#jump_list#define() "{{{
     endif
   endfunction"}}}
 
-  if globpath(&runtimepath, 'autoload/qfreplace.vim') != ''
-    let kind.action_table.replace = {
-          \ 'description' : 'replace with qfreplace',
-          \ 'is_selectable' : 1,
-          \ }
-    function! kind.action_table.replace.func(candidates) "{{{
-      let qflist = []
-      for candidate in a:candidates
-        if has_key(candidate, 'action__line')
-              \ && has_key(candidate, 'action__text')
-          let filename = s:get_filename(candidate)
-          call add(qflist, {
-                \ 'filename' : filename,
-                \ 'lnum' : candidate.action__line,
-                \ 'text' : candidate.action__text,
-                \ })
-        endif
-      endfor
+  let kind.action_table.replace = {
+        \ 'description' : 'replace with qfreplace',
+        \ 'is_selectable' : 1,
+        \ }
+  function! kind.action_table.replace.func(candidates) "{{{
+    if globpath(&runtimepath, 'autoload/qfreplace.vim') == ''
+      echo 'qfreplace.vim is not installed.'
+      return
+    endif
 
-      if !empty(qflist)
-        call setqflist(qflist)
-        call qfreplace#start('')
+    let qflist = []
+    for candidate in a:candidates
+      if has_key(candidate, 'action__line')
+            \ && has_key(candidate, 'action__text')
+        let filename = s:get_filename(candidate)
+        call add(qflist, {
+              \ 'filename' : filename,
+              \ 'lnum' : candidate.action__line,
+              \ 'text' : candidate.action__text,
+              \ })
       endif
-    endfunction"}}}
-  endif
+    endfor
+
+    if !empty(qflist)
+      call setqflist(qflist)
+      call qfreplace#start('')
+    endif
+  endfunction"}}}
 
   return kind
 endfunction"}}}
