@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory_mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Dec 2012.
+" Last Modified: 11 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,9 +53,11 @@ function! unite#sources#directory_mru#define() "{{{
 endfunction"}}}
 function! unite#sources#directory_mru#_append() "{{{
   let filetype = getbufvar(bufnr('%'), '&filetype')
-  if filetype ==# 'vimfiler'
+  if filetype ==# 'vimfiler' &&
+        \ type(getbufvar(bufnr('%'), 'vimfiler')) == type({})
     let path = getbufvar(bufnr('%'), 'vimfiler').current_dir
   elseif filetype ==# 'vimshell'
+        \ type(getbufvar(bufnr('%'), 'vimshell')) == type({})
     let path = getbufvar(bufnr('%'), 'vimshell').current_dir
   else
     let path = getcwd()
