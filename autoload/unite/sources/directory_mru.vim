@@ -56,7 +56,7 @@ function! unite#sources#directory_mru#_append() "{{{
   if filetype ==# 'vimfiler' &&
         \ type(getbufvar(bufnr('%'), 'vimfiler')) == type({})
     let path = getbufvar(bufnr('%'), 'vimfiler').current_dir
-  elseif filetype ==# 'vimshell'
+  elseif filetype ==# 'vimshell' &&
         \ type(getbufvar(bufnr('%'), 'vimshell')) == type({})
     let path = getbufvar(bufnr('%'), 'vimshell').current_dir
   else
