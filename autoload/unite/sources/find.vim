@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: find.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 31 Dec 2012.
+" Last Modified: 11 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,7 +125,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   endif
 
   let candidates = map(filter(
-        \ stdout.read_lines(-1, 100), "v:val != ''"),
+        \ stdout.read_lines(-1, 100), "v:val !~ '^\\s*$'"),
         \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
 
   if isdirectory(a:context.source__target)
@@ -134,8 +134,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   endif
 
   call map(candidates, "{
-    \   'word' : v:val,
-    \   'abbr' : fnamemodify(v:val, ':.'),
+    \   'word' : unite#util#substitute_path_separator(v:val),
     \   'kind' : (isdirectory(v:val) ? 'directory' : 'file'),
     \   'action__path' : unite#util#substitute_path_separator(v:val),
     \   'action__directory' : unite#util#path2directory(v:val),
