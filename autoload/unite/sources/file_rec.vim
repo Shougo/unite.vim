@@ -493,8 +493,7 @@ function! s:init_continuation(context, directory) "{{{
         \ && s:Cache.filereadable(cache_dir, a:directory)
     " Use cache file.
 
-    let files = map(filter(s:Cache.readfile(cache_dir, a:directory),
-          \ 'filereadable(v:val)'), "{
+    let files = map(s:Cache.readfile(cache_dir, a:directory), "{
           \   'word' : unite#util#substitute_path_separator(
           \      fnamemodify(v:val, ':p')),
           \   'action__path' : v:val,
@@ -516,7 +515,8 @@ function! s:init_continuation(context, directory) "{{{
   endif
 
   let s:continuation[a:directory].files =
-        \ unite#util#uniq(s:continuation[a:directory].files)
+        \ filter(unite#util#uniq(s:continuation[a:directory].files),
+        \ 'filereadable(v:val.action__path)')
 endfunction"}}}
 function! s:write_cache(directory, files) "{{{
   let cache_dir = g:unite_data_directory . '/file_rec'
