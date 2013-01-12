@@ -394,9 +394,15 @@ function! s:get_path(args, context) "{{{
     return unite#util#path2project_directory(directory, 1)
   endif
 
-  return unite#util#substitute_path_separator(
+  let directory = unite#util#substitute_path_separator(
         \ substitute(fnamemodify(directory, ':p'), '^\~',
         \ unite#util#substitute_path_separator($HOME), ''))
+
+  if directory =~ '/$'
+    let directory = directory[: -2]
+  endif
+
+  return directory
 endfunction"}}}
 function! s:get_files(files, level, max_len) "{{{
   let continuation_files = []
@@ -474,10 +480,11 @@ function! s:init_continuation(context, directory) "{{{
         \ && s:Cache.filereadable(cache_dir, a:directory)
     " Use cache file.
 
-    let files = map(s:Cache.readfile(cache_dir, a:directory), "{
-          \ 'word' : unite#util#substitute_path_separator(
-          \    fnamemodify(v:val, ':p')),
-          \ 'action__path' : v:val,
+    let files = map(filter(s:Cache.readfile(cache_dir, a:directory),
+          \ 'filereadable(v:val)'), "{
+          \   'word' : unite#util#substitute_path_separator(
+          \      fnamemodify(v:val, ':p')),
+          \   'action__path' : v:val,
           \ }")
 
     let s:continuation[a:directory] = {
@@ -510,6 +517,31 @@ function! s:write_cache(directory, files) "{{{
     " Delete old cache files.
     call s:Cache.delete(cache_dir, a:directory)
   endif
+endfunction"}}}
+
+function! unite#sources#file_rec#_append() "{{{
+  let path = expand('%:p')
+  if path !~ '\a\+:'
+    let path = simplify(resolve(path))
+  endif
+
+  " Append the current buffer to the mru list.
+  if !filereadable(path) || &l:buftype =~# 'help\|nofile'
+    return
+  endif
+
+  let path = unite#util#substitute_path_separator(path)
+
+  " Check continuation.
+  let base_path = unite#util#substitute_path_separator(
+        \ fnamemodify(path, ':h')) . '/'
+  for continuation in values(filter(copy(s:continuation),
+        \ "stridx(v:key.'/', base_path) == 0"))
+    let continuation.files = unite#util#uniq(add(
+          \ continuation.files, {
+            \ 'word' : path, 'action__path' : path,
+            \ }))
+  endfor
 endfunction"}}}
 
 let &cpo = s:save_cpo

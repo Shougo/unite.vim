@@ -2865,6 +2865,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-01-12
+- Implemented recache system automatically in file_rec(/async) sources.
+
 2013-01-11
 - Fixed find source.
 
