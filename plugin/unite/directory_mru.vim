@@ -34,7 +34,8 @@ set cpo&vim
 
 augroup plugin-unite-source-directory_mru
   autocmd!
-  autocmd BufLeave,BufWinLeave,BufFilePost * call unite#sources#directory_mru#_append()
+  autocmd BufLeave,BufWinLeave,BufFilePost *
+        \ call unite#sources#directory_mru#_append()
 augroup END
 
 let g:loaded_unite_source_directory_mru = 1

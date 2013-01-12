@@ -118,6 +118,9 @@ function! s:source_rec.async_gather_candidates(args, context) "{{{
   return deepcopy(candidates)
 endfunction"}}}
 
+function! s:source_rec.hooks.on_init(args, context) "{{{
+  call s:on_init(a:args, a:context)
+endfunction"}}}
 function! s:source_rec.hooks.on_post_filter(args, context) "{{{
   call s:on_post_filter(a:args, a:context)
 endfunction"}}}
@@ -321,6 +324,9 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
   return deepcopy(candidates)
 endfunction"}}}
 
+function! s:source_async.hooks.on_init(args, context) "{{{
+  call s:on_init(a:args, a:context)
+endfunction"}}}
 function! s:source_async.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__proc')
     call a:context.source__proc.waitpid()
@@ -467,6 +473,13 @@ function! s:get_files(files, level, max_len) "{{{
   let continuation_files += a:files[files_index :]
   return [continuation_files, map(ret_files,
         \ "unite#util#substitute_path_separator(fnamemodify(v:val, ':p'))")]
+endfunction"}}}
+function! s:on_init(args, context) "{{{
+  augroup plugin-unite-source-file_rec
+    autocmd!
+    autocmd BufEnter,BufWinEnter,BufFilePost,BufWritePost *
+          \ call unite#sources#file_rec#_append()
+  augroup END
 endfunction"}}}
 function! s:on_post_filter(args, context) "{{{
   for candidate in a:context.candidates
