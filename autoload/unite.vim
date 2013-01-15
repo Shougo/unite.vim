@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jan 2013.
+" Last Modified: 13 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -291,7 +291,7 @@ let s:custom.source = {}
 
 let s:profiles = {}
 call unite#set_substitute_pattern('files', '^\~',
-      \ substitute(unite#util#substitute_path_separator($HOME),
+      \ substitute(substitute($HOME, '\\', '/', 'g'),
       \ ' ', '\\\\ ', 'g'), -100)
 call unite#set_substitute_pattern('files', '\.\{2,}\ze[^/]',
       \ "\\=repeat('../', len(submatch(0))-1)", 10000)
