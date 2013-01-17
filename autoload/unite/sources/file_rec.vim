@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jan 2013.
+" Last Modified: 17 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,7 +92,8 @@ function! s:source_rec.async_gather_candidates(args, context) "{{{
   let continuation = s:continuation[a:context.source__directory]
 
   let [continuation.rest, files] =
-        \ s:get_files(continuation.rest, 1, 20)
+        \ s:get_files(continuation.rest, 1, 20,
+        \   a:context.source.ignore_pattern)
 
   if empty(continuation.rest)
     call unite#print_source_message(
@@ -306,7 +307,7 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
   for filename in map(filter(
         \ stdout.read_lines(-1, 100), 'v:val != ""'),
         \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
-    if filename !~ '/\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
+    if filename !~? a:context.source.ignore_pattern
       call add(candidates, {
             \ 'word' : unite#util#substitute_path_separator(
             \    fnamemodify(filename, ':p')),
@@ -410,7 +411,7 @@ function! s:get_path(args, context) "{{{
 
   return directory
 endfunction"}}}
-function! s:get_files(files, level, max_len) "{{{
+function! s:get_files(files, level, max_len, ignore_pattern) "{{{
   let continuation_files = []
   let ret_files = []
   let files_index = 0
@@ -418,8 +419,8 @@ function! s:get_files(files, level, max_len) "{{{
   for file in a:files
     let files_index += 1
 
-    if file =~ '/\.\+$\|/\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
-          \ || isdirectory(file) && getftype(file) ==# 'link'
+    if file =~ '/\.\+$' || file =~? a:ignore_pattern
+          \ || (isdirectory(file) && getftype(file) ==# 'link')
       continue
     endif
 
@@ -435,15 +436,16 @@ function! s:get_files(files, level, max_len) "{{{
         let child = substitute(child, '\/$', '', '')
         let child_index += 1
 
-        if child =~ '/\.\+$\|/\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
-              \ || isdirectory(child) && getftype(child) ==# 'link'
+        if child =~ '/\.\+$' || child =~? a:ignore_pattern
+              \ || (isdirectory(child) && getftype(child) ==# 'link')
           continue
         endif
 
         if isdirectory(child)
           if a:level < 5 && ret_files_len < a:max_len
             let [continuation_files_child, ret_files_child] =
-                  \ s:get_files([child], a:level + 1, a:max_len - ret_files_len)
+                  \ s:get_files([child], a:level + 1,
+                  \  a:max_len - ret_files_len, a:ignore_pattern)
             let continuation_files += continuation_files_child
             let ret_files += ret_files_child
           else
