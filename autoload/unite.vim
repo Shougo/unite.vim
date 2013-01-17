@@ -1380,6 +1380,7 @@ function! unite#resume(buffer_name, ...) "{{{
   let unite.redrawtime_save = &redrawtime
   let unite.access_time = localtime()
   let unite.context = context
+  let unite.is_finalized = 0
 
   call unite#set_current_unite(unite)
 
