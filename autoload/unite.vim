@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jan 2013.
+" Last Modified: 17 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1757,13 +1757,15 @@ function! s:initialize_sources(...) "{{{
   " args: source_names or source_definition
 
   " Initialize load.
-  let source_names = type(get(a:000, 0, [])) == type([]) ?
-        \ get(a:000, 0, []) : []
-  let head_name = get(a:000, 1, '')
-  if empty(source_names) && head_name != ''
-    let source_names = [head_name]
+  if type(get(a:000, 0, [])) != type({})
+    let source_names = type(get(a:000, 0, [])) == type([]) ?
+          \ get(a:000, 0, []) : []
+    let head_name = get(a:000, 1, '')
+    if empty(source_names) && head_name != ''
+      let source_names = [head_name]
+    endif
+    call s:load_default_scripts('sources', source_names)
   endif
-  call s:load_default_scripts('sources', source_names)
 
   let default_source = {
         \ 'is_volatile' : 0,
