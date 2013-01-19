@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jan 2013.
+" Last Modified: 20 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -273,7 +273,7 @@ function! s:source_async.gather_candidates(args, context) "{{{
   endif
 
   let a:context.source__proc = vimproc#pgroup_open(
-        \ printf('find ''%s'' -type f', directory))
+        \ printf('find %s -type f', string(directory)))
 
   " Close handles.
   call a:context.source__proc.stdin.close()
