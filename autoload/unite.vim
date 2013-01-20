@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jan 2013.
+" Last Modified: 20 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2468,8 +2468,8 @@ function! s:initialize_unite_buffer() "{{{
 
   let unite.bufnr = bufnr('%')
 
-  " Note: If unite buffer initialize is incomplete, &modified or &wrap.
-  if !is_bufexists || &modified || &wrap
+  " Note: If unite buffer initialize is incomplete, &modified or &modifiable.
+  if !is_bufexists || &modified || &modifiable
     " Basic settings.
     setlocal bufhidden=hide
     setlocal buftype=nofile

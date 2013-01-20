@@ -2869,6 +2869,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-01-20
+- Fixed buffer initialization check.
+
 2013-01-17
 - Fixed unite action loading problem.
 - Improved ignore_pattern behavior in file_rec source.
