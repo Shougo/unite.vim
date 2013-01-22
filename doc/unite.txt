@@ -34,6 +34,7 @@ Interface		|unite-interface|
     Sources variables	    |unite-sources-variables|
   Key mappings		  |unite-key-mappings|
   Functions		  |unite-functions|
+  Options		  |unite-options|
 Sources			|unite-sources|
 Kinds			|unite-kinds|
 Actions			|unite-actions|
@@ -168,194 +169,8 @@ COMMANDS 					*unite-commands*
 		"file:foo::baz": the parameters of source file are
 		                ["foo", "", "bar"].
 
-						*unite-options*
-		{options} are options for a unite buffer. You may give the
-		following parameters for an option. You need to escape spaces
-		with "\".
+		{options} are options for a unite buffer: |unite-options|
 		
-		Note: In unite.vim, options converts to a context dictionary.
-		The "-buffer-name" option is same to "buffer_name" key in
-		context.
-
-						*unite-options-buffer-name*
-		-buffer-name={buffer-name}
-		Specifies a buffer name. You can share the configuration of
-		functions like |unite#set_substitute_pattern()| by giving the
-		same name to unite buffers that have the same purpose.  The
-		default buffer name is 'default'.
-		Note: Buffer name must not contain any spaces.
-
-						*unite-options-input*
-		-input={input-text}
-		Specifies an initial narrowing text. The default value is ''.
-
-						*unite-options-prompt*
-		-prompt={prompt-text}
-		Specifies a prompt. The default value is '> '.
-
-						*unite-options-default-action*
-		-default-action={default-action}
-		Specifies a default action. The default value is 'default'.
-
-						*unite-options-start-insert*
-						*unite-options-no-start-insert*
-		-start-insert
-		Opens a unite buffer in the narrowing mode.
-
-		-no-start-insert
-		Opens a unite buffer in the normal mode.
-
-		When both options are undefined, it depends on
-		|g:unite_enable_start_insert| option.
-		The behavior is undefined when both options are defined.
-
-						*unite-options-no-quit*
-		-no-quit
-		Doesn't close unite buffer after firing an action.  Unless you
-		specify it, a unite buffer gets closed when you selected an
-		action which is "is_quit".
-
-						*unite-options-keep-focus*
-		-keep-focus
-		Keep the focus on a unite buffer after firing an action.
-		Note: This option is used with "-no-quit" option.
-
-						*unite-options-winwidth*
-		-winwidth={window-width}
-		Specifies the width of a unite buffer.  Unless you specify
-		it, |g:unite_winwidth| is used.
-
-						*unite-options-winheight*
-		-winheight={window-height}
-		Specifies the height of a unite buffer.  Unless you specify
-		it, |g:unite_winheight| is used.
-
-						*unite-options-immediately*
-		-immediately
-		If the number of candidates is exactly one, it runs default
-		action immediately. If candidate is empty, it doesn't open any
-		unite buffer.
-
-						*unite-options-no-empty*
-		-no-empty
-		If candidate is empty, it doesn't open any unite buffer.
-
-						*unite-options-auto-preview*
-		-auto-preview
-		When you selected a candidate, it runs "preview" action
-		automatically.
-
-						*unite-options-completion*
-		-completion
-		Uses unite completion interface. |unite-options-col| is also
-		required.
-
-						*unite-options-col*
-		-col={column-number}
-		Specifies the called unite buffer position.
-
-						*unite-options-vertical*
-		-vertical
-		Splits unite window vertically.
-
-						*unite-options-horizontal*
-		-horizontal
-		Splits unite window horizontally.
-		
-		When both options are undefined, it depends on
-		|g:unite_enable_split_vertically| option.
-		The behavior is undefined when both options are defined.
-
-						*unite-options-direction*
-		-direction={direction}
-		Defines split position rule. The default value is the same to
-		|g:unite_split_rule|.
-
-						*unite-options-no-split*
-		-no-split
-		No split unite buffer and no resize window.
-
-						*unite-options-verbose*
-		-verbose
-		Print verbose warning messages.
-
-						*unite-options-auto-resize*
-		-auto-resize
-		Auto resize unite buffer height by candidates number.
-
-						*unite-options-toggle*
-		-toggle
-		Close unite buffer window if one of the same buffer name
-		exists.
-
-						*unite-options-quick-match*
-		-quick-match
-		Start in the quick match mode.
-
-						*unite-options-create*
-		-create
-		Create a new unite buffer.
-
-						*unite-options-update-time*
-		-update-time={new-update-time}
-		Change 'updatetime' option. If this option is ommit,
-		|g:unite_update_time| is used. This option is useful for
-		animation source.
-
-					*unite-options-cursor-line-highlight*
-		-cursor-line-high-light={highlight-name}
-		Change cursor line highlight. If this option is ommit,
-		|g:unite_cursor_line_highlight| is used.
-
-						*unite-options-no-cursor-line*
-		-no-cursor-line
-		Disable cursor line highlight. This option is useful for
-		animation source.
-
-					*unite-options-hide-source-names*
-		-hide-source-names
-		Hides source names.
-		Note: This option doesn't only hide names but also the whole
-		unite status line.
-		Note: Source highlight will be overwritten by other sources.
-
-					*unite-options-max-multi-lines*
-		-max-multi-lines={max-lines}
-		Specifies the lines max in multiline candidates. If this
-		option is ommit, "5" is used.
-
-						*unite-options-here*
-		-here
-		Open unite buffer at the cursor position.
-		Note: This option is disabled if "-vertical" or "-no-split"
-		option is on.
-
-						*unite-options-silent*
-		-silent
-		Shuts messages up in unite buffer.
-
-						*unite-options-auto-quit*
-		-auto-quit
-		Closes unite buffer automatically when all candidates are
-		shown.
-
-						*unite-options-no-focus*
-		-no-focus
-		No the focus on the unite buffer after opening a unite buffer.
-
-					*unite-options-short-source-names*
-		-short-source-names
-		Use short source names.
-
-					*unite-options-long-source-names*
-		-long-source-names
-		Use long source names.
-
-					*unite-options-multi-line*
-		-multi-line
-		Force use multi line. If candiate abbr is too long, unite.vim
-		will fold automatically.
-
 :UniteWithCurrentDir [{options}] {sources}	*:UniteWithCurrentDir*
 		Equivalent to |:Unite| except that it targets the current
 		directory for the initial narrowing text.
@@ -1458,6 +1273,200 @@ unite#filters#converter_default#use({converters})
 		Changes the default converter used by
 		|unite-filter-converter_default| into {converters}.
 		{converters} must be specified with a list of converter names.
+
+------------------------------------------------------------------------------
+OPTIONS						*unite-options*
+
+{options} are options for a unite buffer. You may give the
+following parameters for an option. You need to escape spaces
+with "\".
+
+Note: In unite.vim, options converts to a context dictionary.
+The "-buffer-name" option is same to "buffer_name" key in
+context.
+
+						*unite-options-buffer-name*
+		-buffer-name={buffer-name}
+		Specifies a buffer name. You can share the configuration of
+		functions like |unite#set_substitute_pattern()| by giving the
+		same name to unite buffers that have the same purpose.  The
+		default buffer name is 'default'.
+		Note: Buffer name must not contain any spaces.
+
+						*unite-options-input*
+		-input={input-text}
+		Specifies an initial narrowing text. The default value is ''.
+
+						*unite-options-prompt*
+		-prompt={prompt-text}
+		Specifies a prompt. The default value is '> '.
+
+						*unite-options-default-action*
+		-default-action={default-action}
+		Specifies a default action. The default value is 'default'.
+
+					*unite-options-start-insert*
+					*unite-options-no-start-insert*
+		-start-insert
+		Opens a unite buffer in the narrowing mode.
+
+		-no-start-insert
+		Opens a unite buffer in the normal mode.
+
+		When both options are undefined, it depends on
+		|g:unite_enable_start_insert| option.
+		The behavior is undefined when both options are defined.
+
+						*unite-options-no-quit*
+		-no-quit
+		Doesn't close unite buffer after firing an action.  Unless you
+		specify it, a unite buffer gets closed when you selected an
+		action which is "is_quit".
+
+						*unite-options-keep-focus*
+		-keep-focus
+		Keep the focus on a unite buffer after firing an action.
+		Note: This option is used with "-no-quit" option.
+
+						*unite-options-winwidth*
+		-winwidth={window-width}
+		Specifies the width of a unite buffer.  Unless you specify
+		it, |g:unite_winwidth| is used.
+
+						*unite-options-winheight*
+		-winheight={window-height}
+		Specifies the height of a unite buffer.  Unless you specify
+		it, |g:unite_winheight| is used.
+
+						*unite-options-immediately*
+		-immediately
+		If the number of candidates is exactly one, it runs default
+		action immediately. If candidate is empty, it doesn't open any
+		unite buffer.
+
+						*unite-options-no-empty*
+		-no-empty
+		If candidate is empty, it doesn't open any unite buffer.
+
+						*unite-options-auto-preview*
+		-auto-preview
+		When you selected a candidate, it runs "preview" action
+		automatically.
+
+						*unite-options-completion*
+		-completion
+		Uses unite completion interface. |unite-options-col| is also
+		required.
+
+						*unite-options-col*
+		-col={column-number}
+		Specifies the called unite buffer position.
+
+						*unite-options-vertical*
+		-vertical
+		Splits unite window vertically.
+
+						*unite-options-horizontal*
+		-horizontal
+		Splits unite window horizontally.
+		
+		When both options are undefined, it depends on
+		|g:unite_enable_split_vertically| option.
+		The behavior is undefined when both options are defined.
+
+						*unite-options-direction*
+		-direction={direction}
+		Defines split position rule. The default value is the same to
+		|g:unite_split_rule|.
+
+						*unite-options-no-split*
+		-no-split
+		No split unite buffer and no resize window.
+
+						*unite-options-verbose*
+		-verbose
+		Print verbose warning messages.
+
+						*unite-options-auto-resize*
+		-auto-resize
+		Auto resize unite buffer height by candidates number.
+
+						*unite-options-toggle*
+		-toggle
+		Close unite buffer window if one of the same buffer name
+		exists.
+
+						*unite-options-quick-match*
+		-quick-match
+		Start in the quick match mode.
+
+						*unite-options-create*
+		-create
+		Create a new unite buffer.
+
+						*unite-options-update-time*
+		-update-time={new-update-time}
+		Change 'updatetime' option. If this option is ommit,
+		|g:unite_update_time| is used. This option is useful for
+		animation source.
+
+					*unite-options-cursor-line-highlight*
+		-cursor-line-high-light={highlight-name}
+		Change cursor line highlight. If this option is ommit,
+		|g:unite_cursor_line_highlight| is used.
+
+						*unite-options-no-cursor-line*
+		-no-cursor-line
+		Disable cursor line highlight. This option is useful for
+		animation source.
+
+					*unite-options-hide-source-names*
+		-hide-source-names
+		Hides source names.
+		Note: This option doesn't only hide names but also the whole
+		unite status line.
+		Note: Source highlight will be overwritten by other sources.
+
+					*unite-options-max-multi-lines*
+		-max-multi-lines={max-lines}
+		Specifies the lines max in multiline candidates. If this
+		option is ommit, "5" is used.
+
+						*unite-options-here*
+		-here
+		Open unite buffer at the cursor position.
+		Note: This option is disabled if "-vertical" or "-no-split"
+		option is on.
+
+						*unite-options-silent*
+		-silent
+		Shuts messages up in unite buffer.
+
+						*unite-options-auto-quit*
+		-auto-quit
+		Closes unite buffer automatically when all candidates are
+		shown.
+
+						*unite-options-no-focus*
+		-no-focus
+		No the focus on the unite buffer after opening a unite buffer.
+
+					*unite-options-short-source-names*
+		-short-source-names
+		Use short source names.
+
+					*unite-options-long-source-names*
+		-long-source-names
+		Use long source names.
+
+						*unite-options-multi-line*
+		-multi-line
+		Force use multi line. If candiate abbr is too long, unite.vim
+		will fold automatically.
+
+						*unite-options-resume*
+		-resume
+		Reuse previous buffer if exists. Cf: |:UniteResume|
 
 ==============================================================================
 SOURCES						*unite-sources*
@@ -2868,6 +2877,10 @@ A: You can use below mappings.
 <
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-01-22
+- Added resume option.
+- Improved documentation.
 
 2013-01-20
 - Fixed buffer initialization check.

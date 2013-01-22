@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jan 2013.
+" Last Modified: 22 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -313,7 +313,7 @@ let s:unite_options = [
       \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
       \ '-auto-quit', '-no-focus',
       \ '-long-source-names', '-short-source-names',
-      \ '-multi-line',
+      \ '-multi-line', '-resume',
       \]
 "}}}
 
@@ -1071,6 +1071,16 @@ function! unite#start(sources, ...) "{{{
   let context = get(a:000, 0, {})
   let context = s:initialize_context(context)
 
+  if context.resume
+    " Check resume buffer.
+    let resume_bufnr = s:get_resume_buffer(context.buffer_name)
+    if resume_bufnr > 0 &&
+          \ getbufvar(resume_bufnr, 'unite').source_names ==#
+          \    s:get_source_names(a:sources)
+      return unite#resume(context.buffer_name, context)
+    endif
+  endif
+
   let s:use_current_unite = 1
 
   if context.toggle "{{{
@@ -1330,26 +1340,11 @@ function! unite#resume(buffer_name, ...) "{{{
 
     let bufnr = t:unite.last_unite_bufnr
   else
-    let buffer_name = a:buffer_name
-    if buffer_name !~ '@\d\+$'
-      " Add postfix.
-      let prefix = unite#util#is_windows() ?
-            \ '[unite] - ' : '*unite* - '
-      let prefix .= buffer_name
-      let buffer_name .= s:get_postfix(prefix, 0)
-    endif
+    let bufnr = s:get_resume_buffer(a:buffer_name)
+  endif
 
-    let buffer_dict = {}
-    for unite in map(filter(range(1, bufnr('$')),
-          \ 'getbufvar(v:val, "&filetype") ==# "unite"'),
-          \ 'getbufvar(v:val, "unite")')
-      let buffer_dict[unite.buffer_name] = unite.bufnr
-    endfor
-
-    if !has_key(buffer_dict, buffer_name)
-      return
-    endif
-    let bufnr = buffer_dict[buffer_name]
+  if bufnr < 0
+    return
   endif
 
   let winnr = winnr()
@@ -1640,6 +1635,7 @@ function! s:initialize_context(context) "{{{
         \ 'is_resize' : 0,
         \ 'no_focus' : 0,
         \ 'multi_line' : 0,
+        \ 'resume' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 0,
         \ 'unite__is_vimfiler' : 0,
@@ -1704,10 +1700,8 @@ function! s:initialize_context(context) "{{{
   return context
 endfunction"}}}
 function! s:initialize_loaded_sources(sources, context) "{{{
-  let source_names = map(map(copy(a:sources),
-        \ "type(v:val) == type([]) ? v:val[0] : v:val"),
-        \ "type(v:val) == type('') ? v:val : v:val.name")
-  let all_sources = s:initialize_sources(source_names)
+  let all_sources = s:initialize_sources(
+        \ s:get_source_names(a:sources))
   let sources = []
 
   let number = 0
@@ -2409,6 +2403,7 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.context = context
   let unite.current_candidates = []
   let unite.sources = sources
+  let unite.source_names = s:get_source_names(sources)
   let unite.buffer_name = (context.buffer_name == '') ?
         \ 'default' : context.buffer_name
   let unite.profile_name = (context.profile_name == '') ?
@@ -3321,6 +3316,31 @@ function! s:set_syntax() "{{{
     execute 'syntax region' source.syntax 'start=/\%'
           \ .(abbr_head).'c/ end=/$/ keepend contained'
   endfor
+endfunction"}}}
+function! s:get_resume_buffer(buffer_name) "{{{
+  let buffer_name = a:buffer_name
+  if buffer_name !~ '@\d\+$'
+    " Add postfix.
+    let prefix = unite#util#is_windows() ?
+          \ '[unite] - ' : '*unite* - '
+    let prefix .= buffer_name
+    let buffer_name .= s:get_postfix(prefix, 0)
+  endif
+
+  let buffer_dict = {}
+  for unite in map(filter(range(1, bufnr('$')),
+        \ "getbufvar(v:val, '&filetype') ==# 'unite' &&
+        \  type(getbufvar(v:val, 'unite')) == type({})"),
+        \ "getbufvar(v:val, 'unite')")
+    let buffer_dict[unite.buffer_name] = unite.bufnr
+  endfor
+
+  return get(buffer_dict, buffer_name, -1)
+endfunction"}}}
+function! s:get_source_names(sources) "{{{
+  return map(map(copy(a:sources),
+        \ "type(v:val) == type([]) ? v:val[0] : v:val"),
+        \ "type(v:val) == type('') ? v:val : v:val.name")
 endfunction"}}}
 "}}}
 
