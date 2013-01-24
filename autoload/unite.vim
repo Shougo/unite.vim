@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jan 2013.
+" Last Modified: 24 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1069,7 +1069,8 @@ function! unite#start(sources, ...) "{{{
   endif
 
   let context = get(a:000, 0, {})
-  let context = s:initialize_context(context)
+  let context = s:initialize_context(context,
+        \ s:get_source_names(a:sources))
 
   if context.resume
     " Check resume buffer.
@@ -1169,7 +1170,8 @@ function! unite#start_temporary(sources, ...) "{{{
           \ })
   else
     let context = {}
-    let context = s:initialize_context(context)
+    let context = s:initialize_context(context,
+          \ s:get_source_names(a:sources))
     let context.old_buffer_info = []
   endif
 
@@ -1202,7 +1204,8 @@ function! unite#start_temporary(sources, ...) "{{{
 endfunction"}}}
 function! unite#vimfiler_check_filetype(sources, ...) "{{{
   let context = get(a:000, 0, {})
-  let context = s:initialize_context(context)
+  let context = s:initialize_context(context,
+        \ s:get_source_names(a:sources))
   let context.unite__is_vimfiler = 1
 
   try
@@ -1242,7 +1245,8 @@ function! unite#get_candidates(sources, ...) "{{{
 
   try
     let context = get(a:000, 0, {})
-    let context = s:initialize_context(context)
+    let context = s:initialize_context(context,
+          \ s:get_source_names(a:sources))
     let context.no_buffer = 1
     let context.unite__is_interactive = 0
 
@@ -1266,7 +1270,8 @@ function! unite#get_vimfiler_candidates(sources, ...) "{{{
 
   try
     let context = get(a:000, 0, {})
-    let context = s:initialize_context(context)
+    let context = s:initialize_context(context,
+          \ s:get_source_names(a:sources))
     let context.no_buffer = 1
     let context.unite__is_vimfiler = 1
 
@@ -1279,7 +1284,8 @@ function! unite#get_vimfiler_candidates(sources, ...) "{{{
 endfunction"}}}
 function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos) "{{{
   let context = {}
-  let context = s:initialize_context(context)
+  let context = s:initialize_context(context,
+        \ s:get_source_names(a:sources))
   let context.unite__is_interactive = 0
   let context.unite__is_complete = 1
 
@@ -1301,7 +1307,8 @@ function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos) "{{{
 endfunction"}}}
 function! unite#args_complete(sources, arglead, cmdline, cursorpos) "{{{
   let context = {}
-  let context = s:initialize_context(context)
+  let context = s:initialize_context(context,
+        \ s:get_source_names(a:sources))
   let context.unite__is_interactive = 0
   let context.unite__is_complete = 1
 
@@ -1594,7 +1601,7 @@ function! s:load_default_scripts(kind, names) "{{{
     endfor
   endfor
 endfunction"}}}
-function! s:initialize_context(context) "{{{
+function! s:initialize_context(context, ...) "{{{
   let default_context = {
         \ 'input' : '',
         \ 'start_insert' : g:unite_enable_start_insert,
@@ -1603,6 +1610,7 @@ function! s:initialize_context(context) "{{{
         \ 'col' : col('.'),
         \ 'no_quit' : 0,
         \ 'buffer_name' : 'default',
+        \ 'profile_name' : '',
         \ 'prompt' : '> ',
         \ 'default_action' : 'default',
         \ 'winwidth' : g:unite_winwidth,
@@ -1644,8 +1652,12 @@ function! s:initialize_context(context) "{{{
         \ 'unite__disable_hooks' : 0,
         \ }
 
+  let source_names = get(a:000, 0, [])
+
   let profile_name = get(a:context, 'profile_name',
-        \ get(a:context, 'buffer_name', 'default'))
+        \ ((len(source_names) == 1 && !has_key(a:context, 'buffer_name')) ?
+        \    'source/' . source_names[0] :
+        \    get(a:context, 'buffer_name', 'default')))
 
   " Overwrite default_context by profile context.
   let default_context = extend(default_context,
@@ -1666,9 +1678,6 @@ function! s:initialize_context(context) "{{{
   if get(context, 'no_start_insert', 0)
     " Disable start insert.
     let context.start_insert = 0
-  endif
-  if !has_key(context, 'profile_name')
-    let context.profile_name = context.buffer_name
   endif
   if has_key(context, 'horizontal')
     " Disable vertically.
@@ -2406,8 +2415,10 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.source_names = s:get_source_names(sources)
   let unite.buffer_name = (context.buffer_name == '') ?
         \ 'default' : context.buffer_name
-  let unite.profile_name = (context.profile_name == '') ?
-        \ unite.buffer_name : context.profile_name
+  let unite.profile_name =
+        \ (context.profile_name != '') ? context.profile_name :
+        \ (len(sources) == 1) ? 'source/' . sources[0].name :
+        \ unite.buffer_name
   let unite.prev_bufnr = bufnr('%')
   let unite.prev_winnr = winnr()
 
