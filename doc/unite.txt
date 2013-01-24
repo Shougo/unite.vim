@@ -2878,6 +2878,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-01-24
+- Fixed <Plug>(unite_restart) behavior.
+
 2013-01-22
 - Added resume option.
 - Improved documentation.

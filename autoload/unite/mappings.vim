@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Nov 2012.
+" Last Modified: 24 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -491,7 +491,9 @@ endfunction"}}}
 function! s:restart() "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
-  let sources = map(deepcopy(unite.sources), 'empty(v:val.args) ? v:val.name : [v:val.name, v:val.args]')
+  let context.resume = 0
+  let sources = map(deepcopy(unite.sources),
+        \ 'empty(v:val.args) ? v:val.name : [v:val.name] + v:val.args')
   call unite#force_quit_session()
   call unite#start(sources, context)
 endfunction"}}}
