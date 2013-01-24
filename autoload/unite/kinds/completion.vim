@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: completion.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Sep 2012.
+" Last Modified: 24 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,10 +42,9 @@ let s:kind.action_table.insert = {
       \ 'description' : 'insert word',
       \ }
 function! s:kind.action_table.insert.func(candidate) "{{{
-  let word = a:candidate.action__complete_word
-
-  call unite#kinds#common#insert_word(word,
-        \ a:candidate.action__complete_pos)
+  call unite#kinds#common#insert_word(
+        \ a:candidate.action__complete_word,
+        \ { 'pos' : a:candidate.action__complete_pos})
 endfunction"}}}
 
 let s:kind.action_table.preview = {

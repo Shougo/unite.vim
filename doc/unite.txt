@@ -2880,6 +2880,7 @@ CHANGELOG					*unite-changelog*
 
 2013-01-24
 - Fixed <Plug>(unite_restart) behavior.
+- Improved insert action.
 
 2013-01-22
 - Added resume option.

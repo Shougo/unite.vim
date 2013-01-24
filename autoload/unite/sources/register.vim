@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: register.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2012.
+" Last Modified: 24 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,20 +50,16 @@ function! s:source.gather_candidates(args, context) "{{{
         \ 'u', 'v', 'w', 'x', 'y', 'z',
         \ '-', '.', ':', '#', '%', '/', '=',
         \ ]
-  if exists('g:yanktmp_file') && filereadable(g:yanktmp_file)
-    call add(registers, 'yanktmp')
-  endif
 
   for reg in registers
-    let register = (reg ==# 'yanktmp') ?
-          \ join(readfile(g:yanktmp_file, "b"), "\n") :
-          \ getreg(reg, 1)
+    let register = getreg(reg, 1)
     if register != ''
       call add(candidates, {
             \ 'word' : register,
             \ 'abbr' : printf('%-3s - %s', reg, register),
             \ 'is_multiline' : 1,
             \ 'action__register' : reg,
+            \ 'action__regtype' : getregtype(reg),
             \ })
     endif
   endfor
@@ -80,11 +76,7 @@ let s:source.action_table.delete = {
       \ }
 function! s:source.action_table.delete.func(candidates) "{{{
   for candidate in a:candidates
-    if candidate.action__register ==# 'yanktmp'
-      call delete(g:yanktmp_file)
-    else
-      silent! call setreg(candidate.action__register, '')
-    endif
+    silent! call setreg(candidate.action__register, '')
   endfor
 endfunction"}}}
 
@@ -94,16 +86,11 @@ let s:source.action_table.edit = {
       \ 'is_quit' : 0,
       \ }
 function! s:source.action_table.edit.func(candidate) "{{{
-  let register = (a:candidate.action__register ==# 'yanktmp') ?
-        \ join(readfile(g:yanktmp_file, "b"), "\n") :
-        \ getreg(a:candidate.action__register, 1)
+  let register = getreg(a:candidate.action__register, 1)
   let register = substitute(register, '\r\?\n', '\\n', 'g')
   let new_value = substitute(input('', register), '\\n', '\n', 'g')
-  if a:candidate.action__register ==# 'yanktmp'
-    call writefile(split(new_value, "\n", 1), g:yanktmp_file)
-  else
-    silent! call setreg(a:candidate.action__register, new_value)
-  endif
+  silent! call setreg(a:candidate.action__register,
+        \ new_value, a:candidate.action__regtype)
 endfunction"}}}
 "}}}
 

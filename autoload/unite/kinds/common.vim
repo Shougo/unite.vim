@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: common.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Oct 2012.
+" Last Modified: 24 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,7 +84,8 @@ let s:kind.action_table.insert = {
       \ 'description' : 'insert word or text',
       \ }
 function! s:kind.action_table.insert.func(candidate) "{{{
-  call unite#kinds#common#insert_word(s:get_candidate_text(a:candidate))
+  call unite#kinds#common#insert_word(s:get_candidate_text(a:candidate),
+        \ { 'regtype' : get(a:candidate, 'action__regtype', 'v')})
 endfunction"}}}
 
 let s:kind.action_table.insert_directory = {
@@ -128,14 +129,21 @@ endfunction"}}}
 function! unite#kinds#common#insert_word(word, ...) "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
-  let col = get(a:000, 0, context.col)
+  let opt = get(a:000, 0, {})
+  let col = get(opt, 'col', context.col)
+  let regtype = get(opt, 'regtype', 'v')
 
   if !context.complete
     " Paste.
-    let old_reg = @"
-    let @" = a:word
-    execute 'normal! ""'.((col('$') - col('.') <= 1) ? 'p' : 'P')
-    let @" = old_reg
+    let old_reg = [getreg('"'), getregtype('"')]
+
+    call setreg('"', a:word, regtype)
+    try
+      execute 'normal! ""'.(
+            \ regtype !=# 'v' || (col('$') - col('.') <= 1) ? 'p' : 'P')
+    finally
+      call setreg('"', old_reg[0], old_reg[1])
+    endtry
 
     " Open folds.
     normal! zv

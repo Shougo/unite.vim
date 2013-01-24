@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: history_yank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2012.
+" Last Modified: 24 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,7 +29,9 @@ set cpo&vim
 
 " Variables  "{{{
 let s:yank_histories = []
-let s:yank_histories_file_mtime = 0  " the last modified time of the yank histories file.
+
+" the last modified time of the yank histories file.
+let s:yank_histories_file_mtime = 0
 
 call unite#util#set_default('g:unite_source_history_yank_file',
       \ g:unite_data_directory . '/history_yank')
@@ -41,7 +43,7 @@ function! unite#sources#history_yank#define() "{{{
   return s:source
 endfunction"}}}
 function! unite#sources#history_yank#_append() "{{{
-  if get(s:yank_histories, 0, '') ==# @"
+  if (!empty(s:yank_histories) && s:yank_histories[0][0] ==# @")
         \ || len(@") < 2
     return
   endif
@@ -49,7 +51,7 @@ function! unite#sources#history_yank#_append() "{{{
   call s:load()
 
   " Append @" value.
-  call insert(s:yank_histories, @")
+  call insert(s:yank_histories, [getreg('"'), getregtype('"')])
 
   if g:unite_source_history_yank_limit < len(s:yank_histories)
     let s:yank_histories =
@@ -69,8 +71,9 @@ let s:source = {
 function! s:source.gather_candidates(args, context) "{{{
   let max_width = winwidth(0) - 5
   return map(copy(s:yank_histories), "{
-        \ 'word' : v:val,
+        \ 'word' : v:val[0],
         \ 'is_multiline' : 1,
+        \ 'action__regtype' : v:val[1],
         \ }")
 endfunction"}}}
 
@@ -83,7 +86,7 @@ let s:source.action_table.delete = {
       \ }
 function! s:source.action_table.delete.func(candidates) "{{{
   for candidate in a:candidates
-    call filter(s:yank_histories, 'v:val !=# candidate.word')
+    call filter(s:yank_histories, 'v:val[0] !=# candidate.word')
   endfor
 endfunction"}}}
 "}}}
@@ -110,6 +113,10 @@ function! s:load()  "{{{
 
   try
     sandbox let s:yank_histories = eval(file[0])
+
+    " Type check.
+    let history = s:yank_histories[0]
+    let history[0] = history[0]
   catch
     let s:yank_histories = []
   endtry
