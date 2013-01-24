@@ -403,7 +403,8 @@ function! s:get_action_table(action_name, candidates, sources) "{{{
   let action_tables = []
   let Self = unite#get_self_functions()[-1]
   for candidate in a:candidates
-    let action_table = s:get_candidate_action_table(candidate, a:sources)
+    let action_table = unite#mappings#_get_candidate_action_table(
+          \ candidate, a:sources)
 
     let action_name = a:action_name
     if action_name ==# 'default'
@@ -460,21 +461,7 @@ function! s:get_action_table(action_name, candidates, sources) "{{{
 
   return action_tables
 endfunction"}}}
-function! s:get_actions(candidates, sources) "{{{
-  let Self = unite#get_self_functions()[-1]
-
-  let actions = s:get_candidate_action_table(a:candidates[0], a:sources)
-
-  for candidate in a:candidates[1:]
-    let action_table = s:get_candidate_action_table(candidate, a:sources)
-    " Filtering unique items and check selectable flag.
-    call filter(actions, 'has_key(action_table, v:key)
-          \ && action_table[v:key].is_selectable')
-  endfor
-
-  return actions
-endfunction"}}}
-function! s:get_candidate_action_table(candidate, sources) "{{{
+function! unite#mappings#_get_candidate_action_table(candidate, sources) "{{{
   let Self = unite#get_self_functions()[-1]
 
   return unite#get_action_table(a:candidate.source, a:candidate.kind, Self,
@@ -598,13 +585,9 @@ function! unite#mappings#_choose_action(candidates, ...) "{{{
   let context.buffer_name = 'action'
   let context.profile_name = 'action'
 
-  if has_key(context, 'vimfiler__current_directory')
-    call unite#start(
-          \ [[s:source_action] + a:candidates], context)
-  else
-    call unite#start_temporary(
-          \ [[s:source_action] + a:candidates], context)
-  endif
+  call call((has_key(context, 'vimfiler__current_directory') ?
+        \ 'unite#start' : 'unite#start_temporary'),
+        \ [[[unite#sources#action#define(), a:candidates]], context])
 endfunction"}}}
 function! s:insert_enter(key) "{{{
   setlocal modifiable
@@ -907,7 +890,8 @@ function! s:narrowing_path() "{{{
   call unite#mappings#narrowing(has_key(candidate, 'action__path')? candidate.action__path : candidate.word)
 endfunction"}}}
 function! s:narrowing_input_history() "{{{
-  call unite#start_temporary([s:source_input],
+  call unite#start_temporary(
+        \ [unite#sources#history_input#define()],
         \ { 'old_source_names_string' : unite#loaded_source_names_string() },
         \ 'history/input')
 endfunction"}}}
@@ -934,183 +918,6 @@ endfunction"}}}
 function! unite#mappings#complete_actions(arglead, cmdline, cursorpos) "{{{
   return filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
-
-" Unite action source. "{{{
-let s:source_action = {
-      \ 'name' : 'action',
-      \ 'description' : 'candidates from unite action',
-      \ 'action_table' : {},
-      \ 'hooks' : {},
-      \ 'default_action' : 'do',
-      \ 'syntax' : 'uniteSource__Action',
-      \}
-
-function! s:source_action.hooks.on_syntax(args, context) "{{{
-  syntax match uniteSource__ActionDescriptionLine / -- .*$/
-        \ contained containedin=uniteSource__Action
-  syntax match uniteSource__ActionDescription /.*$/
-        \ contained containedin=uniteSource__ActionDescriptionLine
-  syntax match uniteSource__ActionMarker / -- /
-        \ contained containedin=uniteSource__ActionDescriptionLine
-  highlight default link uniteSource__ActionMarker Special
-  highlight default link uniteSource__ActionDescription Comment
-endfunction"}}}
-
-function! s:source_action.gather_candidates(args, context) "{{{
-  if empty(a:args)
-    return
-  endif
-
-  let candidates = copy(a:args)
-
-  " Print candidates.
-  call unite#print_source_message(map(copy(candidates),
-        \ "'candidates: '.v:val.unite__abbr.'('.v:val.source.')'"), self.name)
-
-  " Print default action.
-  let default_actions = []
-  for candidate in candidates
-    let default_action = unite#get_default_action(
-          \ candidate.source, candidate.kind)
-    if default_action != ''
-      call add(default_actions, default_action)
-    endif
-  endfor
-  let default_actions = unite#util#uniq(default_actions)
-  if len(default_actions) == 1
-    call unite#print_source_message(
-          \ 'default_action: ' . default_actions[0], self.name)
-  endif
-
-  " Process Alias.
-  let actions = s:get_actions(candidates,
-        \ unite#get_context().source__sources)
-
-  " Uniq.
-  let uniq_actions = {}
-  for action in values(actions)
-    if !has_key(action, action.name)
-      let uniq_actions[action.name] = action
-    endif
-  endfor
-
-  let max = max(map(values(actions), 'len(v:val.name)'))
-
-  let sources = map(copy(candidates), 'v:val.source')
-
-  return sort(map(filter(values(uniq_actions), 'v:val.is_listed'), "{
-        \   'word' : v:val.name,
-        \   'abbr' : printf('%-" . max . "s -- %s',
-        \       v:val.name, v:val.description),
-        \   'source__candidates' : candidates,
-        \   'action__action' : v:val,
-        \   'source__sources' : sources,
-        \ }"), 's:compare_word')
-endfunction"}}}
-
-function! s:compare_word(i1, i2)
-  return (a:i1.word ># a:i2.word) ? 1 : -1
-endfunction
-
-" Actions "{{{
-let s:source_action.action_table = {}
-
-let s:source_action.action_table.do = {
-      \ 'description' : 'do action',
-      \ }
-function! s:source_action.action_table.do.func(candidate) "{{{
-  let context = unite#get_context()
-
-  if !empty(context.old_buffer_info)
-    " Restore buffer_name and profile_name.
-    let buffer_name =
-          \ get(get(context.old_buffer_info, 0, {}), 'buffer_name', '')
-    if buffer_name != ''
-      let context.buffer_name = buffer_name
-    endif
-    let profile_name =
-          \ get(get(context.old_buffer_info, 0, {}), 'profile_name', '')
-    if profile_name != ''
-      let context.profile_name = profile_name
-    endif
-  endif
-
-  call unite#mappings#do_action(a:candidate.word,
-   \ a:candidate.source__candidates, context, context.source__sources)
-
-  " Check quit flag.
-  if !a:candidate.action__action.is_quit
-        \ && context.temporary
-    call unite#resume_from_temporary(context)
-
-    " Check invalidate cache flag.
-    if a:candidate.action__action.is_invalidate_cache
-      for source_name in a:candidate.source__sources
-        call unite#invalidate_cache(source_name)
-      endfor
-
-      call unite#force_redraw()
-    endif
-  endif
-endfunction"}}}
-"}}}
-"}}}
-
-" Unite history/input source. "{{{
-let s:source_input = {
-      \ 'name' : 'history/input',
-      \ 'description' : 'candidates from unite input history',
-      \ 'action_table' : {},
-      \ 'default_action' : 'narrow',
-      \ 'syntax' : 'uniteSource__Action',
-      \}
-
-function! s:source_input.gather_candidates(args, context) "{{{
-  let context = unite#get_context()
-  let inputs = unite#get_profile(
-        \ context.old_buffer_info[0].profile_name, 'unite__inputs')
-  let key = context.old_source_names_string
-  if !has_key(inputs, key)
-    return []
-  endif
-
-  return map(copy(inputs[key]), '{
-        \ "word" : v:val
-        \ }')
-endfunction"}}}
-
-" Actions "{{{
-let s:source_input.action_table = {}
-
-let s:source_input.action_table.narrow = {
-      \ 'description' : 'narrow by history',
-      \ 'is_quit' : 0,
-      \ }
-function! s:source_input.action_table.narrow.func(candidate) "{{{
-  call unite#force_quit_session()
-  call unite#mappings#narrowing(a:candidate.word)
-endfunction"}}}
-
-let s:source_input.action_table.delete = {
-      \ 'description' : 'delete from input history',
-      \ 'is_selectable' : 1,
-      \ 'is_quit' : 0,
-      \ 'is_invalidate_cache' : 1,
-      \ }
-function! s:source_input.action_table.delete.func(candidates) "{{{
-  let context = unite#get_context()
-  let inputs = unite#get_profile(
-        \ context.old_buffer_info[0].profile_name, 'unite__inputs')
-  let key = context.old_source_names_string
-  if !has_key(inputs, key)
-    return
-  endif
-
-  for candidate in a:candidates
-    call filter(inputs[key], 'v:val !=# candidate.word')
-  endfor
-endfunction"}}}
-"}}}
 "}}}
 
 let &cpo = s:save_cpo

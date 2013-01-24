@@ -2895,6 +2895,7 @@ CHANGELOG					*unite-changelog*
 - Fixed <Plug>(unite_restart) behavior.
 - Improved insert action.
 - Changed profile_name default value.
+- Refactorred mappings.vim.
 
 2013-01-22
 - Added resume option.
