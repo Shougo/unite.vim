@@ -2893,6 +2893,7 @@ CHANGELOG					*unite-changelog*
 
 2013-01-26
 - Fixed syntax file.
+- Fixed for syntax enable.
 
 2013-01-24
 - Fixed <Plug>(unite_restart) behavior.

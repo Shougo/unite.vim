@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jan 2013.
+" Last Modified: 26 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2538,12 +2538,6 @@ function! s:initialize_unite_buffer() "{{{
   set sidescrolloff=0
   setlocal nocursorline
   setfiletype unite
-
-  if !exists('b:current_syntax') || b:current_syntax !=# 'unite'
-    return
-  endif
-
-  call s:set_syntax_default()
 endfunction"}}}
 function! s:switch_unite_buffer(buffer_name, context) "{{{
   " Search unite window.
@@ -2970,6 +2964,10 @@ function! s:change_highlight()  "{{{
   endif
 
   let unite = unite#get_current_unite()
+  if empty(unite)
+    return
+  endif
+
   let context = unite#get_context()
   let prompt_linenr = unite.prompt_linenr
   if !context.no_cursor_line
@@ -3264,7 +3262,7 @@ function! s:convert_source_name(source_name) "{{{
         \ a:source_name !~ '\A'  ? a:source_name[:1] :
         \ substitute(a:source_name, '\a\zs\a\+', '', 'g')
 endfunction"}}}
-function! s:set_syntax_default() "{{{
+function! unite#set_highlight() "{{{
   let unite = unite#get_current_unite()
 
   " Set highlight.
@@ -3311,6 +3309,8 @@ function! s:set_syntax_default() "{{{
 
     call s:call_hook([source], 'on_syntax')
   endfor
+
+  call s:set_syntax()
 endfunction"}}}
 function! s:set_syntax() "{{{
   let unite = unite#get_current_unite()

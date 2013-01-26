@@ -87,6 +87,8 @@ highlight default link uniteErrorHidden Ignore
 
 let b:current_syntax = 'unite'
 
+call unite#set_highlight()
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
