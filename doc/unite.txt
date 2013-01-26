@@ -1481,6 +1481,13 @@ context.
 		-resume
 		Reuse previous buffer if exists. Cf: |:UniteResume|
 
+						*unite-options-wrap*
+		-wrap
+		If it is set, lines longer than the width of the window will
+		wrap and displaying continues on the next line.
+		Note: This option will set 'wrap' option and disable
+		|unite-options-multi-line| option.
+
 ==============================================================================
 SOURCES						*unite-sources*
 
@@ -2894,6 +2901,7 @@ CHANGELOG					*unite-changelog*
 2013-01-26
 - Fixed syntax file.
 - Fixed for syntax enable.
+- Added wrap option.
 
 2013-01-24
 - Fixed <Plug>(unite_restart) behavior.

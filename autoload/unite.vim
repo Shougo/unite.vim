@@ -313,7 +313,7 @@ let s:unite_options = [
       \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
       \ '-auto-quit', '-no-focus',
       \ '-long-source-names', '-short-source-names',
-      \ '-multi-line', '-resume',
+      \ '-multi-line', '-resume', '-wrap',
       \]
 "}}}
 
@@ -1644,6 +1644,7 @@ function! s:initialize_context(context, ...) "{{{
         \ 'no_focus' : 0,
         \ 'multi_line' : 0,
         \ 'resume' : 0,
+        \ 'wrap' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 0,
         \ 'unite__is_vimfiler' : 0,
@@ -1945,7 +1946,7 @@ function! s:initialize_candidates(candidates) "{{{
           \ get(candidate, 'abbr', candidate.word)
 
     " Delete too long abbr.
-    if candidate.is_multiline || context.multi_line
+    if !&l:wrap && (candidate.is_multiline || context.multi_line)
       let candidate.unite__abbr =
             \ candidate.unite__abbr[: max_width *
             \  (context.max_multi_lines + 1)+10]
@@ -2015,7 +2016,7 @@ function! s:initialize_candidates(candidates) "{{{
   endfor
 
   " Multiline check.
-  if is_multiline || context.multi_line
+  if !&l:wrap && (is_multiline || context.multi_line)
     for candidate in filter(copy(candidates), '!v:val.is_multiline')
       let candidate.unite__abbr = '  ' . candidate.unite__abbr
     endfor
@@ -2337,13 +2338,14 @@ function! s:convert_quick_match_lines(candidates, quick_match_table) "{{{
 
   " Add number.
   let num = 0
+
   for candidate in a:candidates
     call add(candidates,
           \ (candidate.is_dummy ? '  ' : get(keys, num, '  '))
           \ . (unite.max_source_name == 0 ? '' :
           \    unite#util#truncate(s:convert_source_name(
           \    candidate.source), max_source_name))
-          \ . unite#util#truncate_smart(candidate.unite__abbr,
+          \ . unite#util#truncate_wrap(candidate.unite__abbr,
           \      max_width, max_width/3, '..'))
     let num += 1
   endfor
@@ -2363,7 +2365,7 @@ function! unite#convert_lines(candidates) "{{{
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(s:convert_source_name(
         \     v:val.source), max_source_name))
-        \ . unite#util#truncate_smart(v:val.unite__abbr, " . max_width
+        \ . unite#util#truncate_wrap(v:val.unite__abbr, " . max_width
         \    .  ", max_width/3, '..')")
 endfunction"}}}
 
@@ -2486,7 +2488,6 @@ function! s:initialize_unite_buffer() "{{{
     setlocal nofoldenable
     setlocal nomodeline
     setlocal nonumber
-    setlocal nowrap
     setlocal foldcolumn=0
     setlocal iskeyword+=-,+,\\,!,~
     setlocal matchpairs-=<:>
@@ -2524,6 +2525,8 @@ function! s:initialize_unite_buffer() "{{{
 
     call unite#mappings#define_default_mappings()
   endif
+
+  let &l:wrap = unite.context.wrap
 
   if exists('&redrawtime')
     " Save redrawtime

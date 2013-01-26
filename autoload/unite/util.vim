@@ -276,6 +276,19 @@ function! unite#util#convert2list(expr) "{{{
   return type(a:expr) ==# type([]) ? a:expr : [a:expr]
 endfunction"}}}
 
+function! unite#util#truncate_wrap(str, max, footer_width, separator) "{{{
+  let width = unite#util#wcswidth(a:str)
+  if width <= a:max
+    return unite#util#truncate(a:str, a:max)
+  elseif &l:wrap
+    return a:str
+  endif
+
+  let header_width = a:max - unite#util#wcswidth(a:separator) - a:footer_width
+  return unite#util#strwidthpart(a:str, header_width) . a:separator
+        \ . unite#util#strwidthpart_reverse(a:str, a:footer_width)
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
