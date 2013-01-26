@@ -2016,7 +2016,7 @@ function! s:initialize_candidates(candidates) "{{{
   endfor
 
   " Multiline check.
-  if !&l:wrap && (is_multiline || context.multi_line)
+  if is_multiline || context.multi_line
     for candidate in filter(copy(candidates), '!v:val.is_multiline')
       let candidate.unite__abbr = '  ' . candidate.unite__abbr
     endfor
