@@ -2891,6 +2891,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-01-26
+- Fixed syntax file.
+
 2013-01-24
 - Fixed <Plug>(unite_restart) behavior.
 - Improved insert action.
