@@ -272,6 +272,11 @@ g:unite_enable_use_short_source_names
 
 		The default value is 0.
 
+g:unite_marked_icon				*g:unite_marked_icon*
+		This variable controls unite marked candidates icon.
+		
+		Default value is "*"
+
 g:unite_quick_match_table			*g:unite_quick_match_table*
 		The table of completion candidates of quick match list,
 		corresponding the narrowing text.
@@ -2902,6 +2907,7 @@ CHANGELOG					*unite-changelog*
 - Fixed syntax file.
 - Fixed for syntax enable.
 - Added wrap option.
+- Added g:unite_marked_icon option.
 
 2013-01-24
 - Fixed <Plug>(unite_restart) behavior.

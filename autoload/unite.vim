@@ -2361,7 +2361,7 @@ function! unite#convert_lines(candidates) "{{{
   endif
 
   return map(copy(a:candidates),
-        \ "(v:val.unite__is_marked ? '* ' : '- ')
+        \ "(v:val.unite__is_marked ? g:unite_marked_icon . ' ' : '- ')
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(s:convert_source_name(
         \     v:val.source), max_source_name))
@@ -3273,6 +3273,10 @@ function! unite#set_highlight() "{{{
   syntax clear uniteInputPrompt
   execute 'syntax match uniteInputPrompt'
         \ '/^'.match_prompt.'/ contained'
+
+  let marked_icon = unite#util#escape_pattern(g:unite_marked_icon)
+  execute 'syntax region uniteMarkedLine start=/^'.
+        \ marked_icon.'/ end=''$'' keepend'
 
   if !unite.context.hide_source_names
     syntax match uniteStatusLine /\%1l.*/
