@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jan 2013.
+" Last Modified: 29 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2346,7 +2346,7 @@ function! s:convert_quick_match_lines(candidates, quick_match_table) "{{{
           \    unite#util#truncate(s:convert_source_name(
           \    candidate.source), max_source_name))
           \ . unite#util#truncate_wrap(candidate.unite__abbr,
-          \      max_width, max_width/3, '..'))
+          \      max_width, max_width/2, '..'))
     let num += 1
   endfor
 
@@ -2366,7 +2366,7 @@ function! unite#convert_lines(candidates) "{{{
         \   : unite#util#truncate(s:convert_source_name(
         \     v:val.source), max_source_name))
         \ . unite#util#truncate_wrap(v:val.unite__abbr, " . max_width
-        \    .  ", max_width/3, '..')")
+        \    .  ", max_width/2, '..')")
 endfunction"}}}
 
 function! s:initialize_current_unite(sources, context) "{{{

@@ -2903,6 +2903,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-01-29
+- Improved truncate behavior.
+
 2013-01-26
 - Fixed syntax file.
 - Fixed for syntax enable.
