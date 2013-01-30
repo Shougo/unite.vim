@@ -651,7 +651,7 @@ Normal mode mappings.
 		may run an action on multiple candidates at the same time by
 		marking multiple candidates.
 
-<Plug>(unite_toggle_mark_current_candidate)
+<Plug>(unite_toggle_mark_all_candidates)
 				*<Plug>(unite_toggle_mark_all_candidates)*
 		Toggles the mark of the candidates in the all lines.
 
