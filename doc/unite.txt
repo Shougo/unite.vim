@@ -2903,6 +2903,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-01-31
+- Improved narrow action behavior.
+
 2013-01-29
 - Improved truncate behavior.
 
