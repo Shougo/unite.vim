@@ -961,6 +961,7 @@ function! unite#clear_message() "{{{
   if line('.') < winheight(0)
     normal! zb
   endif
+  let pos = getpos('.')
   if mode() ==# 'i' && pos[2] == col('$')
     startinsert!
   endif
