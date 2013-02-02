@@ -129,19 +129,19 @@ function! s:rmdir(path, ...)
     return call('rmdir', [a:path] + a:000)
   elseif has("unix")
     let option = ''
-    let option .= flags =~ 'f' ? ' -f' : ''
-    let option .= flags =~ 'r' ? ' -r' : ''
+    let option .= flags =~# 'f' ? ' -f' : ''
+    let option .= flags =~# 'r' ? ' -r' : ''
     let ret = system("/bin/rm" . option . ' ' . shellescape(a:path) . ' 2>&1')
   elseif has("win32") || has("win95") || has("win64") || has("win16")
     let option = ''
     if &shell =~? "sh$"
-      let option .= flags =~ 'f' ? ' -f' : ''
-      let option .= flags =~ 'r' ? ' -r' : ''
-      let ret = system("/bin/rm" . option . ' ' . shellescape(a:path) . ' 2>&1')
+      let option .= flags =~# 'f' ? ' -f' : ''
+      let option .= flags =~# 'r' ? ' -r' : ''
+      let ret = system("/bin/rm" . option . ' ' . shellescape(a:path))
     else
-      let option .= flags =~ 'f' ? ' /Q' : ''
-      let option .= flags =~ 'r' ? ' /S' : ''
-      let ret = system("rmdir " . option . ' "' . a:path . '" 2>&1')
+      let option .= flags =~# 'f' ? ' /Q' : ''
+      let option .= flags =~# 'r' ? ' /S' : ''
+      let ret = system("rmdir" . option . ' "' . a:path . '"')
     endif
   endif
   if v:shell_error
@@ -151,5 +151,6 @@ endfunction
 
 
 let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim:set et ts=2 sts=2 sw=2 tw=0:

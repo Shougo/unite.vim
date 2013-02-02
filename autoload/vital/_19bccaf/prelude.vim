@@ -1,14 +1,25 @@
-" vim:set et ts=2 sts=2 sw=2 tw=0:
+let s:save_cpo = &cpo
+set cpo&vim
 
-
-" glob() wrapper which returns List.
-function! s:glob(...)
-  let R = call('glob', a:000)
-  return split(R, '\n')
-endfunction
-" globpath() wrapper which returns List.
-function! s:globpath(...)
-  let R = call('globpath', a:000)
+" glob() wrapper which returns List
+" and 'wildignore' does not affect
+" this function's return value.
+if v:version ># 703 ||
+\  (v:version is 703 && has('patch465'))
+  function! s:glob(expr)
+    return glob(a:expr, 1, 1)
+  endfunction
+else
+  function! s:glob(expr)
+    let R = glob(a:expr, 1)
+    return split(R, '\n')
+  endfunction
+endif
+" globpath() wrapper which returns List
+" and 'suffixes' and 'wildignore' does not affect
+" this function's return value.
+function! s:globpath(path, expr)
+  let R = globpath(a:path, a:expr, 1)
   return split(R, '\n')
 endfunction
 
@@ -65,7 +76,7 @@ function! s:is_dict(Value)
   return type(a:Value) ==# s:__TYPE_DICT
 endfunction
 
-function! s:truncate_smart(str, max, footer_width, separator) "{{{
+function! s:truncate_smart(str, max, footer_width, separator)
   let width = s:wcswidth(a:str)
   if width <= a:max
     let ret = a:str
@@ -76,9 +87,9 @@ function! s:truncate_smart(str, max, footer_width, separator) "{{{
   endif
 
   return s:truncate(ret, a:max)
-endfunction"}}}
+endfunction
 
-function! s:truncate(str, width) "{{{
+function! s:truncate(str, width)
   " Original function is from mattn.
   " http://github.com/mattn/googlereader-vim/tree/master
 
@@ -99,13 +110,13 @@ function! s:truncate(str, width) "{{{
   endif
 
   return ret
-endfunction"}}}
+endfunction
 
-function! s:strchars(str) "{{{
+function! s:strchars(str)
   return len(substitute(a:str, '.', 'x', 'g'))
-endfunction"}}}
+endfunction
 
-function! s:strwidthpart(str, width) "{{{
+function! s:strwidthpart(str, width)
   if a:width <= 0
     return ''
   endif
@@ -118,8 +129,8 @@ function! s:strwidthpart(str, width) "{{{
   endwhile
 
   return ret
-endfunction"}}}
-function! s:strwidthpart_reverse(str, width) "{{{
+endfunction
+function! s:strwidthpart_reverse(str, width)
   if a:width <= 0
     return ''
   endif
@@ -132,15 +143,15 @@ function! s:strwidthpart_reverse(str, width) "{{{
   endwhile
 
   return ret
-endfunction"}}}
+endfunction
 
 if v:version >= 703
   " Use builtin function.
-  function! s:wcswidth(str) "{{{
+  function! s:wcswidth(str)
     return strwidth(a:str)
-  endfunction"}}}
+  endfunction
 else
-  function! s:wcswidth(str) "{{{
+  function! s:wcswidth(str)
     if a:str =~# '^[\x00-\x7f]*$'
       return strlen(a:str)
     end
@@ -157,10 +168,10 @@ else
       let str = substitute(str, mx_first, '', '')
     endwhile
     return width
-  endfunction"}}}
+  endfunction
 
   " UTF-8 only.
-  function! s:_wcwidth(ucs) "{{{
+  function! s:_wcwidth(ucs)
     let ucs = a:ucs
     if (ucs >= 0x1100
           \  && (ucs <= 0x115f
@@ -179,42 +190,42 @@ else
       return 2
     endif
     return 1
-  endfunction"}}}
+  endfunction
 endif
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
-let s:is_mac = !s:is_windows && !s:is_cygwin
+let s:is_mac = !s:is_windows
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
-      \   (!executable('xdg-open') && system('uname') =~? '^darwin'))
-function! s:is_windows() "{{{
+      \   (!isdirectory('/proc') && executable('sw_vers')))
+function! s:is_windows()
   return s:is_windows
-endfunction"}}}
-function! s:is_cygwin() "{{{
+endfunction
+function! s:is_cygwin()
   return s:is_cygwin
-endfunction"}}}
-function! s:is_mac() "{{{
+endfunction
+function! s:is_mac()
   return s:is_mac
-endfunction"}}}
+endfunction
 
-function! s:print_error(message) "{{{
+function! s:print_error(message)
   echohl ErrorMsg
   for m in split(a:message, "\n")
     echomsg m
   endfor
   echohl None
-endfunction"}}}
+endfunction
 
-function! s:smart_execute_command(action, word) "{{{
+function! s:smart_execute_command(action, word)
   execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
-endfunction"}}}
+endfunction
 
-function! s:escape_file_searching(buffer_name) "{{{
+function! s:escape_file_searching(buffer_name)
   return escape(a:buffer_name, '*[]?{}, ')
-endfunction"}}}
-function! s:escape_pattern(str) "{{{
+endfunction
+function! s:escape_pattern(str)
   return escape(a:str, '~"\.^$[]*')
-endfunction"}}}
+endfunction
 " iconv() wrapper for safety.
 function! s:iconv(expr, from, to)
   if a:from == '' || a:to == '' || a:from ==? a:to
@@ -254,35 +265,47 @@ function! s:input_helper(funcname, args)
     endtry
 endfunction
 
-function! s:set_default(var, val)  "{{{
+function! s:set_default(var, val)
   if !exists(a:var) || type({a:var}) != type(a:val)
     let {a:var} = a:val
   endif
-endfunction"}}}
-function! s:set_dictionary_helper(variable, keys, pattern) "{{{
-  for key in split(a:keys, ',')
+endfunction
+function! s:set_dictionary_helper(variable, keys, pattern)
+  for key in split(a:keys, '\s*,\s*')
     if !has_key(a:variable, key)
       let a:variable[key] = a:pattern
     endif
   endfor
-endfunction"}}}
-function! s:substitute_path_separator(path) "{{{
+endfunction
+function! s:substitute_path_separator(path)
   return s:is_windows ? substitute(a:path, '\\', '/', 'g') : a:path
-endfunction"}}}
-function! s:path2directory(path) "{{{
+endfunction
+function! s:path2directory(path)
   return s:substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
-endfunction"}}}
-function! s:path2project_directory(path, ...) "{{{
+endfunction
+function! s:path2project_directory(path, ...)
   let is_allow_empty = get(a:000, 0, 0)
   let search_directory = s:path2directory(a:path)
   let directory = ''
 
   " Search VCS directory.
-  for d in ['.git', '.bzr', '.hg']
-    let d = finddir(d, s:escape_file_searching(search_directory) . ';')
-    if d != ''
-      let directory = fnamemodify(d, ':p:h:h')
-      break
+  for vcs in ['.git', '.bzr', '.hg', '.svn']
+    let find_directory = s:escape_file_searching(search_directory)
+    let d = finddir(vcs, find_directory . ';')
+    if d == ''
+      continue
+    endif
+
+    let directory = fnamemodify(d, ':p:h:h')
+
+    if vcs ==# '.svn'
+      " Search parent directories.
+      let parent_directory = s:path2directory(
+            \ fnamemodify(directory, ':h'))
+
+      if parent_directory != ''
+        let directory = parent_directory
+      endif
     endif
   endfor
 
@@ -312,9 +335,9 @@ function! s:path2project_directory(path, ...) "{{{
   endif
 
   return s:substitute_path_separator(directory)
-endfunction"}}}
-" Check vimproc. "{{{
-function! s:has_vimproc() "{{{
+endfunction
+" Check vimproc.
+function! s:has_vimproc()
   if !exists('s:exists_vimproc')
     try
       call vimproc#version()
@@ -324,9 +347,9 @@ function! s:has_vimproc() "{{{
     endtry
   endif
   return s:exists_vimproc
-endfunction"}}}
-"}}}
-function! s:system(str, ...) "{{{
+endfunction
+
+function! s:system(str, ...)
   let command = a:str
   let input = a:0 >= 1 ? a:1 : ''
   let command = s:iconv(command, &encoding, 'char')
@@ -347,10 +370,13 @@ function! s:system(str, ...) "{{{
   let output = s:iconv(output, 'char', &encoding)
 
   return output
-endfunction"}}}
-function! s:get_last_status() "{{{
+endfunction
+function! s:get_last_status()
   return s:has_vimproc() ?
         \ vimproc#get_last_status() : v:shell_error
-endfunction"}}}
+endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim:set et ts=2 sts=2 sw=2 tw=0:

@@ -2,7 +2,11 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
-let s:V = vital#{expand('<sfile>:h:h:t:r')}#new()
+
+function! s:_vital_loaded(V)
+  let s:V = a:V
+  let s:L = s:V.import('Data.List')
+endfunction
 
 function! s:_vital_depends()
   return ['Data.List']
@@ -53,6 +57,25 @@ function! s:scan(str, pattern)
     endif
   endwhile
   return list
+endfunction
+
+function! s:reverse(str)
+  return join(reverse(split(a:str, '.\zs')), '')
+endfunction
+
+function! s:common_head(strs)
+  if empty(a:strs)
+    return ''
+  endif
+  let head = a:strs[0]
+  for str in a:strs[1 :]
+    let pat = substitute(str, '.', '[\0]', 'g')
+    let head = matchstr(head, '^\%[' . pat . ']')
+    if head ==# ''
+      break
+    endif
+  endfor
+  return head
 endfunction
 
 " Split to two elements of List. ([left, right])
@@ -121,8 +144,6 @@ endfunction
 " even if a:str contains multibyte character(s).
 " s:strchars(str) {{{
 if exists('*strchars')
-  " TODO: Why can't I write like this?
-  " let s:strchars = function('strchars')
   function! s:strchars(str)
     return strchars(a:str)
   endfunction
@@ -165,8 +186,7 @@ function! s:_split_by_wcswitdh(body, x)
 endfunction
 
 function! s:wrap(str)
-  let L = s:V.import('Data.List')
-  return L.concat(
+  return s:L.concat(
         \ map(split(a:str, '\r\?\n'), 's:_split_by_wcswitdh(v:val, &columns - 1)'))
 endfunction
 
@@ -217,5 +237,6 @@ function! s:diffidx(a, b)
 endfunction
 
 let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim:set et ts=2 sts=2 sw=2 tw=0:
