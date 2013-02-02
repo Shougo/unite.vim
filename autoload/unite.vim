@@ -961,6 +961,7 @@ function! unite#clear_message() "{{{
   if line('.') < winheight(0)
     normal! zb
   endif
+  let pos = getpos('.')
   if mode() ==# 'i' && pos[2] == col('$')
     startinsert!
   endif
@@ -2888,14 +2889,8 @@ function! s:on_cursor_moved()  "{{{
         \  || unite.context.winheight == 0) ?
         \ winheight(0) : unite.context.winheight
   let candidates = unite#gather_candidates_pos(height)
-  let old_unite = deepcopy(unite)
   if empty(candidates)
     " Nothing.
-    return
-  endif
-
-  if unite.is_multi_line != old_unite.is_multi_line
-    call unite#redraw_candidates()
     return
   endif
 
