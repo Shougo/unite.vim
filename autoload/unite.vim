@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2013.
+" Last Modified: 03 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1587,8 +1587,8 @@ function! s:load_default_scripts(kind, names) "{{{
 
     let name = (a:kind ==# 'filters') ?
           \ substitute(name,
-          \'^\%(matcher\|sorter\|converter\)_[^/_]\+\zs[/_].*$', '', '') :
-          \ substitute(name, '^[^/_]\+\zs[/_].*$', '', '')
+          \'^\%(matcher\|sorter\|converter\)_[^/_-]\+\zs[/_-].*$', '', '') :
+          \ substitute(name, '^[^/_-]\+\zs[/_-].*$', '', '')
 
     for define in map(split(globpath(&runtimepath,
           \ 'autoload/unite/'.a:kind.'/'.name.'*.vim'), '\n'),
