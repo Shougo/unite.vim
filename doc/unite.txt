@@ -571,6 +571,13 @@ g:unite_source_history_yank_file	*g:unite_source_history_yank_file*
 
 		The default value is |g:unite_data_directory|; '/history_yank'
 
+g:unite_source_process_enable_confirm	*g:unite_source_process_enable_confirm*
+		When you send a signal to a process via |unite-source-process|
+		such as KILL, Vim will ask you if you really want to do that
+		if this variable is 1.
+
+		The default value is 1.
+
 KINDS VARIABLES					*unite-kinds-variables*
 
 g:unite_kind_jump_list_after_jump_scroll
@@ -2907,6 +2914,7 @@ CHANGELOG					*unite-changelog*
 
 2013-02-07
 - Fixed start action.
+- Added g:unite_source_process_enable_confirm option.
 
 2013-02-03
 - Improved unite menu behavior.
