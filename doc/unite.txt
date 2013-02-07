@@ -2905,6 +2905,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-02-07
+- Fixed start action.
+
 2013-02-03
 - Improved unite menu behavior.
 - Improved name search.
