@@ -2905,6 +2905,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-02-10
+- Fixed parse options.
+
 2013-02-09
 - Improved temporary buffer behavior.
 - Improved narrow action behavior.
