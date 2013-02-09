@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 31 Dec 2012.
+" Last Modified: 09 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,49 +37,8 @@ call unite#util#set_default('g:unite_source_grep_ignore_pattern',
       \'\%(^\|/\)tags\%(-\a*\)\?$')
 "}}}
 
-" Actions "{{{
-let s:action_grep_file = {
-  \   'description': 'grep this files',
-  \   'is_quit': 1,
-  \   'is_invalidate_cache': 1,
-  \   'is_selectable': 1,
-  \ }
-function! s:action_grep_file.func(candidates) "{{{
-  call unite#start_script([
-        \ ['grep', map(copy(a:candidates),
-        \ 'string(substitute(v:val.action__path, "/$", "", "g"))'),
-        \ ]], { 'no_quit' : 1 })
-endfunction "}}}
-
-let s:action_grep_directory = {
-  \   'description': 'grep this directories',
-  \   'is_quit': 1,
-  \   'is_invalidate_cache': 1,
-  \   'is_selectable': 1,
-  \ }
-function! s:action_grep_directory.func(candidates) "{{{
-  call unite#start_script([
-        \ ['grep', map(copy(a:candidates), 'string(v:val.action__directory)'),
-        \ ]], { 'no_quit' : 1 })
-endfunction "}}}
-if unite#util#has_vimproc()
-  call unite#custom_action('file,buffer',
-        \ 'grep', s:action_grep_file)
-  call unite#custom_action('file,buffer',
-        \ 'grep_directory', s:action_grep_directory)
-
-  if get(g:, 'vimfiler_as_default_explorer', 0)
-    " For unite-ssh.
-    call unite#custom_action('file/ssh',
-          \ 'grep', s:action_grep_file)
-    call unite#custom_action('file/ssh',
-          \ 'grep_directory', s:action_grep_directory)
-  endif
-endif
-" }}}
-
 function! unite#sources#grep#define() "{{{
-  return unite#util#has_vimproc() ? s:source : []
+  return s:source
 endfunction "}}}
 
 let s:source = {
@@ -98,6 +57,12 @@ let s:source = {
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
+  if !unite#util#has_vimproc()
+    call unite#print_source_error(
+          \ 'vimproc is not installed.', s:source.name)
+    return
+  endif
+
   if type(get(a:args, 0, '')) == type([])
     let a:context.source__target = a:args[0]
     let targets = a:context.source__target

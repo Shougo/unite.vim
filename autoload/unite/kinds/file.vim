@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Oct 2012.
+" Last Modified: 09 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -224,6 +224,32 @@ function! s:kind.action_table.dirdiff.func(candidates)
           \ a:candidates[1].action__directory
   endif
 endfunction
+
+" For grep.
+let s:kind.action_table.grep = {
+      \   'description': 'grep this files',
+      \   'is_quit': 1,
+      \   'is_invalidate_cache': 1,
+      \   'is_selectable': 1,
+      \ }
+function! s:kind.action_table.grep.func(candidates) "{{{
+  call unite#start_script([
+        \ ['grep', map(copy(a:candidates),
+        \ 'string(substitute(v:val.action__path, "/$", "", "g"))'),
+        \ ]], { 'no_quit' : 1 })
+endfunction "}}}
+
+let s:kind.action_table.grep_directory = {
+      \   'description': 'grep this directories',
+      \   'is_quit': 1,
+      \   'is_invalidate_cache': 1,
+      \   'is_selectable': 1,
+      \ }
+function! s:kind.action_table.grep_directory.func(candidates) "{{{
+  call unite#start_script([
+        \ ['grep', map(copy(a:candidates), 'string(v:val.action__directory)'),
+        \ ]], { 'no_quit' : 1 })
+endfunction "}}}
 
 " For vimfiler.
 let s:kind.action_table.vimfiler__move = {
