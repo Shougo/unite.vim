@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: cdable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2013.
+" Last Modified: 09 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -115,8 +115,8 @@ function! s:kind.action_table.narrow.func(candidate) "{{{
     return
   endif
 
-  call unite#start_temporary(
-        \ [['file', a:candidate.action__directory]])
+  call unite#start_temporary([['file'], ['file/new']])
+  call unite#mappings#narrowing(a:candidate.action__directory . '/')
 endfunction"}}}
 
 let s:kind.action_table.vimshell = {
