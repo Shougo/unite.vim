@@ -2907,6 +2907,7 @@ CHANGELOG					*unite-changelog*
 
 2013-02-10
 - Fixed parse options.
+- Fixed temporary buffer behavior.
 
 2013-02-09
 - Improved temporary buffer behavior.

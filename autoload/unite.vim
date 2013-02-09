@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Feb 2013.
+" Last Modified: 10 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1175,6 +1175,7 @@ function! unite#start_temporary(sources, ...) "{{{
   let new_context = get(a:000, 0, {})
 
   let context.temporary = 1
+  let context.unite__direct_switch = 1
   let context.input = ''
   let context.auto_preview = 0
   let context.unite__is_vimfiler = 0
@@ -1375,7 +1376,9 @@ function! unite#resume(buffer_name, ...) "{{{
   " Set parameters.
   let unite = unite#get_current_unite()
   let unite.winnr = winnr
-  let unite.win_rest_cmd = win_rest_cmd
+  if !context.unite__direct_switch
+    let unite.win_rest_cmd = win_rest_cmd
+  endif
   let unite.redrawtime_save = &redrawtime
   let unite.access_time = localtime()
   let unite.context = context
@@ -1445,19 +1448,9 @@ function! unite#all_quit_session(...)  "{{{
 endfunction"}}}
 function! unite#force_quit_session()  "{{{
   call s:quit_session(1)
-
-  let context = unite#get_context()
-  if context.temporary
-    call unite#resume_from_temporary(context)
-  endif
 endfunction"}}}
 function! unite#quit_session()  "{{{
   call s:quit_session(0)
-
-  let context = unite#get_context()
-  if context.temporary
-    call unite#resume_from_temporary(context)
-  endif
 endfunction"}}}
 function! s:quit_session(is_force)  "{{{
   if &filetype !=# 'unite'
@@ -1504,9 +1497,11 @@ function! s:quit_session(is_force)  "{{{
   if a:is_force || !context.no_quit
     let bufname = bufname('%')
 
-    if winnr('$') == 1 || context.no_split
+    if context.temporary && !empty(context.old_buffer_info)
+      call unite#resume_from_temporary(context)
+    elseif winnr('$') == 1 || context.no_split
       call unite#util#alternate_buffer()
-    else
+    elseif !context.temporary
       noautocmd close!
       if unite.winnr == winnr()
         doautocmd WinEnter
@@ -1543,7 +1538,7 @@ function! s:quit_session(is_force)  "{{{
     endif
   else
     stopinsert
-    redraw!
+    redraw
   endif
 
   " Restore unite.
@@ -1560,7 +1555,8 @@ function! unite#resume_from_temporary(context)  "{{{
 
   " Resume unite buffer.
   let buffer_info = a:context.old_buffer_info[0]
-  call unite#resume(buffer_info.buffer_name)
+  call unite#resume(buffer_info.buffer_name,
+        \ {'unite__direct_switch' : 1})
   call setpos('.', buffer_info.pos)
   let a:context.old_buffer_info = a:context.old_buffer_info[1:]
 
@@ -1642,6 +1638,7 @@ function! s:initialize_context(context, ...) "{{{
         \ 'multi_line' : 0,
         \ 'resume' : 0,
         \ 'wrap' : 0,
+        \ 'unite__direct_switch' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 0,
         \ 'unite__is_vimfiler' : 0,
@@ -2407,7 +2404,9 @@ function! s:initialize_current_unite(sources, context) "{{{
   " Set parameters.
   let unite = {}
   let unite.winnr = winnr
-  let unite.win_rest_cmd = win_rest_cmd
+  if !context.unite__direct_switch
+    let unite.win_rest_cmd = win_rest_cmd
+  endif
   let unite.context = context
   let unite.current_candidates = []
   let unite.sources = sources
@@ -2548,7 +2547,7 @@ function! s:switch_unite_buffer(buffer_name, context) "{{{
     return
   endif
 
-  if !a:context.no_split && !a:context.temporary
+  if !a:context.no_split && !a:context.unite__direct_switch
     " Split window.
     execute a:context.direction (bufexists(a:buffer_name) ?
           \ ((a:context.vertical) ? 'vsplit' : 'split') :
@@ -2943,7 +2942,7 @@ function! s:on_buf_unload(bufname)  "{{{
 
   call unite#clear_previewed_buffer_list()
 
-  if winnr('$') != 1
+  if winnr('$') != 1 && !unite.context.temporary
     execute unite.win_rest_cmd
   endif
 
