@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2013.
+" Last Modified: 09 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1195,7 +1195,7 @@ function! unite#start_temporary(sources, ...) "{{{
 
   let unite_save = unite#get_current_unite()
 
-  call unite#all_quit_session()
+  " call unite#all_quit_session()
   call unite#start(a:sources, context)
 
   " Overwrite unite.
@@ -2376,7 +2376,7 @@ function! s:initialize_current_unite(sources, context) "{{{
   let context = a:context
 
   " Quit previous unite buffer.
-  if !context.create
+  if !context.create && !context.temporary
     let winnr = unite#get_unite_winnr(context.buffer_name)
     if winnr > 0
       " Quit unite buffer.
@@ -2552,7 +2552,7 @@ function! s:switch_unite_buffer(buffer_name, context) "{{{
     return
   endif
 
-  if !a:context.no_split
+  if !a:context.no_split && !a:context.temporary
     " Split window.
     execute a:context.direction (bufexists(a:buffer_name) ?
           \ ((a:context.vertical) ? 'vsplit' : 'split') :
