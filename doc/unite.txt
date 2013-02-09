@@ -2908,6 +2908,7 @@ CHANGELOG					*unite-changelog*
 2013-02-09
 - Improved temporary buffer behavior.
 - Improved narrow action behavior.
+- Fixed unite#custom_source().
 
 2013-02-07
 - Fixed start action.
