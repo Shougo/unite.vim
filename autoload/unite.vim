@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Feb 2013.
+" Last Modified: 11 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1444,18 +1444,30 @@ function! unite#close(buffer_name)  "{{{
 endfunction"}}}
 
 function! unite#all_quit_session(...)  "{{{
-  call s:quit_session(get(a:000, 0, 1))
+  call s:quit_session(get(a:000, 0, 1), 1)
 endfunction"}}}
 function! unite#force_quit_session()  "{{{
   call s:quit_session(1)
+
+  let context = unite#get_context()
+  if context.temporary && !empty(context.old_buffer_info)
+      call unite#resume_from_temporary(context)
+  endif
 endfunction"}}}
 function! unite#quit_session()  "{{{
   call s:quit_session(0)
+
+  let context = unite#get_context()
+  if context.temporary && !empty(context.old_buffer_info)
+    call unite#resume_from_temporary(context)
+  endif
 endfunction"}}}
-function! s:quit_session(is_force)  "{{{
+function! s:quit_session(is_force, ...)  "{{{
   if &filetype !=# 'unite'
     return
   endif
+
+  let is_all = get(a:000, 0, 0)
 
   " Save unite value.
   let unite_save = s:current_unite
@@ -1491,17 +1503,14 @@ function! s:quit_session(is_force)  "{{{
       call insert(filter(inputs[key],
             \ 'v:val !=# unite.context.input'), context.input)
     endif
-
   endif
 
   if a:is_force || !context.no_quit
     let bufname = bufname('%')
 
-    if context.temporary && !empty(context.old_buffer_info)
-      call unite#resume_from_temporary(context)
-    elseif winnr('$') == 1 || context.no_split
+    if winnr('$') == 1 || context.no_split
       call unite#util#alternate_buffer()
-    elseif !context.temporary
+    elseif is_all || !context.temporary
       noautocmd close!
       if unite.winnr == winnr()
         doautocmd WinEnter

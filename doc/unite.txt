@@ -2905,6 +2905,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-02-11
+- Fixed quit session behavior.
+
 2013-02-10
 - Fixed parse options.
 - Fixed temporary buffer behavior.
