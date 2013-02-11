@@ -2914,6 +2914,7 @@ CHANGELOG					*unite-changelog*
 - Fixed quit session behavior.
 - Fixed directory and file source.
 - Added <Plug>(unite_narrowing_dot).
+- Improved unite buffer source.
 
 2013-02-10
 - Fixed parse options.
