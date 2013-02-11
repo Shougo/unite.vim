@@ -58,7 +58,6 @@ function! s:source_file.change_candidates(args, context) "{{{
   let input = substitute(substitute(
         \ a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
 
-
   let path = join(a:args, ':')
   if path !=# '/' && path =~ '[\\/]$'
     " Chomp.

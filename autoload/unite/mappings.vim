@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jan 2013.
+" Last Modified: 11 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -89,6 +89,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>narrowing_path()<CR>
   nnoremap <buffer><silent> <Plug>(unite_narrowing_input_history)
         \ :<C-u>call <SID>narrowing_input_history()<CR>
+  nnoremap <buffer><silent> <Plug>(unite_narrowing_dot)
+        \ :<C-u>call <SID>narrowing_dot()<CR>
   nnoremap <buffer><silent> <Plug>(unite_toggle_max_candidates)
         \ :<C-u>call <SID>toggle_max_candidates()<CR>
   nnoremap <buffer><silent> <Plug>(unite_quick_help)
@@ -191,6 +193,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nmap <buffer> M         <Plug>(unite_toggle_max_candidates)
   nmap <buffer> ?         <Plug>(unite_quick_help)
   nmap <buffer> N         <Plug>(unite_new_candidate)
+  nmap <buffer> .         <Plug>(unite_narrowing_dot)
 
   nmap <silent><buffer><expr> a
         \ unite#smart_map("\<Plug>(unite_append_enter)",
@@ -887,7 +890,8 @@ function! s:narrowing_path() "{{{
   endif
 
   let candidate = unite#get_current_candidate()
-  call unite#mappings#narrowing(has_key(candidate, 'action__path')? candidate.action__path : candidate.word)
+  call unite#mappings#narrowing(has_key(candidate, 'action__path')?
+        \ candidate.action__path : candidate.word)
 endfunction"}}}
 function! s:narrowing_input_history() "{{{
   call unite#start_temporary(
@@ -900,6 +904,9 @@ function! s:redraw_all_candidates() "{{{
   if len(unite.candidates) != len(unite.current_candidates)
     call unite#redraw(0, 1)
   endif
+endfunction"}}}
+function! s:narrowing_dot() "{{{
+  call unite#mappings#narrowing(unite#get_input().'.')
 endfunction"}}}
 
 function! s:get_quick_match_table() "{{{

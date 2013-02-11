@@ -721,6 +721,10 @@ Normal mode mappings.
 				*<Plug>(unite_narrowing_input_history)*
 		Narrowing candidates by input history.
 
+<Plug>(unite_narrowing_dot)
+				*<Plug>(unite_narrowing_dot)*
+		Narrowing candidates by dot character.
+
 <Plug>(unite_toggle_auto_preview)	*<Plug>(unite_toggle_auto_preview)*
 		Toggles the unite buffer's auto preview mode.
 
@@ -880,6 +884,7 @@ yy		In case when you selected a candidate, runs yank action
 p		runs preview action
 x		In case when you selected a candidate, runs
 		|<Plug>(unite_quick_match_default_action)|
+.		|<Plug>(unite_narrowing_dot)|
 
 Insert mode mappings.
 {lhs}		{rhs}
@@ -2908,6 +2913,7 @@ CHANGELOG					*unite-changelog*
 2013-02-11
 - Fixed quit session behavior.
 - Fixed directory and file source.
+- Added <Plug>(unite_narrowing_dot).
 
 2013-02-10
 - Fixed parse options.
