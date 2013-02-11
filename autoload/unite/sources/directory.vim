@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: directory.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Oct 2012.
+" Last Modified: 11 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,19 +84,6 @@ function! s:source_directory.change_candidates(args, context) "{{{
   endif
 
   let candidates = copy(a:context.source__cache[glob])
-
-  " if !a:context.is_list_input
-        " \ && input !~ '^\%(/\|\a\+:/\)$'
-  if 0
-    let parent = substitute(input, '[*\\]\|\.[^/]*$', '', 'g')
-
-    if a:context.input =~ '\.$' && isdirectory(parent . '..')
-      " Add .. directory.
-      let file = unite#sources#file#create_file_dict(
-            \              parent . '..', is_relative_path)
-      let candidates = [file] + copy(candidates)
-    endif
-  endif
 
   return candidates
 endfunction"}}}
