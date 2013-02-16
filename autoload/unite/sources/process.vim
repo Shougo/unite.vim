@@ -28,6 +28,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Variables  "{{{
+call unite#util#set_default(
+      \ 'g:unite_source_process_enable_confirm', 1)
 "}}}
 
 function! unite#sources#process#define() "{{{
@@ -128,14 +130,16 @@ function! s:source.action_table.unite__new_candidate.func(candidate) "{{{
 endfunction"}}}
 
 function! s:kill(signal, candidates) "{{{
-  if !unite#util#input_yesno(
-        \ 'Really send the ' . a:signal .' signal to the processes?')
-    redraw
-    echo 'Canceled.'
-    return
-  endif
+  if g:unite_source_process_enable_confirm
+    if !unite#util#input_yesno(
+          \ 'Really send the ' . a:signal .' signal to the processes?')
+      redraw
+      echo 'Canceled.'
+      return
+    endif
 
-  redraw
+    redraw
+  endif
 
   for candidate in a:candidates
     call unite#util#system(unite#util#is_windows() ?
