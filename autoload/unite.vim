@@ -2955,6 +2955,7 @@ function! s:on_buf_unload(bufname)  "{{{
 
   if winnr('$') != 1 && !unite.context.temporary
     execute unite.win_rest_cmd
+    execute unite.prev_winnr 'wincmd w'
   endif
 
   " Call finalize functions.
