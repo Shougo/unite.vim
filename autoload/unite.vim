@@ -1698,12 +1698,6 @@ function! s:initialize_context(context, ...) "{{{
     " Disable short name.
     let context.short_source_names = 0
   endif
-  if context.here
-    let context.winheight = winheight(0) - winline() + 2
-    if context.winheight < 7
-      let context.winheight = 7
-    endif
-  endif
   if &l:modified && !&l:hidden
     " Split automatically.
     let context.no_split = 0
@@ -2455,6 +2449,14 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.candidates = []
   let unite.max_source_candidates = 0
   let unite.is_multi_line = 0
+
+  if context.here
+    let context.winheight = winheight(0) - winline() +
+          \ unite.prompt_linenr + 1
+    if context.winheight < 7
+      let context.winheight = 7
+    endif
+  endif
 
   " Preview windows check.
   let unite.has_preview_window =

@@ -2914,6 +2914,7 @@ CHANGELOG					*unite-changelog*
 - Improved buffer source highlight.
 - Fixed wrap behavior.
 - Fixed source kind action.
+- Improved here behavior.
 
 2013-02-11
 - Fixed quit session behavior.
