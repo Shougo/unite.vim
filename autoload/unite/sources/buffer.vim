@@ -29,6 +29,10 @@ set cpo&vim
 
 " Variables  "{{{
 let s:buffer_list = {}
+
+call unite#util#set_default(
+      \ 'g:unite_source_buffer_time_format',
+      \ '(%Y/%m/%d %H:%M:%S) ')
 "}}}
 
 function! unite#sources#buffer#define() "{{{
@@ -85,7 +89,8 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
 
   let candidates = map(copy(a:context.source__buffer_list), "{
         \ 'word' : s:make_word(v:val.action__buffer_nr),
-        \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags),
+        \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
+        \        . strftime(g:unite_source_buffer_time_format, v:val.source__time),
         \ 'action__path' : unite#substitute_path_separator(bufname(v:val.action__buffer_nr)),
         \ 'action__buffer_nr' : v:val.action__buffer_nr,
         \ 'action__directory' : s:get_directory(v:val.action__buffer_nr),
@@ -129,7 +134,8 @@ function! s:source_buffer_tab.gather_candidates(args, context) "{{{
 
   let candidates = map(list, "{
         \ 'word' : s:make_word(v:val.action__buffer_nr),
-        \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags),
+        \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
+        \        . strftime(g:unite_source_buffer_time_format, v:val.source__time),
         \ 'action__path' : unite#substitute_path_separator(
         \        bufname(v:val.action__buffer_nr)),
         \ 'action__buffer_nr' : v:val.action__buffer_nr,
@@ -189,7 +195,7 @@ function! s:make_abbr(bufnr, flags) "{{{
   endif
 
   return (getbufvar(a:bufnr, '&buftype') =~# 'nofile' ? '[nofile] ' : '' ) .
-         \ unite#util#substitute_path_separator(path)
+         \ unite#util#substitute_path_separator(path) . ' '
 endfunction"}}}
 function! s:compare(candidate_a, candidate_b) "{{{
   return a:candidate_b.source__time - a:candidate_a.source__time
@@ -263,6 +269,9 @@ function! s:on_syntax(args, context) "{{{
   syntax match uniteSource__Buffer_NoFile /\[nofile\]/
         \ contained containedin=uniteSource__Buffer
   highlight default link uniteSource__Buffer_NoFile Function
+  syntax match uniteSource__Buffer_Time /(.\{-}) /
+        \ contained containedin=uniteSource__Buffer
+  highlight default link uniteSource__Buffer_Time Statement
 endfunction"}}}
 
 function! s:init_context(args, context) "{{{

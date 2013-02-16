@@ -301,6 +301,13 @@ g:unite_no_default_keymappings		*g:unite_no_default_keymappings*
 
 SOURCES VARIABLES 				*unite-sources-variables*
 
+g:unite_source_buffer_time_format
+					*g:unite_source_buffer_time_format*
+		Specifies the output format of the last access time of
+		|unite-source-buffer|.  The format is same to |strftime()|.
+
+		The default value is "(%Y/%m/%d %H:%M:%S) ".
+
 g:unite_source_file_ignore_pattern	*g:unite_source_file_ignore_pattern*
 		Refer autoload/unite/sources/file.vim about the default value.
 		Note: This variable is deprecated. Please use
@@ -2915,6 +2922,7 @@ CHANGELOG					*unite-changelog*
 - Fixed wrap behavior.
 - Fixed source kind action.
 - Improved here behavior.
+- Added g:unite_source_buffer_time_format.
 
 2013-02-11
 - Fixed quit session behavior.
