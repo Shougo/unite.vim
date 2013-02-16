@@ -2913,6 +2913,7 @@ CHANGELOG					*unite-changelog*
 2013-02-16
 - Improved buffer source highlight.
 - Fixed wrap behavior.
+- Fixed source kind action.
 
 2013-02-11
 - Fixed quit session behavior.
