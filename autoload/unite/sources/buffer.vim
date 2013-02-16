@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2013.
+" Last Modified: 16 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -251,6 +251,9 @@ function! s:get_buffer_list(is_bang, is_question) "{{{
   return list
 endfunction"}}}
 function! s:on_syntax(args, context) "{{{
+  syntax match uniteSource__Buffer_Name /[^/ ]\+\s/
+        \ contained containedin=uniteSource__Buffer
+  highlight default link uniteSource__Buffer_Name Function
   syntax match uniteSource__Buffer_Info /\[.\{-}\]\ze\s*$/
         \ contained containedin=uniteSource__Buffer
   highlight default link uniteSource__Buffer_Info PreProc
