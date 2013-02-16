@@ -257,7 +257,7 @@ function! s:get_buffer_list(is_bang, is_question) "{{{
   return list
 endfunction"}}}
 function! s:on_syntax(args, context) "{{{
-  syntax match uniteSource__Buffer_Name /[^/ ]\+\s/
+  syntax match uniteSource__Buffer_Name /[^/ \[\]]\+\s/
         \ contained containedin=uniteSource__Buffer
   highlight default link uniteSource__Buffer_Name Function
   syntax match uniteSource__Buffer_Info /\[.\{-}\]\ze\s*$/
