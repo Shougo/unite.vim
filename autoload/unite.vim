@@ -1581,6 +1581,10 @@ function! s:load_default_scripts(kind, names) "{{{
   let names = empty(a:names) ? [''] : a:names
   if a:kind ==# 'sources' && !empty(a:names)
     call add(names, 'alias')
+
+    if exists('*neobundle#autoload#unite_sources')
+      call neobundle#autoload#unite_sources(a:names)
+    endif
   endif
 
   for name in filter(names,
