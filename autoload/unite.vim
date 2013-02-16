@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2013.
+" Last Modified: 16 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1953,7 +1953,7 @@ function! s:initialize_candidates(candidates) "{{{
       let candidate.unite__abbr =
             \ candidate.unite__abbr[: max_width *
             \  (context.max_multi_lines + 1)+10]
-    elseif len(candidate.unite__abbr) > max_width * 2
+    elseif len(candidate.unite__abbr) > max_width * 2 && !context.wrap
       let candidate.unite__abbr =
             \ candidate.unite__abbr[: max_width * 2]
     endif
