@@ -673,6 +673,9 @@ function! unite#complete_source(arglead, cmdline, cursorpos) "{{{
     " Source name completion.
     let _ += keys(filter(s:initialize_sources([], a:arglead),
           \ 'v:val.is_listed'))
+    if exists('*neobundle#get_unite_sources')
+      let _ += neobundle#get_unite_sources()
+    endif
   else
     " Add "{source-name}:".
     let _  = map(_, 'source_name.":".v:val')

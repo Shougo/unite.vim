@@ -2934,6 +2934,7 @@ CHANGELOG					*unite-changelog*
 - Added -hide-status-line option.
 - Fixed alias actions.
 - Fixed unite#get_sources().
+- Fixed -auto-preview problems.
 
 2013-02-16
 - Improved buffer source highlight.

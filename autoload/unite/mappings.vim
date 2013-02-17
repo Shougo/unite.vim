@@ -311,12 +311,6 @@ function! unite#mappings#do_action(action_name, ...) "{{{
   endif
 
   let is_clear_marks = !empty(unite#get_marked_candidates())
-  if is_clear_marks
-    " Clear marks.
-    for candidate in candidates
-      let candidate.unite__is_marked = 0
-    endfor
-  endif
 
   let candidates = filter(copy(candidates),
         \ '!has_key(v:val, "is_dummy") || !v:val.is_dummy')
@@ -339,11 +333,17 @@ function! unite#mappings#do_action(action_name, ...) "{{{
 
   " Execute action.
   let is_redraw = 0
+  let is_quit = 0
   let _ = []
   for table in action_tables
     " Check quit flag.
     if table.action.is_quit
       call unite#all_quit_session(0)
+      let is_quit = 1
+    endif
+
+    if table.action.is_selectable && is_clear_marks
+      let is_redraw = 1
     endif
 
     try
@@ -370,7 +370,7 @@ function! unite#mappings#do_action(action_name, ...) "{{{
     endif
   endfor
 
-  if unite.context.keep_focus
+  if !is_quit && unite.context.keep_focus
     let winnr = bufwinnr(unite.bufnr)
 
     if winnr > 0
@@ -384,8 +384,15 @@ function! unite#mappings#do_action(action_name, ...) "{{{
     let unite.context = old_context
   endif
 
-  if is_redraw || is_clear_marks
+  if !is_quit && is_redraw
     call unite#force_redraw()
+
+    if is_clear_marks
+      " Clear marks.
+      for candidate in candidates
+        let candidate.unite__is_marked = 0
+      endfor
+    endif
   endif
 
   return _
