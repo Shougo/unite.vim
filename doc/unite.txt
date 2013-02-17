@@ -1460,9 +1460,13 @@ context.
 					*unite-options-hide-source-names*
 		-hide-source-names
 		Hides source names.
-		Note: This option doesn't only hide names but also the whole
-		unite status line.
+		Note: This option doesn't hide status line.
 		Note: Source highlight will be overwritten by other sources.
+
+					*unite-options-hide-status-line*
+		-hide-status-line
+		Hides status line.
+		Note: This option doesn't hide source names.
 
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}
@@ -2927,6 +2931,7 @@ CHANGELOG					*unite-changelog*
 
 2013-02-17
 - Fixed source source.
+- Added -hide-status-line option.
 
 2013-02-16
 - Improved buffer source highlight.

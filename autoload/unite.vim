@@ -305,7 +305,7 @@ let s:unite_options = [
       \ '-vertical', '-horizontal', '-direction=', '-no-split',
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
       \ '-cursor-line-highlight=', '-no-cursor-line',
-      \ '-update-time=', '-hide-source-names',
+      \ '-update-time=', '-hide-source-names', '-hide-status-line',
       \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
       \ '-auto-quit', '-no-focus',
       \ '-long-source-names', '-short-source-names',
@@ -739,7 +739,7 @@ function! unite#quick_match_redraw(quick_match_table) "{{{
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! unite#redraw_status() "{{{
-  if unite#get_context().hide_source_names
+  if unite#get_context().hide_status_line
     return
   endif
 
@@ -1648,6 +1648,7 @@ function! s:initialize_context(context, ...) "{{{
         \ 'update_time' : g:unite_update_time,
         \ 'no_buffer' : 0,
         \ 'hide_source_names' : 0,
+        \ 'hide_status_line' : 0,
         \ 'max_multi_lines' : 5,
         \ 'here' : 0,
         \ 'silent' : 0,
@@ -2445,7 +2446,7 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.input = context.input
   let unite.last_input = context.input
   let unite.sidescrolloff_save = &sidescrolloff
-  let unite.prompt_linenr = (context.hide_source_names) ? 1 : 2
+  let unite.prompt_linenr = (context.hide_status_line) ? 1 : 2
   let unite.is_async =
         \ len(filter(copy(sources),
         \  'v:val.unite__context.is_async')) > 0
@@ -3292,7 +3293,7 @@ function! unite#set_highlight() "{{{
   execute 'syntax region uniteMarkedLine start=/^'.
         \ marked_icon.'/ end=''$'' keepend'
 
-  if !unite.context.hide_source_names
+  if !unite.context.hide_status_line
     syntax match uniteStatusLine /\%1l.*/
           \  contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
   endif
