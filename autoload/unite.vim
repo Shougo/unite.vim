@@ -3067,6 +3067,7 @@ function! s:filter_alias_action(action_table, alias_table, from) "{{{
         call remove(a:action_table, alias_name)
       endif
     elseif has_key(a:action_table, alias_action)
+          \ && !has_key(a:action_table, alias_name)
       let a:action_table[alias_name] = copy(a:action_table[alias_action])
       let a:action_table[alias_name].from = a:from
       let a:action_table[alias_name].name = alias_name
@@ -3074,7 +3075,8 @@ function! s:filter_alias_action(action_table, alias_table, from) "{{{
   endfor
 endfunction"}}}
 function! s:filter_self_func(action_table, self_func) "{{{
-  return filter(copy(a:action_table), printf("string(v:val.func) !=# \"function('%s')\"", a:self_func))
+  return filter(copy(a:action_table),
+        \ printf("string(v:val.func) !=# \"function('%s')\"", a:self_func))
 endfunction"}}}
 function! s:take_action(action_name, candidate, is_parent_action) "{{{
   let candidate_head = type(a:candidate) == type([]) ?
