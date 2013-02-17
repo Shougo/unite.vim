@@ -2933,6 +2933,7 @@ CHANGELOG					*unite-changelog*
 - Fixed source source.
 - Added -hide-status-line option.
 - Fixed alias actions.
+- Fixed unite#get_sources().
 
 2013-02-16
 - Improved buffer source highlight.

@@ -330,7 +330,11 @@ function! unite#get_sources(...) "{{{
     return {}
   endif
 
-  return a:0 == 0 ? unite.sources : get(unite.sources, a:1, {})
+  if a:0 == 0
+    return unite.sources
+  endif
+
+  return get(unite.sources, index(unite.sources, a:1), {})
 endfunction"}}}
 function! unite#get_all_sources(...) "{{{
   if a:0 == 0
@@ -435,6 +439,9 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
   let source = empty(a:source_table) ?
         \ unite#get_sources(a:source_name) :
         \ get(a:source_table, a:source_name, {})
+  echomsg a:source_name
+  echomsg string(source.action_table)
+  echomsg string(source.name)
   if empty(source)
     call unite#print_error('[unite.vim] source "' . a:source_name . '" is not found.')
     return {}
