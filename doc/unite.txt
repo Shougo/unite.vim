@@ -2925,6 +2925,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-02-17
+- Fixed source source.
+
 2013-02-16
 - Improved buffer source highlight.
 - Fixed wrap behavior.
