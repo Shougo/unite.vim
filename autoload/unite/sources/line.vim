@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 31 Dec 2012.
+" Last Modified: 22 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -78,7 +78,7 @@ function! s:source_line.gather_candidates(args, context) "{{{
 
   let a:context.source__format = '%' . strlen(len(_)) . 'd: %s'
 
-  return _
+  return direction ==# 'backward' ? reverse(_) : _
 endfunction"}}}
 
 function! s:source_line.hooks.on_post_filter(args, context) "{{{
@@ -128,7 +128,7 @@ function! s:source_line_fast.gather_candidates(args, context) "{{{
 
   let a:context.source__format = '%' . strlen(len(_)) . 'd: %s'
 
-  return _
+  return direction ==# 'backward' ? reverse(_) : _
 endfunction"}}}
 "}}}
 

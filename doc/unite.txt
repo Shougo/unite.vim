@@ -2929,6 +2929,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-02-22
+- Fixed line source behavior.
+
 2013-02-17
 - Fixed source source.
 - Added -hide-status-line option.
