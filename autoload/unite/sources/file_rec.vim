@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jan 2013.
+" Last Modified: 23 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,13 +65,13 @@ function! s:source_rec.gather_candidates(args, context) "{{{
   if directory == ''
     " Not in project directory.
     call unite#print_source_message(
-          \ 'Not in project directory.', s:source_rec.name)
+          \ 'Not in project directory.', self.name)
     let a:context.is_async = 0
     return []
   endif
 
   call unite#print_source_message(
-        \ 'directory: ' . directory, s:source_rec.name)
+        \ 'directory: ' . directory, self.name)
 
   call s:init_continuation(a:context, directory)
 
@@ -80,7 +80,7 @@ function! s:source_rec.gather_candidates(args, context) "{{{
   if empty(continuation.rest) || continuation.end
     " Disable async.
     call unite#print_source_message(
-          \ 'Directory traverse was completed.', s:source_rec.name)
+          \ 'Directory traverse was completed.', self.name)
     let a:context.is_async = 0
     let continuation.end = 1
   endif
@@ -95,9 +95,14 @@ function! s:source_rec.async_gather_candidates(args, context) "{{{
         \ s:get_files(continuation.rest, 1, 20,
         \   a:context.source.ignore_pattern)
 
-  if empty(continuation.rest)
-    call unite#print_source_message(
-          \ 'Directory traverse was completed.', s:source_rec.name)
+  if empty(continuation.rest) || len(continuation.files) > 1000
+    if empty(continuation.rest)
+      call unite#print_source_message(
+            \ 'Directory traverse was completed.', self.name)
+    else
+      call unite#print_source_message(
+            \ 'Too many candiates.', self.name)
+    endif
 
     " Disable async.
     let a:context.is_async = 0
@@ -250,13 +255,13 @@ function! s:source_async.gather_candidates(args, context) "{{{
   if directory == ''
     " Not in project directory.
     call unite#print_source_message(
-          \ 'Not in project directory.', s:source_async.name)
+          \ 'Not in project directory.', self.name)
     let a:context.is_async = 0
     return []
   endif
 
   call unite#print_source_message(
-        \ 'directory: ' . directory, s:source_async.name)
+        \ 'directory: ' . directory, self.name)
 
   call s:init_continuation(a:context, directory)
 
@@ -265,7 +270,7 @@ function! s:source_async.gather_candidates(args, context) "{{{
   if empty(continuation.rest) || continuation.end
     " Disable async.
     call unite#print_source_message(
-          \ 'Directory traverse was completed.', s:source_async.name)
+          \ 'Directory traverse was completed.', self.name)
     let a:context.is_async = 0
     let continuation.end = 1
 
@@ -288,17 +293,22 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
     let errors = filter(stderr.read_lines(-1, 100),
           \ "v:val !~ '^\\s*$'")
     if !empty(errors)
-      call unite#print_source_error(errors, s:source_async.name)
+      call unite#print_source_error(errors, self.name)
     endif
   endif
 
   let continuation = s:continuation[a:context.source__directory]
 
   let stdout = a:context.source__proc.stdout
-  if stdout.eof
+  if stdout.eof || len(continuation.files) > 1000
     " Disable async.
-    call unite#print_source_message(
-          \ 'Directory traverse was completed.', s:source_async.name)
+    if empty(continuation.rest)
+      call unite#print_source_message(
+            \ 'Directory traverse was completed.', self.name)
+    else
+      call unite#print_source_message(
+            \ 'Too many candiates.', self.name)
+    endif
     let a:context.is_async = 0
     let continuation.end = 1
   endif

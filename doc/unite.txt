@@ -1544,6 +1544,8 @@ file_rec	Gather files recursive and nominates all directory or file
 		".hg".
 		Note: If you edit file by Vim, file_rec source will update
 		cache file.
+		Note: If the candiates are over 1000, it will disable make
+		cache.
 
 		Source arguments:
 		1. the search directory.
@@ -1556,6 +1558,8 @@ file_rec/async	Same as |unite-source-file_rec|, but get files asynchronously.
 		Please install UNIX Tools find for Windows.
 		Note: If you edit file by Vim, file_rec/async source will
 		update cache file.
+		Note: If the candiates are over 1000, it will disable make
+		cache.
 		
 		Source arguments:
 		1. the search directory.
@@ -2932,6 +2936,7 @@ CHANGELOG					*unite-changelog*
 2013-02-23
 - Improved process source.
 - Fixed action table.
+- Improved file_rec behavior.
 
 2013-02-22
 - Fixed line source behavior.
