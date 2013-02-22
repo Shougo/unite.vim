@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Feb 2013.
+" Last Modified: 23 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -380,7 +380,7 @@ endfunction"}}}
 function! unite#loaded_source_names_with_args() "{{{
   return map(copy(unite#loaded_sources_list()), "
         \ join(insert(filter(copy(v:val.args),
-        \  'type(v:val) <= 1'), s:convert_source_name(v:val.name)), ':')
+        \  'type(v:val) <= 1'), unite#_convert_source_name(v:val.name)), ':')
         \ . (v:val.unite__orig_len_candidates == 0 ? '' :
         \      printf(' (%s/%s)', v:val.unite__len_candidates,
         \      v:val.unite__orig_len_candidates))
@@ -1009,7 +1009,7 @@ function! s:print_buffer(message) "{{{
   for msg in messages
     while msg != ''
       let msg = substitute(msg, '^\[\zs.\{-}\ze\] ',
-            \ '\=s:convert_source_name(submatch(0))', '')
+            \ '\=unite#_convert_source_name(submatch(0))', '')
       let trunc_msg = unite#util#strwidthpart(
             \ msg, max_width)
       let msg = msg[len(trunc_msg):]
@@ -2260,7 +2260,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     let source.unite__len_candidates = len(source_candidates)
     if !empty(source_candidates)
       call add(candidate_sources,
-            \ s:convert_source_name(source.name))
+            \ unite#_convert_source_name(source.name))
     endif
   endfor
 
@@ -2360,7 +2360,7 @@ function! s:convert_quick_match_lines(candidates, quick_match_table) "{{{
     call add(candidates,
           \ (candidate.is_dummy ? '  ' : get(keys, num, '  '))
           \ . (unite.max_source_name == 0 ? '' :
-          \    unite#util#truncate(s:convert_source_name(
+          \    unite#util#truncate(unite#_convert_source_name(
           \    candidate.source), max_source_name))
           \ . unite#util#truncate_wrap(candidate.unite__abbr,
           \      max_width, max_width/2, '..'))
@@ -2380,7 +2380,7 @@ function! unite#convert_lines(candidates) "{{{
   return map(copy(a:candidates),
         \ "(v:val.unite__is_marked ? g:unite_marked_icon . ' ' : '- ')
         \ . (unite.max_source_name == 0 ? ''
-        \   : unite#util#truncate(s:convert_source_name(
+        \   : unite#util#truncate(unite#_convert_source_name(
         \     v:val.source), max_source_name))
         \ . unite#util#truncate_wrap(v:val.unite__abbr, " . max_width
         \    .  ", max_width/2, '..')")
@@ -3277,13 +3277,7 @@ function! s:get_postfix(prefix, is_create, ...) "{{{
   return a:is_create ? '@'.(matchstr(buflist[-1], '@\zs\d\+$') + 1)
         \ : matchstr(buflist[-1], '@\d\+$')
 endfunction"}}}
-function! s:convert_source_name(source_name) "{{{
-  let context = unite#get_context()
-  return !context.short_source_names ? a:source_name :
-        \ a:source_name !~ '\A'  ? a:source_name[:1] :
-        \ substitute(a:source_name, '\a\zs\a\+', '', 'g')
-endfunction"}}}
-function! s:convert_source_name(source_name) "{{{
+function! unite#_convert_source_name(source_name) "{{{
   let context = unite#get_context()
   return !context.short_source_names ? a:source_name :
         \ a:source_name !~ '\A'  ? a:source_name[:1] :
@@ -3325,7 +3319,7 @@ function! unite#set_highlight() "{{{
   " Set syntax.
   for source in filter(copy(unite.sources), 'v:val.syntax != ""')
     let name = unite.max_source_name > 0 ?
-          \ s:convert_source_name(source.name) : ''
+          \ unite#_convert_source_name(source.name) : ''
 
     execute 'highlight default link'
           \ source.syntax g:unite_abbr_highlight

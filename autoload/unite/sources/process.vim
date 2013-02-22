@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: process.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Nov 2012.
+" Last Modified: 23 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,13 +52,13 @@ function! s:source.gather_candidates(args, context) "{{{
   " In Windows, use tasklist.
   let command = unite#util#is_windows() ? 'tasklist' : 'ps aux'
 
-  let result = split(vimproc#system(command), '\n')
+  let result = split(unite#util#system(command), '\n')
   if empty(result)
     return []
   endif
 
   if unite#util#is_windows()
-    let [message_linenr, start_result, min_len] = [1, 3, 5]
+    let [message_linenr, start_result, min_len] = [0, 2, 5]
   else
     let [message_linenr, start_result, min_len] = [0, 1, 2]
   endif
@@ -74,7 +74,8 @@ function! s:source.gather_candidates(args, context) "{{{
     call add(_, {
           \ 'word' : (unite#util#is_windows() ?
           \           process[0] : join(process[10:])),
-          \ 'abbr' : (unite#util#is_windows() ? '' : '      ') . line,
+          \ 'abbr' : repeat(' ', len(
+          \       unite#_convert_source_name(s:source.name))+1) . line,
           \ 'action__pid' : process[1],
           \})
   endfor
