@@ -289,6 +289,13 @@ function! unite#util#truncate_wrap(str, max, footer_width, separator) "{{{
         \ . unite#util#strwidthpart_reverse(a:str, a:footer_width)
 endfunction"}}}
 
+function! unite#util#index_name(list, name) "{{{
+  return index(map(copy(a:list), 'v:val.name'), a:name)
+endfunction"}}}
+function! unite#util#get_name(list, name, default) "{{{
+  return get(a:list, unite#util#index_name(a:list, a:name), a:default)
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

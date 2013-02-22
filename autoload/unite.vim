@@ -334,7 +334,7 @@ function! unite#get_sources(...) "{{{
     return unite.sources
   endif
 
-  return get(unite.sources, index(unite.sources, a:1), {})
+  return unite#util#get_name(unite.sources, a:1, {})
 endfunction"}}}
 function! unite#get_all_sources(...) "{{{
   if a:0 == 0
@@ -438,7 +438,7 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
   let kind = unite#get_kinds(a:kind_name)
   let source = empty(a:source_table) ?
         \ unite#get_sources(a:source_name) :
-        \ get(a:source_table, a:source_name, {})
+        \ unite#util#get_name(a:source_table, a:source_name, {})
   if empty(source)
     call unite#print_error('[unite.vim] source "' . a:source_name . '" is not found.')
     return {}
@@ -573,7 +573,7 @@ function! s:get_alias_table(source_name, kind_name, source_table) "{{{
   let kind = unite#get_kinds(a:kind_name)
   let source = empty(a:source_table) ?
         \ unite#get_sources(a:source_name) :
-        \ get(a:source_table, a:source_name, {})
+        \ unite#util#get_name(a:source_table, a:source_name, {})
   if empty(source)
     call unite#print_error('[unite.vim] source "' . a:source_name . '" is not found.')
     return {}

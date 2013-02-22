@@ -2931,6 +2931,7 @@ CHANGELOG					*unite-changelog*
 
 2013-02-23
 - Improved process source.
+- Fixed action table.
 
 2013-02-22
 - Fixed line source behavior.
