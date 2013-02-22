@@ -50,7 +50,7 @@ function! s:source.gather_candidates(args, context) "{{{
   let _ = []
 
   " In Windows, use tasklist.
-  let command = unite#util#is_windows() ? 'tasklist' : 'ps aux'
+  let command = unite#util#is_windows() ? 'tasklist' : 'ps auxww'
 
   let result = split(unite#util#system(command), '\n')
   if empty(result)
