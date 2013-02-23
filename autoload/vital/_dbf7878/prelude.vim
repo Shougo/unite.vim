@@ -304,7 +304,10 @@ function! s:path2project_directory(path, ...)
             \ fnamemodify(directory, ':h'))
 
       if parent_directory != ''
-        let directory = parent_directory
+        let d = finddir(vcs, parent_directory . ';')
+        if d != ''
+          let directory = s:path2project_directory(parent_directory)
+        endif
       endif
     endif
   endfor
