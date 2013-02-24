@@ -207,9 +207,10 @@ function! s:get_lines(context, direction, start, offset) "{{{
 
   let _ = []
   let linenr = start
-  for line in filter(getbufline(
-        \ a:context.source__bufnr, start, end), "v:val != ''")
-    call add(_, [linenr, line])
+  for line in getbufline(a:context.source__bufnr, start, end)
+    if line != ''
+      call add(_, [linenr, line])
+    endif
 
     let linenr += 1
   endfor
