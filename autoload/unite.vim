@@ -2598,6 +2598,9 @@ function! s:switch_unite_buffer(buffer_name, context) "{{{
 
       let bufnr += 1
     endwhile
+
+    call unite#print_error('[Bug] Not found buffer name: '
+          \ . string(a:buffer_name))
   else
     silent! edit `=a:buffer_name`
   endif
