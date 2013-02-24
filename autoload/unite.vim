@@ -2587,20 +2587,24 @@ function! s:switch_unite_buffer(buffer_name, context) "{{{
 
   if bufexists(a:buffer_name)
     " Search buffer name.
+    let found = 0
     let bufnr = 1
     let max = bufnr('$')
     while bufnr <= max
       if unite#util#substitute_path_separator(
             \ bufname(bufnr)) ==# a:buffer_name
         silent execute bufnr 'buffer'
+        let found = 1
         break
       endif
 
       let bufnr += 1
     endwhile
 
-    call unite#print_error('[Bug] Not found buffer name: '
-          \ . string(a:buffer_name))
+    if !found
+      call unite#print_error('[Bug] Not found buffer name: '
+            \ . string(a:buffer_name))
+    endif
   else
     silent! edit `=a:buffer_name`
   endif
