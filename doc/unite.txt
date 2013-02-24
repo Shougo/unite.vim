@@ -2933,6 +2933,9 @@ A: You can use below mappings.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-02-24
+- Improved line source behavior.
+
 2013-02-23
 - Improved process source.
 - Fixed action table.
