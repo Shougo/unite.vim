@@ -1198,6 +1198,8 @@ function! unite#start_temporary(sources, ...) "{{{
 
   let unite_save = unite#get_current_unite()
 
+  let cwd = getcwd()
+
   " call unite#all_quit_session()
   call unite#start(a:sources, context)
 
@@ -1205,6 +1207,9 @@ function! unite#start_temporary(sources, ...) "{{{
   let unite = unite#get_current_unite()
   let unite.prev_bufnr = unite_save.prev_bufnr
   let unite.prev_winnr = unite_save.prev_winnr
+
+  " Restore current directory.
+  execute 'lcd' fnameescape(cwd)
 endfunction"}}}
 function! unite#vimfiler_check_filetype(sources, ...) "{{{
   let context = get(a:000, 0, {})
