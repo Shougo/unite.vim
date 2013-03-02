@@ -2930,6 +2930,11 @@ A: You can use below mappings.
 	inoremap <silent><expr> <C-z>
 	\ unite#start_complete('register', { 'input': unite#get_cur_text() })
 <
+Q: Unite.vim breaks Window layout after quitting unite buffer.
+
+A: You MUST NOT |:quit| or |:close| to quit unite buffer.
+You must use |<Plug>(unite_exit)| or |<Plug>(unite_all_exit)|.
+
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
