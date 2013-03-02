@@ -2728,16 +2728,18 @@ function! unite#_resize_window() "{{{
 
     let context.is_resize = 1
   elseif context.vertical
-        \ && winwidth(winnr()) != context.winwidth
-        \ && (context.unite__old_winwidth  == 0 ||
-        \     winheight(winnr()) == context.unite__old_winheight)
+        \ && context.unite__old_winwidth  == 0
+        " \ && winwidth(winnr()) != context.winwidth
+        " \ && (context.unite__old_winwidth  == 0 ||
+        " \     winheight(winnr()) == context.unite__old_winheight)
     execute 'vertical resize' context.winwidth
 
     let context.is_resize = 1
   elseif !context.vertical
-        \ && winheight(winnr()) != context.winheight
-        \ && (context.unite__old_winheight == 0 ||
-        \     winwidth(winnr()) == context.unite__old_winwidth)
+        \ && context.unite__old_winheight  == 0
+        " \ && winheight(winnr()) != context.winheight
+        " \ && (context.unite__old_winheight == 0 ||
+        " \     winwidth(winnr()) == context.unite__old_winwidth)
     execute 'resize' context.winheight
 
     let context.is_resize = 1

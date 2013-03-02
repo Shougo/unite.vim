@@ -2951,6 +2951,7 @@ CHANGELOG					*unite-changelog*
 - Fixed restore updatetime.
 - Improved output source behavior.
 - Improved documentation.
+- Disabled auto resize feature.
 
 ------------------------------------------------------------------------------
 ChangeLog unite.vim Ver.4.1:
