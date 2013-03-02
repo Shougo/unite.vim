@@ -2937,6 +2937,7 @@ CHANGELOG					*unite-changelog*
 - Ver.5.0 development is started.
 - Fixed cd problem in unite#start_temporary().
 - Fixed restore updatetime.
+- Improved output source behavior.
 
 ------------------------------------------------------------------------------
 ChangeLog unite.vim Ver.4.1:
