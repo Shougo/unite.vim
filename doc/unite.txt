@@ -1209,7 +1209,8 @@ unite#custom_max_candidates({source-name}, {max})
 unite#custom_source({source-name}, {option-name}, {value})
 						*unite#custom_source()*
 		Set {source-name} source specialized {option-name}
-		to {value}.
+		to {value}. You may specify multiple sources with
+		separating "," in {source-name}.
 		
 		These options below are available:
 		
