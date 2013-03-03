@@ -2101,6 +2101,9 @@ Defines an interface for files you can move to with cd command.
 	tabnew_cd	Open a new tab page and change the current
 			directory there.
 	narrow		Narrow down candidates by the directory name
+			Note: This action make temporary buffer. To leave
+			temporary buffer directly, you must use
+			|<Plug>(unite_all_exit)|.
 	vimshell	Run |vimshell| on the directory.  This is available
 			only when you already installed |vimshell|.
 	tabvimshell	Run |:VimShellTab| on the directory.  This is
@@ -2941,6 +2944,10 @@ Q: Unite.vim breaks Window layout after quitting unite buffer.
 
 A: You MUST NOT |:quit| or |:close| to quit unite buffer.
 You must use |<Plug>(unite_exit)| or |<Plug>(unite_all_exit)|.
+
+Q: I want to exit unite buffer after narrowing action in directory.
+
+A: You should use |<Plug>(unite_all_exit)| instead of |<Plug>(unite_exit)|.
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
