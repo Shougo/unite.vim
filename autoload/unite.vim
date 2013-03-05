@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Mar 2013.
+" Last Modified: 05 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1211,6 +1211,7 @@ function! unite#start_temporary(sources, ...) "{{{
   let unite.prev_bufnr = unite_save.prev_bufnr
   let unite.prev_winnr = unite_save.prev_winnr
   let unite.update_time_save = unite_save.update_time_save
+  let unite.winnr = unite_save.winnr
 
   " Restore current directory.
   execute 'lcd' fnameescape(cwd)
