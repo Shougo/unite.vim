@@ -1210,7 +1210,9 @@ function! unite#start_temporary(sources, ...) "{{{
   let unite = unite#get_current_unite()
   let unite.prev_bufnr = unite_save.prev_bufnr
   let unite.prev_winnr = unite_save.prev_winnr
-  let unite.update_time_save = unite_save.update_time_save
+  if has_key(unite, 'update_time_save')
+    let unite.update_time_save = unite_save.update_time_save
+  endif
   let unite.winnr = unite_save.winnr
 
   " Restore current directory.
