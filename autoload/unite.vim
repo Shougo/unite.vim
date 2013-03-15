@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Mar 2013.
+" Last Modified: 16 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1180,6 +1180,9 @@ function! unite#start_temporary(sources, ...) "{{{
 
   let new_context = get(a:000, 0, {})
 
+  " Overwrite context.
+  let context = extend(context, new_context)
+
   let context.temporary = 1
   let context.unite__direct_switch = 1
   let context.input = ''
@@ -1189,9 +1192,6 @@ function! unite#start_temporary(sources, ...) "{{{
   let context.unite__old_winwidth = 0
   let context.unite__old_winheight = 0
   let context.is_resize = 0
-
-  " Overwrite context.
-  let context = extend(context, new_context)
 
   let buffer_name = get(a:000, 1,
         \ matchstr(context.buffer_name, '^\S\+')
@@ -1537,6 +1537,23 @@ function! s:quit_session(is_force, ...)  "{{{
     endif
 
     call s:on_buf_unload(bufname)
+
+    if !unite.has_preview_window
+      let preview_windows = filter(range(1, winnr('$')),
+            \ 'getwinvar(v:val, "&previewwindow") != 0')
+      if !empty(preview_windows)
+        " Close preview window.
+        pclose!
+
+      endif
+    endif
+
+    call unite#clear_previewed_buffer_list()
+
+    if winnr('$') != 1 && !unite.context.temporary
+      execute unite.win_rest_cmd
+      execute unite.prev_winnr 'wincmd w'
+    endif
   else
     let winnr = bufwinnr(unite.prev_bufnr)
     if winnr < 0
@@ -2504,6 +2521,7 @@ function! s:initialize_current_unite(sources, context) "{{{
 endfunction"}}}
 function! s:initialize_unite_buffer() "{{{
   let is_bufexists = bufexists(s:current_unite.real_buffer_name)
+
   call s:switch_unite_buffer(
         \ s:current_unite.real_buffer_name, s:current_unite.context)
 
@@ -2979,23 +2997,6 @@ function! s:on_buf_unload(bufname)  "{{{
   let &sidescrolloff = unite.sidescrolloff_save
 
   call s:restore_updatetime()
-
-  if !unite.has_preview_window
-    let preview_windows = filter(range(1, winnr('$')),
-          \ 'getwinvar(v:val, "&previewwindow") != 0')
-    if !empty(preview_windows)
-      " Close preview window.
-      pclose!
-
-    endif
-  endif
-
-  call unite#clear_previewed_buffer_list()
-
-  if winnr('$') != 1 && !unite.context.temporary
-    execute unite.win_rest_cmd
-    execute unite.prev_winnr 'wincmd w'
-  endif
 
   " Call finalize functions.
   call s:call_hook(unite#loaded_sources_list(), 'on_close')
