@@ -3346,12 +3346,12 @@ function! unite#set_highlight() "{{{
     execute 'highlight default link'
           \ source.syntax g:unite_abbr_highlight
 
-    execute printf('syntax region %s start="^- %s" end="$" '.
-          \ 'keepend contains=uniteCandidateMarker,%s%s',
+    execute printf('syntax match %s "^- %s" '.
+          \ 'nextgroup='.source.syntax.
+          \ ' keepend contains=uniteCandidateMarker,%s',
           \ 'uniteSourceLine__'.source.syntax,
           \ (name == '' ? '' : name . '\>'),
-          \ (name == '' ? '' : 'uniteCandidateSourceName,'),
-          \    source.syntax
+          \ (name == '' ? '' : 'uniteCandidateSourceName')
           \ )
 
     call s:call_hook([source], 'on_syntax')
@@ -3371,8 +3371,8 @@ function! s:set_syntax() "{{{
   " Set syntax.
   for source in filter(copy(unite.sources), 'v:val.syntax != ""')
     execute 'syntax clear' source.syntax
-    execute 'syntax region' source.syntax 'start=/\%'
-          \ .(abbr_head).'c/ end=/$/ keepend contained'
+    execute 'syntax region' source.syntax
+          \ 'start=// end=/$/ keepend contained'
   endfor
 endfunction"}}}
 function! s:get_resume_buffer(buffer_name) "{{{
