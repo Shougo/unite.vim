@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Feb 2013.
+" Last Modified: 16 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -656,7 +656,7 @@ function! s:external(command, dest_dir, src_files) "{{{
         \   map(src_files, '''"''.v:val.''"''')), '&'), 'g')
   let command_line = substitute(command_line,
         \'\$dest\>', escape('"'.dest_dir.'"', '&'), 'g')
-  " echomsg command_line
+  let command_line = escape(command_line, '`')
 
   let output = unite#util#system(command_line)
 
