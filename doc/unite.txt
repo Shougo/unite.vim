@@ -2956,7 +2956,7 @@ CHANGELOG					*unite-changelog*
 2013-03-16
 - Fixed for temporary buffer.
 - Fixed for backquote.
-- Improved syntax highlight.
+- Improved syntax highlight in line and grep sources.
 
 2013-03-05
 - Fixed temporary buffer.
