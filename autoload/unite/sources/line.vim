@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 16 Mar 2013.
+" Last Modified: 19 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -163,10 +163,12 @@ function! s:on_init(args, context) "{{{
   let a:context.source__direction = direction
 endfunction"}}}
 function! s:on_syntax(args, context) "{{{
-  syntax match uniteSource__LineFast_LineNr /\d\+:/
+  syntax match uniteSource__LineFast_LineNr
+        \ '\(^- *+\? *\)\@<=\<\d\+\>'
         \ contained containedin=uniteSource__LineFast
   highlight default link uniteSource__LineFast_LineNr LineNr
-  syntax match uniteSource__Line_LineNr /\d\+:/
+  syntax match uniteSource__Line_LineNr
+        \ '\(^- *+\? *\)\@<=\<\d\+\>'
         \ contained containedin=uniteSource__Line
   highlight default link uniteSource__Line_LineNr LineNr
 endfunction"}}}
