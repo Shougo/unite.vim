@@ -68,13 +68,12 @@ function! unite#kinds#jump_list#define() "{{{
         \ 'is_quit' : 0,
         \ }
   function! kind.action_table.preview.func(candidate) "{{{
+    let filename = s:get_filename(a:candidate)
     let buflisted = buflisted(
-          \ unite#util#escape_file_searching(
-          \ a:candidate.action__path))
+          \ unite#util#escape_file_searching(filename))
     let preview_windows = filter(range(1, winnr('$')),
           \ 'getwinvar(v:val, "&previewwindow") != 0')
     if empty(preview_windows)
-      let filename = s:get_filename(a:candidate)
       pedit! `=filename`
       let preview_windows = filter(range(1, winnr('$')),
             \ 'getwinvar(v:val, "&previewwindow") != 0')
