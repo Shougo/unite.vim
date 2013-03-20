@@ -2956,6 +2956,7 @@ CHANGELOG					*unite-changelog*
 2013-03-20
 - Changed smart_execute_command() implementation.
 - Fixed for auto_preview.
+- Fixed action source problem.
 
 2013-03-19
 - Improved line syntax.

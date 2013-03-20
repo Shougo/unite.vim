@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Mar 2013.
+" Last Modified: 20 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -337,7 +337,8 @@ function! unite#mappings#do_action(action_name, ...) "{{{
   let _ = []
   for table in action_tables
     " Check quit flag.
-    if table.action.is_quit
+    if table.action.is_quit &&
+          \ unite.profile_name !=# 'action'
       call unite#all_quit_session(0)
       let is_quit = 1
     endif
