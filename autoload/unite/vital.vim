@@ -28,8 +28,6 @@ endfunction
 function! unite#vital#print_error(...)
   return call('vital#_39a315#print_error', a:000)
 endfunction
-function! unite#vital#smart_execute_command(...)
-  return call('vital#_39a315#smart_execute_command', a:000)
 endfunction
 function! unite#vital#escape_file_searching(...)
   return call('vital#_39a315#escape_file_searching', a:000)

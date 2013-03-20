@@ -37,8 +37,8 @@ endfunction
 function! unite#util#print_error(...)
   return call(s:V.print_error, a:000)
 endfunction
-function! unite#util#smart_execute_command(...)
-  return call(s:V.smart_execute_command, a:000)
+function! unite#util#smart_execute_command(action, word)
+  execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
 endfunction
 function! unite#util#escape_file_searching(...)
   return call(s:V.escape_file_searching, a:000)
