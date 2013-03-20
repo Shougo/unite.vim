@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Mar 2013.
+" Last Modified: 20 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -3228,6 +3228,7 @@ function! s:do_auto_preview() "{{{
 
   let unite.preview_candidate = unite#get_current_candidate()
 
+  call unite#clear_previewed_buffer_list()
   call unite#mappings#do_action('preview', [], {})
 
   " Restore window size.
