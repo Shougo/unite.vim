@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Feb 2013.
+" Last Modified: 22 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,6 +34,8 @@ call unite#util#set_default(
       \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)')
 call unite#util#set_default(
       \ 'g:unite_source_file_rec_min_cache_files', 100)
+call unite#util#set_default(
+      \ 'g:unite_source_file_rec_max_cache_files', 1000)
 "}}}
 
 let s:Cache = vital#of('unite.vim').import('System.Cache')
@@ -95,7 +97,8 @@ function! s:source_rec.async_gather_candidates(args, context) "{{{
         \ s:get_files(continuation.rest, 1, 20,
         \   a:context.source.ignore_pattern)
 
-  if empty(continuation.rest) || len(continuation.files) > 1000
+  if empty(continuation.rest) || len(continuation.files) >
+        \                    g:unite_source_file_rec_max_cache_files
     if empty(continuation.rest)
       call unite#print_source_message(
             \ 'Directory traverse was completed.', self.name)
@@ -300,7 +303,8 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
   let continuation = s:continuation[a:context.source__directory]
 
   let stdout = a:context.source__proc.stdout
-  if stdout.eof || len(continuation.files) > 1000
+  if stdout.eof || len(continuation.files) >
+        \        g:unite_source_file_rec_max_cache_files
     " Disable async.
     if empty(continuation.rest)
       call unite#print_source_message(
