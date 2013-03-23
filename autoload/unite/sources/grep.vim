@@ -247,11 +247,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
           \ '[v:val, split(v:val[2:], ":")]')
   endif
 
-  if isdirectory(a:context.source__directory)
-    let cwd = getcwd()
-    lcd `=a:context.source__directory`
-  endif
-
   if a:context.source__ssh_path != ''
     " Use ssh command.
     let [hostname, port, path] = unite#sources#ssh#parse_path(
@@ -281,10 +276,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
     call add(_, dict)
   endfor
-
-  if isdirectory(a:context.source__directory)
-    lcd `=cwd`
-  endif
 
   return _
 endfunction "}}}
