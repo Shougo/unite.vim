@@ -2960,6 +2960,9 @@ A: You should use |<Plug>(unite_all_exit)| instead of |<Plug>(unite_exit)|.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-03-23
+- Fixed action source behavior.
+
 2013-03-22
 - Added g:unite_source_file_rec_max_cache_files.
 

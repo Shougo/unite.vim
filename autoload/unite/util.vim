@@ -135,8 +135,9 @@ function! unite#util#iconv(...)
 endfunction
 
 function! unite#util#alternate_buffer() "{{{
-  if bufnr('%') != bufnr('#') && s:buflisted(bufnr('#'))
-    buffer #
+  let unite = unite#get_current_unite()
+  if s:buflisted(unite.prev_bufnr)
+    execute 'buffer' unite.prev_bufnr
     return
   endif
 
