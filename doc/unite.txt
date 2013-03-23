@@ -101,7 +101,7 @@ match a directory recursively.
 	**/foo
 <
 So the example above matches bar/foo or buzz/bar/foo.
-Note: The unite acion |file_rec| does a recursive file matching by default
+Note: The unite action |file_rec| does a recursive file matching by default
 without the need to set wildcards.
 
 You can also specify multiple keywords to narrow down the candidates. Multiple
@@ -1451,13 +1451,13 @@ context.
 
 						*unite-options-update-time*
 		-update-time={new-update-time}
-		Change 'updatetime' option. If this option is ommit,
+		Change 'updatetime' option. If this option is omitted,
 		|g:unite_update_time| is used. This option is useful for
 		animation source.
 
 					*unite-options-cursor-line-highlight*
 		-cursor-line-high-light={highlight-name}
-		Change cursor line highlight. If this option is ommit,
+		Change cursor line highlight. If this option is omitted,
 		|g:unite_cursor_line_highlight| is used.
 
 						*unite-options-no-cursor-line*
@@ -1479,7 +1479,7 @@ context.
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}
 		Specifies the lines max in multiline candidates. If this
-		option is ommit, "5" is used.
+		option is omitted, "5" is used.
 
 						*unite-options-here*
 		-here
@@ -1510,7 +1510,7 @@ context.
 
 						*unite-options-multi-line*
 		-multi-line
-		Force use multi line. If candiate abbr is too long, unite.vim
+		Force use multi line. If candidate abbr is too long, unite.vim
 		will fold automatically.
 
 						*unite-options-resume*
@@ -1543,7 +1543,7 @@ file_mru	Nominates files you used recently as candidates, ordering
 						*unite-source-file_rec*
 file_rec	Gather files recursive and nominates all directory or file
 		names under the search directory(argument 1) or the current
-		directly(if argument is ommitted) as candidates.  This may get
+		directly(if argument is omitted) as candidates.  This may get
 		Vim frozen when there are too many candidates. The candidates
 		are cached by file_rec source. If you clear cache, use
 		|<Plug>(unite_redraw)| keymapping.
@@ -1552,7 +1552,7 @@ file_rec	Gather files recursive and nominates all directory or file
 		".hg".
 		Note: If you edit file by Vim, file_rec source will update
 		cache file.
-		Note: If the candiates are over 1000, it will disable make
+		Note: If the candidates are over 1000, it will disable make
 		cache.
 
 		Source arguments:
@@ -1566,7 +1566,7 @@ file_rec/async	Same as |unite-source-file_rec|, but get files asynchronously.
 		Please install UNIX Tools find for Windows.
 		Note: If you edit file by Vim, file_rec/async source will
 		update cache file.
-		Note: If the candiates are over 1000, it will disable make
+		Note: If the candidates are over 1000, it will disable make
 		cache.
 		
 		Source arguments:
@@ -1619,7 +1619,7 @@ register	Nominates the strings stored in registers as candidates.
 
 						*unite-source-bookmark*
 bookmark	Nominates files or directories you bookmarked as candidates.
-		If source arguments are ommitted, "default" bookmark file name
+		If source arguments are omitted, "default" bookmark file name
 		is used.
 
 		Source arguments:
@@ -1743,7 +1743,7 @@ line		Nominates current buffer lines as candidates.
 						*unite-source-line/fast*
 line/fast	Nominates current buffer lines as candidates.
 		This source is created for big line files(over 10000 lines).
-		It filters candiates automatically.
+		It filters candidates automatically.
 		Note: You cannot change the matcher in it.
 
 		Source arguments:
@@ -1928,7 +1928,7 @@ completion	An interface for completion.
 
 						*unite-kind-source*
 source		unite.vim source
-		If this kind candiate is executed, unite.vim starts unite
+		If this kind candidate is executed, unite.vim starts unite
 		session in current unite buffer.  When you close unite buffer,
 		sources are restored. So, unite.vim behaves like menu.
 
@@ -2073,7 +2073,7 @@ ACTIONS						*unite-actions*
 Actions of each kinds
 
 common						*unite-action-common*
-Defines the common interface for all kinds.  It uses condidate.word
+Defines the common interface for all kinds.  It uses candidate.word
 internally.
 	nop		Do nothing
 	yank		Yank the candidate "word" or "action__text"
@@ -2253,7 +2253,7 @@ CREATE SOURCE					*unite-create-source*
 The files in autoload/unite/sources are automatically loaded and it
 calls unite#sources#{source_name}#define() whose return value is the
 source.  Each return value can be a list so you can return an empty list
-to avoid adding undesireble sources.  To add your own sources
+to avoid adding undesirable sources.  To add your own sources
 dynamically, you can use |unite#define_source()|.
 
 Note: To optimize load source files, if "buffer/rec" source name is detected,
@@ -2290,7 +2290,7 @@ gather_candidates	Function	(Required)
 			parameter and returns a list of {candidate}.
 			Here, {args} is a list of parameters given to
 			the source when |:Unite| command is executed
-			and {context} is the context informantion when
+			and {context} is the context information when
 			the source is called.  If either of these are not
 			given, the argument becomes "".  Hence, this
 			function must handle empty string.  Arguments
@@ -2304,7 +2304,7 @@ gather_candidates	Function	(Required)
 			cached by unite buffer.  The cache is available
 			until the unite buffer is closed and is
 			discarded unless you use |:UniteResume|.  To
-			cache persistenly regardless of the life of the
+			cache persistently regardless of the life of the
 			unite buffer, you have some source to save the
 			cache on non-volatile storage.
 
@@ -2489,12 +2489,12 @@ is_volatile		Number		(Optional)
 			everytime the input is changed.
 			This attribute is optional.
 			If it's not given, 0 is set as the default value. In
-			this case, canidates are cached in unite buffer
+			this case, candidates are cached in unite buffer
 			and it does not call
 			|unite-source-attribute-gather_candidates|
 			repeatedly and the cache is available until the
 			unite buffer is closed.  To cache longer, the source
-			has no choise but to cache by itself.
+			has no choice but to cache by itself.
 
 					*unite-source-attribute-is_listed*
 is_listed		Number		(Optional)
@@ -2505,7 +2505,7 @@ is_listed		Number		(Optional)
 					*unite-source-attribute-description*
 description		String		(Optional)
 			The description of the source.
-			If it's ommitted, it's set to "".
+			If it's omitted, it's set to "".
 			|unite-source-source| uses this.
 
 					*unite-source-attribute-syntax*
@@ -2516,7 +2516,7 @@ syntax			String		(Optional)
 			If it's omitted, it's set to "".
 			This is used to configure the source's own
 			highlight.  According to the unite's naming
-			convension to avoid the syntax name conflicted,
+			conversion to avoid the syntax name conflicted,
 			use syntax name like "uniteSource__(source
 			name)".  Configuration of highlight itself must
 			use |unite-source-attribute-hooks-on_syntax|.
@@ -2542,7 +2542,7 @@ converters		List/String	(Optional)
 					*unite-source-attribute-source__*
 source__		Unknown		(Optional)
 			The Attribute unique for each source.  To avoid
-			the attibute from conflicting wth the unite's own,
+			the attribute from conflicting wth the unite's own,
 			"source__" prefix must be added.
 
 NOTATION					*unite-notation*
@@ -2655,7 +2655,7 @@ NOTATION					*unite-notation*
 				If the candidate is filtered.
 
 			is_multiline		(Number)	(Optional)
-				If the candiates have multiple lines.
+				If the candidates have multiple lines.
 				The default value is 0.  When this is
 				enabled, unite splits abbr (or word if
 				abbr is missing) by a newline character.
@@ -2675,7 +2675,7 @@ CREATE KIND					*unite-create-kind*
 The files in autoload/unite/kinds are automatically loaded and it calls
 unite#kinds#{kind_name}#define() whose return value is the kind.  Each return
 value can be a list so you can return an empty list to avoid adding
-undesireble kinds.  To add your own kinds dynamically, you can use
+undesirable kinds.  To add your own kinds dynamically, you can use
 |unite#define_kind()|.
 
 Note: To optimize load kind files, if "foo" kind name is detected, unite.vim
@@ -2703,7 +2703,7 @@ name			String		(Required)
 default_action		String		(Required)
 			Specifies default action name when executing
 			|<Plug>(unite_do_default_action)|.  If this attribute is
-			ommitted, an error occurred.  But this hack is used in
+			omitted, an error occurred.  But this hack is used in
 			parent only actions.
 
 					*unite-kind-attribute-action_table*
@@ -2733,17 +2733,17 @@ action_table		Dictionary		(Required)
 			is_quit			(Number)	(Optional)
 				If this attribute is "1", unite buffer is closed
 				before executing actions. If this attribute is
-				ommitted, "1" is used.
+				omitted, "1" is used.
 
 			is_selectable		(Number)	(Optional)
 				If this attribute is "1", the action can
 				execute multiple candidates.  If this attribute
-				is ommitted, "0" is used.
+				is omitted, "0" is used.
 
 			is_invalidate_cache	(Number)	(Optional)
 				If this attribute is "1", unite invalidates
 				source cache when executing the action.  If
-				this attribute is ommitted, "0" is used.
+				this attribute is omitted, "0" is used.
 
 			is_listed		(Number)	(Optional)
 				If this attribute is "1", the action is listed
@@ -2759,7 +2759,7 @@ alias_table		Dictionary		(Optional)
 
 						*unite-kind-attribute-parents*
 parents			List		(Optional)
-			Specifies parent list.  If this attribute is ommitted,
+			Specifies parent list.  If this attribute is omitted,
 			["common"] is used.
 			Unite searches actions from list tail(head actions are
 			overwritten).
@@ -2804,7 +2804,7 @@ CREATE FILTER					*unite-create-filter*
 The files in autoload/unite/filters are automatically loaded and it calls
 unite#filters#{filter_name}#define() whose return value is the filter.  Each
 return value can be a list so you can return an empty list to avoid adding
-undesireble filter.  To add your own filters dynamically, you can use
+undesirable filter.  To add your own filters dynamically, you can use
 |unite#define_filter()|.
 
 Note: To optimize load filter files, if "matcher_foo_bar" filter name is
@@ -3233,7 +3233,7 @@ ChangeLog unite.vim Ver.4.1:
 - Added FAQ section.
 
 2012-09-14
-- Fixed redraw all candiates behavior.
+- Fixed redraw all candidates behavior.
 
 2012-09-13
 - Use trashbox automatically in delete action.
