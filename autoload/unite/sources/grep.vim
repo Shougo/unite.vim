@@ -247,8 +247,8 @@ function! s:source.async_gather_candidates(args, context) "{{{
           \ '[v:val, split(v:val[2:], ":")]')
   endif
 
+  let cwd = getcwd()
   if isdirectory(a:context.source__directory)
-    let cwd = getcwd()
     lcd `=a:context.source__directory`
   endif
 
@@ -282,9 +282,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
     call add(_, dict)
   endfor
 
-  if isdirectory(a:context.source__directory)
-    lcd `=cwd`
-  endif
+  lcd `=cwd`
 
   return _
 endfunction "}}}
