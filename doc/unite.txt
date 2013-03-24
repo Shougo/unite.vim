@@ -2962,6 +2962,7 @@ CHANGELOG					*unite-changelog*
 
 2013-03-24
 - Improved runtimepath source.
+- Fixed updatetime restore.
 
 2013-03-23
 - Fixed action source behavior.
