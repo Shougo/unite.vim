@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: runtimepath.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Dec 2012.
+" Last Modified: 24 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,8 +37,8 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'runtimepath',
       \ 'description' : 'candidates from Vim runtimepath',
-      \ 'default_action' : 'yank',
-      \ 'default_kind' : 'word',
+      \ 'default_action' : 'lcd',
+      \ 'default_kind' : 'directory',
       \ 'action_table' : {},
       \ }
 
