@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2012.
+" Last Modified: 29 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -146,41 +146,6 @@ function! s:source.action_table.unite__new_candidate.func(candidates) "{{{
 
   call unite#sources#bookmark#_append(filename)
 endfunction"}}}
-"}}}
-
-" Add custom action table. "{{{
-let s:file_bookmark_action = {
-      \ 'description' : 'append files to bookmark list',
-      \ }
-function! s:file_bookmark_action.func(candidate) "{{{
-  " Add to bookmark.
-  call unite#sources#bookmark#_append(a:candidate.action__path)
-endfunction"}}}
-
-let s:buffer_bookmark_action = {
-      \ 'description' : 'append buffers to bookmark list',
-      \ }
-function! s:buffer_bookmark_action.func(candidate) "{{{
-  let filetype = getbufvar(
-        \ a:candidate.action__buffer_nr, '&filetype')
-  if filetype ==# 'vimfiler'
-    let filename = getbufvar(
-          \ a:candidate.action__buffer_nr, 'vimfiler').current_dir
-  elseif filetype ==# 'vimshell'
-    let filename = getbufvar(
-          \ a:candidate.action__buffer_nr, 'vimshell').current_dir
-  else
-    let filename = a:candidate.action__path
-  endif
-
-  " Add to bookmark.
-  call unite#sources#bookmark#_append(filename)
-endfunction"}}}
-
-call unite#custom_action('file', 'bookmark', s:file_bookmark_action)
-call unite#custom_action('buffer', 'bookmark', s:buffer_bookmark_action)
-unlet! s:file_bookmark_action
-unlet! s:buffer_bookmark_action
 "}}}
 
 " Misc
