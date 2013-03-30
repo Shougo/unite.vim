@@ -290,18 +290,17 @@ lua << EOF
   input = vim.eval('input')
   ignorecase = vim.eval('a:ignorecase')
   candidates = vim.eval('a:candidates')
-  i = 0
-  for candidate in candidates() do
-    if (candidate ~= nil) then
+  for i = 0, #candidates-1 do
+    if (candidates[i] ~= nil) then
       if (ignorecase ~= 0) then
-        pos = string.find(string.lower(candidate.word), input, 1, true)
+        pos = string.find(string.lower(candidates[i].word), input, 1, true)
       else
-        pos = string.find(candidate.word, input, 1, true)
+        pos = string.find(candidates[i].word, input, 1, true)
       end
-      candidates[i] = nil
+      if (pos == nil) then
+        candidates[i] = nil
+      end
     end
-
-    i = i + 1
   end
 EOF
 

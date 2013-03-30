@@ -18,6 +18,10 @@ Context Source.run()
             \ [{'word' : 'Foo'}], 'foo', 1), [{'word' : 'Foo'}]
       ShouldEqual unite#util#lua_matcher(
             \ [{'word' : 'Foo'}, {'word' : 'Bar'}], 'foo', 1), [{'word' : 'Foo'}]
+      ShouldEqual unite#util#lua_matcher(
+            \ [{'word' : 'foo'}, {'word' : 'bar'},
+            \  {'word' : 'foobar'}, {'word' : 'baz'}],
+            \ 'foo', 0), [{'word' : 'foo'}, {'word' : 'foobar'}]
       End
   endif
 End
