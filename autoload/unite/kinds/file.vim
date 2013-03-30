@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Mar 2013.
+" Last Modified: 30 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -462,7 +462,7 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
   try
     lcd `=vimfiler_current_dir`
 
-    let filenames = input('New files name(comma separated multiple files): ',
+    let filenames = input('New files name(comma separated): ',
           \               '', 'file')
     if filenames == ''
       redraw
@@ -475,7 +475,7 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
 
       if filereadable(filename)
         redraw
-        echo filename . ' is already exists.'
+        call unite#print_error(filename . ' is already exists.')
         continue
       endif
 
@@ -557,26 +557,30 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidates) "{{{
   try
     lcd `=vimfiler_current_dir`
 
-    let dirname = input('New directory name: ', '', 'dir')
+    let dirnames = split(input(
+          \ 'New directory names(comma separated): ', '', 'dir'), ',')
     redraw
 
-    if dirname == ''
+    if empty(dirnames)
       echo 'Canceled.'
       return
     endif
 
-    let dirname = unite#util#substitute_path_separator(
-          \ fnamemodify(dirname, ':p'))
+    for dirname in dirnames
+      let dirname = unite#util#substitute_path_separator(
+            \ fnamemodify(dirname, ':p'))
 
-    if filereadable(dirname) || isdirectory(dirname)
-      echo dirname . ' is already exists.'
-      return
-    endif
+      if filereadable(dirname) || isdirectory(dirname)
+        redraw
+        call unite#print_error(dirname . ' is already exists.')
+        continue
+      endif
 
-    call mkdir(dirname, 'p')
+      call mkdir(dirname, 'p')
+    endfor
 
     " Move marked files.
-    if !get(context, 'vimfiler__is_dummy', 1)
+    if !get(context, 'vimfiler__is_dummy', 1) && len(dirnames) == 1
       call unite#sources#file#move_files(dirname, a:candidates)
     endif
   finally
