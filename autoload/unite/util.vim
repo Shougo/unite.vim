@@ -248,7 +248,9 @@ function! unite#util#filter_matcher(list, expr, context) "{{{
         \ !unite#get_current_unite().is_enabled_max_candidates ||
         \ len(a:context.input_list) > 1
 
-    return a:expr == '' ? a:list : filter(a:list, a:expr)
+    return a:expr == '' ? a:list : (a:expr ==# 'if_lua') ?
+          \ unite#util#lua_matcher(a:list, a:context.input, &ignorecase)
+          \ : filter(a:list, a:expr)
   endif
 
   if a:expr == ''
@@ -261,7 +263,9 @@ function! unite#util#filter_matcher(list, expr, context) "{{{
   let max = a:context.unite__max_candidates
   let offset = max*4
   for cnt in range(0, len(a:list) / offset)
-    let list = filter(a:list[cnt*offset : cnt*offset + offset], a:expr)
+    let list = (a:expr ==# 'if_lua') ?
+          \ unite#util#lua_matcher(a:list, a:context.input, &ignorecase) :
+          \ filter(a:list[cnt*offset : cnt*offset + offset], a:expr)
     let len += len(list)
     let _ += list
 
@@ -271,6 +275,37 @@ function! unite#util#filter_matcher(list, expr, context) "{{{
   endfor
 
   return _[: max]
+endfunction"}}}
+function! unite#util#lua_matcher(candidates, input, ignorecase) "{{{
+  if !has('lua')
+    return []
+  endif
+
+  let input = substitute(a:input, '\\ ', ' ', 'g')
+  let input = substitute(input, '\\\(.\)', '\1', 'g')
+  if a:ignorecase
+    let input = tolower(input)
+  endif
+lua << EOF
+  input = vim.eval('input')
+  ignorecase = vim.eval('a:ignorecase')
+  candidates = vim.eval('a:candidates')
+  i = 0
+  for candidate in candidates() do
+    if (candidate ~= nil) then
+      if (ignorecase ~= 0) then
+        pos = string.find(string.lower(candidate.word), input, 1, true)
+      else
+        pos = string.find(candidate.word, input, 1, true)
+      end
+      candidates[i] = nil
+    end
+
+    i = i + 1
+  end
+EOF
+
+  return a:candidates
 endfunction"}}}
 
 function! unite#util#convert2list(expr) "{{{
