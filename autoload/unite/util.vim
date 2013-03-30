@@ -286,6 +286,7 @@ function! unite#util#lua_matcher(candidates, input, ignorecase) "{{{
   if a:ignorecase
     let input = tolower(input)
   endif
+  echomsg 'before:' . len(a:candidates)
 lua << EOF
   input = vim.eval('input')
   ignorecase = vim.eval('a:ignorecase')
@@ -303,6 +304,7 @@ lua << EOF
     end
   end
 EOF
+  echomsg 'after:' . len(a:candidates)
 
   return a:candidates
 endfunction"}}}
