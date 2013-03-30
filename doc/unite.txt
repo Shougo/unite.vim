@@ -2962,6 +2962,7 @@ CHANGELOG					*unite-changelog*
 
 2013-03-30
 - Supported make multiple directories.
+- Use python3 interface.
 
 2013-03-29
 - Improved cutsom bookmark action.

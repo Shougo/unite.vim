@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2013.
+" Last Modified: 30 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -404,9 +404,9 @@ unlet! s:cdable_action_file
 function! s:get_filetime(filename) "{{{
   let filetime = getftime(a:filename)
   if filetime < 0 && getftype(a:filename) !=# 'link'
-        \ && has('python') "{{{
-    " Use python.
-python <<END
+        \ && has('python3') "{{{
+    " Use python3 interface.
+python3 <<END
 import os
 import os.path
 import vim
