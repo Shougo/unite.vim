@@ -398,6 +398,14 @@ g:unite_source_file_rec_max_cache_files
 
 		The default value is 1000.
 
+g:unite_source_file_rec_async_command
+				*g:unite_source_file_rec_async_command*
+		Specifies the filelist command and arguments in file_rec/async
+		source.
+
+		The default value is "ag" or "ack-grep" or "find" and the args.
+
+		The default value is 1000.
 g:unite_source_grep_command			*g:unite_source_grep_command*
 		Set grep command.
 
@@ -1562,11 +1570,12 @@ file_rec	Gather files recursive and nominates all directory or file
 file_rec/async	Same as |unite-source-file_rec|, but get files asynchronously.
 		
 		Note: This source requires vimproc.
+		Note: This source requires "ag" or "ack-grep" or "find" command.
 		Note: Windows "find" command is not supported.
-		Please install UNIX Tools find for Windows.
 		Note: If you edit file by Vim, file_rec/async source will
 		update cache file.
-		Note: If the candidates are over 1000, it will disable make
+		Note: If the candidates are over
+		|g:unite_source_file_rec_max_cache_files|, it will disable make
 		cache.
 		
 		Source arguments:
@@ -2959,6 +2968,9 @@ A: You should use |<Plug>(unite_all_exit)| instead of |<Plug>(unite_exit)|.
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-03-31
+- Added g:unite_source_file_rec_async_command option.
 
 2013-03-30
 - Supported make multiple directories.

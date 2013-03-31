@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Mar 2013.
+" Last Modified: 31 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,14 +36,19 @@ call unite#util#set_default(
       \ 'g:unite_source_file_rec_min_cache_files', 100)
 call unite#util#set_default(
       \ 'g:unite_source_file_rec_max_cache_files', 1000)
+call unite#util#set_default(
+      \ 'g:unite_source_file_rec_async_command',
+      \ executable('ag') ? 'ag --nocolor --nogroup -g ""' :
+      \ executable('ack-grep') ? 'ack-grep -f' :
+      \ !unite#util#is_windows() && executable('find') ? 'find -type f' :
+      \ '')
 "}}}
 
 let s:Cache = vital#of('unite.vim').import('System.Cache')
 
 function! unite#sources#file_rec#define() "{{{
   return [ s:source_rec ]
-        \ + [ executable('find')
-        \   && unite#util#has_vimproc() ? s:source_async : {} ]
+        \ + [ unite#util#has_vimproc() ? s:source_async : {} ]
 endfunction"}}}
 
 let s:continuation = {}
@@ -252,6 +257,12 @@ let s:source_async = {
       \ }
 
 function! s:source_async.gather_candidates(args, context) "{{{
+  if g:unite_source_file_rec_async_command == ''
+    call unite#print_source_message(
+          \ 'g:unite_source_file_rec_async_command is not executable.', self.name)
+    return []
+  endif
+
   let a:context.source__directory = s:get_path(a:args, a:context)
 
   let directory = a:context.source__directory
@@ -280,8 +291,9 @@ function! s:source_async.gather_candidates(args, context) "{{{
     return deepcopy(continuation.files)
   endif
 
-  let a:context.source__proc = vimproc#pgroup_open(
-        \ printf('find %s -type f', string(directory)))
+  let a:context.source__proc = vimproc#ptyopen(
+        \ g:unite_source_file_rec_async_command
+        \ . ' ' . string(directory))
 
   " Close handles.
   call a:context.source__proc.stdin.close()
@@ -306,7 +318,7 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
   if stdout.eof || len(continuation.files) >
         \        g:unite_source_file_rec_max_cache_files
     " Disable async.
-    if empty(continuation.rest)
+    if stdout.eof
       call unite#print_source_message(
             \ 'Directory traverse was completed.', self.name)
     else
