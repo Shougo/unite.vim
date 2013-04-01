@@ -276,7 +276,7 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) "{{{
   if a:is_relative_path
     let dict.action__path = unite#util#substitute_path_separator(
         \                    fnamemodify(a:file, ':p'))
-    let dict.action__directory = fnamemodify(dict.action__directory, ':.')
+    let dict.action__directory = fnamemodify(dict.action__path, ':.:h')
   else
     let dict.action__directory = dict.vimfiler__is_directory ?
           \ a:file : fnamemodify(a:file, ':h')
