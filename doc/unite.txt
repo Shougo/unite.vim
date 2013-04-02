@@ -2974,6 +2974,7 @@ CHANGELOG					*unite-changelog*
 - Improved vimfiler redraw behavior.
 - Fixed narrow action.
 - Fixed file_rec/async source.
+- Fixed close previous unite buffer behavior.
 
 2013-04-01
 - Optimized for files.
