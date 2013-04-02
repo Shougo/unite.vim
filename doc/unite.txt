@@ -2973,6 +2973,7 @@ CHANGELOG					*unite-changelog*
 - Fixed action__path problem.
 - Improved vimfiler redraw behavior.
 - Fixed narrow action.
+- Fixed file_rec/async source.
 
 2013-04-01
 - Optimized for files.

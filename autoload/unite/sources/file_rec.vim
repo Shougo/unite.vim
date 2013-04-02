@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Mar 2013.
+" Last Modified: 02 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,7 +40,7 @@ call unite#util#set_default(
       \ 'g:unite_source_file_rec_async_command',
       \ executable('ag') ? 'ag --nocolor --nogroup -g ""' :
       \ executable('ack-grep') ? 'ack-grep -f' :
-      \ !unite#util#is_windows() && executable('find') ? 'find -type f' :
+      \ !unite#util#is_windows() && executable('find') ? 'find' :
       \ '')
 "}}}
 
@@ -333,7 +333,7 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
   for filename in map(filter(
         \ stdout.read_lines(-1, 100), 'v:val != ""'),
         \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
-    if filename !~? a:context.source.ignore_pattern
+    if !isdirectory(filename) && filename !~? a:context.source.ignore_pattern
       call add(candidates, {
             \ 'word' : unite#util#substitute_path_separator(
             \    fnamemodify(filename, ':p')),
