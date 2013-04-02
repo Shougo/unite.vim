@@ -2972,6 +2972,7 @@ CHANGELOG					*unite-changelog*
 2013-04-02
 - Fixed action__path problem.
 - Improved vimfiler redraw behavior.
+- Fixed narrow action.
 
 2013-04-01
 - Optimized for files.
