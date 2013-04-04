@@ -2972,6 +2972,13 @@ CHANGELOG					*unite-changelog*
 2013-04-04
 - Fixed file_rec/async source.
 
+2013-04-02
+- Fixed action__path problem.
+- Improved vimfiler redraw behavior.
+- Fixed narrow action.
+- Fixed file_rec/async source.
+- Fixed close previous unite buffer behavior.
+
 2013-04-01
 - Optimized for files.
 

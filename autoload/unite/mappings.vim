@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Mar 2013.
+" Last Modified: 02 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -382,6 +382,12 @@ function! unite#mappings#do_action(action_name, ...) "{{{
   if !empty(new_context)
     " Restore context.
     let unite.context = old_context
+  endif
+
+  if is_redraw && !empty(filter(range(1, winnr('$')),
+          \ "getwinvar(v:val, '&filetype') ==# 'vimfiler'"))
+    " Redraw vimfiler buffer.
+    call vimfiler#force_redraw_all_vimfiler(1)
   endif
 
   if !is_quit && is_redraw

@@ -39,7 +39,7 @@ call unite#util#set_default(
 call unite#util#set_default(
       \ 'g:unite_source_file_rec_async_command',
       \ executable('ag') ? 'ag --nocolor --nogroup -g ""' :
-      \ !unite#util#is_windows() && executable('find') ? 'find -type f' :
+      \ !unite#util#is_windows() && executable('find') ? 'find' :
       \ '')
 "}}}
 
@@ -292,7 +292,9 @@ function! s:source_async.gather_candidates(args, context) "{{{
 
   let a:context.source__proc = vimproc#pgroup_open(
         \ g:unite_source_file_rec_async_command
-        \ . ' ' . string(directory))
+        \ . ' ' . string(directory)
+        \ . (g:unite_source_file_rec_async_command ==#
+        \         'find' ? ' -type f' : ''))
 
   " Close handles.
   call a:context.source__proc.stdin.close()
@@ -332,7 +334,7 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
   for filename in map(filter(
         \ stdout.read_lines(-1, 100), 'v:val != ""'),
         \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
-    if filename !~? a:context.source.ignore_pattern
+    if !isdirectory(filename) && filename !~? a:context.source.ignore_pattern
       call add(candidates, {
             \ 'word' : unite#util#substitute_path_separator(
             \    fnamemodify(filename, ':p')),

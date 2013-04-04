@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Apr 2013.
+" Last Modified: 02 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -276,14 +276,14 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) "{{{
   if a:is_relative_path
     let dict.action__path = unite#util#substitute_path_separator(
         \                    fnamemodify(a:file, ':p'))
-    let dict.action__directory = fnamemodify(dict.action__path, ':.:h')
-  else
-    let dict.action__directory = dict.vimfiler__is_directory ?
-          \ a:file : fnamemodify(a:file, ':h')
   endif
 
+  let dict.action__directory = dict.vimfiler__is_directory ?
+        \ dict.action__path : fnamemodify(dict.action__path, ':h')
+
   if unite#util#is_windows()
-    let dict.action__directory = unite#util#substitute_path_separator(a:file)
+    let dict.action__directory =
+          \ unite#util#substitute_path_separator(dict.action__directory)
   endif
 
   if dict.vimfiler__is_directory
@@ -313,10 +313,8 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts) "{{{
   try
     if len(a:candidate.action__path) > 200
       " Convert to relative path.
-      let directory = unite#util#substitute_path_separator(
-            \ fnamemodify(a:candidate.action__path, ':h'))
       let current_dir_save = getcwd()
-      lcd `=directory`
+      lcd `=a:candidate.action__directory`
 
       let filename = unite#util#substitute_path_separator(
             \ fnamemodify(a:candidate.action__path, ':.'))
