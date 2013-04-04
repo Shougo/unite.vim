@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Mar 2013.
+" Last Modified: 04 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,7 +39,6 @@ call unite#util#set_default(
 call unite#util#set_default(
       \ 'g:unite_source_file_rec_async_command',
       \ executable('ag') ? 'ag --nocolor --nogroup -g ""' :
-      \ executable('ack-grep') ? 'ack-grep -f' :
       \ !unite#util#is_windows() && executable('find') ? 'find -type f' :
       \ '')
 "}}}
@@ -291,7 +290,7 @@ function! s:source_async.gather_candidates(args, context) "{{{
     return deepcopy(continuation.files)
   endif
 
-  let a:context.source__proc = vimproc#ptyopen(
+  let a:context.source__proc = vimproc#pgroup_open(
         \ g:unite_source_file_rec_async_command
         \ . ' ' . string(directory))
 

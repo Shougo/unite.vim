@@ -1570,7 +1570,7 @@ file_rec	Gather files recursive and nominates all directory or file
 file_rec/async	Same as |unite-source-file_rec|, but get files asynchronously.
 		
 		Note: This source requires vimproc.
-		Note: This source requires "ag" or "ack-grep" or "find" command.
+		Note: This source requires "ag" or "find" command.
 		Note: Windows "find" command is not supported.
 		Note: If you edit file by Vim, file_rec/async source will
 		update cache file.
@@ -2968,6 +2968,9 @@ A: You should use |<Plug>(unite_all_exit)| instead of |<Plug>(unite_exit)|.
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-04-04
+- Fixed file_rec/async source.
 
 2013-04-01
 - Optimized for files.
