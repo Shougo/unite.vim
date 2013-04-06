@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Apr 2013.
+" Last Modified: 06 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -244,7 +244,7 @@ function! unite#get_unite_winnr(buffer_name) "{{{
           \ buffer_context.buffer_name ==# a:buffer_name
       if buffer_context.temporary
             \ && !empty(filter(copy(buffer_context.old_buffer_info),
-            \ 'v:val.buffer_name ==# context.buffer_name'))
+            \ 'v:val.buffer_name ==# buffer_context.buffer_name'))
         " Disable resume.
         let buffer_context.old_buffer_info = []
       endif
@@ -262,7 +262,7 @@ function! unite#get_unite_bufnr(buffer_name) "{{{
           \ buffer_context.buffer_name ==# a:buffer_name
       if buffer_context.temporary
             \ && !empty(filter(copy(buffer_context.old_buffer_info),
-            \ 'v:val.buffer_name ==# context.buffer_name'))
+            \ 'v:val.buffer_name ==# buffer_context.buffer_name'))
         " Disable resume.
         let buffer_context.old_buffer_info = []
       endif
