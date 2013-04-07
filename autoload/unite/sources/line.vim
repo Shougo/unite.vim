@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 19 Mar 2013.
+" Last Modified: 07 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -189,8 +189,10 @@ function! s:on_gather_candidates(direction, context, start, offset) "{{{
 
     " Check match.
     for input in a:context.input_list
-      call filter(lines,
-            \ unite#filters#matcher_regexp#get_expr(input))
+      let expr = unite#filters#matcher_regexp#get_expr(input)
+      if expr !=# 'if_lua'
+        call filter(lines, expr)
+      endif
     endfor
 
     let _ += lines

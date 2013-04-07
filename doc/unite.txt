@@ -2969,6 +2969,9 @@ A: You should use |<Plug>(unite_all_exit)| instead of |<Plug>(unite_exit)|.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-04-07
+- Fixed filter.
+
 2013-04-06
 - Improved quick match behavior.
 
