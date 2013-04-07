@@ -2971,6 +2971,7 @@ CHANGELOG					*unite-changelog*
 
 2013-04-07
 - Fixed filter.
+- Added unite#util#has_lua().
 
 2013-04-06
 - Improved quick match behavior.

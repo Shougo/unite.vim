@@ -74,6 +74,9 @@ endfunction
 function! unite#util#has_vimproc(...)
   return call(s:V.has_vimproc, a:000)
 endfunction
+function! unite#util#has_lua()
+  return has('lua')
+endfunction
 function! unite#util#system(...)
   return call(s:V.system, a:000)
 endfunction

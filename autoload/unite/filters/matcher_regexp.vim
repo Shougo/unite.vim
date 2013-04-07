@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_regexp.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Apr 2013.
+" Last Modified: 08 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -71,7 +71,7 @@ function! unite#filters#matcher_regexp#get_expr(input) "{{{
     " Exclusion match.
     let expr = 'v:val.word !~ '.string(input[1:])
   elseif input !~ '[~\\.^$\[\]*]'
-    if has('lua')
+    if unite#util#has_lua()
       let expr = 'if_lua'
     else
       " Optimized filter.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_glob.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Mar 2013.
+" Last Modified: 08 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,7 +68,7 @@ function! unite#filters#matcher_glob#glob_matcher(candidates, input, context) "{
     let input = substitute(unite#escape_match(input),
           \ '\\\@<!|', '\\|', 'g')
     let expr = 'v:val.word =~ ' . string(input)
-  elseif has('lua')
+  elseif unite#util#has_lua()
     let expr = 'if_lua'
   else
     let input = substitute(input, '\\\(.\)', '\1', 'g')
