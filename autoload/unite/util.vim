@@ -286,12 +286,11 @@ function! unite#util#lua_matcher(candidates, input, ignorecase) "{{{
   if a:ignorecase
     let input = tolower(input)
   endif
-  echomsg 'before:' . len(a:candidates)
 lua << EOF
   input = vim.eval('input')
   ignorecase = vim.eval('a:ignorecase')
   candidates = vim.eval('a:candidates')
-  for i = 0, #candidates-1 do
+  for i = #candidates-1, 0, -1 do
     if (candidates[i] ~= nil) then
       if (ignorecase ~= 0) then
         pos = string.find(string.lower(candidates[i].word), input, 1, true)
@@ -304,7 +303,6 @@ lua << EOF
     end
   end
 EOF
-  echomsg 'after:' . len(a:candidates)
 
   return a:candidates
 endfunction"}}}
