@@ -304,16 +304,16 @@ function! unite#util#lua_matcher(candidates, context, ignorecase) "{{{
 
     lua << EOF
     input = vim.eval('input')
-    ignorecase = vim.eval('a:ignorecase')
     candidates = vim.eval('a:candidates')
-    for i = #candidates-1, 0, -1 do
-      if (candidates[i] ~= nil) then
-        if (ignorecase ~= 0) then
-          pos = string.find(string.lower(candidates[i].word), input, 1, true)
-        else
-          pos = string.find(candidates[i].word, input, 1, true)
+    if (vim.eval('a:ignorecase') ~= 0) then
+      for i = #candidates-1, 0, -1 do
+        if (string.find(string.lower(candidates[i].word), input, 1, true) == nil) then
+          candidates[i] = nil
         end
-        if (pos == nil) then
+      end
+    else
+      for i = #candidates-1, 0, -1 do
+        if (string.find(candidates[i].word, input, 1, true) == nil) then
           candidates[i] = nil
         end
       end
