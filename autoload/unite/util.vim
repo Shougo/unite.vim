@@ -249,7 +249,7 @@ function! unite#util#filter_matcher(list, expr, context) "{{{
         \ len(a:context.input_list) > 1
 
     return a:expr == '' ? a:list : (a:expr ==# 'if_lua') ?
-          \ unite#util#lua_matcher(a:list, a:context.input, &ignorecase)
+          \ unite#util#lua_matcher(a:list, a:context, &ignorecase)
           \ : filter(a:list, a:expr)
   endif
 
@@ -264,7 +264,7 @@ function! unite#util#filter_matcher(list, expr, context) "{{{
   let offset = max*4
   for cnt in range(0, len(a:list) / offset)
     let list = (a:expr ==# 'if_lua') ?
-          \ unite#util#lua_matcher(a:list, a:context.input, &ignorecase) :
+          \ unite#util#lua_matcher(a:list, a:context, &ignorecase) :
           \ filter(a:list[cnt*offset : cnt*offset + offset], a:expr)
     let len += len(list)
     let _ += list
@@ -276,33 +276,36 @@ function! unite#util#filter_matcher(list, expr, context) "{{{
 
   return _[: max]
 endfunction"}}}
-function! unite#util#lua_matcher(candidates, input, ignorecase) "{{{
+function! unite#util#lua_matcher(candidates, context, ignorecase) "{{{
   if !has('lua')
     return []
   endif
 
-  let input = substitute(a:input, '\\ ', ' ', 'g')
-  let input = substitute(input, '\\\(.\)', '\1', 'g')
-  if a:ignorecase
-    let input = tolower(input)
-  endif
-lua << EOF
-  input = vim.eval('input')
-  ignorecase = vim.eval('a:ignorecase')
-  candidates = vim.eval('a:candidates')
-  for i = #candidates-1, 0, -1 do
-    if (candidates[i] ~= nil) then
-      if (ignorecase ~= 0) then
-        pos = string.find(string.lower(candidates[i].word), input, 1, true)
-      else
-        pos = string.find(candidates[i].word, input, 1, true)
-      end
-      if (pos == nil) then
-        candidates[i] = nil
+  for input in a:context.input_list
+    let input = substitute(input, '\\ ', ' ', 'g')
+    let input = substitute(input, '\\\(.\)', '\1', 'g')
+    if a:ignorecase
+      let input = tolower(input)
+    endif
+
+    lua << EOF
+    input = vim.eval('input')
+    ignorecase = vim.eval('a:ignorecase')
+    candidates = vim.eval('a:candidates')
+    for i = #candidates-1, 0, -1 do
+      if (candidates[i] ~= nil) then
+        if (ignorecase ~= 0) then
+          pos = string.find(string.lower(candidates[i].word), input, 1, true)
+        else
+          pos = string.find(candidates[i].word, input, 1, true)
+        end
+        if (pos == nil) then
+          candidates[i] = nil
+        end
       end
     end
-  end
 EOF
+  endfor
 
   return a:candidates
 endfunction"}}}
