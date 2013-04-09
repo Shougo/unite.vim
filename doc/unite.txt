@@ -1541,6 +1541,9 @@ file		Nominates an input file as a candidate.
 		(Example: "../") or hidden files(Example: ".gitignore").
 		If you want to open these files, please input ".".
 
+		Source arguments:
+		1. the file/directory path.
+
 						*unite-source-file/new*
 file/new	Nominates a new input file as a candidate.
 
@@ -2981,6 +2984,7 @@ CHANGELOG					*unite-changelog*
 2013-04-07
 - Fixed filter.
 - Added unite#util#has_lua().
+- Improved source file.
 
 2013-04-06
 - Improved quick match behavior.

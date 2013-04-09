@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Apr 2013.
+" Last Modified: 09 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,6 +62,11 @@ function! s:source_file.change_candidates(args, context) "{{{
   if path !=# '/' && path =~ '[\\/]$'
     " Chomp.
     let path = path[: -2]
+  endif
+
+  if !isdirectory(path) && filereadable(path)
+    return [ unite#sources#file#create_file_dict(
+          \      path, path !~ '^\%(/\|\a\+:/\)') ]
   endif
 
   if input !~ '^\%(/\|\a\+:/\)' && path != '' && path != '/'
