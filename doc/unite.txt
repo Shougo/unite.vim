@@ -2975,7 +2975,7 @@ path?
 A:
 >
 	call unite#do_candidates_action('some_action',
-	\  unite#get_candidates(['file', expand('%')]))
+	\  unite#get_candidates([['file', expand('%')]]))
 <
 
 ==============================================================================
