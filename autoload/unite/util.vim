@@ -303,18 +303,20 @@ function! unite#util#lua_matcher(candidates, context, ignorecase) "{{{
     endif
 
     lua << EOF
-    input = vim.eval('input')
-    candidates = vim.eval('a:candidates')
-    if (vim.eval('a:ignorecase') ~= 0) then
-      for i = #candidates-1, 0, -1 do
-        if (string.find(string.lower(candidates[i].word), input, 1, true) == nil) then
-          candidates[i] = nil
+    do
+      local input = vim.eval('input')
+      local candidates = vim.eval('a:candidates')
+      if (vim.eval('a:ignorecase') ~= 0) then
+        for i = #candidates-1, 0, -1 do
+          if (string.find(string.lower(candidates[i].word), input, 1, true) == nil) then
+            candidates[i] = nil
+          end
         end
-      end
-    else
-      for i = #candidates-1, 0, -1 do
-        if (string.find(candidates[i].word, input, 1, true) == nil) then
-          candidates[i] = nil
+      else
+        for i = #candidates-1, 0, -1 do
+          if (string.find(candidates[i].word, input, 1, true) == nil) then
+            candidates[i] = nil
+          end
         end
       end
     end
