@@ -75,7 +75,9 @@ function! unite#util#has_vimproc(...)
   return call(s:V.has_vimproc, a:000)
 endfunction
 function! unite#util#has_lua()
-  return has('lua')
+  " Note: Temporally disabled if_lua feature. Because if_lua has SEGV problem.
+  return 0
+  " return has('lua')
 endfunction
 function! unite#util#system(...)
   return call(s:V.system, a:000)

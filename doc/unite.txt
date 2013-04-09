@@ -2981,6 +2981,9 @@ A:
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-04-10
+- Temporally disabled if_lua feature. Because if_lua has SEGV problem.
+
 2013-04-07
 - Fixed filter.
 - Added unite#util#has_lua().
