@@ -2966,6 +2966,15 @@ Q: I want to exit unite buffer after narrowing action in directory.
 
 A: You should use |<Plug>(unite_all_exit)| instead of |<Plug>(unite_exit)|.
 
+Q: How to make direct action (or choose action menu) to current file or given
+path?
+
+A:
+>
+	call unite#do_candidates_action('some_action',
+	\  unite#get_candidates(['file', expand('%')]))
+<
+
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
