@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Apr 2013.
+" Last Modified: 11 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1020,13 +1020,13 @@ function! s:print_buffer(message) "{{{
         \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
 
   " Auto split.
-  let message = []
-  let messages = type(a:message) == type([]) ?
-        \ a:message : split(a:message, '\n')
+  let messages = []
 
   " Convert source name.
-  for msg in messages
-    while msg != ''
+  for msg in type(a:message) == type([]) ?
+        \ a:message : split(a:message, '\n')
+    let trunc_msg = msg
+    while msg != '' && trunc_msg != ''
       let msg = substitute(msg, '^\[\zs.\{-}\ze\] ',
             \ '\=unite#_convert_source_name(submatch(0))', '')
       let trunc_msg = unite#util#strwidthpart(
@@ -1047,15 +1047,15 @@ function! s:print_buffer(message) "{{{
         endif
       endif
 
-      call add(message, trunc_msg)
+      call add(messages, trunc_msg)
     endwhile
   endfor
 
   let linenr = line('.')
-  call append(unite.prompt_linenr-1, message)
-  let unite.prompt_linenr += len(message)
+  call append(unite.prompt_linenr-1, messages)
+  let unite.prompt_linenr += len(messages)
 
-  call cursor(linenr+len(message), 0)
+  call cursor(linenr+len(messages), 0)
   if line('.') < winheight(0)
     normal! zb
   endif
