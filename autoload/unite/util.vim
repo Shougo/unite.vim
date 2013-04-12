@@ -75,9 +75,9 @@ function! unite#util#has_vimproc(...)
   return call(s:V.has_vimproc, a:000)
 endfunction
 function! unite#util#has_lua()
-  " Note: Temporally disabled if_lua feature. Because if_lua has SEGV problem.
-  return 0
-  " return has('lua')
+  " Note: Disabled if_lua feature if less than 7.3.885.
+  " Because if_lua has double free problem.
+  return has('lua') && (v:version > 703 || v:version == 703 && has('patch885'))
 endfunction
 function! unite#util#system(...)
   return call(s:V.system, a:000)
