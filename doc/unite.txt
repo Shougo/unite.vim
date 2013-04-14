@@ -2981,6 +2981,9 @@ A:
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-04-14
+- Fixed action source problems.
+
 2013-04-13
 - Improved narrow action.
 
