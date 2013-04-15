@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Apr 2013.
+" Last Modified: 15 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2816,7 +2816,7 @@ function! s:on_cursor_moved_i()  "{{{
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
 
-  if unite.max_source_candidates < 4000
+  if unite.max_source_candidates <= 4000
     call s:check_redraw()
   endif
 
