@@ -2981,6 +2981,9 @@ A:
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-04-17
+- Use vimproc#readdir() in file_rec source.
+
 2013-04-14
 - Fixed action source problems.
 

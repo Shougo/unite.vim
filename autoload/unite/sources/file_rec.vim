@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file_rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Apr 2013.
+" Last Modified: 17 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -457,8 +457,9 @@ function! s:get_files(files, level, max_len, ignore_pattern) "{{{
       endif
 
       let child_index = 0
-      let children = unite#util#glob(file.'/*') +
-            \ unite#util#glob(file.'/.*')
+      let children = exists('*vimproc#readdir') ?
+            \ vimproc#readdir(file) :
+            \ unite#util#glob(file.'/*') + unite#util#glob(file.'/.*')
       for child in children
         let child = substitute(child, '\/$', '', '')
         let child_index += 1
