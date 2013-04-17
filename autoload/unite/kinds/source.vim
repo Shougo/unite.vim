@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: source.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Feb 2013.
+" Last Modified: 17 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,13 +44,13 @@ let s:kind.action_table.start = {
       \ 'is_quit' : 1,
       \ }
 function! s:kind.action_table.start.func(candidates) "{{{
-  let context = copy(unite#get_context())
+  let context = {}
   let context.input = ''
   let context.auto_preview = 0
   let context.unite__is_vimfiler = 0
   let context.default_action = 'default'
 
-  call unite#start(map(copy(a:candidates),
+  call unite#start_temporary(map(copy(a:candidates),
         \ 'has_key(v:val, "action__source_args") ?'
         \  . 'insert(copy(v:val.action__source_args), v:val.action__source_name) :'
         \  . 'v:val.action__source_name'), context)
