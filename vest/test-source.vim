@@ -71,7 +71,7 @@ Context Source.run()
   It get candidates
     call unite#custom_max_candidates('file_mru', 1)
     let candidates = unite#get_candidates(['file_mru'])
-    ShouldEqual len(candidates),len(readfile(
+    ShouldEqual len(candidates), len(readfile(
           \ g:unite_data_directory . '/file_mru'))-1
 
     let candidates = unite#get_candidates([

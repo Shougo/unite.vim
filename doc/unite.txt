@@ -2983,6 +2983,7 @@ CHANGELOG					*unite-changelog*
 
 2013-04-18
 - Improved documentation for ag.
+- Fixed unite#get_candidates().
 
 2013-04-17
 - Use vimproc#readdir() in file_rec source.

@@ -259,7 +259,7 @@ endfunction"}}}
 " filter() for matchers.
 function! unite#util#filter_matcher(list, expr, context) "{{{
   if a:context.unite__max_candidates <= 0 ||
-        \ !unite#get_current_unite().is_enabled_max_candidates ||
+        \ !a:context.unite__is_interactive ||
         \ len(a:context.input_list) > 1
 
     return a:expr == '' ? a:list : (a:expr ==# 'if_lua') ?

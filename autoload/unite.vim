@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Apr 2013.
+" Last Modified: 18 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1287,13 +1287,11 @@ function! unite#get_candidates(sources, ...) "{{{
     let context.unite__is_interactive = 0
 
     " Finalize.
-    let unite = unite#get_current_unite()
-    let unite.is_enabled_max_candidates = 1
-
     let candidates = s:get_candidates(a:sources, context)
 
     " Call finalize functions.
     call s:call_hook(unite#loaded_sources_list(), 'on_close')
+    let unite = unite#get_current_unite()
     let unite.is_finalized = 1
   finally
     call unite#set_current_unite(unite_save)
@@ -1310,6 +1308,7 @@ function! unite#get_vimfiler_candidates(sources, ...) "{{{
           \ s:get_source_names(a:sources))
     let context.no_buffer = 1
     let context.unite__is_vimfiler = 1
+    let context.unite__is_interactive = 0
 
     let candidates = s:get_candidates(a:sources, context)
   finally
@@ -2165,7 +2164,7 @@ function! s:recache_candidates(input, is_force) "{{{
     let source.unite__is_invalidate = 0
 
     if !context.no_buffer && source.max_candidates != 0
-          \ && unite.is_enabled_max_candidates
+          \ && !context.unite__is_interactive
           \ && len(source.unite__candidates) > source.max_candidates
       " Filtering too many candidates.
       let source.unite__candidates =
@@ -2500,7 +2499,6 @@ function! s:initialize_current_unite(sources, context) "{{{
         \  'v:val.unite__context.is_async')) > 0
   let unite.access_time = localtime()
   let unite.is_finalized = 0
-  let unite.is_enabled_max_candidates = 1
   let unite.previewd_buffer_list = []
   let unite.post_filters = unite#get_profile(
         \ unite.profile_name, 'filters')
