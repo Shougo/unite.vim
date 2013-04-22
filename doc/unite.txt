@@ -1532,6 +1532,10 @@ context.
 		Note: This option will set 'wrap' option and disable
 		|unite-options-multi-line| option.
 
+						*unite-options-select*
+		-select={select-candidate-number}
+		If it is set, unite will select specified candidate.
+
 ==============================================================================
 SOURCES						*unite-sources*
 

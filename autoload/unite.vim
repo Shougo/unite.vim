@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Apr 2013.
+" Last Modified: 22 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -328,7 +328,7 @@ let s:unite_options = [
       \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
       \ '-auto-quit', '-no-focus',
       \ '-long-source-names', '-short-source-names',
-      \ '-multi-line', '-resume', '-wrap',
+      \ '-multi-line', '-resume', '-wrap', '-select='
       \]
 "}}}
 
@@ -1707,6 +1707,7 @@ function! s:initialize_context(context, ...) "{{{
         \ 'multi_line' : 0,
         \ 'resume' : 0,
         \ 'wrap' : 0,
+        \ 'select' : 0,
         \ 'unite__direct_switch' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 0,
@@ -3238,18 +3239,16 @@ endfunction"}}}
 function! s:init_cursor() "{{{
   let unite = unite#get_current_unite()
 
-  if unite.context.no_focus
-    if winbufnr(winnr('#')) > 0
-      wincmd p
-    else
-      execute bufwinnr(unite.prev_bufnr).'wincmd w'
-    endif
+  let positions = unite#get_profile(
+        \ unite.profile_name, 'unite__save_pos')
+  let key = unite#loaded_source_names_string()
+  let is_restore = has_key(positions, key) &&
+        \ unite.context.select != 0
 
-    return
-  elseif unite.context.start_insert
+  if unite.context.start_insert
     let unite.is_insert = 1
 
-    execute unite.prompt_linenr
+    call cursor(unite.prompt_linenr, 0)
     if line('.') < winheight(0)
       normal! zb
     endif
@@ -3257,22 +3256,18 @@ function! s:init_cursor() "{{{
 
     startinsert!
   else
-    let positions = unite#get_profile(
-          \ unite.profile_name, 'unite__save_pos')
-    let key = unite#loaded_source_names_string()
-    let is_restore = has_key(positions, key)
-    let candidate = unite#get_current_candidate()
-
     if is_restore
       " Restore position.
       call setpos('.', positions[key].pos)
     endif
 
+    let candidate = unite#get_current_candidate()
+
     let unite.is_insert = 0
 
     if !is_restore
           \ || candidate != unite#get_current_candidate()
-      execute (unite.prompt_linenr+1)
+      call cursor(unite.prompt_linenr+1, 0)
     endif
 
     normal! 0
@@ -3281,6 +3276,19 @@ function! s:init_cursor() "{{{
     endif
 
     stopinsert
+  endif
+
+  if unite.context.select != 0
+    " Select specified candidate.
+    call cursor(line('.') + unite.context.select, 0)
+  endif
+
+  if unite.context.no_focus
+    if winbufnr(winnr('#')) > 0
+      wincmd p
+    else
+      execute bufwinnr(unite.prev_bufnr).'wincmd w'
+    endif
   endif
 
   if unite.context.quick_match
