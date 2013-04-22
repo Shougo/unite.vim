@@ -3280,7 +3280,7 @@ function! s:init_cursor() "{{{
 
   if unite.context.select != 0
     " Select specified candidate.
-    call cursor(line('.') + unite.context.select, 0)
+    call cursor(line('.') + unite.context.select - 1, 0)
   endif
 
   if unite.context.no_focus

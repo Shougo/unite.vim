@@ -1533,8 +1533,9 @@ context.
 		|unite-options-multi-line| option.
 
 						*unite-options-select*
-		-select={select-candidate-number}
+		-select={select-candidate-index}
 		If it is set, unite will select specified candidate.
+		Note: The candidate index is 0-origin.
 
 ==============================================================================
 SOURCES						*unite-sources*
