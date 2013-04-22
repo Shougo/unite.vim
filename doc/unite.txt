@@ -2985,6 +2985,9 @@ A:
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-04-22
+- Changed tab source behavior.
+
 2013-04-18
 - Improved documentation for ag.
 - Fixed unite#get_candidates().
