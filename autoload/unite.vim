@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2013.
+" Last Modified: 23 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -3243,7 +3243,7 @@ function! s:init_cursor() "{{{
         \ unite.profile_name, 'unite__save_pos')
   let key = unite#loaded_source_names_string()
   let is_restore = has_key(positions, key) &&
-        \ unite.context.select != 0
+        \ unite.context.select == 0
 
   if unite.context.start_insert
     let unite.is_insert = 1
