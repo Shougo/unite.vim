@@ -2986,6 +2986,9 @@ A:
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-04-25
+- Fixed unite#clear_message().
+
 2013-04-22
 - Changed tab source behavior.
 

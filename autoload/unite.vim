@@ -970,7 +970,8 @@ endfunction"}}}
 function! unite#clear_message() "{{{
   let s:unite_cached_message = []
   let unite = unite#get_current_unite()
-  if &filetype !=# 'unite' || unite.prompt_linenr <= 2
+  if &filetype !=# 'unite' ||
+        \ unite.prompt_linenr <= unite.min_prompt_linenr
     return
   endif
 
@@ -978,8 +979,10 @@ function! unite#clear_message() "{{{
   setlocal modifiable
 
   let linenr = line('.')
-  silent! execute '2,'.(unite.prompt_linenr-1).'delete _'
-  call cursor(linenr - (unite.prompt_linenr - 2), 0)
+  silent! execute unite.min_prompt_linenr.','.
+        \ (unite.prompt_linenr-1).'delete _'
+  call cursor(linenr - (unite.prompt_linenr -
+        \ unite.min_prompt_linenr), 0)
   if line('.') < winheight(0)
     normal! zb
   endif
@@ -988,7 +991,7 @@ function! unite#clear_message() "{{{
     startinsert!
   endif
 
-  let unite.prompt_linenr = 2
+  let unite.prompt_linenr = unite.min_prompt_linenr
 
   let &l:modifiable = modifiable_save
   call s:on_cursor_moved()
@@ -2494,7 +2497,8 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.input = context.input
   let unite.last_input = context.input
   let unite.sidescrolloff_save = &sidescrolloff
-  let unite.prompt_linenr = (context.hide_status_line) ? 1 : 2
+  let unite.min_prompt_linenr = (context.hide_status_line) ? 1 : 2
+  let unite.prompt_linenr = unite.min_prompt_linenr
   let unite.is_async =
         \ len(filter(copy(sources),
         \  'v:val.unite__context.is_async')) > 0
