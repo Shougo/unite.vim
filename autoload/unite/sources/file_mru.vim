@@ -50,9 +50,11 @@ call unite#util#set_default(
       \ 100)
 call unite#util#set_default(
       \ 'g:unite_source_file_mru_ignore_pattern',
-      \'\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$'
+      \'\~$\|\.\%(o\|exe\|dll\|bak\|zwc\|pyc\|sw[po]\)$'
       \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
-      \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)')
+      \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)'
+      \'\|\%(^\%(fugitive\)://\)'
+      \)
 "}}}
 
 function! unite#sources#file_mru#define() "{{{
