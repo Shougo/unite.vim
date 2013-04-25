@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Apr 2013.
+" Last Modified: 25 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2742,19 +2742,23 @@ function! unite#_resize_window() "{{{
     " Auto resize.
 
     let saved_lazyredraw = &lazyredraw
-    set lazyredraw
 
-    let max_len = unite.prompt_linenr + len(unite.current_candidates)
-    execute 'resize' min([max_len, context.winheight])
-    if line('.') < winheight(0)
-      normal! zb
-    endif
-    if mode() ==# 'i' && col('.') == (col('$') - 1)
-      startinsert!
-    endif
+    try
+      set lazyredraw
 
-    redraw
-    let &lazyredraw = saved_lazyredraw
+      let max_len = unite.prompt_linenr + len(unite.current_candidates)
+      execute 'resize' min([max_len, context.winheight])
+      if line('.') < winheight(0)
+        normal! zb
+      endif
+      if mode() ==# 'i' && col('.') == (col('$') - 1)
+        startinsert!
+      endif
+
+      redraw
+    finally
+      let &lazyredraw = saved_lazyredraw
+    endtry
 
     let context.is_resize = 1
   elseif context.vertical
