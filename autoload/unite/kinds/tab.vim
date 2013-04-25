@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2012.
+" Last Modified: 25 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,20 +73,15 @@ endfunction"}}}
 let s:kind.action_table.unite__new_candidate = {
       \ 'description' : 'create new tab',
       \ 'is_invalidate_cache' : 1,
-      \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.unite__new_candidate.func(candidate) "{{{
   let title = input('Please input tab title: ', '',
         \ 'customlist,' . s:SID_PREFIX() . 'history_complete')
 
-  let tabnr = tabpagenr()
-
   tabnew
   if title != ''
     let t:title = title
   endif
-
-  execute 'tabnext' tabnr
 endfunction"}}}
 
 " Anywhere SID.
