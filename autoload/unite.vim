@@ -2740,6 +2740,10 @@ function! unite#_resize_window() "{{{
 
   if context.auto_resize
     " Auto resize.
+
+    let saved_lazyredraw = &lazyredraw
+    set lazyredraw
+
     let max_len = unite.prompt_linenr + len(unite.current_candidates)
     execute 'resize' min([max_len, context.winheight])
     if line('.') < winheight(0)
@@ -2748,6 +2752,9 @@ function! unite#_resize_window() "{{{
     if mode() ==# 'i' && col('.') == (col('$') - 1)
       startinsert!
     endif
+
+    redraw
+    let &lazyredraw = saved_lazyredraw
 
     let context.is_resize = 1
   elseif context.vertical
