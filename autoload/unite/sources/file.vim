@@ -29,7 +29,7 @@ set cpo&vim
 
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_file_ignore_pattern',
-      \'\%(^\|/\)\.\.\?$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$')
+      \'\%(^\|/\)\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|DS_Store|pyc|zwc|sw[po]\)$')
 "}}}
 
 function! unite#sources#file#define() "{{{
