@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Apr 2013.
+" Last Modified: 30 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2839,6 +2839,9 @@ function! s:on_cursor_moved()  "{{{
   else
     if winline() <= winheight('$') / 2
       normal! zz
+    endif
+    if mode() ==# 'i'
+      startinsert!
     endif
 
     nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
