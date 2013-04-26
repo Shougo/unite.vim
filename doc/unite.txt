@@ -214,6 +214,12 @@ g:unite_update_time				*g:unite_update_time*
 
 		The default value is 500.
 
+g:unite_prompt			                *g:unite_prompt*
+		Unite default prompt. Can be set with `-prompt` option for 
+		each unite session.
+
+		The default value is '> '.
+
 g:unite_enable_start_insert			*g:unite_enable_start_insert*
 		If this variable is 1, unite buffer will be in Insert Mode
 		immediately.
