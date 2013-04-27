@@ -320,7 +320,7 @@ let s:unite_options = [
       \ '-buffer-name=', '-profile-name=', '-input=', '-prompt=',
       \ '-default-action=', '-start-insert','-no-start-insert', '-no-quit',
       \ '-winwidth=', '-winheight=',
-      \ '-immediately', '-no-empty', '-auto-preview', '-complete',
+      \ '-immediately', '-no-empty', '-auto-preview', '-auto-highlight', '-complete',
       \ '-vertical', '-horizontal', '-direction=', '-no-split',
       \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
       \ '-cursor-line-highlight=', '-no-cursor-line',
@@ -1210,6 +1210,7 @@ function! unite#start_temporary(sources, ...) "{{{
   let context.unite__direct_switch = 1
   let context.input = ''
   let context.auto_preview = 0
+  let context.auto_highlight = 0
   let context.unite__is_vimfiler = 0
   let context.default_action = 'default'
   let context.unite__old_winwidth = 0
@@ -1682,6 +1683,7 @@ function! s:initialize_context(context, ...) "{{{
         \ 'immediately' : 0,
         \ 'no_empty' : 0,
         \ 'auto_preview' : 0,
+        \ 'auto_highlight' : 0,
         \ 'vertical' : g:unite_enable_split_vertically,
         \ 'direction' : g:unite_split_rule,
         \ 'no_split' : 0,
@@ -2508,6 +2510,7 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.post_filters = unite#get_profile(
         \ unite.profile_name, 'filters')
   let unite.preview_candidate = {}
+  let unite.highlight_candidate = {}
   let unite.max_source_name = 0
   let unite.candidates_pos = 0
   let unite.candidates = []
@@ -2716,6 +2719,9 @@ function! s:redraw(is_force, winnr, is_gather_all) "{{{
 
   if context.auto_preview
     call s:do_auto_preview()
+  endif
+  if context.auto_highlight
+    call s:do_auto_highlight()
   endif
 endfunction"}}}
 function! unite#_resize_window() "{{{
@@ -2944,6 +2950,9 @@ function! s:on_cursor_moved()  "{{{
 
   if context.auto_preview
     call s:do_auto_preview()
+  endif
+  if context.auto_highlight
+    call s:do_auto_highlight()
   endif
 
   " Check lines. "{{{
@@ -3239,6 +3248,16 @@ function! s:do_auto_preview() "{{{
   if s:has_preview_window()
     call unite#_resize_window()
   endif
+endfunction"}}}
+function! s:do_auto_highlight() "{{{
+  let unite = unite#get_current_unite()
+
+  if unite.highlight_candidate == unite#get_current_candidate()
+    return
+  endif
+  let unite.highlight_candidate = unite#get_current_candidate()
+
+  call unite#mappings#do_action('highlight', [], {})
 endfunction"}}}
 function! s:init_cursor() "{{{
   let unite = unite#get_current_unite()

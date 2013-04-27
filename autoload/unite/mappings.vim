@@ -85,6 +85,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>toggle_transpose_window()<CR>
   nnoremap <buffer><silent> <Plug>(unite_toggle_auto_preview)
         \ :<C-u>call <SID>toggle_auto_preview()<CR>
+  nnoremap <buffer><silent> <Plug>(unite_toggle_auto_highlight)
+        \ :<C-u>call <SID>toggle_auto_highlight()<CR>
   nnoremap <buffer><silent> <Plug>(unite_narrowing_path)
         \ :<C-u>call <SID>narrowing_path()<CR>
   nnoremap <buffer><silent> <Plug>(unite_narrowing_input_history)
@@ -149,6 +151,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ <C-o>:<C-u>call <SID>toggle_transpose_window()<CR>
   inoremap <silent><buffer> <Plug>(unite_toggle_auto_preview)
         \ <C-o>:<C-u>call <SID>toggle_auto_preview()<CR>
+  inoremap <silent><buffer> <Plug>(unite_toggle_auto_highlight)
+        \ <C-o>:<C-u>call <SID>toggle_auto_highlight()<CR>
   inoremap <silent><buffer> <Plug>(unite_narrowing_path)
         \ <C-o>:<C-u>call <SID>narrowing_path()<CR>
   inoremap <silent><buffer> <Plug>(unite_narrowing_input_history)
@@ -883,6 +887,10 @@ function! s:toggle_auto_preview() "{{{
     " Close preview window.
     pclose!
   endif
+endfunction"}}}
+function! s:toggle_auto_highlight() "{{{
+  let context = unite#get_context()
+  let context.auto_highlight = !context.auto_highlight
 endfunction"}}}
 function! s:toggle_max_candidates() "{{{
   let unite = unite#get_current_unite()
