@@ -40,6 +40,8 @@ syntax region uniteNonMarkedLine start=/^- / end='$' keepend
 syntax match uniteCandidateMarker /^- / contained
 syntax match uniteQuickMatchTrigger /^.|/ contained
 
+highlight default link uniteError  Error
+
 highlight default link uniteQuickMatchTrigger  Special
 highlight default link uniteMarkedLine  Statement
 highlight default link uniteCandidateSourceName  Type
