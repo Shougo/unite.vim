@@ -1411,6 +1411,10 @@ context.
 		-auto-preview
 		When you selected a candidate, it runs "preview" action
 		automatically.
+						*unite-options-auto-highlight*
+		-auto-highlight
+		When you selected a candidate, it runs "highlight" action
+		automatically.
 
 						*unite-options-completion*
 		-completion
@@ -2202,6 +2206,8 @@ This kind extends actions of |unite-action-openable|.  Let me explain about
 the additional actions defined in this.
 	open		Jump to the location of the candidate
 	preview		Preview around the location of the candidate
+	highlight	highlight the location of the candidate if the 
+			corresponding buffer is visible
 	replace		Replace selected candidates with |qfreplace| plugin
 
 command						*unite-action-command*
