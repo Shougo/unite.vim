@@ -3016,7 +3016,8 @@ A:
 	call unite#do_candidates_action('some_action',
 	\  unite#get_candidates([['file', expand('%')]]))
 <
-Q: unite.vim statusline conflicts with vim-powerline.
+Q: unite.vim statusline conflicts with powerline.
+https://github.com/Lokaltog/powerline
 https://github.com/Lokaltog/vim-powerline
 
 A: Todo
