@@ -1675,7 +1675,7 @@ function! s:initialize_context(context, ...) "{{{
         \ 'no_quit' : 0,
         \ 'buffer_name' : 'default',
         \ 'profile_name' : '',
-        \ 'prompt' : '> ',
+        \ 'prompt' : g:unite_prompt,
         \ 'default_action' : 'default',
         \ 'winwidth' : g:unite_winwidth,
         \ 'winheight' : g:unite_winheight,
