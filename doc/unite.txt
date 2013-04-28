@@ -1640,7 +1640,8 @@ bookmark	Nominates files or directories you bookmarked as candidates.
 		is used.
 
 		Source arguments:
-		1. Bookmark file name. `*` to load from all bookmark files
+		1. Bookmark file name. 
+		use `*` or `_` to load from all bookmark files
 
 						*unite-source-source*
 source		Nominates Unite source names themselves as candidates.

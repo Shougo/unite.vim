@@ -94,7 +94,7 @@ let s:source = {
 function! s:source.gather_candidates(args, context) "{{{
     let bookmark_name = get(a:args, 0, 'default')
 
-    if bookmark_name == '*'
+    if bookmark_name == '*' || bookmark_name == '_'
       let bookmarks = map(filter(
           \ unite#util#glob(g:unite_source_bookmark_directory . '/*'),
           \ 'filereadable(v:val)'),
