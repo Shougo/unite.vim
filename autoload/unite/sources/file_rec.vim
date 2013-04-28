@@ -85,8 +85,12 @@ function! s:source_rec.gather_candidates(args, context) "{{{
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
-    call unite#print_source_message(
+    if a:context.hide_status_line
+      call unite#clear_message()
+    else
+      call unite#print_source_message(
           \ 'Directory traverse was completed.', self.name)
+    endif
     let a:context.is_async = 0
     let continuation.end = 1
   endif
@@ -104,8 +108,12 @@ function! s:source_rec.async_gather_candidates(args, context) "{{{
   if empty(continuation.rest) || len(continuation.files) >
         \                    g:unite_source_file_rec_max_cache_files
     if empty(continuation.rest)
-      call unite#print_source_message(
+      if a:context.hide_status_line
+        call unite#clear_message()
+      else
+        call unite#print_source_message(
             \ 'Directory traverse was completed.', self.name)
+      endif
     else
       call unite#print_source_message(
             \ 'Too many candiates.', self.name)
@@ -282,8 +290,13 @@ function! s:source_async.gather_candidates(args, context) "{{{
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
-    call unite#print_source_message(
+    if a:context.hide_status_line
+      call unite#clear_message()
+    else
+      call unite#print_source_message(
           \ 'Directory traverse was completed.', self.name)
+    endif
+
     let a:context.is_async = 0
     let continuation.end = 1
 
@@ -320,8 +333,13 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
         \        g:unite_source_file_rec_max_cache_files
     " Disable async.
     if stdout.eof
+    if a:context.hide_status_line
+      call unite#clear_message()
+    else
       call unite#print_source_message(
-            \ 'Directory traverse was completed.', self.name)
+          \ 'Directory traverse was completed.', self.name)
+    endif
+
     else
       call unite#print_source_message(
             \ 'Too many candiates.', self.name)

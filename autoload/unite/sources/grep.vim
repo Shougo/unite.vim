@@ -230,7 +230,11 @@ function! s:source.async_gather_candidates(args, context) "{{{
   let stdout = a:context.source__proc.stdout
   if stdout.eof
     " Disable async.
-    call unite#print_source_message('Completed.', s:source.name)
+    if a:context.hide_status_line
+      call unite#clear_message()
+    else
+      call unite#print_source_message('Completed.', s:source.name)
+    endif
     let a:context.is_async = 0
   endif
 
