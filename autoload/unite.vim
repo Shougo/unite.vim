@@ -239,8 +239,7 @@ function! unite#do_candidates_action(action_name, candidates, ...) "{{{
 endfunction"}}}
 function! unite#get_unite_winnr(buffer_name) "{{{
   for winnr in filter(range(1, winnr('$')),
-        \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite' &&
-        \  !getwinvar(v:val, '&previewwindow')")
+        \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
     let buffer_context = get(getbufvar(
           \ winbufnr(winnr), 'unite'), 'context', {})
     if !empty(buffer_context) &&
@@ -1462,7 +1461,9 @@ function! s:quit_session(is_force, ...)  "{{{
       execute unite.prev_winnr 'wincmd w'
     endif
   else
-    let winnr = unite#get_unite_winnr(context.buffer_name)
+    let winnr = get(filter(range(1, winnr('$')),
+          \ "winbufnr(v:val) == unite.prev_bufnr &&
+          \  !getwinvar(v:val, '&previewwindow')"), 0, -1)
     if winnr < 0
       let winnr = unite.prev_winnr
     endif
