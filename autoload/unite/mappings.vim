@@ -657,7 +657,7 @@ function! s:print_candidate() "{{{
 endfunction"}}}
 function! s:print_message_log() "{{{
   for msg in unite#get_current_unite().msgs
-    echo msg
+    echohl Comment | echo msg | echohl None
   endfor
   for msg in unite#get_current_unite().err_msgs
     echohl WarningMsg | echo msg | echohl None

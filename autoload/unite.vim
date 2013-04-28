@@ -953,7 +953,7 @@ function! unite#print_message(message) "{{{
 
   let unite = unite#get_current_unite()
   let unite.msgs += unite#util#msg2list(a:message)
-  call unite#util#redraw_echo(a:message)
+  echohl Comment | call unite#util#redraw_echo(a:message) | echohl None
 endfunction"}}}
 function! unite#print_source_message(message, source_name) "{{{
   call unite#print_message(map(copy(unite#util#msg2list(a:message)),
