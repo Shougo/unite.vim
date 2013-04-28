@@ -101,9 +101,16 @@ function! unite#kinds#jump_list#define() "{{{
 
     if candidate_winnr > 0
       let unite = unite#get_current_unite()
+      let context = unite.context
       let current_winnr = winnr()
 
-      execute candidate_winnr 'wincmd w'
+      if context.vertical 
+          setlocal winfixwidth
+      else 
+          setlocal winfixheight
+      endif
+
+      noautocmd execute candidate_winnr 'wincmd w'
 
       call s:jump(a:candidate, 1)
       let unite_winnr = bufwinnr(unite.bufnr)
@@ -111,7 +118,7 @@ function! unite#kinds#jump_list#define() "{{{
         let unite_winnr = current_winnr
       endif
       if unite_winnr > 0
-        execute unite_winnr 'wincmd w'
+        noautocmd execute unite_winnr 'wincmd w'
       endif
     endif
   endfunction"}}}
