@@ -1461,13 +1461,12 @@ function! s:quit_session(is_force, ...)  "{{{
       execute unite.prev_winnr 'wincmd w'
     endif
   else
+    " Note: Except preview window.
     let winnr = get(filter(range(1, winnr('$')),
           \ "winbufnr(v:val) == unite.prev_bufnr &&
-          \  !getwinvar(v:val, '&previewwindow')"), 0, -1)
-    if winnr < 0
-      let winnr = unite.prev_winnr
-    endif
-    if winnr == winnr() || winnr < 0
+          \  !getwinvar(v:val, '&previewwindow')"), 0, unite.prev_winnr)
+
+    if winnr == winnr()
       new
     else
       execute winnr 'wincmd w'

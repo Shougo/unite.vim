@@ -704,6 +704,9 @@ Normal mode mappings.
 <Plug>(unite_print_candidate)		*<Plug>(unite_print_candidate)*
 		Shows the target of the action of the selected candidate.
 
+<Plug>(unite_print_message_log)		*<Plug>(unite_print_message_log)*
+		Shows the message log in current unite buffer.
+
 <Plug>(unite_cursor_top)			*<Plug>(unite_cursor_top)*
 		Moves the cursor to the top of the Unite buffer.
 
@@ -867,6 +870,12 @@ Insert mode mappings.
 <Plug>(unite_redraw)				*i_<Plug>(unite_redraw)*
 		Same to |<Plug>(unite_redraw)|.
 
+<Plug>(unite_print_candidate)		*i_<Plug>(unite_print_candidate)*
+		Same to |<Plug>(unite_print_candidate)|.
+
+<Plug>(unite_print_message_log)		*i_<Plug>(unite_print_message_log)*
+		Same to |<Plug>(unite_print_message_log)|.
+
 <Plug>(unite_new_candidate)			*i_<Plug>(unite_new_candidate)*
 		Same to |<Plug>(unite_new_candidate)|.
 
@@ -897,7 +906,7 @@ M		|<Plug>(unite_toggle_max_candidates)|
 <Tab>		|<Plug>(unite_choose_action)|
 <C-n>		|<Plug>(unite_rotate_next_source)|
 <C-p>		|<Plug>(unite_rotate_previous_source)|
-<C-g>		|<Plug>(unite_print_candidate)|
+<C-g>		|<Plug>(unite_print_message_log)|
 <C-l>		|<Plug>(unite_redraw)|
 <C-h>		|<Plug>(unite_delete_backward_path)|
 gg		|<Plug>(unite_cursor_top)|
@@ -3010,6 +3019,7 @@ CHANGELOG					*unite-changelog*
 2013-04-28
 - Improved unite status line.
 - Improved message behavior.
+- Added <Plug>(unite_print_message_log) mapping.
 
 2013-04-25
 - Fixed unite#clear_message().

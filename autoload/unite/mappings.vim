@@ -55,6 +55,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>rotate_source(0)<CR>
   nnoremap <silent><buffer> <Plug>(unite_print_candidate)
         \ :<C-u>call <SID>print_candidate()<CR>
+  nnoremap <silent><buffer> <Plug>(unite_print_message_log)
+        \ :<C-u>call <SID>print_message_log()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
         \ unite#get_current_unite().prompt_linenr.'G0z.'
   nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
@@ -163,6 +165,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ <C-o>:<C-u>call <SID>redraw()<CR>
   inoremap <buffer><silent> <Plug>(unite_new_candidate)
         \ <C-o>:<C-u>call <SID>do_new_candidate_action()<CR>
+  inoremap <silent><buffer> <Plug>(unite_print_message_log)
+        \ <C-o>:<C-u>call <SID>print_message_log()<CR>
   "}}}
 
   if exists('g:unite_no_default_keymappings')
@@ -181,7 +185,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nmap <buffer> <Tab>     <Plug>(unite_choose_action)
   nmap <buffer> <C-n>     <Plug>(unite_rotate_next_source)
   nmap <buffer> <C-p>     <Plug>(unite_rotate_previous_source)
-  nmap <buffer> <C-g>     <Plug>(unite_print_candidate)
+  nmap <buffer> <C-g>     <Plug>(unite_print_message_log)
   nmap <buffer> <C-l>     <Plug>(unite_redraw)
   nmap <buffer> gg        <Plug>(unite_cursor_top)
   nmap <buffer> G         <Plug>(unite_cursor_bottom)
@@ -650,6 +654,14 @@ function! s:print_candidate() "{{{
   let candidate = unite#get_current_candidate()
   echo 'abbr: ' . candidate.unite__abbr
   echo 'word: ' . candidate.word
+endfunction"}}}
+function! s:print_message_log() "{{{
+  for msg in unite#get_current_unite().msgs
+    echo msg
+  endfor
+  for msg in unite#get_current_unite().err_msgs
+    echohl WarningMsg | echo msg | echohl None
+  endfor
 endfunction"}}}
 function! s:insert_selected_candidate() "{{{
   if line('.') <= unite#get_current_unite().prompt_linenr
