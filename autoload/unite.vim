@@ -285,7 +285,6 @@ let s:LNUM_STATUS = 1
 " Variables  "{{{
 " buffer number of the unite buffer
 let s:current_unite = {}
-let s:unite_cached_message = []
 let s:use_current_unite = 1
 
 let s:static = {}
@@ -933,18 +932,15 @@ endfunction"}}}
 
 " Utils.
 function! unite#print_error(message) "{{{
-  let message = type(a:message) == type([]) ?
-        \ a:message : split(a:message, '\n')
+  let message = unite#util#msg2list(a:message)
+  let unite = unite#get_current_unite()
+  let unite.err_msgs += message
   for mes in message
-    call unite#print_message('!!!'.mes.'!!!')
-
     echohl WarningMsg | echomsg mes | echohl None
   endfor
 endfunction"}}}
 function! unite#print_source_error(message, source_name) "{{{
-  let message = type(a:message) == type([]) ?
-        \ a:message : [a:message]
-  call unite#print_error(map(copy(message),
+  call unite#print_error(map(copy(unite#util#msg2list(a:message)),
         \ "printf('[%s] %s', a:source_name, v:val)"))
 endfunction"}}}
 function! unite#print_message(message) "{{{
@@ -953,125 +949,23 @@ function! unite#print_message(message) "{{{
     return
   endif
 
-  if &filetype ==# 'unite' && !s:use_current_unite
-    call s:print_buffer(a:message)
-  else
-    call add(s:unite_cached_message, a:message)
-  endif
+  let unite = unite#get_current_unite()
+  let unite.msgs += unite#util#msg2list(a:message)
+  call unite#util#redraw_echo(a:message)
 endfunction"}}}
 function! unite#print_source_message(message, source_name) "{{{
-  let messages = type(a:message) == type([]) ?
-        \ a:message : [a:message]
-  call unite#print_message(map(copy(messages),
+  call unite#print_message(map(copy(unite#util#msg2list(a:message)),
         \ "printf('[%s] %s', a:source_name, v:val)"))
 endfunction"}}}
 function! unite#clear_message() "{{{
-  let s:unite_cached_message = []
   let unite = unite#get_current_unite()
-  if &filetype !=# 'unite'
-    return
-  endif
-
-  let modifiable_save = &l:modifiable
-  setlocal modifiable
-
-  let linenr = line('.')
-  silent! execute unite.prompt_linenr.','.
-        \ (unite.prompt_linenr-1).'delete _'
-  call cursor(linenr - unite.prompt_linenr, 0)
-  if line('.') < winheight(0)
-    normal! zb
-  endif
-  let pos = getpos('.')
-  if mode() ==# 'i' && pos[2] == col('$')
-    startinsert!
-  endif
-
-  let unite.prompt_linenr = unite.min_prompt_linenr
-
-  let &l:modifiable = modifiable_save
-  call s:on_cursor_moved()
-
-  if exists('b:current_syntax') && b:current_syntax ==# 'unite'
-    syntax clear uniteInputLine
-    execute 'syntax match uniteInputLine'
-          \ '/\%'.unite.prompt_linenr.'l.*/'
-          \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
-  endif
+  let unite.msgs = []
 endfunction"}}}
 function! unite#substitute_path_separator(path) "{{{
   return unite#util#substitute_path_separator(a:path)
 endfunction"}}}
 function! unite#path2directory(path) "{{{
   return unite#util#path2directory(a:path)
-endfunction"}}}
-function! s:print_buffer(message) "{{{
-  if &filetype !=# 'unite'
-    return
-  endif
-
-  let modifiable_save = &l:modifiable
-  setlocal modifiable
-
-  let unite = unite#get_current_unite()
-
-  let [max_width, max_source_name] =
-        \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
-
-  " Auto split.
-  let messages = []
-
-  " Convert source name.
-  for msg in type(a:message) == type([]) ?
-        \ a:message : split(a:message, '\n')
-    let trunc_msg = msg
-    while msg != '' && trunc_msg != ''
-      let msg = substitute(msg, '^\[\zs.\{-}\ze\] ',
-            \ '\=unite#_convert_source_name(submatch(0))', '')
-      let trunc_msg = unite#util#strwidthpart(
-            \ msg, max_width)
-      let msg = msg[len(trunc_msg):]
-
-      if msg != ''
-        if trunc_msg =~ '^!!!'
-          " Append error marker.
-          let msg = '!!!<'.msg
-          let trunc_msg .= '>!!!'
-        else
-          let source_name = matchstr(trunc_msg, '^\[.\{-}\] ')
-
-          " Append source name.
-          let msg = source_name.'<'.msg
-          let trunc_msg .= '>'
-        endif
-      endif
-
-      call add(messages, trunc_msg)
-    endwhile
-  endfor
-
-  let linenr = line('.')
-  call append(unite.prompt_linenr-1, messages)
-  let unite.prompt_linenr += len(messages)
-
-  call cursor(linenr+len(messages), 0)
-  if line('.') < winheight(0)
-    normal! zb
-  endif
-  if mode() ==# 'i'
-    startinsert!
-  endif
-
-  let &l:modifiable = modifiable_save
-  call s:on_cursor_moved()
-
-  if exists('b:current_syntax') && b:current_syntax ==# 'unite'
-    syntax clear uniteInputLine
-    execute 'syntax match uniteInputLine'
-          \ '/\%'.unite.prompt_linenr.'l.*/'
-          \ 'contains=uniteInputPrompt,'
-          \ 'uniteInputPromptError,uniteInputSpecial'
-  endif
 endfunction"}}}
 "}}}
 
@@ -1152,10 +1046,6 @@ function! unite#start(sources, ...) "{{{
   " Redraw prompt.
   silent % delete _
   call setline(unite.prompt_linenr, unite.prompt . unite.context.input)
-  for message in s:unite_cached_message
-    call s:print_buffer(message)
-    unlet message
-  endfor
 
   call unite#redraw_candidates()
 
@@ -2427,8 +2317,6 @@ function! unite#convert_lines(candidates) "{{{
 endfunction"}}}
 
 function! s:initialize_current_unite(sources, context) "{{{
-  let s:unite_cached_message = []
-
   let context = a:context
 
   " Quit previous unite buffer.
@@ -2512,6 +2400,8 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.max_source_candidates = 0
   let unite.is_multi_line = 0
   let unite.args = s:get_source_args(a:sources)
+  let unite.msgs = []
+  let unite.err_msgs = []
 
   if context.here
     let context.winheight = winheight(0) - winline() +

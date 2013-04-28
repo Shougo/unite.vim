@@ -3009,6 +3009,7 @@ CHANGELOG					*unite-changelog*
 
 2013-04-28
 - Improved unite status line.
+- Improved message behavior.
 
 2013-04-25
 - Fixed unite#clear_message().
