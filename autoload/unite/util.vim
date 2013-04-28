@@ -362,9 +362,9 @@ function! unite#util#redraw_echo(expr) "{{{
 
   let msg = map(unite#util#convert2list(a:expr),
         \ "unite#util#truncate_smart(v:val, &columns-1, &columns/2, '..')")
-  for i in range(0, len(msg)-1)
+  for i in range(0, len(msg), &cmdheight)
     redraw
-    echo msg[i]
+    echo "\r" . join(msg[i : i+&cmdheight-1], "\n")
   endfor
 endfunction"}}}
 

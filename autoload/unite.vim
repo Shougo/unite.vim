@@ -766,19 +766,9 @@ function! unite#quick_match_redraw(quick_match_table) "{{{
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! unite#get_status_string() "{{{
-  return join(unite#loaded_source_names_with_args(), ', ')
-endfunction"}}}
-function! unite#redraw_status() "{{{
-  let modifiable_save = &l:modifiable
-  setlocal modifiable
-
-  call setline(s:LNUM_STATUS, 'Sources: ' .
-        \ join(unite#loaded_source_names_with_args(), ', '))
-  if empty(unite#loaded_sources_list())
-    call unite#print_error('[unite.vim] Sources are not found')
-  endif
-
-  let &l:modifiable = modifiable_save
+  let unite = unite#get_current_unite()
+  return (unite.is_async ? '[async] ' : '') .
+        \ join(unite#loaded_source_names_with_args(), ', ')
 endfunction"}}}
 function! unite#redraw_candidates(...) "{{{
   let is_gather_all = get(a:000, 0, 0)

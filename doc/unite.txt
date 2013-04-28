@@ -1068,6 +1068,10 @@ unite#smart_map({narrow-map}, {select-map})	*unite#smart_map()*
 >
 		inoremap <buffer><expr> ' unite#smart_map("'", unite#do_action('preview'))
 <
+unite#get_status_string()			 *unite#get_status_string()*
+		Returns unite status string. It is useful to custom
+		statusline.
+
 unite#mappings#set_current_filters({filters})
 					*unite#mappings#set_current_filters()*
 		Changes current unite buffer filters.
@@ -3012,6 +3016,10 @@ A:
 	call unite#do_candidates_action('some_action',
 	\  unite#get_candidates([['file', expand('%')]]))
 <
+Q: unite.vim statusline conflicts with vim-powerline.
+https://github.com/Lokaltog/vim-powerline
+
+A: Todo
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
