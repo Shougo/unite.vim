@@ -192,7 +192,9 @@ function! unite#do_action(action) "{{{
         \             (mode() ==# 'i' ? "\<C-o>" : ''), string(a:action))
 endfunction"}}}
 function! unite#smart_map(narrow_map, select_map) "{{{
-  return (line('.') <= unite#get_current_unite().prompt_linenr && empty(unite#get_marked_candidates())) ? a:narrow_map : a:select_map
+  return (line('.') <= unite#get_current_unite().prompt_linenr
+        \ && empty(unite#get_marked_candidates())) ?
+        \   a:narrow_map : a:select_map
 endfunction"}}}
 function! unite#start_complete(sources, ...) "{{{
   let sources = type(a:sources) == type('') ?
@@ -763,7 +765,7 @@ function! unite#quick_match_redraw(quick_match_table) "{{{
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! unite#status() "{{{
+function! unite#get_status_string() "{{{
   return join(unite#loaded_source_names_with_args(), ', ')
 endfunction"}}}
 function! unite#redraw_status() "{{{
@@ -2465,7 +2467,7 @@ function! s:initialize_unite_buffer() "{{{
     if exists('+colorcolumn')
       setlocal colorcolumn=0
     endif
-    let &l:statusline = '*unite* : %{unite#status()}'
+    let &l:statusline = '*unite* : %{unite#get_status_string()}'
           \ . "\ %=%{printf(' %5d/%d',line('.'),
           \       b:unite.max_source_candidates+b:unite.prompt_linenr)}"
 
