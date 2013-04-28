@@ -1486,13 +1486,12 @@ context.
 					*unite-options-hide-source-names*
 		-hide-source-names
 		Hides source names.
-		Note: This option doesn't hide status line.
 		Note: Source highlight will be overwritten by other sources.
 
 					*unite-options-hide-status-line*
 		-hide-status-line
-		Hides status line.
-		Note: This option doesn't hide source names.
+		Nothing.
+		Note: This option is obsolete.
 
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}
@@ -3007,6 +3006,9 @@ A:
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-04-28
+- Improved unite status line.
 
 2013-04-25
 - Fixed unite#clear_message().

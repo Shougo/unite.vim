@@ -510,7 +510,8 @@ function! s:delete_backward_path() "{{{
         \      getline('.') :
         \      matchstr(getline('.'),
         \         '^.*\%' . col('.') . 'c' . (mode() ==# 'i' ? '' : '.'))
-  return repeat("\<C-h>", unite#util#strchars(cur_text[len(prompt):]))
+  return repeat("\<C-h>", unite#util#strchars(
+        \ cur_text[len(unite#get_context().prompt):]))
 endfunction"}}}
 function! s:normal_delete_backward_path() "{{{
   let modifiable_save = &l:modifiable
@@ -638,7 +639,6 @@ function! s:rotate_source(is_next) "{{{
     endif
   endfor
 
-  call unite#redraw_status()
   call unite#redraw_candidates()
 endfunction"}}}
 function! s:print_candidate() "{{{

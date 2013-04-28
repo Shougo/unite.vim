@@ -764,11 +764,10 @@ function! unite#quick_match_redraw(quick_match_table) "{{{
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
+function! unite#status() "{{{
+  return join(unite#loaded_source_names_with_args(), ', ')
+endfunction"}}}
 function! unite#redraw_status() "{{{
-  if unite#get_context().hide_status_line
-    return
-  endif
-
   let modifiable_save = &l:modifiable
   setlocal modifiable
 
@@ -790,7 +789,6 @@ function! unite#redraw_candidates(...) "{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
 
-  call unite#redraw_status()
   let lines = unite#convert_lines(candidates)
   let pos = getpos('.')
   let unite = unite#get_current_unite()
@@ -970,8 +968,7 @@ endfunction"}}}
 function! unite#clear_message() "{{{
   let s:unite_cached_message = []
   let unite = unite#get_current_unite()
-  if &filetype !=# 'unite' ||
-        \ unite.prompt_linenr <= unite.min_prompt_linenr
+  if &filetype !=# 'unite'
     return
   endif
 
@@ -979,10 +976,9 @@ function! unite#clear_message() "{{{
   setlocal modifiable
 
   let linenr = line('.')
-  silent! execute unite.min_prompt_linenr.','.
+  silent! execute unite.prompt_linenr.','.
         \ (unite.prompt_linenr-1).'delete _'
-  call cursor(linenr - (unite.prompt_linenr -
-        \ unite.min_prompt_linenr), 0)
+  call cursor(linenr - unite.prompt_linenr, 0)
   if line('.') < winheight(0)
     normal! zb
   endif
@@ -1700,7 +1696,6 @@ function! s:initialize_context(context, ...) "{{{
         \ 'update_time' : g:unite_update_time,
         \ 'no_buffer' : 0,
         \ 'hide_source_names' : 0,
-        \ 'hide_status_line' : 0,
         \ 'max_multi_lines' : 5,
         \ 'here' : 0,
         \ 'silent' : 0,
@@ -2499,8 +2494,8 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.input = context.input
   let unite.last_input = context.input
   let unite.sidescrolloff_save = &sidescrolloff
-  let unite.min_prompt_linenr = (context.hide_status_line) ? 1 : 2
-  let unite.prompt_linenr = unite.min_prompt_linenr
+  let unite.prompt_linenr = 1
+  let unite.min_prompt_linenr = 1
   let unite.is_async =
         \ len(filter(copy(sources),
         \  'v:val.unite__context.is_async')) > 0
@@ -2580,6 +2575,9 @@ function! s:initialize_unite_buffer() "{{{
     if exists('+colorcolumn')
       setlocal colorcolumn=0
     endif
+    let &l:statusline = '*unite* : %{unite#status()}'
+          \ . "\ %=%{printf(' %5d/%d',line('.'),
+          \       b:unite.max_source_candidates+b:unite.prompt_linenr)}"
 
     " Autocommands.
     augroup plugin-unite
@@ -3347,11 +3345,6 @@ function! unite#set_highlight() "{{{
   let marked_icon = unite#util#escape_pattern(g:unite_marked_icon)
   execute 'syntax region uniteMarkedLine start=/^'.
         \ marked_icon.'/ end=''$'' keepend'
-
-  if !unite.context.hide_status_line
-    syntax match uniteStatusLine /\%1l.*/
-          \  contains=uniteSourcePrompt,uniteSeparator,uniteSourceNames,uniteSourceArgs
-  endif
 
   execute 'syntax match uniteInputLine'
         \ '/\%'.unite.prompt_linenr.'l.*/'
