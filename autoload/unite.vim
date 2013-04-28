@@ -962,6 +962,7 @@ endfunction"}}}
 function! unite#clear_message() "{{{
   let unite = unite#get_current_unite()
   let unite.msgs = []
+  redraw
 endfunction"}}}
 function! unite#substitute_path_separator(path) "{{{
   return unite#util#substitute_path_separator(a:path)

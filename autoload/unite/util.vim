@@ -360,10 +360,11 @@ function! unite#util#redraw_echo(expr) "{{{
     return
   endif
 
-  let msg = unite#util#convert2list(a:expr)
-  for i in range(0, len(msg), &cmdheight)
+  let msg = map(unite#util#convert2list(a:expr),
+        \ "unite#util#truncate_smart(v:val, &columns-1, &columns/2, '..')")
+  for i in range(0, len(msg)-1)
     redraw
-    echo join(msg[i : i+&cmdheight-1], "\n")
+    echo msg[i]
   endfor
 endfunction"}}}
 
