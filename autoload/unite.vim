@@ -2476,7 +2476,6 @@ function! s:initialize_unite_buffer() "{{{
     if exists('+colorcolumn')
       setlocal colorcolumn=0
     endif
-    let &l:statusline = unite.statusline
 
     " Autocommands.
     augroup plugin-unite
@@ -2753,10 +2752,7 @@ function! s:on_bufwin_enter(bufnr)  "{{{
 
   call s:save_updatetime()
 
-  if &l:statusline != unite.statusline
-    " Restore statusline.
-    let &l:statusline = unite.statusline
-  endif
+  call s:restore_statusline()
 
   if !unite.context.no_split && winnr('$') != 1
     call unite#_resize_window()
@@ -2775,6 +2771,8 @@ function! s:on_bufwin_enter(bufnr)  "{{{
 endfunction"}}}
 function! unite#_on_cursor_hold()  "{{{
   let is_async = 0
+
+  call s:restore_statusline()
 
   if &filetype ==# 'unite'
     " Redraw.
@@ -2856,6 +2854,8 @@ function! s:on_cursor_moved()  "{{{
   if context.auto_highlight
     call s:do_auto_highlight()
   endif
+
+  call s:restore_statusline()
 
   " Check lines. "{{{
   if winheight(0) < line('$') &&
@@ -2979,6 +2979,18 @@ function! s:restore_updatetime()  "{{{
 
   if &updatetime < unite.update_time_save
     let &updatetime = unite.update_time_save
+  endif
+endfunction"}}}
+function! s:restore_statusline()  "{{{
+  if &filetype !=# 'unite'
+    return
+  endif
+
+  let unite = unite#get_current_unite()
+
+  if &l:statusline != unite.statusline
+    " Restore statusline.
+    let &l:statusline = unite.statusline
   endif
 endfunction"}}}
 
