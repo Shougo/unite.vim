@@ -94,9 +94,13 @@ let s:source = {
 function! s:source.gather_candidates(args, context) "{{{
     let bookmark_name = get(a:args, 0, 'default')
 
-    if bookmark_name == '*' || bookmark_name == '_'
+    if bookmark_name == '_'
+      let bookmark_name = '*'
+    endif
+
+    if stridx(bookmark_name, '*') != -1
       let bookmarks = map(filter(
-          \ unite#util#glob(g:unite_source_bookmark_directory . '/*'),
+          \ unite#util#glob(g:unite_source_bookmark_directory . '/' . bookmark_name),
           \ 'filereadable(v:val)'),
           \ 'fnamemodify(v:val, ":t:r")'
           \)
@@ -124,7 +128,7 @@ function! s:source.gather_candidates(args, context) "{{{
     return candidates
 endfunction"}}}
 function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
-  return ['*', 'default'] + map(split(glob(
+  return ['_', '*', 'default'] + map(split(glob(
         \ g:unite_source_bookmark_directory . '/' . a:arglead . '*'), '\n'),
         \ "fnamemodify(v:val, ':t')")
 endfunction"}}}
