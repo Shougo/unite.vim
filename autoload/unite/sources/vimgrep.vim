@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 16 Mar 2013.
+" Last Modified: 29 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,6 +39,7 @@ let s:action_vimgrep_file = {
   \   'is_quit': 1,
   \   'is_invalidate_cache': 1,
   \   'is_selectable': 1,
+  \   'is_start' : 1,
   \ }
 function! s:action_vimgrep_file.func(candidates) "{{{
   call unite#start_script([
@@ -52,6 +53,7 @@ let s:action_vimgrep_directory = {
   \   'is_quit': 1,
   \   'is_invalidate_cache': 1,
   \   'is_selectable': 1,
+  \   'is_start' : 1,
   \ }
 function! s:action_vimgrep_directory.func(candidates) "{{{
   call unite#start_script([

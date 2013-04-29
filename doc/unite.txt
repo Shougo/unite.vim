@@ -2792,6 +2792,11 @@ action_table		Dictionary		(Required)
 				in |<Plug>(unite_choose_action)|.  If this
 				attribute is omitted, "1" is used.
 
+			is_start		(Number)	(Optional)
+				If this attribute is "1", the action start
+				unite sources. If this attribute is omitted,
+				"0" is used.
+
 					*unite-kind-attribute-alias_table*
 alias_table		Dictionary		(Optional)
 			Adds an alias table unique to the kind.  In
@@ -3024,6 +3029,9 @@ A: Todo
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-04-29
+- Improved start sources behavior.
 
 2013-04-28
 - Improved unite status line.

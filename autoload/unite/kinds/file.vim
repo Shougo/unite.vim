@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Mar 2013.
+" Last Modified: 29 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -231,6 +231,7 @@ let s:kind.action_table.grep = {
       \   'is_quit': 1,
       \   'is_invalidate_cache': 1,
       \   'is_selectable': 1,
+      \   'is_start' : 1,
       \ }
 function! s:kind.action_table.grep.func(candidates) "{{{
   call unite#start_script([
@@ -244,6 +245,7 @@ let s:kind.action_table.grep_directory = {
       \   'is_quit': 1,
       \   'is_invalidate_cache': 1,
       \   'is_selectable': 1,
+      \   'is_start' : 1,
       \ }
 function! s:kind.action_table.grep_directory.func(candidates) "{{{
   call unite#start_script([
@@ -517,6 +519,7 @@ endfunction"}}}
 let s:kind.action_table.vimfiler__shellcmd = {
       \ 'description' : 'execute shell command',
       \ 'is_listed' : 0,
+      \ 'is_start' : 1,
       \ }
 function! s:kind.action_table.vimfiler__shellcmd.func(candidate) "{{{
   let vimfiler_current_dir =

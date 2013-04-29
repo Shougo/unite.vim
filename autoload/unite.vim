@@ -925,7 +925,9 @@ endfunction"}}}
 function! unite#print_error(message) "{{{
   let message = unite#util#msg2list(a:message)
   let unite = unite#get_current_unite()
-  let unite.err_msgs += message
+  if !empty(unite)
+    let unite.err_msgs += message
+  endif
   for mes in message
     echohl WarningMsg | echomsg mes | echohl None
   endfor
@@ -936,13 +938,16 @@ function! unite#print_source_error(message, source_name) "{{{
 endfunction"}}}
 function! unite#print_message(message) "{{{
   let context = unite#get_context()
-  if context.silent
+  if get(context, 'silent', 0)
     return
   endif
 
   let unite = unite#get_current_unite()
-  let unite.msgs += unite#util#msg2list(a:message)
-  echohl Comment | call unite#util#redraw_echo(a:message) | echohl None
+  let message = unite#util#msg2list(a:message)
+  if !empty(unite)
+    let unite.msgs += message
+  endif
+  echohl Comment | call unite#util#redraw_echo(message) | echohl None
 endfunction"}}}
 function! unite#print_source_message(message, source_name) "{{{
   call unite#print_message(map(copy(unite#util#msg2list(a:message)),
@@ -1058,7 +1063,9 @@ function! unite#start_script(sources, ...) "{{{
           \ join(a:sources)
   endif
 
-  return unite#start(a:sources, context)
+  return get(unite#get_context(), 'temporary', 0) ?
+        \ unite#start_temporary(a:sources, context) :
+        \ unite#start(a:sources, context)
 endfunction"}}}
 function! unite#start_temporary(sources, ...) "{{{
   " Get current context.

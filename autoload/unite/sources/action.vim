@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 14 Apr 2013.
+" Last Modified: 29 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -130,7 +130,8 @@ function! s:source.action_table.do.func(candidate) "{{{
     endif
   endif
 
-  if a:candidate.action__action.is_quit
+  if a:candidate.action__action.is_quit &&
+        \ !a:candidate.action__action.is_start
     call unite#all_quit_session(0)
   endif
 

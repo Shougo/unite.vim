@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Apr 2013.
+" Last Modified: 29 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -400,6 +400,7 @@ endfunction"}}}
 " Add custom action table. "{{{
 let s:cdable_action_file = {
       \ 'description' : 'open this directory by file source',
+      \ 'is_start' : 1,
       \}
 
 function! s:cdable_action_file.func(candidate)
