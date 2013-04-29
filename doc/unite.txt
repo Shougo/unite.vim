@@ -1559,6 +1559,11 @@ context.
 		If it is set, unite will select specified candidate.
 		Note: The candidate index is 0-origin.
 
+						*unite-options-log*
+		-log
+		Enable log mode. In log mode, cursor move to bottom
+		automatically.
+
 ==============================================================================
 SOURCES						*unite-sources*
 
@@ -3032,6 +3037,7 @@ CHANGELOG					*unite-changelog*
 
 2013-04-29
 - Improved start sources behavior.
+- Added log option.
 
 2013-04-28
 - Improved unite status line.

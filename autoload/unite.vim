@@ -280,8 +280,6 @@ endfunction"}}}
 " Constants "{{{
 let s:FALSE = 0
 let s:TRUE = !s:FALSE
-
-let s:LNUM_STATUS = 1
 "}}}
 
 " Variables  "{{{
@@ -329,7 +327,7 @@ let s:unite_options = [
       \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
       \ '-auto-quit', '-no-focus',
       \ '-long-source-names', '-short-source-names',
-      \ '-multi-line', '-resume', '-wrap', '-select='
+      \ '-multi-line', '-resume', '-wrap', '-select=', '-log',
       \]
 "}}}
 
@@ -795,6 +793,16 @@ function! unite#redraw_candidates(...) "{{{
 
   if pos != getpos('.')
     call setpos('.', pos)
+  endif
+
+  if context.input == '' && context.log
+    " Redraw all candidates.
+    if len(unite.candidates) != len(unite.current_candidates)
+      call unite#redraw(0, 1)
+    endif
+
+    " Move to bottom.
+    call cursor(line('$'), 0)
   endif
 
   " Set syntax.
@@ -1598,6 +1606,7 @@ function! s:initialize_context(context, ...) "{{{
         \ 'resume' : 0,
         \ 'wrap' : 0,
         \ 'select' : 0,
+        \ 'log' : 0,
         \ 'unite__direct_switch' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 0,
