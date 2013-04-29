@@ -292,6 +292,11 @@ let s:static.sources = {}
 let s:static.kinds = {}
 let s:static.filters = {}
 
+let s:loaded_defaults = {}
+let s:loaded_defaults.sources = 0
+let s:loaded_defaults.kinds = 0
+let s:loaded_defaults.filters = 0
+
 let s:dynamic = {}
 let s:dynamic.sources = {}
 let s:dynamic.kinds = {}
@@ -689,8 +694,10 @@ function! unite#complete_source(arglead, cmdline, cursorpos) "{{{
     let _ +=  copy(s:unite_options)
 
     " Source name completion.
-    let _ += keys(filter(s:initialize_sources([], a:arglead),
-          \ 'v:val.is_listed'))
+    if mode() ==# 'c'
+      let _ += keys(filter(s:initialize_sources([], a:arglead),
+            \ 'v:val.is_listed'))
+    endif
     if exists('*neobundle#get_unite_sources')
       let _ += neobundle#get_unite_sources()
     endif
@@ -699,7 +706,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos) "{{{
     let _  = map(_, 'source_name.":".v:val')
   endif
 
-  if source_name != ''
+  if source_name != '' && mode() ==# 'c'
     " Source args completion.
     let args = source_name . ':' . join(source_args[: -2], ':')
     if args !~ ':$'
@@ -1518,6 +1525,10 @@ function! unite#resume_from_temporary(context)  "{{{
 endfunction"}}}
 
 function! s:load_default_scripts(kind, names) "{{{
+  if s:loaded_defaults[a:kind]
+    return
+  endif
+
   let names = empty(a:names) ? [''] : a:names
   if a:kind ==# 'sources' && !empty(a:names)
     call add(names, 'alias')
@@ -1537,6 +1548,9 @@ function! s:load_default_scripts(kind, names) "{{{
 
   for name in filter(names,
         \ "v:val == '' || !has_key(s:static[a:kind], v:val)")
+    if name == ''
+      let s:loaded_defaults[a:kind] = 1
+    endif
 
     let name = (a:kind ==# 'filters') ?
           \ substitute(name,
