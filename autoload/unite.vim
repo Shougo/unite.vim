@@ -796,11 +796,6 @@ function! unite#redraw_candidates(...) "{{{
   endif
 
   if context.input == '' && context.log
-    " Redraw all candidates.
-    if len(unite.candidates) != len(unite.current_candidates)
-      call unite#redraw(0, 1)
-    endif
-
     " Move to bottom.
     call cursor(line('$'), 0)
   endif
@@ -2583,6 +2578,8 @@ function! s:redraw(is_force, winnr, is_gather_all) "{{{
       return
     endif
 
+    let is_gather_all = a:is_gather_all || context.log
+
     if context.is_redraw
           \ || input !=# unite.last_input
           \ || unite.is_async
@@ -2593,7 +2590,7 @@ function! s:redraw(is_force, winnr, is_gather_all) "{{{
     let unite.last_input = input
 
     " Redraw.
-    call unite#redraw_candidates(a:is_gather_all)
+    call unite#redraw_candidates(is_gather_all)
     let unite.context.is_redraw = 0
   finally
     if a:winnr > 0
