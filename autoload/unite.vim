@@ -2380,6 +2380,9 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.prev_bufnr = bufnr('%')
   let unite.prev_winnr = winnr()
   let unite.update_time_save = &updatetime
+  let unite.statusline = '*unite* : %{unite#get_status_string()}'
+          \ . "\ %=%{printf(' %5d/%d',line('.'),
+          \       b:unite.max_source_candidates+b:unite.prompt_linenr)}"
 
   " Create new buffer name.
   let postfix = s:get_postfix(
@@ -2473,9 +2476,7 @@ function! s:initialize_unite_buffer() "{{{
     if exists('+colorcolumn')
       setlocal colorcolumn=0
     endif
-    let &l:statusline = '*unite* : %{unite#get_status_string()}'
-          \ . "\ %=%{printf(' %5d/%d',line('.'),
-          \       b:unite.max_source_candidates+b:unite.prompt_linenr)}"
+    let &l:statusline = unite.statusline
 
     " Autocommands.
     augroup plugin-unite
@@ -2751,6 +2752,11 @@ function! s:on_bufwin_enter(bufnr)  "{{{
   endif
 
   call s:save_updatetime()
+
+  if &l:statusline != unite.statusline
+    " Restore statusline.
+    let &l:statusline = unite.statusline
+  endif
 
   if !unite.context.no_split && winnr('$') != 1
     call unite#_resize_window()
