@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: common.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jan 2013.
+" Last Modified: 29 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,7 +48,6 @@ endfunction"}}}
 let s:kind.action_table.yank = {
       \ 'description' : 'yank word or text',
       \ 'is_selectable' : 1,
-      \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.yank.func(candidates) "{{{
