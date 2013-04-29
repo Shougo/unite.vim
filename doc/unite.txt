@@ -1440,7 +1440,7 @@ context.
 
 						*unite-options-vertical*
 		-vertical
-		Splits unite window vertically.
+		Splits unite window vertically. |g:unite_winwidth| is used.
 
 						*unite-options-horizontal*
 		-horizontal
