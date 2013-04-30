@@ -321,7 +321,7 @@ function! unite#mappings#do_action(action_name, ...) "{{{
   let is_clear_marks = !empty(unite#get_marked_candidates())
 
   let candidates = filter(copy(candidates),
-        \ '!has_key(v:val, "is_dummy") || !v:val.is_dummy')
+        \ "!empty(v:val) && (!get(v:val, 'is_dummy', 0)")
   if empty(candidates)
     return []
   endif
