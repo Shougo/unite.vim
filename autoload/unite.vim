@@ -2999,7 +2999,7 @@ function! s:restore_updatetime()  "{{{
   endif
 endfunction"}}}
 function! s:restore_statusline()  "{{{
-  if &filetype !=# 'unite'
+  if &filetype !=# 'unite' || !g:unite_force_overwrite_statusline
     return
   endif
 

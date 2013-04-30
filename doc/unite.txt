@@ -271,8 +271,8 @@ g:unite_abbr_highlight				*g:unite_abbr_highlight*
 		
 		The default value is "Normal".
 
-g:unite_enable_use_short_source_names
 				*g:unite_enable_use_short_source_names*
+g:unite_enable_use_short_source_names
 		If this variable is 1, unite buffer will show short source
 		names.
 
@@ -282,6 +282,15 @@ g:unite_marked_icon				*g:unite_marked_icon*
 		This variable controls unite marked candidates icon.
 		
 		Default value is "*"
+
+					*g:unite_force_overwrite_statusline*
+g:unite_force_overwrite_statusline
+		If this variable is 1, unite will overwrite 'statusline'
+		automatically.
+		Note: If you want to change 'statusline' in unite buffer, you
+		must set it to 0.
+
+		The default value is 1.
 
 g:unite_quick_match_table			*g:unite_quick_match_table*
 		The table of completion candidates of quick match list,
@@ -3029,15 +3038,31 @@ A:
 <
 Q: unite.vim statusline conflicts with powerline.
 https://github.com/Lokaltog/powerline
-https://github.com/Lokaltog/vim-powerline
+https://github.com/Lokaltog/vim-powerline (deprecated)
 
-A: Todo
+A: You must set |g:unite_force_overwrite_statusline| to 0.
+>
+	let g:unite_force_overwrite_statusline = 0
+<
+
+And you must install below custom theme for powerline.
+
+For powerline:
+https://github.com/zhaocai/powerline (custom theme for unite.vim included
+edition)
+https://github.com/Lokaltog/powerline/issues/470
+
+For vim-powerline:
+Note: The description is Japanese
+http://d.hatena.ne.jp/osyo-manga/20130429/1367235332
+https://github.com/osyo-manga/vim-powerline-unite-theme
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
 2013-04-30
 - Fixed <Plug>(unite_delete_backward_path).
+- Added g:unite_force_overwrite_statusline option.
 
 2013-04-29
 - Improved start sources behavior.

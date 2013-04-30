@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Apr 2013.
+" Last Modified: 30 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -85,6 +85,8 @@ let g:unite_enable_short_source_names =
       \ get(g:, 'unite_enable_short_source_names', 0)
 let g:unite_marked_icon =
       \ get(g:, 'unite_marked_icon', '*')
+let g:unite_force_overwrite_statusline =
+      \ get(g:, 'unite_force_overwrite_statusline', 1)
 let g:unite_data_directory =
       \ substitute(substitute(fnamemodify(get(
       \   g:, 'unite_data_directory', '~/.unite'),
