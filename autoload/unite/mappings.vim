@@ -346,6 +346,7 @@ function! unite#mappings#do_action(action_name, ...) "{{{
   for table in action_tables
     " Check quit flag.
     if table.action.is_quit && unite.profile_name !=# 'action'
+          \ && !table.action.is_start
       call unite#all_quit_session(0)
       let is_quit = 1
     endif

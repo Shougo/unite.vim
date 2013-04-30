@@ -3063,6 +3063,7 @@ CHANGELOG					*unite-changelog*
 2013-04-30
 - Fixed <Plug>(unite_delete_backward_path).
 - Added g:unite_force_overwrite_statusline option.
+- Fixed start sources behavior.
 
 2013-04-29
 - Improved start sources behavior.

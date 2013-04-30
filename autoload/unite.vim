@@ -1125,7 +1125,6 @@ function! unite#start_temporary(sources, ...) "{{{
 
   let cwd = getcwd()
 
-  " call unite#all_quit_session()
   call unite#start(a:sources, context)
 
   " Overwrite unite.
