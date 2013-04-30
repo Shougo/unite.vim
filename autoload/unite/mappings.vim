@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Apr 2013.
+" Last Modified: 30 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -514,8 +514,9 @@ function! s:delete_backward_path() "{{{
         \      getline('.') :
         \      matchstr(getline('.'),
         \         '^.*\%' . col('.') . 'c' . (mode() ==# 'i' ? '' : '.'))
-  return repeat("\<C-h>", unite#util#strchars(
-        \ cur_text[len(unite#get_context().prompt):]))
+  let path = matchstr(cur_text[
+        \ len(unite#get_context().prompt):], '[^/]*.$')
+  return repeat("\<C-h>", unite#util#strchars(path))
 endfunction"}}}
 function! s:normal_delete_backward_path() "{{{
   let modifiable_save = &l:modifiable

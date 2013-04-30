@@ -3036,6 +3036,9 @@ A: Todo
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-04-30
+- Fixed <Plug>(unite_delete_backward_path).
+
 2013-04-29
 - Improved start sources behavior.
 - Added log option.
