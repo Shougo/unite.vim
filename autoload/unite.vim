@@ -556,7 +556,7 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
     endif
   endif
 
-  " Set default parameters.
+  " Initialize action.
   for [action_name, action] in items(action_table)
     if !has_key(action, 'name')
       let action.name = action_name
@@ -566,6 +566,9 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
     endif
     if !has_key(action, 'is_quit')
       let action.is_quit = 1
+    endif
+    if !has_key(action, 'is_start')
+      let action.is_start = 0
     endif
     if !has_key(action, 'is_selectable')
       let action.is_selectable = 0
