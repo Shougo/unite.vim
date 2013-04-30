@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: directory_mru.vim
+" FILE: mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Oct 2010
+" Last Modified: 05 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@
 " }}}
 "=============================================================================
 
-if exists('g:loaded_unite_source_directory_mru')
+if exists('g:loaded_unite_source_mru')
       \ || $SUDO_USER != ''
   finish
 endif
@@ -32,13 +32,13 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-augroup plugin-unite-source-directory_mru
+augroup plugin-unite-source-mru
   autocmd!
-  autocmd BufLeave,BufWinLeave,BufFilePost *
-        \ call unite#sources#directory_mru#_append()
+  autocmd BufEnter,BufFilePost,BufWritePost * call unite#sources#mru#append()
+  autocmd VimLeavePre * call unite#sources#mru#save({'event' : 'VimLeavePre'})
 augroup END
 
-let g:loaded_unite_source_directory_mru = 1
+let g:loaded_unite_source_mru = 1
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
