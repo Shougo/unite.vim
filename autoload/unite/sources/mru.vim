@@ -376,7 +376,7 @@ function! unite#sources#mru#define() "{{{
   return [s:file_mru_source, s:dir_mru_source]
 endfunction"}}}
 let s:file_mru_source = {
-      \ 'name' : 'file_mru',
+      \ 'name' : 'mru/file',
       \ 'description' : 'candidates from file MRU list',
       \ 'hooks' : {},
       \ 'action_table' : {},
@@ -386,7 +386,7 @@ let s:file_mru_source = {
       \}
 
 let s:dir_mru_source = {
-      \ 'name' : 'directory_mru',
+      \ 'name' : 'mru/directory',
       \ 'description' : 'candidates from directory MRU list',
       \ 'hooks' : {},
       \ 'action_table' : {},
