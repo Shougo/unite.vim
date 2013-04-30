@@ -3192,14 +3192,15 @@ function! s:do_auto_highlight() "{{{
 endfunction"}}}
 function! s:init_cursor() "{{{
   let unite = unite#get_current_unite()
+  let context = unite.context
 
   let positions = unite#get_profile(
         \ unite.profile_name, 'unite__save_pos')
   let key = unite#loaded_source_names_string()
   let is_restore = has_key(positions, key) &&
-        \ unite.context.select == 0
+        \ context.select == 0
 
-  if unite.context.start_insert
+  if context.start_insert
     let unite.is_insert = 1
 
     call cursor(unite.prompt_linenr, 0)
@@ -3232,12 +3233,15 @@ function! s:init_cursor() "{{{
     stopinsert
   endif
 
-  if unite.context.select != 0
+  if context.select != 0
     " Select specified candidate.
-    call cursor(line('.') + unite.context.select, 0)
+    call cursor(line('.') + context.select, 0)
+  elseif context.input == '' && context.log
+    " Move to bottom.
+    call cursor(line('$'), 0)
   endif
 
-  if unite.context.no_focus
+  if context.no_focus
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
@@ -3245,7 +3249,7 @@ function! s:init_cursor() "{{{
     endif
   endif
 
-  if unite.context.quick_match
+  if context.quick_match
     call unite#mappings#_quick_match(0)
   endif
 endfunction"}}}
