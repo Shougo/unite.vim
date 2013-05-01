@@ -147,12 +147,18 @@ function! s:mru.append() "{{{
   let save_ignorecase = &ignorecase
   let &ignorecase = unite#util#is_windows()
 
-  call insert(filter(self.candidates, 'v:val.action__path !=# path'),
-  \           s:convert2dictionary([path, localtime()]))
+  for i in range(len(self.candidates)-1)
+    if self.candidates[i].action__path ==# path
+      unlet self.candidates[i]
+      break
+    endif
+  endfor
+  let localtime = localtime()
+  call insert(self.candidates, s:convert2dictionary([path, localtime]))
 
   let &ignorecase = save_ignorecase
 
-  if (localtime() - self.mtime) > self.update_interval 
+  if (localtime - self.mtime) > self.update_interval 
     call self.save()
   endif
 endfunction"}}}
