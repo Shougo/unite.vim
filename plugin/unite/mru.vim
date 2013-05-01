@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: file_mru.vim
+" FILE: mru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 05 Oct 2010
 " License: MIT license  {{{
@@ -24,7 +24,7 @@
 " }}}
 "=============================================================================
 
-if exists('g:loaded_unite_source_file_mru')
+if exists('g:loaded_unite_source_mru')
       \ || $SUDO_USER != ''
   finish
 endif
@@ -32,13 +32,13 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-augroup plugin-unite-source-file_mru
+augroup plugin-unite-source-mru
   autocmd!
-  autocmd BufEnter,BufWinEnter,BufFilePost,BufWritePost *
-        \ call unite#sources#file_mru#_append()
+  autocmd BufEnter,BufFilePost,BufWritePost * call unite#sources#mru#append()
+  autocmd VimLeavePre * call unite#sources#mru#save({'event' : 'VimLeavePre'})
 augroup END
 
-let g:loaded_unite_source_file_mru = 1
+let g:loaded_unite_source_mru = 1
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
