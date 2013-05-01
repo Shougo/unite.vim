@@ -1035,7 +1035,8 @@ function! unite#start(sources, ...) "{{{
       return
     elseif context.immediately && len(candidates) == 1
       " Immediately action.
-      call unite#mappings#do_action(context.default_action, [candidates[0]])
+      call unite#mappings#do_action(
+            \ context.default_action, [candidates[0]])
       let s:use_current_unite = 0
       return
     endif
@@ -1052,11 +1053,13 @@ function! unite#start(sources, ...) "{{{
 
   " Redraw prompt.
   silent % delete _
-  call setline(unite.prompt_linenr, unite.prompt . unite.context.input)
+  call setline(unite.prompt_linenr,
+        \ unite.prompt . unite.context.input)
 
   call unite#redraw_candidates()
 
   call s:init_cursor()
+
 endfunction"}}}
 function! unite#start_script(sources, ...) "{{{
   " Start unite from script.
@@ -1492,8 +1495,8 @@ function! s:quit_session(is_force, ...)  "{{{
       call neocomplcache#skip_next_complete()
     endif
   else
-    stopinsert
     redraw
+    stopinsert
   endif
 
   " Restore unite.
@@ -2634,10 +2637,6 @@ function! s:redraw(is_force, winnr, is_gather_all) "{{{
     endif
   endtry
 
-  if context.auto_quit && !unite.is_async
-    call unite#force_quit_session()
-  endif
-
   if context.auto_preview
     call s:do_auto_preview()
   endif
@@ -2808,7 +2807,12 @@ function! unite#_on_cursor_hold()  "{{{
     call unite#redraw()
     call s:change_highlight()
 
-    let is_async = unite#get_current_unite().is_async
+    let unite = unite#get_current_unite()
+    let is_async = unite.is_async
+
+    if !unite.is_async && unite.context.auto_quit
+      call unite#force_quit_session()
+    endif
   else
     " Search other unite window.
     for winnr in filter(range(1, winnr('$')),
@@ -3215,7 +3219,7 @@ function! s:init_cursor() "{{{
   let is_restore = has_key(positions, key) &&
         \ context.select == 0
 
-  if context.start_insert
+  if context.start_insert && !context.auto_quit
     let unite.is_insert = 1
 
     call cursor(unite.prompt_linenr, 0)
