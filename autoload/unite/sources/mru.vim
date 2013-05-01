@@ -300,10 +300,6 @@ function! s:file_mru.path() "{{{
     return ''
   endif
 
-  " Append the current buffer to the mru list.
-  if !isdirectory(path) || &buftype =~ 'help'
-    return ''
-  endif
   return path
 endfunction "}}}
 
