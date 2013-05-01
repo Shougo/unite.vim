@@ -804,7 +804,7 @@ Insert mode mappings.
 		Deletes a word just before the cursor.
 
 <Plug>(unite_delete_backward_path)	*i_<Plug>(unite_delete_backward_path)*
-		Deletes a path upward, or quits the unite buffer.
+		Deletes a path upward.
 		For example doing <Plug>(unite_delete_backward_path) on >
 		/Users/ujihisa/Desktop
 <		or >

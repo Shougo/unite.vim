@@ -122,8 +122,7 @@ function! unite#mappings#define_default_mappings() "{{{
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_word)
         \ <SID>smart_imap('', "\<C-w>")
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_path)
-        \ <SID>smart_imap("\<C-o>:\<C-u>call \<SID>all_exit()\<CR>",
-        \ <SID>delete_backward_path())
+        \ <SID>smart_imap('', <SID>delete_backward_path())
   inoremap <expr><buffer> <Plug>(unite_select_next_line)
         \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(0)
   inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
