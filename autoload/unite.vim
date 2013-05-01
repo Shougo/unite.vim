@@ -1571,8 +1571,6 @@ function! s:load_default_scripts(kind, names) "{{{
           \ [prefix_name, postfix_name] : [prefix_name])
       let files += split(globpath(&runtimepath,
             \ 'autoload/unite/'.a:kind.'/'.name.'*.vim', 1), '\n')
-      let files += split(globpath(&runtimepath,
-            \ 'autoload/unite/'.a:kind.'/'.name.'*/*.vim', 1), '\n')
     endfor
 
     for define in map(files,
