@@ -37,6 +37,8 @@ let s:VERSION = '0.2.0'
 
 call unite#util#set_default(
       \ 'g:unite_source_mru_do_validate', 1)
+call unite#util#set_default(
+      \ 'g:unite_source_mru_update_interval', 600)
 
 call unite#util#set_default(
       \ 'g:unite_source_file_mru_time_format',
@@ -103,14 +105,15 @@ let s:MRUs = {}
 " -------------------%<---------------------
 
 let s:mru =
-    \ { 'candidates'    : []
-    \ , 'type'          : ''
-    \ , 'mtime'         : 0
-    \ , 'mru_file'      : {}
-    \ , 'limit'         : {}
-    \ , 'do_validate'   : g:unite_source_mru_do_validate
-    \ , 'is_loaded'     : 0
-    \ , 'version'       : s:VERSION
+    \ { 'candidates'      : []
+    \ , 'type'            : ''
+    \ , 'mtime'           : 0
+    \ , 'update_interval' : g:unite_source_mru_update_interval
+    \ , 'mru_file'        : {}
+    \ , 'limit'           : {}
+    \ , 'do_validate'     : g:unite_source_mru_do_validate
+    \ , 'is_loaded'       : 0
+    \ , 'version'         : s:VERSION
     \ }
 
 
@@ -148,6 +151,10 @@ function! s:mru.append() "{{{
   \           s:convert2dictionary([path, localtime()]))
 
   let &ignorecase = save_ignorecase
+
+  if (localtime() - self.mtime) > self.update_interval 
+    call self.save()
+  endif
 endfunction"}}}
 
 function! s:mru.gather_candidates(args, context) "{{{
@@ -175,12 +182,19 @@ function! s:mru.has_external_update() "{{{
       \ || self.mtime < getftime(self.mru_file.long)
 endfunction"}}}
 
-function! s:mru.save(opts) "{{{
+function! s:mru.save(...) "{{{
+
   if empty(self.candidates)
     " nothing to save, mru is not loaded
     return
   endif
-  
+  let event = a:0 >= 1 ? a:1 : ''
+
+  let opts = {}
+  if a:0 >= 1 && s:V.is_dict(a:1)
+    call extend(opts, a:1)
+  endif
+
   " should load all candidates
   if self.is_loaded < 2
     call self.load()
@@ -195,8 +209,7 @@ function! s:mru.save(opts) "{{{
     endif
   endif
   
-  if get(a:opts, 'event') == 'VimLeavePre'
-    exec zl#vim#context() | call Trace({ 'a:opts': a:opts})
+  if get(opts, 'event') == 'VimLeavePre'
     call self.validate()
   endif
   
@@ -357,14 +370,8 @@ function! unite#sources#mru#append() "{{{
 endfunction"}}}
 
 function! unite#sources#mru#save(...) "{{{
-  let event = a:0 >= 1 ? a:1 : ''
-
-  let opts = {}
-  if a:0 >= 1 && s:V.is_dict(a:1)
-    call extend(opts, a:1)
-  endif
   for m in values(s:MRUs)
-    call m.save(opts)
+    call call(m.save, a:000)
   endfor
 endfunction"}}}
 "}}}
