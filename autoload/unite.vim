@@ -3256,8 +3256,7 @@ function! s:init_cursor() "{{{
     " Select specified candidate.
     call cursor(line('.') + context.select, 0)
   elseif context.input == '' && context.log
-    " Move to bottom.
-    call cursor(line('$'), 0)
+    call unite#redraw_candidates(1)
   endif
 
   if context.no_focus
