@@ -2862,9 +2862,6 @@ function! s:on_cursor_moved()  "{{{
     if winline() <= winheight('$') / 2
       normal! zz
     endif
-    if mode() ==# 'i'
-      startinsert!
-    endif
 
     nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
           \ unite#mappings#loop_cursor_up_expr(0)
