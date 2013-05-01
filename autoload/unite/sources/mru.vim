@@ -302,7 +302,7 @@ function! s:file_mru.path() "{{{
   return path
 endfunction "}}}
 
-function! s:file_mru.validate(items)  "{{{
+function! s:file_mru.validate()  "{{{
   if self.do_validate
     call filter(self.candidates, 'getftype(v:val.action__path) ==# "file"')
   endif
