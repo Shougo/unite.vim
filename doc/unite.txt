@@ -2315,8 +2315,9 @@ to avoid adding undesirable sources.  To add your own sources
 dynamically, you can use |unite#define_source()|.
 
 Note: To optimize load source files, if "buffer/rec" source name is detected,
-unite.vim loads "autoload/unite/sources/buffer*.vim" files.  The source file
-name must have source name prefix(Ex: buffer).
+unite.vim loads "autoload/unite/sources/buffer*.vim" or
+"autoload/unite/sources/rec*.vim" files.  The source file name must have
+source name prefix(Ex: buffer) or source name postfix(Ex: rec).
 
 ------------------------------------------------------------------------------
 SOURCE ATTRIBUTES				*unite-source-attributes*
@@ -3063,6 +3064,7 @@ CHANGELOG					*unite-changelog*
 
 2013-05-01
 - Improved <Plug>(unite_delete_backward_char).
+- Improved load default scripts behavior.
 
 2013-04-30
 - Fixed <Plug>(unite_delete_backward_path).

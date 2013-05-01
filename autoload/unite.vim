@@ -293,9 +293,6 @@ let s:static.kinds = {}
 let s:static.filters = {}
 
 let s:loaded_defaults = {}
-let s:loaded_defaults.sources = 0
-let s:loaded_defaults.kinds = 0
-let s:loaded_defaults.filters = 0
 
 let s:dynamic = {}
 let s:dynamic.sources = {}
@@ -1527,7 +1524,7 @@ function! unite#resume_from_temporary(context)  "{{{
 endfunction"}}}
 
 function! s:load_default_scripts(kind, names) "{{{
-  if s:loaded_defaults[a:kind]
+  if get(s:loaded_defaults, a:kind, 0)
     return
   endif
 
@@ -1548,24 +1545,41 @@ function! s:load_default_scripts(kind, names) "{{{
     endif
   endif
 
-  for name in filter(names,
-        \ "v:val == '' || !has_key(s:static[a:kind], v:val)")
-    if name == ''
-      let s:loaded_defaults[a:kind] = 1
+  for name in names
+    if name != '' && has_key(s:static[a:kind], name)
+          \ || (a:kind ==# 'sources' && name ==# 'alias' &&
+          \     get(s:loaded_defaults, 'alias', 0))
+      continue
     endif
 
-    let name = (a:kind ==# 'filters') ?
+    if name == ''
+      let s:loaded_defaults[a:kind] = 1
+    elseif a:kind ==# 'sources' && name ==# 'alias'
+      let s:loaded_defaults['alias'] = 1
+    endif
+
+    " Search files by prefix or postfix.
+    let prefix_name = (a:kind ==# 'filters') ?
           \ substitute(name,
           \'^\%(matcher\|sorter\|converter\)_[^/_-]\+\zs[/_-].*$', '', '') :
           \ substitute(name, '^[^/_-]\+\zs[/_-].*$', '', '')
+    let postfix_name = matchstr(name, '[^/_-]\+$')
 
-    for define in map(split(globpath(&runtimepath,
-          \ 'autoload/unite/'.a:kind.'/'.name.'*.vim'), '\n'),
+    let files = []
+    for name in ((postfix_name != '' &&
+          \ prefix_name !=# postfix_name) ?
+          \ [prefix_name, postfix_name] : [prefix_name])
+      let files += split(globpath(&runtimepath,
+            \ 'autoload/unite/'.a:kind.'/'.name.'*.vim', 1), '\n')
+      let files += split(globpath(&runtimepath,
+            \ 'autoload/unite/'.a:kind.'/'.name.'*/*.vim', 1), '\n')
+    endfor
+
+    for define in map(files,
           \ "unite#{a:kind}#{fnamemodify(v:val, ':t:r')}#define()")
-      for dict in unite#util#convert2list(define)
-        if !empty(dict) && !has_key(s:static[a:kind], dict.name)
-          let s:static[a:kind][dict.name] = dict
-        endif
+      for dict in filter(unite#util#convert2list(define),
+            \ '!empty(v:val) && !has_key(s:static[a:kind], v:val.name)')
+        let s:static[a:kind][dict.name] = dict
       endfor
       unlet define
     endfor
