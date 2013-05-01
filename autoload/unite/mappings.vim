@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Apr 2013.
+" Last Modified: 01 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -114,16 +114,14 @@ function! unite#mappings#define_default_mappings() "{{{
         \ (unite#get_current_unite().prompt_linenr+1)."G" : "")
         \ . ":call unite#redraw()\<CR>"
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
-        \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
-        \ "\<C-o>:\<C-u>call \<SID>all_exit()\<CR>" : "\<C-h>"
-  inoremap <expr><buffer> <Plug>(unite_delete_backward_line)
+        \ <SID>smart_imap("\<C-o>:\<C-u>call \<SID>all_exit()\<CR>",
+        \ (unite#get_input() == '' ? '' : "\<C-h>"))
+  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_line)
         \ <SID>smart_imap('', repeat("\<C-h>",
         \     col('.')-(len(unite#get_current_unite().prompt)+1)))
-  inoremap <expr><buffer> <Plug>(unite_delete_backward_word)
+  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_word)
         \ <SID>smart_imap('', "\<C-w>")
-  inoremap <expr><buffer> <Plug>(unite_delete_backward_path)
-        \ col('.') <= (len(unite#get_current_unite().prompt)+1) ?
-        \ "\<C-o>:\<C-u>call \<SID>exit()\<CR>" :
+  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_path)
         \ <SID>smart_imap('', <SID>delete_backward_path())
   inoremap <expr><buffer> <Plug>(unite_select_next_line)
         \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(0)
