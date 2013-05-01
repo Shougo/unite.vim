@@ -134,7 +134,7 @@ function! s:mru.validate()
 endfunction
 
 function! s:mru.append() "{{{
-  let path = self.path() 
+  let path = self.path()
 
   if empty(path)
     return
@@ -183,7 +183,6 @@ function! s:mru.has_external_update() "{{{
 endfunction"}}}
 
 function! s:mru.save(...) "{{{
-
   if empty(self.candidates)
     " nothing to save, mru is not loaded
     return
@@ -198,7 +197,7 @@ function! s:mru.save(...) "{{{
   if self.is_loaded < 2
     call self.load()
   endif
-  
+
   if self.has_external_update()
     " only need to get the short list which contains the latest MRUs
     let [ver; items] = readfile(self.mru_file.short)
@@ -207,16 +206,16 @@ function! s:mru.save(...) "{{{
       let self.candidates = s:uniq_sort(self.candidates)
     endif
   endif
-  
+
   if get(opts, 'event') == 'VimLeavePre'
     call self.validate()
   endif
-  
+
   call writefile([self.version] + map(copy(
       \ self.candidates[: self.limit.short - 1]),
       \ 'join(s:convert2list(v:val), "\t")'),
       \ self.mru_file.short)
-  
+
   if len(self.candidates) > self.limit.short
     call writefile([self.version] + map(copy(
         \ self.candidates[self.limit.short : self.limit.long - 1]), 
@@ -302,7 +301,7 @@ function! s:file_mru.path() "{{{
   return path
 endfunction "}}}
 
-function! s:file_mru.validate(items)  "{{{
+function! s:file_mru.validate()  "{{{
   if self.do_validate
     call filter(self.candidates, 'getftype(v:val.action__path) ==# "file"')
   endif
