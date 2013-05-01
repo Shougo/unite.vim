@@ -349,6 +349,8 @@ g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		Specifies the file to write the information of most recent
 		used files.
 
+		The default value is |g:unite_data_directory|; '/file_mru'
+
 g:unite_source_mru_do_validate			*g:unite_source_mru_do_validate*
 		Specify whether automatically remove invalid file path from mru 
 		history.
@@ -395,6 +397,9 @@ g:unite_source_directory_mru_filename_format
 				*g:unite_source_directory_mru_filename_format*
 g:unite_source_directory_mru_file
 				*g:unite_source_directory_mru_file*
+
+		The default value is |g:unite_data_directory|; '/directory_mru'
+
 g:unite_source_directory_mru_limit
 				*g:unite_source_directory_mru_limit*
 
