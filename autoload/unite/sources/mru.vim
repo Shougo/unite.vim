@@ -188,7 +188,6 @@ function! s:mru.save(...) "{{{
     " nothing to save, mru is not loaded
     return
   endif
-  let event = a:0 >= 1 ? a:1 : ''
 
   let opts = {}
   if a:0 >= 1 && s:V.is_dict(a:1)
@@ -366,8 +365,13 @@ function! unite#sources#mru#append() "{{{
 endfunction"}}}
 
 function! unite#sources#mru#save(...) "{{{
+  let opts = {}
+  if a:0 >= 1 && s:V.is_dict(a:1)
+    call extend(opts, a:1)
+  endif
+
   for m in values(s:MRUs)
-    call call(m.save, a:000)
+    call m.save(opts)
   endfor
 endfunction"}}}
 "}}}
