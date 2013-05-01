@@ -115,7 +115,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ . ":call unite#redraw()\<CR>"
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
         \ <SID>smart_imap("\<C-o>:\<C-u>call \<SID>all_exit()\<CR>",
-        \ (unite#get_input() == '' ? '' : "\<C-h>"))
+        \ (unite#get_input() == '' ?
+        \ "\<C-o>:\<C-u>call \<SID>all_exit()\<CR>" : "\<C-h>"))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_line)
         \ <SID>smart_imap('', repeat("\<C-h>",
         \     col('.')-(len(unite#get_current_unite().prompt)+1)))
