@@ -1637,9 +1637,9 @@ file_mru	Nominates files you used recently as candidates, ordering
 		1. short list for quick start; |g:unite_source_file_mru_limit|
 		2. long list for tracking mru history.|g:unite_source_file_mru_long_limit|
 		
-		Normally, only the short list are shown in the unite window. To 
-		load the long list  Hit the key associated with *<Plug>(unite_redraw)*
-		to trigger the unite redraw event.
+		Normally, only the short list are shown in the unite window.
+		To load the long list  Hit the key associated with
+		|<Plug>(unite_redraw)| to trigger the unite redraw event.
 
 		Or, you can start file_mru/directory_mru with argument
 		including `*`, `_`, or `all`, `long`
@@ -1677,8 +1677,8 @@ file_rec/async	Same as |unite-source-file_rec|, but get files asynchronously.
 		Note: If you edit file by Vim, file_rec/async source will
 		update cache file.
 		Note: If the candidates are over
-		|g:unite_source_file_rec_max_cache_files|, it will disable make
-		cache.
+		|g:unite_source_file_rec_max_cache_files|, it will disable
+		make cache.
 		
 		Source arguments:
 		1. the search directory.
