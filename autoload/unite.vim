@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 May 2013.
+" Last Modified: 02 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2111,7 +2111,7 @@ function! s:recache_candidates(input, is_force) "{{{
 
     let source.unite__candidates =
           \ unite#initialize_candidates_source(
-          \   source.unite__candidates, source.name)
+          \   source.unite__context.candidates, source.name)
   endfor
 
   " Update async state.

@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: mru.vim
 " AUTHOR:  Zhso Cai <caizhaoff@gmail.com>
+"          Shougo Matsushita <Shougo.Matsu at gmail.com>
 " Last Modified: 30 Apr 2013
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
@@ -147,12 +148,12 @@ function! s:mru.append() "{{{
   let save_ignorecase = &ignorecase
   let &ignorecase = unite#util#is_windows()
 
-  call insert(filter(self.candidates, 'v:val.action__path !=# path'),
-  \           s:convert2dictionary([path, localtime()]))
+  let time = localtime()
+  call insert(self.candidates, s:convert2dictionary([path, time]))
 
   let &ignorecase = save_ignorecase
 
-  if (localtime() - self.mtime) > self.update_interval 
+  if (time - self.mtime) > self.update_interval
     call self.save()
   endif
 endfunction"}}}
@@ -161,7 +162,7 @@ function! s:mru.gather_candidates(args, context) "{{{
   if empty(self.candidates)
     call self.load()
   endif
-  
+
   if get(a:args, 0, '') =~# '\%(long\|all\|\*\|_\)'
       \ || a:context.is_redraw
     call self.load()
@@ -172,9 +173,10 @@ function! s:mru.gather_candidates(args, context) "{{{
 endfunction"}}}
 function! s:mru.delete(candidates) "{{{
   for candidate in a:candidates
-    call filter(self.candidates, 'v:val.action__path !=# candidate.action__path')
+    call filter(self.candidates,
+          \ 'v:val.action__path !=# candidate.action__path')
   endfor
-  
+
   call self.save()
 endfunction"}}}
 function! s:mru.has_external_update() "{{{
@@ -218,7 +220,7 @@ function! s:mru.save(...) "{{{
 
   if len(self.candidates) > self.limit.short
     call writefile([self.version] + map(copy(
-        \ self.candidates[self.limit.short : self.limit.long - 1]), 
+        \ self.candidates[self.limit.short : self.limit.long - 1]),
         \ 'join(s:convert2list(v:val), "\t")'),
         \ self.mru_file.long)
     let self.mtime = getftime(self.mru_file.long)
@@ -236,11 +238,8 @@ function! s:mru.load()  "{{{
   " Load Order:
   " 1. (load)  short mru list
   " 2. (merge) long list on_redraw
-  if empty(self.candidates)
-    let mru_file = self.mru_file.short
-  else
-    let mru_file = self.mru_file.long
-  endif
+  let mru_file = empty(self.candidates) ?
+        \ self.mru_file.short : self.mru_file.long
 
   if !filereadable(mru_file)
     return
@@ -416,18 +415,10 @@ function! s:dir_mru_source.hooks.on_syntax(args, context) "{{{
   highlight default link uniteSource__DirectoryMru_Time Statement
 endfunction"}}}
 function! s:file_mru_source.hooks.on_post_filter(args, context) "{{{
-  for candidate in a:context.candidates
-    let candidate.action__directory =
-          \ unite#util#path2directory(candidate.action__path)
-    let candidate.kind =
-          \ (isdirectory(candidate.action__path) ? 'directory' : 'file')
-  endfor
+  return s:on_post_filter(a:args, a:context)
 endfunction"}}}
 function! s:dir_mru_source.hooks.on_post_filter(args, context) "{{{
-  for candidate in a:context.candidates
-    let candidate.action__directory =
-          \ unite#util#path2directory(candidate.action__path)
-  endfor
+  return s:on_post_filter(a:args, a:context)
 endfunction"}}}
 function! s:file_mru_source.gather_candidates(args, context) "{{{
   let mru = s:MRUs['file']
@@ -534,6 +525,16 @@ function! s:convert2dictionary(list)  "{{{
 endfunction"}}}
 function! s:convert2list(dict)  "{{{
   return [ a:dict.action__path, a:dict.source__time ]
+endfunction"}}}
+function! s:on_post_filter(args, context) "{{{
+  let a:context.candidates = s:L.uniq(
+        \ a:context.candidates, 'v:val.action__path')
+  for candidate in a:context.candidates
+    let candidate.action__directory =
+          \ unite#util#path2directory(candidate.action__path)
+    let candidate.kind =
+          \ (isdirectory(candidate.action__path) ? 'directory' : 'file')
+  endfor
 endfunction"}}}
 "}}}
 "
