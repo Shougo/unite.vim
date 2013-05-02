@@ -1527,7 +1527,7 @@ function! unite#resume_from_temporary(context)  "{{{
 endfunction"}}}
 
 function! s:load_default_scripts(kind, names) "{{{
-  if get(s:loaded_defaults, a:kind, 0)
+  if get(s:loaded_defaults, a:kind, '') ==# &runtimepath
     return
   endif
 
@@ -1556,9 +1556,9 @@ function! s:load_default_scripts(kind, names) "{{{
     endif
 
     if name == ''
-      let s:loaded_defaults[a:kind] = 1
+      let s:loaded_defaults[a:kind] = &runtimepath
     elseif a:kind ==# 'sources' && name ==# 'alias'
-      let s:loaded_defaults['alias'] = 1
+      let s:loaded_defaults['alias'] = &runtimepath
     endif
 
     " Search files by prefix or postfix.

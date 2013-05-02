@@ -3127,6 +3127,7 @@ CHANGELOG					*unite-changelog*
 
 2013-05-02
 - Improved mru sources.
+- Fixed load scripts behavior.
 
 2013-05-01
 - Improved <Plug>(unite_delete_backward_char).
