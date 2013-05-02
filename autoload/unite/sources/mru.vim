@@ -223,7 +223,7 @@ function! s:mru.save(...) "{{{
         \ self.mru_file.long)
     let self.mtime = getftime(self.mru_file.long)
   else
-    let self.mtime = getftime(self.mru_file.long)
+    let self.mtime = getftime(self.mru_file.short)
   endif
 endfunction"}}}
 
