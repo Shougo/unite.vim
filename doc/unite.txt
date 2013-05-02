@@ -3125,6 +3125,9 @@ https://github.com/osyo-manga/vim-powerline-unite-theme
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-05-02
+- Improved mru sources.
+
 2013-05-01
 - Improved <Plug>(unite_delete_backward_char).
 - Improved load default scripts behavior.

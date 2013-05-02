@@ -105,18 +105,17 @@ let s:MRUs = {}
 " 2: long
 " -------------------%<---------------------
 
-let s:mru =
-    \ { 'candidates'      : []
-    \ , 'type'            : ''
-    \ , 'mtime'           : 0
-    \ , 'update_interval' : g:unite_source_mru_update_interval
-    \ , 'mru_file'        : {}
-    \ , 'limit'           : {}
-    \ , 'do_validate'     : g:unite_source_mru_do_validate
-    \ , 'is_loaded'       : 0
-    \ , 'version'         : s:VERSION
-    \ }
-
+let s:mru = {
+      \ 'candidates'      : [],
+      \ 'type'            : '',
+      \ 'mtime'           : 0,
+      \ 'update_interval' : g:unite_source_mru_update_interval,
+      \ 'mru_file'        : {},
+      \ 'limit'           : {},
+      \ 'do_validate'     : g:unite_source_mru_do_validate,
+      \ 'is_loaded'       : 0,
+      \ 'version'         : s:VERSION,
+      \ }
 
 function! s:mru.is_a(type) "{{{
   return self.type == a:type
@@ -209,7 +208,7 @@ function! s:mru.save(...) "{{{
     endif
   endif
 
-  if get(opts, 'event') == 'VimLeavePre'
+  if get(opts, 'event') ==# 'VimLeavePre'
     call self.validate()
   endif
 
@@ -262,7 +261,8 @@ function! s:mru.load()  "{{{
 endfunction"}}}
 function! s:mru.version_check(ver)  "{{{
   if str2float(a:ver) < self.version
-    call unite#util#print_error('Sorry, the version of MRU file is old.')
+    call unite#util#print_error(
+          \ 'Sorry, the version of MRU file is old.')
     return 0
   else
     return 1
@@ -273,18 +273,18 @@ endfunction"}}}
 
 " File MRU:   "{{{2
 "
-let s:file_mru = extend(deepcopy(s:mru),
-    \ { 'type'          : 'file'
-    \ , 'mru_file'      :
-      \ { 'short' : g:unite_source_file_mru_file
-      \ , 'long'  : g:unite_source_file_mru_long_file
+let s:file_mru = extend(deepcopy(s:mru), {
+      \ 'type'          : 'file',
+      \ 'mru_file'      : {
+      \   'short' : g:unite_source_file_mru_file,
+      \   'long'  : g:unite_source_file_mru_long_file,
+      \  },
+      \ 'limit'         : {
+      \   'short' : g:unite_source_file_mru_limit,
+      \   'long'  : g:unite_source_file_mru_long_limit,
+      \  },
       \ }
-    \ , 'limit'         : 
-      \ { 'short' : g:unite_source_file_mru_limit
-      \ , 'long'  : g:unite_source_file_mru_long_limit
-      \ }
-    \ }
-    \)
+      \)
 function! s:file_mru.path() "{{{
   let path = unite#util#substitute_path_separator(expand('%:p'))
   if path !~ '\a\+:'
@@ -302,23 +302,24 @@ endfunction "}}}
 
 function! s:file_mru.validate()  "{{{
   if self.do_validate
-    call filter(self.candidates, 'getftype(v:val.action__path) ==# "file"')
+    call filter(self.candidates,
+          \ 'getftype(v:val.action__path) ==# "file"')
   endif
 endfunction"}}}
 
 " Directory MRU:   "{{{2
-let s:directory_mru = extend(deepcopy(s:mru),
-    \ { 'type'          : 'directory'
-    \ , 'mru_file'      : 
-      \ { 'short' : g:unite_source_directory_mru_file
-      \ , 'long'  : g:unite_source_directory_mru_long_file
+let s:directory_mru = extend(deepcopy(s:mru), {
+      \ 'type'          : 'directory',
+      \ 'mru_file'      : {
+      \   'short' : g:unite_source_directory_mru_file,
+      \   'long'  : g:unite_source_directory_mru_long_file,
+      \  },
+      \ 'limit'         : {
+      \   'short' : g:unite_source_directory_mru_limit,
+      \   'long'  : g:unite_source_directory_mru_long_limit,
+      \  },
       \ }
-    \ , 'limit'         : 
-      \ { 'short' : g:unite_source_directory_mru_limit
-      \ , 'long'  : g:unite_source_directory_mru_long_limit
-      \ }
-    \ }
-    \)
+      \)
 
 function! s:directory_mru.path() "{{{
   let filetype = getbufvar(bufnr('%'), '&filetype')
@@ -346,16 +347,16 @@ endfunction "}}}
 
 function! s:directory_mru.validate()  "{{{
   if self.do_validate
-    call filter(self.candidates, 'getftype(v:val.action__path) ==# "dir"')
+    call filter(self.candidates,
+          \ 'getftype(v:val.action__path) ==# "dir"')
   endif
 endfunction"}}}
 "}}}
 
 " Public Interface:   "{{{2
 
-
-let s:MRUs['file'] = s:file_mru
-let s:MRUs['directory'] = s:directory_mru
+let s:MRUs.file = s:file_mru
+let s:MRUs.directory = s:directory_mru
 function! unite#sources#mru#append() "{{{
   for m in values(s:MRUs)
     call m.append()
@@ -421,11 +422,11 @@ function! s:dir_mru_source.hooks.on_post_filter(args, context) "{{{
   return s:on_post_filter(a:args, a:context)
 endfunction"}}}
 function! s:file_mru_source.gather_candidates(args, context) "{{{
-  let mru = s:MRUs['file']
+  let mru = s:MRUs.file
   return mru.gather_candidates(a:args, a:context)
 endfunction"}}}
 function! s:dir_mru_source.gather_candidates(args, context) "{{{
-  let mru = s:MRUs['directory']
+  let mru = s:MRUs.directory
   return mru.gather_candidates(a:args, a:context)
 endfunction"}}}
 "}}}
@@ -437,7 +438,7 @@ let s:file_mru_source.action_table.delete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:file_mru_source.action_table.delete.func(candidates) "{{{
-  call s:MRUs['file'].delete(a:candidates)
+  call s:MRUs.file.delete(a:candidates)
 endfunction"}}}
 
 let s:dir_mru_source.action_table.delete = {
@@ -447,52 +448,23 @@ let s:dir_mru_source.action_table.delete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:dir_mru_source.action_table.delete.func(candidates) "{{{
-  call s:MRUs['directory'].delete(a:candidates)
+  call s:MRUs.directory.delete(a:candidates)
 endfunction"}}}
 "}}}
 
 " Filters "{{{
 function! s:file_mru_source.source__converter(candidates, context) "{{{
-  for candidate in filter(copy(a:candidates),
-        \ "!has_key(v:val, 'abbr')")
-    let path = (g:unite_source_file_mru_filename_format == '') ?
-          \ candidate.action__path :
-          \ unite#util#substitute_path_separator(
-          \     fnamemodify(candidate.action__path,
-          \      g:unite_source_file_mru_filename_format))
-    if path == ''
-      let path = candidate.action__path
-    endif
-  
-    " Set default abbr.
-    let candidate.abbr = (g:unite_source_file_mru_time_format == '' ? '' :
-          \ strftime(g:unite_source_file_mru_time_format, candidate.source__time)) .path
-  endfor
-
-  return a:candidates
+  return s:converter(a:candidates,
+        \ g:unite_source_file_mru_filename_format,
+        \ g:unite_source_file_mru_time_format)
 endfunction"}}}
 
 let s:file_mru_source.converters = [ s:file_mru_source.source__converter ]
 
 function! s:dir_mru_source.source__converter(candidates, context) "{{{
-  for candidate in filter(copy(a:context.candidates), "!has_key(v:val, 'abbr')")
-    let relative_path = unite#util#substitute_path_separator(
-          \ fnamemodify(candidate.action__path,
-          \   g:unite_source_directory_mru_filename_format))
-    if relative_path == ''
-      let relative_path = candidate.action__path
-    endif
-    if relative_path !~ '/$'
-      let relative_path .= '/'
-    endif
-  
-    " Set default abbr.
-    let candidate.abbr = strftime(g:unite_source_directory_mru_time_format,
-          \ candidate.source__time)
-          \ . relative_path
-  endfor
-  
-  return a:candidates
+  return s:converter(a:candidates,
+        \ g:unite_source_directory_mru_filename_format,
+        \ g:unite_source_directory_mru_time_format)
 endfunction"}}}
 
 let s:dir_mru_source.converters = [ s:dir_mru_source.source__converter ]
@@ -501,8 +473,7 @@ let s:dir_mru_source.converters = [ s:dir_mru_source.source__converter ]
 
 " Misc "{{{
 function! s:is_file_exist(path)  "{{{
-  return a:path !~ '^\a\w\+:' &&
-        \ getftype(a:path) ==# 'file'
+  return a:path !~ '^\a\w\+:' && getftype(a:path) ==# 'file'
 endfunction"}}}
 function! s:uniq_sort(items)  "{{{
   function! s:compare(i1, i2)  "{{{
@@ -534,7 +505,29 @@ function! s:on_post_filter(args, context) "{{{
           \ unite#util#path2directory(candidate.action__path)
     let candidate.kind =
           \ (isdirectory(candidate.action__path) ? 'directory' : 'file')
+
+    if candidate.kind ==# 'directory' && candidate.abbr !~ '/$'
+      let candidate.abbr .= '/'
+    endif
   endfor
+endfunction"}}}
+function! s:converter(candidates, filename_format, time_format) "{{{
+  for candidate in filter(copy(a:candidates),
+        \ "!has_key(v:val, 'abbr')")
+    let path = (a:filename_format == '') ?  candidate.action__path :
+          \ unite#util#substitute_path_separator(
+          \   fnamemodify(candidate.action__path, a:filename_format))
+    if path == ''
+      let path = candidate.action__path
+    endif
+
+    " Set default abbr.
+    let candidate.abbr = (a:time_format == '' ? '' :
+          \ strftime(a:time_format, candidate.source__time))
+    let candidate.abbr .= path
+  endfor
+
+  return a:candidates
 endfunction"}}}
 "}}}
 "
