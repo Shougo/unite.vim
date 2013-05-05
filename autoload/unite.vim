@@ -1144,6 +1144,7 @@ function! unite#vimfiler_check_filetype(sources, ...) "{{{
   let context = s:initialize_context(context,
         \ s:get_source_names(a:sources))
   let context.unite__is_vimfiler = 1
+  let context.unite__is_interactive = 0
 
   try
     call s:initialize_current_unite(a:sources, context)
@@ -2356,6 +2357,7 @@ function! s:initialize_current_unite(sources, context) "{{{
 
   " Quit previous unite buffer.
   if !context.create && !context.temporary
+        \ && context.unite__is_interactive
     let winnr = unite#get_unite_winnr(context.buffer_name)
     if winnr > 0 && s:get_source_args(a:sources) !=#
           \ getbufvar(winbufnr(winnr), 'unite').args
