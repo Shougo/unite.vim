@@ -212,6 +212,8 @@ function! s:mru.save(...) "{{{
     call self.validate()
   endif
 
+  let self.candidates = s:L.uniq(self.candidates, 'v:val.action__path')
+
   call writefile([self.version] + map(copy(
       \ self.candidates[: self.limit.short - 1]),
       \ 'join(s:convert2list(v:val), "\t")'),
