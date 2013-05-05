@@ -199,7 +199,7 @@ function! s:mru.save(...) "{{{
     call self.load()
   endif
 
-  if self.has_external_update() && filereadable(mru_file.short)
+  if self.has_external_update() && filereadable(self.mru_file.short)
     " only need to get the short list which contains the latest MRUs
     let [ver; items] = readfile(self.mru_file.short)
     if self.version_check(ver)
