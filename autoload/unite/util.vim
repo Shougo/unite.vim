@@ -363,7 +363,7 @@ function! unite#util#redraw_echo(expr) "{{{
   let msg = unite#util#msg2list(a:expr)
   for i in range(0, len(msg), &cmdheight)
     redraw
-    echomsg join(msg[i : i+&cmdheight-1], "\n")
+    echo join(msg[i : i+&cmdheight-1], "\n")
   endfor
 endfunction"}}}
 
