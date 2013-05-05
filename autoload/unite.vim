@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 May 2013.
+" Last Modified: 05 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1527,10 +1527,6 @@ function! unite#resume_from_temporary(context)  "{{{
 endfunction"}}}
 
 function! s:load_default_scripts(kind, names) "{{{
-  if get(s:loaded_defaults, a:kind, '') ==# &runtimepath
-    return
-  endif
-
   let names = empty(a:names) ? [''] : a:names
   if a:kind ==# 'sources' && !empty(a:names)
     call add(names, 'alias')
@@ -1546,6 +1542,10 @@ function! s:load_default_scripts(kind, names) "{{{
     if exists('*neobundle#autoload#unite_sources')
       call neobundle#autoload#unite_sources(a:names)
     endif
+  endif
+
+  if get(s:loaded_defaults, a:kind, '') ==# &runtimepath
+    return
   endif
 
   for name in names

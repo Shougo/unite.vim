@@ -3127,6 +3127,7 @@ CHANGELOG					*unite-changelog*
 
 2013-05-05
 - Uniq mru list in save.
+- Fixed loading sources problem.
 
 2013-05-02
 - Improved mru sources.
