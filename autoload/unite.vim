@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 May 2013.
+" Last Modified: 06 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -771,8 +771,8 @@ function! unite#quick_match_redraw(quick_match_table) "{{{
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! unite#get_status_string() "{{{
-  return (b:unite.is_async ? '[async] ' : '') .
-        \ join(unite#loaded_source_names_with_args(), ', ')
+  return !exists('b:unite') ? '' : ((b:unite.is_async ? '[async] ' : '') .
+        \ join(unite#loaded_source_names_with_args(), ', '))
 endfunction"}}}
 function! unite#redraw_candidates(...) "{{{
   let is_gather_all = get(a:000, 0, 0)
