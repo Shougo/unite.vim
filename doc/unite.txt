@@ -215,7 +215,7 @@ g:unite_update_time				*g:unite_update_time*
 		The default value is 500.
 
 g:unite_prompt			                *g:unite_prompt*
-		Unite default prompt. Can be set with `-prompt` option for 
+		Unite default prompt. Can be set with `-prompt` option for
 		each unite session.
 
 		The default value is '> '.
@@ -352,24 +352,24 @@ g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		The default value is |g:unite_data_directory|; '/file_mru'
 
 g:unite_source_mru_do_validate			*g:unite_source_mru_do_validate*
-		Specify whether automatically remove invalid file path from mru 
-		history.
+		Specify whether automatically remove invalid file path from
+		mru history.
 
 		Effective for both file_mru and directory_mru
 
 		The default value is 1
 
 g:unite_source_mru_update_interval		*g:unite_source_mru_update_interval*
-		Specify the update interval to save updated mru files/directories
-		to disk.
+		Specify the update interval to save updated mru
+		files/directories to disk.
 
 		Effective for both file_mru and directory_mru
 
 		The default value is 600 (10 minutes)
 
 g:unite_source_file_mru_limit		*g:unite_source_file_mru_limit*
-		The number of recent file candidates to show in default file_mru 
-		window.
+		The number of recent file candidates to show in default
+		file_mru window.
 
 		The default value is 100.
 
@@ -523,16 +523,14 @@ g:unite_source_find_max_candidates
 
 g:unite_source_find_ignore_pattern
 					*g:unite_source_find_ignore_pattern*
-		Refer autoload/unite/sources/find.vim about the default
-		value.
+		Refer autoload/unite/sources/find.vim about the default value.
 		Note: This variable is deprecated. Please use
 		|unite#custom_source()| instead.
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_line_enable_highlight
 					*g:unite_source_line_enable_highlight*
-		Control whether search keyword is highlighted in unite
-		buffer.
+		Control whether search keyword is highlighted in unite buffer.
 
 		The default value is 1.
 
@@ -763,12 +761,12 @@ Normal mode mappings.
 		Note: This mapping redraw all candidates.
 
 <Plug>(unite_loop_cursor_down)		*<Plug>(unite_loop_cursor_down)*
-		Goes to the next line.  Goes up to the top when you are on
-		the bottom.
+		Goes to the next line.  Goes up to the top when you are on the
+		bottom.
 
 <Plug>(unite_loop_cursor_up)		*<Plug>(unite_loop_cursor_up)*
-		Goes to the previous line.  Goes down to the bottom when you are
-		on the top.
+		Goes to the previous line.  Goes down to the bottom when you
+		are on the top.
 
 <Plug>(unite_skip_cursor_down)		*<Plug>(unite_skip_cursor_down)*
 		Goes to the next line. But skips unmatched candidates.
@@ -857,8 +855,8 @@ Insert mode mappings.
 		bottom.
 
 <Plug>(unite_select_previous_line)	*i_<Plug>(unite_select_previous_line)*
-		Goes to the previous candidate, or goes to the bottom from
-		the top.
+		Goes to the previous candidate, or goes to the bottom from the
+		top.
 
 <Plug>(unite_skip_next_line)		*i_<Plug>(unite_skip_next_line)*
 		Goes to the next candidate but skips unmatched candidates.
@@ -1135,17 +1133,17 @@ unite#mappings#get_current_filters()
 
 unite#set_substitute_pattern({profile-name}, {pattern}, {subst} [, {priority}])
 						*unite#set_substitute_pattern()*
-		Specify a replace pattern of narrowing text for a Unite
-		buffer of which name is {profile-name}.  "" is regarded as
-		"default" and is equivalent to the case of |:Unite| without
+		Specify a replace pattern of narrowing text for a Unite buffer
+		of which name is {profile-name}.  "" is regarded as "default"
+		and is equivalent to the case of |:Unite| without
 		-buffer-name= option.  You may specify multiple {profile-name}
-		with breaking with ",".  {pattern} is the replace target regexp
-		and {subst} is the substitute string.  If you specify a same
-		{pattern} again, the setting is just updated.  You may
+		with breaking with ",".  {pattern} is the replace target
+		regexp and {subst} is the substitute string.  If you specify a
+		same {pattern} again, the setting is just updated.  You may
 		defeat {pattern} with giving "" to {subst}.  {priority}
 		prioritizes how this replaces.  If you skipped giving
-		{priority} it is 0.  Give bigger number for a {pattern}
-		which must be done earlier.
+		{priority} it is 0.  Give bigger number for a {pattern} which
+		must be done earlier.
 		Note: that the initial text of Unite buffer is not replaced
 		with these values.
 
@@ -1242,8 +1240,8 @@ unite#custom_default_action({kind}, {default-action})
 unite#custom_action({kind}, {name}, {action})
 						*unite#custom_action()*
 		Adds an {action} of which name is {name} for {kind}.
-		You may specify multiple {kind} with separating ",".  For
-		example:
+		You may specify multiple {kind} with separating ",".
+		For example:
 >
 		let my_tabopen = {
 		\ 'is_selectable' : 1,
@@ -1274,54 +1272,53 @@ unite#custom_alias({kind}, {name}, {action})
 		call unite#custom_alias('file', 'h', 'left')
 <
 unite#custom_filters({source-name}, {filters})	*unite#custom_filters()*
-		Changes the filters of {source-name} into {filters}. You
-		may specify multiple sources with separating "," in
-		{source-name}.  {filters} is a name of filter or a list of
-		the names.
+		Changes the filters of {source-name} into {filters}. You may
+		specify multiple sources with separating "," in {source-name}.
+		{filters} is a name of filter or a list of the names.
 		Note: This function is deprecated. Please use
 		|unite#custom_source()| instead.
 
 unite#custom_max_candidates({source-name}, {max})
 					*unite#custom_max_candidates()*
-		Changes the max candidates of {source-name} into
-		{max}.  You may specify multiple sources with
-		separating "," in {source-name}.
+		Changes the max candidates of {source-name} into {max}.  You
+		may specify multiple sources with separating "," in
+		{source-name}.
 		Note: This function is deprecated. Please use
 		|unite#custom_source()| instead.
 
 unite#custom_source({source-name}, {option-name}, {value})
 						*unite#custom_source()*
-		Set {source-name} source specialized {option-name}
-		to {value}. You may specify multiple sources with
-		separating "," in {source-name}.
+		Set {source-name} source specialized {option-name} to {value}.
+		You may specify multiple sources with separating "," in
+		{source-name}.
 		
 		These options below are available:
 		
 		filters				(List)
-		Specify a list of filter names.  The filters overwrite
-		source default filters.
+		Specify a list of filter names.  The filters overwrite source
+		default filters.
 		
 		matchers			(List) or (String)
-		Specify a list of matcher names.  The filters overwrite
-		source default matchers.
+		Specify a list of matcher names.  The filters overwrite source
+		default matchers.
 		
 		sorters				(List) or (String)
-		Specify a list of sorter names.  The filters overwrite
-		source default sorters.
+		Specify a list of sorter names.  The filters overwrite source
+		default sorters.
 		
 		converters			(List) or (String)
 		Specify a list of converter names.  The filters overwrite
 		source default converters.
 		
 		max_candidates			(Number)
-		Changes the max candidates into {value}.  If {value}
-		is 0, all candidates is displayed.
+		Changes the max candidates into {value}.  If {value} is 0, all
+		candidates is displayed.
 		
 		ignore_pattern			(String)
-		Specify the regexp pattern to ignore candidates of the
-		source.  This applies on the path or word attribute of
-		candidates.  Regardless of |g:unite_enable_ignore_case| value,
-		it's case sensitive.
+		Specify the regexp pattern to ignore candidates of the source.
+		This applies on the path or word attribute of candidates.
+		Regardless of |g:unite_enable_ignore_case| value, it's case
+		sensitive.
 		
 		variables			(Dictionary)
 		Changes the source custom variables. The variables are depends
@@ -1346,9 +1343,9 @@ unite#define_source({source})			*unite#define_source()*
 		exists, that is overwritten.
 
 unite#define_kind({kind})			*unite#define_kind()*
-		Adds {kind} dynamically.  See also |unite-create-kind|
-		about the detail of kind.  If a kind with the same name
-		exists, that is overwritten.
+		Adds {kind} dynamically.  See also |unite-create-kind| about
+		the detail of kind.  If a kind with the same name exists, that
+		is overwritten.
 
 unite#define_filter({filter})			*unite#define_filter()*
 		Adds {filter} dynamically.  See also |unite-create-filter|
@@ -1379,8 +1376,8 @@ unite#filters#matcher_default#use({matchers})
 unite#filters#sorter_default#use({sorters})
 					*unite#filters#sorter_default#use(()*
 		Changes the default sorter used by
-		|unite-filter-sorter_default| into {sourters}.  {sorters}
-		must be specified with a list of sorter names.
+		|unite-filter-sorter_default| into {sorters}.
+		{sorters} must be specified with a list of sorter names.
 
 					*unite#filters#converter_default#use(()*
 unite#filters#converter_default#use({converters})
@@ -1391,13 +1388,11 @@ unite#filters#converter_default#use({converters})
 ------------------------------------------------------------------------------
 OPTIONS						*unite-options*
 
-{options} are options for a unite buffer. You may give the
-following parameters for an option. You need to escape spaces
-with "\".
+{options} are options for a unite buffer. You may give the following
+parameters for an option. You need to escape spaces with "\".
 
 Note: In unite.vim, options converts to a context dictionary.
-The "-buffer-name" option is same to "buffer_name" key in
-context.
+The "-buffer-name" option is same to "buffer_name" key in context.
 
 						*unite-options-buffer-name*
 		-buffer-name={buffer-name}
@@ -1557,8 +1552,8 @@ context.
 
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}
-		Specify the lines max in multiline candidates. If this
-		option is omitted, "5" is used.
+		Specify the lines max in multiline candidates. If this option
+		is omitted, "5" is used.
 
 						*unite-options-here*
 		-here
@@ -1632,10 +1627,11 @@ file/new	Nominates a new input file as a candidate.
 file_mru	Nominates files you used recently as candidates, ordering
 		by time series.
 
-		For file_mru and directory_mru source, two lists are maintained 
+		For file_mru and directory_mru source, two lists are
+		maintained 
 		
 		1. short list for quick start; |g:unite_source_file_mru_limit|
-		2. long list for tracking mru history.|g:unite_source_file_mru_long_limit|
+		2. long list for tracking mru history. |g:unite_source_file_mru_long_limit|
 		
 		Normally, only the short list are shown in the unite window.
 		To load the long list  Hit the key associated with
@@ -1780,7 +1776,7 @@ grep		Nominates "grep" command output as candidates.
 		Note: This source is created by Sixeight.
 
 		Note: This source requires vimproc.  Please install.
-		http://github.com/Shougo/vimproc/tree/master
+		http://github.com/Shougo/vimproc
 
 		Source arguments:
 		1. the target directory.
@@ -1821,8 +1817,8 @@ grep		Nominates "grep" command output as candidates.
 <
 						*unite-source-vimgrep*
 vimgrep		Nominates |vimgrep| command output as candidates.
-		This source is slower than |unite-source-grep|, but
-		it can recognize file encodings.
+		This source is slower than |unite-source-grep|, but it can
+		recognize file encodings.
 		Note: The source clears quickfix list.
 
 		Source arguments:
@@ -1833,7 +1829,7 @@ vimgrep		Nominates |vimgrep| command output as candidates.
 find		Nominates "find" command output as candidates.
 
 		Note: This source requires vimproc.  Please install.
-		http://github.com/Shougo/vimproc/tree/master
+		http://github.com/Shougo/vimproc
 		
 		Note: Windows "find" command is not supported.
 		Please install UNIX Tools find for Windows.
@@ -2096,8 +2092,8 @@ matcher_regexp	A matcher which filters the candidates with user given
 		Narrowing down can be done by word.
 
 						*unite-filter-matcher_fuzzy*
-matcher_fuzzy	A matcher which filters the candidates with user
-		given fuzzy string.
+matcher_fuzzy	A matcher which filters the candidates with user given fuzzy
+		string.
 		This recognizes "!" as negative.
 		Narrowing down can be done by word.
 		Note: that narrowing down might be slower if this matcher is
@@ -2368,10 +2364,10 @@ source		start
 CREATE SOURCE					*unite-create-source*
 
 The files in autoload/unite/sources are automatically loaded and it
-calls unite#sources#{source_name}#define() whose return value is the
-source.  Each return value can be a list so you can return an empty list
-to avoid adding undesirable sources.  To add your own sources
-dynamically, you can use |unite#define_source()|.
+calls unite#sources#{source_name}#define() whose return value is the source.
+Each return value can be a list so you can return an empty list to avoid
+adding undesirable sources.  To add your own sources dynamically, you can use
+|unite#define_source()|.
 
 Note: To optimize load source files, if "buffer/rec" source name is detected,
 unite.vim loads "autoload/unite/sources/buffer*.vim" or
@@ -2399,88 +2395,80 @@ name			String		(Required)
 
 				*unite-source-attribute-gather_candidates*
 gather_candidates	Function	(Required)
-			This function is called once in gathering
-			candidates and anytime in redrawing by
-			|<Plug>(unite_redraw).  If source is defined as
-			|unite-source-is_volatile|, this function is
-			called whenever the input string is changed.
-			This function takes {args} and {context} as its
-			parameter and returns a list of {candidate}.
-			Here, {args} is a list of parameters given to
-			the source when |:Unite| command is executed
-			and {context} is the context information when
-			the source is called.  If either of these are not
-			given, the argument becomes "".  Hence, this
-			function must handle empty string.  Arguments
-			should be checked by |get()| function.  For more
-			details, you can refer to
+			This function is called once in gathering candidates
+			and anytime in redrawing by |<Plug>(unite_redraw)|.
+			If source is defined as |unite-source-is_volatile|,
+			this function is called whenever the input string is
+			changed.  This function takes {args} and {context} as
+			its parameter and returns a list of {candidate}.
+			Here, {args} is a list of parameters given to the
+			source when |:Unite| command is executed and {context}
+			is the context information when the source is called.
+			If either of these are not given, the argument becomes
+			"".  Hence, this function must handle empty string.
+			Arguments should be checked by |get()| function.
+			For more details, you can refer to
 			|unite-notation-{context}| about {context} and
 			|unite-notation-{candidate}| about {candidate}.
-			This attribute can be omitted if other
-			attributes can gather some candidates.
-			The candidates gathered by this attribute are
-			cached by unite buffer.  The cache is available
-			until the unite buffer is closed and is
-			discarded unless you use |:UniteResume|.  To
-			cache persistently regardless of the life of the
-			unite buffer, you have some source to save the
-			cache on non-volatile storage.
+			This attribute can be omitted if other attributes can
+			gather some candidates.
+			The candidates gathered by this attribute are cached
+			by unite buffer.  The cache is available until the
+			unite buffer is closed and is discarded unless you use
+			|:UniteResume|.  To cache persistently regardless of
+			the life of the unite buffer, you have some source to
+			save the cache on non-volatile storage.
 
 				*unite-source-attribute-change_candidates*
 change_candidates	Function	(Optional)
-			This function is called if the input string is
-			changed in gathering candidates by unite.  You
-			can make use of this attribute to generate
-			candidates from the input string.  The
-			candidates generated by this attributes are
-			added to the candidates cached by
+			This function is called if the input string is changed
+			in gathering candidates by unite.  You can make use of
+			this attribute to generate candidates from the input
+			string.  The candidates generated by this attributes
+			are added to the candidates cached by
 			|unites-source-attribute-gather_candidates|.
 			This function takes {args} and {context} as its
 			parameter and returns a list of {candidate}.
-			The specification of the parameters and the
-			returned value is same as
+			The specification of the parameters and the returned
+			value is same as
 			|unite-source-attribute-gather_candidates|.
 
 			*unite-source-attribute-async_gather_candidates*
 async_gather_candidates	Function	(Optional)
-			This function is called asynchronously in
-			gathering candidates.  You can make use of this
-			function to split time-consuming job into small
-			jobs.  |g:unite_update_time| is the default
-			timing.  This function takes {args} and
-			{context} as its parameter and returns a list of
-			{candidate}.
+			This function is called asynchronously in gathering
+			candidates.  You can make use of this function to
+			split time-consuming job into small jobs.
+			|g:unite_update_time| is the default timing.  This
+			function takes {args} and {context} as its parameter
+			and returns a list of {candidate}.
 			
-			The specification of the parameters and the
-			returned value is same as
+			The specification of the parameters and the returned
+			value is same as
 			|unite-source-attribute-gather_candidates|.
 
 					*unite-source-attribute-complete*
 complete		Function	(Optional)
 			This functions is called to complete the source
-			argument of |:Unite|.  This function takes
-			{args}, {context}, {arglead}, {cmdline} and
-			{cursorpos} as its parameter and returns a list
-			of candidates.
+			argument of |:Unite|.  This function takes {args},
+			{context}, {arglead}, {cmdline} and {cursorpos} as its
+			parameter and returns a list of candidates.
 
 						*unite-source-attribute-hooks*
 hooks			Dictionary		(Optional)
-			You may put hook functions in this dictionary
-			in which the key is the position to hook and
-			and the value is the reference to the function
-			to be called.  The following hook functions are
-			defined:
+			You may put hook functions in this dictionary in which
+			the key is the position to hook and the value is the
+			reference to the function to be called.  The following
+			hook functions are defined:
 
 			on_init		*unite-source-attribute-hooks-on_init*
-			Called just before returning to unite buffer
-			after executing |:Unite| commands or calling
-			|unite#start()| but executing |:UniteResume|.
+			Called just before returning to unite buffer after
+			executing |:Unite| commands or calling |unite#start()|
+			but executing |:UniteResume|.
 			This function takes {args} and {context} as its
 			parameters.
-			Note that you must be careful to select the
-			function to call because the unite buffer is not
-			still initialized in calling this hook
-			function.
+			Note that you must be careful to select the function
+			to call because the unite buffer is not still
+			initialized in calling this hook function.
 
 			on_syntax
 				*unite-source-attribute-hooks-on_syntax*
@@ -2489,8 +2477,8 @@ hooks			Dictionary		(Optional)
 			|unite-source-attribute-syntax| is not set.
 			This function takes {args} and {context} as its
 			parameters.
-			Highlight configuration for each source is done
-			by this function.
+			Highlight configuration for each source is done by
+			this function.
 
 			Note: To get abbr head column, use
 			"unite#get_current_unite().abbr_head".
@@ -2499,29 +2487,29 @@ hooks			Dictionary		(Optional)
 			syntax match uniteSource_FileMru_Time /(.*)/ contained containedin=uniteSource_FileMru
 			highlight default link uniteSource_FileMru_Time Statement
 <
-			Note you must set the containedin of the same syntax
+			Note you must set the contained in of the same syntax
 			name as for |unite-source-attribute-syntax|.
 
 			on_close
 				*unite-source-attribute-hooks-on_close*
-			Called after executing |<Plug>(unite_exit)| or
-			closing the unite buffer following some command
-			execution.  This function takes {args} and
-			{context} as its parameters.
+			Called after executing |<Plug>(unite_exit)| or closing
+			the unite buffer following some command execution.
+			This function takes {args} and {context} as its
+			parameters.
 
 			on_pre_filter
 				*unite-source-attribute-hooks-on_pre_filter*
 			Called before the filters to narrow down the
-			candidates. This function takes {args} and
-			{context} as its parameters.
+			candidates. This function takes {args} and {context}
+			as its parameters.
 
 			on_post_filter
 				*unite-source-attribute-hooks-on_post_filter*
 			Called after the filters to narrow down the
 			candidates.  This is used to set attributes.
 			This filters is to avoid adversely affecting the
-			performance.  This function takes {args} and
-			{context} as its parameters.
+			performance.  This function takes {args} and {context}
+			as its parameters.
 
 			on_pre_init
 				*unite-source-attribute-hooks-on_pre_init*
@@ -2529,30 +2517,29 @@ hooks			Dictionary		(Optional)
 			{args} is empty.
 			Current source is set as "a:context.source" in
 			{context}.
-			You can dynamically initialize source by
-			changing "a:context.source" in this function.
+			You can dynamically initialize source by changing
+			"a:context.source" in this function.
 
 					*unite-source-attribute-action_table*
 action_table		Dictionary		(Optional)
-			Adds source's own action table.  In this
-			dictionary, the key is the kind and the value is
-			the action table.  The specification of action
-			table is same as
-			|unite-kind-attribute-action_table|.  With this
-			dictionary, you can define original
-			|unite-kind-attribute-action_table| for each
-			kind in source's own context.
+			Adds source's own action table. 
+			In this dictionary, the key is the kind and the value
+			is the action table.  The specification of action
+			table is same as |unite-kind-attribute-action_table|.
+			With this dictionary, you can define original
+			|unite-kind-attribute-action_table| for each kind in
+			source's own context.
 			For example:
 >
 			'action_table' : { 'buffer' : foo_action_table }
 <
-			means that foo_action_table is used for kind
-			"buffer" in this source's context.
+			means that foo_action_table is used for kind "buffer"
+			in this source's context.
 			You can use "*" for the key to match any kind.
-			This is useful if you expect only one kind.  If
-			no key-value pair is set, this dictionary is
-			left empty.  You can put action table without a
-			corresponding key and it means the key is "*".
+			This is useful if you expect only one kind.  If no
+			key-value pair is set, this dictionary is left empty.
+			You can put action table without a corresponding key
+			and it means the key is "*".
 			For example, the following two are the same.
 >
 			'action_table' : foo_action_table
@@ -2560,8 +2547,8 @@ action_table		Dictionary		(Optional)
 <
 				*unite-source-attribute-default_action*
 default_action		Dictionary		(Optional)
-			Adds default action unique to the source.  In
-			this dictionary, the key is the kind and the value
+			Adds default action unique to the source.
+			In this dictionary, the key is the kind and the value
 			is the default action.
 			If it's not given, the kind's default action is used.
 			The default action can be in string format and
@@ -2576,13 +2563,12 @@ default_kind		String			(Optional)
 
 					*unite-source-attribute-alias_table*
 alias_table		Dictionary		(Optional)
-			Adds an alias table unique to the source.  In
-			this dictionary, the key is the kind and the
-			value is the alias table.
+			Adds an alias table unique to the source. 
+			In this dictionary, the key is the kind and the value
+			is the alias table.
 			If the key is '*', it matches any kinds.
-			Please refer to
-			|unite-kind-attribute-action_table| for the
-			specification of alias table.
+			Please refer to |unite-kind-attribute-action_table|
+			for the specification of alias table.
 			If no key-value is set, this dictionary is left
 			empty.
 
@@ -2596,8 +2582,8 @@ max_candidates		Number		(Optional)
 
 			*unite-source-attribute-required_pattern_length*
 required_pattern_length	Number		(Optional)
-			The least string length to narrow down the
-			candidates.  This attribute is optional.
+			The least string length to narrow down the candidates.
+			This attribute is optional.
 			If it's not given, 0 is used as the default value and
 			all the possible candidates are collected.
 
@@ -2607,12 +2593,12 @@ is_volatile		Number		(Optional)
 			everytime the input is changed.
 			This attribute is optional.
 			If it's not given, 0 is set as the default value. In
-			this case, candidates are cached in unite buffer
-			and it does not call
+			this case, candidates are cached in unite buffer and
+			it does not call
 			|unite-source-attribute-gather_candidates|
-			repeatedly and the cache is available until the
-			unite buffer is closed.  To cache longer, the source
-			has no choice but to cache by itself.
+			repeatedly and the cache is available until the unite
+			buffer is closed.  To cache longer, the source has no
+			choice but to cache by itself.
 
 					*unite-source-attribute-is_listed*
 is_listed		Number		(Optional)
@@ -2628,16 +2614,15 @@ description		String		(Optional)
 
 					*unite-source-attribute-syntax*
 syntax			String		(Optional)
-			The syntax name used within the source.  This
-			syntax name is defined automatically by unite
-			itself.
+			The syntax name used within the source.  This syntax
+			name is defined automatically by unite itself.
 			If it's omitted, it's set to "".
-			This is used to configure the source's own
-			highlight.  According to the unite's naming
-			conversion to avoid the syntax name conflicted,
-			use syntax name like "uniteSource__(source
-			name)".  Configuration of highlight itself must
-			use |unite-source-attribute-hooks-on_syntax|.
+			This is used to configure the source's own highlight.
+			According to the unite's naming conversion to avoid
+			the syntax name conflicted, use syntax name like
+			"uniteSource__(source name)".  Configuration of
+			highlight itself must use
+			|unite-source-attribute-hooks-on_syntax|.
 
 					*unite-source-attribute-filters*
 filters			List		(Optional)
@@ -2659,8 +2644,8 @@ converters		List/String	(Optional)
 
 					*unite-source-attribute-source__*
 source__		Unknown		(Optional)
-			The Attribute unique for each source.  To avoid
-			the attribute from conflicting wth the unite's own,
+			The Attribute unique for each source.  To avoid the
+			attribute from conflicting with the unite's own,
 			"source__" prefix must be added.
 
 NOTATION					*unite-notation*
@@ -2668,11 +2653,11 @@ NOTATION					*unite-notation*
 {context}					*unite-notation-{context}*
 			A dictionary to give context information.
 			The followings are the primary information.
-			The global context information can be acquired
-			by |unite#get_context()|.
-			The context information is characteristic to
-			each source and you can distinguish one by a key
-			stored in the dictionary.
+			The global context information can be acquired by
+			|unite#get_context()|.
+			The context information is characteristic to each
+			source and you can distinguish one by a key stored in
+			the dictionary.
 
 			input			(String)
 				The input string of unite buffer.
@@ -2695,18 +2680,14 @@ NOTATION					*unite-notation*
 				|unite-options-immediately|.
 
 			is_redraw		(Number)
-				If a user pressed
-				|<Plug>(unite_redraw)| or
-				invalidated cache after executed
-				actions.
-				Note: A user uses
-				|<Plug>(unite_redraw)| mapping
-				to remove cache files.
+				If a user pressed |<Plug>(unite_redraw)| or
+				invalidated cache after executed actions.
+				Note: A user uses |<Plug>(unite_redraw)|
+				mapping to remove cache files.
 
 			is_invalidate		(Number)
-				If An action disables a cache. This is
-				also 1 in initialization of unite
-				buffer.
+				If An action disables a cache. This is also 1
+				in initialization of unite buffer.
 
 			is_async		(Number)
 				If the source gathers candidates
@@ -2715,8 +2696,7 @@ NOTATION					*unite-notation*
 				asynchronous.
 
 			source			(Dictionary)
-				Gathering candidates source
-				information.
+				Gathering candidates source information.
 
 			candidates		(List)
 				Filtered candidates.
@@ -2725,8 +2705,8 @@ NOTATION					*unite-notation*
 
 			source__{name}		(Unknown)	(Optional)
 				Additional source information.
-				Note: Recommend sources save
-				variables instead of s: variables.
+				Note: Recommend sources save variables instead
+				of s: variables.
 
 {candidate}					*unite-notation-{candidate}*
 			A dictionary for candidates.
@@ -2734,28 +2714,24 @@ NOTATION					*unite-notation*
 
 			word			(String)	(Required)
 				String Displayed in unite buffer.
-				Matcher to use word attribute to
-				filter.
+				Matcher to use word attribute to filter.
 
 			abbr			(String)	(Optional)
 				String Displayed in unite buffer.
-				If it is omit, word attribute is used
-				instead.
-				The attribute is not used for
-				matcher.
+				If it is omit, word attribute is used instead.
+				The attribute is not used for matcher.
 
 			source			(String)	(Optional)
 				Generated candidate source name.
-				Note: This attribute is set
-				automatically.
+				Note: This attribute is set automatically.
 
 			kind			(String/List)	(Optional)
 				The candidate kind name.
 				If it is omit, "common" is used.
 				Kind name list is acceptable.
 				Ex: ["file", "directory"]
-				If you use list, you have not to
-				define parents kind action.
+				If you use list, you have not to define
+				parents kind action.
 				Note: Unite searches kinds action from list
 				tail.
 				Ex: If you set kind attribute to ["file",
@@ -2774,9 +2750,9 @@ NOTATION					*unite-notation*
 
 			is_multiline		(Number)	(Optional)
 				If the candidates have multiple lines.
-				The default value is 0.  When this is
-				enabled, unite splits abbr (or word if
-				abbr is missing) by a newline character.
+				The default value is 0.  When this is enabled,
+				unite splits abbr (or word if abbr is missing)
+				by a newline character.
 
 			source__{name}		(Unknown)	(Optional)
 				Attributes added by sources.
@@ -2820,25 +2796,25 @@ name			String		(Required)
 					*unite-kind-attribute-default_action*
 default_action		String		(Required)
 			Specify default action name when executing
-			|<Plug>(unite_do_default_action)|.  If this attribute is
-			omitted, an error occurred.  But this hack is used in
-			parent only actions.
+			|<Plug>(unite_do_default_action)|.  If this attribute
+			is omitted, an error occurred.  But this hack is used
+			in parent only actions.
 
 					*unite-kind-attribute-action_table*
 action_table		Dictionary		(Required)
-			Adds an action table unique to the kind.  In
-			this dictionary, the key is the action name and the
-			value is one of dictionary attributes below.
+			Adds an action table unique to the kind.  In this
+			dictionary, the key is the action name and the value
+			is one of dictionary attributes below.
 			If the value is "nop", the actions are disabled.
-			Note: "default" and "nop" names are keyword. You cannot
-			use them.
+			Note: "default" and "nop" names are keyword. You
+			cannot use them.
 			Note: If name is "unite__new_candidate", it will be
 			used for |<Plug>(unite_new_candidate)|. It adds a
 			candidate in current source.
 			
 			func			(Function)
-				This function is called when executing actions.
-				This function takes {candidate}.
+				This function is called when executing
+				actions.  This function takes {candidate}.
 				If "is_selectable" attribute is "1",
 				{candidate} are candidate list({candidates}).
 				Note: This {candidate} is cached by unite, so
@@ -2849,14 +2825,14 @@ action_table		Dictionary		(Required)
 				The kind description string.
 
 			is_quit			(Number)	(Optional)
-				If this attribute is "1", unite buffer is closed
-				before executing actions. If this attribute is
-				omitted, "1" is used.
+				If this attribute is "1", unite buffer is
+				closed before executing actions. If this
+				attribute is omitted, "1" is used.
 
 			is_selectable		(Number)	(Optional)
 				If this attribute is "1", the action can
-				execute multiple candidates.  If this attribute
-				is omitted, "0" is used.
+				execute multiple candidates.  If this
+				attribute is omitted, "0" is used.
 
 			is_invalidate_cache	(Number)	(Optional)
 				If this attribute is "1", unite invalidates
@@ -2875,9 +2851,9 @@ action_table		Dictionary		(Required)
 
 					*unite-kind-attribute-alias_table*
 alias_table		Dictionary		(Optional)
-			Adds an alias table unique to the kind.  In
-			this dictionary, the key is the action name and the
-			value is the overwrite action name.
+			Adds an alias table unique to the kind.  In this
+			dictionary, the key is the action name and the value
+			is the overwrite action name.
 			If the value is "nop", the action is disabled.
 
 						*unite-kind-attribute-parents*
@@ -2904,8 +2880,8 @@ below command.
 ------------------------------------------------------------------------------
 ACTION RESOLUTION ORDER				*unite-action-resolution-order*
 
-For example, if you fire actions from kind "file" candidate gathered
-by source "file", unite searches actions by order below.
+For example, if you fire actions from kind "file" candidate gathered by source
+"file", unite searches actions by order below.
 Note: kind "file" extends "openable" and "cdable" kind.
 
 (1) Custom action table for kind "source/file/file".
@@ -2931,8 +2907,8 @@ undesirable filter.  To add your own filters dynamically, you can use
 |unite#define_filter()|.
 
 Note: To optimize load filter files, if "matcher_foo_bar" filter name is
-detected, unite.vim loads "autoload/unite/filters/matcher_foo*.vim" files.  The
-filter file name must be filter name prefix(Ex: matcher_foo).
+detected, unite.vim loads "autoload/unite/filters/matcher_foo*.vim" files.
+The filter file name must be filter name prefix(Ex: matcher_foo).
 
 ------------------------------------------------------------------------------
 FILTER ATTRIBUTES				*unite-filter-attributes*
@@ -2943,13 +2919,12 @@ name			String		(Required)
 
 						*unite-filter-attribute-filter*
 filter			Function		(Required)
-			This function is called after gathering
-			candidates by unite.
-			This function takes {candidates} and
-			{context} as its parameter and returns a
-			list of {candidate}.
-			The specification of the parameters and the
-			returned value is same as
+			This function is called after gathering candidates by
+			unite.
+			This function takes {candidates} and {context} as its
+			parameter and returns a list of {candidate}.
+			The specification of the parameters and the returned
+			value is same as
 			|unite-source-attribute-gather_candidates|.
 
 					*unite-filter-attribute-description*
