@@ -1240,8 +1240,8 @@ unite#custom_default_action({kind}, {default-action})
 unite#custom_action({kind}, {name}, {action})
 						*unite#custom_action()*
 		Adds an {action} of which name is {name} for {kind}.
-		You may specify multiple {kind} with separating ",".  For
-		example:
+		You may specify multiple {kind} with separating ",".
+		For example:
 >
 		let my_tabopen = {
 		\ 'is_selectable' : 1,
@@ -1272,54 +1272,53 @@ unite#custom_alias({kind}, {name}, {action})
 		call unite#custom_alias('file', 'h', 'left')
 <
 unite#custom_filters({source-name}, {filters})	*unite#custom_filters()*
-		Changes the filters of {source-name} into {filters}. You
-		may specify multiple sources with separating "," in
-		{source-name}.  {filters} is a name of filter or a list of
-		the names.
+		Changes the filters of {source-name} into {filters}. You may
+		specify multiple sources with separating "," in {source-name}.
+		{filters} is a name of filter or a list of the names.
 		Note: This function is deprecated. Please use
 		|unite#custom_source()| instead.
 
 unite#custom_max_candidates({source-name}, {max})
 					*unite#custom_max_candidates()*
-		Changes the max candidates of {source-name} into
-		{max}.  You may specify multiple sources with
-		separating "," in {source-name}.
+		Changes the max candidates of {source-name} into {max}.  You
+		may specify multiple sources with separating "," in
+		{source-name}.
 		Note: This function is deprecated. Please use
 		|unite#custom_source()| instead.
 
 unite#custom_source({source-name}, {option-name}, {value})
 						*unite#custom_source()*
-		Set {source-name} source specialized {option-name}
-		to {value}. You may specify multiple sources with
-		separating "," in {source-name}.
+		Set {source-name} source specialized {option-name} to {value}.
+		You may specify multiple sources with separating "," in
+		{source-name}.
 		
 		These options below are available:
 		
 		filters				(List)
-		Specify a list of filter names.  The filters overwrite
-		source default filters.
+		Specify a list of filter names.  The filters overwrite source
+		default filters.
 		
 		matchers			(List) or (String)
-		Specify a list of matcher names.  The filters overwrite
-		source default matchers.
+		Specify a list of matcher names.  The filters overwrite source
+		default matchers.
 		
 		sorters				(List) or (String)
-		Specify a list of sorter names.  The filters overwrite
-		source default sorters.
+		Specify a list of sorter names.  The filters overwrite source
+		default sorters.
 		
 		converters			(List) or (String)
 		Specify a list of converter names.  The filters overwrite
 		source default converters.
 		
 		max_candidates			(Number)
-		Changes the max candidates into {value}.  If {value}
-		is 0, all candidates is displayed.
+		Changes the max candidates into {value}.  If {value} is 0, all
+		candidates is displayed.
 		
 		ignore_pattern			(String)
-		Specify the regexp pattern to ignore candidates of the
-		source.  This applies on the path or word attribute of
-		candidates.  Regardless of |g:unite_enable_ignore_case| value,
-		it's case sensitive.
+		Specify the regexp pattern to ignore candidates of the source.
+		This applies on the path or word attribute of candidates.
+		Regardless of |g:unite_enable_ignore_case| value, it's case
+		sensitive.
 		
 		variables			(Dictionary)
 		Changes the source custom variables. The variables are depends
@@ -1344,9 +1343,9 @@ unite#define_source({source})			*unite#define_source()*
 		exists, that is overwritten.
 
 unite#define_kind({kind})			*unite#define_kind()*
-		Adds {kind} dynamically.  See also |unite-create-kind|
-		about the detail of kind.  If a kind with the same name
-		exists, that is overwritten.
+		Adds {kind} dynamically.  See also |unite-create-kind| about
+		the detail of kind.  If a kind with the same name exists, that
+		is overwritten.
 
 unite#define_filter({filter})			*unite#define_filter()*
 		Adds {filter} dynamically.  See also |unite-create-filter|
@@ -1377,8 +1376,8 @@ unite#filters#matcher_default#use({matchers})
 unite#filters#sorter_default#use({sorters})
 					*unite#filters#sorter_default#use(()*
 		Changes the default sorter used by
-		|unite-filter-sorter_default| into {sourters}.  {sorters}
-		must be specified with a list of sorter names.
+		|unite-filter-sorter_default| into {sorters}.
+		{sorters} must be specified with a list of sorter names.
 
 					*unite#filters#converter_default#use(()*
 unite#filters#converter_default#use({converters})
@@ -2457,9 +2456,9 @@ complete		Function	(Optional)
 						*unite-source-attribute-hooks*
 hooks			Dictionary		(Optional)
 			You may put hook functions in this dictionary in which
-			the key is the position to hook and and the value is
-			the reference to the function to be called.  The
-			following hook functions are defined:
+			the key is the position to hook and the value is the
+			reference to the function to be called.  The following
+			hook functions are defined:
 
 			on_init		*unite-source-attribute-hooks-on_init*
 			Called just before returning to unite buffer after
@@ -2488,7 +2487,7 @@ hooks			Dictionary		(Optional)
 			syntax match uniteSource_FileMru_Time /(.*)/ contained containedin=uniteSource_FileMru
 			highlight default link uniteSource_FileMru_Time Statement
 <
-			Note you must set the containedin of the same syntax
+			Note you must set the contained in of the same syntax
 			name as for |unite-source-attribute-syntax|.
 
 			on_close
@@ -2646,7 +2645,7 @@ converters		List/String	(Optional)
 					*unite-source-attribute-source__*
 source__		Unknown		(Optional)
 			The Attribute unique for each source.  To avoid the
-			attribute from conflicting wth the unite's own,
+			attribute from conflicting with the unite's own,
 			"source__" prefix must be added.
 
 NOTATION					*unite-notation*
@@ -2706,8 +2705,8 @@ NOTATION					*unite-notation*
 
 			source__{name}		(Unknown)	(Optional)
 				Additional source information.
-				Note: Recommend sources save
-				variables instead of s: variables.
+				Note: Recommend sources save variables instead
+				of s: variables.
 
 {candidate}					*unite-notation-{candidate}*
 			A dictionary for candidates.
@@ -2797,9 +2796,9 @@ name			String		(Required)
 					*unite-kind-attribute-default_action*
 default_action		String		(Required)
 			Specify default action name when executing
-			|<Plug>(unite_do_default_action)|.  If this attribute is
-			omitted, an error occurred.  But this hack is used in
-			parent only actions.
+			|<Plug>(unite_do_default_action)|.  If this attribute
+			is omitted, an error occurred.  But this hack is used
+			in parent only actions.
 
 					*unite-kind-attribute-action_table*
 action_table		Dictionary		(Required)
@@ -2807,15 +2806,15 @@ action_table		Dictionary		(Required)
 			dictionary, the key is the action name and the value
 			is one of dictionary attributes below.
 			If the value is "nop", the actions are disabled.
-			Note: "default" and "nop" names are keyword. You cannot
-			use them.
+			Note: "default" and "nop" names are keyword. You
+			cannot use them.
 			Note: If name is "unite__new_candidate", it will be
 			used for |<Plug>(unite_new_candidate)|. It adds a
 			candidate in current source.
 			
 			func			(Function)
-				This function is called when executing actions.
-				This function takes {candidate}.
+				This function is called when executing
+				actions.  This function takes {candidate}.
 				If "is_selectable" attribute is "1",
 				{candidate} are candidate list({candidates}).
 				Note: This {candidate} is cached by unite, so
@@ -2908,8 +2907,8 @@ undesirable filter.  To add your own filters dynamically, you can use
 |unite#define_filter()|.
 
 Note: To optimize load filter files, if "matcher_foo_bar" filter name is
-detected, unite.vim loads "autoload/unite/filters/matcher_foo*.vim" files.  The
-filter file name must be filter name prefix(Ex: matcher_foo).
+detected, unite.vim loads "autoload/unite/filters/matcher_foo*.vim" files.
+The filter file name must be filter name prefix(Ex: matcher_foo).
 
 ------------------------------------------------------------------------------
 FILTER ATTRIBUTES				*unite-filter-attributes*
