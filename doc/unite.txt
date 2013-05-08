@@ -3088,9 +3088,16 @@ A: You must set |g:unite_force_overwrite_statusline| to 0.
 And you must install below custom theme for powerline.
 
 For powerline:
-https://github.com/zhaocai/powerline (custom theme for unite.vim included
-edition)
-https://github.com/Lokaltog/powerline/issues/470
+
+1. vim powerline local themes
+https://github.com/zhaocai/linepower.vim 
+
+2. or checkout the powerline branch from @zhaocai with custom theme for
+   unite.vim included edition
+https://github.com/zhaocai/powerline
+
+https://github.com/Lokaltog/powerline/issues/470 (pull request)
+
 
 For vim-powerline:
 Note: The description is Japanese
