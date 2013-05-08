@@ -402,6 +402,9 @@ function! unite#loaded_source_names_with_args() "{{{
         \ join(insert(filter(copy(v:val.args),
         \  'type(v:val) <= 1'), unite#_convert_source_name(v:val.name)), ':')
         \ . (v:val.unite__orig_len_candidates == 0 ? '' :
+        \      v:val.unite__orig_len_candidates ==
+        \            v:val.unite__len_candidates ?
+        \            '(' .  v:val.unite__len_candidates . ')' :
         \      printf('(%s/%s)', v:val.unite__len_candidates,
         \      v:val.unite__orig_len_candidates))
         \ ")
