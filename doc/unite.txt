@@ -2178,6 +2178,11 @@ converter_relative_abbr
 		Specification of this term is almost the same as
 		|unite-filter-converter_relative_word|.
 
+					*unite-filter-converter_tail*
+converter_tail
+		A converter which converts a candidate's word into the
+		tail of the filename.
+
 ==============================================================================
 ACTIONS						*unite-actions*
 
@@ -3106,6 +3111,9 @@ https://github.com/osyo-manga/vim-powerline-unite-theme
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-05-09
+- Added converter_tail.
 
 2013-05-05
 - Uniq mru list in save.
