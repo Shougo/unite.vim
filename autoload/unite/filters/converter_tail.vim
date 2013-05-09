@@ -38,6 +38,10 @@ let s:converter = {
 
 function! s:converter.filter(candidates, context) "{{{
   for candidate in a:candidates
+    if !has_key(candidate, 'abbr')
+      " Save original word.
+      let candidate.abbr = candidate.word
+    endif
     let candidate.word = fnamemodify(candidate.word, ':t')
   endfor
 
