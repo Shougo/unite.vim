@@ -2238,9 +2238,13 @@ Defines an interface for files you can move to with cd command.
 			available only when |vimfiler| is already installed.
 	rec		Run |unite-source-file_rec| on the directory.
 	rec_parent	Run |unite-source-file_rec| on the parent directory.
+	rec_project	Run |unite-source-file_rec| on the project directory.
 	rec/async	Run |unite-source-file_rec/async| on the directory.
 	rec_parent/async
 			Run |unite-source-file_rec/async| on the parent
+			directory.
+	rec_project/async
+			Run |unite-source-file_rec/async| on the project
 			directory.
 	file		Run |unite-source-file| on the directory.
 
