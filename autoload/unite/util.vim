@@ -361,9 +361,10 @@ function! unite#util#redraw_echo(expr) "{{{
   endif
 
   let msg = unite#util#msg2list(a:expr)
-  for i in range(0, len(msg), &cmdheight)
+  let height = max([1, &cmdheight - 1])
+  for i in range(0, len(msg), height)
     redraw
-    echo join(msg[i : i+&cmdheight-1], "\n")
+    echo join(msg[i : i+height-1], "\n")
   endfor
 endfunction"}}}
 
