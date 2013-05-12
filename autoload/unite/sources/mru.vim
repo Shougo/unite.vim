@@ -246,8 +246,13 @@ function! s:mru.load()  "{{{
     return
   endif
 
-  let [ver; items] = readfile(mru_file)
-  if ! self.version_check(ver)
+  let file = readfile(mru_file)
+  if empty(file)
+    return
+  endif
+
+  let [ver; items] = file
+  if !self.version_check(ver)
     return
   endif
 
