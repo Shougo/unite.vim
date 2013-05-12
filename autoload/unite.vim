@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 May 2013.
+" Last Modified: 12 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,7 +33,7 @@ augroup unite
 augroup END
 
 function! unite#version() "{{{
-  return str2nr(printf('%02d%02d', 5, 0))
+  return str2nr(printf('%02d%02d', 5, 1))
 endfunction"}}}
 
 " User functions. "{{{
