@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 May 2013.
+" Last Modified: 13 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -766,7 +766,7 @@ function! unite#quick_match_redraw(quick_match_table) "{{{
   setlocal modifiable
 
   call setline(unite#get_current_unite().prompt_linenr+1,
-        \ s:convert_quick_match_lines(
+        \ unite#convert_lines(
         \ unite#get_current_unite().current_candidates,
         \ a:quick_match_table))
   redraw
@@ -2316,12 +2316,6 @@ function! s:convert_quick_match_lines(candidates, quick_match_table) "{{{
 
   let candidates = []
 
-  " Create key table.
-  let keys = {}
-  for [key, number] in items(a:quick_match_table)
-    let keys[number] = key . '|'
-  endfor
-
   " Add number.
   let num = 0
 
@@ -2338,7 +2332,9 @@ function! s:convert_quick_match_lines(candidates, quick_match_table) "{{{
 
   return candidates
 endfunction"}}}
-function! unite#convert_lines(candidates) "{{{
+function! unite#convert_lines(candidates, ...) "{{{
+  let quick_match_table = get(a:000, 0, {})
+
   let unite = unite#get_current_unite()
   let [max_width, max_source_name] =
         \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
@@ -2346,8 +2342,17 @@ function! unite#convert_lines(candidates) "{{{
     let max_width -= 1
   endif
 
+  " Create key table.
+  let keys = {}
+  for [key, number] in items(quick_match_table)
+    let keys[number] = key . '|'
+  endfor
+
   return map(copy(a:candidates),
-        \ "(v:val.unite__is_marked ? g:unite_marked_icon . ' ' : '- ')
+        \ "(v:val.is_dummy ? '  ' :
+        \   v:val.unite__is_marked ? g:unite_marked_icon . ' ' :
+        \   empty(quick_match_table) ? '- ' :
+        \   get(keys, v:key, '  '))
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(unite#_convert_source_name(
         \     v:val.source), max_source_name))
