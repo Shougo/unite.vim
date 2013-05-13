@@ -330,6 +330,7 @@ let s:unite_options = [
       \ '-auto-quit', '-no-focus',
       \ '-long-source-names', '-short-source-names',
       \ '-multi-line', '-resume', '-wrap', '-select=', '-log',
+      \ '-truncate',
       \]
 "}}}
 
@@ -1637,6 +1638,7 @@ function! s:initialize_context(context, ...) "{{{
         \ 'wrap' : 0,
         \ 'select' : 0,
         \ 'log' : 0,
+        \ 'truncate' : 0,
         \ 'unite__direct_switch' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 0,
@@ -2336,6 +2338,7 @@ function! unite#convert_lines(candidates, ...) "{{{
   let quick_match_table = get(a:000, 0, {})
 
   let unite = unite#get_current_unite()
+  let context = unite.context
   let [max_width, max_source_name] =
         \ s:adjustments(winwidth(0)-1, unite.max_source_name, 2)
   if unite.max_source_name == 0
@@ -2355,9 +2358,9 @@ function! unite#convert_lines(candidates, ...) "{{{
         \   get(keys, v:key, '  '))
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(unite#_convert_source_name(
-        \     v:val.source), max_source_name))
+        \     (v:val.is_dummy ? '' : v:val.source)), max_source_name))
         \ . unite#util#truncate_wrap(v:val.unite__abbr, " . max_width
-        \    .  ", max_width/2, '..')")
+        \    .  ", (context.truncate ? 0 : max_width/2), '..')")
 endfunction"}}}
 
 function! s:initialize_current_unite(sources, context) "{{{

@@ -1618,6 +1618,11 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 		Enable log mode. In log mode, cursor move to bottom
 		automatically.
 
+						*unite-options-truncate*
+		-truncate
+		If it is set, lines longer than the width of the window will
+		truncate candidate abbr.
+
 ==============================================================================
 SOURCES						*unite-sources*
 
@@ -3141,6 +3146,9 @@ A:
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-05-13
+- Added truncate option.
 
 2013-05-10
 - Added converter_file_directory.
