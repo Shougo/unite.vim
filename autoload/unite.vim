@@ -33,7 +33,7 @@ augroup unite
 augroup END
 
 function! unite#version() "{{{
-  return str2nr(printf('%02d%02d', 5, 0))
+  return str2nr(printf('%02d%02d', 5, 1))
 endfunction"}}}
 
 " User functions. "{{{
