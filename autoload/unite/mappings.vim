@@ -337,17 +337,9 @@ function! unite#mappings#do_action(action_name, ...) "{{{
 
   let context = unite#get_context()
 
-  let is_redraw = 0
-  if !empty(unite#get_marked_candidates())
-    " Clear marks.
-    for candidate in candidates
-      let candidate.unite__is_marked = 0
-    endfor
-    let is_redraw = 1
-  endif
-
   " Execute action.
   let is_quit = 0
+  let is_redraw = 0
   let _ = []
   for table in action_tables
     " Check quit flag.
@@ -357,7 +349,8 @@ function! unite#mappings#do_action(action_name, ...) "{{{
       let is_quit = 1
     endif
 
-    if table.action.is_start && is_redraw
+    if table.action.is_start && !empty(unite#get_marked_candidates())
+      call s:clear_marks(candidates)
       call unite#force_redraw()
       let is_redraw = 0
     elseif table.action.is_selectable
@@ -409,6 +402,7 @@ function! unite#mappings#do_action(action_name, ...) "{{{
   endif
 
   if !is_quit && is_redraw
+    call s:clear_marks(candidates)
     call unite#force_redraw()
   endif
 
@@ -944,6 +938,11 @@ function! s:redraw_all_candidates() "{{{
 endfunction"}}}
 function! s:narrowing_dot() "{{{
   call unite#mappings#narrowing(unite#get_input().'.')
+endfunction"}}}
+function! s:clear_marks(candidates) "{{{
+  for candidate in a:candidates
+    let candidate.unite__is_marked = 0
+  endfor
 endfunction"}}}
 
 function! s:get_quick_match_table() "{{{
