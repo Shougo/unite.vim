@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 May 2013.
+" Last Modified: 14 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1063,7 +1063,6 @@ function! unite#start(sources, ...) "{{{
   call unite#redraw_candidates()
 
   call s:init_cursor()
-
 endfunction"}}}
 function! unite#start_script(sources, ...) "{{{
   " Start unite from script.
@@ -1071,14 +1070,6 @@ function! unite#start_script(sources, ...) "{{{
   let context = get(a:000, 0, {})
 
   let context.script = 1
-
-  " Set buffer-name.
-  if !has_key(context, 'buffer_name')
-    let context.buffer_name =
-          \ type(get(a:sources, 0, [])) == type([]) ?
-          \ join(map(copy(a:sources), 'v:val[0]')) :
-          \ join(a:sources)
-  endif
 
   return get(unite#get_context(), 'temporary', 0) ?
         \ unite#start_temporary(a:sources, context) :
@@ -1118,6 +1109,11 @@ function! unite#start_temporary(sources, ...) "{{{
   let context.unite__old_winwidth = 0
   let context.unite__old_winheight = 0
   let context.is_resize = 0
+
+  if context.script
+    " Set buffer-name automatically.
+    let context.buffer_name = s:get_source_names(a:sources)
+  endif
 
   let buffer_name = get(a:000, 1,
         \ matchstr(context.buffer_name, '^\S\+')
@@ -1694,6 +1690,11 @@ function! s:initialize_context(context, ...) "{{{
     " Split automatically.
     let context.no_split = 0
   endif
+  if !has_key(a:context, 'buffer_name') && context.script
+    " Set buffer-name automatically.
+    let context.buffer_name = join(source_names)
+  endif
+
   let context.is_changed = 0
 
   return context

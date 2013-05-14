@@ -359,9 +359,8 @@ function! unite#mappings#do_action(action_name, ...) "{{{
 
     if table.action.is_start && is_redraw
       call unite#force_redraw()
-    endif
-
-    if table.action.is_selectable
+      let is_redraw = 0
+    elseif table.action.is_selectable
       let is_redraw = 1
     endif
 
