@@ -290,10 +290,11 @@ function! unite#mappings#narrowing(word) "{{{
   let prompt_linenr = unite.prompt_linenr
   call setline(prompt_linenr, unite.prompt . unite.input)
   call unite#redraw()
-  execute prompt_linenr
   if unite.is_insert
+    call cursor(prompt_linenr, 0)
     startinsert!
   else
+    call cursor(prompt_linenr+1, 0)
     normal! 0z.
   endif
 endfunction"}}}
