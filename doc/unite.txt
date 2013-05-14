@@ -1,6 +1,6 @@
 *unite.txt*	Unite and create user interfaces.
 
-Version: 5.0
+Version: 5.1
 Author : Shougo <Shougo.Matsu@gmail.com>
 Documentation Author: ujihisa <ujihisa at gmail com>
 License: MIT license  {{{
@@ -3148,6 +3148,7 @@ CHANGELOG					*unite-changelog*
 
 2013-05-13
 - Added truncate option.
+- Improved narrowing behavior.
 
 2013-05-12
 - Ver.5.1 development is started.
