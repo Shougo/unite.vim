@@ -457,7 +457,7 @@ g:unite_source_grep_command			*g:unite_source_grep_command*
 g:unite_source_grep_recursive_opt	*g:unite_source_grep_recursive_opt*
 		Set grep recursive option.
 
-		The default value is "-R".
+		The default value is "-r".
 
 g:unite_source_grep_default_opts	*g:unite_source_grep_default_opts*
 		Set the default options for grep.
@@ -3145,6 +3145,9 @@ A:
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-05-16
+- Improved g:unite_source_grep_recursive_opt default value.
 
 2013-05-13
 - Added truncate option.

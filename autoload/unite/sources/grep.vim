@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 16 Mar 2013.
+" Last Modified: 16 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,7 +28,7 @@
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_grep_command', 'grep')
 call unite#util#set_default('g:unite_source_grep_default_opts', '-iHn')
-call unite#util#set_default('g:unite_source_grep_recursive_opt', '-R')
+call unite#util#set_default('g:unite_source_grep_recursive_opt', '-r')
 call unite#util#set_default('g:unite_source_grep_max_candidates', 100)
 call unite#util#set_default('g:unite_source_grep_search_word_highlight', 'Search')
 call unite#util#set_default('g:unite_source_grep_ignore_pattern',
