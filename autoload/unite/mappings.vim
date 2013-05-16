@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 May 2013.
+" Last Modified: 16 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -607,6 +607,7 @@ function! unite#mappings#_choose_action(candidates, ...) "{{{
   let context.source__sources = unite.sources
   let context.buffer_name = 'action'
   let context.profile_name = 'action'
+  let context.start_insert = 1
 
   call call((has_key(context, 'vimfiler__current_directory') ?
         \ 'unite#start' : 'unite#start_temporary'),
