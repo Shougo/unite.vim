@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 May 2013.
+" Last Modified: 17 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -263,7 +263,7 @@ function! s:open(candidate) "{{{
     if has_key(a:candidate, 'action__buffer_nr')
       silent execute 'buffer' bufnr
     else
-      silent edit `=a:candidate.action__path`
+      edit `=a:candidate.action__path`
     endif
   endif
 
