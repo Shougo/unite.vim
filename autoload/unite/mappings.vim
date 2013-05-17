@@ -95,8 +95,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>narrowing_input_history()<CR>
   nnoremap <buffer><silent> <Plug>(unite_narrowing_dot)
         \ :<C-u>call <SID>narrowing_dot()<CR>
-  nnoremap <buffer><silent> <Plug>(unite_toggle_max_candidates)
-        \ :<C-u>call <SID>toggle_max_candidates()<CR>
+  nnoremap <buffer><silent> <Plug>(unite_disable_max_candidates)
+        \ :<C-u>call <SID>disable_max_candidates()<CR>
   nnoremap <buffer><silent> <Plug>(unite_quick_help)
         \ :<C-u>call <SID>quick_help()<CR>
   nnoremap <buffer><silent> <Plug>(unite_new_candidate)
@@ -158,8 +158,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ <C-o>:<C-u>call <SID>narrowing_path()<CR>
   inoremap <silent><buffer> <Plug>(unite_narrowing_input_history)
         \ <C-o>:<C-u>call <SID>narrowing_input_history()<CR>
-  inoremap <silent><buffer> <Plug>(unite_toggle_max_candidates)
-        \ <C-o>:<C-u>call <SID>toggle_max_candidates()<CR>
+  inoremap <silent><buffer> <Plug>(unite_disable_max_candidates)
+        \ <C-o>:<C-u>call <SID>disable_max_candidates()<CR>
   inoremap <silent><buffer> <Plug>(unite_redraw)
         \ <C-o>:<C-u>call <SID>redraw()<CR>
   inoremap <buffer><silent> <Plug>(unite_new_candidate)
@@ -197,7 +197,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nmap <buffer> <C-h>     <Plug>(unite_delete_backward_path)
   nmap <buffer> <C-r>     <Plug>(unite_restart)
   nmap <buffer> *         <Plug>(unite_toggle_mark_all_candidates)
-  nmap <buffer> M         <Plug>(unite_toggle_max_candidates)
+  nmap <buffer> M         <Plug>(unite_disable_max_candidates)
   nmap <buffer> ?         <Plug>(unite_quick_help)
   nmap <buffer> N         <Plug>(unite_new_candidate)
   nmap <buffer> .         <Plug>(unite_narrowing_dot)
@@ -903,7 +903,7 @@ function! s:toggle_auto_highlight() "{{{
   let context = unite#get_context()
   let context.auto_highlight = !context.auto_highlight
 endfunction"}}}
-function! s:toggle_max_candidates() "{{{
+function! s:disable_max_candidates() "{{{
   call unite#force_redraw()
   call s:redraw_all_candidates()
 endfunction"}}}
