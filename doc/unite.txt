@@ -3146,6 +3146,9 @@ A:
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-05-19
+- Fixed source completion.
+
 2013-05-17
 - Added <Plug>(unite_disable_max_candidates) mappings.
 
