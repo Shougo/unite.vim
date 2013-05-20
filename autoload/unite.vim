@@ -2421,8 +2421,6 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.prev_winnr = winnr()
   let unite.update_time_save = &updatetime
   let unite.statusline = '*unite* : %{unite#get_status_string()}'
-          \ . "\ %=%{printf(' %5d/%d',line('.'),
-          \       b:unite.max_source_candidates+b:unite.prompt_linenr)}"
 
   " Create new buffer name.
   let postfix = s:get_postfix(
