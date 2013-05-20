@@ -427,6 +427,24 @@ function! unite#get_current_candidate(...) "{{{
 
   return get(unite#get_unite_candidates(), num, {})
 endfunction"}}}
+function! unite#get_current_candidate_linenr(num) "{{{
+  let num = 0
+
+  let candidate_num = 0
+  for candidate in unite#get_unite_candidates()
+    if !candidate.is_dummy
+      let candidate_num += 1
+    endif
+
+    let num += 1
+
+    if candidate_num >= a:num+1
+      break
+    endif
+  endfor
+
+  return unite#get_current_unite().prompt_linenr + num
+endfunction"}}}
 function! unite#get_context() "{{{
   let unite = unite#get_current_unite()
   return has_key(unite, 'context') ?
@@ -3250,7 +3268,7 @@ function! s:init_cursor() "{{{
 
     if !is_restore
           \ || candidate != unite#get_current_candidate()
-      call cursor(unite.prompt_linenr+1, 0)
+      call cursor(unite#get_current_candidate_linenr(0), 0)
     endif
 
     normal! 0
@@ -3263,7 +3281,9 @@ function! s:init_cursor() "{{{
 
   if context.select != 0
     " Select specified candidate.
-    call cursor(line('.') + context.select, 0)
+    echomsg context.select
+    call cursor(unite#get_current_candidate_linenr(
+          \ context.select), 0)
   elseif context.input == '' && context.log
     call unite#redraw_candidates(1)
   endif
