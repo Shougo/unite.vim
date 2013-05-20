@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 May 2013.
+" Last Modified: 20 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -3335,7 +3335,7 @@ function! unite#set_highlight() "{{{
     execute 'highlight default link'
           \ source.syntax g:unite_abbr_highlight
 
-    execute printf('syntax match %s "^- %s" '.
+    execute printf('syntax match %s "^[- ] %s" '.
           \ 'nextgroup='.source.syntax.
           \ ' keepend contains=uniteCandidateMarker,%s',
           \ 'uniteSourceLine__'.source.syntax,
