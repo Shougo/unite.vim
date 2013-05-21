@@ -716,7 +716,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos) "{{{
     let _ +=  copy(s:unite_options)
 
     " Source name completion.
-    if mode() ==# 'c'
+    if mode() ==# 'c' || unite#util#is_cmdwin()
       let _ += keys(filter(s:initialize_sources([], a:arglead),
             \ 'v:val.is_listed'))
     endif
@@ -728,7 +728,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos) "{{{
     let _  = map(_, 'source_name.":".v:val')
   endif
 
-  if source_name != '' && mode() ==# 'c'
+  if source_name != '' && (mode() ==# 'c' || unite#util#is_cmdwin())
     " Source args completion.
     let args = source_name . ':' . join(source_args[: -2], ':')
     if args !~ ':$'
