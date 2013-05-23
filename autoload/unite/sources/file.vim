@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 May 2013.
+" Last Modified: 23 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,6 +26,8 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+let s:is_windows = unite#util#is_windows()
 
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_file_ignore_pattern',
@@ -77,7 +79,7 @@ function! s:source_file.change_candidates(args, context) "{{{
   " Substitute *. -> .* .
   let input = substitute(input, '\*\.', '.*', 'g')
 
-  if input !~ '\*' && unite#util#is_windows() && getftype(input) == 'link'
+  if input !~ '\*' && s:is_windows && getftype(input) == 'link'
     " Resolve link.
     let input = resolve(input)
   endif
@@ -146,7 +148,7 @@ function! s:source_file.vimfiler_gather_candidates(args, context) "{{{
     let candidates = []
   endif
 
-  let exts = unite#util#is_windows() ?
+  let exts = s:is_windows ?
         \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
 
   let old_dir = getcwd()
@@ -180,7 +182,7 @@ function! s:source_file.vimfiler_dummy_candidates(args, context) "{{{
     lcd `=path`
   endif
 
-  let exts = unite#util#is_windows() ?
+  let exts = s:is_windows ?
         \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
 
   let is_relative_path = path !~ '^\%(/\|\a\+:/\)'
@@ -236,7 +238,7 @@ function! s:source_file_new.change_candidates(args, context) "{{{
   " Substitute *. -> .* .
   let input = substitute(input, '\*\.', '.*', 'g')
 
-  if input !~ '\*' && unite#util#is_windows() && getftype(input) == 'link'
+  if input !~ '\*' && s:is_windows && getftype(input) == 'link'
     " Resolve link.
     let input = resolve(input)
   endif
@@ -286,7 +288,7 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) "{{{
   let dict.action__directory = dict.vimfiler__is_directory ?
         \ dict.action__path : fnamemodify(dict.action__path, ':h')
 
-  if unite#util#is_windows()
+  if s:is_windows
     let dict.action__directory =
           \ unite#util#substitute_path_separator(dict.action__directory)
   endif
@@ -341,7 +343,7 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts) "{{{
 
   if !a:candidate.vimfiler__is_directory
     let a:candidate.vimfiler__is_executable =
-          \ unite#util#is_windows() ?
+          \ s:is_windows ?
           \ ('.'.fnamemodify(a:candidate.vimfiler__filename, ':e') =~? a:exts) :
           \ executable(a:candidate.action__path)
 
@@ -355,7 +357,7 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts) "{{{
     let a:candidate.vimfiler__is_readable =
           \ getfperm(a:candidate.action__path) =~# 'r.x$'
     let a:candidate.vimfiler__is_writable =
-          \ unite#util#is_windows() ?
+          \ s:is_windows ?
           \ (getfperm(a:candidate.action__path) =~# '.wx$')
           \ : filewritable(a:candidate.action__path)
   endif

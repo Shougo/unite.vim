@@ -2175,6 +2175,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     endfor
 
     if sorters ==# ['sorter_nothing']
+          \ || unite.context.unite__is_vimfiler
       let sorters = []
     endif
 
