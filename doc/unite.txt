@@ -3146,6 +3146,9 @@ A:
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-05-28
+- Lock neocomplete.
+
 2013-05-23
 - Improved for vimfiler.
 
