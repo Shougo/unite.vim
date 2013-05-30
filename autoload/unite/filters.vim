@@ -123,14 +123,14 @@ function! unite#filters#lua_fuzzy_matcher(candidates, context, ignorecase) "{{{
         input = string.lower(input)
         for i = #candidates-1, 0, -1 do
           local word = string.lower(candidates[i].word)
-          if string.find(word, pattern, 1) == nil or word == input then
+          if string.find(word, pattern, 1) == nil then
             candidates[i] = nil
           end
         end
       else
         for i = #candidates-1, 0, -1 do
           local word = candidates[i].word
-          if string.find(word, pattern, 1) == nil or word == input then
+          if string.find(word, pattern, 1) == nil then
             candidates[i] = nil
           end
         end
