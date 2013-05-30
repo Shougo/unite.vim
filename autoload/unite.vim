@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 May 2013.
+" Last Modified: 30 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -311,9 +311,6 @@ call unite#set_substitute_pattern('files', '^\~',
       \ ' ', '\\\\ ', 'g'), -100)
 call unite#set_substitute_pattern('files', '\.\{2,}\ze[^/]',
       \ "\\=repeat('../', len(submatch(0))-1)", 10000)
-call unite#set_substitute_pattern('files', '[^~.* ]\ze/', '\0*', 100)
-call unite#set_substitute_pattern('files', '/\ze[^~.* ]', '/*', 100)
-call unite#set_substitute_pattern('files', '\.', '*.', 1000)
 call unite#set_profile('files', 'smartcase', 0)
 call unite#set_profile('files', 'ignorecase', 1)
 
