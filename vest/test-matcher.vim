@@ -8,17 +8,17 @@ set cpo&vim
 Context Source.run()
   if has('lua')
     It tests lua matcher.
-      ShouldEqual unite#util#lua_matcher(
+      ShouldEqual unite#filters#lua_matcher(
             \ [{'word' : 'foo'}], 'foo', 0), [{'word' : 'foo'}]
-      ShouldEqual unite#util#lua_matcher(
+      ShouldEqual unite#filters#lua_matcher(
             \ [{'word' : 'foo'}], 'bar', 0), []
-      ShouldEqual unite#util#lua_matcher(
+      ShouldEqual unite#filters#lua_matcher(
             \ [{'word' : 'Foo'}], 'foo', 0), []
-      ShouldEqual unite#util#lua_matcher(
+      ShouldEqual unite#filters#lua_matcher(
             \ [{'word' : 'Foo'}], 'foo', 1), [{'word' : 'Foo'}]
-      ShouldEqual unite#util#lua_matcher(
+      ShouldEqual unite#filters#lua_matcher(
             \ [{'word' : 'Foo'}, {'word' : 'Bar'}], 'foo', 1), [{'word' : 'Foo'}]
-      ShouldEqual unite#util#lua_matcher(
+      ShouldEqual unite#filters#lua_matcher(
             \ [{'word' : 'foo'}, {'word' : 'bar'},
             \  {'word' : 'foobar'}, {'word' : 'baz'}],
             \ 'foo', 0), [{'word' : 'foo'}, {'word' : 'foobar'}]

@@ -3143,8 +3143,19 @@ A:
         \ ['converter_file_directory'])
 <
 
+Q: I want to use fuzzy match.
+
+A: You can use |unite-filter-matcher_fuzzy|.
+>
+		call unite#custom_source('file,file/new,buffer,file_rec',
+		\ 'matchers', 'matcher_fuzzy')
+<
+
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-05-29
+- Supported if_lua in fuzzy matcher.
 
 2013-05-28
 - Lock neocomplete.

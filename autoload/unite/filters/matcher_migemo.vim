@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_migemo.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Sep 2012.
+" Last Modified: 29 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -99,7 +99,7 @@ function! s:matcher.filter(candidates, context) "{{{
     endif
 
     try
-      let candidates = unite#util#filter_matcher(
+      let candidates = unite#filters#filter_matcher(
             \ candidates, expr, a:context)
     catch
       let candidates = []
