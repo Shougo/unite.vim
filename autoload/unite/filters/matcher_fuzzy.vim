@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_fuzzy.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 May 2013.
+" Last Modified: 02 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,6 +40,12 @@ function! s:matcher.filter(candidates, context) "{{{
   if a:context.input == ''
     return unite#filters#filter_matcher(
           \ a:candidates, '', a:context)
+  endif
+
+  if len(a:context.input) > 20
+    " Fall back to matcher_head.
+    return unite#filters#matcher_head#define().filter(
+          \ a:candidates, a:context)
   endif
 
   let candidates = a:candidates
