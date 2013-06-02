@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 May 2013.
+" Last Modified: 02 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -2472,6 +2472,8 @@ function! s:initialize_unite_buffer() "{{{
     setlocal foldcolumn=0
     setlocal iskeyword+=-,+,\\,!,~
     setlocal matchpairs-=<:>
+    setlocal completefunc=
+    setlocal omnifunc=
     match
     if has('conceal')
       setlocal conceallevel=3
@@ -2693,11 +2695,6 @@ function! s:on_insert_enter()  "{{{
   if exists(':NeoComplCacheLock')
     " Lock neocomplcache.
     NeoComplCacheLock
-  endif
-
-  if exists(':NeoCompleteLock')
-    " Lock neocomplete.
-    NeoCompleteLock
   endif
 
   if &filetype ==# 'unite'

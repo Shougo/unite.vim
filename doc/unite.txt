@@ -3154,6 +3154,9 @@ A: You can use |unite-filter-matcher_fuzzy|.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-06-02
+- Improved for auto completion.
+
 2013-05-29
 - Supported if_lua in fuzzy matcher.
 
