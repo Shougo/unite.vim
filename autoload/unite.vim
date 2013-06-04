@@ -2955,7 +2955,7 @@ function! s:change_highlight()  "{{{
           \ context.cursor_line_highlight.' /\%'.line('.').'l/')
   endif
 
-  syntax clear uniteCandidateInputKeyword
+  silent! syntax clear uniteCandidateInputKeyword
 
   if unite#get_input() == ''
     return
@@ -3274,7 +3274,7 @@ function! unite#set_highlight() "{{{
 
   " Set highlight.
   let match_prompt = escape(unite.prompt, '\/*~.^$[]')
-  syntax clear uniteInputPrompt
+  silent! syntax clear uniteInputPrompt
   execute 'syntax match uniteInputPrompt'
         \ '/^'.match_prompt.'/ contained'
 
@@ -3286,7 +3286,7 @@ function! unite#set_highlight() "{{{
         \ '/\%'.unite.prompt_linenr.'l.*/'
         \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
 
-  syntax clear uniteCandidateSourceName
+  silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0
     syntax match uniteCandidateSourceName
           \ /\%3c[[:alnum:]_\/-]\+/ contained
@@ -3329,7 +3329,7 @@ function! s:set_syntax() "{{{
 
   " Set syntax.
   for source in filter(copy(unite.sources), 'v:val.syntax != ""')
-    execute 'syntax clear' source.syntax
+    silent! execute 'syntax clear' source.syntax
     execute 'syntax region' source.syntax
           \ 'start=// end=/$/ keepend contained'
   endfor
