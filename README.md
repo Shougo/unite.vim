@@ -87,6 +87,10 @@ sources to the command you wish to select from as parameters. However, it's a
 pain in the ass to run the command explicitly every time, so I recommend you
 to set a key mapping for the command. See `:h unite`.
 
+## FAQ
+
+See [:h unite](https://github.com/Shougo/unite.vim/blob/master/doc/unite.txt). There's FAQ section.
+
 ## Links
 
 unite plugins(in Japanese): https://github.com/Shougo/unite.vim/wiki/unite-plugins
