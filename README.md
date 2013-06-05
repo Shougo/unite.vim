@@ -10,6 +10,10 @@ sources and you can create new interface using unite.
 
 ## Usage
 
+Recommend to read this post by @bling:
+[Unite.vim, the Plugin You Didn't Know You Need](http://bling.github.io/blog/2013/06/02/unite-dot-vim-the-plugin-you-didnt-know-you-need/)
+
+
 In case you run unite to display files and buffers as sources to pick
 from.
 
@@ -23,7 +27,7 @@ down files.
 
 
 If you start unite it splits the window horizontally and pops up
-from the top of Vim by default. 
+from the top of Vim by default.
 
 	:Unite file
 
@@ -39,12 +43,12 @@ You can also narrow down the list of candidates by a keyword. If you change
 into the insert mode inside of a unite window, the cursor drops you behind the
 ">" in the second line from above. There you can start typing to filter the
 candidates.  You can also use the wild card "*" as an arbitrary character
-sequence. For example, 
+sequence. For example,
 
 	*hisa
 
 matches hisa, ujihisa, or ujihisahisa. Furthermore, two consecutive wild cards
-match a directory recursively. 
+match a directory recursively.
 
 	**/foo
 
