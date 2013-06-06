@@ -3066,6 +3066,26 @@ EXAMPLES					*unite-examples*
 ==============================================================================
 USER DEFINED SOURCES				*unite-user-sources*
 
+tag source :
+
+https://github.com/tsukkee/unite-tag
+
+Quick Fix source :
+
+https://github.com/osyo-manga/unite-quickfix
+
+Outline source :
+
+https://github.com/Shougo/unite-outline (newer)
+https://github.com/h1mesuke/unite-outline (original)
+
+Help source :
+
+https://github.com/Shougo/unite-help (newer/vimproc required)
+https://github.com/tsukkee/unite-help (original)
+
+And so on...
+
 See Wiki page(Japanese).
 https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
