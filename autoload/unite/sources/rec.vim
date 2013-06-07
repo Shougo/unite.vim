@@ -49,14 +49,17 @@ call unite#util#set_default(
 let s:Cache = vital#of('unite.vim').import('System.Cache')
 
 function! unite#sources#rec#define() "{{{
-  return [ s:source_rec ]
-        \ + [ unite#util#has_vimproc() ? s:source_async : {} ]
+  let sources = [ s:source_file_rec, s:source_directory_rec ]
+  if unite#util#has_vimproc()
+    let sources += [ s:source_file_async, s:source_directory_async]
+  endif
+  return sources
 endfunction"}}}
 
-let s:continuation = {}
+let s:continuation = { 'directory' : {}, 'file' : {} }
 
 " Source rec.
-let s:source_rec = {
+let s:source_file_rec = {
       \ 'name' : 'file_rec',
       \ 'description' : 'candidates from directory by recursive',
       \ 'hooks' : {},
@@ -67,7 +70,7 @@ let s:source_rec = {
       \ 'matchers' : [ 'matcher_default', 'matcher_hide_hidden_files' ],
       \ }
 
-function! s:source_rec.gather_candidates(args, context) "{{{
+function! s:source_file_rec.gather_candidates(args, context) "{{{
   let a:context.source__directory = s:get_path(a:args, a:context)
 
   let directory = a:context.source__directory
@@ -84,7 +87,7 @@ function! s:source_rec.gather_candidates(args, context) "{{{
 
   call s:init_continuation(a:context, directory)
 
-  let continuation = s:continuation[directory]
+  let continuation = a:context.source__continuation
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
@@ -97,11 +100,11 @@ function! s:source_rec.gather_candidates(args, context) "{{{
   return deepcopy(continuation.files)
 endfunction"}}}
 
-function! s:source_rec.async_gather_candidates(args, context) "{{{
-  let continuation = s:continuation[a:context.source__directory]
+function! s:source_file_rec.async_gather_candidates(args, context) "{{{
+  let continuation = a:context.source__continuation
 
   let [continuation.rest, files] =
-        \ s:get_files(continuation.rest, 1, 20,
+        \ s:get_files(a:context, continuation.rest, 1, 20,
         \   a:context.source.ignore_pattern)
 
   if empty(continuation.rest) || len(continuation.files) >
@@ -127,21 +130,22 @@ function! s:source_rec.async_gather_candidates(args, context) "{{{
 
   let continuation.files += candidates
   if empty(continuation.rest)
-    call s:write_cache(a:context.source__directory,
-          \ continuation.files)
+    call s:write_cache(a:context,
+          \ a:context.source__directory, continuation.files)
   endif
 
   return deepcopy(candidates)
 endfunction"}}}
 
-function! s:source_rec.hooks.on_init(args, context) "{{{
+function! s:source_file_rec.hooks.on_init(args, context) "{{{
+  let a:context.source__is_directory = 0
   call s:on_init(a:args, a:context)
 endfunction"}}}
-function! s:source_rec.hooks.on_post_filter(args, context) "{{{
+function! s:source_file_rec.hooks.on_post_filter(args, context) "{{{
   call s:on_post_filter(a:args, a:context)
 endfunction"}}}
 
-function! s:source_rec.vimfiler_check_filetype(args, context) "{{{
+function! s:source_file_rec.vimfiler_check_filetype(args, context) "{{{
   let path = unite#util#substitute_path_separator(
         \ unite#util#expand(join(a:args, ':')))
   let path = unite#util#substitute_path_separator(
@@ -157,7 +161,7 @@ function! s:source_rec.vimfiler_check_filetype(args, context) "{{{
 
   return [type, lines, dict]
 endfunction"}}}
-function! s:source_rec.vimfiler_gather_candidates(args, context) "{{{
+function! s:source_file_rec.vimfiler_gather_candidates(args, context) "{{{
   let path = s:get_path(a:args, a:context)
 
   if !isdirectory(path)
@@ -203,7 +207,7 @@ function! s:source_rec.vimfiler_gather_candidates(args, context) "{{{
 
   return deepcopy(candidates)
 endfunction"}}}
-function! s:source_rec.vimfiler_dummy_candidates(args, context) "{{{
+function! s:source_file_rec.vimfiler_dummy_candidates(args, context) "{{{
   let path = unite#util#substitute_path_separator(
         \ unite#util#expand(join(a:args, ':')))
   let path = unite#util#substitute_path_separator(
@@ -237,17 +241,17 @@ function! s:source_rec.vimfiler_dummy_candidates(args, context) "{{{
 
   return deepcopy(candidates)
 endfunction"}}}
-function! s:source_rec.vimfiler_complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source_file_rec.vimfiler_complete(args, context, arglead, cmdline, cursorpos) "{{{
   return unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
-function! s:source_rec.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source_file_rec.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 
 " Source async.
-let s:source_async = {
+let s:source_file_async = {
       \ 'name' : 'file_rec/async',
       \ 'description' : 'asyncronous candidates from directory by recursive',
       \ 'hooks' : {},
@@ -258,7 +262,7 @@ let s:source_async = {
       \    'matcher_default', 'matcher_hide_hidden_files'],
       \ }
 
-function! s:source_async.gather_candidates(args, context) "{{{
+function! s:source_file_async.gather_candidates(args, context) "{{{
   if g:unite_source_rec_async_command == ''
     call unite#print_source_message(
           \ 'g:unite_source_rec_async_command is not executable.', self.name)
@@ -281,7 +285,7 @@ function! s:source_async.gather_candidates(args, context) "{{{
 
   call s:init_continuation(a:context, directory)
 
-  let continuation = s:continuation[directory]
+  let continuation = a:context.source__continuation
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
@@ -305,7 +309,7 @@ function! s:source_async.gather_candidates(args, context) "{{{
   return []
 endfunction"}}}
 
-function! s:source_async.async_gather_candidates(args, context) "{{{
+function! s:source_file_async.async_gather_candidates(args, context) "{{{
   let stderr = a:context.source__proc.stderr
   if !stderr.eof
     " Print error.
@@ -316,7 +320,7 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
     endif
   endif
 
-  let continuation = s:continuation[a:context.source__directory]
+  let continuation = a:context.source__continuation
 
   let stdout = a:context.source__proc.stdout
   if stdout.eof || len(continuation.files) >
@@ -348,28 +352,53 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
 
   let continuation.files += candidates
   if stdout.eof
-    call s:write_cache(a:context.source__directory,
-          \ continuation.files)
+    call s:write_cache(a:context,
+          \ a:context.source__directory, continuation.files)
   endif
 
   return deepcopy(candidates)
 endfunction"}}}
 
-function! s:source_async.hooks.on_init(args, context) "{{{
+function! s:source_file_async.hooks.on_init(args, context) "{{{
+  let a:context.source__is_directory = 0
   call s:on_init(a:args, a:context)
 endfunction"}}}
-function! s:source_async.hooks.on_close(args, context) "{{{
+function! s:source_file_async.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__proc')
     call a:context.source__proc.waitpid()
   endif
 endfunction "}}}
-function! s:source_async.hooks.on_post_filter(args, context) "{{{
+function! s:source_file_async.hooks.on_post_filter(args, context) "{{{
   call s:on_post_filter(a:args, a:context)
 endfunction"}}}
 
-function! s:source_async.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source_file_async.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
+endfunction"}}}
+
+" Source directory.
+let s:source_directory_rec = deepcopy(s:source_file_rec)
+let s:source_directory_rec.name = 'directory_rec'
+let s:source_directory_rec.description =
+      \ 'candidates from directory by recursive'
+let s:source_directory_rec.default_kind = 'directory'
+
+function! s:source_directory_rec.hooks.on_init(args, context) "{{{
+  let a:context.source__is_directory = 1
+  call s:on_init(a:args, a:context)
+endfunction"}}}
+
+" Source directory/async.
+let s:source_directory_async = deepcopy(s:source_file_async)
+let s:source_directory_async.name = 'directory_rec/async'
+let s:source_directory_async.description =
+      \ 'asyncronous candidates from directory by recursive'
+let s:source_directory_async.default_kind = 'directory'
+
+function! s:source_directory_async.hooks.on_init(args, context) "{{{
+  let a:context.source__is_directory = 1
+  call s:on_init(a:args, a:context)
 endfunction"}}}
 
 " Add custom action table. "{{{
@@ -473,7 +502,7 @@ function! s:get_path(args, context) "{{{
 
   return directory
 endfunction"}}}
-function! s:get_files(files, level, max_len, ignore_pattern) "{{{
+function! s:get_files(context, files, level, max_len, ignore_pattern) "{{{
   let continuation_files = []
   let ret_files = []
   let files_index = 0
@@ -491,6 +520,12 @@ function! s:get_files(files, level, max_len, ignore_pattern) "{{{
         let file = file[: -2]
       endif
 
+      if a:context.source__is_directory &&
+            \ file !=# a:context.source__directory
+        call add(ret_files, file)
+        let ret_files_len += 1
+      endif
+
       let child_index = 0
       let children = exists('*vimproc#readdir') ?
             \ vimproc#readdir(file) :
@@ -505,16 +540,25 @@ function! s:get_files(files, level, max_len, ignore_pattern) "{{{
         endif
 
         if isdirectory(child)
+          if a:context.source__is_directory
+            call add(ret_files, child)
+            let ret_files_len += 1
+          endif
+
           if a:level < 5 && ret_files_len < a:max_len
             let [continuation_files_child, ret_files_child] =
-                  \ s:get_files([child], a:level + 1,
+                  \ s:get_files(a:context, [child], a:level + 1,
                   \  a:max_len - ret_files_len, a:ignore_pattern)
             let continuation_files += continuation_files_child
-            let ret_files += ret_files_child
+
+            if !a:context.source__is_directory
+              let ret_files += ret_files_child
+              let ret_files_len += len(ret_files_child)
+            endif
           else
             call add(continuation_files, child)
           endif
-        else
+        elseif !a:context.source__is_directory
           call add(ret_files, child)
 
           let ret_files_len += 1
@@ -525,7 +569,7 @@ function! s:get_files(files, level, max_len, ignore_pattern) "{{{
           endif
         endif
       endfor
-    else
+    elseif !a:context.source__is_directory
       call add(ret_files, file)
       let ret_files_len += 1
     endif
@@ -553,8 +597,12 @@ function! s:on_post_filter(args, context) "{{{
   endfor
 endfunction"}}}
 function! s:init_continuation(context, directory) "{{{
-  let cache_dir = g:unite_data_directory . '/file_rec'
-  if !has_key(s:continuation, a:directory)
+  let cache_dir = g:unite_data_directory . '/rec/' .
+        \ (a:context.source__is_directory ? 'directory' : 'file')
+  let continuation = (a:context.source__is_directory) ?
+        \ s:continuation.directory : s:continuation.file
+
+  if !has_key(continuation, a:directory)
         \ && s:Cache.filereadable(cache_dir, a:directory)
     " Use cache file.
 
@@ -564,27 +612,31 @@ function! s:init_continuation(context, directory) "{{{
           \   'action__path' : v:val,
           \ }")
 
-    let s:continuation[a:directory] = {
+    let continuation[a:directory] = {
           \ 'files' : files,
           \ 'rest' : [],
           \ 'directory' : a:directory, 'end' : 1,
           \ }
   elseif a:context.is_redraw
-        \ || !has_key(s:continuation, a:directory)
+        \ || !has_key(continuation, a:directory)
     let a:context.is_async = 1
 
-    let s:continuation[a:directory] = {
+    let continuation[a:directory] = {
           \ 'files' : [], 'rest' : [a:directory],
           \ 'directory' : a:directory, 'end' : 0,
           \ }
   endif
 
-  let s:continuation[a:directory].files =
-        \ filter(unite#util#uniq(s:continuation[a:directory].files),
-        \ 'filereadable(v:val.action__path)')
+  let a:context.source__continuation = continuation[a:directory]
+  let a:context.source__continuation.files =
+        \ filter(copy(a:context.source__continuation.files),
+        \ (a:context.source__is_directory) ?
+        \   'isdirectory(v:val.action__path)' :
+        \   'filereadable(v:val.action__path)')
 endfunction"}}}
-function! s:write_cache(directory, files) "{{{
-  let cache_dir = g:unite_data_directory . '/file_rec'
+function! s:write_cache(context, directory, files) "{{{
+  let cache_dir = g:unite_data_directory . '/rec/' .
+        \ (a:context.source__is_directory ? 'directory' : 'file')
 
   if g:unite_source_rec_min_cache_files > 0
         \ && len(a:files) >
@@ -613,7 +665,7 @@ function! unite#sources#rec#_append() "{{{
   " Check continuation.
   let base_path = unite#util#substitute_path_separator(
         \ fnamemodify(path, ':h')) . '/'
-  for continuation in values(filter(copy(s:continuation),
+  for continuation in values(filter(copy(s:continuation.file),
         \ "stridx(v:key.'/', base_path) == 0"))
     let continuation.files = unite#util#uniq(add(
           \ continuation.files, {

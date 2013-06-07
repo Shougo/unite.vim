@@ -3195,6 +3195,7 @@ CHANGELOG					*unite-changelog*
 2013-06-07
 - Added undo source.
 - Improved rec sources.
+- Added directory_rec source.
 
 2013-06-02
 - Improved for auto completion.
