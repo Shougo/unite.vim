@@ -48,9 +48,14 @@ endfunction
 function! unite#util#escape_pattern(...)
   return call(s:V.escape_pattern, a:000)
 endfunction
-function! unite#util#set_default(...)
-  return call(s:V.set_default, a:000)
-endfunction
+function! unite#util#set_default(var, val, ...)  "{{{
+  if !exists(a:var) || type({a:var}) != type(a:val)
+    let alternate_var = get(a:000, 0, '')
+
+    let {a:var} = exists(alternate_var) ?
+          \ {alternate_var} : a:val
+  endif
+endfunction"}}}
 function! unite#util#set_dictionary_helper(...)
   return call(s:V.set_dictionary_helper, a:000)
 endfunction

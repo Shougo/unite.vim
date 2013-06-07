@@ -411,8 +411,8 @@ g:unite_source_bookmark_directory	*g:unite_source_bookmark_directory*
 
 		The default value is |g:unite_data_directory|; '/bookmark'.
 
-g:unite_source_file_rec_ignore_pattern
-				*g:unite_source_file_rec_ignore_pattern*
+g:unite_source_rec_ignore_pattern
+				*g:unite_source_rec_ignore_pattern*
 		Refer autoload/unite/sources/file_rec.vim about the default
 		value.
 		Note: This variable is deprecated.  Please use
@@ -425,8 +425,11 @@ g:unite_source_file_rec_ignore_pattern
 <
 		Note: This variable must be set before using |unite|.
 
-g:unite_source_file_rec_min_cache_files
-				*g:unite_source_file_rec_min_cache_files*
+				*g:unite_source_file_rec_ignore_pattern*
+		Note: This variable is obsolete.
+
+g:unite_source_rec_min_cache_files
+				*g:unite_source_rec_min_cache_files*
 		Specify the minimum number of files that
 		|unite-source-file_rec| saves the caches.  Any cache isn't
 		saved if the number of files is less than this value or this
@@ -434,19 +437,28 @@ g:unite_source_file_rec_min_cache_files
 
 		The default value is 100.
 
-g:unite_source_file_rec_max_cache_files
-				*g:unite_source_file_rec_max_cache_files*
+				*g:unite_source_file_rec_min_cache_files*
+		Note: This variable is obsolete.
+
+g:unite_source_rec_max_cache_files
+				*g:unite_source_rec_max_cache_files*
 		Specify the maximum number of files that
 		|unite-source-file_rec| saves the caches.
 
 		The default value is 1000.
 
-g:unite_source_file_rec_async_command
-				*g:unite_source_file_rec_async_command*
+				*g:unite_source_file_rec_max_cache_files*
+		Note: This variable is obsolete.
+
+g:unite_source_rec_async_command
+				*g:unite_source_rec_async_command*
 		Specify the filelist command and arguments in file_rec/async
 		source.
 
 		The default value is "ag" or "find" and the args.
+
+				*g:unite_source_file_rec_max_cache_files*
+		Note: This variable is obsolete.
 
 		The default value is 1000.
 g:unite_source_grep_command			*g:unite_source_grep_command*
@@ -3182,6 +3194,7 @@ CHANGELOG					*unite-changelog*
 
 2013-06-07
 - Added undo source.
+- Improved rec sources.
 
 2013-06-02
 - Improved for auto completion.

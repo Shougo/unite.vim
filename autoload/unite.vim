@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jun 2013.
+" Last Modified: 07 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1577,13 +1577,14 @@ function! s:load_default_scripts(kind, names) "{{{
     let prefix_name = (a:kind ==# 'filters') ?
           \ substitute(name,
           \'^\%(matcher\|sorter\|converter\)_[^/_-]\+\zs[/_-].*$', '', '') :
-          \ substitute(name, '^[^/_-]\+\zs[/_-].*$', '', '')
+          \ matchstr(name, '^[^/_-]\+')
     let postfix_name = matchstr(name, '[^/_-]\+$')
+    let postfix_name2 = matchstr(name, '[^/_-]\+\zs[^/_-]\+')
 
     let files = []
     for name in ((postfix_name != '' &&
           \ prefix_name !=# postfix_name) ?
-          \ [prefix_name, postfix_name] : [prefix_name])
+          \ [prefix_name, postfix_name, postfix_name2] : [prefix_name])
       let files += split(globpath(&runtimepath,
             \ 'autoload/unite/'.a:kind.'/'.name.'*.vim', 1), '\n')
     endfor

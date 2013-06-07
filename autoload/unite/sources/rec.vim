@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: file_rec.vim
+" FILE: rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Apr 2013.
+" Last Modified: 07 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,23 +29,26 @@ set cpo&vim
 
 " Variables  "{{{
 call unite#util#set_default(
-      \ 'g:unite_source_file_rec_ignore_pattern',
+      \ 'g:unite_source_rec_ignore_pattern',
       \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\)$'.
-      \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)')
+      \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
+      \ 'g:unite_source_rec_ignore_pattern')
 call unite#util#set_default(
-      \ 'g:unite_source_file_rec_min_cache_files', 100)
+      \ 'g:unite_source_rec_min_cache_files', 100,
+      \ 'g:unite_source_rec_min_cache_files')
 call unite#util#set_default(
-      \ 'g:unite_source_file_rec_max_cache_files', 1000)
+      \ 'g:unite_source_rec_max_cache_files', 1000,
+      \ 'g:unite_source_rec_max_cache_files')
 call unite#util#set_default(
-      \ 'g:unite_source_file_rec_async_command',
-      \ executable('ag') ? 'ag --nocolor --nogroup -g ""' :
-      \ !unite#util#is_windows() && executable('find') ? 'find' :
-      \ '')
+      \ 'g:unite_source_rec_async_command',
+      \ (executable('ag') ? 'ag --nocolor --nogroup -g ""' :
+      \ !unite#util#is_windows() && executable('find') ? 'find' : ''),
+      \ 'g:unite_source_rec_async_command')
 "}}}
 
 let s:Cache = vital#of('unite.vim').import('System.Cache')
 
-function! unite#sources#file_rec#define() "{{{
+function! unite#sources#rec#define() "{{{
   return [ s:source_rec ]
         \ + [ unite#util#has_vimproc() ? s:source_async : {} ]
 endfunction"}}}
@@ -59,7 +62,7 @@ let s:source_rec = {
       \ 'hooks' : {},
       \ 'default_kind' : 'file',
       \ 'max_candidates' : 50,
-      \ 'ignore_pattern' : g:unite_source_file_rec_ignore_pattern,
+      \ 'ignore_pattern' : g:unite_source_rec_ignore_pattern,
       \ 'converters' : 'converter_relative_word',
       \ 'matchers' : [ 'matcher_default', 'matcher_hide_hidden_files' ],
       \ }
@@ -102,7 +105,7 @@ function! s:source_rec.async_gather_candidates(args, context) "{{{
         \   a:context.source.ignore_pattern)
 
   if empty(continuation.rest) || len(continuation.files) >
-        \                    g:unite_source_file_rec_max_cache_files
+        \                    g:unite_source_rec_max_cache_files
     if empty(continuation.rest)
       call unite#print_source_message(
             \ 'Directory traverse was completed.', self.name)
@@ -250,15 +253,15 @@ let s:source_async = {
       \ 'hooks' : {},
       \ 'default_kind' : 'file',
       \ 'max_candidates' : 50,
-      \ 'ignore_pattern' : g:unite_source_file_rec_ignore_pattern,
+      \ 'ignore_pattern' : g:unite_source_rec_ignore_pattern,
       \ 'matchers' : ['converter_relative_word',
       \    'matcher_default', 'matcher_hide_hidden_files'],
       \ }
 
 function! s:source_async.gather_candidates(args, context) "{{{
-  if g:unite_source_file_rec_async_command == ''
+  if g:unite_source_rec_async_command == ''
     call unite#print_source_message(
-          \ 'g:unite_source_file_rec_async_command is not executable.', self.name)
+          \ 'g:unite_source_rec_async_command is not executable.', self.name)
     return []
   endif
 
@@ -291,9 +294,9 @@ function! s:source_async.gather_candidates(args, context) "{{{
   endif
 
   let a:context.source__proc = vimproc#pgroup_open(
-        \ g:unite_source_file_rec_async_command
+        \ g:unite_source_rec_async_command
         \ . ' ' . string(directory)
-        \ . (g:unite_source_file_rec_async_command ==#
+        \ . (g:unite_source_rec_async_command ==#
         \         'find' ? ' -type f' : ''))
 
   " Close handles.
@@ -317,7 +320,7 @@ function! s:source_async.async_gather_candidates(args, context) "{{{
 
   let stdout = a:context.source__proc.stdout
   if stdout.eof || len(continuation.files) >
-        \        g:unite_source_file_rec_max_cache_files
+        \        g:unite_source_rec_max_cache_files
     " Disable async.
     if stdout.eof
       call unite#print_source_message(
@@ -540,7 +543,7 @@ function! s:on_init(args, context) "{{{
   augroup plugin-unite-source-file_rec
     autocmd!
     autocmd BufEnter,BufWinEnter,BufFilePost,BufWritePost *
-          \ call unite#sources#file_rec#_append()
+          \ call unite#sources#rec#_append()
   augroup END
 endfunction"}}}
 function! s:on_post_filter(args, context) "{{{
@@ -583,9 +586,9 @@ endfunction"}}}
 function! s:write_cache(directory, files) "{{{
   let cache_dir = g:unite_data_directory . '/file_rec'
 
-  if g:unite_source_file_rec_min_cache_files > 0
+  if g:unite_source_rec_min_cache_files > 0
         \ && len(a:files) >
-        \ g:unite_source_file_rec_min_cache_files
+        \ g:unite_source_rec_min_cache_files
     call s:Cache.writefile(cache_dir, a:directory,
           \ map(copy(a:files), 'v:val.action__path'))
   elseif s:Cache.filereadable(cache_dir, a:directory)
@@ -594,7 +597,7 @@ function! s:write_cache(directory, files) "{{{
   endif
 endfunction"}}}
 
-function! unite#sources#file_rec#_append() "{{{
+function! unite#sources#rec#_append() "{{{
   let path = expand('%:p')
   if path !~ '\a\+:'
     let path = simplify(resolve(path))
