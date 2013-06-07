@@ -457,7 +457,7 @@ g:unite_source_rec_async_command
 
 		The default value is "ag" or "find" and the args.
 
-				*g:unite_source_file_rec_max_cache_files*
+				*g:unite_source_file_rec_async_command*
 		Note: This variable is obsolete.
 
 		The default value is 1000.
