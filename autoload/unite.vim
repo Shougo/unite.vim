@@ -1583,7 +1583,8 @@ function! s:load_default_scripts(kind, names) "{{{
 
     let files = []
     for name in ((postfix_name != '' &&
-          \ prefix_name !=# postfix_name) ?
+          \ prefix_name !=# postfix_name ||
+          \    prefix_name !=# postfix_name2) ?
           \ [prefix_name, postfix_name, postfix_name2] : [prefix_name])
       let files += split(globpath(&runtimepath,
             \ 'autoload/unite/'.a:kind.'/'.name.'*.vim', 1), '\n')
