@@ -1929,6 +1929,9 @@ process		Nominates processes.
 						*unite-source-runtimepath*
 runtimepath	Nominates runtimepath directories.
 
+						*unite-source-undo*
+undo		Nominates undo list.
+
 ==============================================================================
 KINDS						*unite-kinds*
 
@@ -2372,6 +2375,9 @@ command						*unite-action-source-command*
 function					*unite-action-source-function*
 	call		Call the function and print result.
 	preview		View the help documentation.
+
+undo						*unite-action-source-undo*
+	undo		Undo changes.
 
 						*unite-default-action*
 Default actions
@@ -3173,6 +3179,9 @@ A: You can use |unite-filter-matcher_fuzzy|.
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-06-07
+- Added undo source.
 
 2013-06-02
 - Improved for auto completion.
