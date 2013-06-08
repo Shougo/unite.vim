@@ -45,7 +45,7 @@ Create source		|unite-create-source|
 Create kind		|unite-create-kind|
 Create filter		|unite-create-filter|
 Configuration Examples	|unite-examples|
-User defined source	|unite-user-sources|
+External source		|unite-external-sources|
 FAQ			|unite-faq|
 Changelog		|unite-changelog|
 
@@ -3082,7 +3082,7 @@ EXAMPLES					*unite-examples*
 	endif
 <
 ==============================================================================
-USER DEFINED SOURCES				*unite-user-sources*
+EXTERNAL SOURCES				*unite-external-sources*
 
 tag source :
 
