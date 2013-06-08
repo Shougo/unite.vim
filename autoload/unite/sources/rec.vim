@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Jun 2013.
+" Last Modified: 08 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,14 +47,6 @@ call unite#util#set_default(
 "}}}
 
 let s:Cache = vital#of('unite.vim').import('System.Cache')
-
-function! unite#sources#rec#define() "{{{
-  let sources = [ s:source_file_rec, s:source_directory_rec ]
-  if unite#util#has_vimproc()
-    let sources += [ s:source_file_async, s:source_directory_async]
-  endif
-  return sources
-endfunction"}}}
 
 let s:continuation = { 'directory' : {}, 'file' : {} }
 
@@ -142,7 +134,13 @@ function! s:source_file_rec.hooks.on_init(args, context) "{{{
   call s:on_init(a:args, a:context)
 endfunction"}}}
 function! s:source_file_rec.hooks.on_post_filter(args, context) "{{{
-  call s:on_post_filter(a:args, a:context)
+  let directory = unite#util#substitute_path_separator(
+        \ fnamemodify(a:context.source__directory, ':p'))
+  for candidate in filter(a:context.candidates,
+        \ "v:val.action__path !=# directory")
+    let candidate.action__directory =
+          \ unite#util#path2directory(candidate.action__path)
+  endfor
 endfunction"}}}
 
 function! s:source_file_rec.vimfiler_check_filetype(args, context) "{{{
@@ -251,24 +249,12 @@ function! s:source_file_rec.complete(args, context, arglead, cmdline, cursorpos)
 endfunction"}}}
 
 " Source async.
-let s:source_file_async = {
-      \ 'name' : 'file_rec/async',
-      \ 'description' : 'asyncronous candidates from directory by recursive',
-      \ 'hooks' : {},
-      \ 'default_kind' : 'file',
-      \ 'max_candidates' : 50,
-      \ 'ignore_pattern' : g:unite_source_rec_ignore_pattern,
-      \ 'matchers' : ['converter_relative_word',
-      \    'matcher_default', 'matcher_hide_hidden_files'],
-      \ }
+let s:source_file_async = deepcopy(s:source_file_rec)
+let s:source_file_async.name = 'file_rec/async'
+let s:source_file_async.description =
+      \ 'asyncronous candidates from directory by recursive'
 
 function! s:source_file_async.gather_candidates(args, context) "{{{
-  if g:unite_source_rec_async_command == ''
-    call unite#print_source_message(
-          \ 'g:unite_source_rec_async_command is not executable.', self.name)
-    return []
-  endif
-
   let a:context.source__directory = s:get_path(a:args, a:context)
 
   let directory = a:context.source__directory
@@ -297,11 +283,23 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
     return deepcopy(continuation.files)
   endif
 
+  let command = g:unite_source_rec_async_command
+  if a:context.source__is_directory
+    " Use find command.
+    let command = 'find'
+  endif
+
+  if !executable(command)
+    call unite#print_source_message(
+          \ command.' is not executable.', self.name)
+    let a:context.is_async = 0
+    return []
+  endif
+
   let a:context.source__proc = vimproc#pgroup_open(
-        \ g:unite_source_rec_async_command
-        \ . ' ' . string(directory)
-        \ . (g:unite_source_rec_async_command ==#
-        \         'find' ? ' -type f' : ''))
+        \ command . ' ' . string(directory)
+        \ . (command ==# 'find' ? ' -type '.
+        \    (a:context.source__is_directory ? 'd' : 'f') : ''))
 
   " Close handles.
   call a:context.source__proc.stdin.close()
@@ -341,7 +339,8 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
   for filename in map(filter(
         \ stdout.read_lines(-1, 100), 'v:val != ""'),
         \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
-    if !isdirectory(filename) && filename !~? a:context.source.ignore_pattern
+    if filename !=# a:context.source__directory
+          \ && filename !~? a:context.source.ignore_pattern
       call add(candidates, {
             \ 'word' : unite#util#substitute_path_separator(
             \    fnamemodify(filename, ':p')),
@@ -368,14 +367,6 @@ function! s:source_file_async.hooks.on_close(args, context) "{{{
     call a:context.source__proc.waitpid()
   endif
 endfunction "}}}
-function! s:source_file_async.hooks.on_post_filter(args, context) "{{{
-  call s:on_post_filter(a:args, a:context)
-endfunction"}}}
-
-function! s:source_file_async.complete(args, context, arglead, cmdline, cursorpos) "{{{
-  return unite#sources#file#complete_directory(
-        \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
-endfunction"}}}
 
 " Source directory.
 let s:source_directory_rec = deepcopy(s:source_file_rec)
@@ -590,12 +581,6 @@ function! s:on_init(args, context) "{{{
           \ call unite#sources#rec#_append()
   augroup END
 endfunction"}}}
-function! s:on_post_filter(args, context) "{{{
-  for candidate in a:context.candidates
-    let candidate.action__directory =
-          \ unite#util#path2directory(candidate.action__path)
-  endfor
-endfunction"}}}
 function! s:init_continuation(context, directory) "{{{
   let cache_dir = g:unite_data_directory . '/rec/' .
         \ (a:context.source__is_directory ? 'directory' : 'file')
@@ -672,6 +657,14 @@ function! unite#sources#rec#_append() "{{{
             \ 'word' : path, 'action__path' : path,
             \ }))
   endfor
+endfunction"}}}
+
+function! unite#sources#rec#define() "{{{
+  let sources = [ s:source_file_rec, s:source_directory_rec ]
+  if unite#util#has_vimproc()
+    let sources += [ s:source_file_async, s:source_directory_async]
+  endif
+  return sources
 endfunction"}}}
 
 let &cpo = s:save_cpo

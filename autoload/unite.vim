@@ -1570,7 +1570,7 @@ function! s:load_default_scripts(kind, names) "{{{
     if name == ''
       let s:loaded_defaults[a:kind] = &runtimepath
     elseif a:kind ==# 'sources' && name ==# 'alias'
-      let s:loaded_defaults['alias'] = &runtimepath
+      let s:loaded_defaults['alias'] = 1
     endif
 
     " Search files by prefix or postfix.
