@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: openable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Aug 2012.
+" Last Modified: 08 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -64,6 +64,7 @@ function! s:kind.action_table.tabdrop.func(candidates) "{{{
     if bufpath !=# candidate.action__path
       call unite#util#smart_execute_command('tab drop',
             \ candidate.action__path)
+      doautocmd BufWinEnter
 
       call unite#remove_previewed_buffer_list(
             \ bufnr(unite#util#escape_file_searching(
