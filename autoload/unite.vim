@@ -1563,7 +1563,7 @@ function! s:load_default_scripts(kind, names) "{{{
   for name in names
     if name != '' && has_key(s:static[a:kind], name)
           \ || (a:kind ==# 'sources' && name ==# 'alias' &&
-          \     get(s:loaded_defaults, 'alias', 0))
+          \     has_key(s:loaded_defaults, 'alias'))
       continue
     endif
 
@@ -1574,20 +1574,23 @@ function! s:load_default_scripts(kind, names) "{{{
     endif
 
     " Search files by prefix or postfix.
-    let prefix_name = (a:kind ==# 'filters') ?
-          \ substitute(name,
-          \'^\%(matcher\|sorter\|converter\)_[^/_-]\+\zs[/_-].*$', '', '') :
-          \ matchstr(name, '^[^/_-]\+')
-    let postfix_name = matchstr(name, '[^/_-]\+$')
-    let postfix_name2 = matchstr(name, '^[^/_-]\+[/_-]\+\zs[^/_-]\+')
+    if a:kind ==# 'filters'
+      let prefix_name = substitute(name,
+            \'^\%(matcher\|sorter\|converter\)_[^/_-]\+\zs[/_-].*$', '', '')
+      let postfix_name = ''
+      let postfix_name2 = ''
+    else
+      let prefix_name = matchstr(name, '^[^/_-]\+')
+      let postfix_name = matchstr(name, '[^/_-]\+$')
+      let postfix_name2 = matchstr(name, '^[^/_-]\+[/_-]\+\zs[^/_-]\+')
+    endif
 
     let files = []
-    for name in ((postfix_name != '' &&
-          \ prefix_name !=# postfix_name ||
-          \    prefix_name !=# postfix_name2) ?
-          \ [prefix_name, postfix_name, postfix_name2] : [prefix_name])
+    for prefix in filter(unite#util#uniq([
+          \ prefix_name, postfix_name, postfix_name2]),
+          \ "name == '' || v:val != ''")
       let files += split(globpath(&runtimepath,
-            \ 'autoload/unite/'.a:kind.'/'.name.'*.vim', 1), '\n')
+            \ 'autoload/unite/'.a:kind.'/'.prefix.'*.vim', 1), '\n')
     endfor
 
     for define in map(files,

@@ -3192,6 +3192,9 @@ A: You can use |unite-filter-matcher_fuzzy|.
 ==============================================================================
 CHANGELOG					*unite-changelog*
 
+2013-06-08
+- Improved source loading.
+
 2013-06-07
 - Added undo source.
 - Improved rec sources.
