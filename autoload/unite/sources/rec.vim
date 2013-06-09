@@ -252,7 +252,7 @@ endfunction"}}}
 let s:source_file_async = deepcopy(s:source_file_rec)
 let s:source_file_async.name = 'file_rec/async'
 let s:source_file_async.description =
-      \ 'asyncronous candidates from directory by recursive'
+      \ 'asynchronous candidates from directory by recursive'
 
 function! s:source_file_async.gather_candidates(args, context) "{{{
   let a:context.source__directory = s:get_path(a:args, a:context)
@@ -385,7 +385,7 @@ endfunction"}}}
 let s:source_directory_async = deepcopy(s:source_file_async)
 let s:source_directory_async.name = 'directory_rec/async'
 let s:source_directory_async.description =
-      \ 'asyncronous candidates from directory by recursive'
+      \ 'asynchronous candidates from directory by recursive'
 let s:source_directory_async.default_kind = 'directory'
 
 function! s:source_directory_async.hooks.on_init(args, context) "{{{

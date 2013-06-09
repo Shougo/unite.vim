@@ -44,7 +44,7 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Obsolute options check. "{{{
+" Obsolete options check. "{{{
 if exists('g:unite_cd_command')
   echoerr 'g:unite_cd_command option does not work this version of unite.vim.'
 endif

@@ -1809,7 +1809,7 @@ function! s:initialize_sources(...) "{{{
         elseif has_key(source.hooks, 'on_pre_init')
           " Call pre_init hook.
 
-          " Set dummey value.
+          " Set dummy value.
           let source.args = []
           let source.unite__context = { 'source' : source }
 
@@ -2247,7 +2247,7 @@ function! s:get_source_candidates(source) "{{{
     endif
 
     if a:source.unite__context.is_async
-      " Get asyncronous candidates.
+      " Get asynchronous candidates.
       let funcname = 'async_gather_candidates'
       while 1
         let a:source.unite__cached_candidates +=
