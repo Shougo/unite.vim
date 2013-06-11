@@ -352,6 +352,11 @@ function! unite#view#_do_auto_highlight() "{{{
   call unite#mappings#do_action('highlight', [], {})
 endfunction"}}}
 
+function! s:has_preview_window() "{{{
+  return len(filter(range(1, winnr('$')),
+        \    'getwinvar(v:val, "&previewwindow")')) > 0
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
