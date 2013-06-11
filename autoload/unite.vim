@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jun 2013.
+" Last Modified: 11 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -826,6 +826,10 @@ function! unite#redraw_candidates(...) "{{{
     call cursor(line('$'), 0)
   endif
 
+  if line('.') <= winheight(0)
+    normal! zb
+  endif
+
   " Set syntax.
   call s:set_syntax()
 endfunction"}}}
@@ -1062,7 +1066,6 @@ function! unite#start(sources, ...) "{{{
   endif"}}}
 
   call s:initialize_unite_buffer()
-  call s:on_bufwin_enter(bufnr('%'))
 
   let s:use_current_unite = 0
 
@@ -1076,6 +1079,8 @@ function! unite#start(sources, ...) "{{{
         \ unite.prompt . unite.context.input)
 
   call unite#redraw_candidates()
+
+  call s:on_bufwin_enter(bufnr('%'))
 
   call s:init_cursor()
 endfunction"}}}
@@ -2660,7 +2665,7 @@ function! unite#_resize_window() "{{{
     " Auto resize.
     let max_len = unite.prompt_linenr + len(unite.current_candidates)
     execute 'resize' min([max_len, context.winheight])
-    if line('.') < winheight(0)
+    if line('.') <= winheight(0)
       normal! zb
     endif
     if mode() ==# 'i' && col('.') == (col('$') - 1)
@@ -3208,7 +3213,7 @@ function! s:init_cursor() "{{{
     let unite.is_insert = 1
 
     call cursor(unite.prompt_linenr, 0)
-    if line('.') < winheight(0)
+    if line('.') <= winheight(0)
       normal! zb
     endif
     setlocal modifiable
@@ -3230,7 +3235,7 @@ function! s:init_cursor() "{{{
     endif
 
     normal! 0
-    if line('.') < winheight(0)
+    if line('.') <= winheight(0)
       normal! zb
     endif
 
