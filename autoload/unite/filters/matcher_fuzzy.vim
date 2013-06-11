@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_fuzzy.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jun 2013.
+" Last Modified: 11 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,8 +49,8 @@ function! s:matcher.filter(candidates, context) "{{{
   endif
 
   let candidates = a:candidates
-  for input in a:context.input_list
-    let input = substitute(input, '\\ ', ' ', 'g')
+  for input_orig in a:context.input_list
+    let input = substitute(input_orig, '\\ ', ' ', 'g')
     if input == '!'
       continue
     endif
@@ -63,6 +63,7 @@ function! s:matcher.filter(candidates, context) "{{{
           \ 'v:val.word =~ ' . string(input)
     if input !~ '^!' && unite#util#has_lua()
       let expr = 'if_lua_fuzzy'
+      let a:context.input = input_orig
     endif
 
     let candidates = unite#filters#filter_matcher(

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: filters.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 May 2013.
+" Last Modified: 11 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -75,33 +75,31 @@ function! unite#filters#lua_matcher(candidates, context, ignorecase) "{{{
     return []
   endif
 
-  for input in a:context.input_list
-    let input = substitute(input, '\\ ', ' ', 'g')
-    let input = substitute(input, '\\\(.\)', '\1', 'g')
-    if a:ignorecase
-      let input = tolower(input)
-    endif
+  let input = substitute(a:context.input, '\\ ', ' ', 'g')
+  let input = substitute(input, '\\\(.\)', '\1', 'g')
+  if a:ignorecase
+    let input = tolower(input)
+  endif
 
-    lua << EOF
-    do
-      local input = vim.eval('input')
-      local candidates = vim.eval('a:candidates')
-      if (vim.eval('a:ignorecase') ~= 0) then
-        for i = #candidates-1, 0, -1 do
-          if (string.find(string.lower(candidates[i].word), input, 1, true) == nil) then
-            candidates[i] = nil
-          end
-        end
-      else
-        for i = #candidates-1, 0, -1 do
-          if (string.find(candidates[i].word, input, 1, true) == nil) then
-            candidates[i] = nil
-          end
-        end
+  lua << EOF
+do
+  local input = vim.eval('input')
+  local candidates = vim.eval('a:candidates')
+  if (vim.eval('a:ignorecase') ~= 0) then
+    for i = #candidates-1, 0, -1 do
+      if (string.find(string.lower(candidates[i].word), input, 1, true) == nil) then
+        candidates[i] = nil
       end
     end
+  else
+    for i = #candidates-1, 0, -1 do
+      if (string.find(candidates[i].word, input, 1, true) == nil) then
+        candidates[i] = nil
+      end
+    end
+  end
+end
 EOF
-  endfor
 
   return a:candidates
 endfunction"}}}
@@ -110,34 +108,32 @@ function! unite#filters#lua_fuzzy_matcher(candidates, context, ignorecase) "{{{
     return []
   endif
 
-  for input in a:context.input_list
-    let pattern = unite#filters#fuzzy_escape(input)
+  let pattern = unite#filters#fuzzy_escape(a:context.input)
 
-    lua << EOF
-    do
-      local pattern = vim.eval('pattern')
-      local input = vim.eval('input')
-      local candidates = vim.eval('a:candidates')
-      if vim.eval('&ignorecase') ~= 0 then
-        pattern = string.lower(pattern)
-        input = string.lower(input)
-        for i = #candidates-1, 0, -1 do
-          local word = string.lower(candidates[i].word)
-          if string.find(word, pattern, 1) == nil then
-            candidates[i] = nil
-          end
-        end
-      else
-        for i = #candidates-1, 0, -1 do
-          local word = candidates[i].word
-          if string.find(word, pattern, 1) == nil then
-            candidates[i] = nil
-          end
-        end
+  lua << EOF
+do
+  local pattern = vim.eval('pattern')
+  local input = vim.eval('a:context.input')
+  local candidates = vim.eval('a:candidates')
+  if vim.eval('&ignorecase') ~= 0 then
+    pattern = string.lower(pattern)
+    input = string.lower(input)
+    for i = #candidates-1, 0, -1 do
+      local word = string.lower(candidates[i].word)
+      if string.find(word, pattern, 1) == nil then
+        candidates[i] = nil
       end
     end
+  else
+    for i = #candidates-1, 0, -1 do
+      local word = candidates[i].word
+      if string.find(word, pattern, 1) == nil then
+        candidates[i] = nil
+      end
+    end
+  end
+end
 EOF
-  endfor
 
   return a:candidates
 endfunction"}}}
