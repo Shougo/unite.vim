@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#helpers#call_hook(sources, hook_name) "{{{
+function! unite#helper#call_hook(sources, hook_name) "{{{
   let context = unite#get_context()
   if context.unite__disable_hooks
     return
@@ -51,6 +51,60 @@ function! unite#helpers#call_hook(sources, hook_name) "{{{
             \ '[unite.vim] Source name is ' . source.name)
     endtry
   endfor
+endfunction"}}}
+
+function! unite#helper#get_substitute_input(input) "{{{
+  let input = a:input
+
+  let unite = unite#get_current_unite()
+  let substitute_patterns = reverse(unite#util#sort_by(
+        \ values(unite#get_profile(unite.profile_name,
+        \        'substitute_patterns')),
+        \ 'v:val.priority'))
+  if unite.input != '' && stridx(input, unite.input) == 0
+    " Substitute after input.
+    let input_save = input
+    let input = input_save[len(unite.input) :]
+    let head = input_save[: len(unite.input)-1]
+  else
+    " Substitute all input.
+    let head = ''
+  endif
+
+  let inputs = unite#helper#get_substitute_input_loop(input, substitute_patterns)
+
+  return map(inputs, 'head . v:val')
+endfunction"}}}
+function! unite#helper#get_substitute_input_loop(input, substitute_patterns) "{{{
+  if empty(a:substitute_patterns)
+    return [a:input]
+  endif
+
+  let inputs = [a:input]
+  for pattern in a:substitute_patterns
+    let cnt = 0
+    for input in inputs
+      if input =~ pattern.pattern
+        if type(pattern.subst) == type([])
+          if len(inputs) == 1
+            " List substitute.
+            let inputs = []
+            for subst in pattern.subst
+              call add(inputs,
+                    \ substitute(input, pattern.pattern, subst, 'g'))
+            endfor
+          endif
+        else
+          let inputs[cnt] = substitute(
+                \ input, pattern.pattern, pattern.subst, 'g')
+        endif
+      endif
+
+      let cnt += 1
+    endfor
+  endfor
+
+  return inputs
 endfunction"}}}
 
 let &cpo = s:save_cpo

@@ -803,10 +803,6 @@ function! unite#redraw_candidates(...) "{{{
     call cursor(line('$'), 0)
   endif
 
-  if line('.') <= winheight(0)
-    normal! zb
-  endif
-
   " Set syntax.
   call s:set_syntax()
 endfunction"}}}
@@ -1188,7 +1184,7 @@ function! unite#get_candidates(sources, ...) "{{{
     let candidates = s:get_candidates(a:sources, context)
 
     " Call finalize functions.
-    call unite#helpers#call_hook(unite#loaded_sources_list(), 'on_close')
+    call unite#helper#call_hook(unite#loaded_sources_list(), 'on_close')
     let unite = unite#get_current_unite()
     let unite.is_finalized = 1
   finally
@@ -1798,7 +1794,7 @@ function! s:initialize_sources(...) "{{{
           let source.unite__context = { 'source' : source }
 
           " Overwrite source values.
-          call unite#helpers#call_hook([source], 'on_pre_init')
+          call unite#helper#call_hook([source], 'on_pre_init')
         endif
 
         let source = extend(source, default_source, 'keep')
@@ -2038,7 +2034,7 @@ function! s:recache_candidates(input, is_force) "{{{
     let source.unite__candidates = []
   endfor
 
-  let inputs = s:get_substitute_input(a:input)
+  let inputs = unite#helper#get_substitute_input(a:input)
   let context.is_list_input = len(inputs) > 1
   for input in inputs
     let context.input = input
@@ -2068,7 +2064,7 @@ function! s:recache_candidates(input, is_force) "{{{
     " Call post_filter hook.
     let source.unite__context.candidates =
           \ source.unite__candidates
-    call unite#helpers#call_hook([source], 'on_post_filter')
+    call unite#helper#call_hook([source], 'on_post_filter')
 
     let source.unite__candidates =
           \ unite#initialize_candidates_source(
@@ -2126,7 +2122,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
 
     " Call pre_filter hook.
     let context.candidates = source_candidates
-    call unite#helpers#call_hook([source], 'on_pre_filter')
+    call unite#helper#call_hook([source], 'on_pre_filter')
 
     " Set filters.
     let matchers = []
@@ -2429,7 +2425,7 @@ function! s:initialize_current_unite(sources, context) "{{{
   call unite#set_context(context)
 
   if !context.unite__is_complete
-    call unite#helpers#call_hook(sources, 'on_init')
+    call unite#helper#call_hook(sources, 'on_init')
   endif
 endfunction"}}}
 function! s:initialize_unite_buffer() "{{{
@@ -2744,59 +2740,6 @@ function! s:get_loaded_sources(...) "{{{
   return a:0 == 0 ? unite.sources :
         \ get(filter(copy(unite.sources), 'v:val.name ==# a:1'), 0, {})
 endfunction"}}}
-function! s:get_substitute_input(input) "{{{
-  let input = a:input
-
-  let unite = unite#get_current_unite()
-  let substitute_patterns = reverse(unite#util#sort_by(
-        \ values(unite#get_profile(unite.profile_name,
-        \        'substitute_patterns')),
-        \ 'v:val.priority'))
-  if unite.input != '' && stridx(input, unite.input) == 0
-    " Substitute after input.
-    let input_save = input
-    let input = input_save[len(unite.input) :]
-    let head = input_save[: len(unite.input)-1]
-  else
-    " Substitute all input.
-    let head = ''
-  endif
-
-  let inputs = s:get_substitute_input_loop(input, substitute_patterns)
-
-  return map(inputs, 'head . v:val')
-endfunction"}}}
-function! s:get_substitute_input_loop(input, substitute_patterns) "{{{
-  if empty(a:substitute_patterns)
-    return [a:input]
-  endif
-
-  let inputs = [a:input]
-  for pattern in a:substitute_patterns
-    let cnt = 0
-    for input in inputs
-      if input =~ pattern.pattern
-        if type(pattern.subst) == type([])
-          if len(inputs) == 1
-            " List substitute.
-            let inputs = []
-            for subst in pattern.subst
-              call add(inputs,
-                    \ substitute(input, pattern.pattern, subst, 'g'))
-            endfor
-          endif
-        else
-          let inputs[cnt] = substitute(
-                \ input, pattern.pattern, pattern.subst, 'g')
-        endif
-      endif
-
-      let cnt += 1
-    endfor
-  endfor
-
-  return inputs
-endfunction"}}}
 function! s:has_preview_window() "{{{
   return len(filter(range(1, winnr('$')),
         \    'getwinvar(v:val, "&previewwindow")')) > 0
@@ -2953,7 +2896,7 @@ function! unite#set_highlight() "{{{
           \ (name == '' ? '' : 'uniteCandidateSourceName')
           \ )
 
-    call unite#helpers#call_hook([source], 'on_syntax')
+    call unite#helper#call_hook([source], 'on_syntax')
   endfor
 
   call s:set_syntax()

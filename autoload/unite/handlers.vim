@@ -259,7 +259,7 @@ function! unite#handlers#_on_buf_unload(bufname)  "{{{
   call unite#handlers#_restore_updatetime()
 
   " Call finalize functions.
-  call unite#helpers#call_hook(unite#loaded_sources_list(), 'on_close')
+  call unite#helper#call_hook(unite#loaded_sources_list(), 'on_close')
   let unite.is_finalized = 1
 endfunction"}}}
 
@@ -292,7 +292,7 @@ function! s:change_highlight()  "{{{
 
   syntax case ignore
 
-  for input in s:get_substitute_input(unite#get_input())
+  for input in unite#helper#get_substitute_input(unite#get_input())
     for pattern in map(split(input, '\\\@<! '),
           \ "substitute(escape(unite#escape_match(v:val), '/'),
           \   '\\\\\\@<!|', '\\\\|', 'g')")
