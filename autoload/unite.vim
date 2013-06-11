@@ -2461,10 +2461,6 @@ function! s:get_loaded_sources(...) "{{{
   return a:0 == 0 ? unite.sources :
         \ get(filter(copy(unite.sources), 'v:val.name ==# a:1'), 0, {})
 endfunction"}}}
-function! s:has_preview_window() "{{{
-  return len(filter(range(1, winnr('$')),
-        \    'getwinvar(v:val, "&previewwindow")')) > 0
-endfunction"}}}
 function! s:init_cursor() "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
