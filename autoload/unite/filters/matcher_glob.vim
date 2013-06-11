@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_glob.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 May 2013.
+" Last Modified: 11 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -70,6 +70,7 @@ function! unite#filters#matcher_glob#glob_matcher(candidates, input, context) "{
     let expr = 'v:val.word =~ ' . string(input)
   elseif unite#util#has_lua()
     let expr = 'if_lua'
+    let a:context.input = input
   else
     let input = substitute(input, '\\\(.\)', '\1', 'g')
     let expr = &ignorecase ?
