@@ -540,7 +540,7 @@ function! s:toggle_mark() "{{{
   endif
 
   while 1
-    call unite#redraw_line()
+    call unite#view#_redraw_line()
 
     if line('.') != line('$')
       normal! j
@@ -571,7 +571,7 @@ function! s:toggle_mark_candidates(start, end) "{{{
     let candidate.unite__is_marked = !candidate.unite__is_marked
     let candidate.unite__marked_time = localtime()
 
-    call unite#redraw_line(cnt + offset)
+    call unite#view#_redraw_line(cnt + offset)
 
     let cnt += 1
   endwhile
@@ -642,7 +642,7 @@ function! s:rotate_source(is_next) "{{{
     endif
   endfor
 
-  call unite#redraw_candidates()
+  call unite#view#_redraw_candidates()
 endfunction"}}}
 function! s:print_candidate() "{{{
   if line('.') <= unite#get_current_unite().prompt_linenr
@@ -678,7 +678,7 @@ function! unite#mappings#_quick_match(is_choose) "{{{
   endif
 
   let quick_match_table = s:get_quick_match_table()
-  call unite#quick_match_redraw(quick_match_table)
+  call unite#view#_quick_match_redraw(quick_match_table)
 
   if mode() !~# '^c'
     echo 'Input quick match key: '
@@ -692,7 +692,7 @@ function! unite#mappings#_quick_match(is_choose) "{{{
   redraw
   echo ''
 
-  call unite#redraw_candidates()
+  call unite#view#_redraw_candidates()
 
   let unite = unite#get_current_unite()
 

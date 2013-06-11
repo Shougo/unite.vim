@@ -107,6 +107,15 @@ function! unite#helper#get_substitute_input_loop(input, substitute_patterns) "{{
   return inputs
 endfunction"}}}
 
+function! unite#helper#adjustments(currentwinwidth, the_max_source_name, size) "{{{
+  let max_width = a:currentwinwidth - a:the_max_source_name - a:size
+  if max_width < 20
+    return [a:currentwinwidth - a:size, 0]
+  else
+    return [max_width, a:the_max_source_name]
+  endif
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

@@ -96,7 +96,7 @@ function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
   call s:restore_statusline()
 
   if !unite.context.no_split && winnr('$') != 1
-    call unite#_resize_window()
+    call unite#view#_resize_window()
   endif
 
   setlocal nomodified
@@ -217,12 +217,12 @@ function! unite#handlers#_on_cursor_moved()  "{{{
     return
   endif
 
-  call unite#_resize_window()
+  call unite#view#_resize_window()
 
   let modifiable_save = &l:modifiable
   try
     setlocal modifiable
-    let lines = unite#convert_lines(candidates)
+    let lines = unite#view#_convert_lines(candidates)
     let pos = getpos('.')
     call append('$', lines)
   finally

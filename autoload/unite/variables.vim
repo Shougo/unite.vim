@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: syntax/unite.vim
+" FILE: variables.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 11 Jun 2013.
 " License: MIT license  {{{
@@ -24,46 +24,22 @@
 " }}}
 "=============================================================================
 
-if version < 700
-  syntax clear
-elseif exists('b:current_syntax')
-  finish
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
-syntax match uniteQuickMatchLine /^.|.*/
-      \ contains=uniteQuickMatchTrigger,uniteCandidateSourceName,uniteCandidateAbbr
-syntax region uniteNonMarkedLine start=/^- / end='$' keepend
-      \ contains=uniteCandidateMarker,uniteCandidateSourceName,uniteCandidateAbbr
-syntax match uniteCandidateMarker /^- / contained
-syntax match uniteQuickMatchTrigger /^.|/ contained
+function! unite#variables#current_unite() "{{{
+  if !exists('s:current_unite')
+    let s:current_unite = {}
+  endif
 
-highlight default link uniteError  Error
+  return s:current_unite
+endfunction"}}}
 
-highlight default link uniteQuickMatchTrigger  Special
-highlight default link uniteMarkedLine  Statement
-highlight default link uniteCandidateSourceName  Type
-highlight default link uniteCandidateMarker  Special
-highlight default link uniteCandidateInputKeyword  Function
-
-" The following definitions are for <Plug>(unite-choose-action).
-highlight default link uniteChooseAction  NONE
-highlight default link uniteChooseCandidate  NONE
-highlight default link uniteChooseKey  SpecialKey
-highlight default link uniteChooseMessage  NONE
-highlight default link uniteChoosePrompt  uniteSourcePrompt
-highlight default link uniteChooseSource  uniteSourceNames
-
-highlight default link uniteInputPrompt  Identifier
-highlight default link uniteInputPromptError  Error
-highlight default link uniteInputSpecial  Special
-
-let b:current_syntax = 'unite'
-
-call unite#view#_set_highlight()
+function! unite#variables#set_current_unite(unite) "{{{
+  let s:current_unite = a:unite
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
+" vim: foldmethod=marker
