@@ -27,9 +27,9 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-augroup unite
+augroup plugin-unite
   autocmd CursorHold
-        \ call unite#_on_cursor_hold()
+        \ call unite#handlers#_on_cursor_hold()
 augroup END
 
 function! unite#version() "{{{
@@ -1057,7 +1057,7 @@ function! unite#start(sources, ...) "{{{
 
   call unite#redraw_candidates()
 
-  call s:on_bufwin_enter(bufnr('%'))
+  call unite#handlers#_on_bufwin_enter(bufnr('%'))
 
   call s:init_cursor()
 endfunction"}}}
@@ -1188,7 +1188,7 @@ function! unite#get_candidates(sources, ...) "{{{
     let candidates = s:get_candidates(a:sources, context)
 
     " Call finalize functions.
-    call s:call_hook(unite#loaded_sources_list(), 'on_close')
+    call unite#helpers#call_hook(unite#loaded_sources_list(), 'on_close')
     let unite = unite#get_current_unite()
     let unite.is_finalized = 1
   finally
@@ -1445,7 +1445,7 @@ function! s:quit_session(is_force, ...)  "{{{
       call unite#_resize_window()
     endif
 
-    call s:on_buf_unload(bufname)
+    call unite#handlers#_on_buf_unload(bufname)
 
     if !unite.has_preview_window
       let preview_windows = filter(range(1, winnr('$')),
@@ -1501,7 +1501,7 @@ function! unite#resume_from_temporary(context)  "{{{
     return
   endif
 
-  call s:on_buf_unload(a:context.buffer_name)
+  call unite#handlers#_on_buf_unload(a:context.buffer_name)
 
   let unite_save = unite#get_current_unite()
 
@@ -1798,7 +1798,7 @@ function! s:initialize_sources(...) "{{{
           let source.unite__context = { 'source' : source }
 
           " Overwrite source values.
-          call s:call_hook([source], 'on_pre_init')
+          call unite#helpers#call_hook([source], 'on_pre_init')
         endif
 
         let source = extend(source, default_source, 'keep')
@@ -2015,9 +2015,6 @@ function! s:initialize_candidates(candidates) "{{{
 
   return candidates
 endfunction"}}}
-function! s:initialize_tab_variable()  "{{{
-  let t:unite = { 'last_unite_bufnr' : -1 }
-endfunction"}}}
 
 function! s:recache_candidates(input, is_force) "{{{
   let unite = unite#get_current_unite()
@@ -2071,7 +2068,7 @@ function! s:recache_candidates(input, is_force) "{{{
     " Call post_filter hook.
     let source.unite__context.candidates =
           \ source.unite__candidates
-    call s:call_hook([source], 'on_post_filter')
+    call unite#helpers#call_hook([source], 'on_post_filter')
 
     let source.unite__candidates =
           \ unite#initialize_candidates_source(
@@ -2129,7 +2126,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
 
     " Call pre_filter hook.
     let context.candidates = source_candidates
-    call s:call_hook([source], 'on_pre_filter')
+    call unite#helpers#call_hook([source], 'on_pre_filter')
 
     " Set filters.
     let matchers = []
@@ -2432,7 +2429,7 @@ function! s:initialize_current_unite(sources, context) "{{{
   call unite#set_context(context)
 
   if !context.unite__is_complete
-    call s:call_hook(sources, 'on_init')
+    call unite#helpers#call_hook(sources, 'on_init')
   endif
 endfunction"}}}
 function! s:initialize_unite_buffer() "{{{
@@ -2480,21 +2477,21 @@ function! s:initialize_unite_buffer() "{{{
     " Autocommands.
     augroup plugin-unite
       autocmd InsertEnter <buffer>
-            \ call s:on_insert_enter()
+            \ call unite#handlers#_on_insert_enter()
       autocmd InsertLeave <buffer>
-            \ call s:on_insert_leave()
+            \ call unite#handlers#_on_insert_leave()
       autocmd CursorHoldI <buffer>
-            \ call s:on_cursor_hold_i()
+            \ call unite#handlers#_on_cursor_hold_i()
       autocmd CursorMovedI <buffer>
-            \ call s:on_cursor_moved_i()
+            \ call unite#handlers#_on_cursor_moved_i()
       autocmd CursorMoved,CursorMovedI <buffer>  nested
-            \ call s:on_cursor_moved()
+            \ call unite#handlers#_on_cursor_moved()
       autocmd BufUnload,BufHidden <buffer>
-            \ call s:on_buf_unload(expand('<afile>'))
+            \ call unite#handlers#_on_buf_unload(expand('<afile>'))
       autocmd WinEnter,BufWinEnter <buffer>
-            \ call s:on_bufwin_enter(bufnr(expand('<abuf>')))
+            \ call unite#handlers#_on_bufwin_enter(bufnr(expand('<abuf>')))
       autocmd WinLeave,BufWinLeave <buffer>
-            \ call s:restore_updatetime()
+            \ call unite#handlers#_restore_updatetime()
     augroup END
 
     call unite#mappings#define_default_mappings()
@@ -2508,7 +2505,7 @@ function! s:initialize_unite_buffer() "{{{
     let &redrawtime = 100
   endif
 
-  call s:save_updatetime()
+  call unite#handlers#_save_updatetime()
 
   " User's initialization.
   setlocal nomodifiable
@@ -2540,7 +2537,7 @@ function! s:switch_unite_buffer(buffer_name, context) "{{{
     silent! edit `=a:context.real_buffer_name`
   endif
 
-  call s:on_bufwin_enter(bufnr('%'))
+  call unite#handlers#_on_bufwin_enter(bufnr('%'))
 endfunction"}}}
 
 function! s:redraw(is_force, winnr, is_gather_all) "{{{
@@ -2678,329 +2675,6 @@ function! unite#_resize_window() "{{{
   let context.unite__old_winwidth = winwidth(winnr())
 endfunction"}}}
 
-" Autocmd events.
-function! s:on_insert_enter()  "{{{
-  let unite = unite#get_current_unite()
-  let unite.is_insert = 1
-
-  if exists(':NeoComplCacheLock')
-    " Lock neocomplcache.
-    NeoComplCacheLock
-  endif
-
-  if &filetype ==# 'unite'
-    setlocal modifiable
-  endif
-endfunction"}}}
-function! s:on_insert_leave()  "{{{
-  let unite = unite#get_current_unite()
-
-  if line('.') != unite.prompt_linenr
-    normal! 0
-  endif
-
-  let unite.is_insert = 0
-
-  if &filetype ==# 'unite'
-    setlocal nomodifiable
-  endif
-endfunction"}}}
-function! s:on_cursor_hold_i()  "{{{
-  let unite = unite#get_current_unite()
-
-  if unite.max_source_candidates > 4000
-    call s:check_redraw()
-  endif
-
-  if unite.is_async && &l:modifiable
-    " Ignore key sequences.
-    call feedkeys("a\<BS>", 'n')
-    " call feedkeys("\<C-r>\<ESC>", 'n')
-  endif
-endfunction"}}}
-function! s:on_cursor_moved_i()  "{{{
-  let unite = unite#get_current_unite()
-  let prompt_linenr = unite.prompt_linenr
-
-  if unite.max_source_candidates <= 4000
-    call s:check_redraw()
-  endif
-
-  " Prompt check.
-  if line('.') == prompt_linenr && col('.') <= len(unite.prompt)
-    startinsert!
-  endif
-endfunction"}}}
-function! s:check_redraw() "{{{
-  let unite = unite#get_current_unite()
-  let prompt_linenr = unite.prompt_linenr
-  if line('.') == prompt_linenr || unite.context.is_redraw
-    " Redraw.
-    call unite#redraw()
-    call s:change_highlight()
-  endif
-endfunction"}}}
-function! s:on_bufwin_enter(bufnr)  "{{{
-  let unite = getbufvar(a:bufnr, 'unite')
-  if type(unite) != type({})
-        \ || bufwinnr(a:bufnr) < 1
-    return
-  endif
-
-  if bufwinnr(a:bufnr) != winnr()
-    let winnr = winnr()
-    execute bufwinnr(a:bufnr) 'wincmd w'
-  endif
-
-  call s:save_updatetime()
-
-  call s:restore_statusline()
-
-  if !unite.context.no_split && winnr('$') != 1
-    call unite#_resize_window()
-  endif
-
-  setlocal nomodified
-
-  if exists('winnr')
-    execute winnr.'wincmd w'
-  endif
-
-  if !exists('t:unite')
-    call s:initialize_tab_variable()
-  endif
-  let t:unite.last_unite_bufnr = a:bufnr
-endfunction"}}}
-function! unite#_on_cursor_hold()  "{{{
-  let is_async = 0
-
-  call s:restore_statusline()
-
-  if &filetype ==# 'unite'
-    " Redraw.
-    call unite#redraw()
-    call s:change_highlight()
-
-    let unite = unite#get_current_unite()
-    let is_async = unite.is_async
-
-    if !unite.is_async && unite.context.auto_quit
-      call unite#force_quit_session()
-    endif
-  else
-    " Search other unite window.
-    for winnr in filter(range(1, winnr('$')),
-          \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
-      let unite = getbufvar(winbufnr(winnr), 'unite')
-      if unite.is_async
-        " Redraw unite buffer.
-        call unite#redraw(winnr)
-
-        let is_async = unite.is_async
-      endif
-    endfor
-  endif
-
-  if is_async
-    " Ignore key sequences.
-    call feedkeys("g\<ESC>", 'n')
-  endif
-endfunction"}}}
-function! s:on_cursor_moved()  "{{{
-  if &filetype !=# 'unite'
-    return
-  endif
-
-  let unite = unite#get_current_unite()
-  let prompt_linenr = unite.prompt_linenr
-  let context = unite.context
-
-  setlocal nocursorline
-
-  execute 'setlocal' line('.') == prompt_linenr ?
-        \ 'modifiable' : 'nomodifiable'
-  if line('.') <= prompt_linenr
-    nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
-          \ <ESC>:call unite#mappings#loop_cursor_up_call(
-          \    0, 'n')<CR>
-    nnoremap <silent><buffer> <Plug>(unite_skip_cursor_up)
-          \ <ESC>:call unite#mappings#loop_cursor_up_call(
-          \    1, 'n')<CR>
-    inoremap <silent><buffer> <Plug>(unite_select_previous_line)
-          \ <ESC>:call unite#mappings#loop_cursor_up_call(
-          \    0, 'i')<CR>
-    inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
-          \ <ESC>:call unite#mappings#loop_cursor_up_call(
-          \    1, 'i')<CR>
-  else
-    if winline() <= winheight('$') / 2
-      normal! zz
-    endif
-
-    nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
-          \ unite#mappings#loop_cursor_up_expr(0)
-    nnoremap <expr><buffer> <Plug>(unite_skip_cursor_up)
-          \ unite#mappings#loop_cursor_up_expr(1)
-    inoremap <expr><buffer> <Plug>(unite_select_previous_line)
-          \ unite#mappings#loop_cursor_up_expr(0)
-    inoremap <expr><buffer> <Plug>(unite_skip_previous_line)
-          \ unite#mappings#loop_cursor_up_expr(1)
-  endif
-
-  if exists('b:current_syntax') && !context.no_cursor_line
-    silent! execute 'match' (line('.') <= prompt_linenr ?
-          \ line('$') <= prompt_linenr ?
-          \ 'uniteError /\%'.prompt_linenr.'l/' :
-          \ context.cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-          \ context.cursor_line_highlight.' /\%'.line('.').'l/')
-  endif
-
-  if context.auto_preview
-    call s:do_auto_preview()
-  endif
-  if context.auto_highlight
-    call s:do_auto_highlight()
-  endif
-
-  call s:restore_statusline()
-
-  " Check lines. "{{{
-  if winheight(0) < line('$') &&
-        \ line('.') + winheight(0) / 2 < line('$')
-    return
-  endif
-
-  let height =
-        \ (unite.context.no_split
-        \  || unite.context.winheight == 0) ?
-        \ winheight(0) : unite.context.winheight
-  let candidates = unite#gather_candidates_pos(height)
-  if empty(candidates)
-    " Nothing.
-    return
-  endif
-
-  call unite#_resize_window()
-
-  let modifiable_save = &l:modifiable
-  try
-    setlocal modifiable
-    let lines = unite#convert_lines(candidates)
-    let pos = getpos('.')
-    call append('$', lines)
-  finally
-    let &l:modifiable = l:modifiable_save
-  endtry
-
-  let context = unite.context
-  let unite.current_candidates += candidates
-
-  if pos != getpos('.')
-    call setpos('.', pos)
-  endif"}}}
-endfunction"}}}
-function! s:on_buf_unload(bufname)  "{{{
-  match
-
-  " Save unite value.
-  let unite = getbufvar(a:bufname, 'unite')
-  if type(unite) != type({})
-    " Invalid unite.
-    return
-  endif
-
-  if unite.is_finalized
-    return
-  endif
-
-  " Restore options.
-  if exists('&redrawtime')
-    let &redrawtime = unite.redrawtime_save
-  endif
-  let &sidescrolloff = unite.sidescrolloff_save
-
-  call s:restore_updatetime()
-
-  " Call finalize functions.
-  call s:call_hook(unite#loaded_sources_list(), 'on_close')
-  let unite.is_finalized = 1
-endfunction"}}}
-function! s:change_highlight()  "{{{
-  if &filetype !=# 'unite'
-        \ || !exists('b:current_syntax')
-    return
-  endif
-
-  let unite = unite#get_current_unite()
-  if empty(unite)
-    return
-  endif
-
-  let context = unite#get_context()
-  let prompt_linenr = unite.prompt_linenr
-  if !context.no_cursor_line
-    execute 'match' (line('.') <= prompt_linenr ?
-          \ line('$') <= prompt_linenr ?
-          \ 'uniteError /\%'.prompt_linenr.'l/' :
-          \ context.cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-          \ context.cursor_line_highlight.' /\%'.line('.').'l/')
-  endif
-
-  silent! syntax clear uniteCandidateInputKeyword
-
-  if unite#get_input() == ''
-    return
-  endif
-
-  syntax case ignore
-
-  for input in s:get_substitute_input(unite#get_input())
-    for pattern in map(split(input, '\\\@<! '),
-          \ "substitute(escape(unite#escape_match(v:val), '/'),
-          \   '\\\\\\@<!|', '\\\\|', 'g')")
-      execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
-            \ 'containedin=uniteCandidateAbbr contained'
-      for source in filter(copy(unite.sources), 'v:val.syntax != ""')
-        execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
-              \ 'containedin='.source.syntax.' contained'
-      endfor
-    endfor
-  endfor
-
-  syntax case match
-endfunction"}}}
-function! s:save_updatetime()  "{{{
-  let unite = unite#get_current_unite()
-
-  if &updatetime > unite.context.update_time
-    let unite.update_time_save = &updatetime
-    let &updatetime = unite.context.update_time
-  endif
-endfunction"}}}
-function! s:restore_updatetime()  "{{{
-  let unite = unite#get_current_unite()
-
-  if !has_key(unite, 'update_time_save')
-    return
-  endif
-
-  if &updatetime < unite.update_time_save
-    let &updatetime = unite.update_time_save
-  endif
-endfunction"}}}
-function! s:restore_statusline()  "{{{
-  if &filetype !=# 'unite' || !g:unite_force_overwrite_statusline
-    return
-  endif
-
-  let unite = unite#get_current_unite()
-
-  if &l:statusline != unite.statusline
-    " Restore statusline.
-    let &l:statusline = unite.statusline
-  endif
-endfunction"}}}
-
 " Internal helper functions. "{{{
 function! s:adjustments(currentwinwidth, the_max_source_name, size) "{{{
   let max_width = a:currentwinwidth - a:the_max_source_name - a:size
@@ -3122,31 +2796,6 @@ function! s:get_substitute_input_loop(input, substitute_patterns) "{{{
   endfor
 
   return inputs
-endfunction"}}}
-function! s:call_hook(sources, hook_name) "{{{
-  let context = unite#get_context()
-  if context.unite__disable_hooks
-    return
-  endif
-
-  let _ = []
-  for source in a:sources
-    if !has_key(source.hooks, a:hook_name)
-      continue
-    endif
-
-    try
-      call call(source.hooks[a:hook_name],
-            \ [source.args, source.unite__context], source.hooks)
-    catch
-      call unite#print_error(v:throwpoint)
-      call unite#print_error(v:exception)
-      call unite#print_error(
-            \ '[unite.vim] Error occured in calling hook "' . a:hook_name . '"!')
-      call unite#print_error(
-            \ '[unite.vim] Source name is ' . source.name)
-    endtry
-  endfor
 endfunction"}}}
 function! s:has_preview_window() "{{{
   return len(filter(range(1, winnr('$')),
@@ -3304,7 +2953,7 @@ function! unite#set_highlight() "{{{
           \ (name == '' ? '' : 'uniteCandidateSourceName')
           \ )
 
-    call s:call_hook([source], 'on_syntax')
+    call unite#helpers#call_hook([source], 'on_syntax')
   endfor
 
   call s:set_syntax()

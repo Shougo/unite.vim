@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 May 2013.
+" Last Modified: 11 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -189,11 +189,6 @@ endfunction"}}}
 
 command! -nargs=1 -complete=customlist,unite#complete_buffer_name
       \ UniteClose call unite#close(<q-args>)
-
-augroup plugin-unite
-  autocmd!
-  autocmd CursorHold * call unite#_on_cursor_hold()
-augroup END
 
 let g:loaded_unite = 1
 
