@@ -1277,12 +1277,6 @@ unite#custom_action({kind}, {name}, {action})
 		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen
 <
-unite#undef_custom_action({kind}, {name})	*unite#undef_custom_action()*
-		Deletes an action of which name is {name} of {kind} that you
-		added with using |unite#custom_action()|.  You may specify
-		multiple {kind} with separating ",".  This function does
-		nothing if the action doesn't exist.
-
 unite#custom_alias({kind}, {name}, {action})
 						*unite#custom_alias()*
 		Defines an action of {name} which is another name of {action}
