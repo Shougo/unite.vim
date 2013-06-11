@@ -160,10 +160,10 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
   endtry
 
   if context.auto_preview
-    call s:do_auto_preview()
+    call unite#view#_do_auto_preview()
   endif
   if context.auto_highlight
-    call s:do_auto_highlight()
+    call unite#view#_do_auto_highlight()
   endif
 endfunction"}}}
 
@@ -323,7 +323,7 @@ function! s:set_syntax() "{{{
   endfor
 endfunction"}}}
 
-function! s:do_auto_preview() "{{{
+function! unite#view#_do_auto_preview() "{{{
   let unite = unite#get_current_unite()
 
   if unite.preview_candidate == unite#get_current_candidate()
@@ -341,7 +341,7 @@ function! s:do_auto_preview() "{{{
     call unite#view#_resize_window()
   endif
 endfunction"}}}
-function! s:do_auto_highlight() "{{{
+function! unite#view#_do_auto_highlight() "{{{
   let unite = unite#get_current_unite()
 
   if unite.highlight_candidate == unite#get_current_candidate()

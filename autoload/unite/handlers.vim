@@ -193,10 +193,10 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   endif
 
   if context.auto_preview
-    call s:do_auto_preview()
+    call unite#view#_do_auto_preview()
   endif
   if context.auto_highlight
-    call s:do_auto_highlight()
+    call unite#view#_do_auto_highlight()
   endif
 
   call s:restore_statusline()
