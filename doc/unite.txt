@@ -315,7 +315,7 @@ g:unite_source_buffer_time_format
 g:unite_source_file_ignore_pattern	*g:unite_source_file_ignore_pattern*
 		Refer autoload/unite/sources/file.vim about the default value.
 		Note: This variable is deprecated.  Please use
-		|unite#custom_source()| instead.
+		|unite#custom#source()| instead.
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_file_mru_time_format
@@ -377,7 +377,7 @@ g:unite_source_file_mru_ignore_pattern
 		Refer autoload/unite/sources/file_mru.vim about the default
 		value.
 		Note: This function is deprecated.  Please use
-		|unite#custom_source()| instead.
+		|unite#custom#source()| instead.
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_directory_mru_time_format
@@ -416,12 +416,12 @@ g:unite_source_rec_ignore_pattern
 		Refer autoload/unite/sources/file_rec.vim about the default
 		value.
 		Note: This variable is deprecated.  Please use
-		|unite#custom_source()| instead like the below.
+		|unite#custom#source()| instead like the below.
 >
 		" before
 		" let g:unite_source_file_rec_ignore_pattern = '\.abc$'
 		" after
-		call unite#custom_source('file_rec', 'ignore_pattern', '\.abc$')
+		call unite#custom#source('file_rec', 'ignore_pattern', '\.abc$')
 <
 		Note: This variable must be set before using |unite|.
 
@@ -489,7 +489,7 @@ g:unite_source_grep_ignore_pattern	*g:unite_source_grep_ignore_pattern*
 		Refer autoload/unite/sources/grep.vim about the default
 		value.
 		Note: This variable is deprecated.  Please use
-		|unite#custom_source()| instead.
+		|unite#custom#source()| instead.
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_grep_search_word_highlight
@@ -508,7 +508,7 @@ g:unite_source_vimgrep_ignore_pattern	*g:unite_source_vimgrep_ignore_pattern*
 		Refer autoload/unite/sources/vimgrep.vim about the default
 		value.
 		Note: This variable is deprecated.  Please use
-		|unite#custom_source()| instead.
+		|unite#custom#source()| instead.
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_find_command			*g:unite_source_find_command*
@@ -526,7 +526,7 @@ g:unite_source_find_ignore_pattern
 					*g:unite_source_find_ignore_pattern*
 		Refer autoload/unite/sources/find.vim about the default value.
 		Note: This variable is deprecated.  Please use
-		|unite#custom_source()| instead.
+		|unite#custom#source()| instead.
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_line_enable_highlight
@@ -1103,7 +1103,7 @@ unite#do_candidates_action({action-name}, {candidates}, [, {context}])
 
 unite#get_context()				*unite#get_context()*
 		Gets the context information of the current Unite buffer.
-		This is used by functions like |unite#custom_action()| to call
+		This is used by functions like |unite#custom#action()| to call
 		|unite#start()| internally.
 
 unite#do_action({action-name})			*unite#do_action()*
@@ -1250,15 +1250,17 @@ unite#set_buffer_name_option({buffer-name}, {option-name}, {value})
 		This function is deprecated.  Please use
 		|unite#set_profile()| instead.
 
-unite#custom_default_action({kind}, {default-action})
+unite#custom#default_action({kind}, {default-action})
 					*unite#custom_default_action()*
+					*unite#custom#default_action()*
 		Changes the default action of {kind} into {default-action}.
 		You may specify multiple {kind} with separating ",".  For
 		Example:
 >
-		call unite#custom_default_action('file', 'tabopen')
+		call unite#custom#default_action('file', 'tabopen')
 <
-unite#custom_action({kind}, {name}, {action})
+unite#custom#action({kind}, {name}, {action})
+						*unite#custom#action()*
 						*unite#custom_action()*
 		Adds an {action} of which name is {name} for {kind}.
 		You may specify multiple {kind} with separating ",".
@@ -1274,32 +1276,27 @@ unite#custom_action({kind}, {name}, {action})
 		  \    a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
 		  execute g:unite_kind_openable_lcd_command '`=dir`'
 		endfunction
-		call unite#custom_action('file,buffer', 'tabopen', my_tabopen)
+		call unite#custom#action('file,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen
 <
-unite#custom_alias({kind}, {name}, {action})
+unite#custom#alias({kind}, {name}, {action})
+						*unite#custom#alias()*
 						*unite#custom_alias()*
 		Defines an action of {name} which is another name of {action}
 		in {kind}.  You may specify multiple {kind} with separating
 		",".  If {action} is "nop", such action is disabled.
 		example:
 >
-		call unite#custom_alias('file', 'h', 'left')
+		call unite#custom#alias('file', 'h', 'left')
 <
 unite#custom_filters({source-name}, {filters})	*unite#custom_filters()*
-		Changes the filters of {source-name} into {filters}.  You may
-		specify multiple sources with separating "," in {source-name}.
-		{filters} is a name of filter or a list of the names.
 		Note: This function is deprecated.  Please use
-		|unite#custom_source()| instead.
+		|unite#custom#source()| instead.
 
 unite#custom_max_candidates({source-name}, {max})
 					*unite#custom_max_candidates()*
-		Changes the max candidates of {source-name} into {max}.  You
-		may specify multiple sources with separating "," in
-		{source-name}.
 		Note: This function is deprecated.  Please use
-		|unite#custom_source()| instead.
+		|unite#custom#source()| instead.
 
 unite#custom_source({source-name}, {option-name}, {value})
 						*unite#custom_source()*
@@ -1342,7 +1339,7 @@ unite#custom_source({source-name}, {option-name}, {value})
 unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
 		Runs an action {action-name} against {candidate}.  This will
-		be mainly used in |unite#custom_action()|.  When the action is
+		be mainly used in |unite#custom#action()|.  When the action is
 		is_selectable, the {candidate} will be automatically converted
 		into a list.
 
@@ -2124,13 +2121,13 @@ matcher_fuzzy	A matcher which filters the candidates with user given fuzzy
 		This matcher may produce the best effect if set as
 		|unite-source-file_rec|.
 >
-		call unite#custom_source('file,file/new,buffer,file_rec',
+		call unite#custom#source('file,file/new,buffer,file_rec',
 		\ 'matchers', 'matcher_fuzzy')
 <
 						*unite-filter-matcher_migemo*
 matcher_migemo	For Japanese migemo filter.
 >
-		call unite#custom_source('line', 'matchers', 'matcher_migemo')
+		call unite#custom#source('line', 'matchers', 'matcher_migemo')
 <
 				*unite-filter-matcher_hide_hidden_files*
 matcher_hide_hidden_files
@@ -2163,7 +2160,7 @@ sorter_rank	Matched rank order sorter.  The higher the matched word is or
 		the longer the matched length is, the higher the rank is.
 		This sorter is useful for file candidate source.
 >
-		call unite#custom_source('buffer,file,file_mru,file_rec',
+		call unite#custom#source('buffer,file,file_mru,file_rec',
 		\ 'sorters', 'sorter_rank')
 <
 						*unite-filter-sorter_reverse*
@@ -2190,7 +2187,7 @@ converter_relative_word
 		converter uses it as the base path in relative path
 		conversion.
 >
-		call unite#custom_source('file_rec', 'filters',
+		call unite#custom#source('file_rec', 'filters',
 		\ ['converter_relative_word', 'matcher_default',
 		\  'sorter_default', 'converter_relative_abbr'])
 <
@@ -2914,7 +2911,7 @@ matches any kinds.
 For example, if you want to add "delete" action in source "file", execute
 below command.
 >
-	call unite#custom_action('source/file/*', 'delete', function('...'))
+	call unite#custom#action('source/file/*', 'delete', function('...'))
 <
 ------------------------------------------------------------------------------
 ACTION RESOLUTION ORDER				*unite-action-resolution-order*
@@ -3109,7 +3106,7 @@ Q: I want to delete files in unite buffer.
 A: You can use below setting.  But this setting is dangerous.  You may delete
 files by mistake.
 >
-	call unite#custom_alias('file', 'delete', 'vimfiler__delete')
+	call unite#custom#alias('file', 'delete', 'vimfiler__delete')
 <
 Q: I want to input register values in insert mode.
 
@@ -3167,10 +3164,10 @@ Q: I want to match candidates by filename.
 
 A:
 >
-  call unite#custom_source(
+  call unite#custom#source(
         \ 'buffer,file_rec/async,file_rec,file_mru', 'matchers',
         \ ['converter_tail', 'matcher_default'])
-  call unite#custom_source(
+  call unite#custom#source(
         \ 'file_rec/async,file_rec,file_mru', 'converters',
         \ ['converter_file_directory'])
 <
@@ -3179,7 +3176,7 @@ Q: I want to use fuzzy match.
 
 A: You can use |unite-filter-matcher_fuzzy|.
 >
-		call unite#custom_source('file,file/new,buffer,file_rec',
+		call unite#custom#source('file,file/new,buffer,file_rec',
 		\ 'matchers', 'matcher_fuzzy')
 <
 
