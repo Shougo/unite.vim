@@ -35,6 +35,7 @@ function! unite#custom#get() "{{{
     let s:custom.actions = {}
     let s:custom.default_actions = {}
     let s:custom.aliases = {}
+    let s:custom.profiles = {}
   endif
 
   return s:custom
@@ -45,7 +46,7 @@ function! unite#custom#source(source_name, option_name, value) "{{{
 endfunction"}}}
 
 function! unite#custom#alias(kind, name, action) "{{{
-  return s:custom_base('aliases', a:kind, a:name, a:action)
+  call s:custom_base('aliases', a:kind, a:name, a:action)
 endfunction"}}}
 
 function! unite#custom#default_action(kind, default_action) "{{{
@@ -58,15 +59,70 @@ function! unite#custom#action(kind, name, action) "{{{
   return s:custom_base('actions', a:kind, a:name, a:action)
 endfunction"}}}
 
+function! unite#custom#profile(profile_name, option_name, value) "{{{
+  let profile_name =
+        \ (a:profile_name == '' ? 'default' : a:profile_name)
+  let custom = unite#custom#get()
+
+  for key in split(profile_name, '\s*,\s*')
+    if !has_key(custom.profiles, key)
+      let custom.profiles[key] = {
+            \ 'substitute_patterns' : {},
+            \ 'filters' : [],
+            \ 'context' : {},
+            \ 'ignorecase' : &ignorecase,
+            \ 'smartcase' : &smartcase,
+            \ 'unite__save_pos' : {},
+            \ 'unite__inputs' : {},
+            \ }
+    endif
+
+    if a:option_name ==# 'substitute_patterns'
+      let substitute_patterns = custom.profiles[key].substitute_patterns
+
+      if has_key(substitute_patterns, a:value.pattern)
+            \ && a:pattern == ''
+        call remove(substitute_patterns, a:value.pattern)
+      else
+        let substitute_patterns[a:value.pattern] = {
+              \ 'pattern' : a:value.pattern,
+              \ 'subst' : a:value.subst, 'priority' : a:value.priority,
+              \ }
+      endif
+    else
+      let custom.profiles[key][a:option_name] = a:value
+    endif
+  endfor
+endfunction"}}}
+function! unite#custom#get_profile(profile_name, option_name) "{{{
+  let profile_name =
+        \ (a:profile_name == '' ? 'default' : a:profile_name)
+  let custom = unite#custom#get()
+
+  if !has_key(custom.profiles, profile_name)
+    let custom.profiles[profile_name] = {
+          \ 'substitute_patterns' : {},
+          \ 'filters' : [],
+          \ 'context' : {},
+          \ 'ignorecase' : &ignorecase,
+          \ 'smartcase' : &smartcase,
+          \ 'unite__save_pos' : {},
+          \ 'unite__inputs' : {},
+          \ }
+  endif
+
+  return custom.profiles[profile_name][a:option_name]
+endfunction"}}}
+
 function! s:custom_base(key, kind, name, value) "{{{
   let custom = unite#custom#get()[a:key]
 
   for key in split(a:kind, '\s*,\s*')
-    if !has_key(s:custom.aliases, key)
-      let s:custom.aliases[key] = {}
+    if !has_key(custom, key)
+      let custom[key] = {}
     endif
 
-    let s:custom.aliases[key][a:name] = a:value
+    let custom[key][a:name] = a:value
   endfor
 endfunction"}}}
 

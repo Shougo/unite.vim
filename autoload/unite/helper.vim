@@ -58,7 +58,7 @@ function! unite#helper#get_substitute_input(input) "{{{
 
   let unite = unite#get_current_unite()
   let substitute_patterns = reverse(unite#util#sort_by(
-        \ values(unite#get_profile(unite.profile_name,
+        \ values(unite#custom#get_profile(unite.profile_name,
         \        'substitute_patterns')),
         \ 'v:val.priority'))
   if unite.input != '' && stridx(input, unite.input) == 0

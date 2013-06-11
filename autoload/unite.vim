@@ -37,38 +37,6 @@ function! unite#version() "{{{
 endfunction"}}}
 
 " User functions. "{{{
-function! unite#get_substitute_pattern(profile_name) "{{{
-  let profile_name = (a:profile_name == '' ? 'default' : a:profile_name)
-
-  return has_key(s:profiles, profile_name) ?
-        \ s:profiles[profile_name].substitute_patterns : ''
-endfunction"}}}
-function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...) "{{{
-  let buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
-
-  for key in split(buffer_name, '\s*,\s*')
-    let substitute_patterns = has_key(s:profiles, key) ?
-          \ unite#get_profile(key, 'substitute_patterns') : {}
-
-    if has_key(substitute_patterns, a:pattern)
-          \ && a:pattern == ''
-      call remove(substitute_patterns, a:pattern)
-    else
-      let substitute_patterns[a:pattern] = {
-            \ 'pattern' : a:pattern,
-            \ 'subst' : a:subst, 'priority' : (a:0 > 0 ? a:1 : 0),
-            \ }
-    endif
-
-    call unite#set_profile(key, 'substitute_patterns', substitute_patterns)
-  endfor
-endfunction"}}}
-function! unite#set_buffer_name_option(buffer_name, option_name, value) "{{{
-  return unite#set_profile(a:buffer_name, a:option_name, a:value)
-endfunction"}}}
-function! unite#get_buffer_name_option(buffer_name, option_name) "{{{
-  return unite#get_profile(a:buffer_name, a:option_name)
-endfunction"}}}
 function! s:initialize_profile(profile_name) "{{{
   if !has_key(s:profiles, a:profile_name)
     let s:profiles[a:profile_name] = {}
@@ -88,28 +56,10 @@ function! s:initialize_profile(profile_name) "{{{
         \ s:profiles[a:profile_name])
 endfunction"}}}
 function! unite#set_profile(profile_name, option_name, value) "{{{
-  let profile_name =
-        \ (a:profile_name == '' ? 'default' : a:profile_name)
-
-  for key in split(profile_name, '\s*,\s*')
-    if !has_key(s:profiles, key)
-      call s:initialize_profile(key)
-    endif
-
-    let s:profiles[key][a:option_name] = a:value
-  endfor
+  return unite#custom#profile(a:profile_name, a:option_name, a:value)
 endfunction"}}}
 function! unite#get_profile(profile_name, option_name) "{{{
-  let profile_name = matchstr(a:profile_name, '^\S\+')
-  if profile_name == ''
-    let profile_name = 'default'
-  endif
-
-  if !has_key(s:profiles, profile_name)
-    call s:initialize_profile(profile_name)
-  endif
-
-  return s:profiles[profile_name][a:option_name]
+  return unite#custom#get_profile(a:profile_name, a:option_name)
 endfunction"}}}
 
 function! unite#custom_filters(source_name, expr) "{{{
@@ -275,14 +225,19 @@ let s:dynamic.sources = {}
 let s:dynamic.kinds = {}
 let s:dynamic.filters = {}
 
-let s:profiles = {}
-call unite#set_substitute_pattern('files', '^\~',
-      \ substitute(substitute($HOME, '\\', '/', 'g'),
-      \ ' ', '\\\\ ', 'g'), -100)
-call unite#set_substitute_pattern('files', '\.\{2,}\ze[^/]',
-      \ "\\=repeat('../', len(submatch(0))-1)", 10000)
-call unite#set_profile('files', 'smartcase', 0)
-call unite#set_profile('files', 'ignorecase', 1)
+call unite#custom#profile('files', 'substitute_patterns', {
+      \ 'pattern' : '^\~',
+      \ 'subst' : substitute(substitute($HOME, '\\', '/', 'g'),
+      \ ' ', '\\\\ ', 'g'),
+      \ 'priority' : -100,
+      \ })
+call unite#custom#profile('files', 'substitute_patterns', {
+      \ 'pattern' : '\.\{2,}\ze[^/]',
+      \ 'subst' : "\\=repeat('../', len(submatch(0))-1)",
+      \ 'priority' : 10000,
+      \ })
+call unite#custom#profile('files', 'smartcase', 0)
+call unite#custom#profile('files', 'ignorecase', 1)
 
 let s:unite_options = [
       \ '-buffer-name=', '-profile-name=', '-input=', '-prompt=',
@@ -1345,7 +1300,7 @@ function! s:quit_session(is_force, ...)  "{{{
   endfor
 
   " Save position.
-  let positions = unite#get_profile(
+  let positions = unite#custom#get_profile(
         \ unite.profile_name, 'unite__save_pos')
   if key != ''
     let positions[key] = {
@@ -1355,7 +1310,7 @@ function! s:quit_session(is_force, ...)  "{{{
 
     if context.input != ''
       " Save input.
-      let inputs = unite#get_profile(
+      let inputs = unite#custom#get_profile(
             \ unite.profile_name, 'unite__inputs')
       if !has_key(inputs, key)
         let inputs[key] = []
@@ -1586,14 +1541,14 @@ function! s:initialize_context(context, ...) "{{{
 
   " Overwrite default_context by profile context.
   let default_context = extend(default_context,
-        \ unite#get_profile(profile_name, 'context'))
+        \ unite#custom#get_profile(profile_name, 'context'))
 
   let context = extend(default_context, a:context)
 
   if context.temporary || context.script
     " User can overwrite context by profile context.
     let context = extend(context,
-          \ unite#get_profile(profile_name, 'context'))
+          \ unite#custom#get_profile(profile_name, 'context'))
   endif
 
   " Complex initializer.
@@ -1957,12 +1912,12 @@ function! unite#_recache_candidates(input, is_force) "{{{
   " Save options.
   let ignorecase_save = &ignorecase
 
-  if unite#get_profile(unite.profile_name, 'smartcase')
+  if unite#custom#get_profile(unite.profile_name, 'smartcase')
         \ && a:input =~ '\u'
     let &ignorecase = 0
   else
     let &ignorecase =
-          \ unite#get_profile(unite.profile_name, 'ignorecase')
+          \ unite#custom#get_profile(unite.profile_name, 'ignorecase')
   endif
 
   let context = unite.context
@@ -2303,7 +2258,7 @@ function! s:initialize_current_unite(sources, context) "{{{
   let unite.access_time = localtime()
   let unite.is_finalized = 0
   let unite.previewd_buffer_list = []
-  let unite.post_filters = unite#get_profile(
+  let unite.post_filters = unite#custom#get_profile(
         \ unite.profile_name, 'filters')
   let unite.preview_candidate = {}
   let unite.highlight_candidate = {}
@@ -2514,7 +2469,7 @@ function! s:init_cursor() "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
 
-  let positions = unite#get_profile(
+  let positions = unite#custom#get_profile(
         \ unite.profile_name, 'unite__save_pos')
   let key = unite#loaded_source_names_string()
   let is_restore = has_key(positions, key) &&
