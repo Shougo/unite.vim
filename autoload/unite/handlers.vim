@@ -211,7 +211,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
         \ (unite.context.no_split
         \  || unite.context.winheight == 0) ?
         \ winheight(0) : unite.context.winheight
-  let candidates = unite#gather_candidates_pos(height)
+  let candidates = unite#candidates#_gather_pos(height)
   if empty(candidates)
     " Nothing.
     return

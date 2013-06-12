@@ -32,7 +32,7 @@ function! unite#view#_redraw_candidates(...) "{{{
 
   call unite#view#_resize_window()
 
-  let candidates = unite#gather_candidates(is_gather_all)
+  let candidates = unite#candidates#gather(is_gather_all)
 
   let modifiable_save = &l:modifiable
   setlocal modifiable
@@ -138,7 +138,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
           \ || input !=# unite.last_input
           \ || unite.is_async
       " Recaching.
-      call unite#_recache_candidates(input, a:is_force)
+      call unite#candidates#_recache(input, a:is_force)
     endif
 
     let unite.last_input = input
@@ -309,11 +309,11 @@ endfunction"}}}
 function! unite#view#_do_auto_preview() "{{{
   let unite = unite#get_current_unite()
 
-  if unite.preview_candidate == unite#get_current_candidate()
+  if unite.preview_candidate == unite#helper#get_current_candidate()
     return
   endif
 
-  let unite.preview_candidate = unite#get_current_candidate()
+  let unite.preview_candidate = unite#helper#get_current_candidate()
 
   call s:clear_previewed_buffer_list()
   call unite#action#do('preview', [], {})
@@ -327,10 +327,10 @@ endfunction"}}}
 function! unite#view#_do_auto_highlight() "{{{
   let unite = unite#get_current_unite()
 
-  if unite.highlight_candidate == unite#get_current_candidate()
+  if unite.highlight_candidate == unite#helper#get_current_candidate()
     return
   endif
-  let unite.highlight_candidate = unite#get_current_candidate()
+  let unite.highlight_candidate = unite#helper#get_current_candidate()
 
   call unite#action#do('highlight', [], {})
 endfunction"}}}
@@ -411,13 +411,13 @@ function! unite#view#_init_cursor() "{{{
       call setpos('.', positions[key].pos)
     endif
 
-    let candidate = unite#get_current_candidate()
+    let candidate = unite#helper#get_current_candidate()
 
     let unite.is_insert = 0
 
     if !is_restore
-          \ || candidate != unite#get_current_candidate()
-      call cursor(unite#get_current_candidate_linenr(0), 0)
+          \ || candidate != unite#helper#get_current_candidate()
+      call cursor(unite#helper#get_current_candidate_linenr(0), 0)
     endif
 
     normal! 0
@@ -430,7 +430,7 @@ function! unite#view#_init_cursor() "{{{
 
   if context.select != 0
     " Select specified candidate.
-    call cursor(unite#get_current_candidate_linenr(
+    call cursor(unite#helper#get_current_candidate_linenr(
           \ context.select), 0)
   elseif context.input == '' && context.log
     call unite#view#_redraw_candidates(1)
@@ -477,7 +477,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
   if key != ''
     let positions[key] = {
           \ 'pos' : getpos('.'),
-          \ 'candidate' : unite#get_current_candidate(),
+          \ 'candidate' : unite#helper#get_current_candidate(),
           \ }
 
     if context.input != ''
@@ -559,6 +559,46 @@ function! unite#view#_quit(is_force, ...)  "{{{
   call unite#set_current_unite(unite_save)
 endfunction"}}}
 
+" Message output.
+function! unite#view#_print_error(message) "{{{
+  let message = s:msg2list(a:message)
+  let unite = unite#get_current_unite()
+  if !empty(unite)
+    let unite.err_msgs += message
+  endif
+  for mes in message
+    echohl WarningMsg | echomsg mes | echohl None
+  endfor
+endfunction"}}}
+function! unite#view#_print_source_error(message, source_name) "{{{
+  call unite#view#_print_error(
+        \ map(copy(s:msg2list(a:message)),
+        \   "printf('[%s] %s', a:source_name, v:val)"))
+endfunction"}}}
+function! unite#view#_print_message(message) "{{{
+  let context = unite#get_context()
+  if get(context, 'silent', 0)
+    return
+  endif
+
+  let unite = unite#get_current_unite()
+  let message = s:msg2list(a:message)
+  if !empty(unite)
+    let unite.msgs += message
+  endif
+  echohl Comment | call s:redraw_echo(message) | echohl None
+endfunction"}}}
+function! unite#view#_print_source_message(message, source_name) "{{{
+  call unite#view#_print_message(
+        \ map(copy(s:msg2list(a:message)),
+        \    "printf('[%s] %s', a:source_name, v:val)"))
+endfunction"}}}
+function! unite#view#_clear_message() "{{{
+  let unite = unite#get_current_unite()
+  let unite.msgs = []
+  redraw
+endfunction"}}}
+
 function! unite#view#_get_status_string() "{{{
   return !exists('b:unite') ? '' : ((b:unite.is_async ? '[async] ' : '') .
         \ join(unite#helper#loaded_source_names_with_args(), ', '))
@@ -604,6 +644,24 @@ endfunction"}}}
 function! s:has_preview_window() "{{{
   return len(filter(range(1, winnr('$')),
         \    'getwinvar(v:val, "&previewwindow")')) > 0
+endfunction"}}}
+
+function! s:msg2list(expr) "{{{
+  return type(a:expr) ==# type([]) ? a:expr : split(a:expr, '\n')
+endfunction"}}}
+
+function! s:redraw_echo(expr) "{{{
+  if has('vim_starting')
+    echo join(s:msg2list(a:expr), "\n")
+    return
+  endif
+
+  let msg = s:msg2list(a:expr)
+  let height = max([1, &cmdheight])
+  for i in range(0, len(msg)-1, height)
+    redraw
+    echo join(msg[i : i+height-1], "\n")
+  endfor
 endfunction"}}}
 
 let &cpo = s:save_cpo

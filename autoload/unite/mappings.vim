@@ -297,7 +297,7 @@ function! s:smart_imap2(lhs, rhs) "{{{
 endfunction"}}}
 
 function! s:do_new_candidate_action() "{{{
-  if empty(unite#get_current_candidate())
+  if empty(unite#helper#get_current_candidate())
     " Get source name.
     if len(unite#get_sources()) != 1
       call unite#print_error('[unite] No candidates and multiple sources.')
@@ -308,7 +308,7 @@ function! s:do_new_candidate_action() "{{{
     let candidates = unite#init#_candidates_source([{}],
           \ unite#get_sources()[0].name)
   else
-    let candidates = [unite#get_current_candidate()]
+    let candidates = [unite#helper#get_current_candidate()]
   endif
 
   return unite#action#do('unite__new_candidate', candidates)
@@ -351,7 +351,7 @@ function! s:normal_delete_backward_path() "{{{
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! s:toggle_mark() "{{{
-  let candidate = unite#get_current_candidate()
+  let candidate = unite#helper#get_current_candidate()
   if empty(candidate) || get(candidate, 'is_dummy', 0)
     return
   endif
@@ -371,7 +371,7 @@ function! s:toggle_mark() "{{{
       normal! j
     endif
 
-    let candidate = unite#get_current_candidate()
+    let candidate = unite#helper#get_current_candidate()
     if line('.') == line('$') || !get(candidate, 'is_dummy', 0)
       break
     endif
@@ -415,7 +415,7 @@ function! s:choose_action() "{{{
 
   let candidates = unite#helper#get_marked_candidates()
   if empty(candidates)
-    let candidates = [ unite#get_current_candidate() ]
+    let candidates = [ unite#helper#get_current_candidate() ]
   endif
 
   call unite#mappings#_choose_action(candidates)
@@ -475,7 +475,7 @@ function! s:print_candidate() "{{{
     return
   endif
 
-  let candidate = unite#get_current_candidate()
+  let candidate = unite#helper#get_current_candidate()
   echo 'abbr: ' . candidate.unite__abbr
   echo 'word: ' . candidate.word
 endfunction"}}}
@@ -493,7 +493,7 @@ function! s:insert_selected_candidate() "{{{
     return
   endif
 
-  let candidate = unite#get_current_candidate()
+  let candidate = unite#helper#get_current_candidate()
   call unite#mappings#narrowing(candidate.word)
 endfunction"}}}
 function! unite#mappings#_quick_match(is_choose) "{{{
@@ -740,7 +740,7 @@ function! s:narrowing_path() "{{{
     return
   endif
 
-  let candidate = unite#get_current_candidate()
+  let candidate = unite#helper#get_current_candidate()
   call unite#mappings#narrowing(has_key(candidate, 'action__path')?
         \ candidate.action__path : candidate.word)
 endfunction"}}}

@@ -319,7 +319,7 @@ function! unite#action#do(action_name, ...) "{{{
       return []
     endif
 
-    let candidates = [ unite#get_current_candidate() ]
+    let candidates = [ unite#helper#get_current_candidate() ]
   endif
 
   let candidates = filter(copy(candidates),

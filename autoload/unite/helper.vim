@@ -262,6 +262,42 @@ function! unite#helper#get_unite_bufnr(buffer_name) "{{{
   return -1
 endfunction"}}}
 
+function! unite#helper#get_current_candidate(...) "{{{
+  let linenr = a:0 > 1? a:1 : line('.')
+  let num = linenr <= unite#get_current_unite().prompt_linenr ?
+        \ 0 : linenr - (unite#get_current_unite().prompt_linenr+1)
+
+  return get(unite#get_unite_candidates(), num, {})
+endfunction"}}}
+
+function! unite#helper#get_current_candidate_linenr(num) "{{{
+  let num = 0
+
+  let candidate_num = 0
+  for candidate in unite#get_unite_candidates()
+    if !candidate.is_dummy
+      let candidate_num += 1
+    endif
+
+    let num += 1
+
+    if candidate_num >= a:num+1
+      break
+    endif
+  endfor
+
+  return unite#get_current_unite().prompt_linenr + num
+endfunction"}}}
+
+function! unite#helper#call_filter(filter_name, candidates, context) "{{{
+  let filter = unite#get_filters(a:filter_name)
+  if empty(filter)
+    return a:candidates
+  endif
+
+  return filter.filter(a:candidates, a:context)
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

@@ -74,11 +74,11 @@ function! unite#start#standard(sources, ...) "{{{
   let current_unite = unite#variables#current_unite()
   let current_unite.last_input = context.input
   let current_unite.input = context.input
-  call unite#_recache_candidates(context.input, context.is_redraw)
+  call unite#candidates#_recache(context.input, context.is_redraw)
 
   if !current_unite.is_async &&
         \ (context.immediately || context.no_empty) "{{{
-    let candidates = unite#gather_candidates()
+    let candidates = unite#candidates#gather()
 
     if empty(candidates)
       " Ignore.
@@ -386,7 +386,7 @@ function! s:get_candidates(sources, context) "{{{
   " Caching.
   let current_unite.last_input = a:context.input
   let current_unite.input = a:context.input
-  call unite#_recache_candidates(a:context.input, a:context.is_redraw)
+  call unite#candidates#_recache(a:context.input, a:context.is_redraw)
 
   let candidates = []
   for source in unite#loaded_sources_list()
