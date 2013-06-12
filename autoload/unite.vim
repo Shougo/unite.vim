@@ -111,19 +111,8 @@ function! unite#smart_map(narrow_map, select_map) "{{{
         \ && empty(unite#helper#get_marked_candidates())) ?
         \   a:narrow_map : a:select_map
 endfunction"}}}
-function! unite#start_complete(sources, ...) "{{{
-  let sources = type(a:sources) == type('') ?
-        \ [a:sources] : a:sources
-  let context = {
-        \ 'col' : col('.'), 'complete' : 1,
-        \ 'direction' : 'rightbelow',
-        \ 'buffer_name' : 'completion',
-        \ 'here' : 1,
-        \ }
-  call extend(context, get(a:000, 0, {}))
-
-  return printf("\<ESC>:call unite#start(%s, %s)\<CR>",
-        \  string(sources), string(context))
+function! unite#start_complete(...) "{{{
+  return call('unite#start#complete', a:000)
 endfunction "}}}
 function! unite#get_cur_text() "{{{
   let cur_text =
@@ -151,44 +140,6 @@ function! unite#do_candidates_action(action_name, candidates, ...) "{{{
 
   return unite#mappings#do_action(
         \ a:action_name, a:candidates, context)
-endfunction"}}}
-function! unite#get_unite_winnr(buffer_name) "{{{
-  for winnr in filter(range(1, winnr('$')),
-        \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
-    let buffer_context = get(getbufvar(
-          \ winbufnr(winnr), 'unite'), 'context', {})
-    if !empty(buffer_context) &&
-          \ buffer_context.buffer_name ==# a:buffer_name
-      if buffer_context.temporary
-            \ && !empty(filter(copy(buffer_context.old_buffer_info),
-            \ 'v:val.buffer_name ==# buffer_context.buffer_name'))
-        " Disable resume.
-        let buffer_context.old_buffer_info = []
-      endif
-      return winnr
-    endif
-  endfor
-
-  return -1
-endfunction"}}}
-function! unite#get_unite_bufnr(buffer_name) "{{{
-  for bufnr in filter(range(1, bufnr('$')),
-        \ "getbufvar(v:val, '&filetype') ==# 'unite'")
-    let buffer_context = get(getbufvar(bufnr, 'unite'), 'context', {})
-    if !empty(buffer_context) &&
-          \ buffer_context.buffer_name ==# a:buffer_name
-      if buffer_context.temporary
-            \ && !empty(filter(copy(buffer_context.old_buffer_info),
-            \ 'v:val.buffer_name ==# buffer_context.buffer_name'))
-        " Disable resume.
-        let buffer_context.old_buffer_info = []
-      endif
-
-      return bufnr
-    endif
-  endfor
-
-  return -1
 endfunction"}}}
 "}}}
 

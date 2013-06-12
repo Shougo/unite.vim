@@ -173,7 +173,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   " Quit previous unite buffer.
   if !context.create && !context.temporary
         \ && context.unite__is_interactive
-    let winnr = unite#get_unite_winnr(context.buffer_name)
+    let winnr = unite#helper#get_unite_winnr(context.buffer_name)
     if winnr > 0 && s:get_source_args(a:sources) !=#
           \ getbufvar(winbufnr(winnr), 'unite').args
       " Quit unite buffer.

@@ -337,14 +337,14 @@ endfunction"}}}
 
 function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
   " Search unite window.
-  let winnr = unite#get_unite_winnr(a:buffer_name)
+  let winnr = unite#helper#get_unite_winnr(a:buffer_name)
   if !a:context.no_split && winnr > 0
     silent execute winnr 'wincmd w'
     return
   endif
 
   " Search unite buffer.
-  let bufnr = unite#get_unite_bufnr(a:buffer_name)
+  let bufnr = unite#helper#get_unite_bufnr(a:buffer_name)
 
   if !a:context.no_split && !a:context.unite__direct_switch
     " Split window.
@@ -374,7 +374,7 @@ function! unite#view#_close(buffer_name)  "{{{
   endif
 
   " Search unite window.
-  let quit_winnr = unite#get_unite_winnr(a:buffer_name)
+  let quit_winnr = unite#helper#get_unite_winnr(a:buffer_name)
 
   if quit_winnr > 0
     " Quit unite buffer.

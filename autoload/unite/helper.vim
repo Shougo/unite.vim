@@ -223,6 +223,45 @@ function! unite#helper#invalidate_cache(source_name)  "{{{
   endfor
 endfunction"}}}
 
+function! unite#helper#get_unite_winnr(buffer_name) "{{{
+  for winnr in filter(range(1, winnr('$')),
+        \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
+    let buffer_context = get(getbufvar(
+          \ winbufnr(winnr), 'unite'), 'context', {})
+    if !empty(buffer_context) &&
+          \ buffer_context.buffer_name ==# a:buffer_name
+      if buffer_context.temporary
+            \ && !empty(filter(copy(buffer_context.old_buffer_info),
+            \ 'v:val.buffer_name ==# buffer_context.buffer_name'))
+        " Disable resume.
+        let buffer_context.old_buffer_info = []
+      endif
+      return winnr
+    endif
+  endfor
+
+  return -1
+endfunction"}}}
+function! unite#helper#get_unite_bufnr(buffer_name) "{{{
+  for bufnr in filter(range(1, bufnr('$')),
+        \ "getbufvar(v:val, '&filetype') ==# 'unite'")
+    let buffer_context = get(getbufvar(bufnr, 'unite'), 'context', {})
+    if !empty(buffer_context) &&
+          \ buffer_context.buffer_name ==# a:buffer_name
+      if buffer_context.temporary
+            \ && !empty(filter(copy(buffer_context.old_buffer_info),
+            \ 'v:val.buffer_name ==# buffer_context.buffer_name'))
+        " Disable resume.
+        let buffer_context.old_buffer_info = []
+      endif
+
+      return bufnr
+    endif
+  endfor
+
+  return -1
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

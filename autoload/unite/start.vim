@@ -359,6 +359,21 @@ function! unite#start#resume_from_temporary(context)  "{{{
   call unite#redraw()
 endfunction"}}}
 
+function! unite#start#complete(sources, ...) "{{{
+  let sources = type(a:sources) == type('') ?
+        \ [a:sources] : a:sources
+  let context = {
+        \ 'col' : col('.'), 'complete' : 1,
+        \ 'direction' : 'rightbelow',
+        \ 'buffer_name' : 'completion',
+        \ 'here' : 1,
+        \ }
+  call extend(context, get(a:000, 0, {}))
+
+  return printf("\<ESC>:call unite#start(%s, %s)\<CR>",
+        \  string(sources), string(context))
+endfunction "}}}
+
 function! s:get_candidates(sources, context) "{{{
   try
     call unite#init#_current_unite(a:sources, a:context)
