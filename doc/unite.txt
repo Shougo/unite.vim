@@ -52,81 +52,89 @@ Changelog		|unite-changelog|
 ==============================================================================
 INTRODUCTION					*unite-introduction*
 
-The *unite* or *unite.vim* plug-in can search and display information from
-arbitrary sources like files, buffers, recently used files or registers.  You
-can run several pre-defined actions on a target displayed in the unite window.
+*Unite* is a common extensible interface for searching and displaying lists of
+information from within vim. It can display and search through any arbitrary
+source, from files and directories to buffers and registers.
 
 The difference between |unite| and similar plug-ins like |fuzzyfinder|,
-|ctrl-p| or |ku| is, |unite| provides an integration interface for several
-sources and you can create new interface using |unite|.
+|ctrl-p| or |ku| is, |unite| provides a standard interface for any sources.
+The API is flexible enough that it can be used to build your own interface.
 
 ==============================================================================
 USAGE						*unite-usage*
 
-	In case you run unite to display files and buffers as sources to pick
-	from.
+	To browse a list of currently open buffers like |:ls| command.
+>
+	:Unite buffer
+<
+	To browse a list of files in the current working directory.
+>
+	:Unite file
+<
+	To browse recursive list of all the files under the current working
+	directory.
+>
+	:Unite file_rec
+<
+	Or you can combine sources, to browse files and buffers.
 >
 	:Unite file buffer
 <
-
-	In case you run unite with an initial filter value (foo) to narrow
-	down files.
+	There are a number of command line flags(see |unite-options|), for
+	example to set an initial search term (foo) to filter files search.
 >
 	:Unite -input=foo file
 <
 
-If you start unite it splits the window horizontally and pops up
-from the top of Vim by default.
+Invoking unite will create a horizontal split buffer by default.
 >
 	:Unite file
 <
-The example call above lists all the files in the current directory.  You can
-choose one of them in the in the unite window by moving the cursor up and down
-as usual with j and k.  If you type Enter on an active candidate it will open
-it in a new buffer.  Enter triggers the default action for a candidate which is
-"open" for candidates of the kind "file".  You can also select an alternative
-action for a candidate with <Tab>.  See also |unite-action| to read on about
+This example lists all the files in the current directory.  You can select one
+in the in the unite window by moving the cursor with normal Vim navigation,
+e.g. j and k.  Pressing Enter on a candidate and it will open it in a new
+buffer.
+
+Enter will trigger the default action, which in the case of "file" is open,
+however alternate actions can be defined. These alternative actions can be
+invoked with <Tab>.  See also |unite-action| to read on about different
 actions.
 
-You can also narrow down the list of candidates by a keyword.  If you change
-into the insert mode inside of a unite window, the cursor drops you behind the
-">" in the second line from above.  There you can start typing to filter the
-candidates.  You can also use the wild card "*" as an arbitrary character
-sequence.  For example
+You can also narrow down the list of candidates with a keyword.  By entering
+insert mode in a unite window, the cursor will jump to the unite prompt (">")
+at the top of the window. Typing at the unite prompt will filter the candidate
+list.
+
+You can also use the wild card "*" as an arbitrary character sequence.
 >
 	*hisa
 <
-matches hisa, ujihisa, or ujihisahisa.  Furthermore, two consecutive wild cards
-match a directory recursively.
+This example matches hisa, ujihisa, or ujihisahisa.
+
+Two consecutive wild cards recursively match directories.
 >
 	**/foo
 <
-So the example above matches bar/foo or buzz/bar/foo.
-Note: The unite action |file_rec| does a recursive file matching by default
-without the need to set wildcards.
+This example would matche bar/foo or buzz/bar/foo.
 
-You can also specify multiple keywords to narrow down the candidates.  Multiple
-keywords need to be separated either by a space " " or a dash "|".  The
-examples below match for candidates that meet both conditions "foo" and "bar".
+Note: The unite action |file_rec| (read: file recursive) does a recursive
+file search by default without the need to set wildcards.
+
+Multiple keywords can be be use to narrow down the candidates.  They are
+separated by either a space " " or a pipe "|", and act like a logical AND.
 >
 	foo bar
 	foo|bar
 <
-You can also specify negative conditions with an exclamation mark "!".  This
-matches candidates that meet "foo" but do not meet "bar".
+This example matches "foobar" and "foobazbar", but not "foobaz"
+
+Specify negative conditions with a bang "!".
 >
 	foo !bar
 <
-Wild cards are added automatically if you add a "/" in the filter and you have
-specified "files" as the buffer name with the option "-buffer-name".  That's
-handy in case you select files with unite.
->
-	:Unite -buffer-name=files file
-<
-See also |unite_default_key_mappings| for other actions.
+This example matches candidates that contain "foo" but not "bar".
 
-There is also a screencast available which shows unite in action.  Thanks to
-ujihisa! http://www.ustream.tv/recorded/11240673
+See |unite_default_key_mappings| for other actions.
 
 ==============================================================================
 INSTALL						*unite-install*
