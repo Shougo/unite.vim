@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2013.
+" Last Modified: 12 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -238,22 +238,6 @@ call unite#custom#profile('files', 'substitute_patterns', {
       \ })
 call unite#custom#profile('files', 'smartcase', 0)
 call unite#custom#profile('files', 'ignorecase', 1)
-
-let s:unite_options = [
-      \ '-buffer-name=', '-profile-name=', '-input=', '-prompt=',
-      \ '-default-action=', '-start-insert','-no-start-insert', '-no-quit',
-      \ '-winwidth=', '-winheight=',
-      \ '-immediately', '-no-empty', '-auto-preview', '-auto-highlight', '-complete',
-      \ '-vertical', '-horizontal', '-direction=', '-no-split',
-      \ '-verbose', '-auto-resize', '-toggle', '-quick-match', '-create',
-      \ '-cursor-line-highlight=', '-no-cursor-line',
-      \ '-update-time=', '-hide-source-names', '-hide-status-line',
-      \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
-      \ '-auto-quit', '-no-focus',
-      \ '-long-source-names', '-short-source-names',
-      \ '-multi-line', '-resume', '-wrap', '-select=', '-log',
-      \ '-truncate',
-      \]
 "}}}
 
 " Core functions. "{{{
@@ -642,7 +626,7 @@ function! unite#complete_source(arglead, cmdline, cursorpos) "{{{
 
   if a:arglead !~ ':'
     " Option names completion.
-    let _ +=  copy(s:unite_options)
+    let _ +=  copy(unite#variables#options())
 
     " Source name completion.
     if mode() ==# 'c' || unite#util#is_cmdwin()
@@ -676,7 +660,7 @@ function! unite#complete_buffer_name(arglead, cmdline, cursorpos) "{{{
         \ getbufvar(v:val, "&filetype") ==# "unite" &&
         \ !getbufvar(v:val, "unite").context.temporary'),
         \ 'getbufvar(v:val, "unite").buffer_name')
-  let _ += s:unite_options
+  let _ += unite#variables#options()
 
   return filter(_, printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
@@ -716,9 +700,6 @@ function! unite#get_input() "{{{
   endif
 
   return getline(unite.prompt_linenr)[len(unite.prompt):]
-endfunction"}}}
-function! unite#get_options() "{{{
-  return s:unite_options
 endfunction"}}}
 function! unite#get_self_functions() "{{{
   return split(matchstr(expand('<sfile>'), '^function \zs.*$'), '\.\.')[: -2]
@@ -2578,7 +2559,7 @@ function! unite#parse_options(args) "{{{
     let arg = substitute(arg, '\\\( \)', '\1', 'g')
 
     let arg_key = substitute(arg, '=\zs.*$', '', '')
-    let matched_list = filter(copy(unite#get_options()),
+    let matched_list = filter(copy(unite#variables#options()),
           \  'v:val ==# arg_key')
     for option in matched_list
       let key = substitute(substitute(option, '-', '_', 'g'), '=$', '', '')[1:]

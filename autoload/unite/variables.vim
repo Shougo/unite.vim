@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: variables.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2013.
+" Last Modified: 12 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,6 +37,31 @@ endfunction"}}}
 
 function! unite#variables#set_current_unite(unite) "{{{
   let s:current_unite = a:unite
+endfunction"}}}
+
+function! unite#variables#options() "{{{
+  if !exists('s:options')
+    let s:options = [
+          \ '-buffer-name=', '-profile-name=', '-input=', '-prompt=',
+          \ '-default-action=', '-start-insert',
+          \ '-no-start-insert', '-no-quit',
+          \ '-winwidth=', '-winheight=',
+          \ '-immediately', '-no-empty',
+          \ '-auto-preview', '-auto-highlight', '-complete',
+          \ '-vertical', '-horizontal', '-direction=', '-no-split',
+          \ '-verbose', '-auto-resize',
+          \ '-toggle', '-quick-match', '-create',
+          \ '-cursor-line-highlight=', '-no-cursor-line',
+          \ '-update-time=', '-hide-source-names', '-hide-status-line',
+          \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
+          \ '-auto-quit', '-no-focus',
+          \ '-long-source-names', '-short-source-names',
+          \ '-multi-line', '-resume', '-wrap', '-select=', '-log',
+          \ '-truncate',
+          \]
+  endif
+
+  return s:options
 endfunction"}}}
 
 let &cpo = s:save_cpo
