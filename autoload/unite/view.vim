@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2013.
+" Last Modified: 12 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -306,23 +306,6 @@ function! unite#view#_convert_lines(candidates, ...) "{{{
         \    .  ", (context.truncate ? 0 : max_width/2), '..')")
 endfunction"}}}
 
-function! s:set_syntax() "{{{
-  let unite = unite#get_current_unite()
-  let source_padding = 3
-
-  let abbr_head = unite.max_source_name+source_padding
-  silent! syntax clear uniteCandidateAbbr
-  execute 'syntax region uniteCandidateAbbr' 'start=/\%'
-        \ .(abbr_head).'c/ end=/$/ keepend contained'
-
-  " Set syntax.
-  for source in filter(copy(unite.sources), 'v:val.syntax != ""')
-    silent! execute 'syntax clear' source.syntax
-    execute 'syntax region' source.syntax
-          \ 'start=// end=/$/ keepend contained'
-  endfor
-endfunction"}}}
-
 function! unite#view#_do_auto_preview() "{{{
   let unite = unite#get_current_unite()
 
@@ -350,6 +333,50 @@ function! unite#view#_do_auto_highlight() "{{{
   let unite.highlight_candidate = unite#get_current_candidate()
 
   call unite#mappings#do_action('highlight', [], {})
+endfunction"}}}
+
+function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
+  " Search unite window.
+  let winnr = unite#get_unite_winnr(a:buffer_name)
+  if !a:context.no_split && winnr > 0
+    silent execute winnr 'wincmd w'
+    return
+  endif
+
+  " Search unite buffer.
+  let bufnr = unite#get_unite_bufnr(a:buffer_name)
+
+  if !a:context.no_split && !a:context.unite__direct_switch
+    " Split window.
+    execute a:context.direction ((bufnr > 0) ?
+          \ ((a:context.vertical) ? 'vsplit' : 'split') :
+          \ ((a:context.vertical) ? 'vnew' : 'new'))
+  endif
+
+  if bufnr > 0
+    silent execute bufnr 'buffer'
+  else
+    silent! edit `=a:context.real_buffer_name`
+  endif
+
+  call unite#handlers#_on_bufwin_enter(bufnr('%'))
+endfunction"}}}
+
+function! s:set_syntax() "{{{
+  let unite = unite#get_current_unite()
+  let source_padding = 3
+
+  let abbr_head = unite.max_source_name+source_padding
+  silent! syntax clear uniteCandidateAbbr
+  execute 'syntax region uniteCandidateAbbr' 'start=/\%'
+        \ .(abbr_head).'c/ end=/$/ keepend contained'
+
+  " Set syntax.
+  for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+    silent! execute 'syntax clear' source.syntax
+    execute 'syntax region' source.syntax
+          \ 'start=// end=/$/ keepend contained'
+  endfor
 endfunction"}}}
 
 function! s:has_preview_window() "{{{
