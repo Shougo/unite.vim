@@ -198,7 +198,7 @@ function! unite#view#_set_highlight() "{{{
   " Set syntax.
   for source in filter(copy(unite.sources), 'v:val.syntax != ""')
     let name = unite.max_source_name > 0 ?
-          \ unite#_convert_source_name(source.name) : ''
+          \ unite#helper#convert_source_name(source.name) : ''
 
     execute 'highlight default link'
           \ source.syntax g:unite_abbr_highlight
@@ -300,7 +300,7 @@ function! unite#view#_convert_lines(candidates, ...) "{{{
         \   empty(quick_match_table) ? '- ' :
         \   get(keys, v:key, '  '))
         \ . (unite.max_source_name == 0 ? ''
-        \   : unite#util#truncate(unite#_convert_source_name(
+        \   : unite#util#truncate(unite#helper#convert_source_name(
         \     (v:val.is_dummy ? '' : v:val.source)), max_source_name))
         \ . unite#util#truncate_wrap(v:val.unite__abbr, " . max_width
         \    .  ", (context.truncate ? 0 : max_width/2), '..')")

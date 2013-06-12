@@ -194,6 +194,13 @@ function! unite#helper#get_postfix(prefix, is_create, ...) "{{{
         \ : matchstr(buflist[-1], '@\d\+$')
 endfunction"}}}
 
+function! unite#helper#convert_source_name(source_name) "{{{
+  let context = unite#get_context()
+  return !context.short_source_names ? a:source_name :
+        \ a:source_name !~ '\A'  ? a:source_name[:1] :
+        \ substitute(a:source_name, '\a\zs\a\+', '', 'g')
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
