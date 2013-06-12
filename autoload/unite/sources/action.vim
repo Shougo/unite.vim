@@ -135,7 +135,7 @@ function! s:source.action_table.do.func(candidate) "{{{
     call unite#all_quit_session(0)
   endif
 
-  call unite#mappings#do_action(a:candidate.word,
+  call unite#action#do(a:candidate.word,
    \ a:candidate.source__candidates, context, context.source__sources)
 
   " Check quit flag.
@@ -158,11 +158,11 @@ endfunction"}}}
 function! s:get_actions(candidates, sources) "{{{
   let Self = unite#get_self_functions()[-1]
 
-  let actions = unite#mappings#_get_candidate_action_table(
+  let actions = unite#action#_get_candidate_action_table(
         \ a:candidates[0], a:sources)
 
   for candidate in a:candidates[1:]
-    let action_table = unite#mappings#_get_candidate_action_table(
+    let action_table = unite#action#_get_candidate_action_table(
           \ candidate, a:sources)
     " Filtering unique items and check selectable flag.
     call filter(actions, 'has_key(action_table, v:key)

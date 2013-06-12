@@ -86,7 +86,7 @@ function! unite#start#standard(sources, ...) "{{{
       return
     elseif context.immediately && len(candidates) == 1
       " Immediately action.
-      call unite#mappings#do_action(
+      call unite#action#do(
             \ context.default_action, [candidates[0]])
       call unite#variables#disable_current_unite()
       return

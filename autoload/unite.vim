@@ -103,7 +103,7 @@ function! unite#undef_filter(name) "{{{
 endfunction"}}}
 
 function! unite#do_action(action) "{{{
-  return printf("%s:\<C-u>call unite#mappings#do_action(%s)\<CR>",
+  return printf("%s:\<C-u>call unite#action#do(%s)\<CR>",
         \             (mode() ==# 'i' ? "\<C-o>" : ''), string(a:action))
 endfunction"}}}
 function! unite#smart_map(narrow_map, select_map) "{{{
@@ -125,21 +125,11 @@ function! unite#get_cur_text() "{{{
 endfunction "}}}
 
 function! unite#take_action(action_name, candidate) "{{{
-  call s:take_action(a:action_name, a:candidate, 0)
+  call unite#action#take(a:action_name, a:candidate, 0)
 endfunction"}}}
 function! unite#take_parents_action(action_name, candidate, extend_candidate) "{{{
-  call s:take_action(a:action_name, extend(deepcopy(a:candidate), a:extend_candidate), 1)
-endfunction"}}}
-
-function! unite#do_candidates_action(action_name, candidates, ...) "{{{
-  let context = get(a:000, 0, {})
-  let context = unite#init#_context(context)
-  let context.unite__is_interactive = 0
-  let context.unite__disable_hooks = 1
-  call unite#set_context(context)
-
-  return unite#mappings#do_action(
-        \ a:action_name, a:candidates, context)
+  call unite#action#take(a:action_name,
+        \ extend(deepcopy(a:candidate), a:extend_candidate), 1)
 endfunction"}}}
 "}}}
 

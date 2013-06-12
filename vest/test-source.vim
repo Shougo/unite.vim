@@ -76,7 +76,7 @@ Context Source.run()
 
     let candidates = unite#get_candidates([
           \ ['grep', 'unite.vim/plugin', '', 'vim']])
-    call unite#do_candidates_action('replace', candidates)
+    call unite#action#do_candidates('replace', candidates)
   End
 
   It check custom variables.

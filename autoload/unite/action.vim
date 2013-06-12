@@ -276,6 +276,224 @@ function! s:get_default_action(source_name, kind_name) "{{{
   return get(kind, 'default_action', '')
 endfunction"}}}
 
+function! unite#action#take(action_name, candidate, is_parent_action) "{{{
+  let candidate_head = type(a:candidate) == type([]) ?
+        \ a:candidate[0] : a:candidate
+
+  let action_table = unite#action#get_action_table(
+        \ candidate_head.source, candidate_head.kind,
+        \ unite#get_self_functions()[-3], a:is_parent_action)
+
+  let action_name =
+        \ a:action_name ==# 'default' ?
+        \ unite#action#get_default_action(
+        \   candidate_head.source, candidate_head.kind)
+        \ : a:action_name
+
+  if !has_key(action_table, a:action_name)
+    " throw 'unite.vim: no such action ' . a:action_name
+    return 1
+  endif
+
+  let action = action_table[a:action_name]
+  " Convert candidates.
+  call action.func(
+        \ (action.is_selectable && type(a:candidate) != type([])) ?
+        \ [a:candidate] : a:candidate)
+endfunction"}}}
+
+function! unite#action#do(action_name, ...) "{{{
+  call unite#redraw()
+
+  let candidates = get(a:000, 0,
+        \ unite#helper#get_marked_candidates())
+  let new_context = get(a:000, 1, {})
+  let sources = get(a:000, 2, {})
+
+  let unite = unite#get_current_unite()
+  if empty(candidates)
+    let num = (line('.') <= unite.prompt_linenr) ? 0 :
+          \ (line('.') - (unite.prompt_linenr + 1))
+    if line('$') - (unite.prompt_linenr + 1) < num
+      " Ignore.
+      return []
+    endif
+
+    let candidates = [ unite#get_current_candidate() ]
+  endif
+
+  let candidates = filter(copy(candidates),
+        \ "!empty(v:val) && !get(v:val, 'is_dummy', 0)")
+  if empty(candidates)
+    return []
+  endif
+
+  let action_tables = s:get_candidates_action_table(
+        \ a:action_name, candidates, sources)
+
+  if !empty(new_context)
+    " Set new context.
+    let new_context = extend(
+          \ deepcopy(unite#get_context()), new_context)
+    let old_context = unite#set_context(new_context)
+    let unite = unite#get_current_unite()
+  endif
+
+  let context = unite#get_context()
+
+  " Execute action.
+  let is_quit = 0
+  let is_redraw = 0
+  let _ = []
+  for table in action_tables
+    " Check quit flag.
+    if table.action.is_quit && unite.profile_name !=# 'action'
+          \ && !table.action.is_start
+      call unite#all_quit_session(0)
+      let is_quit = 1
+    endif
+
+    if table.action.is_start && !empty(unite#helper#get_marked_candidates())
+      call s:clear_marks(candidates)
+      call unite#force_redraw()
+      let is_redraw = 0
+    elseif table.action.is_selectable
+      let is_redraw = 1
+    endif
+
+    try
+      call add(_, table.action.func(table.candidates))
+    catch /^Vim\%((\a\+)\)\=:E325/
+      " Ignore catch.
+      call unite#print_error(v:exception)
+      call unite#print_error('Attenssion: Swap file is found in executing action!')
+      call unite#print_error('Action name is ' . table.action.name)
+    catch
+      call unite#print_error(v:throwpoint)
+      call unite#print_error(v:exception)
+      call unite#print_error('Error occured in executing action!')
+      call unite#print_error('Action name is ' . table.action.name)
+    endtry
+
+    " Check invalidate cache flag.
+    if table.action.is_invalidate_cache
+      for source_name in table.source_names
+        call unite#helper#invalidate_cache(source_name)
+      endfor
+
+      let is_redraw = 1
+    endif
+  endfor
+
+  if !is_quit && unite.context.keep_focus
+    let winnr = bufwinnr(unite.bufnr)
+
+    if winnr > 0
+      " Restore focus.
+      execute winnr 'wincmd w'
+    endif
+  endif
+
+  if !empty(new_context)
+    " Restore context.
+    let unite.context = old_context
+  endif
+
+  if is_redraw && !empty(filter(range(1, winnr('$')),
+          \ "getwinvar(v:val, '&filetype') ==# 'vimfiler'"))
+    " Redraw vimfiler buffer.
+    call vimfiler#force_redraw_all_vimfiler(1)
+  endif
+
+  if !is_quit && is_redraw
+    call s:clear_marks(candidates)
+    call unite#force_redraw()
+  endif
+
+  return _
+endfunction"}}}
+
+function! unite#action#do_candidates(action_name, candidates, ...) "{{{
+  let context = get(a:000, 0, {})
+  let context = unite#init#_context(context)
+  let context.unite__is_interactive = 0
+  let context.unite__disable_hooks = 1
+  call unite#set_context(context)
+
+  return unite#action#do(
+        \ a:action_name, a:candidates, context)
+endfunction"}}}
+
+function! unite#action#_get_candidate_action_table(candidate, sources) "{{{
+  let Self = unite#get_self_functions()[-1]
+
+  return unite#action#get_action_table(
+        \ a:candidate.source, a:candidate.kind, Self, 0, a:sources)
+endfunction"}}}
+
+function! s:get_candidates_action_table(action_name, candidates, sources) "{{{
+  let action_tables = []
+  let Self = unite#get_self_functions()[-1]
+  for candidate in a:candidates
+    let action_table = unite#action#_get_candidate_action_table(
+          \ candidate, a:sources)
+
+    let action_name = a:action_name
+    if action_name ==# 'default'
+      " Get default action.
+      let action_name = unite#action#get_default_action(
+            \ candidate.source, candidate.kind)
+    endif
+
+    if action_name == ''
+      " Ignore.
+      return []
+    endif
+
+    if !has_key(action_table, action_name)
+      call unite#util#print_error(
+            \ candidate.unite__abbr . '(' . candidate.source . ')')
+      call unite#util#print_error(
+            \ 'No such action : ' . action_name)
+
+      return []
+    endif
+
+    let action = action_table[action_name]
+
+    " Check selectable flag.
+    if !action.is_selectable && len(a:candidates) > 1
+      call unite#util#print_error(
+            \ candidate.unite__abbr . '(' . candidate.source . ')')
+      call unite#util#print_error(
+            \ 'Not selectable action : ' . action_name)
+      return []
+    endif
+
+    let found = 0
+    for table in action_tables
+      if action == table.action
+        " Add list.
+        call add(table.candidates, candidate)
+        call add(table.source_names, candidate.source)
+        let found = 1
+        break
+      endif
+    endfor
+
+    if !found
+      " Add action table.
+      call add(action_tables, {
+            \ 'action' : action,
+            \ 'source_names' : [candidate.source],
+            \ 'candidates' : (!action.is_selectable ? candidate : [candidate]),
+            \ })
+    endif
+  endfor
+
+  return action_tables
+endfunction"}}}
+
 function! s:extend_actions(self_func, action_table1, action_table2, ...) "{{{
   let filterd_table = s:filter_self_func(a:action_table2, a:self_func)
 
@@ -305,31 +523,6 @@ endfunction"}}}
 function! s:filter_self_func(action_table, self_func) "{{{
   return filter(copy(a:action_table),
         \ printf("string(v:val.func) !=# \"function('%s')\"", a:self_func))
-endfunction"}}}
-function! s:take_action(action_name, candidate, is_parent_action) "{{{
-  let candidate_head = type(a:candidate) == type([]) ?
-        \ a:candidate[0] : a:candidate
-
-  let action_table = unite#action#get_action_table(
-        \ candidate_head.source, candidate_head.kind,
-        \ unite#get_self_functions()[-3], a:is_parent_action)
-
-  let action_name =
-        \ a:action_name ==# 'default' ?
-        \ unite#action#get_default_action(
-        \   candidate_head.source, candidate_head.kind)
-        \ : a:action_name
-
-  if !has_key(action_table, a:action_name)
-    " throw 'unite.vim: no such action ' . a:action_name
-    return 1
-  endif
-
-  let action = action_table[a:action_name]
-  " Convert candidates.
-  call action.func(
-        \ (action.is_selectable && type(a:candidate) != type([])) ?
-        \ [a:candidate] : a:candidate)
 endfunction"}}}
 
 let &cpo = s:save_cpo

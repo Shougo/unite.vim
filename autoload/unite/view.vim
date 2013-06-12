@@ -316,7 +316,7 @@ function! unite#view#_do_auto_preview() "{{{
   let unite.preview_candidate = unite#get_current_candidate()
 
   call s:clear_previewed_buffer_list()
-  call unite#mappings#do_action('preview', [], {})
+  call unite#action#do('preview', [], {})
 
   " Restore window size.
   let context = unite#get_context()
@@ -332,7 +332,7 @@ function! unite#view#_do_auto_highlight() "{{{
   endif
   let unite.highlight_candidate = unite#get_current_candidate()
 
-  call unite#mappings#do_action('highlight', [], {})
+  call unite#action#do('highlight', [], {})
 endfunction"}}}
 
 function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
