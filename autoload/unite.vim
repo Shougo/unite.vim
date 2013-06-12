@@ -156,7 +156,7 @@ endfunction"}}}
 
 function! unite#do_candidates_action(action_name, candidates, ...) "{{{
   let context = get(a:000, 0, {})
-  let context = s:initialize_context(context)
+  let context = unite#init#_context(context)
   let context.unite__is_interactive = 0
   let context.unite__disable_hooks = 1
   call unite#set_context(context)
@@ -354,7 +354,7 @@ endfunction"}}}
 function! unite#get_context() "{{{
   let unite = unite#get_current_unite()
   return has_key(unite, 'context') ?
-        \ unite.context : s:initialize_context({})
+        \ unite.context : unite#init#_context({})
 endfunction"}}}
 function! unite#set_context(context) "{{{
   let old_context = unite#get_context()
@@ -721,7 +721,7 @@ function! unite#gather_candidates(...) "{{{
     let unite.candidates_pos = height
   endif
 
-  let candidates = s:initialize_candidates(
+  let candidates = unite#init#_candidates(
         \ unite.candidates[: unite.candidates_pos-1])
 
   " Post filter.
@@ -750,7 +750,7 @@ function! unite#gather_candidates_pos(offset) "{{{
 
   let unite.candidates_pos += len(candidates)
 
-  return s:initialize_candidates(candidates)
+  return unite#init#_candidates(candidates)
 endfunction"}}}
 function! unite#get_current_unite() "{{{
   return exists('b:unite') && !s:use_current_unite ?
@@ -860,7 +860,7 @@ function! unite#start(sources, ...) "{{{
   endif
 
   let context = get(a:000, 0, {})
-  let context = s:initialize_context(context,
+  let context = unite#init#_context(context,
         \ s:get_source_names(a:sources))
 
   if context.resume
@@ -955,7 +955,7 @@ function! unite#start_temporary(sources, ...) "{{{
           \ })
   else
     let context = {}
-    let context = s:initialize_context(context,
+    let context = unite#init#_context(context,
           \ s:get_source_names(a:sources))
     let context.old_buffer_info = []
   endif
@@ -1007,7 +1007,7 @@ function! unite#start_temporary(sources, ...) "{{{
 endfunction"}}}
 function! unite#vimfiler_check_filetype(sources, ...) "{{{
   let context = get(a:000, 0, {})
-  let context = s:initialize_context(context,
+  let context = unite#init#_context(context,
         \ s:get_source_names(a:sources))
   let context.unite__is_vimfiler = 1
   let context.unite__is_interactive = 0
@@ -1048,7 +1048,7 @@ function! unite#get_candidates(sources, ...) "{{{
 
   try
     let context = get(a:000, 0, {})
-    let context = s:initialize_context(context,
+    let context = unite#init#_context(context,
           \ s:get_source_names(a:sources))
     let context.no_buffer = 1
     let context.unite__is_interactive = 0
@@ -1071,7 +1071,7 @@ function! unite#get_vimfiler_candidates(sources, ...) "{{{
 
   try
     let context = get(a:000, 0, {})
-    let context = s:initialize_context(context,
+    let context = unite#init#_context(context,
           \ s:get_source_names(a:sources))
     let context.no_buffer = 1
     let context.unite__is_vimfiler = 1
@@ -1086,7 +1086,7 @@ function! unite#get_vimfiler_candidates(sources, ...) "{{{
 endfunction"}}}
 function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos) "{{{
   let context = {}
-  let context = s:initialize_context(context,
+  let context = unite#init#_context(context,
         \ s:get_source_names(a:sources))
   let context.unite__is_interactive = 0
   let context.unite__is_complete = 1
@@ -1109,7 +1109,7 @@ function! unite#vimfiler_complete(sources, arglead, cmdline, cursorpos) "{{{
 endfunction"}}}
 function! unite#args_complete(sources, arglead, cmdline, cursorpos) "{{{
   let context = {}
-  let context = s:initialize_context(context,
+  let context = unite#init#_context(context,
         \ s:get_source_names(a:sources))
   let context.unite__is_interactive = 0
   let context.unite__is_complete = 1
@@ -1456,118 +1456,6 @@ function! s:load_default_scripts(kind, names) "{{{
     endfor
   endfor
 endfunction"}}}
-function! s:initialize_context(context, ...) "{{{
-  let default_context = {
-        \ 'input' : '',
-        \ 'start_insert' : g:unite_enable_start_insert,
-        \ 'complete' : 0,
-        \ 'script' : 0,
-        \ 'col' : col('.'),
-        \ 'no_quit' : 0,
-        \ 'buffer_name' : 'default',
-        \ 'profile_name' : '',
-        \ 'prompt' : g:unite_prompt,
-        \ 'default_action' : 'default',
-        \ 'winwidth' : g:unite_winwidth,
-        \ 'winheight' : g:unite_winheight,
-        \ 'immediately' : 0,
-        \ 'no_empty' : 0,
-        \ 'auto_preview' : 0,
-        \ 'auto_highlight' : 0,
-        \ 'vertical' : g:unite_enable_split_vertically,
-        \ 'direction' : g:unite_split_rule,
-        \ 'no_split' : 0,
-        \ 'temporary' : 0,
-        \ 'verbose' : 0,
-        \ 'auto_resize' : 0,
-        \ 'old_buffer_info' : [],
-        \ 'toggle' : 0,
-        \ 'quick_match' : 0,
-        \ 'create' : 0,
-        \ 'cursor_line_highlight' :
-        \    g:unite_cursor_line_highlight,
-        \ 'no_cursor_line' : 0,
-        \ 'update_time' : g:unite_update_time,
-        \ 'no_buffer' : 0,
-        \ 'hide_source_names' : 0,
-        \ 'max_multi_lines' : 5,
-        \ 'here' : 0,
-        \ 'silent' : 0,
-        \ 'keep_focus' : 0,
-        \ 'auto_quit' : 0,
-        \ 'is_redraw' : 0,
-        \ 'is_resize' : 0,
-        \ 'no_focus' : 0,
-        \ 'multi_line' : 0,
-        \ 'resume' : 0,
-        \ 'wrap' : 0,
-        \ 'select' : 0,
-        \ 'log' : 0,
-        \ 'truncate' : 0,
-        \ 'unite__direct_switch' : 0,
-        \ 'unite__is_interactive' : 1,
-        \ 'unite__is_complete' : 0,
-        \ 'unite__is_vimfiler' : 0,
-        \ 'unite__old_winwidth' : 0,
-        \ 'unite__old_winheight' : 0,
-        \ 'unite__disable_hooks' : 0,
-        \ }
-
-  let source_names = get(a:000, 0, [])
-
-  let profile_name = get(a:context, 'profile_name',
-        \ ((len(source_names) == 1 && !has_key(a:context, 'buffer_name')) ?
-        \    'source/' . source_names[0] :
-        \    get(a:context, 'buffer_name', 'default')))
-
-  " Overwrite default_context by profile context.
-  let default_context = extend(default_context,
-        \ unite#custom#get_profile(profile_name, 'context'))
-
-  let context = extend(default_context, a:context)
-
-  if context.temporary || context.script
-    " User can overwrite context by profile context.
-    let context = extend(context,
-          \ unite#custom#get_profile(profile_name, 'context'))
-  endif
-
-  " Complex initializer.
-  if get(context, 'complete', 1) && !has_key(a:context, 'start_insert')
-    let context.start_insert = 1
-  endif
-  if get(context, 'no_start_insert', 0)
-    " Disable start insert.
-    let context.start_insert = 0
-  endif
-  if has_key(context, 'horizontal')
-    " Disable vertically.
-    let context.vertical = 0
-  endif
-  if context.immediately
-    " Ignore empty unite buffer.
-    let context.no_empty = 1
-  endif
-  if !has_key(context, 'short_source_names')
-    let context.short_source_names = g:unite_enable_short_source_names
-  endif
-  if get(context, 'long_source_names', 0)
-    " Disable short name.
-    let context.short_source_names = 0
-  endif
-  if &l:modified && !&l:hidden
-    " Split automatically.
-    let context.no_split = 0
-  endif
-  if !has_key(a:context, 'buffer_name') && context.script
-    " Set buffer-name automatically.
-    let context.buffer_name = join(source_names)
-  endif
-
-  let context.is_changed = 0
-
-  return context
-endfunction"}}}
 function! s:initialize_loaded_sources(sources, context) "{{{
   let all_sources = s:initialize_sources(
         \ s:get_source_names(a:sources))
@@ -1790,99 +1678,6 @@ function! unite#initialize_candidates_source(candidates, source_name) "{{{
 
     call add(candidates, candidate)
   endfor
-
-  return candidates
-endfunction"}}}
-function! s:initialize_candidates(candidates) "{{{
-  let unite = unite#get_current_unite()
-  let context = unite.context
-  let [max_width, max_source_name] =
-        \ unite#helper#adjustments(winwidth(0)-5, unite.max_source_name, 2)
-  let is_multiline = 0
-
-  let candidates = []
-  for candidate in a:candidates
-    let candidate.unite__abbr =
-          \ get(candidate, 'abbr', candidate.word)
-
-    " Delete too long abbr.
-    if !&l:wrap && (candidate.is_multiline || context.multi_line)
-      let candidate.unite__abbr =
-            \ candidate.unite__abbr[: max_width *
-            \  (context.max_multi_lines + 1)+10]
-    elseif len(candidate.unite__abbr) > max_width * 2 && !context.wrap
-      let candidate.unite__abbr =
-            \ candidate.unite__abbr[: max_width * 2]
-    endif
-
-    " Substitute tab.
-    if candidate.unite__abbr =~ '\t'
-      let candidate.unite__abbr = substitute(
-            \ candidate.unite__abbr, '\t',
-            \ repeat(' ', &tabstop), 'g')
-    endif
-
-    if !candidate.is_multiline && !context.multi_line
-      call add(candidates, candidate)
-      continue
-    endif
-
-    if candidate.unite__abbr !~ '\n'
-      " Auto split.
-      let abbr = candidate.unite__abbr
-      let candidate.unite__abbr = ''
-
-      while abbr !~ '^\s\+$'
-        let trunc_abbr = unite#util#strwidthpart(
-              \ abbr, max_width)
-        let candidate.unite__abbr .= trunc_abbr . "~\n"
-        let abbr = '  ' . abbr[len(trunc_abbr):]
-      endwhile
-
-      let candidate.unite__abbr =
-            \ substitute(candidate.unite__abbr,
-            \    '\~\n$', '', '')
-    else
-      let candidate.unite__abbr =
-            \ substitute(candidate.unite__abbr,
-            \    '\r\?\n$', '^@', '')
-    endif
-
-    if candidate.unite__abbr !~ '\n'
-      let candidate.is_multiline = 0
-      call add(candidates, candidate)
-      continue
-    endif
-
-    " Convert multi line.
-    let cnt = 0
-    for multi in split(
-          \ candidate.unite__abbr, '\r\?\n', 1)[:
-          \   context.max_multi_lines-1]
-      let candidate_multi = (cnt != 0) ?
-            \ deepcopy(candidate) : candidate
-      let candidate_multi.unite__abbr =
-            \ (cnt == 0 ? '+ ' : '| ') . multi
-
-      if cnt != 0
-        let candidate_multi.is_dummy = 1
-      endif
-
-      let is_multiline = 1
-      call add(candidates, candidate_multi)
-
-      let cnt += 1
-    endfor
-  endfor
-
-  " Multiline check.
-  if is_multiline || context.multi_line
-    for candidate in filter(copy(candidates), '!v:val.is_multiline')
-      let candidate.unite__abbr = '  ' . candidate.unite__abbr
-    endfor
-
-    let unite.is_multi_line = 1
-  endif
 
   return candidates
 endfunction"}}}
@@ -2136,32 +1931,6 @@ function! s:get_source_candidates(source) "{{{
 
   return a:source.unite__cached_candidates
         \ + a:source.unite__cached_change_candidates
-endfunction"}}}
-function! s:convert_quick_match_lines(candidates, quick_match_table) "{{{
-  let unite = unite#get_current_unite()
-  let [max_width, max_source_name] =
-        \ unite#helper#adjustments(winwidth(0)-1, unite.max_source_name, 2)
-  if unite.max_source_name == 0
-    let max_width -= 1
-  endif
-
-  let candidates = []
-
-  " Add number.
-  let num = 0
-
-  for candidate in a:candidates
-    call add(candidates,
-          \ (candidate.is_dummy ? '  ' : get(keys, num, '  '))
-          \ . (unite.max_source_name == 0 ? '' :
-          \    unite#util#truncate(unite#_convert_source_name(
-          \    candidate.source), max_source_name))
-          \ . unite#util#truncate_wrap(candidate.unite__abbr,
-          \      max_width, max_width/2, '..'))
-    let num += 1
-  endfor
-
-  return candidates
 endfunction"}}}
 
 function! s:initialize_current_unite(sources, context) "{{{

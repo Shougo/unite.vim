@@ -64,6 +64,68 @@ function! unite#variables#options() "{{{
   return s:options
 endfunction"}}}
 
+function! unite#variables#default_context() "{{{
+  if !exists('s:default_context')
+    let s:default_context = {
+          \ 'input' : '',
+          \ 'start_insert' : g:unite_enable_start_insert,
+          \ 'complete' : 0,
+          \ 'script' : 0,
+          \ 'col' : col('.'),
+          \ 'no_quit' : 0,
+          \ 'buffer_name' : 'default',
+          \ 'profile_name' : '',
+          \ 'prompt' : g:unite_prompt,
+          \ 'default_action' : 'default',
+          \ 'winwidth' : g:unite_winwidth,
+          \ 'winheight' : g:unite_winheight,
+          \ 'immediately' : 0,
+          \ 'no_empty' : 0,
+          \ 'auto_preview' : 0,
+          \ 'auto_highlight' : 0,
+          \ 'vertical' : g:unite_enable_split_vertically,
+          \ 'direction' : g:unite_split_rule,
+          \ 'no_split' : 0,
+          \ 'temporary' : 0,
+          \ 'verbose' : 0,
+          \ 'auto_resize' : 0,
+          \ 'old_buffer_info' : [],
+          \ 'toggle' : 0,
+          \ 'quick_match' : 0,
+          \ 'create' : 0,
+          \ 'cursor_line_highlight' :
+          \    g:unite_cursor_line_highlight,
+          \ 'no_cursor_line' : 0,
+          \ 'update_time' : g:unite_update_time,
+          \ 'no_buffer' : 0,
+          \ 'hide_source_names' : 0,
+          \ 'max_multi_lines' : 5,
+          \ 'here' : 0,
+          \ 'silent' : 0,
+          \ 'keep_focus' : 0,
+          \ 'auto_quit' : 0,
+          \ 'is_redraw' : 0,
+          \ 'is_resize' : 0,
+          \ 'no_focus' : 0,
+          \ 'multi_line' : 0,
+          \ 'resume' : 0,
+          \ 'wrap' : 0,
+          \ 'select' : 0,
+          \ 'log' : 0,
+          \ 'truncate' : 0,
+          \ 'unite__direct_switch' : 0,
+          \ 'unite__is_interactive' : 1,
+          \ 'unite__is_complete' : 0,
+          \ 'unite__is_vimfiler' : 0,
+          \ 'unite__old_winwidth' : 0,
+          \ 'unite__old_winheight' : 0,
+          \ 'unite__disable_hooks' : 0,
+          \ }
+  endif
+
+  return s:default_context
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
