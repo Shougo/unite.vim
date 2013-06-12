@@ -154,6 +154,46 @@ function! unite#helper#parse_options_args(args) "{{{
   return [_, options]
 endfunction"}}}
 
+function! unite#helper#get_marked_candidates() "{{{
+  return unite#util#sort_by(filter(copy(unite#get_unite_candidates()),
+        \ 'v:val.unite__is_marked'), 'v:val.unite__marked_time')
+endfunction"}}}
+
+function! unite#helper#get_input() "{{{
+  let unite = unite#get_current_unite()
+  " Prompt check.
+  if stridx(getline(unite.prompt_linenr), unite.prompt) != 0
+    let modifiable_save = &l:modifiable
+    setlocal modifiable
+
+    " Restore prompt.
+    call setline(unite.prompt_linenr, unite.prompt
+          \ . getline(unite.prompt_linenr))
+
+    let &l:modifiable = modifiable_save
+  endif
+
+  return getline(unite.prompt_linenr)[len(unite.prompt):]
+endfunction"}}}
+
+function! unite#helper#get_source_names(sources) "{{{
+  return map(map(copy(a:sources),
+        \ "type(v:val) == type([]) ? v:val[0] : v:val"),
+        \ "type(v:val) == type('') ? v:val : v:val.name")
+endfunction"}}}
+
+function! unite#helper#get_postfix(prefix, is_create, ...) "{{{
+  let buffers = get(a:000, 0, range(1, bufnr('$')))
+  let buflist = sort(filter(map(buffers,
+        \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'))
+  if empty(buflist)
+    return ''
+  endif
+
+  return a:is_create ? '@'.(matchstr(buflist[-1], '@\zs\d\+$') + 1)
+        \ : matchstr(buflist[-1], '@\d\+$')
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

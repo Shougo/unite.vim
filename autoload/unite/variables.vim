@@ -27,6 +27,10 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+if !exists('s:use_current_unite')
+  let s:use_current_unite = 1
+endif
+
 function! unite#variables#current_unite() "{{{
   if !exists('s:current_unite')
     let s:current_unite = {}
@@ -37,6 +41,48 @@ endfunction"}}}
 
 function! unite#variables#set_current_unite(unite) "{{{
   let s:current_unite = a:unite
+endfunction"}}}
+
+function! unite#variables#use_current_unite() "{{{
+  return s:use_current_unite
+endfunction"}}}
+
+function! unite#variables#enable_current_unite() "{{{
+  let s:use_current_unite = 1
+endfunction"}}}
+
+function! unite#variables#disable_current_unite() "{{{
+  let s:use_current_unite = 0
+endfunction"}}}
+
+function! unite#variables#static() "{{{
+  if !exists('s:static')
+    let s:static = {}
+    let s:static.sources = {}
+    let s:static.kinds = {}
+    let s:static.filters = {}
+  endif
+
+  return s:static
+endfunction"}}}
+
+function! unite#variables#dynamic() "{{{
+  if !exists('s:dynamic')
+    let s:dynamic = {}
+    let s:dynamic.sources = {}
+    let s:dynamic.kinds = {}
+    let s:dynamic.filters = {}
+  endif
+
+  return s:dynamic
+endfunction"}}}
+
+function! unite#variables#loaded_defaults() "{{{
+  if !exists('s:loaded_defaults')
+    let s:loaded_defaults = {}
+  endif
+
+  return s:loaded_defaults
 endfunction"}}}
 
 function! unite#variables#options() "{{{

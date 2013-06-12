@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: custom.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2013.
+" Last Modified: 12 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -126,6 +126,21 @@ function! s:custom_base(key, kind, name, value) "{{{
   endfor
 endfunction"}}}
 
+" Default customs  "{{{
+call unite#custom#profile('files', 'substitute_patterns', {
+      \ 'pattern' : '^\~',
+      \ 'subst' : substitute(substitute($HOME, '\\', '/', 'g'),
+      \ ' ', '\\\\ ', 'g'),
+      \ 'priority' : -100,
+      \ })
+call unite#custom#profile('files', 'substitute_patterns', {
+      \ 'pattern' : '\.\{2,}\ze[^/]',
+      \ 'subst' : "\\=repeat('../', len(submatch(0))-1)",
+      \ 'priority' : 10000,
+      \ })
+call unite#custom#profile('files', 'smartcase', 0)
+call unite#custom#profile('files', 'ignorecase', 1)
+"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

@@ -261,6 +261,76 @@ function! unite#init#_candidates(candidates) "{{{
   return candidates
 endfunction"}}}
 
+function! unite#init#_default_scripts(kind, names) "{{{
+  let names = empty(a:names) ? [''] : a:names
+  if a:kind ==# 'sources' && !empty(a:names)
+    call add(names, 'alias')
+
+    if !exists('*neobundle#autoload#unite_sources')
+      " Dummy call.
+      try
+        call neobundle#autoload#unite_sources([])
+      catch /E117.*/
+      endtry
+    endif
+
+    if exists('*neobundle#autoload#unite_sources')
+      call neobundle#autoload#unite_sources(a:names)
+    endif
+  endif
+
+  let loaded_defaults = unite#variables#loaded_defaults()
+
+  if get(loaded_defaults, a:kind, '') ==# &runtimepath
+    return
+  endif
+
+  let static = unite#variables#static()
+
+  for name in names
+    if name != '' && has_key(static[a:kind], name)
+          \ || (a:kind ==# 'sources' && name ==# 'alias' &&
+          \     has_key(loaded_defaults, 'alias'))
+      continue
+    endif
+
+    if name == ''
+      let loaded_defaults[a:kind] = &runtimepath
+    elseif a:kind ==# 'sources' && name ==# 'alias'
+      let loaded_defaults.alias = 1
+    endif
+
+    " Search files by prefix or postfix.
+    if a:kind ==# 'filters'
+      let prefix_name = substitute(name,
+            \'^\%(matcher\|sorter\|converter\)_[^/_-]\+\zs[/_-].*$', '', '')
+      let postfix_name = ''
+      let postfix_name2 = ''
+    else
+      let prefix_name = matchstr(name, '^[^/_-]\+')
+      let postfix_name = matchstr(name, '[^/_-]\+$')
+      let postfix_name2 = matchstr(name, '^[^/_-]\+[/_-]\+\zs[^/_-]\+')
+    endif
+
+    let files = []
+    for prefix in filter(unite#util#uniq([
+          \ prefix_name, postfix_name, postfix_name2]),
+          \ "name == '' || v:val != ''")
+      let files += split(globpath(&runtimepath,
+            \ 'autoload/unite/'.a:kind.'/'.prefix.'*.vim', 1), '\n')
+    endfor
+
+    for define in map(files,
+          \ "unite#{a:kind}#{fnamemodify(v:val, ':t:r')}#define()")
+      for dict in filter(unite#util#convert2list(define),
+            \ '!empty(v:val) && !has_key(static[a:kind], v:val.name)')
+        let static[a:kind][dict.name] = dict
+      endfor
+      unlet define
+    endfor
+  endfor
+endfunction"}}}
+
 function! unite#init#_tab_variables() "{{{
   if !exists('t:unite')
     let t:unite = { 'last_unite_bufnr' : -1 }

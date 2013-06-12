@@ -124,7 +124,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
       call unite#clear_message()
     endif
 
-    let input = unite#get_input()
+    let input = unite#helper#get_input()
     if !context.is_redraw && input ==# unite.last_input
           \ && !unite.is_async
           \ && !context.is_resize
@@ -360,6 +360,29 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
   endif
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
+endfunction"}}}
+
+function! unite#view#_close(buffer_name)  "{{{
+  let buffer_name = a:buffer_name
+  if buffer_name !~ '@\d\+$'
+    " Add postfix.
+    let prefix = unite#util#is_windows() ?
+          \ '[unite] - ' : '*unite* - '
+    let prefix .= buffer_name
+    let buffer_name .= unite#helper#get_postfix(
+          \ prefix, 0, tabpagebuflist(tabpagenr()))
+  endif
+
+  " Search unite window.
+  let quit_winnr = unite#get_unite_winnr(a:buffer_name)
+
+  if quit_winnr > 0
+    " Quit unite buffer.
+    silent execute quit_winnr 'wincmd w'
+    call unite#force_quit_session()
+  endif
+
+  return quit_winnr > 0
 endfunction"}}}
 
 function! s:set_syntax() "{{{

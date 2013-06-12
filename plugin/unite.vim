@@ -97,7 +97,7 @@ endif
 "}}}
 
 " Wrapper command.
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ Unite
       \ call s:call_unite_empty(<q-args>)
 function! s:call_unite_empty(args) "{{{
@@ -105,7 +105,7 @@ function! s:call_unite_empty(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithCurrentDir
       \ call s:call_unite_current_dir(<q-args>)
 function! s:call_unite_current_dir(args) "{{{
@@ -123,7 +123,7 @@ function! s:call_unite_current_dir(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithBufferDir
       \ call s:call_unite_buffer_dir(<q-args>)
 function! s:call_unite_buffer_dir(args) "{{{
@@ -141,7 +141,7 @@ function! s:call_unite_buffer_dir(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithCursorWord call s:call_unite_cursor_word(<q-args>)
 function! s:call_unite_cursor_word(args) "{{{
   let [args, options] = unite#helper#parse_options_args(a:args)
@@ -152,7 +152,7 @@ function! s:call_unite_cursor_word(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithInput call s:call_unite_input(<q-args>)
 function! s:call_unite_input(args) "{{{
   let [args, options] = unite#helper#parse_options_args(a:args)
@@ -163,7 +163,7 @@ function! s:call_unite_input(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithInputDirectory call s:call_unite_input_directory(<q-args>)
 function! s:call_unite_input_directory(args) "{{{
   let [args, options] = unite#helper#parse_options_args(a:args)
@@ -179,7 +179,7 @@ function! s:call_unite_input_directory(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=? -complete=customlist,unite#complete_buffer_name
+command! -nargs=? -complete=customlist,unite#complete#buffer_name
       \ UniteResume call s:call_unite_resume(<q-args>)
 function! s:call_unite_resume(args) "{{{
   let [args, options] = unite#helper#parse_options(a:args)
@@ -187,8 +187,8 @@ function! s:call_unite_resume(args) "{{{
   call unite#resume(join(args), options)
 endfunction"}}}
 
-command! -nargs=1 -complete=customlist,unite#complete_buffer_name
-      \ UniteClose call unite#close(<q-args>)
+command! -nargs=1 -complete=customlist,unite#complete#buffer_name
+      \ UniteClose call unite#view#_close(<q-args>)
 
 let g:loaded_unite = 1
 

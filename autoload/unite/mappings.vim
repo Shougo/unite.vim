@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2013.
+" Last Modified: 12 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,7 +40,7 @@ function! unite#mappings#define_default_mappings() "{{{
         \ <SID>insert_enter('i')
   nnoremap <expr><buffer> <Plug>(unite_insert_head)
         \ <SID>insert_enter('A'.
-        \  (repeat("\<Left>", len(substitute(unite#get_input(), '.', 'x', 'g')))))
+        \  (repeat("\<Left>", len(substitute(unite#helper#get_input(), '.', 'x', 'g')))))
   nnoremap <expr><buffer> <Plug>(unite_append_enter)
         \ <SID>insert_enter('a')
   nnoremap <expr><buffer> <Plug>(unite_append_end)
@@ -115,7 +115,7 @@ function! unite#mappings#define_default_mappings() "{{{
         \ . ":call unite#redraw()\<CR>"
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
         \ <SID>smart_imap("\<C-o>:\<C-u>call \<SID>all_exit()\<CR>",
-        \ (unite#get_input() == '' ?
+        \ (unite#helper#get_input() == '' ?
         \ "\<C-o>:\<C-u>call \<SID>all_exit()\<CR>" : "\<C-h>"))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_line)
         \ <SID>smart_imap('', repeat("\<C-h>",
@@ -139,7 +139,7 @@ function! unite#mappings#define_default_mappings() "{{{
   inoremap <expr><buffer> <Plug>(unite_move_head)
         \ <SID>smart_imap("\<ESC>".<SID>insert_enter('A'),
         \   repeat("\<Left>", len(substitute(
-        \     unite#get_input(), '.', 'x', 'g'))))
+        \     unite#helper#get_input(), '.', 'x', 'g'))))
   inoremap <silent><buffer> <Plug>(unite_quick_match_default_action)
         \ <C-o>:<C-u>call unite#mappings#_quick_match(0)<CR>
   inoremap <silent><buffer> <Plug>(unite_quick_match_choose_action)
@@ -302,7 +302,7 @@ function! unite#mappings#do_action(action_name, ...) "{{{
   call unite#redraw()
 
   let candidates = get(a:000, 0,
-        \ unite#get_marked_candidates())
+        \ unite#helper#get_marked_candidates())
   let new_context = get(a:000, 1, {})
   let sources = get(a:000, 2, {})
 
@@ -349,7 +349,7 @@ function! unite#mappings#do_action(action_name, ...) "{{{
       let is_quit = 1
     endif
 
-    if table.action.is_start && !empty(unite#get_marked_candidates())
+    if table.action.is_start && !empty(unite#helper#get_marked_candidates())
       call s:clear_marks(candidates)
       call unite#force_redraw()
       let is_redraw = 0
@@ -588,7 +588,7 @@ function! s:choose_action() "{{{
     return
   endif
 
-  let candidates = unite#get_marked_candidates()
+  let candidates = unite#helper#get_marked_candidates()
   if empty(candidates)
     let candidates = [ unite#get_current_candidate() ]
   endif
@@ -672,7 +672,7 @@ function! s:insert_selected_candidate() "{{{
   call unite#mappings#narrowing(candidate.word)
 endfunction"}}}
 function! unite#mappings#_quick_match(is_choose) "{{{
-  if !empty(unite#get_marked_candidates())
+  if !empty(unite#helper#get_marked_candidates())
     call unite#util#print_error('Marked candidates is detected.')
     return
   endif
@@ -716,7 +716,9 @@ function! unite#mappings#_quick_match(is_choose) "{{{
   endif
 endfunction"}}}
 function! s:input_directory() "{{{
-  let path = unite#substitute_path_separator(input('Input narrowing directory: ', unite#get_input(), 'dir'))
+  let path = unite#substitute_path_separator(
+        \ input('Input narrowing directory: ',
+        \         unite#helper#get_input(), 'dir'))
   let path = path.(path == '' || path =~ '/$' ? '' : '/')
   call unite#mappings#narrowing(path)
 endfunction"}}}
@@ -930,7 +932,7 @@ function! s:redraw_all_candidates() "{{{
   endif
 endfunction"}}}
 function! s:narrowing_dot() "{{{
-  call unite#mappings#narrowing(unite#get_input().'.')
+  call unite#mappings#narrowing(unite#helper#get_input().'.')
 endfunction"}}}
 function! s:clear_marks(candidates) "{{{
   for candidate in a:candidates
