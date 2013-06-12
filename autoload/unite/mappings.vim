@@ -430,7 +430,7 @@ function! s:get_action_table(action_name, candidates, sources) "{{{
     let action_name = a:action_name
     if action_name ==# 'default'
       " Get default action.
-      let action_name = unite#get_default_action(
+      let action_name = unite#action#get_default_action(
             \ candidate.source, candidate.kind)
     endif
 
@@ -485,8 +485,8 @@ endfunction"}}}
 function! unite#mappings#_get_candidate_action_table(candidate, sources) "{{{
   let Self = unite#get_self_functions()[-1]
 
-  return unite#get_action_table(a:candidate.source, a:candidate.kind, Self,
-        \ 0, a:sources)
+  return unite#action#get_action_table(
+        \ a:candidate.source, a:candidate.kind, Self, 0, a:sources)
 endfunction"}}}
 
 " key-mappings functions.

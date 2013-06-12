@@ -66,7 +66,7 @@ function! s:source.gather_candidates(args, context) "{{{
   " Print default action.
   let default_actions = []
   for candidate in candidates
-    let default_action = unite#get_default_action(
+    let default_action = unite#action#get_default_action(
           \ candidate.source, candidate.kind)
     if default_action != ''
       call add(default_actions, default_action)
