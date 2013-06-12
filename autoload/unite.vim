@@ -618,7 +618,7 @@ function! unite#escape_match(str) "{{{
         \ '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 function! unite#complete_source(arglead, cmdline, cursorpos) "{{{
-  let [ret, options] = unite#parse_options_args(a:cmdline)
+  let [ret, options] = unite#helper#parse_options_args(a:cmdline)
   let source_name = ret[-1][0]
   let source_args = ret[-1][1:]
 
@@ -2551,45 +2551,6 @@ function! s:get_source_args(sources)
   return map(copy(a:sources),
         \ 'type(v:val) == type([]) ? [v:val[0], v:val[1:]] : [v:val, []]')
 endfunction
-
-function! unite#parse_options(args) "{{{
-  let args = []
-  let options = {}
-  for arg in split(a:args, '\%(\\\@<!\s\)\+')
-    let arg = substitute(arg, '\\\( \)', '\1', 'g')
-
-    let arg_key = substitute(arg, '=\zs.*$', '', '')
-    let matched_list = filter(copy(unite#variables#options()),
-          \  'v:val ==# arg_key')
-    for option in matched_list
-      let key = substitute(substitute(option, '-', '_', 'g'), '=$', '', '')[1:]
-      let options[key] = (option =~ '=$') ?
-            \ arg[len(option) :] : 1
-    endfor
-
-    if empty(matched_list)
-      call add(args, arg)
-    endif
-  endfor
-
-  return [args, options]
-endfunction"}}}
-function! unite#parse_options_args(args) "{{{
-  let _ = []
-  let [args, options] = unite#parse_options(a:args)
-  for arg in args
-    " Add source name.
-    let source_name = matchstr(arg, '^[^:]*')
-    let source_arg = arg[len(source_name)+1 :]
-    let source_args = source_arg  == '' ? [] :
-          \  map(split(source_arg, '\\\@<!:', 1),
-          \      'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
-    call add(_, insert(source_args, source_name))
-  endfor
-
-  return [_, options]
-endfunction"}}}
-
 "}}}
 
 let &cpo = s:save_cpo

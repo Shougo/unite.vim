@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helpers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2013.
+" Last Modified: 12 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -114,6 +114,44 @@ function! unite#helper#adjustments(currentwinwidth, the_max_source_name, size) "
   else
     return [max_width, a:the_max_source_name]
   endif
+endfunction"}}}
+
+function! unite#helper#parse_options(args) "{{{
+  let args = []
+  let options = {}
+  for arg in split(a:args, '\%(\\\@<!\s\)\+')
+    let arg = substitute(arg, '\\\( \)', '\1', 'g')
+
+    let arg_key = substitute(arg, '=\zs.*$', '', '')
+    let matched_list = filter(copy(unite#variables#options()),
+          \  'v:val ==# arg_key')
+    for option in matched_list
+      let key = substitute(substitute(option, '-', '_', 'g'), '=$', '', '')[1:]
+      let options[key] = (option =~ '=$') ?
+            \ arg[len(option) :] : 1
+    endfor
+
+    if empty(matched_list)
+      call add(args, arg)
+    endif
+  endfor
+
+  return [args, options]
+endfunction"}}}
+function! unite#helper#parse_options_args(args) "{{{
+  let _ = []
+  let [args, options] = unite#helper#parse_options(a:args)
+  for arg in args
+    " Add source name.
+    let source_name = matchstr(arg, '^[^:]*')
+    let source_arg = arg[len(source_name)+1 :]
+    let source_args = source_arg  == '' ? [] :
+          \  map(split(source_arg, '\\\@<!:', 1),
+          \      'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
+    call add(_, insert(source_args, source_name))
+  endfor
+
+  return [_, options]
 endfunction"}}}
 
 let &cpo = s:save_cpo
