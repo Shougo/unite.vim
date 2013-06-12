@@ -63,7 +63,7 @@ The API is flexible enough that it can be used to build your own interface.
 ==============================================================================
 USAGE						*unite-usage*
 
-	To browse a list of currently open buffers.
+	To browse a list of currently open buffers like |:ls| command.
 >
 	:Unite buffer
 <
@@ -71,7 +71,8 @@ USAGE						*unite-usage*
 >
 	:Unite file
 <
-	Recursively list all the files under the current working directory.
+	To browse recursive list of all the files under the current working
+	directory.
 >
 	:Unite file_rec
 <
@@ -79,24 +80,25 @@ USAGE						*unite-usage*
 >
 	:Unite file buffer
 <
-	There are a number of command line flags, for example to set an initial
-	search term (foo) to filter files search.
+	There are a number of command line flags(see |unite-options|), for
+	example to set an initial search term (foo) to filter files search.
 >
 	:Unite -input=foo file
 <
 
-Invoking unite will create a horizantal split by default.
+Invoking unite will create a horizontal split buffer by default.
 >
 	:Unite file
 <
 This example lists all the files in the current directory.  You can select one
-in the in the unite window by moving the cursor with normal vim navigation,
+in the in the unite window by moving the cursor with normal Vim navigation,
 e.g. j and k.  Pressing Enter on a candidate and it will open it in a new
 buffer.
 
 Enter will trigger the default action, which in the case of "file" is open,
 however alternate actions can be defined. These alternative actions can be
-invoked with <Tab>.  See also |unite-action| to read on about different actions.
+invoked with <Tab>.  See also |unite-action| to read on about different
+actions.
 
 You can also narrow down the list of candidates with a keyword.  By entering
 insert mode in a unite window, the cursor will jump to the unite prompt (">")
@@ -107,7 +109,7 @@ You can also use the wild card "*" as an arbitrary character sequence.
 >
 	*hisa
 <
-Will matche hisa, ujihisa, or ujihisahisa.
+This example matches hisa, ujihisa, or ujihisahisa.
 
 Two consecutive wild cards recursively match directories.
 >
@@ -115,8 +117,8 @@ Two consecutive wild cards recursively match directories.
 <
 This example would matche bar/foo or buzz/bar/foo.
 
-Note: The unite action |file_rec| (read: file, recursive) does a recursive file
-search by default without the need to set wildcards.
+Note: The unite action |file_rec| (read: file recursive) does a recursive
+file search by default without the need to set wildcards.
 
 Multiple keywords can be be use to narrow down the candidates.  They are
 separated by either a space " " or a pipe "|", and act like a logical AND.
