@@ -274,7 +274,7 @@ function! s:do_new_candidate_action() "{{{
     endif
 
     " Dummy candidate.
-    let candidates = unite#initialize_candidates_source([{}],
+    let candidates = unite#init#_candidates_source([{}],
           \ unite#get_sources()[0].name)
   else
     let candidates = [unite#get_current_candidate()]

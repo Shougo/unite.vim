@@ -385,6 +385,70 @@ function! unite#view#_close(buffer_name)  "{{{
   return quit_winnr > 0
 endfunction"}}}
 
+function! unite#view#_init_cursor() "{{{
+  let unite = unite#get_current_unite()
+  let context = unite.context
+
+  let positions = unite#custom#get_profile(
+        \ unite.profile_name, 'unite__save_pos')
+  let key = unite#loaded_source_names_string()
+  let is_restore = has_key(positions, key) &&
+        \ context.select == 0
+
+  if context.start_insert && !context.auto_quit
+    let unite.is_insert = 1
+
+    call cursor(unite.prompt_linenr, 0)
+    if line('.') <= winheight(0)
+      normal! zb
+    endif
+    setlocal modifiable
+
+    startinsert!
+  else
+    if is_restore
+      " Restore position.
+      call setpos('.', positions[key].pos)
+    endif
+
+    let candidate = unite#get_current_candidate()
+
+    let unite.is_insert = 0
+
+    if !is_restore
+          \ || candidate != unite#get_current_candidate()
+      call cursor(unite#get_current_candidate_linenr(0), 0)
+    endif
+
+    normal! 0
+    if line('.') <= winheight(0)
+      normal! zb
+    endif
+
+    stopinsert
+  endif
+
+  if context.select != 0
+    " Select specified candidate.
+    call cursor(unite#get_current_candidate_linenr(
+          \ context.select), 0)
+  elseif context.input == '' && context.log
+    call unite#view#_redraw_candidates(1)
+  endif
+
+  if context.no_focus
+    if winbufnr(winnr('#')) > 0
+      wincmd p
+    else
+      execute bufwinnr(unite.prev_bufnr).'wincmd w'
+    endif
+  endif
+
+  if context.quick_match
+    call unite#mappings#_quick_match(0)
+  endif
+endfunction"}}}
+
 function! s:set_syntax() "{{{
   let unite = unite#get_current_unite()
   let source_padding = 3

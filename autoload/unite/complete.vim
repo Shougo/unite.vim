@@ -40,7 +40,7 @@ function! unite#complete#source(arglead, cmdline, cursorpos) "{{{
 
     " Source name completion.
     if mode() ==# 'c' || unite#util#is_cmdwin()
-      let _ += keys(filter(s:initialize_sources([], a:arglead),
+      let _ += keys(filter(unite#init#_sources([], a:arglead),
             \ 'v:val.is_listed'))
     endif
     if exists('*neobundle#get_unite_sources')
@@ -84,7 +84,7 @@ function! unite#complete#vimfiler(sources, arglead, cmdline, cursorpos) "{{{
   let context.unite__is_complete = 1
 
   try
-    call s:initialize_current_unite(a:sources, context)
+    call unite#init#_current_unite(a:sources, context)
   catch /^unite.vim: Invalid source/
     return
   endtry
@@ -108,7 +108,7 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
   let context.unite__is_complete = 1
 
   try
-    call s:initialize_current_unite(a:sources, context)
+    call unite#init#_current_unite(a:sources, context)
   catch /^unite.vim: Invalid source/
     return []
   endtry

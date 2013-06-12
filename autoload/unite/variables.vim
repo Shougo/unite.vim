@@ -110,6 +110,68 @@ function! unite#variables#options() "{{{
   return s:options
 endfunction"}}}
 
+function! unite#variables#kinds(...) "{{{
+  if a:0 == 0
+    call unite#init#_default_scripts('kinds', [])
+  else
+    call unite#init#_default_scripts('kinds', [a:1])
+  endif
+
+  let kinds = unite#init#_kinds()
+  return (a:0 == 0) ? kinds : get(kinds, a:1, {})
+endfunction"}}}
+
+function! unite#variables#sources(...) "{{{
+  let unite = unite#get_current_unite()
+  if !has_key(unite, 'sources')
+    return {}
+  endif
+
+  if a:0 == 0
+    return unite.sources
+  endif
+
+  return unite#util#get_name(unite.sources, a:1, {})
+endfunction"}}}
+
+function! unite#variables#all_sources(...) "{{{
+  if a:0 == 0
+    return unite#init#_sources()
+  endif
+
+  let unite = unite#get_current_unite()
+
+  let all_sources = unite#init#_sources([], a:1)
+  let source = get(all_sources, a:1, {})
+
+  return empty(source) ?
+        \ get(filter(copy(get(unite, 'sources', [])),
+        \ 'v:val.name ==# a:1'), 0, {}) : source
+endfunction"}}}
+
+function! unite#variables#filters(...) "{{{
+  if a:0 == 0
+    call unite#init#_default_scripts('filters', [])
+  else
+    call unite#init#_default_scripts('filters', [a:1])
+  endif
+
+  let filters = unite#init#_filters()
+
+  if a:0 == 0
+    return filters
+  endif
+
+  return get(filters, a:1, {})
+endfunction"}}}
+
+function! unite#variables#loaded_sources(...) "{{{
+  " Initialize load.
+  let unite = unite#get_current_unite()
+  return a:0 == 0 ? unite.sources :
+        \ get(filter(copy(unite.sources), 'v:val.name ==# a:1'), 0, {})
+endfunction"}}}
+
 function! unite#variables#default_context() "{{{
   if !exists('s:default_context')
     let s:default_context = {

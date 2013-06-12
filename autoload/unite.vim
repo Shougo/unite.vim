@@ -37,24 +37,6 @@ function! unite#version() "{{{
 endfunction"}}}
 
 " User functions. "{{{
-function! s:initialize_profile(profile_name) "{{{
-  if !has_key(s:profiles, a:profile_name)
-    let s:profiles[a:profile_name] = {}
-  endif
-
-  let default_profile = {
-        \ 'substitute_patterns' : {},
-        \ 'filters' : [],
-        \ 'context' : {},
-        \ 'ignorecase' : &ignorecase,
-        \ 'smartcase' : &smartcase,
-        \ 'unite__save_pos' : {},
-        \ 'unite__inputs' : {},
-        \ }
-
-  let s:profiles[a:profile_name] = extend(default_profile,
-        \ s:profiles[a:profile_name])
-endfunction"}}}
 function! unite#set_profile(profile_name, option_name, value) "{{{
   return unite#custom#profile(a:profile_name, a:option_name, a:value)
 endfunction"}}}
@@ -212,55 +194,16 @@ endfunction"}}}
 
 " Core functions. "{{{
 function! unite#get_kinds(...) "{{{
-  if a:0 == 0
-    call unite#init#_default_scripts('kinds', [])
-  else
-    call unite#init#_default_scripts('kinds', [a:1])
-  endif
-
-  let kinds = s:initialize_kinds()
-  return (a:0 == 0) ? kinds : get(kinds, a:1, {})
+  return call('unite#variables#kinds', a:000)
 endfunction"}}}
 function! unite#get_sources(...) "{{{
-  let unite = unite#get_current_unite()
-  if !has_key(unite, 'sources')
-    return {}
-  endif
-
-  if a:0 == 0
-    return unite.sources
-  endif
-
-  return unite#util#get_name(unite.sources, a:1, {})
+  return call('unite#variables#sources', a:000)
 endfunction"}}}
 function! unite#get_all_sources(...) "{{{
-  if a:0 == 0
-    return s:initialize_sources()
-  endif
-
-  let unite = unite#get_current_unite()
-
-  let all_sources = s:initialize_sources([], a:1)
-  let source = get(all_sources, a:1, {})
-
-  return empty(source) ?
-        \ get(filter(copy(get(unite, 'sources', [])),
-        \ 'v:val.name ==# a:1'), 0, {}) : source
+  return call('unite#variables#all_sources', a:000)
 endfunction"}}}
 function! unite#get_filters(...) "{{{
-  if a:0 == 0
-    call unite#init#_default_scripts('filters', [])
-  else
-    call unite#init#_default_scripts('filters', [a:1])
-  endif
-
-  let filters = s:initialize_filters()
-
-  if a:0 == 0
-    return filters
-  endif
-
-  return get(filters, a:1, {})
+  return call('unite#variables#filters', a:000)
 endfunction"}}}
 "}}}
 
@@ -287,10 +230,10 @@ function! unite#loaded_source_names_with_args() "{{{
         \ ")
 endfunction"}}}
 function! unite#loaded_sources_list() "{{{
-  return s:get_loaded_sources()
+  return unite#variables#loaded_sources()
 endfunction"}}}
 function! unite#get_vimfiler_source_names() "{{{
-  return map(filter(values(s:initialize_sources()),
+  return map(filter(values(unite#init#_sources()),
         \ 'has_key(v:val, "vimfiler_check_filetype")'), 'v:val.name')
 endfunction"}}}
 function! unite#get_unite_candidates() "{{{
@@ -791,7 +734,7 @@ function! unite#start(sources, ...) "{{{
   endif"}}}
 
   try
-    call s:initialize_current_unite(a:sources, context)
+    call unite#init#_current_unite(a:sources, context)
   catch /^unite.vim: Invalid source/
     call unite#print_error('[unite.vim] ' . v:exception)
     return
@@ -837,7 +780,7 @@ function! unite#start(sources, ...) "{{{
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
 
-  call s:init_cursor()
+  call unite#view#_init_cursor()
 endfunction"}}}
 function! unite#start_script(sources, ...) "{{{
   " Start unite from script.
@@ -922,7 +865,7 @@ function! unite#vimfiler_check_filetype(sources, ...) "{{{
   let context.unite__is_interactive = 0
 
   try
-    call s:initialize_current_unite(a:sources, context)
+    call unite#init#_current_unite(a:sources, context)
   catch /^unite.vim: Invalid source/
     return []
   endtry
@@ -936,7 +879,7 @@ function! unite#vimfiler_check_filetype(sources, ...) "{{{
 
     let [type, info] = ret
     if type ==# 'file'
-      call unite#initialize_candidates_source([info[1]], source.name)
+      call unite#init#_candidates_source([info[1]], source.name)
     elseif type ==# 'directory'
       " nop
     elseif type ==# 'error'
@@ -1053,11 +996,11 @@ function! unite#resume(buffer_name, ...) "{{{
 
   call unite#set_current_unite(unite)
 
-  call s:init_cursor()
+  call unite#view#_init_cursor()
 endfunction"}}}
 function! s:get_candidates(sources, context) "{{{
   try
-    call s:initialize_current_unite(a:sources, a:context)
+    call unite#init#_current_unite(a:sources, a:context)
   catch /^unite.vim: Invalid source/
     return []
   endtry
@@ -1244,236 +1187,6 @@ function! unite#resume_from_temporary(context)  "{{{
   call unite#redraw()
 endfunction"}}}
 
-function! s:initialize_loaded_sources(sources, context) "{{{
-  let all_sources = s:initialize_sources(
-        \ unite#helper#get_source_names(a:sources))
-  let sources = []
-
-  let number = 0
-  for [source, args] in s:get_source_args(a:sources)
-    if type(source) == type('')
-      let source_name = source
-      unlet source
-      if !has_key(all_sources, source_name)
-        if a:context.unite__is_vimfiler || a:context.unite__is_complete
-          " Ignore error.
-          continue
-        endif
-
-        call unite#util#print_error(
-              \ 'unite.vim: Invalid source name "' .
-              \ source_name . '" is detected.')
-        throw 'unite.vim: Invalid source'
-      endif
-
-      let source = deepcopy(all_sources[source_name])
-    else
-      " Use source dictionary.
-      call s:initialize_sources(source)
-    endif
-
-    let source.args = args
-    let source.unite__is_invalidate = 1
-
-    let source.unite__context = deepcopy(a:context)
-    let source.unite__context.is_async =
-          \ has_key(source, 'async_gather_candidates')
-    let source.unite__context.source = source
-    let source.unite__candidates = []
-    let source.unite__cached_candidates = []
-    let source.unite__cached_change_candidates = []
-    let source.unite__number = number
-    let number += 1
-
-    call add(sources, source)
-
-    unlet source
-  endfor
-
-  return sources
-endfunction"}}}
-function! s:initialize_sources(...) "{{{
-  " args: source_names or source_definition
-
-  " Initialize load.
-  if type(get(a:000, 0, [])) != type({})
-    let source_names = type(get(a:000, 0, [])) == type([]) ?
-          \ get(a:000, 0, []) : []
-    let head_name = get(a:000, 1, '')
-    if empty(source_names) && head_name != ''
-      let source_names = [head_name]
-    endif
-    call unite#init#_default_scripts('sources', source_names)
-  endif
-
-  let default_source = {
-        \ 'is_volatile' : 0,
-        \ 'is_listed' : 1,
-        \ 'is_forced' : 0,
-        \ 'required_pattern_length' : 0,
-        \ 'action_table' : {},
-        \ 'default_action' : {},
-        \ 'default_kind' : 'common',
-        \ 'alias_table' : {},
-        \ 'parents' : [],
-        \ 'description' : '',
-        \ 'syntax' : '',
-        \ }
-
-  let sources = {}
-  let sources = extend(sources,
-        \ unite#variables#static().sources)
-  let sources = extend(sources,
-        \ unite#variables#dynamic().sources)
-  if type(get(a:000, 0, [])) == type({})
-    let sources[a:1.name] = a:1
-  endif
-
-  let custom = unite#custom#get()
-
-  for source in type(sources) == type([]) ?
-        \ sources : values(sources)
-    try
-      if !get(source, 'is_initialized', 0)
-        let source.is_initialized = 1
-
-        if !has_key(source, 'hooks')
-          let source.hooks = {}
-        elseif has_key(source.hooks, 'on_pre_init')
-          " Call pre_init hook.
-
-          " Set dummy value.
-          let source.args = []
-          let source.unite__context = { 'source' : source }
-
-          " Overwrite source values.
-          call unite#helper#call_hook([source], 'on_pre_init')
-        endif
-
-        let source = extend(source, default_source, 'keep')
-
-        if !empty(source.action_table)
-          let action = values(source.action_table)[0]
-
-          " Check if '*' action_table?
-          if has_key(action, 'func')
-                \ && type(action.func) == type(function('type'))
-            " Syntax sugar.
-            let source.action_table = { '*' : source.action_table }
-          endif
-        endif
-
-        if type(source.default_action) == type('')
-          " Syntax sugar.
-          let source.default_action = { '*' : source.default_action }
-        endif
-
-        if !empty(source.alias_table)
-          " Check if '*' alias_table?
-          if type(values(source.alias_table)[0]) == type('')
-            " Syntax sugar.
-            let source.alias_table = { '*' : source.alias_table }
-          endif
-        endif
-        if source.is_volatile
-              \ && !has_key(source, 'change_candidates')
-          let source.change_candidates = source.gather_candidates
-          call remove(source, 'gather_candidates')
-        endif
-      endif
-
-      " For custom sources.
-      let custom_source = get(custom.sources, source.name, {})
-
-      " Set filters.
-      if has_key(custom_source, 'filters')
-        let source.filters = custom_source.filters
-      elseif !has_key(source, 'filters')
-            \ || has_key(custom_source, 'matchers')
-            \ || has_key(custom_source, 'sorters')
-            \ || has_key(custom_source, 'converters')
-        let matchers = unite#util#convert2list(
-              \ get(custom_source, 'matchers',
-              \   get(source, 'matchers', 'matcher_default')))
-        let sorters = unite#util#convert2list(
-              \ get(custom_source, 'sorters',
-              \   get(source, 'sorters', 'sorter_default')))
-        let converters = unite#util#convert2list(
-              \ get(custom_source, 'converters',
-              \   get(source, 'converters', 'converter_default')))
-        let source.filters = matchers + sorters + converters
-      endif
-
-      let source.max_candidates =
-            \ get(custom_source, 'max_candidates',
-            \    get(source, 'max_candidates', 0))
-      let source.ignore_pattern =
-            \ get(custom_source, 'ignore_pattern',
-            \    get(source, 'ignore_pattern', ''))
-      let source.variables =
-            \ extend(get(custom_source, 'variables', {}),
-            \    get(source, 'variables', {}), 'keep')
-
-      let source.unite__len_candidates = 0
-      let source.unite__orig_len_candidates = 0
-      let source.unite__candidates = []
-    catch
-      call unite#print_error(v:throwpoint)
-      call unite#print_error(v:exception)
-      call unite#print_error(
-            \ '[unite.vim] Error occured in source initialization!')
-      call unite#print_error(
-            \ '[unite.vim] Source name is ' . source.name)
-    endtry
-  endfor
-
-  return sources
-endfunction"}}}
-function! s:initialize_kinds() "{{{
-  let kinds = extend(copy(unite#variables#static().kinds),
-        \ unite#variables#dynamic().kinds)
-  for kind in values(filter(copy(kinds),
-        \ '!has_key(v:val, "is_initialized")'))
-    let kind.is_initialized = 1
-    if !has_key(kind, 'action_table')
-      let kind.action_table = {}
-    endif
-    if !has_key(kind, 'alias_table')
-      let kind.alias_table = {}
-    endif
-    if !has_key(kind, 'parents')
-      let kind.parents = ['common']
-    endif
-  endfor
-
-  return kinds
-endfunction"}}}
-function! s:initialize_filters() "{{{
-  return extend(copy(unite#variables#static().filters),
-        \ unite#variables#dynamic().filters)
-endfunction"}}}
-function! unite#initialize_candidates_source(candidates, source_name) "{{{
-  let source = s:get_loaded_sources(a:source_name)
-
-  let default_candidate = {
-        \ 'kind' : source.default_kind,
-        \ 'is_dummy' : 0,
-        \ 'is_matched' : 1,
-        \ 'is_multiline' : 0,
-        \ 'unite__is_marked' : 0,
-        \ }
-
-  let candidates = []
-  for candidate in a:candidates
-    let candidate = extend(candidate, default_candidate, 'keep')
-    let candidate.source = a:source_name
-
-    call add(candidates, candidate)
-  endfor
-
-  return candidates
-endfunction"}}}
-
 function! unite#_recache_candidates(input, is_force) "{{{
   let unite = unite#get_current_unite()
 
@@ -1529,7 +1242,7 @@ function! unite#_recache_candidates(input, is_force) "{{{
     call unite#helper#call_hook([source], 'on_post_filter')
 
     let source.unite__candidates =
-          \ unite#initialize_candidates_source(
+          \ unite#init#_candidates_source(
           \   source.unite__context.candidates, source.name)
   endfor
 
@@ -1725,115 +1438,6 @@ function! s:get_source_candidates(source) "{{{
         \ + a:source.unite__cached_change_candidates
 endfunction"}}}
 
-function! s:initialize_current_unite(sources, context) "{{{
-  let context = a:context
-
-  " Quit previous unite buffer.
-  if !context.create && !context.temporary
-        \ && context.unite__is_interactive
-    let winnr = unite#get_unite_winnr(context.buffer_name)
-    if winnr > 0 && s:get_source_args(a:sources) !=#
-          \ getbufvar(winbufnr(winnr), 'unite').args
-      " Quit unite buffer.
-      execute winnr 'wincmd w'
-
-      if context.input == ''
-        " Get input text.
-        let context.input = unite#helper#get_input()
-      endif
-
-      " Get winwidth.
-      let context.winwidth = winwidth(0)
-
-      " Get winheight.
-      let context.winheight = winheight(0)
-
-      call unite#force_quit_session()
-    endif
-  endif
-
-  " The current buffer is initialized.
-  let buffer_name = unite#util#is_windows() ?
-        \ '[unite] - ' : '*unite* - '
-  let buffer_name .= context.buffer_name
-
-  let winnr = winnr()
-  let win_rest_cmd = winrestcmd()
-
-  " Check sources.
-  let sources = s:initialize_loaded_sources(a:sources, a:context)
-
-  " Set parameters.
-  let unite = {}
-  let unite.winnr = winnr
-  let unite.win_rest_cmd = (!context.unite__direct_switch) ?
-        \ win_rest_cmd : ''
-  let unite.context = context
-  let unite.current_candidates = []
-  let unite.sources = sources
-  let unite.source_names = unite#helper#get_source_names(sources)
-  let unite.buffer_name = (context.buffer_name == '') ?
-        \ 'default' : context.buffer_name
-  let unite.profile_name =
-        \ (context.profile_name != '') ? context.profile_name :
-        \ (len(sources) == 1) ? 'source/' . sources[0].name :
-        \ unite.buffer_name
-  let unite.prev_bufnr = bufnr('%')
-  let unite.prev_winnr = winnr()
-  let unite.update_time_save = &updatetime
-  let unite.statusline = '*unite* : %{unite#get_status_string()}'
-
-  " Create new buffer name.
-  let postfix = unite#helper#get_postfix(
-        \ buffer_name, unite.context.create)
-  let unite.buffer_name .= postfix
-
-  let unite.real_buffer_name = buffer_name . postfix
-  let unite.prompt = context.prompt
-  let unite.input = context.input
-  let unite.last_input = context.input
-  let unite.sidescrolloff_save = &sidescrolloff
-  let unite.prompt_linenr = 1
-  let unite.is_async =
-        \ len(filter(copy(sources),
-        \  'v:val.unite__context.is_async')) > 0
-  let unite.access_time = localtime()
-  let unite.is_finalized = 0
-  let unite.previewd_buffer_list = []
-  let unite.post_filters = unite#custom#get_profile(
-        \ unite.profile_name, 'filters')
-  let unite.preview_candidate = {}
-  let unite.highlight_candidate = {}
-  let unite.max_source_name = 0
-  let unite.candidates_pos = 0
-  let unite.candidates = []
-  let unite.max_source_candidates = 0
-  let unite.is_multi_line = 0
-  let unite.args = s:get_source_args(a:sources)
-  let unite.msgs = []
-  let unite.err_msgs = []
-
-  if context.here
-    let context.winheight = winheight(0) - winline() +
-          \ unite.prompt_linenr + 1
-    if context.winheight < 7
-      let context.winheight = 7
-    endif
-  endif
-
-  " Preview windows check.
-  let unite.has_preview_window =
-        \ len(filter(range(1, winnr('$')),
-        \  'getwinvar(v:val, "&previewwindow")')) > 0
-
-  call unite#set_current_unite(unite)
-  call unite#set_context(context)
-
-  if !context.unite__is_complete
-    call unite#helper#call_hook(sources, 'on_init')
-  endif
-endfunction"}}}
-
 " Internal helper functions. "{{{
 function! s:extend_actions(self_func, action_table1, action_table2, ...) "{{{
   let filterd_table = s:filter_self_func(a:action_table2, a:self_func)
@@ -1889,75 +1493,6 @@ function! s:take_action(action_name, candidate, is_parent_action) "{{{
         \ (action.is_selectable && type(a:candidate) != type([])) ?
         \ [a:candidate] : a:candidate)
 endfunction"}}}
-function! s:get_loaded_sources(...) "{{{
-  " Initialize load.
-  let unite = unite#get_current_unite()
-  return a:0 == 0 ? unite.sources :
-        \ get(filter(copy(unite.sources), 'v:val.name ==# a:1'), 0, {})
-endfunction"}}}
-function! s:init_cursor() "{{{
-  let unite = unite#get_current_unite()
-  let context = unite.context
-
-  let positions = unite#custom#get_profile(
-        \ unite.profile_name, 'unite__save_pos')
-  let key = unite#loaded_source_names_string()
-  let is_restore = has_key(positions, key) &&
-        \ context.select == 0
-
-  if context.start_insert && !context.auto_quit
-    let unite.is_insert = 1
-
-    call cursor(unite.prompt_linenr, 0)
-    if line('.') <= winheight(0)
-      normal! zb
-    endif
-    setlocal modifiable
-
-    startinsert!
-  else
-    if is_restore
-      " Restore position.
-      call setpos('.', positions[key].pos)
-    endif
-
-    let candidate = unite#get_current_candidate()
-
-    let unite.is_insert = 0
-
-    if !is_restore
-          \ || candidate != unite#get_current_candidate()
-      call cursor(unite#get_current_candidate_linenr(0), 0)
-    endif
-
-    normal! 0
-    if line('.') <= winheight(0)
-      normal! zb
-    endif
-
-    stopinsert
-  endif
-
-  if context.select != 0
-    " Select specified candidate.
-    call cursor(unite#get_current_candidate_linenr(
-          \ context.select), 0)
-  elseif context.input == '' && context.log
-    call unite#view#_redraw_candidates(1)
-  endif
-
-  if context.no_focus
-    if winbufnr(winnr('#')) > 0
-      wincmd p
-    else
-      execute bufwinnr(unite.prev_bufnr).'wincmd w'
-    endif
-  endif
-
-  if context.quick_match
-    call unite#mappings#_quick_match(0)
-  endif
-endfunction"}}}
 function! unite#_convert_source_name(source_name) "{{{
   let context = unite#get_context()
   return !context.short_source_names ? a:source_name :
@@ -1984,10 +1519,6 @@ function! s:get_resume_buffer(buffer_name) "{{{
 
   return get(buffer_dict, buffer_name, -1)
 endfunction"}}}
-function! s:get_source_args(sources)
-  return map(copy(a:sources),
-        \ 'type(v:val) == type([]) ? [v:val[0], v:val[1:]] : [v:val, []]')
-endfunction
 "}}}
 
 let &cpo = s:save_cpo
