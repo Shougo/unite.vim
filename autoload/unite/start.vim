@@ -335,6 +335,30 @@ function! unite#start#resume(buffer_name, ...) "{{{
   call unite#view#_init_cursor()
 endfunction"}}}
 
+function! unite#start#resume_from_temporary(context)  "{{{
+  if empty(a:context.old_buffer_info)
+    return
+  endif
+
+  call unite#handlers#_on_buf_unload(a:context.buffer_name)
+
+  let unite_save = unite#get_current_unite()
+
+  " Resume unite buffer.
+  let buffer_info = a:context.old_buffer_info[0]
+  call unite#resume(buffer_info.buffer_name,
+        \ {'unite__direct_switch' : 1})
+  call setpos('.', buffer_info.pos)
+  let a:context.old_buffer_info = a:context.old_buffer_info[1:]
+
+  " Overwrite unite.
+  let unite = unite#get_current_unite()
+  let unite.prev_bufnr = unite_save.prev_bufnr
+  let unite.prev_winnr = unite_save.prev_winnr
+
+  call unite#redraw()
+endfunction"}}}
+
 function! s:get_candidates(sources, context) "{{{
   try
     call unite#init#_current_unite(a:sources, a:context)

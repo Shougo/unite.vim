@@ -217,19 +217,6 @@ endfunction"}}}
 function! unite#loaded_source_names_string() "{{{
   return join(unite#loaded_source_names())
 endfunction"}}}
-function! unite#loaded_source_names_with_args() "{{{
-  return map(copy(unite#loaded_sources_list()), "
-        \ join(insert(filter(copy(v:val.args),
-        \  'type(v:val) <= 1'),
-        \   unite#helper#convert_source_name(v:val.name)), ':')
-        \ . (v:val.unite__orig_len_candidates == 0 ? '' :
-        \      v:val.unite__orig_len_candidates ==
-        \            v:val.unite__len_candidates ?
-        \            '(' .  v:val.unite__len_candidates . ')' :
-        \      printf('(%s/%s)', v:val.unite__len_candidates,
-        \      v:val.unite__orig_len_candidates))
-        \ ")
-endfunction"}}}
 function! unite#loaded_sources_list() "{{{
   return unite#variables#loaded_sources()
 endfunction"}}}
@@ -527,17 +514,6 @@ function! s:get_default_action(source_name, kind_name) "{{{
   return get(kind, 'default_action', '')
 endfunction"}}}
 
-function! unite#escape_match(str) "{{{
-  return substitute(substitute(escape(a:str, '~\.^$[]'),
-        \ '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
-endfunction"}}}
-function! unite#invalidate_cache(source_name)  "{{{
-  for source in unite#get_current_unite().sources
-    if source.name ==# a:source_name
-      let source.unite__is_invalidate = 1
-    endif
-  endfor
-endfunction"}}}
 function! unite#force_redraw(...) "{{{
   call unite#view#_redraw(1, get(a:000, 0, 0), get(a:000, 1, 0))
 endfunction"}}}
@@ -545,8 +521,7 @@ function! unite#redraw(...) "{{{
   call unite#view#_redraw(0, get(a:000, 0, 0), get(a:000, 1, 0))
 endfunction"}}}
 function! unite#get_status_string() "{{{
-  return !exists('b:unite') ? '' : ((b:unite.is_async ? '[async] ' : '') .
-        \ join(unite#loaded_source_names_with_args(), ', '))
+  return unite#view#_get_status_string()
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{
   return unite#helper#get_marked_candidates()
@@ -613,32 +588,10 @@ function! unite#set_current_unite(unite) "{{{
   return unite#variables#set_current_unite(a:unite)
 endfunction"}}}
 function! unite#add_previewed_buffer_list(bufnr) "{{{
-  let unite = unite#get_current_unite()
-  call add(unite.previewd_buffer_list, a:bufnr)
+  return unite#view#_add_previewed_buffer_list(a:bufnr)
 endfunction"}}}
 function! unite#remove_previewed_buffer_list(bufnr) "{{{
-  let unite = unite#get_current_unite()
-  call filter(unite.previewd_buffer_list, 'v:val != a:bufnr')
-endfunction"}}}
-function! unite#clear_previewed_buffer_list() "{{{
-  let unite = unite#get_current_unite()
-  for bufnr in unite.previewd_buffer_list
-    if buflisted(bufnr)
-      silent execute 'bdelete!' bufnr
-    endif
-  endfor
-
-  let unite.previewd_buffer_list = []
-endfunction"}}}
-function! unite#parse_path(path) "{{{
-  let source_name = matchstr(a:path, '^[^:]*\ze:')
-  let source_arg = a:path[len(source_name)+1 :]
-
-  let source_args = source_arg  == '' ? [] :
-        \  map(split(source_arg, '\\\@<!:', 1),
-        \      'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
-
-  return insert(source_args, source_name)
+  return unite#view#_remove_previewed_buffer_list(a:bufnr)
 endfunction"}}}
 function! unite#call_filter(filter_name, candidates, context) "{{{
   let filter = unite#get_filters(a:filter_name)
@@ -734,155 +687,23 @@ function! unite#args_complete(sources, arglead, cmdline, cursorpos) "{{{
 endfunction"}}}
 
 function! unite#all_quit_session(...)  "{{{
-  call s:quit_session(get(a:000, 0, 1), 1)
+  call unite#view#_quit(get(a:000, 0, 1), 1)
 endfunction"}}}
 function! unite#force_quit_session()  "{{{
-  call s:quit_session(1)
+  call unite#view#_quit(1)
 
   let context = unite#get_context()
   if context.temporary && !empty(context.old_buffer_info)
-      call unite#resume_from_temporary(context)
+      call unite#start#resume_from_temporary(context)
   endif
 endfunction"}}}
 function! unite#quit_session()  "{{{
-  call s:quit_session(0)
+  call unite#view#_quit(0)
 
   let context = unite#get_context()
   if context.temporary && !empty(context.old_buffer_info)
-    call unite#resume_from_temporary(context)
+    call unite#start#resume_from_temporary(context)
   endif
-endfunction"}}}
-function! s:quit_session(is_force, ...)  "{{{
-  if &filetype !=# 'unite'
-    return
-  endif
-
-  let is_all = get(a:000, 0, 0)
-
-  " Save unite value.
-  let unite_save = unite#variables#current_unite()
-  call unite#set_current_unite(b:unite)
-  let unite = b:unite
-  let context = unite.context
-
-  let key = unite#loaded_source_names_string()
-
-  " Clear mark.
-  for source in unite#loaded_sources_list()
-    for candidate in source.unite__cached_candidates
-      let candidate.unite__is_marked = 0
-    endfor
-  endfor
-
-  " Save position.
-  let positions = unite#custom#get_profile(
-        \ unite.profile_name, 'unite__save_pos')
-  if key != ''
-    let positions[key] = {
-          \ 'pos' : getpos('.'),
-          \ 'candidate' : unite#get_current_candidate(),
-          \ }
-
-    if context.input != ''
-      " Save input.
-      let inputs = unite#custom#get_profile(
-            \ unite.profile_name, 'unite__inputs')
-      if !has_key(inputs, key)
-        let inputs[key] = []
-      endif
-      call insert(filter(inputs[key],
-            \ 'v:val !=# unite.context.input'), context.input)
-    endif
-  endif
-
-  if a:is_force || !context.no_quit
-    let bufname = bufname('%')
-
-    if winnr('$') == 1 || context.no_split
-      call unite#util#alternate_buffer()
-    elseif is_all || !context.temporary
-      noautocmd close!
-      if unite.winnr == winnr()
-        doautocmd WinEnter
-      else
-        execute unite.winnr . 'wincmd w'
-      endif
-      call unite#view#_resize_window()
-    endif
-
-    call unite#handlers#_on_buf_unload(bufname)
-
-    if !unite.has_preview_window
-      let preview_windows = filter(range(1, winnr('$')),
-            \ 'getwinvar(v:val, "&previewwindow") != 0')
-      if !empty(preview_windows)
-        " Close preview window.
-        pclose!
-
-      endif
-    endif
-
-    call unite#clear_previewed_buffer_list()
-
-    if winnr('$') != 1 && !unite.context.temporary
-      execute unite.win_rest_cmd
-      execute unite.prev_winnr 'wincmd w'
-    endif
-  else
-    " Note: Except preview window.
-    let winnr = get(filter(range(1, winnr('$')),
-          \ "winbufnr(v:val) == unite.prev_bufnr &&
-          \  !getwinvar(v:val, '&previewwindow')"), 0, unite.prev_winnr)
-
-    if winnr == winnr()
-      new
-    else
-      execute winnr 'wincmd w'
-    endif
-    let unite.prev_winnr = winnr()
-  endif
-
-  if context.complete
-    if context.col < col('$')
-      startinsert
-    else
-      startinsert!
-    endif
-
-    " Skip next auto completion.
-    if exists('*neocomplcache#skip_next_complete')
-      call neocomplcache#skip_next_complete()
-    endif
-  else
-    redraw
-    stopinsert
-  endif
-
-  " Restore unite.
-  call unite#set_current_unite(unite_save)
-endfunction"}}}
-function! unite#resume_from_temporary(context)  "{{{
-  if empty(a:context.old_buffer_info)
-    return
-  endif
-
-  call unite#handlers#_on_buf_unload(a:context.buffer_name)
-
-  let unite_save = unite#get_current_unite()
-
-  " Resume unite buffer.
-  let buffer_info = a:context.old_buffer_info[0]
-  call unite#resume(buffer_info.buffer_name,
-        \ {'unite__direct_switch' : 1})
-  call setpos('.', buffer_info.pos)
-  let a:context.old_buffer_info = a:context.old_buffer_info[1:]
-
-  " Overwrite unite.
-  let unite = unite#get_current_unite()
-  let unite.prev_bufnr = unite_save.prev_bufnr
-  let unite.prev_winnr = unite_save.prev_winnr
-
-  call unite#redraw()
 endfunction"}}}
 
 function! unite#_recache_candidates(input, is_force) "{{{

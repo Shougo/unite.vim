@@ -294,7 +294,7 @@ function! s:change_highlight()  "{{{
 
   for input in unite#helper#get_substitute_input(unite#helper#get_input())
     for pattern in map(split(input, '\\\@<! '),
-          \ "substitute(escape(unite#escape_match(v:val), '/'),
+          \ "substitute(escape(unite#util#escape_match(v:val), '/'),
           \   '\\\\\\@<!|', '\\\\|', 'g')")
       execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
             \ 'containedin=uniteCandidateAbbr contained'

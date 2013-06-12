@@ -302,6 +302,11 @@ function! unite#util#redraw_echo(expr) "{{{
   endfor
 endfunction"}}}
 
+function! unite#util#escape_match(str) "{{{
+  return substitute(substitute(escape(a:str, '~\.^$[]'),
+        \ '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

@@ -1,6 +1,6 @@
 "=============================================================================
-" FILE: matcher_fuzzy.vim
-" AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
+" FILE: candidates.vim
+" AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 12 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
@@ -26,52 +26,6 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
-
-function! unite#filters#matcher_fuzzy#define() "{{{
-  return s:matcher
-endfunction"}}}
-
-let s:matcher = {
-      \ 'name' : 'matcher_fuzzy',
-      \ 'description' : 'fuzzy matcher',
-      \}
-
-function! s:matcher.filter(candidates, context) "{{{
-  if a:context.input == ''
-    return unite#filters#filter_matcher(
-          \ a:candidates, '', a:context)
-  endif
-
-  if len(a:context.input) > 20
-    " Fall back to matcher_glob.
-    return unite#filters#matcher_glob#define().filter(
-          \ a:candidates, a:context)
-  endif
-
-  let candidates = a:candidates
-  for input_orig in a:context.input_list
-    let input = substitute(input_orig, '\\ ', ' ', 'g')
-    if input == '!'
-      continue
-    endif
-
-    let input = substitute(substitute(unite#util#escape_match(input),
-          \ '[[:alnum:]._-]', '\0.*', 'g'), '\*\*', '*', 'g')
-
-    let expr = (input =~ '^!') ?
-          \ 'v:val.word !~ ' . string(input[1:]) :
-          \ 'v:val.word =~ ' . string(input)
-    if input !~ '^!' && unite#util#has_lua()
-      let expr = 'if_lua_fuzzy'
-      let a:context.input = input_orig
-    endif
-
-    let candidates = unite#filters#filter_matcher(
-          \ a:candidates, expr, a:context)
-  endfor
-
-  return candidates
-endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

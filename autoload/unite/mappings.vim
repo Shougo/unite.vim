@@ -374,7 +374,7 @@ function! unite#mappings#do_action(action_name, ...) "{{{
     " Check invalidate cache flag.
     if table.action.is_invalidate_cache
       for source_name in table.source_names
-        call unite#invalidate_cache(source_name)
+        call unite#helper#invalidate_cache(source_name)
       endfor
 
       let is_redraw = 1

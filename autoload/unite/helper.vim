@@ -201,6 +201,28 @@ function! unite#helper#convert_source_name(source_name) "{{{
         \ substitute(a:source_name, '\a\zs\a\+', '', 'g')
 endfunction"}}}
 
+function! unite#helper#loaded_source_names_with_args() "{{{
+  return map(copy(unite#loaded_sources_list()), "
+        \ join(insert(filter(copy(v:val.args),
+        \  'type(v:val) <= 1'),
+        \   unite#helper#convert_source_name(v:val.name)), ':')
+        \ . (v:val.unite__orig_len_candidates == 0 ? '' :
+        \      v:val.unite__orig_len_candidates ==
+        \            v:val.unite__len_candidates ?
+        \            '(' .  v:val.unite__len_candidates . ')' :
+        \      printf('(%s/%s)', v:val.unite__len_candidates,
+        \      v:val.unite__orig_len_candidates))
+        \ ")
+endfunction"}}}
+
+function! unite#helper#invalidate_cache(source_name)  "{{{
+  for source in unite#get_current_unite().sources
+    if source.name ==# a:source_name
+      let source.unite__is_invalidate = 1
+    endif
+  endfor
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_glob.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2013.
+" Last Modified: 12 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,12 +60,12 @@ function! unite#filters#matcher_glob#glob_matcher(candidates, input, context) "{
     endif
 
     " Exclusion.
-    let input = substitute(unite#escape_match(input),
+    let input = substitute(unite#util#escape_match(input),
           \ '\\\@<!|', '\\|', 'g')
     let expr = 'v:val.word !~ ' . string(input[1:])
   elseif input =~ '\\\@<![*|]'
     " Wildcard(*) or OR(|).
-    let input = substitute(unite#escape_match(input),
+    let input = substitute(unite#util#escape_match(input),
           \ '\\\@<!|', '\\|', 'g')
     let expr = 'v:val.word =~ ' . string(input)
   elseif unite#util#has_lua()

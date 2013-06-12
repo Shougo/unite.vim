@@ -315,7 +315,7 @@ function! unite#view#_do_auto_preview() "{{{
 
   let unite.preview_candidate = unite#get_current_candidate()
 
-  call unite#clear_previewed_buffer_list()
+  call s:clear_previewed_buffer_list()
   call unite#mappings#do_action('preview', [], {})
 
   " Restore window size.
@@ -447,6 +447,141 @@ function! unite#view#_init_cursor() "{{{
   if context.quick_match
     call unite#mappings#_quick_match(0)
   endif
+endfunction"}}}
+
+function! unite#view#_quit(is_force, ...)  "{{{
+  if &filetype !=# 'unite'
+    return
+  endif
+
+  let is_all = get(a:000, 0, 0)
+
+  " Save unite value.
+  let unite_save = unite#variables#current_unite()
+  call unite#set_current_unite(b:unite)
+  let unite = b:unite
+  let context = unite.context
+
+  let key = unite#loaded_source_names_string()
+
+  " Clear mark.
+  for source in unite#loaded_sources_list()
+    for candidate in source.unite__cached_candidates
+      let candidate.unite__is_marked = 0
+    endfor
+  endfor
+
+  " Save position.
+  let positions = unite#custom#get_profile(
+        \ unite.profile_name, 'unite__save_pos')
+  if key != ''
+    let positions[key] = {
+          \ 'pos' : getpos('.'),
+          \ 'candidate' : unite#get_current_candidate(),
+          \ }
+
+    if context.input != ''
+      " Save input.
+      let inputs = unite#custom#get_profile(
+            \ unite.profile_name, 'unite__inputs')
+      if !has_key(inputs, key)
+        let inputs[key] = []
+      endif
+      call insert(filter(inputs[key],
+            \ 'v:val !=# unite.context.input'), context.input)
+    endif
+  endif
+
+  if a:is_force || !context.no_quit
+    let bufname = bufname('%')
+
+    if winnr('$') == 1 || context.no_split
+      call unite#util#alternate_buffer()
+    elseif is_all || !context.temporary
+      noautocmd close!
+      if unite.winnr == winnr()
+        doautocmd WinEnter
+      else
+        execute unite.winnr . 'wincmd w'
+      endif
+      call unite#view#_resize_window()
+    endif
+
+    call unite#handlers#_on_buf_unload(bufname)
+
+    if !unite.has_preview_window
+      let preview_windows = filter(range(1, winnr('$')),
+            \ 'getwinvar(v:val, "&previewwindow") != 0')
+      if !empty(preview_windows)
+        " Close preview window.
+        pclose!
+
+      endif
+    endif
+
+    call s:clear_previewed_buffer_list()
+
+    if winnr('$') != 1 && !unite.context.temporary
+      execute unite.win_rest_cmd
+      execute unite.prev_winnr 'wincmd w'
+    endif
+  else
+    " Note: Except preview window.
+    let winnr = get(filter(range(1, winnr('$')),
+          \ "winbufnr(v:val) == unite.prev_bufnr &&
+          \  !getwinvar(v:val, '&previewwindow')"), 0, unite.prev_winnr)
+
+    if winnr == winnr()
+      new
+    else
+      execute winnr 'wincmd w'
+    endif
+    let unite.prev_winnr = winnr()
+  endif
+
+  if context.complete
+    if context.col < col('$')
+      startinsert
+    else
+      startinsert!
+    endif
+
+    " Skip next auto completion.
+    if exists('*neocomplcache#skip_next_complete')
+      call neocomplcache#skip_next_complete()
+    endif
+  else
+    redraw
+    stopinsert
+  endif
+
+  " Restore unite.
+  call unite#set_current_unite(unite_save)
+endfunction"}}}
+
+function! unite#view#_get_status_string() "{{{
+  return !exists('b:unite') ? '' : ((b:unite.is_async ? '[async] ' : '') .
+        \ join(unite#helper#loaded_source_names_with_args(), ', '))
+endfunction"}}}
+
+function! unite#view#_add_previewed_buffer_list(bufnr) "{{{
+  let unite = unite#get_current_unite()
+  call add(unite.previewd_buffer_list, a:bufnr)
+endfunction"}}}
+function! unite#view#_remove_previewed_buffer_list(bufnr) "{{{
+  let unite = unite#get_current_unite()
+  call filter(unite.previewd_buffer_list, 'v:val != a:bufnr')
+endfunction"}}}
+
+function! s:clear_previewed_buffer_list() "{{{
+  let unite = unite#get_current_unite()
+  for bufnr in unite.previewd_buffer_list
+    if buflisted(bufnr)
+      silent execute 'bdelete!' bufnr
+    endif
+  endfor
+
+  let unite.previewd_buffer_list = []
 endfunction"}}}
 
 function! s:set_syntax() "{{{
