@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 25 May 2013.
+" Last Modified: 12 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -207,13 +207,15 @@ function! s:source.gather_candidates(args, context) "{{{
     let $TERM = save_term
   endtry
 
-  return []
+  return self.async_gather_candidates(a:args, a:context)
 endfunction "}}}
 
 function! s:source.async_gather_candidates(args, context) "{{{
   let variables = unite#get_source_variables(a:context)
 
   if !has_key(a:context, 'source__proc')
+    let a:context.is_async = 0
+    call unite#print_source_message('Completed.', s:source.name)
     return []
   endif
 
@@ -230,8 +232,8 @@ function! s:source.async_gather_candidates(args, context) "{{{
   let stdout = a:context.source__proc.stdout
   if stdout.eof
     " Disable async.
-    call unite#print_source_message('Completed.', s:source.name)
     let a:context.is_async = 0
+    call unite#print_source_message('Completed.', s:source.name)
   endif
 
   let candidates = map(stdout.read_lines(-1, 100),
