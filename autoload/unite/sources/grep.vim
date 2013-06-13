@@ -2,15 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-<<<<<<< HEAD
 " Last Modified: 13 Jun 2013.
-=======
-<<<<<<< HEAD
-" Last Modified: 12 Jun 2013.
-=======
-" Last Modified: 13 Jun 2013.
->>>>>>> - Fixed grep source.
->>>>>>> fd22109... Merged.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
