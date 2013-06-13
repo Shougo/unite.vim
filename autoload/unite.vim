@@ -223,7 +223,7 @@ endfunction"}}}
 
 " Utils.
 function! unite#print_error(message) "{{{
-  return unite#print_error(a:message)
+  return unite#view#_print_error(a:message)
 endfunction"}}}
 function! unite#print_source_error(message, source_name) "{{{
   return unite#view#_print_source_error(a:message, a:source_name)
