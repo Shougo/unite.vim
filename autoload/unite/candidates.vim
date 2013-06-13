@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -174,7 +174,9 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     let context.is_changed = a:context.is_changed
     let context.is_invalidate = source.unite__is_invalidate
     let context.is_list_input = a:context.is_list_input
-    let context.input_list = split(context.input, '\\\@<! ')
+    let context.input_list = split(context.input, '\\\@<! ', 1)
+    let context.path = get(filter(copy(context.input_list),
+        \         "v:val !~ '^[!:]'"), 0, '')
     let context.unite__max_candidates = source.max_candidates
 
     let source_candidates = s:get_source_candidates(source)
@@ -246,6 +248,9 @@ function! s:recache_candidates_loop(context, is_force) "{{{
 
       unlet Filter
     endfor
+
+    " Get execute_command.
+    let a:context.execute_command = context.execute_command
 
     let source.unite__candidates += source_candidates
     let source.unite__len_candidates = len(source_candidates)

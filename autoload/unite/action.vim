@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -374,6 +374,11 @@ function! unite#action#do(action_name, ...) "{{{
       call unite#print_error('Error occured in executing action!')
       call unite#print_error('Action name is ' . table.action.name)
     endtry
+
+    " Executes command.
+    if context.execute_command != ''
+      execute context.execute_command
+    endif
 
     " Check invalidate cache flag.
     if table.action.is_invalidate_cache

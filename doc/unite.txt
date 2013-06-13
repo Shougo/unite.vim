@@ -134,6 +134,15 @@ Specify negative conditions with a bang "!".
 <
 This example matches candidates that contain "foo" but not "bar".
 
+Specify command execution after the action with a ":".
+>
+	" Jump to line 3.
+	foo :3
+	" Search to "bar".
+	foo :/bar
+	" Executes :diffthis command.
+	foo :diffthis
+<
 See |unite_default_key_mappings| for other actions.
 
 ==============================================================================
@@ -3190,6 +3199,9 @@ A: You can use |unite-filter-matcher_fuzzy|.
 
 ==============================================================================
 CHANGELOG					*unite-changelog*
+
+2013-06-13
+- Added specify command execution feature.
 
 2013-06-11
 - Fixed auto resize behavior.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,6 +39,7 @@ syntax region uniteNonMarkedLine start=/^- / end='$' keepend
       \ contains=uniteCandidateMarker,uniteCandidateSourceName,uniteCandidateAbbr
 syntax match uniteCandidateMarker /^- / contained
 syntax match uniteQuickMatchTrigger /^.|/ contained
+syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 
 highlight default link uniteError  Error
 
@@ -58,7 +59,7 @@ highlight default link uniteChooseSource  uniteSourceNames
 
 highlight default link uniteInputPrompt  Identifier
 highlight default link uniteInputPromptError  Error
-highlight default link uniteInputSpecial  Special
+highlight default link uniteInputCommand  Statement
 
 let b:current_syntax = 'unite'
 

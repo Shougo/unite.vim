@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -182,7 +182,8 @@ function! unite#view#_set_highlight() "{{{
 
   execute 'syntax match uniteInputLine'
         \ '/\%'.unite.prompt_linenr.'l.*/'
-        \ 'contains=uniteInputPrompt,uniteInputPromptError,uniteInputSpecial'
+        \ 'contains=uniteInputPrompt,uniteInputPromptError,'.
+        \ 'uniteInputCommand'
 
   silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0

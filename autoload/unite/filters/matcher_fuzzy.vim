@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_fuzzy.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,6 +52,10 @@ function! s:matcher.filter(candidates, context) "{{{
   for input_orig in a:context.input_list
     let input = substitute(input_orig, '\\ ', ' ', 'g')
     if input == '!'
+      continue
+    elseif input =~ '^:'
+      " Executes command.
+      let a:context.execute_command = input[1:]
       continue
     endif
 
