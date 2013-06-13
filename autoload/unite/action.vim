@@ -529,6 +529,11 @@ function! s:filter_self_func(action_table, self_func) "{{{
   return filter(copy(a:action_table),
         \ printf("string(v:val.func) !=# \"function('%s')\"", a:self_func))
 endfunction"}}}
+function! s:clear_marks(candidates) "{{{
+  for candidate in a:candidates
+    let candidate.unite__is_marked = 0
+  endfor
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
