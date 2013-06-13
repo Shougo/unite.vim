@@ -285,14 +285,16 @@ g:unite_enable_use_short_source_names
 		The default value is 0.
 
 g:unite_marked_icon				*g:unite_marked_icon*
-		This variable controls unite marked candidates icon.
+		It controls unite marked candidates icon.
+		Note: It must be one character.
 
-		Default value is "*"
+		Default value is "*".
 
 g:unite_candidate_icon				*g:unite_candidate_icon*
-		This variable controls unite normal candidates icon.
+		It controls unite normal candidates icon.
+		Note: It must be one character.
 
-		Default value is " "
+		Default value is " ".
 
 					*g:unite_force_overwrite_statusline*
 g:unite_force_overwrite_statusline
