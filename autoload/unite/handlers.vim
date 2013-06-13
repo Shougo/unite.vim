@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -310,7 +310,7 @@ endfunction"}}}
 function! unite#handlers#_save_updatetime()  "{{{
   let unite = unite#get_current_unite()
 
-  if &updatetime > unite.context.update_time
+  if unite.is_async && &updatetime > unite.context.update_time
     let unite.update_time_save = &updatetime
     let &updatetime = unite.context.update_time
   endif
