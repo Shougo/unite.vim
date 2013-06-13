@@ -289,6 +289,11 @@ g:unite_marked_icon				*g:unite_marked_icon*
 
 		Default value is "*"
 
+g:unite_candidate_icon				*g:unite_candidate_icon*
+		This variable controls unite normal candidates icon.
+
+		Default value is " "
+
 					*g:unite_force_overwrite_statusline*
 g:unite_force_overwrite_statusline
 		If this variable is 1, unite will overwrite 'statusline'
@@ -3202,6 +3207,7 @@ CHANGELOG					*unite-changelog*
 
 2013-06-13
 - Added specify command execution feature.
+- Added g:unite_candidate_icon option.
 
 2013-06-11
 - Fixed auto resize behavior.

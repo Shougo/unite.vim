@@ -180,6 +180,14 @@ function! unite#view#_set_highlight() "{{{
   execute 'syntax region uniteMarkedLine start=/^'.
         \ marked_icon.'/ end=''$'' keepend'
 
+  let candidate_icon = unite#util#escape_pattern(g:unite_candidate_icon)
+  execute 'syntax region uniteNonMarkedLine start=/^'.
+        \ candidate_icon.' / end=''$'' keepend'.
+        \ ' contains=uniteCandidateMarker,'.
+        \ 'uniteCandidateSourceName,uniteCandidateAbbr'
+  execute 'syntax match uniteCandidateMarker /^'.
+        \ candidate_icon.' / contained'
+
   execute 'syntax match uniteInputLine'
         \ '/\%'.unite.prompt_linenr.'l.*/'
         \ 'contains=uniteInputPrompt,uniteInputPromptError,'.
@@ -190,7 +198,8 @@ function! unite#view#_set_highlight() "{{{
     syntax match uniteCandidateSourceName
           \ /\%3c[[:alnum:]_\/-]\+/ contained
   else
-    syntax match uniteCandidateSourceName /^- / contained
+    execute 'syntax match uniteCandidateSourceName /^'.
+          \ candidate_icon.' / contained'
   endif
 
   execute 'highlight default link uniteCandidateAbbr'
@@ -204,7 +213,7 @@ function! unite#view#_set_highlight() "{{{
     execute 'highlight default link'
           \ source.syntax g:unite_abbr_highlight
 
-    execute printf('syntax match %s "^[- ] %s" '.
+    execute printf('syntax match %s "^['.g:unite_candidate_icon.' ] %s" '.
           \ 'nextgroup='.source.syntax.
           \ ' keepend contains=uniteCandidateMarker,%s',
           \ 'uniteSourceLine__'.source.syntax,
@@ -298,7 +307,7 @@ function! unite#view#_convert_lines(candidates, ...) "{{{
   return map(copy(a:candidates),
         \ "(v:val.is_dummy ? '  ' :
         \   v:val.unite__is_marked ? g:unite_marked_icon . ' ' :
-        \   empty(quick_match_table) ? '- ' :
+        \   empty(quick_match_table) ? g:unite_candidate_icon . ' ' :
         \   get(keys, v:key, '  '))
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(unite#helper#convert_source_name(

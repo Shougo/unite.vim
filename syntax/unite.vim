@@ -35,9 +35,6 @@ set cpo&vim
 
 syntax match uniteQuickMatchLine /^.|.*/
       \ contains=uniteQuickMatchTrigger,uniteCandidateSourceName,uniteCandidateAbbr
-syntax region uniteNonMarkedLine start=/^- / end='$' keepend
-      \ contains=uniteCandidateMarker,uniteCandidateSourceName,uniteCandidateAbbr
-syntax match uniteCandidateMarker /^- / contained
 syntax match uniteQuickMatchTrigger /^.|/ contained
 syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 
