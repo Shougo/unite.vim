@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -278,7 +278,7 @@ function! unite#complete_buffer_name(arglead, cmdline, cursorpos) "{{{
   return unite#complete#buffer_name(a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 function! unite#args_complete(sources, arglead, cmdline, cursorpos) "{{{
-  return unite#complete#args()
+  return unite#complete#args(a:sources, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 
 function! unite#all_quit_session(...)  "{{{
