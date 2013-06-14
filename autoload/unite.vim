@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jun 2013.
+" Last Modified: 14 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -130,6 +130,9 @@ endfunction"}}}
 function! unite#take_parents_action(action_name, candidate, extend_candidate) "{{{
   call unite#action#take(a:action_name,
         \ extend(deepcopy(a:candidate), a:extend_candidate), 1)
+endfunction"}}}
+function! unite#do_candidates_action(...) "{{{
+  return call('unite#action#do_candidates', a:000)
 endfunction"}}}
 "}}}
 
