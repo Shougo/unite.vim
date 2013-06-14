@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Apr 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,10 +35,8 @@ set cpo&vim
 
 syntax match uniteQuickMatchLine /^.|.*/
       \ contains=uniteQuickMatchTrigger,uniteCandidateSourceName,uniteCandidateAbbr
-syntax region uniteNonMarkedLine start=/^- / end='$' keepend
-      \ contains=uniteCandidateMarker,uniteCandidateSourceName,uniteCandidateAbbr
-syntax match uniteCandidateMarker /^- / contained
 syntax match uniteQuickMatchTrigger /^.|/ contained
+syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 
 highlight default link uniteError  Error
 
@@ -58,11 +56,11 @@ highlight default link uniteChooseSource  uniteSourceNames
 
 highlight default link uniteInputPrompt  Identifier
 highlight default link uniteInputPromptError  Error
-highlight default link uniteInputSpecial  Special
+highlight default link uniteInputCommand  Statement
 
 let b:current_syntax = 'unite'
 
-call unite#set_highlight()
+call unite#view#_set_highlight()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

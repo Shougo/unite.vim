@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 May 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,11 +54,8 @@ function! s:source_file.change_candidates(args, context) "{{{
 
   let is_vimfiler = get(a:context, 'is_vimfiler', 0)
 
-  let input_list = filter(split(a:context.input,
-        \                     '\\\@<! ', 1), 'v:val !~ "!"')
-  let input = empty(input_list) ? '' : input_list[0]
   let input = substitute(substitute(
-        \ a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
+        \ a:context.path, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
 
   let path = join(a:args, ':')
   if path !=# '/' && path =~ '[\\/]$'
@@ -131,12 +128,12 @@ function! s:source_file.vimfiler_gather_candidates(args, context) "{{{
 
     let context = deepcopy(a:context)
     let context.is_vimfiler = 1
-    let context.input .= path
+    let context.path .= path
     let candidates = self.change_candidates(a:args, context)
 
     if !exists('*vimproc#readdir')
       " Add doted files.
-      let context.input .= '.'
+      let context.path .= '.'
       let candidates += self.change_candidates(a:args, context)
     endif
     call filter(candidates, 'v:val.word !~ "/\\.\\.\\?$"')
@@ -216,11 +213,8 @@ let s:source_file_new = {
       \ }
 
 function! s:source_file_new.change_candidates(args, context) "{{{
-  let input_list = filter(split(a:context.input,
-        \                     '\\\@<! ', 1), 'v:val !~ "!"')
-  let input = empty(input_list) ? '' : input_list[0]
   let input = substitute(substitute(
-        \ a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
+        \ a:context.path, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
   if input == ''
     return []
   endif
@@ -250,7 +244,7 @@ function! s:source_file_new.change_candidates(args, context) "{{{
   let is_relative_path = path !~ '^\%(/\|\a\+:/\)'
 
   let newfile = unite#util#expand(
-        \ escape(substitute(a:context.input, '[*\\]', '', 'g'), ''))
+        \ escape(substitute(a:context.path, '[*\\]', '', 'g'), ''))
   if filereadable(newfile) || isdirectory(newfile)
     return []
   endif

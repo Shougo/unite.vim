@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 May 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -85,6 +85,8 @@ let g:unite_enable_short_source_names =
       \ get(g:, 'unite_enable_short_source_names', 0)
 let g:unite_marked_icon =
       \ get(g:, 'unite_marked_icon', '*')
+let g:unite_candidate_icon =
+      \ get(g:, 'unite_candidate_icon', ' ')
 let g:unite_force_overwrite_statusline =
       \ get(g:, 'unite_force_overwrite_statusline', 1)
 let g:unite_data_directory =
@@ -97,19 +99,19 @@ endif
 "}}}
 
 " Wrapper command.
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ Unite
       \ call s:call_unite_empty(<q-args>)
 function! s:call_unite_empty(args) "{{{
-  let [args, options] = unite#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_args(a:args)
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithCurrentDir
       \ call s:call_unite_current_dir(<q-args>)
 function! s:call_unite_current_dir(args) "{{{
-  let [args, options] = unite#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_args(a:args)
   if !has_key(options, 'input')
     let path = &filetype ==# 'vimfiler' ?
           \ b:vimfiler.current_dir :
@@ -123,11 +125,11 @@ function! s:call_unite_current_dir(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithBufferDir
       \ call s:call_unite_buffer_dir(<q-args>)
 function! s:call_unite_buffer_dir(args) "{{{
-  let [args, options] = unite#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_args(a:args)
   if !has_key(options, 'input')
     let path = &filetype ==# 'vimfiler' ?
           \ b:vimfiler.current_dir :
@@ -141,10 +143,10 @@ function! s:call_unite_buffer_dir(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithCursorWord call s:call_unite_cursor_word(<q-args>)
 function! s:call_unite_cursor_word(args) "{{{
-  let [args, options] = unite#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_args(a:args)
   if !has_key(options, 'input')
     let options.input = expand('<cword>')
   endif
@@ -152,10 +154,10 @@ function! s:call_unite_cursor_word(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithInput call s:call_unite_input(<q-args>)
 function! s:call_unite_input(args) "{{{
-  let [args, options] = unite#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_args(a:args)
   if !has_key(options, 'input')
     let options.input = input('Input narrowing text: ', '')
   endif
@@ -163,10 +165,10 @@ function! s:call_unite_input(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=+ -complete=customlist,unite#complete_source
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithInputDirectory call s:call_unite_input_directory(<q-args>)
 function! s:call_unite_input_directory(args) "{{{
-  let [args, options] = unite#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_args(a:args)
   if !has_key(options, 'input')
     let path = unite#substitute_path_separator(
           \ input('Input narrowing directory: ', '', 'dir'))
@@ -179,21 +181,16 @@ function! s:call_unite_input_directory(args) "{{{
   call unite#start(args, options)
 endfunction"}}}
 
-command! -nargs=? -complete=customlist,unite#complete_buffer_name
+command! -nargs=? -complete=customlist,unite#complete#buffer_name
       \ UniteResume call s:call_unite_resume(<q-args>)
 function! s:call_unite_resume(args) "{{{
-  let [args, options] = unite#parse_options(a:args)
+  let [args, options] = unite#helper#parse_options(a:args)
 
   call unite#resume(join(args), options)
 endfunction"}}}
 
-command! -nargs=1 -complete=customlist,unite#complete_buffer_name
-      \ UniteClose call unite#close(<q-args>)
-
-augroup plugin-unite
-  autocmd!
-  autocmd CursorHold * call unite#_on_cursor_hold()
-augroup END
+command! -nargs=1 -complete=customlist,unite#complete#buffer_name
+      \ UniteClose call unite#view#_close(<q-args>)
 
 let g:loaded_unite = 1
 

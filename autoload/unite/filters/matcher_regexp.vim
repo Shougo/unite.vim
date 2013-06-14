@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_regexp.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,7 @@ function! s:matcher.filter(candidates, context) "{{{
 endfunction"}}}
 
 function! unite#filters#matcher_regexp#regexp_matcher(candidates, input, context) "{{{
-  let expr = unite#filters#matcher_regexp#get_expr(a:input)
+  let expr = unite#filters#matcher_regexp#get_expr(a:input, a:context)
 
   try
     return unite#filters#filter_matcher(a:candidates, expr, a:context)
@@ -61,7 +61,7 @@ function! unite#filters#matcher_regexp#regexp_matcher(candidates, input, context
     return []
   endtry
 endfunction"}}}
-function! unite#filters#matcher_regexp#get_expr(input) "{{{
+function! unite#filters#matcher_regexp#get_expr(input, context) "{{{
   let input = a:input
 
   if input =~ '^!'
@@ -71,6 +71,10 @@ function! unite#filters#matcher_regexp#get_expr(input) "{{{
 
     " Exclusion match.
     let expr = 'v:val.word !~ '.string(input[1:])
+  elseif input =~ '^:'
+    " Executes command.
+    let a:context.execute_command = input[1:]
+    return '1'
   elseif input !~ '[~\\.^$\[\]*]'
     if unite#util#has_lua()
       let expr = 'if_lua'

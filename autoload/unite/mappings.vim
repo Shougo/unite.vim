@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 May 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,7 +40,7 @@ function! unite#mappings#define_default_mappings() "{{{
         \ <SID>insert_enter('i')
   nnoremap <expr><buffer> <Plug>(unite_insert_head)
         \ <SID>insert_enter('A'.
-        \  (repeat("\<Left>", len(substitute(unite#get_input(), '.', 'x', 'g')))))
+        \  (repeat("\<Left>", len(substitute(unite#helper#get_input(), '.', 'x', 'g')))))
   nnoremap <expr><buffer> <Plug>(unite_append_enter)
         \ <SID>insert_enter('a')
   nnoremap <expr><buffer> <Plug>(unite_append_end)
@@ -115,7 +115,7 @@ function! unite#mappings#define_default_mappings() "{{{
         \ . ":call unite#redraw()\<CR>"
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
         \ <SID>smart_imap("\<C-o>:\<C-u>call \<SID>all_exit()\<CR>",
-        \ (unite#get_input() == '' ?
+        \ (unite#helper#get_input() == '' ?
         \ "\<C-o>:\<C-u>call \<SID>all_exit()\<CR>" : "\<C-h>"))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_line)
         \ <SID>smart_imap('', repeat("\<C-h>",
@@ -139,7 +139,7 @@ function! unite#mappings#define_default_mappings() "{{{
   inoremap <expr><buffer> <Plug>(unite_move_head)
         \ <SID>smart_imap("\<ESC>".<SID>insert_enter('A'),
         \   repeat("\<Left>", len(substitute(
-        \     unite#get_input(), '.', 'x', 'g'))))
+        \     unite#helper#get_input(), '.', 'x', 'g'))))
   inoremap <silent><buffer> <Plug>(unite_quick_match_default_action)
         \ <C-o>:<C-u>call unite#mappings#_quick_match(0)<CR>
   inoremap <silent><buffer> <Plug>(unite_quick_match_choose_action)
@@ -255,34 +255,6 @@ function! unite#mappings#define_default_mappings() "{{{
         \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
 endfunction"}}}
 
-function! s:smart_imap(lhs, rhs) "{{{
-  return line('.') != unite#get_current_unite().prompt_linenr ||
-        \ col('.') <= (unite#util#wcswidth(unite#get_current_unite().prompt)) ?
-        \ a:lhs : a:rhs
-endfunction"}}}
-function! s:smart_imap2(lhs, rhs) "{{{
-  return line('.') <= (len(unite#get_current_unite().prompt)+1) ?
-       \ a:lhs : a:rhs
-endfunction"}}}
-
-function! s:do_new_candidate_action() "{{{
-  if empty(unite#get_current_candidate())
-    " Get source name.
-    if len(unite#get_sources()) != 1
-      call unite#print_error('[unite] No candidates and multiple sources.')
-      return
-    endif
-
-    " Dummy candidate.
-    let candidates = unite#initialize_candidates_source([{}],
-          \ unite#get_sources()[0].name)
-  else
-    let candidates = [unite#get_current_candidate()]
-  endif
-
-  return unite#mappings#do_action('unite__new_candidate', candidates)
-endfunction"}}}
-
 function! unite#mappings#narrowing(word) "{{{
   setlocal modifiable
   let unite = unite#get_current_unite()
@@ -298,115 +270,9 @@ function! unite#mappings#narrowing(word) "{{{
     normal! 0z.
   endif
 endfunction"}}}
-function! unite#mappings#do_action(action_name, ...) "{{{
-  call unite#redraw()
 
-  let candidates = get(a:000, 0,
-        \ unite#get_marked_candidates())
-  let new_context = get(a:000, 1, {})
-  let sources = get(a:000, 2, {})
-
-  let unite = unite#get_current_unite()
-  if empty(candidates)
-    let num = (line('.') <= unite.prompt_linenr) ? 0 :
-          \ (line('.') - (unite.prompt_linenr + 1))
-    if line('$') - (unite.prompt_linenr + 1) < num
-      " Ignore.
-      return []
-    endif
-
-    let candidates = [ unite#get_current_candidate() ]
-  endif
-
-  let candidates = filter(copy(candidates),
-        \ "!empty(v:val) && !get(v:val, 'is_dummy', 0)")
-  if empty(candidates)
-    return []
-  endif
-
-  let action_tables = s:get_action_table(
-        \ a:action_name, candidates, sources)
-
-  if !empty(new_context)
-    " Set new context.
-    let new_context = extend(
-          \ deepcopy(unite#get_context()), new_context)
-    let old_context = unite#set_context(new_context)
-    let unite = unite#get_current_unite()
-  endif
-
-  let context = unite#get_context()
-
-  " Execute action.
-  let is_quit = 0
-  let is_redraw = 0
-  let _ = []
-  for table in action_tables
-    " Check quit flag.
-    if table.action.is_quit && unite.profile_name !=# 'action'
-          \ && !table.action.is_start
-      call unite#all_quit_session(0)
-      let is_quit = 1
-    endif
-
-    if table.action.is_start && !empty(unite#get_marked_candidates())
-      call s:clear_marks(candidates)
-      call unite#force_redraw()
-      let is_redraw = 0
-    elseif table.action.is_selectable
-      let is_redraw = 1
-    endif
-
-    try
-      call add(_, table.action.func(table.candidates))
-    catch /^Vim\%((\a\+)\)\=:E325/
-      " Ignore catch.
-      call unite#print_error(v:exception)
-      call unite#print_error('Attenssion: Swap file is found in executing action!')
-      call unite#print_error('Action name is ' . table.action.name)
-    catch
-      call unite#print_error(v:throwpoint)
-      call unite#print_error(v:exception)
-      call unite#print_error('Error occured in executing action!')
-      call unite#print_error('Action name is ' . table.action.name)
-    endtry
-
-    " Check invalidate cache flag.
-    if table.action.is_invalidate_cache
-      for source_name in table.source_names
-        call unite#invalidate_cache(source_name)
-      endfor
-
-      let is_redraw = 1
-    endif
-  endfor
-
-  if !is_quit && unite.context.keep_focus
-    let winnr = bufwinnr(unite.bufnr)
-
-    if winnr > 0
-      " Restore focus.
-      execute winnr 'wincmd w'
-    endif
-  endif
-
-  if !empty(new_context)
-    " Restore context.
-    let unite.context = old_context
-  endif
-
-  if is_redraw && !empty(filter(range(1, winnr('$')),
-          \ "getwinvar(v:val, '&filetype') ==# 'vimfiler'"))
-    " Redraw vimfiler buffer.
-    call vimfiler#force_redraw_all_vimfiler(1)
-  endif
-
-  if !is_quit && is_redraw
-    call s:clear_marks(candidates)
-    call unite#force_redraw()
-  endif
-
-  return _
+function! unite#mappings#do_action(...) "{{{
+  return call('unite#action#do', a:000)
 endfunction"}}}
 
 function! unite#mappings#get_current_filters() "{{{
@@ -420,73 +286,32 @@ function! unite#mappings#set_current_filters(filters) "{{{
   return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
 endfunction"}}}
 
-function! s:get_action_table(action_name, candidates, sources) "{{{
-  let action_tables = []
-  let Self = unite#get_self_functions()[-1]
-  for candidate in a:candidates
-    let action_table = unite#mappings#_get_candidate_action_table(
-          \ candidate, a:sources)
-
-    let action_name = a:action_name
-    if action_name ==# 'default'
-      " Get default action.
-      let action_name = unite#get_default_action(
-            \ candidate.source, candidate.kind)
-    endif
-
-    if action_name == ''
-      " Ignore.
-      return []
-    endif
-
-    if !has_key(action_table, action_name)
-      call unite#util#print_error(
-            \ candidate.unite__abbr . '(' . candidate.source . ')')
-      call unite#util#print_error(
-            \ 'No such action : ' . action_name)
-
-      return []
-    endif
-
-    let action = action_table[action_name]
-
-    " Check selectable flag.
-    if !action.is_selectable && len(a:candidates) > 1
-      call unite#util#print_error(
-            \ candidate.unite__abbr . '(' . candidate.source . ')')
-      call unite#util#print_error(
-            \ 'Not selectable action : ' . action_name)
-      return []
-    endif
-
-    let found = 0
-    for table in action_tables
-      if action == table.action
-        " Add list.
-        call add(table.candidates, candidate)
-        call add(table.source_names, candidate.source)
-        let found = 1
-        break
-      endif
-    endfor
-
-    if !found
-      " Add action table.
-      call add(action_tables, {
-            \ 'action' : action,
-            \ 'source_names' : [candidate.source],
-            \ 'candidates' : (!action.is_selectable ? candidate : [candidate]),
-            \ })
-    endif
-  endfor
-
-  return action_tables
+function! s:smart_imap(lhs, rhs) "{{{
+  return line('.') != unite#get_current_unite().prompt_linenr ||
+        \ col('.') <= (unite#util#wcswidth(unite#get_current_unite().prompt)) ?
+        \ a:lhs : a:rhs
 endfunction"}}}
-function! unite#mappings#_get_candidate_action_table(candidate, sources) "{{{
-  let Self = unite#get_self_functions()[-1]
+function! s:smart_imap2(lhs, rhs) "{{{
+  return line('.') <= (len(unite#get_current_unite().prompt)+1) ?
+       \ a:lhs : a:rhs
+endfunction"}}}
 
-  return unite#get_action_table(a:candidate.source, a:candidate.kind, Self,
-        \ 0, a:sources)
+function! s:do_new_candidate_action() "{{{
+  if empty(unite#helper#get_current_candidate())
+    " Get source name.
+    if len(unite#get_sources()) != 1
+      call unite#print_error('[unite] No candidates and multiple sources.')
+      return
+    endif
+
+    " Dummy candidate.
+    let candidates = unite#init#_candidates_source([{}],
+          \ unite#get_sources()[0].name)
+  else
+    let candidates = [unite#helper#get_current_candidate()]
+  endif
+
+  return unite#action#do('unite__new_candidate', candidates)
 endfunction"}}}
 
 " key-mappings functions.
@@ -526,7 +351,7 @@ function! s:normal_delete_backward_path() "{{{
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! s:toggle_mark() "{{{
-  let candidate = unite#get_current_candidate()
+  let candidate = unite#helper#get_current_candidate()
   if empty(candidate) || get(candidate, 'is_dummy', 0)
     return
   endif
@@ -540,13 +365,13 @@ function! s:toggle_mark() "{{{
   endif
 
   while 1
-    call unite#redraw_line()
+    call unite#view#_redraw_line()
 
     if line('.') != line('$')
       normal! j
     endif
 
-    let candidate = unite#get_current_candidate()
+    let candidate = unite#helper#get_current_candidate()
     if line('.') == line('$') || !get(candidate, 'is_dummy', 0)
       break
     endif
@@ -571,7 +396,7 @@ function! s:toggle_mark_candidates(start, end) "{{{
     let candidate.unite__is_marked = !candidate.unite__is_marked
     let candidate.unite__marked_time = localtime()
 
-    call unite#redraw_line(cnt + offset)
+    call unite#view#_redraw_line(cnt + offset)
 
     let cnt += 1
   endwhile
@@ -588,9 +413,9 @@ function! s:choose_action() "{{{
     return
   endif
 
-  let candidates = unite#get_marked_candidates()
+  let candidates = unite#helper#get_marked_candidates()
   if empty(candidates)
-    let candidates = [ unite#get_current_candidate() ]
+    let candidates = [ unite#helper#get_current_candidate() ]
   endif
 
   call unite#mappings#_choose_action(candidates)
@@ -642,7 +467,7 @@ function! s:rotate_source(is_next) "{{{
     endif
   endfor
 
-  call unite#redraw_candidates()
+  call unite#view#_redraw_candidates()
 endfunction"}}}
 function! s:print_candidate() "{{{
   if line('.') <= unite#get_current_unite().prompt_linenr
@@ -650,7 +475,7 @@ function! s:print_candidate() "{{{
     return
   endif
 
-  let candidate = unite#get_current_candidate()
+  let candidate = unite#helper#get_current_candidate()
   echo 'abbr: ' . candidate.unite__abbr
   echo 'word: ' . candidate.word
 endfunction"}}}
@@ -668,17 +493,17 @@ function! s:insert_selected_candidate() "{{{
     return
   endif
 
-  let candidate = unite#get_current_candidate()
+  let candidate = unite#helper#get_current_candidate()
   call unite#mappings#narrowing(candidate.word)
 endfunction"}}}
 function! unite#mappings#_quick_match(is_choose) "{{{
-  if !empty(unite#get_marked_candidates())
+  if !empty(unite#helper#get_marked_candidates())
     call unite#util#print_error('Marked candidates is detected.')
     return
   endif
 
   let quick_match_table = s:get_quick_match_table()
-  call unite#quick_match_redraw(quick_match_table)
+  call unite#view#_quick_match_redraw(quick_match_table)
 
   if mode() !~# '^c'
     echo 'Input quick match key: '
@@ -692,7 +517,7 @@ function! unite#mappings#_quick_match(is_choose) "{{{
   redraw
   echo ''
 
-  call unite#redraw_candidates()
+  call unite#view#_redraw_candidates()
 
   let unite = unite#get_current_unite()
 
@@ -711,12 +536,14 @@ function! unite#mappings#_quick_match(is_choose) "{{{
   if a:is_choose
     call unite#mappings#_choose_action([candidate])
   else
-    call unite#mappings#do_action(
+    call unite#action#do(
           \ unite.context.default_action, [candidate])
   endif
 endfunction"}}}
 function! s:input_directory() "{{{
-  let path = unite#substitute_path_separator(input('Input narrowing directory: ', unite#get_input(), 'dir'))
+  let path = unite#substitute_path_separator(
+        \ input('Input narrowing directory: ',
+        \         unite#helper#get_input(), 'dir'))
   let path = path.(path == '' || path =~ '/$' ? '' : '/')
   call unite#mappings#narrowing(path)
 endfunction"}}}
@@ -913,7 +740,7 @@ function! s:narrowing_path() "{{{
     return
   endif
 
-  let candidate = unite#get_current_candidate()
+  let candidate = unite#helper#get_current_candidate()
   call unite#mappings#narrowing(has_key(candidate, 'action__path')?
         \ candidate.action__path : candidate.word)
 endfunction"}}}
@@ -930,12 +757,7 @@ function! s:redraw_all_candidates() "{{{
   endif
 endfunction"}}}
 function! s:narrowing_dot() "{{{
-  call unite#mappings#narrowing(unite#get_input().'.')
-endfunction"}}}
-function! s:clear_marks(candidates) "{{{
-  for candidate in a:candidates
-    let candidate.unite__is_marked = 0
-  endfor
+  call unite#mappings#narrowing(unite#helper#get_input().'.')
 endfunction"}}}
 
 function! s:get_quick_match_table() "{{{
@@ -949,10 +771,6 @@ function! s:get_quick_match_table() "{{{
     let table[key] += offset
   endfor
   return table
-endfunction"}}}
-
-function! unite#mappings#complete_actions(arglead, cmdline, cursorpos) "{{{
-  return filter(keys(s:actions), printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 "}}}
 

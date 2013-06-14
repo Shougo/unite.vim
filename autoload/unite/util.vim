@@ -264,9 +264,6 @@ endfunction"}}}
 function! unite#util#convert2list(expr) "{{{
   return type(a:expr) ==# type([]) ? a:expr : [a:expr]
 endfunction"}}}
-function! unite#util#msg2list(expr) "{{{
-  return type(a:expr) ==# type([]) ? a:expr : split(a:expr, '\n')
-endfunction"}}}
 
 function! unite#util#truncate_wrap(str, max, footer_width, separator) "{{{
   let width = unite#util#wcswidth(a:str)
@@ -288,18 +285,9 @@ function! unite#util#get_name(list, name, default) "{{{
   return get(a:list, unite#util#index_name(a:list, a:name), a:default)
 endfunction"}}}
 
-function! unite#util#redraw_echo(expr) "{{{
-  if has('vim_starting')
-    echo join(unite#util#msg2list(a:expr), "\n")
-    return
-  endif
-
-  let msg = unite#util#msg2list(a:expr)
-  let height = max([1, &cmdheight])
-  for i in range(0, len(msg)-1, height)
-    redraw
-    echo join(msg[i : i+height-1], "\n")
-  endfor
+function! unite#util#escape_match(str) "{{{
+  return substitute(substitute(escape(a:str, '~\.^$[]'),
+        \ '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 
 let &cpo = s:save_cpo

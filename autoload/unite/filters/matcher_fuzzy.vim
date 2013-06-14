@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_fuzzy.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2013.
+" Last Modified: 13 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,9 +53,13 @@ function! s:matcher.filter(candidates, context) "{{{
     let input = substitute(input_orig, '\\ ', ' ', 'g')
     if input == '!'
       continue
+    elseif input =~ '^:'
+      " Executes command.
+      let a:context.execute_command = input[1:]
+      continue
     endif
 
-    let input = substitute(substitute(unite#escape_match(input),
+    let input = substitute(substitute(unite#util#escape_match(input),
           \ '[[:alnum:]._-]', '\0.*', 'g'), '\*\*', '*', 'g')
 
     let expr = (input =~ '^!') ?
