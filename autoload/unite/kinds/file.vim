@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 14 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -262,6 +262,11 @@ let s:kind.action_table.vimfiler__move = {
       \ 'is_listed' : 0,
       \ }
 function! s:kind.action_table.vimfiler__move.func(candidates) "{{{
+  if !unite#util#input_yesno('Really move files?')
+    echo 'Canceled.'
+    return
+  endif
+
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -323,13 +328,6 @@ let s:kind.action_table.move =
       \ deepcopy(s:kind.action_table.vimfiler__move)
 let s:kind.action_table.move.is_listed = 1
 function! s:kind.action_table.move.func(candidates) "{{{
-  if !unite#util#input_yesno('Really move files?')
-    redraw
-    echo 'Canceled.'
-    return
-  endif
-  redraw
-
   return s:kind.action_table.vimfiler__move.func(a:candidates)
 endfunction"}}}
 
@@ -404,6 +402,11 @@ function! s:kind.action_table.vimfiler__delete.func(candidates) "{{{
         \ || g:unite_kind_file_delete_directory_command == ''
     call unite#print_error("Please install rm.exe.")
     return 1
+  endif
+
+  if !unite#util#input_yesno('Really force delete files?')
+    echo 'Canceled.'
+    return
   endif
 
   call unite#kinds#file#do_action(a:candidates, '', 'delete')

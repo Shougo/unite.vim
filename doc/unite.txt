@@ -3209,6 +3209,7 @@ CHANGELOG					*unite-changelog*
 
 2013-06-14
 - Fixed filtering of alias.
+- Fixed prompt behavior in file operations.
 
 2013-06-13
 - Added specify command execution feature.

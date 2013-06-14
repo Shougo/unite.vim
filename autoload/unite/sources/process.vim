@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: process.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 May 2013.
+" Last Modified: 14 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -136,12 +136,9 @@ function! s:kill(signal, candidates) "{{{
   if g:unite_source_process_enable_confirm
     if !unite#util#input_yesno(
           \ 'Really send the ' . a:signal .' signal to the processes?')
-      redraw
       echo 'Canceled.'
       return
     endif
-
-    redraw
   endif
 
   for candidate in a:candidates

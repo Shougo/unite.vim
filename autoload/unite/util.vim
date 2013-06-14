@@ -128,6 +128,8 @@ function! unite#util#input_yesno(message) "{{{
     let yesno = input(a:message . ' [yes/no]: ')
   endwhile
 
+  redraw
+
   return yesno =~? 'y\%[es]'
 endfunction"}}}
 function! unite#util#input_directory(message) "{{{
