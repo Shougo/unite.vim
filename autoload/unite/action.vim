@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jun 2013.
+" Last Modified: 14 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -518,7 +518,6 @@ function! s:filter_alias_action(action_table, alias_table, from) "{{{
         call remove(a:action_table, alias_name)
       endif
     elseif has_key(a:action_table, alias_action)
-          \ && !has_key(a:action_table, alias_name)
       let a:action_table[alias_name] = copy(a:action_table[alias_action])
       let a:action_table[alias_name].from = a:from
       let a:action_table[alias_name].name = alias_name
