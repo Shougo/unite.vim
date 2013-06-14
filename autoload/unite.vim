@@ -131,9 +131,6 @@ function! unite#take_parents_action(action_name, candidate, extend_candidate) "{
   call unite#action#take(a:action_name,
         \ extend(deepcopy(a:candidate), a:extend_candidate), 1)
 endfunction"}}}
-function! unite#do_candidates_action(...) "{{{
-  return call('unite#action#do_candidates', a:000)
-endfunction"}}}
 "}}}
 
 " Core functions. "{{{

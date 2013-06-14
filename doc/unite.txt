@@ -1119,8 +1119,8 @@ unite#get_candidates({sources}, [, {context}])	*unite#get_candidates()*
 		arguments feature is same to |unite#start()|.
 		Note: max_candidates option of sources is ignored.
 
-unite#do_candidates_action({action-name}, {candidates}, [, {context}])
-						*unite#do_candidates_action()*
+unite#action#do_candidates({action-name}, {candidates}, [, {context}])
+						*unite#action#do_candidates()*
 		Does {action-name} with {candidates}.  Unite buffer is not
 		created.  This function may not work in some actions.
 		Note: To get candidates, use |unite#get_candidates()|.
