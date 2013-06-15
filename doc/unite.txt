@@ -228,8 +228,8 @@ COMMANDS 					*unite-commands*
 The commands of source				*:unite-sources-commands*
 
 :UniteBookmarkAdd [{file}]			*:UniteBookmarkAdd*
-		Add a file into the bookmark list. By default will this will
-		also store the position of the current file.
+		Adds a file to the bookmark list. By default this will also
+		store the position of the current file.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*unite-variables*
