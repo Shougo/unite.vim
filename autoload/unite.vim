@@ -28,7 +28,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 augroup plugin-unite
-  autocmd CursorHold
+  autocmd CursorHold *
         \ call unite#handlers#_on_cursor_hold()
 augroup END
 
