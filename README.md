@@ -100,7 +100,6 @@ See [:h unite](https://github.com/Shougo/unite.vim/blob/master/doc/unite.txt). T
 unite plugins(in Japanese): https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ## Screen shots
-============
 
 unite file source
 -----------------
