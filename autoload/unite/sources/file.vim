@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jun 2013.
+" Last Modified: 16 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -343,17 +343,16 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts) "{{{
 
     let a:candidate.vimfiler__filesize =
           \ getfsize(a:candidate.action__path)
-    let a:candidate.vimfiler__is_readable =
-          \ filereadable(a:candidate.action__path)
+    if !s:is_windows
+      let a:candidate.vimfiler__is_readable =
+            \ filereadable(a:candidate.action__path)
+      let a:candidate.vimfiler__is_writable =
+            \ filewritable(a:candidate.action__path)
+    endif
+  elseif !s:is_windows
+    let a:candidate.vimfiler__is_readable = (perm =~# 'r.x$')
     let a:candidate.vimfiler__is_writable =
           \ filewritable(a:candidate.action__path)
-  else
-    let a:candidate.vimfiler__is_readable =
-          \ getfperm(a:candidate.action__path) =~# 'r.x$'
-    let a:candidate.vimfiler__is_writable =
-          \ s:is_windows ?
-          \ (getfperm(a:candidate.action__path) =~# '.wx$')
-          \ : filewritable(a:candidate.action__path)
   endif
 
   let a:candidate.vimfiler__filetime =
