@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jun 2013.
+" Last Modified: 16 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,6 +42,31 @@ function! unite#set_profile(profile_name, option_name, value) "{{{
 endfunction"}}}
 function! unite#get_profile(profile_name, option_name) "{{{
   return unite#custom#get_profile(a:profile_name, a:option_name)
+endfunction"}}}
+function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...) "{{{
+  call unite#print_error('unite#set_substitute_pattern() is deprecated.')
+  call unite#print_error('Please use unite#set_profile() instead of it.')
+
+  let buffer_name = (a:buffer_name == '' ? 'default' : a:buffer_name)
+
+  let profiles = unite#custom#get().profiles
+
+  for key in split(buffer_name, '\s*,\s*')
+    let substitute_patterns = has_key(profiles, key) ?
+          \ unite#get_profile(key, 'substitute_patterns') : {}
+
+    if has_key(substitute_patterns, a:pattern)
+          \ && a:pattern == ''
+      call remove(substitute_patterns, a:pattern)
+    else
+      let substitute_patterns[a:pattern] = {
+            \ 'pattern' : a:pattern,
+            \ 'subst' : a:subst, 'priority' : (a:0 > 0 ? a:1 : 0),
+            \ }
+    endif
+
+    call unite#set_profile(key, 'substitute_patterns', substitute_patterns)
+  endfor
 endfunction"}}}
 
 function! unite#custom_filters(source_name, expr) "{{{
