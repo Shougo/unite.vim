@@ -165,16 +165,24 @@ INTERFACE					*unite-interface*
 COMMANDS 					*unite-commands*
 
 :Unite [{options}] {sources}			*:Unite*
-		Shows the candidate window of {sources} with the initial
-		narrowing text empty.  You may specify multiple {sources} with
-		spaces as a separator; the order of the {sources} is equal to
-		the order of candidates.  See also |unite-source| for sources.
-		This command restores previous position.
+		Unite can be invoked with one or more source. This can be done
+		by specifying the list on the command line, separated by
+		spaces. The list of candidates (the matches found in the source
+		by your filter string) will be ordered in the same order that
+		you specify the {sources}.
 
-		In case you are already on a unite buffer, the narrowing text
+		For example:
+
+		:Unite file buffer
+
+		Will first list the files, then list the buffers.
+
+		See also |unite-source| the available sources.
+
+		In case you are already in a unite buffer, the narrowing text
 		is stored.
 
-		You may give a list of strings, separated with ":", after
+		Unite can accept a list of strings, separated with ":", after
 		the name of sources.  You must escape ":" and "\" with "\"
 		in parameters themselves. "::" is an abbreviation argument.  It
 		depends on the sources how the parameters are interpreted.
@@ -198,30 +206,30 @@ COMMANDS 					*unite-commands*
 		directory for the initial narrowing text.
 
 :UniteWithInput [{options}] {sources}		*:UniteWithInput*
-		Equivalent to |:Unite| except that it targets the user input
-		for the initial narrowing text.
+		Equivalent to |:Unite| except that it will prompt the user for
+		narrowing text before opening the unite buffer.
 
 :UniteWithCursorWord [{options}] {sources}	*:UniteWithCursorWord*
-		Equivalent to |:Unite| except that it targets the word on the
-		cursor for the initial narrowing text.
+		Equivalent to |:Unite| except that it targets the word under
+		the cursor for the initial narrowing text.
 
 :UniteResume [{options}] [{buffer-name}]	*:UniteResume*
 		Reuses the unite buffer named {buffer-name} that you opened
 		previously.  Narrowing texts or candidates are
 		as-is.  If {options} are given, context information gets
 		overridden.
+
 		Note: Reuses the last unite buffer you used in current tab if
 		you skip specifying {buffer-name}.
 
 :UniteClose {buffer-name}			*:UniteClose*
-		Closes the unite buffer named {buffer-name}.
+		Closes the unite buffer with {buffer-name}.
 
 The commands of source				*:unite-sources-commands*
 
 :UniteBookmarkAdd [{file}]			*:UniteBookmarkAdd*
-		Adds a file into the bookmark list.  Unless you specify any
-		parameter, the current position of the current file is
-		stored.
+		Adds a file to the bookmark list. By default this will also
+		store the position of the current file.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*unite-variables*
