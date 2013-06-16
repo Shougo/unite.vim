@@ -81,7 +81,7 @@ function! unite#custom#profile(profile_name, option_name, value) "{{{
       let substitute_patterns = custom.profiles[key].substitute_patterns
 
       if has_key(substitute_patterns, a:value.pattern)
-            \ && a:value.pattern == ''
+            \ && a:value.subst == ''
         call remove(substitute_patterns, a:value.pattern)
       else
         let substitute_patterns[a:value.pattern] = {
