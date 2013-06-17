@@ -1284,6 +1284,12 @@ unite#custom#profile({profile-name}, {option-name}, {value})
 		call unite#custom#profile('source/grep', 'context',
 		\ {'no_quit' : 1})
 <
+unite#custom#substitute({profile-name}, {pattern}, {subst} [, {priority}])
+					*unite#custom#substitute()*
+		Specify a replace pattern of narrowing text for a Unite buffer
+		of which name is {profile-name}.
+		Note: This is wrapper function for backward compatibility.
+
 unite#custom#default_action({kind}, {default-action})
 					*unite#custom_default_action()*
 					*unite#custom#default_action()*

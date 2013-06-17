@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jun 2013.
+" Last Modified: 17 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,6 +45,11 @@ function! unite#get_profile(profile_name, option_name) "{{{
 endfunction"}}}
 function! unite#set_substitute_pattern(buffer_name, pattern, subst, ...) "{{{
   call unite#print_error('unite#set_substitute_pattern() is deprecated.')
+  call unite#print_error('Please use unite#set_profile() '.
+        \ 'or unite#custom#substitute() instead of it.')
+endfunction"}}}
+function! unite#set_buffer_name_option(buffer_name, option_name, value) "{{{
+  call unite#print_error('unite#set_buffer_name_options() is deprecated.')
   call unite#print_error('Please use unite#set_profile() instead of it.')
 endfunction"}}}
 
