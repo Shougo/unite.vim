@@ -8,7 +8,7 @@ The difference between unite and similar plug-ins like fuzzyfinder,
 ctrl-p or ku is, unite provides an integration interface for several
 sources and you can create new interface using unite.
 
-![Screencast](https://s3.amazonaws.com/github-csexton/unite-01.gif)
+<img src="https://s3.amazonaws.com/github-csexton/unite-01.gif" />
 
 ## Usage
 
