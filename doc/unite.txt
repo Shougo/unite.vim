@@ -47,7 +47,6 @@ Create filter		|unite-create-filter|
 Configuration Examples	|unite-examples|
 External source		|unite-external-sources|
 FAQ			|unite-faq|
-Changelog		|unite-changelog|
 
 ==============================================================================
 INTRODUCTION					*unite-introduction*
@@ -1662,6 +1661,10 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 		If it is set, lines longer than the width of the window will
 		truncate candidate abbr.
 
+						*unite-options-tab*
+		-tab
+		Open new unite buffer by new tabpage.
+
 ==============================================================================
 SOURCES						*unite-sources*
 
@@ -3217,196 +3220,6 @@ A: You can use |unite-filter-matcher_fuzzy|.
 		call unite#custom#source('file,file/new,buffer,file_rec',
 		\ 'matchers', 'matcher_fuzzy')
 <
-
-==============================================================================
-CHANGELOG					*unite-changelog*
-
-2013-06-14
-- Fixed filtering of alias.
-- Fixed prompt behavior in file operations.
-
-2013-06-13
-- Added specify command execution feature.
-- Added g:unite_candidate_icon option.
-
-2013-06-11
-- Fixed auto resize behavior.
-
-2013-06-09
-- Improved file_point source.
-
-2013-06-08
-- Improved source loading.
-- Fixed rec sources.
-
-2013-06-07
-- Added undo source.
-- Improved rec sources.
-- Added directory_rec source.
-
-2013-06-02
-- Improved for auto completion.
-
-2013-05-29
-- Supported if_lua in fuzzy matcher.
-
-2013-05-28
-- Lock neocomplete.
-
-2013-05-23
-- Improved for vimfiler.
-
-2013-05-20
-- Fixed cursor position.
-
-2013-05-19
-- Fixed source completion.
-- Improved process source behavior.
-
-2013-05-17
-- Added <Plug>(unite_disable_max_candidates) mappings.
-
-2013-05-16
-- Improved g:unite_source_grep_recursive_opt default value.
-
-2013-05-13
-- Added truncate option.
-- Improved narrowing behavior.
-- Fixed unite#mappings#do_action().
-
-2013-05-12
-- Ver.5.1 development is started.
-
-------------------------------------------------------------------------------
-ChangeLog unite.vim Ver.5.0:
-
-2013-05-10
-- Added converter_file_directory.
-
-2013-05-09
-- Added converter_tail.
-
-2013-05-05
-- Uniq mru list in save.
-- Fixed loading sources problem.
-
-2013-05-02
-- Improved mru sources.
-- Fixed load scripts behavior.
-
-2013-05-01
-- Improved <Plug>(unite_delete_backward_char).
-- Improved load default scripts behavior.
-
-2013-04-30
-- Fixed <Plug>(unite_delete_backward_path).
-- Added g:unite_force_overwrite_statusline option.
-- Fixed start sources behavior.
-
-2013-04-29
-- Improved start sources behavior.
-- Added log option.
-- Restore statusline.
-
-2013-04-28
-- Improved unite status line.
-- Improved message behavior.
-- Added <Plug>(unite_print_message_log) mapping.
-
-2013-04-25
-- Fixed unite#clear_message().
-
-2013-04-22
-- Changed tab source behavior.
-
-2013-04-18
-- Improved documentation for ag.
-- Fixed unite#get_candidates().
-
-2013-04-17
-- Use vimproc#readdir() in file_rec source.
-- Changed start action in source kind.
-
-2013-04-14
-- Fixed action source problems.
-
-2013-04-13
-- Improved narrow action.
-
-2013-04-12
-- Enabled lua interface feature.
-
-2013-04-11
-- Improved print message feature.
-
-2013-04-10
-- Temporally disabled if_lua feature.  Because if_lua has SEGV problem.
-
-2013-04-07
-- Fixed filter.
-- Added unite#util#has_lua().
-- Improved source file.
-
-2013-04-06
-- Improved quick match behavior.
-
-2013-04-04
-- Fixed file_rec/async source.
-- Improved unite#get_unite_bufnr()/unite#get_unite_winnr().
-
-2013-04-02
-- Fixed action__path problem.
-- Improved vimfiler redraw behavior.
-- Fixed narrow action.
-- Fixed file_rec/async source.
-- Fixed close previous unite buffer behavior.
-
-2013-04-01
-- Optimized for files.
-
-2013-03-31
-- Added g:unite_source_file_rec_async_command option.
-
-2013-03-30
-- Supported make multiple directories.
-- Use python3 interface.
-
-2013-03-29
-- Improved cutsom bookmark action.
-
-2013-03-24
-- Improved runtimepath source.
-- Fixed updatetime restore.
-
-2013-03-23
-- Fixed action source behavior.
-
-2013-03-22
-- Added g:unite_source_file_rec_max_cache_files.
-
-2013-03-20
-- Changed smart_execute_command() implementation.
-- Fixed for auto_preview.
-- Fixed action source problem.
-
-2013-03-19
-- Improved line syntax.
-
-2013-03-16
-- Fixed for temporary buffer.
-- Fixed for backquote.
-- Improved syntax highlight in line and grep sources.
-
-2013-03-05
-- Fixed temporary buffer.
-
-2013-03-02
-- Ver.5.0 development is started.
-- Fixed cd problem in unite#start_temporary().
-- Fixed restore updatetime.
-- Improved output source behavior.
-- Improved documentation.
-- Disabled auto resize feature.
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:

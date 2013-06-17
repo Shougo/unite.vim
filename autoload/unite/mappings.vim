@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jun 2013.
+" Last Modified: 17 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -316,7 +316,14 @@ endfunction"}}}
 
 " key-mappings functions.
 function! s:exit() "{{{
+  let context = unite#get_context()
+
   call unite#force_quit_session()
+
+  if context.tab && winnr('$') == 1 && !context.temporary
+    " Close window.
+    close
+  endif
 endfunction"}}}
 function! s:all_exit() "{{{
   call unite#all_quit_session()

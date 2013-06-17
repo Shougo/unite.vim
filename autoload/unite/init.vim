@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 17 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -63,6 +63,9 @@ function! unite#init#_context(context, ...) "{{{
     " Ignore empty unite buffer.
     let context.no_empty = 1
   endif
+  if context.tab
+    let context.no_split = 1
+  endif
   if !has_key(context, 'short_source_names')
     let context.short_source_names = g:unite_enable_short_source_names
   endif
@@ -90,8 +93,14 @@ function! unite#init#_unite_buffer() "{{{
   let current_unite.context.real_buffer_name =
         \ current_unite.real_buffer_name
 
+  let context = current_unite.context
+
+  if !context.temporary && context.tab
+    tabnew
+  endif
+
   call unite#view#_switch_unite_buffer(
-        \ current_unite.buffer_name, current_unite.context)
+        \ current_unite.buffer_name, context)
 
   let b:unite = current_unite
   let unite = unite#get_current_unite()
@@ -150,7 +159,7 @@ function! unite#init#_unite_buffer() "{{{
     call unite#mappings#define_default_mappings()
   endif
 
-  let &l:wrap = unite.context.wrap
+  let &l:wrap = context.wrap
 
   if exists('&redrawtime')
     " Save redrawtime

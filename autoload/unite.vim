@@ -298,7 +298,7 @@ function! unite#force_quit_session()  "{{{
 
   let context = unite#get_context()
   if context.temporary && !empty(context.old_buffer_info)
-      call unite#start#resume_from_temporary(context)
+    call unite#start#resume_from_temporary(context)
   endif
 endfunction"}}}
 function! unite#quit_session()  "{{{
