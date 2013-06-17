@@ -1,4 +1,4 @@
-## Description
+![Unite.vim](https://s3.amazonaws.com/github-csexton/unite-brand.png)
 
 The unite or unite.vim plug-in can search and display information from
 arbitrary sources like files, buffers, recently used files or registers.  You
@@ -8,11 +8,9 @@ The difference between unite and similar plug-ins like fuzzyfinder,
 ctrl-p or ku is, unite provides an integration interface for several
 sources and you can create new interface using unite.
 
+<img src="https://s3.amazonaws.com/github-csexton/unite-01.gif" />
+
 ## Usage
-
-Recommend to read this post by @bling:
-[Unite.vim, the Plugin You Didn't Know You Need](http://bling.github.io/blog/2013/06/02/unite-dot-vim-the-plugin-you-didnt-know-you-need/)
-
 
 In case you run unite to display files and buffers as sources to pick
 from.
@@ -42,7 +40,7 @@ actions.
 You can also narrow down the list of candidates by a keyword. If you change
 into the insert mode inside of a unite window, the cursor drops you behind the
 ">" in the second line from above. There you can start typing to filter the
-candidates.  You can also use the wild card "*" as an arbitrary character
+candidates.  You can also use the wild card `*` as an arbitrary character
 sequence. For example,
 
 	*hisa
@@ -79,7 +77,7 @@ See also `unite_default_key_mappings` for other actions.
 There is also a screencast available which shows unite in action. Thanks to
 ujihisa! http://www.ustream.tv/recorded/11240673
 
-## Install details
+## Install
 
 Install the distributed files into your Vim script directory which is usually
 `~/.vim/`, or `$HOME/vimfiles` on Windows. You should consider to use one of the
@@ -91,13 +89,12 @@ sources to the command you wish to select from as parameters. However, it's a
 pain in the ass to run the command explicitly every time, so I recommend you
 to set a key mapping for the command. See `:h unite`.
 
-## FAQ
+## Resources
 
-See [:h unite](https://github.com/Shougo/unite.vim/blob/master/doc/unite.txt). There's FAQ section.
+* [Unite plugins](https://github.com/Shougo/unite.vim/wiki/unite-plugins)
+* [Unite.vim, the Plugin You Didn't Know You Need](http://bling.github.io/blog/2013/06/02/unite-dot-vim-the-plugin-you-didnt-know-you-need/)
+* [FAQ](https://github.com/Shougo/unite.vim/blob/master/doc/unite.txt#L3134)
 
-## Links
-
-unite plugins(in Japanese): https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ## Screen shots
 
@@ -120,3 +117,7 @@ unite mapping source
 unite menu source
 -----------------
 ![Unite menu source.](http://cdn-ak.f.st-hatena.com/images/fotolife/o/osyo-manga/20130307/20130307101227.png)
+
+## Special Thanks
+
+* Dragon Image was originally from [Stanislav](http://All-Silhouettes.com)
