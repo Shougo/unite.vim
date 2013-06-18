@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jun 2013.
+" Last Modified: 18 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,18 +32,18 @@ call unite#util#set_default(
       \ 'g:unite_source_rec_ignore_pattern',
       \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\)$'.
       \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
-      \ 'g:unite_source_rec_ignore_pattern')
+      \ 'g:unite_source_file_rec_ignore_pattern')
 call unite#util#set_default(
       \ 'g:unite_source_rec_min_cache_files', 100,
-      \ 'g:unite_source_rec_min_cache_files')
+      \ 'g:unite_source_file_rec_min_cache_files')
 call unite#util#set_default(
       \ 'g:unite_source_rec_max_cache_files', 1000,
-      \ 'g:unite_source_rec_max_cache_files')
+      \ 'g:unite_source_file_rec_max_cache_files')
 call unite#util#set_default(
       \ 'g:unite_source_rec_async_command',
       \ (executable('ag') ? 'ag --nocolor --nogroup -g ""' :
       \ !unite#util#is_windows() && executable('find') ? 'find' : ''),
-      \ 'g:unite_source_rec_async_command')
+      \ 'g:unite_source_file_rec_async_command')
 "}}}
 
 let s:Cache = vital#of('unite.vim').import('System.Cache')
