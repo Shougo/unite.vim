@@ -28,6 +28,7 @@ CONTENTS					*unite-contents*
 Introduction		|unite-introduction|
 Usage			|unite-usage|
 Install			|unite-install|
+Configuration Examples	|unite-examples|
 Interface		|unite-interface|
   Commands		  |unite-commands|
   Variables		  |unite-variables|
@@ -44,7 +45,6 @@ Filters			|unite-filters|
 Create source		|unite-create-source|
 Create kind		|unite-create-kind|
 Create filter		|unite-create-filter|
-Configuration Examples	|unite-examples|
 External source		|unite-external-sources|
 FAQ			|unite-faq|
 
@@ -157,6 +157,156 @@ sources to the command you wish to select from as parameters.  However, it's a
 pain in the ass to run the command explicitly every time, so I recommend you
 to set a key mapping for the command.
 
+==============================================================================
+EXAMPLES					*unite-examples*
+
+With off the fexibility and power that unite gives you it is recommended that
+you create some normal mode mappings for invoking unite in your .vimrc file.
+
+A simple mapping that will configure <leader>-f to browse for a file in the
+current working dorectory:
+
+	nnoremap <leader>f :Unite file<cr>
+
+The same mapping, but instead start in insert mode so any typing will filter
+the candidate list:
+
+	nnoremap <leader>f :Unite -start-insert file<cr>
+
+The popular recursive file search, starting insert automatically and using
+fuzzy file matching:
+
+	call unite#filters#matcher_default#use(['matcher_fuzzy'])
+	nnoremap <leader>r :Unite -start-insert file_rec<cr>
+
+Note: with large projects this may cause some performance problems. Normally
+it is recommended to use |unite-source-file_rec/async| source, which requires
+vimproc. The mapping might look something like this:
+
+	nnoremap <leader>r :Unite -start-insert file_rec/async:!<cr>
+
+Most recently used files:
+
+	nnoremap <leader>m :Unite file_mru<cr>
+
+Search through yank history. First, this must be enabled to track yank history, then the mapping set.
+
+	let g:unite_source_history_yank_enable = 1
+	nnoremap <leader>y :Unite history/yank<cr>
+
+Since you can pass in multiple sources into unite you can easily create a
+mapping that will open up a unite pane with the sources you frequently use.
+To see buffers, recent files then bookmarks:
+
+	nnoremap <silent> <leader>b :Unite buffer file_mru bookmark<CR>
+
+Much more spophisticated mappings can be configured to very quickly find what
+you need in vim.
+
+More advanced configuration example:
+>
+	" The prefix key.
+	nnoremap    [unite]   <Nop>
+	nmap    f [unite]
+
+	nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir
+	        \ -buffer-name=files buffer file_mru bookmark file<CR>
+	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
+	        \ -buffer-name=files -prompt=%\  buffer file_mru bookmark file<CR>
+	nnoremap <silent> [unite]r  :<C-u>Unite
+	        \ -buffer-name=register register<CR>
+	nnoremap <silent> [unite]o  :<C-u>Unite outline<CR>
+	nnoremap <silent> [unite]f
+	        \ :<C-u>Unite -buffer-name=resume resume<CR>
+	nnoremap <silent> [unite]d
+	        \ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+	nnoremap <silent> [unite]ma
+	        \ :<C-u>Unite mapping<CR>
+	nnoremap <silent> [unite]me
+	        \ :<C-u>Unite output:message<CR>
+	nnoremap  [unite]f  :<C-u>Unite source<CR>
+
+	nnoremap <silent> [unite]s
+	        \ :<C-u>Unite -buffer-name=files -no-split
+	        \ jump_point file_point buffer_tab
+	        \ file_rec:! file file/new file_mru<CR>
+
+	" Start insert.
+	"let g:unite_enable_start_insert = 1
+	"let g:unite_enable_short_source_names = 1
+
+	" To track long mru history.
+	"let g:unite_source_file_mru_long_limit = 3000
+	"let g:unite_source_directory_mru_long_limit = 3000
+
+	" Like ctrlp.vim settings.
+	"let g:unite_enable_start_insert = 1
+	"let g:unite_winheight = 10
+	"let g:unite_split_rule = 'botright'
+
+	" Prompt choices.
+	"let g:unite_prompt = '❫ '
+	"let g:unite_prompt = '» '
+
+	autocmd FileType unite call s:unite_my_settings()
+	function! s:unite_my_settings()"{{{
+	  " Overwrite settings.
+
+	  nmap <buffer> <ESC>      <Plug>(unite_exit)
+	  imap <buffer> jj      <Plug>(unite_insert_leave)
+	  "imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+
+	imap <buffer><expr> j unite#smart_map('j', '')
+	imap <buffer> <TAB>   <Plug>(unite_select_next_line)
+	imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+	imap <buffer> '     <Plug>(unite_quick_match_default_action)
+	nmap <buffer> '     <Plug>(unite_quick_match_default_action)
+	imap <buffer><expr> x
+	        \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
+	nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
+	nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
+	imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
+	imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
+	nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
+	nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
+	nmap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
+	imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
+	nnoremap <silent><buffer><expr> l
+	        \ unite#smart_map('l', unite#do_action('default'))
+
+	let unite = unite#get_current_unite()
+	if unite.buffer_name =~# '^search'
+	  nnoremap <silent><buffer><expr> r     unite#do_action('replace')
+	else
+	  nnoremap <silent><buffer><expr> r     unite#do_action('rename')
+	endif
+
+	nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
+	nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
+	        \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
+	endfunction"}}}
+
+	let g:unite_source_file_mru_limit = 200
+	let g:unite_cursor_line_highlight = 'TabLineSel'
+	let g:unite_abbr_highlight = 'TabLine'
+
+	" For optimize.
+	let g:unite_source_file_mru_filename_format = ''
+
+	if executable('jvgrep')
+	  " For jvgrep.
+	  let g:unite_source_grep_command = 'jvgrep'
+	  let g:unite_source_grep_default_opts = '--exclude ''\.(git|svn|hg|bzr)'''
+	  let g:unite_source_grep_recursive_opt = '-R'
+	endif
+
+	" For ack.
+	if executable('ack-grep')
+	  " let g:unite_source_grep_command = 'ack-grep'
+	  " let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
+	  " let g:unite_source_grep_recursive_opt = ''
+	endif
+<
 ==============================================================================
 INTERFACE					*unite-interface*
 
@@ -3008,111 +3158,6 @@ filter			Function		(Required)
 description		String		(Optional)
 			The filter description string.
 
-==============================================================================
-EXAMPLES					*unite-examples*
->
-	" The prefix key.
-	nnoremap    [unite]   <Nop>
-	nmap    f [unite]
-	
-	nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir
-	\ -buffer-name=files buffer file_mru bookmark file<CR>
-	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
-	\ -buffer-name=files -prompt=%\  buffer file_mru bookmark file<CR>
-	nnoremap <silent> [unite]r  :<C-u>Unite
-	\ -buffer-name=register register<CR>
-	nnoremap <silent> [unite]o  :<C-u>Unite outline<CR>
-	nnoremap <silent> [unite]f
-	\ :<C-u>Unite -buffer-name=resume resume<CR>
-	nnoremap <silent> [unite]d
-	\ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-	nnoremap <silent> [unite]ma
-	\ :<C-u>Unite mapping<CR>
-	nnoremap <silent> [unite]me
-	\ :<C-u>Unite output:message<CR>
-	nnoremap  [unite]f  :<C-u>Unite source<CR>
-	
-	nnoremap <silent> [unite]s
-	        \ :<C-u>Unite -buffer-name=files -no-split
-	        \ jump_point file_point buffer_tab
-	        \ file_rec:! file file/new file_mru<CR>
-	
-	" Start insert.
-	"let g:unite_enable_start_insert = 1
-	"let g:unite_enable_short_source_names = 1
-
-	" To track long mru history.
-	"let g:unite_source_file_mru_long_limit = 3000
-	"let g:unite_source_directory_mru_long_limit = 3000
-	
-	" Like ctrlp.vim settings.
-	"let g:unite_enable_start_insert = 1
-	"let g:unite_winheight = 10
-	"let g:unite_split_rule = 'botright'
-	
-	" Prompt choices.
-	"let g:unite_prompt = '❫ '
-	"let g:unite_prompt = '» '
-	
-	autocmd FileType unite call s:unite_my_settings()
-	function! s:unite_my_settings()"{{{
-	  " Overwrite settings.
-	
-	  nmap <buffer> <ESC>      <Plug>(unite_exit)
-	  imap <buffer> jj      <Plug>(unite_insert_leave)
-	  "imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
-	
-	imap <buffer><expr> j unite#smart_map('j', '')
-	imap <buffer> <TAB>   <Plug>(unite_select_next_line)
-	imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
-	imap <buffer> '     <Plug>(unite_quick_match_default_action)
-	nmap <buffer> '     <Plug>(unite_quick_match_default_action)
-	imap <buffer><expr> x
-	        \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
-	nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
-	nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-	imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-	imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
-	nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
-	nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
-	nmap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
-	imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
-	nnoremap <silent><buffer><expr> l
-	        \ unite#smart_map('l', unite#do_action('default'))
-	
-	let unite = unite#get_current_unite()
-	if unite.buffer_name =~# '^search'
-	  nnoremap <silent><buffer><expr> r     unite#do_action('replace')
-	else
-	  nnoremap <silent><buffer><expr> r     unite#do_action('rename')
-	endif
-	
-	nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
-	nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
-	\ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
-	endfunction"}}}
-	
-	let g:unite_source_file_mru_limit = 200
-	let g:unite_cursor_line_highlight = 'TabLineSel'
-	let g:unite_abbr_highlight = 'TabLine'
-	
-	" For optimize.
-	let g:unite_source_file_mru_filename_format = ''
-	
-	if executable('jvgrep')
-	  " For jvgrep.
-	  let g:unite_source_grep_command = 'jvgrep'
-	  let g:unite_source_grep_default_opts = '--exclude ''\.(git|svn|hg|bzr)'''
-	  let g:unite_source_grep_recursive_opt = '-R'
-	endif
-	
-	" For ack.
-	if executable('ack-grep')
-	  " let g:unite_source_grep_command = 'ack-grep'
-	  " let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
-	  " let g:unite_source_grep_recursive_opt = ''
-	endif
-<
 ==============================================================================
 EXTERNAL SOURCES				*unite-external-sources*
 
