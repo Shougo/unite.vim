@@ -166,40 +166,40 @@ you create some normal mode mappings for invoking unite in your .vimrc file.
 A simple mapping that will configure <leader>-f to browse for a file in the
 current working dorectory:
 >
-	nnoremap <leader>f :Unite file<cr>
+	nnoremap <leader>f :<C-u>Unite file<CR>
 <
 The same mapping, but instead start in insert mode so any typing will filter
 the candidate list:
 >
-	nnoremap <leader>f :Unite -start-insert file<cr>
+	nnoremap <leader>f :<C-u>Unite -start-insert file<CR>
 <
 The popular recursive file search, starting insert automatically and using
 fuzzy file matching:
 >
 	call unite#filters#matcher_default#use(['matcher_fuzzy'])
-	nnoremap <leader>r :Unite -start-insert file_rec<cr>
+	nnoremap <leader>r :<C-u>Unite -start-insert file_rec<CR>
 <
 Note: with large projects this may cause some performance problems. Normally
 it is recommended to use |unite-source-file_rec/async| source, which requires
 |vimproc|. The mapping might look something like this:
 >
-	nnoremap <leader>r :Unite -start-insert file_rec/async:!<cr>
+	nnoremap <leader>r :<C-u>Unite -start-insert file_rec/async:!<CR>
 <
 Most recently used files:
 >
-	nnoremap <leader>m :Unite file_mru<cr>
+	nnoremap <leader>m :<C-u>Unite file_mru<CR>
 <
 Search through yank history. First, this must be enabled to track yank
 history, then the mapping set.
 >
 	let g:unite_source_history_yank_enable = 1
-	nnoremap <leader>y :Unite history/yank<cr>
+	nnoremap <leader>y :<C-u>Unite history/yank<CR>
 <
 Since you can pass in multiple sources into unite you can easily create a
 mapping that will open up a unite pane with the sources you frequently use.
 To see buffers, recent files then bookmarks:
 >
-	nnoremap <silent> <leader>b :Unite buffer file_mru bookmark<CR>
+	nnoremap <silent> <leader>b :<C-u>Unite buffer file_mru bookmark<CR>
 <
 Much more spophisticated mappings can be configured to very quickly find what
 you need in vim.
