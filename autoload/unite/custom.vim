@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: custom.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jun 2013.
+" Last Modified: 20 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -81,6 +81,7 @@ function! unite#custom#profile(profile_name, option_name, value) "{{{
       let substitute_patterns = custom.profiles[key].substitute_patterns
 
       if has_key(substitute_patterns, a:value.pattern)
+            \ && type(a:value.subst) == type('')
             \ && a:value.subst == ''
         call remove(substitute_patterns, a:value.pattern)
       else
