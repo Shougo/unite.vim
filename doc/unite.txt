@@ -385,14 +385,16 @@ The commands of source				*:unite-sources-commands*
 VARIABLES 					*unite-variables*
 
 g:unite_update_time				*g:unite_update_time*
-		Update time interval of candidates for each input of narrowing
-		text.  In Msec.
+		The time interval for updating the canidate list as the filter
+		text it typed.
+
+		In Msec.
 
 		The default value is 500.
 
 g:unite_prompt			                *g:unite_prompt*
-		Unite default prompt.  Can be set with `-prompt` option for
-		each unite session.
+		Unite default prompt.  Can also be set with the `-prompt`
+		command line argument.
 
 		The default value is '> '.
 
@@ -409,24 +411,24 @@ g:unite_split_rule				*g:unite_split_rule*
 
 g:unite_enable_split_vertically
 					*g:unite_enable_split_vertically*
-		If this option is 1, unite window is split vertically.
+		If this variable is 1, unite window is split vertically.
 
-		The default value is 0; unite window is split horizontally.
+		The default value is 0; window is split horizontally.
 
 g:unite_winheight				*g:unite_winheight*
-		The height of unite window when it's split horizontally.  It's
-		ignored in splitting vertically.
+		The height of unite window when split horizontally. Ignored
+		when splitting vertically.
 
 		The default value is 20.
 
 g:unite_winwidth				*g:unite_winwidth*
-		The width of unite window when it's split vertically.  It's
-		ignored in splitting horizontally.
+		The width of unite window when split vertically. Ignored
+		when splitting horizontally.
 
 		The default value is 90.
 
 g:unite_cursor_line_highlight		*g:unite_cursor_line_highlight*
-		Specify the cursor line highlight.
+		Specify the cursor line highlight group.
 
 		The default value is "PmenuSel".
 
@@ -443,13 +445,15 @@ g:unite_enable_use_short_source_names
 		The default value is 0.
 
 g:unite_marked_icon				*g:unite_marked_icon*
-		It controls unite marked candidates icon.
-		Note: It must be one character.
+		Controls unite marked candidates icon.
+
+		Note: This must be one character.
 
 		Default value is "*".
 
 g:unite_candidate_icon				*g:unite_candidate_icon*
-		It controls unite normal candidates icon.
+		Controls unite normal candidates icon.
+
 		Note: It must be one character.
 
 		Default value is " ".
@@ -458,7 +462,8 @@ g:unite_candidate_icon				*g:unite_candidate_icon*
 g:unite_force_overwrite_statusline
 		If this variable is 1, unite will overwrite 'statusline'
 		automatically.
-		Note: If you want to change 'statusline' in unite buffer, you
+
+		Note: If you want to change 'statusline' in unite buffer, this
 		must set it to 0.
 
 		The default value is 1.
@@ -470,18 +475,19 @@ g:unite_quick_match_table			*g:unite_quick_match_table*
 		The default value is complex; so see plugin/unite.vim.
 
 g:unite_data_directory				*g:unite_data_directory*
-		Specify directories for configurations internally used in
-		unite itself or its sources.  If the directory doesn't exist,
-		the directory is automatically generated.  For example
+		Specify directories to store unite configurations. Used by
+		both unite itself and its sources.  If the directory doesn't
+		exist, the directory is automatically generated.  For example
 		source of file_mru saves the information of the most recent
-		used files into the directory.
+		used files into this directory.
 
 		The Default value is expand('~/.unite'); the absolute path
 		of it.
 
 g:unite_no_default_keymappings		*g:unite_no_default_keymappings*
-		If it's 1, unite doesn't map any default key mappings.  You
-		shouldn't enable this option without any particular reasons.
+		If this variable is 1, unite doesn't set any default key
+		mappings.  Not recomended. You shouldn't set this to 1 unless
+		you are a specific reason.
 
 		This variable doesn't exist unless you define explicitly.
 
@@ -490,20 +496,22 @@ SOURCES VARIABLES 				*unite-sources-variables*
 g:unite_source_buffer_time_format
 					*g:unite_source_buffer_time_format*
 		Specify the output format of the last access time of
-		|unite-source-buffer|.  The format is same to |strftime()|.
+		|unite-source-buffer|.  Uses |strftime()| formatting.
 
 		The default value is "(%Y/%m/%d %H:%M:%S) ".
 
 g:unite_source_file_ignore_pattern	*g:unite_source_file_ignore_pattern*
-		Refer autoload/unite/sources/file.vim about the default value.
 		Note: This variable is deprecated.  Please use
 		|unite#custom#source()| instead.
+
 		Note: This variable must be set before using |unite|.
+
+		Refer autoload/unite/sources/file.vim about the default value.
 
 g:unite_source_file_mru_time_format
 					*g:unite_source_file_mru_time_format*
 		Specify the output format of the last access time of
-		|unite-source-file_mru|.  The format is same to |strftime()|.
+		|unite-source-file_mru|. Uses |strftime()| formatting.
 
 		The default value is "(%Y/%m/%d %H:%M:%S) ".
 
@@ -523,7 +531,7 @@ g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		The default value is |g:unite_data_directory|; '/file_mru'
 
 g:unite_source_mru_do_validate			*g:unite_source_mru_do_validate*
-		Specify whether automatically remove invalid file path from
+		Specify whether automatically remove invalid file paths from
 		mru history.
 
 		Effective for both file_mru and directory_mru
@@ -551,15 +559,17 @@ g:unite_source_file_mru_long_limit		*g:unite_source_file_mru_long_limit*
 
 		The default value is 1000.
 
-		The mru code is overhauled, you can set a large number like
+		Note: The mru code has been optimized, you can set a large number like
 		5000 without impact the performance.
 
 g:unite_source_file_mru_ignore_pattern
 				*g:unite_source_file_mru_ignore_pattern*
 		Refer autoload/unite/sources/file_mru.vim about the default
 		value.
+
 		Note: This function is deprecated.  Please use
 		|unite#custom#source()| instead.
+
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_directory_mru_time_format
@@ -584,7 +594,8 @@ g:unite_source_directory_mru_long_limit
 		The default value is 1000.
 g:unite_source_directory_mru_ignore_pattern
 				*g:unite_source_directory_mru_ignore_pattern*
-		They are same to |unite-source-file_mru| except that the
+
+		Same as |unite-source-file_mru| except that the
 		targets are |unite-source-directory_mru|.
 
 g:unite_source_bookmark_directory	*g:unite_source_bookmark_directory*
@@ -597,6 +608,7 @@ g:unite_source_rec_ignore_pattern
 				*g:unite_source_rec_ignore_pattern*
 		Refer autoload/unite/sources/file_rec.vim about the default
 		value.
+
 		Note: This variable is deprecated.  Please use
 		|unite#custom#source()| instead like the below.
 >
@@ -655,6 +667,7 @@ g:unite_source_grep_recursive_opt	*g:unite_source_grep_recursive_opt*
 
 g:unite_source_grep_default_opts	*g:unite_source_grep_default_opts*
 		Set the default options for grep.
+
 		Note: grep output must match the pattern below.
 		filename:number:pattern
 >
@@ -670,8 +683,10 @@ g:unite_source_grep_max_candidates	*g:unite_source_grep_max_candidates*
 g:unite_source_grep_ignore_pattern	*g:unite_source_grep_ignore_pattern*
 		Refer autoload/unite/sources/grep.vim about the default
 		value.
+
 		Note: This variable is deprecated.  Please use
 		|unite#custom#source()| instead.
+
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_grep_search_word_highlight
@@ -689,8 +704,10 @@ g:unite_source_vimgrep_search_word_highlight
 g:unite_source_vimgrep_ignore_pattern	*g:unite_source_vimgrep_ignore_pattern*
 		Refer autoload/unite/sources/vimgrep.vim about the default
 		value.
+
 		Note: This variable is deprecated.  Please use
 		|unite#custom#source()| instead.
+
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_find_command			*g:unite_source_find_command*
@@ -706,9 +723,11 @@ g:unite_source_find_max_candidates
 
 g:unite_source_find_ignore_pattern
 					*g:unite_source_find_ignore_pattern*
-		Refer autoload/unite/sources/find.vim about the default value.
+		Refer autoload/unite/sources/find.vim for the default value.
+
 		Note: This variable is deprecated.  Please use
 		|unite#custom#source()| instead.
+
 		Note: This variable must be set before using |unite|.
 
 g:unite_source_line_enable_highlight
@@ -719,7 +738,7 @@ g:unite_source_line_enable_highlight
 
 g:unite_source_line_search_word_highlight
 				*g:unite_source_line_search_word_highlight*
-		Highlight setting applied to search keyword when
+		Highlight group applied to search keyword when
 		|g:unite_source_enable_highlight| is true.
 
 		The default value is "Search".
@@ -762,9 +781,9 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		command_candidates
 				(List or Dictionary)	(Optional)
 		Menu candidates for commands.
-		If it is Dictionary, the key is used for word.  The value is
+		If this is a Dictionary, the key is used for word.  The value is
 		command name.
-		If it is List, the first item is used for word.  The second
+		If this is a List, the first item is used for word.  The second
 		item is command name.
 
 		map		(Function)		(Optional)
@@ -789,14 +808,14 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		      \       'action__command' : a:value,
 		      \     }
 		endfunction
-		
+
 		let g:unite_source_menu_menus.test2 = {
 		      \     'description' : 'Test menu2',
 		      \ }
 		let g:unite_source_menu_menus.test2.command_candidates = {
 		      \   'python'    : 'VimShellInteractive python',
 		      \ }
-		
+
 		let g:unite_source_menu_menus.test3 = {
 		      \     'description' : 'Test menu3',
 		      \ }
@@ -804,22 +823,23 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		      \   ['ruby', 'VimShellInteractive ruby
 		      \   ['python', 'VimShellInteractive python'],
 		      \ ]
-		
+
 		nnoremap <silent> sm  :<C-u>Unite menu:test<CR>
 <
 		The default value is "{}".
 
 g:unite_source_history_yank_enable
 					*g:unite_source_history_yank_enable*
-		If it's defined and non-0, unite enables
-		|unite-source-history/yank|.  Note: This value has to be set
-		in .vimrc.
+		If defined and not 0, unite enables
+		|unite-source-history/yank|.
+
+		Note: This value has to be set in .vimrc.
 
 		This variable is not defined by default.
 
 g:unite_source_history_yank_limit	*g:unite_source_history_yank_limit*
 		The maximum number of |unite-source-history/yank| to save.
-		
+
 		The default value is 100.
 
 g:unite_source_history_yank_file	*g:unite_source_history_yank_file*
@@ -829,9 +849,9 @@ g:unite_source_history_yank_file	*g:unite_source_history_yank_file*
 		The default value is |g:unite_data_directory|; '/history_yank'
 
 g:unite_source_process_enable_confirm	*g:unite_source_process_enable_confirm*
-		When you send a signal to a process via |unite-source-process|
-		such as KILL, Vim will ask you if you really want to do that
-		if this variable is 1.
+		When this variable is 1 and a signal is sent to a process via
+		|unite-source-process| such as KILL, Vim will ask you if you
+		really want to do that.
 
 		The default value is 1.
 
