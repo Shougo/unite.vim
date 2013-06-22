@@ -538,7 +538,8 @@ g:unite_source_mru_do_validate			*g:unite_source_mru_do_validate*
 
 		The default value is 1
 
-g:unite_source_mru_update_interval		*g:unite_source_mru_update_interval*
+g:unite_source_mru_update_interval
+					*g:unite_source_mru_update_interval*
 		Specify the update interval to save updated mru
 		files/directories to disk.
 
@@ -546,21 +547,22 @@ g:unite_source_mru_update_interval		*g:unite_source_mru_update_interval*
 
 		The default value is 600 (10 minutes)
 
-g:unite_source_file_mru_limit		*g:unite_source_file_mru_limit*
+g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
 		The number of recent file candidates to show in default
 		file_mru window.
 
 		The default value is 100.
 
-g:unite_source_file_mru_long_limit		*g:unite_source_file_mru_long_limit*
+g:unite_source_file_mru_long_limit
+					*g:unite_source_file_mru_long_limit*
 		The maximum number of most recent files to save.
 
 		Refer to |unite-source-file_mru| for details.
 
 		The default value is 1000.
 
-		Note: The mru code has been optimized, you can set a large number like
-		5000 without impact the performance.
+		Note: The mru code has been optimized, you can set a large
+		number like 5000 without impact the performance.
 
 g:unite_source_file_mru_ignore_pattern
 				*g:unite_source_file_mru_ignore_pattern*
@@ -592,6 +594,7 @@ g:unite_source_directory_mru_long_limit
 		Refer to |unite-source-file_mru| for details.
 
 		The default value is 1000.
+
 g:unite_source_directory_mru_ignore_pattern
 				*g:unite_source_directory_mru_ignore_pattern*
 
@@ -605,7 +608,7 @@ g:unite_source_bookmark_directory	*g:unite_source_bookmark_directory*
 		The default value is |g:unite_data_directory|; '/bookmark'.
 
 g:unite_source_rec_ignore_pattern
-				*g:unite_source_rec_ignore_pattern*
+					*g:unite_source_rec_ignore_pattern*
 		Refer autoload/unite/sources/file_rec.vim about the default
 		value.
 
@@ -623,7 +626,7 @@ g:unite_source_rec_ignore_pattern
 		Note: This variable is obsolete.
 
 g:unite_source_rec_min_cache_files
-				*g:unite_source_rec_min_cache_files*
+					*g:unite_source_rec_min_cache_files*
 		Specify the minimum number of files that
 		|unite-source-file_rec| saves the caches.  Any cache isn't
 		saved if the number of files is less than this value or this
@@ -635,7 +638,7 @@ g:unite_source_rec_min_cache_files
 		Note: This variable is obsolete.
 
 g:unite_source_rec_max_cache_files
-				*g:unite_source_rec_max_cache_files*
+					*g:unite_source_rec_max_cache_files*
 		Specify the maximum number of files that
 		|unite-source-file_rec| saves the caches.
 
@@ -645,27 +648,29 @@ g:unite_source_rec_max_cache_files
 		Note: This variable is obsolete.
 
 g:unite_source_rec_async_command
-				*g:unite_source_rec_async_command*
+					*g:unite_source_rec_async_command*
 		Specify the filelist command and arguments in file_rec/async
 		source.
 
 		The default value is "ag" or "find" and the args.
 
-				*g:unite_source_file_rec_async_command*
+					*g:unite_source_file_rec_async_command*
 		Note: This variable is obsolete.
 
 		The default value is 1000.
-g:unite_source_grep_command			*g:unite_source_grep_command*
+g:unite_source_grep_command		*g:unite_source_grep_command*
 		Set grep command.
 
 		The default value is "grep".
 
-g:unite_source_grep_recursive_opt	*g:unite_source_grep_recursive_opt*
+g:unite_source_grep_recursive_opt
+					*g:unite_source_grep_recursive_opt*
 		Set grep recursive option.
 
 		The default value is "-r".
 
-g:unite_source_grep_default_opts	*g:unite_source_grep_default_opts*
+g:unite_source_grep_default_opts
+					*g:unite_source_grep_default_opts*
 		Set the default options for grep.
 
 		Note: grep output must match the pattern below.
@@ -675,12 +680,14 @@ g:unite_source_grep_default_opts	*g:unite_source_grep_default_opts*
 <
 		The default value is "-Hn".
 
-g:unite_source_grep_max_candidates	*g:unite_source_grep_max_candidates*
+g:unite_source_grep_max_candidates
+					*g:unite_source_grep_max_candidates*
 		Set the max number of |unite-source-grep| candidates.
 
 		The default value is 100.
 
-g:unite_source_grep_ignore_pattern	*g:unite_source_grep_ignore_pattern*
+g:unite_source_grep_ignore_pattern
+					*g:unite_source_grep_ignore_pattern*
 		Refer autoload/unite/sources/grep.vim about the default
 		value.
 
@@ -701,7 +708,8 @@ g:unite_source_vimgrep_search_word_highlight
 
 		The default value is "Search".
 
-g:unite_source_vimgrep_ignore_pattern	*g:unite_source_vimgrep_ignore_pattern*
+g:unite_source_vimgrep_ignore_pattern
+				*g:unite_source_vimgrep_ignore_pattern*
 		Refer autoload/unite/sources/vimgrep.vim about the default
 		value.
 
@@ -710,7 +718,7 @@ g:unite_source_vimgrep_ignore_pattern	*g:unite_source_vimgrep_ignore_pattern*
 
 		Note: This variable must be set before using |unite|.
 
-g:unite_source_find_command			*g:unite_source_find_command*
+g:unite_source_find_command		*g:unite_source_find_command*
 		Set find command.
 
 		The default value is "find".
@@ -781,10 +789,10 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		command_candidates
 				(List or Dictionary)	(Optional)
 		Menu candidates for commands.
-		If this is a Dictionary, the key is used for word.  The value is
-		command name.
-		If this is a List, the first item is used for word.  The second
-		item is command name.
+		If this is a Dictionary, the key is used for word.  The value
+		is command name.
+		If this is a List, the first item is used for word.  The
+		second item is command name.
 
 		map		(Function)		(Optional)
 		If this attribute is given, candidates are results of
@@ -837,18 +845,21 @@ g:unite_source_history_yank_enable
 
 		This variable is not defined by default.
 
-g:unite_source_history_yank_limit	*g:unite_source_history_yank_limit*
+g:unite_source_history_yank_limit
+					*g:unite_source_history_yank_limit*
 		The maximum number of |unite-source-history/yank| to save.
 
 		The default value is 100.
 
-g:unite_source_history_yank_file	*g:unite_source_history_yank_file*
+g:unite_source_history_yank_file
+					*g:unite_source_history_yank_file*
 		Specify the file to write the information of yank history.
 		If this variable is empty, saving history is disabled.
 
 		The default value is |g:unite_data_directory|; '/history_yank'
 
-g:unite_source_process_enable_confirm	*g:unite_source_process_enable_confirm*
+g:unite_source_process_enable_confirm
+					*g:unite_source_process_enable_confirm*
 		When this variable is 1 and a signal is sent to a process via
 		|unite-source-process| such as KILL, Vim will ask you if you
 		really want to do that.
@@ -879,13 +890,15 @@ g:unite_kind_openable_persist_open_blink_time
 
 		The default value is "250m"
 
-g:unite_kind_openable_cd_command	*g:unite_kind_openable_cd_command*
+g:unite_kind_openable_cd_command
+				*g:unite_kind_openable_cd_command*
 		Specify the Vim command for cd action.
 		This command must interpret |`=|.
 
 		The default value is "cd".
 
-g:unite_kind_openable_lcd_command	*g:unite_kind_openable_lcd_command*
+g:unite_kind_openable_lcd_command
+				*g:unite_kind_openable_lcd_command*
 		Specify the Vim command for lcd action.
 		This command must interpret |`=|.
 
@@ -893,8 +906,8 @@ g:unite_kind_openable_lcd_command	*g:unite_kind_openable_lcd_command*
 
 FILTERS VARIABLES				*unite-filters-variables*
 
-				*g:unite_converter_file_directory_width*
 g:unite_converter_file_directory_width
+				*g:unite_converter_file_directory_width*
 		Specify the filename width.
 
 		The default value is "45".
