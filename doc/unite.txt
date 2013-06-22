@@ -1880,7 +1880,7 @@ file_rec	Gather files recursive and nominates all directory or file
 		names under the search directory(argument 1) or the current
 		directly(if argument is omitted) as candidates.  This may get
 		Vim frozen when there are too many candidates.  The candidates
-		are cached by file_rec source.  If you clear cache, use
+		are cached by file_rec source.  To clear cache, use
 		|<Plug>(unite_redraw)| keymapping.
 		If argument 1 is "!", use the project directory instead of
 		the current directory.  The project directory has ".git", ".svn",
@@ -3286,6 +3286,9 @@ A: You can use |unite-filter-matcher_fuzzy|.
 		call unite#custom#source('file,file/new,buffer,file_rec',
 		\ 'matchers', 'matcher_fuzzy')
 <
+Q: I want to clear cache in candidates.
+
+A: Please use |<Plug>(unite_redraw)|.
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
