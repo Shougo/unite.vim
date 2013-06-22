@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: output.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Mar 2013.
+" Last Modified: 22 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,19 +43,41 @@ let s:source = {
       \ 'hooks' : {},
       \ }
 
+function! s:source.hooks.on_init(args, context) "{{{
+  if type(get(a:args, 0, '')) == type([])
+    " Use args directly.
+    return
+  endif
+
+  let command = join(a:args, ' ')
+  if command == ''
+    let command = unite#util#input(
+          \ 'Please input Vim command: ', '', 'command')
+    redraw
+  endif
+  let a:context.source__command = command
+
+  call unite#print_source_message('command: ' . command, s:source.name)
+endfunction"}}}
+function! s:source.hooks.on_syntax(args, context) "{{{
+  let save_current_syntax = get(b:, 'current_syntax', '')
+  unlet! b:current_syntax
+
+  try
+    syntax include @Vim syntax/vim.vim
+    syntax region uniteSource__OutputVim
+          \ start=' ' end='$' contains=@Vim containedin=uniteSource__Output
+  finally
+    let b:current_syntax = save_current_syntax
+  endtry
+endfunction"}}}
 function! s:source.gather_candidates(args, context) "{{{
   if type(get(a:args, 0, '')) == type([])
     " Use args directly.
     let result = a:args[0]
   else
-    let command = join(a:args, ' ')
-    if command == ''
-      let command = unite#util#input(
-            \ 'Please input Vim command: ', '', 'command')
-    endif
-
     redir => output
-    silent! execute command
+    silent! execute a:context.source__command
     redir END
 
     let result = split(output, '\r\n\|\n')
@@ -75,18 +97,6 @@ function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   let [cur_keyword_pos, cur_keyword_str] = neocomplcache#match_word(a:arglead, pattern)
   return map(neocomplcache#sources#vim_complete#helper#command(
         \ a:arglead, cur_keyword_str), 'v:val.word')
-endfunction"}}}
-function! s:source.hooks.on_syntax(args, context) "{{{
-  let save_current_syntax = get(b:, 'current_syntax', '')
-  unlet! b:current_syntax
-
-  try
-    syntax include @Vim syntax/vim.vim
-    syntax region uniteSource__OutputVim
-          \ start=' ' end='$' contains=@Vim containedin=uniteSource__Output
-  finally
-    let b:current_syntax = save_current_syntax
-  endtry
 endfunction"}}}
 
 let &cpo = s:save_cpo

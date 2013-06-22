@@ -34,7 +34,8 @@ set cpo&vim
 
 augroup plugin-unite-source-buffer
   autocmd!
-  autocmd BufEnter,BufWinEnter,BufFilePost * call unite#sources#buffer#_append()
+  autocmd BufEnter,BufWinEnter,BufFilePost *
+        \ call unite#sources#buffer#_append()
 augroup END
 
 let g:loaded_unite_source_buffer = 1
