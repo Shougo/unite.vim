@@ -34,11 +34,22 @@ set cpo&vim
 
 augroup plugin-unite-source-mru
   autocmd!
-  autocmd BufEnter,BufFilePost,BufWritePost * call unite#sources#mru#append()
-  autocmd VimLeavePre * call unite#sources#mru#save({'event' : 'VimLeavePre'})
+  autocmd BufEnter,BufFilePost,BufWritePost *
+        \ call s:append(expand('<amatch>'))
+  autocmd VimLeavePre *
+        \ call unite#sources#mru#save({'event' : 'VimLeavePre'})
 augroup END
 
 let g:loaded_unite_source_mru = 1
+
+function! s:append(path) "{{{
+  if bufnr('%') != expand('<abuf>')
+        \ || a:path == ''
+    return
+  endif
+
+  call unite#sources#mru#append()
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jan 2012.
+" Last Modified: 24 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,10 +34,23 @@ set cpo&vim
 
 augroup plugin-unite-source-window
   autocmd!
-  autocmd WinEnter,BufWinEnter * call unite#sources#window#_append()
+  autocmd WinEnter,BufWinEnter * call s:append()
 augroup END
 
 let g:loaded_unite_source_window = 1
+
+function! s:append() "{{{
+  if &filetype == 'unite'
+    " Ignore unite window.
+    return
+  endif
+
+  " Save unite window information.
+  let w:unite_window = {
+        \ 'time' : localtime(),
+        \ 'cwd' : getcwd(),
+        \}
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

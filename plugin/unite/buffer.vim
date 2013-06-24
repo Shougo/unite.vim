@@ -35,10 +35,19 @@ set cpo&vim
 augroup plugin-unite-source-buffer
   autocmd!
   autocmd BufEnter,BufWinEnter,BufFilePost *
-        \ call unite#sources#buffer#_append()
+        \ call s:append(expand('<amatch>'))
 augroup END
 
 let g:loaded_unite_source_buffer = 1
+
+function! s:append(path) "{{{
+  if bufnr('%') != expand('<abuf>')
+        \ || a:path == ''
+    return
+  endif
+
+  call unite#sources#buffer#append()
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
