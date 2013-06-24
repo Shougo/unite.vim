@@ -37,7 +37,7 @@ augroup plugin-unite-source-mru
   autocmd BufEnter,BufFilePost,BufWritePost *
         \ call s:append(expand('<amatch>'))
   autocmd VimLeavePre *
-        \ call unite#sources#mru#save({'event' : 'VimLeavePre'})
+        \ call unite#sources#mru#_save({'event' : 'VimLeavePre'})
 augroup END
 
 let g:loaded_unite_source_mru = 1

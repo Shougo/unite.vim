@@ -364,13 +364,13 @@ endfunction"}}}
 
 let s:MRUs.file = s:file_mru
 let s:MRUs.directory = s:directory_mru
-function! unite#sources#mru#append() "{{{
+function! unite#sources#mru#_append() "{{{
   for m in values(s:MRUs)
     call m.append()
   endfor
 endfunction"}}}
 
-function! unite#sources#mru#save(...) "{{{
+function! unite#sources#mru#_save(...) "{{{
   let opts = {}
   if a:0 >= 1 && s:V.is_dict(a:1)
     call extend(opts, a:1)
