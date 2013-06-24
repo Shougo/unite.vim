@@ -242,7 +242,9 @@ function! unite#mappings#define_default_mappings() "{{{
   imap <buffer> <C-a>     <Plug>(unite_move_head)
   imap <buffer> <Home>    <Plug>(unite_move_head)
   imap <buffer> <C-l>     <Plug>(unite_redraw)
-  imap <buffer> <ESC>     <Plug>(unite_insert_leave)
+  if has('gui_running')
+    imap <buffer> <ESC>     <Plug>(unite_insert_leave)
+  endif
   imap <buffer> <C-g>     <Plug>(unite_exit)
 
   inoremap <silent><buffer><expr> d
