@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jun 2013.
+" Last Modified: 24 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -503,11 +503,17 @@ function! s:get_files(context, files, level, max_len, ignore_pattern) "{{{
     let files_index += 1
 
     if file =~ '/\.\+$' || file =~? a:ignore_pattern
-          \ || (isdirectory(file) && getftype(file) ==# 'link')
       continue
     endif
 
     if isdirectory(file)
+      if getftype(file) ==# 'link'
+        let file = s:resolve(file)
+        if file == ''
+          continue
+        endif
+      endif
+
       if file != '/' && file =~ '/$'
         let file = file[: -2]
       endif
@@ -527,11 +533,17 @@ function! s:get_files(context, files, level, max_len, ignore_pattern) "{{{
         let child_index += 1
 
         if child =~ '/\.\+$' || child =~? a:ignore_pattern
-              \ || (isdirectory(child) && getftype(child) ==# 'link')
           continue
         endif
 
         if isdirectory(child)
+          if getftype(child) ==# 'link'
+            let child = s:resolve(child)
+            if child == ''
+              continue
+            endif
+          endif
+
           if a:context.source__is_directory
             call add(ret_files, child)
             let ret_files_len += 1
@@ -666,6 +678,13 @@ function! unite#sources#rec#define() "{{{
     let sources += [ s:source_file_async, s:source_directory_async]
   endif
   return sources
+endfunction"}}}
+
+function! s:resolve(file) "{{{
+  " Detect symbolic link loop.
+  let file_link = unite#util#substitute_path_separator(
+        \ resolve(a:file))
+  return stridx(a:file, file_link.'/') == 0 ? '' : file_link
 endfunction"}}}
 
 let &cpo = s:save_cpo
