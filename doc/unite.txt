@@ -1902,6 +1902,8 @@ file_rec	Gather files recursive and nominates all directory or file
 		cache file.
 		Note: If the candidates are over 1000, it will disable make
 		cache.
+		Note: If you input |<Plug>(unite_restart)|, you can change
+		search directory.
 
 		Source arguments:
 		1. the search directory.

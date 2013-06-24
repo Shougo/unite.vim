@@ -479,6 +479,11 @@ function! s:get_path(args, context) "{{{
           \ a:context.input : getcwd()
   endif
 
+  if a:context.is_restart
+    let directory = unite#util#input('Target: ',
+          \ directory, 'dir', a:context.source_name)
+  endif
+
   if get(a:args, 0, '') == '!'
     " Use project directory.
     return unite#util#path2project_directory(directory, 1)

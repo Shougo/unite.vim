@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: variables.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jun 2013.
+" Last Modified: 24 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -213,6 +213,7 @@ function! unite#variables#default_context() "{{{
           \ 'keep_focus' : 0,
           \ 'auto_quit' : 0,
           \ 'is_redraw' : 0,
+          \ 'is_restart' : 0,
           \ 'is_resize' : 0,
           \ 'no_focus' : 0,
           \ 'multi_line' : 0,

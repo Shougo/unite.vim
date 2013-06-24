@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jun 2013.
+" Last Modified: 24 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -162,6 +162,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     " Set context.
     let context = source.unite__context
     let context.input = a:context.input
+    let context.source_name = source.name
 
     if source.required_pattern_length > 0
           \ && !source.is_forced

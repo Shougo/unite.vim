@@ -105,9 +105,15 @@ function! unite#util#uniq(...)
 endfunction
 function! unite#util#input(prompt, ...) "{{{
   let context = unite#get_context()
+  let prompt = a:prompt
   let default = get(a:000, 0, '')
   let completion = get(a:000, 1, '')
-  let args = [a:prompt, default]
+  let source_name = get(a:000, 2, '')
+  if source_name != ''
+    let prompt = printf('[%s] %s', source_name, prompt)
+  endif
+
+  let args = [prompt, default]
   if completion != ''
     call add(args, completion)
   endif
