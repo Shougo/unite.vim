@@ -46,7 +46,7 @@ function! s:append(path) "{{{
     return
   endif
 
-  call unite#sources#buffer#append()
+  call unite#sources#buffer#_append()
 endfunction"}}}
 
 let &cpo = s:save_cpo

@@ -48,7 +48,7 @@ function! s:append(path) "{{{
     return
   endif
 
-  call unite#sources#mru#append()
+  call unite#sources#mru#_append()
 endfunction"}}}
 
 let &cpo = s:save_cpo
