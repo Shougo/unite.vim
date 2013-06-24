@@ -189,7 +189,7 @@ function! s:on_gather_candidates(direction, context, start, offset) "{{{
 
     " Check match.
     for input in a:context.input_list
-      let expr = unite#filters#matcher_regexp#get_expr(input)
+      let expr = unite#filters#matcher_regexp#get_expr(input, a:context)
       if expr !=# 'if_lua'
         call filter(lines, expr)
       endif
