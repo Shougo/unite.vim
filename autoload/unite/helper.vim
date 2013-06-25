@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helpers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 25 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -296,6 +296,11 @@ function! unite#helper#call_filter(filter_name, candidates, context) "{{{
   endif
 
   return filter.filter(a:candidates, a:context)
+endfunction"}}}
+
+function! unite#helper#get_source_args(sources) "{{{
+  return map(copy(a:sources),
+        \ 'type(v:val) == type([]) ? [v:val[0], v:val[1:]] : [v:val, []]')
 endfunction"}}}
 
 let &cpo = s:save_cpo
