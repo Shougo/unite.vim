@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jun 2013.
+" Last Modified: 25 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -426,7 +426,7 @@ function! unite#view#_init_cursor() "{{{
     let unite.is_insert = 0
 
     if !is_restore
-          \ || candidate != unite#helper#get_current_candidate()
+          \ || candidate ==# unite#helper#get_current_candidate()
       call cursor(unite#helper#get_current_candidate_linenr(0), 0)
     endif
 
