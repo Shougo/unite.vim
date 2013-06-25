@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: source.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2012.
+" Last Modified: 25 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,14 +39,21 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context) "{{{
-  return map(copy(unite#util#sort_by(filter(
-        \ values(unite#get_all_sources()), 'v:val.is_listed'), 'v:val.name')), "{
+  let sources = filter(values(unite#get_all_sources()),
+        \        'v:val.is_listed && (empty(a:args) ||
+        \            index(a:args, v:val.name) >= 0)')
+  return map(copy(unite#util#sort_by(sources, 'v:val.name')), "{
         \ 'word' : v:val.name,
         \ 'abbr' : unite#util#truncate(v:val.name, 25) .
         \         (v:val.description != '' ? ' -- ' . v:val.description : ''),
         \ 'action__source_name' : v:val.name,
         \ 'action__source_args' : [],
         \}")
+endfunction"}}}
+
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
+  return keys(filter(unite#init#_sources([], a:arglead),
+            \ 'v:val.is_listed'))
 endfunction"}}}
 
 let &cpo = s:save_cpo

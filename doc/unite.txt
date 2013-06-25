@@ -1854,9 +1854,10 @@ SOURCES						*unite-sources*
 
 						*unite-source-file*
 file		Nominates an input file as a candidate.
-		Note: This source doesn't nominate files in the parent directory
-		(Example: "../") or hidden files(Example: ".gitignore").
-		If you want to open these files, please input ".".
+		Note: This source doesn't nominate files in the parent
+		directory (Example: "../") or hidden files(Example:
+		".gitignore").  If you want to open these files, please input
+		".".
 
 		Source arguments:
 		1. the file/directory path.
@@ -1924,9 +1925,10 @@ file_rec/async	Same as |unite-source-file_rec|, but get files asynchronously.
 
 						*unite-source-directory*
 directory	Nominates an input directory as a candidate.
-		Note: This source doesn't nominate the parent directory(Example:
-		"../") or hidden directories(Example: ".git").  If you want to
-		open this directories, please input ".".
+		Note: This source doesn't nominate the parent
+		directory(Example: "../") or hidden directories(Example:
+		".git").  If you want to open this directories, please input
+		".".
 
 						*unite-source-directory/new*
 directory/new	Nominates a new input directory as a candidate.
@@ -1981,6 +1983,14 @@ bookmark	Nominates files or directories you bookmarked as candidates.
 
 						*unite-source-source*
 source		Nominates Unite source names themselves as candidates.
+		If arguments are given, arguments source names are listed.
+		If no arguments are given, all source names are listed.
+
+		Source arguments:
+		1. source name 1
+		2. source name 2
+		...
+		n. source name n
 
 		Runs |unite#start()| with the selected source name, using the
 		current Unite buffer context.
