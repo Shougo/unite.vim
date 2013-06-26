@@ -41,6 +41,10 @@ augroup END
 let g:loaded_unite_source_buffer = 1
 
 function! s:append(path) "{{{
+  if !exists('t:unite_buffer_dictionary')
+    let t:unite_buffer_dictionary = {}
+  endif
+
   if bufnr('%') != expand('<abuf>')
         \ || a:path == ''
     return
