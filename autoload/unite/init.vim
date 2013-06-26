@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Jun 2013.
+" Last Modified: 26 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -314,7 +314,7 @@ function! unite#init#_candidates(candidates) "{{{
             \ repeat(' ', &tabstop), 'g')
     endif
 
-    if !candidate.is_multiline && !context.multi_line
+    if context.wrap || (!candidate.is_multiline && !context.multi_line)
       call add(candidates, candidate)
       continue
     endif
