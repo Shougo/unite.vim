@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jun 2013.
+" Last Modified: 27 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,19 +45,6 @@ function! unite#sources#buffer#_append() "{{{
         \ 'action__buffer_nr' : bufnr,
         \ 'source__time' : localtime(),
         \ }
-
-  if exists('*gettabvar')
-    " Delete same buffer in other tab pages.
-    for tabnr in range(1, tabpagenr('$'))
-      let buffer_dict = gettabvar(tabnr, 'unite_buffer_dictionary')
-      if type(buffer_dict) == type({}) && has_key(buffer_dict, bufnr)
-        call remove(buffer_dict, bufnr)
-      endif
-      unlet buffer_dict
-    endfor
-  endif
-
-  let t:unite_buffer_dictionary[bufnr] = 1
 endfunction"}}}
 
 let s:source_buffer_all = {

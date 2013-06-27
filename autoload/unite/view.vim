@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Jun 2013.
+" Last Modified: 27 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -366,6 +366,9 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
   if bufnr > 0
     silent execute bufnr 'buffer'
   else
+    if bufname('%') == ''
+      silent enew
+    endif
     silent! edit `=a:context.real_buffer_name`
   endif
 
