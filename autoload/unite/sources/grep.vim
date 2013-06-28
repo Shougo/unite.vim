@@ -35,6 +35,7 @@ call unite#util#set_default('g:unite_source_grep_ignore_pattern',
       \'\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$\|'.
       \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|'.
       \'\%(^\|/\)tags\%(-\a*\)\?$')
+call unite#util#set_default('g:unite_source_grep_encoding', 'char')
 "}}}
 
 function! unite#sources#grep#define() "{{{
@@ -243,7 +244,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   endif
 
   let candidates = map(stdout.read_lines(-1, 100),
-          \ "unite#util#iconv(v:val, 'char', &encoding)")
+          \ "unite#util#iconv(v:val, g:unite_source_grep_encoding, &encoding)")
   if variables.default_opts =~ '^-[^-]*l'
         \ || a:context.source__extra_opts =~ '^-[^-]*l'
     let candidates = map(filter(candidates,

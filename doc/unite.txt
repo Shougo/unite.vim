@@ -702,6 +702,11 @@ g:unite_source_grep_search_word_highlight
 
 		The default value is "Search".
 
+g:unite_source_grep_encoding			*g:unite_source_grep_encoding*
+		Set output encoding of grep command.
+
+		The default value is "char".
+
 g:unite_source_vimgrep_search_word_highlight
 				*g:unite_source_vimgrep_search_word_highlight*
 		Specify the search word highlight.
