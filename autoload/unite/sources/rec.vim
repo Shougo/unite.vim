@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jun 2013.
+" Last Modified: 28 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -255,6 +255,13 @@ let s:source_file_async.description =
       \ 'asynchronous candidates from directory by recursive'
 
 function! s:source_file_async.gather_candidates(args, context) "{{{
+  if !unite#util#has_vimproc()
+    call unite#print_source_message(
+          \ 'vimproc plugin is not installed.', self.name)
+    let a:context.is_async = 0
+    return []
+  endif
+
   let a:context.source__directory = s:get_path(a:args, a:context)
 
   let directory = a:context.source__directory
@@ -679,9 +686,7 @@ endfunction"}}}
 
 function! unite#sources#rec#define() "{{{
   let sources = [ s:source_file_rec, s:source_directory_rec ]
-  if unite#util#has_vimproc()
-    let sources += [ s:source_file_async, s:source_directory_async]
-  endif
+  let sources += [ s:source_file_async, s:source_directory_async]
   return sources
 endfunction"}}}
 
