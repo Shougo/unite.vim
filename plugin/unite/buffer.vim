@@ -34,7 +34,7 @@ set cpo&vim
 
 augroup plugin-unite-source-buffer
   autocmd!
-  autocmd BufEnter,BufWinEnter,BufWinLeave,BufLeave,BufFilePost *
+  autocmd BufEnter,BufWinEnter,BufFilePost *
         \ call s:append(expand('<amatch>'))
 augroup END
 
@@ -65,7 +65,7 @@ function! s:append(path) "{{{
 
   let t:unite_buffer_dictionary[bufnr] = 1
 
-  if bufname('%') != '' || &l:modified
+  if !has('vim_starting') || bufname('%') != ''
     call unite#sources#buffer#_append()
   endif
 endfunction"}}}
