@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jun 2013.
+" Last Modified: 28 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -217,8 +217,6 @@ function! unite#mappings#define_default_mappings() "{{{
         \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
   nnoremap <silent><buffer><expr> t
         \ unite#smart_map('t', unite#do_action('tabopen'))
-  inoremap <silent><buffer><expr> t
-        \ unite#smart_map('t', unite#do_action('tabopen'))
   nnoremap <silent><buffer><expr> yy
         \ unite#smart_map('yy', unite#do_action('yank'))
 
@@ -255,6 +253,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <silent><buffer><expr> x
         \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
+  inoremap <silent><buffer><expr> t
+        \ unite#smart_map('t', unite#do_action('tabopen'))
 endfunction"}}}
 
 function! unite#mappings#narrowing(word) "{{{
