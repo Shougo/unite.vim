@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jun 2013.
+" Last Modified: 30 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -484,6 +484,12 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
         redraw
         call unite#print_error(filename . ' is already exists.')
         continue
+      endif
+
+      let dir = fnamemodify(filename, ':h')
+      if dir != '' && !isdirectory(dir)
+        " Auto create directory.
+        call mkdir(dir, 'p')
       endif
 
       let file = unite#sources#file#create_file_dict(
