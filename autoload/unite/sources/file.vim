@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jun 2013.
+" Last Modified: 30 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -151,7 +151,12 @@ function! s:source_file.vimfiler_gather_candidates(args, context) "{{{
   let old_dir = getcwd()
   if path !=# old_dir
         \ && isdirectory(path)
-    lcd `=path`
+    try
+      lcd `=path`
+    catch
+      call unite#print_error('cd failed in "' . path . '"')
+      return []
+    endtry
   endif
 
   " Set vimfiler property.
