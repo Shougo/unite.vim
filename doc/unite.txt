@@ -1517,7 +1517,8 @@ unite#custom#alias({kind}, {name}, {action})
 >
 		call unite#custom#alias('file', 'h', 'left')
 <
-unite#custom_filters({source-name}, {filters})	*unite#custom_filters()*
+unite#custom_filters({source-name}, {filters})
+						*unite#custom_filters()*
 		Note: This function is deprecated.  Please use
 		|unite#custom#source()| instead.
 
@@ -1526,7 +1527,8 @@ unite#custom_max_candidates({source-name}, {max})
 		Note: This function is deprecated.  Please use
 		|unite#custom#source()| instead.
 
-unite#custom_source({source-name}, {option-name}, {value})
+unite#custom#source({source-name}, {option-name}, {value})
+						*unite#custom#source()*
 						*unite#custom_source()*
 		Set {source-name} source specialized {option-name} to {value}.
 		You may specify multiple sources with separating "," in
@@ -1710,8 +1712,8 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 		When you selected a candidate, it runs "highlight" action
 		automatically.
 
-						*unite-options-completion*
-		-completion
+						*unite-options-complete*
+		-complete
 		Uses unite completion interface. |unite-options-col| is also
 		required.
 
