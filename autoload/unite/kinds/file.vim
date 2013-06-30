@@ -77,7 +77,13 @@ let s:kind.action_table.open = {
       \ }
 function! s:kind.action_table.open.func(candidates) "{{{
   for candidate in a:candidates
-    call s:execute_command('edit', candidate)
+    if buflisted(unite#util#escape_file_searching(
+          \ candidate.action__path))
+      execute 'buffer' bufnr(unite#util#escape_file_searching(
+          \ candidate.action__path))
+    else
+      call s:execute_command('edit', candidate)
+    endif
 
     doautocmd BufWinEnter
 
