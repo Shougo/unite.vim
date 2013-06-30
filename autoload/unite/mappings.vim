@@ -245,18 +245,8 @@ function! unite#mappings#define_default_mappings() "{{{
   endif
   imap <buffer> <C-g>     <Plug>(unite_exit)
 
-  if !g:unite_enable_auto_narrow
-    inoremap <silent><buffer><expr> d
-          \ unite#smart_map('d', unite#do_action('delete'))
-    inoremap <silent><buffer><expr> e
-          \ unite#smart_map('e', unite#do_action('edit'))
-    imap <silent><buffer><expr> <Space>
-          \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
-    imap <silent><buffer><expr> x
-          \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
-    inoremap <silent><buffer><expr> t
-          \ unite#smart_map('t', unite#do_action('tabopen'))
-  endif
+  imap <silent><buffer><expr> <Space>
+        \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
 endfunction"}}}
 
 function! unite#mappings#narrowing(word) "{{{

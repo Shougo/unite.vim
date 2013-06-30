@@ -156,8 +156,8 @@ function! unite#init#_unite_buffer() "{{{
             \ call unite#handlers#_restore_updatetime()
     augroup END
 
-    if g:unite_enable_auto_narrow &&
-          \ (v:version > 703 || v:version == 703 && has('patch418'))
+    if v:version > 703 || v:version == 703 && has('patch418')
+      " Enable auto narrow feature.
       autocmd plugin-unite InsertCharPre <buffer>
             \ call unite#handlers#_on_insert_char_pre()
     endif

@@ -89,8 +89,6 @@ let g:unite_candidate_icon =
       \ get(g:, 'unite_candidate_icon', ' ')
 let g:unite_force_overwrite_statusline =
       \ get(g:, 'unite_force_overwrite_statusline', 1)
-let g:unite_enable_auto_narrow =
-      \ get(g:, 'unite_enable_auto_narrow', 0)
 let g:unite_data_directory =
       \ substitute(substitute(fnamemodify(get(
       \   g:, 'unite_data_directory', '~/.unite'),

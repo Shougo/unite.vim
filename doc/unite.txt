@@ -474,17 +474,6 @@ g:unite_quick_match_table			*g:unite_quick_match_table*
 
 		The default value is complex; so see plugin/unite.vim.
 
-						*g:unite_enable_auto_narrow*
-g:unite_enable_auto_narrow
-		If this variable is 1, unite buffer will narrow by inputted
-		characters automatically.
-		Note: You must set this variable before unite.vim is
-		initialized.
-		Note: It requires Vim 7.3.418 or above.
-		Note: It disables insert mode character mappings in unite.vim.
-
-		The default value is 0.
-
 g:unite_data_directory				*g:unite_data_directory*
 		Specify directories to store unite configurations. Used by
 		both unite itself and its sources.  If the directory doesn't
@@ -1249,13 +1238,8 @@ Insert mode mappings.
 <Home>		|i_<Plug>(unite_move_head)|
 <C-l>		|i_<Plug>(unite_redraw)|
 <C-g>		|i_<Plug>(unite_exit)|
-e		In case when you selected a candidate, runs narrow action
-d		In case when you selected a candidate, runs delete action
-t		In case when you selected a candidate, runs tabopen action
 <Space>		In case when you selected a candidate,
 		|i_<Plug>(unite_toggle_mark_current_candidate)|
-x		In case when you selected a candidate,
-		|i_<Plug>(unite_quick_match_default_action)|
 
 Visual mode mappings.
 {lhs}		{rhs}
@@ -3336,7 +3320,8 @@ A: Please use |<Plug>(unite_redraw)|.
 Q: I want to narrow automatically when other candidates are selected in insert
 mode like ctrlp.vim.
 
-A: You can use |g:unite_enable_auto_narrow| feature.
+A: This feature is already implemented.
+Note: It requires Vim 7.3.418 or above.
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
