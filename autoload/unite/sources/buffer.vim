@@ -99,7 +99,7 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
           \                   a:context.source__is_question)
   endif
 
-  let candidates = map(list, "{
+  let candidates = map(a:context.source__buffer_list, "{
         \ 'word' : s:make_word(v:val.action__buffer_nr),
         \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
         \        . strftime(g:unite_source_buffer_time_format, v:val.source__time),
