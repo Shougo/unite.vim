@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jun 2013.
+" Last Modified: 30 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -155,6 +155,12 @@ function! unite#init#_unite_buffer() "{{{
       autocmd WinLeave,BufWinLeave <buffer>
             \ call unite#handlers#_restore_updatetime()
     augroup END
+
+    if g:unite_enable_auto_narrow &&
+          \ (v:version > 703 || v:version == 703 && has('patch418'))
+      autocmd plugin-unite InsertCharPre <buffer>
+            \ call unite#handlers#_on_insert_char_pre()
+    endif
 
     call unite#mappings#define_default_mappings()
   endif

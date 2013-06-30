@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jun 2013.
+" Last Modified: 30 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -261,6 +261,11 @@ function! unite#handlers#_on_buf_unload(bufname)  "{{{
   " Call finalize functions.
   call unite#helper#call_hook(unite#loaded_sources_list(), 'on_close')
   let unite.is_finalized = 1
+endfunction"}}}
+function! unite#handlers#_on_insert_char_pre()  "{{{
+  call cursor(unite#get_current_unite().prompt_linenr, 0)
+  startinsert!
+  call unite#handlers#_on_cursor_moved()
 endfunction"}}}
 
 function! s:change_highlight()  "{{{

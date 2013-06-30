@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jun 2013.
+" Last Modified: 30 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -245,16 +245,18 @@ function! unite#mappings#define_default_mappings() "{{{
   endif
   imap <buffer> <C-g>     <Plug>(unite_exit)
 
-  inoremap <silent><buffer><expr> d
-        \ unite#smart_map('d', unite#do_action('delete'))
-  inoremap <silent><buffer><expr> e
-        \ unite#smart_map('e', unite#do_action('edit'))
-  imap <silent><buffer><expr> <Space>
-        \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
-  imap <silent><buffer><expr> x
-        \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
-  inoremap <silent><buffer><expr> t
-        \ unite#smart_map('t', unite#do_action('tabopen'))
+  if !g:unite_enable_auto_narrow
+    inoremap <silent><buffer><expr> d
+          \ unite#smart_map('d', unite#do_action('delete'))
+    inoremap <silent><buffer><expr> e
+          \ unite#smart_map('e', unite#do_action('edit'))
+    imap <silent><buffer><expr> <Space>
+          \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
+    imap <silent><buffer><expr> x
+          \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
+    inoremap <silent><buffer><expr> t
+          \ unite#smart_map('t', unite#do_action('tabopen'))
+  endif
 endfunction"}}}
 
 function! unite#mappings#narrowing(word) "{{{
