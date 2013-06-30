@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jun 2013.
+" Last Modified: 30 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -298,7 +298,7 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
 
   let args = split(command)
   if empty(args) || !executable(args[0])
-    call unite#print_source_message('async command : "'
+    call unite#print_source_message('async command : "'.
           \ command.'" is not executable.', self.name)
     let a:context.is_async = 0
     return []
