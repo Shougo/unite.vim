@@ -263,7 +263,13 @@ function! unite#handlers#_on_buf_unload(bufname)  "{{{
   let unite.is_finalized = 1
 endfunction"}}}
 function! unite#handlers#_on_insert_char_pre()  "{{{
-  call cursor(unite#get_current_unite().prompt_linenr, 0)
+  let prompt_linenr = unite#get_current_unite().prompt_linenr
+
+  if line('.') <= prompt_linenr
+    return
+  endif
+
+  call cursor(prompt_linenr, 0)
   startinsert!
   call unite#handlers#_on_cursor_moved()
 endfunction"}}}
