@@ -1,3 +1,4 @@
+[![Stories in Ready](http://badge.waffle.io/Shougo/unite.vim.png)](http://waffle.io/Shougo/unite.vim)  
 ![Unite.vim](https://s3.amazonaws.com/github-csexton/unite-brand.png)
 
 The unite or unite.vim plug-in can search and display information from
