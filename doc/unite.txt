@@ -287,8 +287,8 @@ More advanced configuration example:
 	          \ empty(unite#mappings#get_current_filters()) ?
 	          \ ['sorter_reverse'] : [])
 
-	  " Runs "bookmark" action by <C-b>.
-	  imap <silent><buffer><expr> <C-b>     unite#do_action('bookmark')
+	  " Runs "split" action by <C-s>.
+	  imap <silent><buffer><expr> <C-s>     unite#do_action('split')
 	endfunction"}}}
 
 	let g:unite_source_file_mru_limit = 200
@@ -3331,14 +3331,14 @@ mode like ctrlp.vim.
 A: This feature is already implemented.
 Note: It requires Vim 7.3.418 or above.
 
-Q: I want to run "bookmark" action in insert mode by "<C-b>".
+Q: I want to run "split" action in insert mode by "<C-s>".
 
 A:
 
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()
 	  " Overwrite settings.
-	  imap <silent><buffer><expr> <C-b>     unite#do_action('bookmark')
+	  imap <silent><buffer><expr> <C-s>     unite#do_action('split')
 	endfunction
 
 ==============================================================================
