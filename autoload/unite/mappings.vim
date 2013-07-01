@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Jun 2013.
+" Last Modified: 01 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -247,6 +247,15 @@ function! unite#mappings#define_default_mappings() "{{{
 
   imap <silent><buffer><expr> <Space>
         \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
+
+  inoremap <silent><buffer><expr> <C-d>
+        \ unite#do_action('delete')
+  inoremap <silent><buffer><expr> <C-e>
+        \ unite#do_action('edit')
+  inoremap <silent><buffer><expr> <C-t>
+        \ unite#do_action('tabopen')
+  inoremap <silent><buffer><expr> <C-y>
+        \ unite#do_action('yank')
 endfunction"}}}
 
 function! unite#mappings#narrowing(word) "{{{

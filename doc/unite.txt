@@ -287,8 +287,8 @@ More advanced configuration example:
 	          \ empty(unite#mappings#get_current_filters()) ?
 	          \ ['sorter_reverse'] : [])
 
-	  " Execute "tabopen" action by <C-t>.
-	  imap <silent><buffer><expr> <C-t>     unite#do_action('tabopen')
+	  " Runs "bookmark" action by <C-b>.
+	  imap <silent><buffer><expr> <C-b>     unite#do_action('bookmark')
 	endfunction"}}}
 
 	let g:unite_source_file_mru_limit = 200
@@ -1212,8 +1212,8 @@ K		|<Plug>(unite_skip_cursor_up)|
 ?		|<Plug>(unite_quick_help)|
 N		|<Plug>(unite_new_candidate)|
 <CR>		In case when you selected a candidate, runs default action
-d		In case when you selected a candidate, runs delete action
 b		In case when you selected a candidate, runs bookmark action
+d		In case when you selected a candidate, runs delete action
 e		In case when you selected a candidate, runs narrow action
 t		In case when you selected a candidate, runs tabopen action
 yy		In case when you selected a candidate, runs yank action
@@ -1244,6 +1244,10 @@ Insert mode mappings.
 <C-g>		|i_<Plug>(unite_exit)|
 <Space>		In case when you selected a candidate,
 		|i_<Plug>(unite_toggle_mark_current_candidate)|
+<C-d>		runs delete action
+<C-e>		runs edit action
+<C-t>		runs tabopen action
+<C-y>		runs yank action
 
 Visual mode mappings.
 {lhs}		{rhs}
@@ -3327,14 +3331,14 @@ mode like ctrlp.vim.
 A: This feature is already implemented.
 Note: It requires Vim 7.3.418 or above.
 
-Q: I want to execute "tabopen" action in insert mode by "<C-t>".
+Q: I want to run "bookmark" action in insert mode by "<C-b>".
 
 A:
 
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()
 	  " Overwrite settings.
-	  imap <silent><buffer><expr> <C-t>     unite#do_action('tabopen')
+	  imap <silent><buffer><expr> <C-b>     unite#do_action('bookmark')
 	endfunction
 
 ==============================================================================
