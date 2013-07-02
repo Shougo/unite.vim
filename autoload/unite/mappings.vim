@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jul 2013.
+" Last Modified: 02 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -270,7 +270,7 @@ function! unite#mappings#narrowing(word) "{{{
     startinsert!
   else
     call cursor(prompt_linenr+1, 0)
-    normal! 0z.
+    keepjumps normal! 0z.
   endif
 endfunction"}}}
 
@@ -608,7 +608,8 @@ function! s:loop_cursor_up(is_skip_not_matched, mode) "{{{
 
   if line('.') <= prompt_linenr
     if !is_insert && line('.') > 2
-      return cursor(line('.') - 1, 0)
+      call cursor(line('.') - 1, 0)
+      return
     endif
 
     " Loop.
@@ -661,7 +662,8 @@ function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode) "{{{
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
   if !is_insert && line('.') > 2
-    return cursor(line('.') - 1, 0)
+    call cursor(line('.') - 1, 0)
+    return
   endif
 
   " Loop.

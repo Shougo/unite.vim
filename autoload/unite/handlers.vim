@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jul 2013.
+" Last Modified: 02 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,7 +44,7 @@ function! unite#handlers#_on_insert_leave()  "{{{
   let unite = unite#get_current_unite()
 
   if line('.') != unite.prompt_linenr
-    normal! 0
+    keepjumps normal! 0
   endif
 
   let unite.is_insert = 0
