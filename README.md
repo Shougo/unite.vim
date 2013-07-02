@@ -121,7 +121,7 @@ unite menu source
 
 unite menu source with customization
 ------------------------------------
-![Unite menu source with customization.](https://f.cloud.github.com/assets/390964/731759/31d6f0d6-e273-11e2-88d9-84cfe3fd27a5.png)
+![Unite menu source with customization.](https://f.cloud.github.com/assets/390964/734885/82b91006-e2e1-11e2-9957-fb279bc71311.png)
 
 	let g:unite_source_menu_menus.git = {
 	    \ 'description' : '            gestionar repositorios git
