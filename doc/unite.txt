@@ -33,8 +33,8 @@ Interface		|unite-interface|
   Commands		  |unite-commands|
   Variables		  |unite-variables|
     Sources variables	    |unite-sources-variables|
-    Kinds variables	    |unite-kinds-variables|
-    Filters variables	    |unite-filters-variables|
+    Kind variables	    |unite-kind-variables|
+    Filter variables	    |unite-filter-variables|
   Key mappings		  |unite-key-mappings|
   Functions		  |unite-functions|
   Options		  |unite-options|
@@ -875,14 +875,14 @@ g:unite_source_process_enable_confirm
 
 		The default value is 1.
 
-KINDS VARIABLES					*unite-kinds-variables*
+KIND VARIABLES					*unite-kind-variables*
 
 g:unite_kind_jump_list_after_jump_scroll
 				*g:unite_kind_jump_list_after_jump_scroll*
-		A number for adjusting the location of the cursor after the
-		jump by |unite-kind-jump_list|.  The minimum is 0 which means
-		the top of the window and the maximum is 100 which means the
-		bottom of the window.
+		Number of lines to adjust the cursor location after the
+		jump via |unite-kind-jump_list|.  Valid range is 0 to 100,
+		where 0 is the top of the window and 100 is the bottom of
+		the window.
 
 		value	meaning		equivalent command
 		--------------------------------------
@@ -894,7 +894,7 @@ g:unite_kind_jump_list_after_jump_scroll
 
 g:unite_kind_openable_persist_open_blink_time
 			*g:unite_kind_openable_persist_open_blink_time*
-		A number of blink time after "persist_open" action by
+		The amount of blink time after "persist_open" action from
 		|unite-kind-openable|.
 
 		The default value is "250m"
@@ -913,7 +913,7 @@ g:unite_kind_openable_lcd_command
 
 		The default value is "lcd".
 
-FILTERS VARIABLES				*unite-filters-variables*
+FILTER VARIABLES				*unite-filter-variables*
 
 g:unite_converter_file_directory_width
 				*g:unite_converter_file_directory_width*
