@@ -51,17 +51,18 @@ function! s:sorter.filter(candidates, context) "{{{
           \ '\*', '', 'g')
 
     " Calc rank.
+    let l1 = len(input)
     for candidate in a:candidates
       let candidate.filter__rank +=
-            \ s:calc_word_distance(candidate.word, input)
+            \ s:calc_word_distance(input, candidate.word, l1)
     endfor
   endfor
 
   return unite#util#sort_by(a:candidates, 'v:val.filter__rank')
 endfunction"}}}
 
-function! s:calc_word_distance(str1, str2) "{{{
-  let [l1, l2] = [len(a:str1), len(a:str2)]
+function! s:calc_word_distance(str1, str2, l1) "{{{
+  let l2 = len(a:str2)
   let p1 = range(l2+1)
   let p2 = []
 
@@ -69,7 +70,7 @@ function! s:calc_word_distance(str1, str2) "{{{
     call add(p2, 0)
   endfor
 
-  for i in range(l1)
+  for i in range(a:l1)
     let p2[0] = p1[0] + 1
     for j in range(l2)
       let p2[j+1] = min([p1[j+1] + 1, p2[j]+1])
