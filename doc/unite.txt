@@ -2044,7 +2044,8 @@ grep		Nominates "grep" command output as candidates.
 		Source arguments:
 		1. the target directory.
 		2. "grep" options.
-		3. the narrowing pattern.
+		3. the narrowing pattern(if you omit it, |unite-options-input|
+		or input prompt is used).
 		Max candidates: |g:unite_source_grep_max_candidates|
 
 		Special Target:

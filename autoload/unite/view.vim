@@ -367,9 +367,9 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
     silent execute bufnr 'buffer'
   else
     if bufname('%') == ''
-      silent enew
+      keepjumps silent enew
     endif
-    silent! edit `=a:context.real_buffer_name`
+    silent! keepjumps edit `=a:context.real_buffer_name`
   endif
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
