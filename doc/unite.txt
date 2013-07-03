@@ -2365,7 +2365,9 @@ matcher_fuzzy	A matcher which filters the candidates with user given fuzzy
 		string.
 		This recognizes "!" as negative.
 		Narrowing down can be done by word.
-		Note: that narrowing down might be slower if this matcher is
+		Note: This matcher does not sort candidates. you want to use
+		fuzzy sort, you can use |unite-filter-sorter_rank|.
+		Note: That narrowing down might be slower if this matcher is
 		used.
 		This matcher may produce the best effect if set as
 		|unite-source-file_rec|.
@@ -2408,6 +2410,7 @@ sorter_length	Compare length sorter.
 sorter_rank	Matched rank order sorter.  The higher the matched word is or
 		the longer the matched length is, the higher the rank is.
 		This sorter is useful for file candidate source.
+		Note: This sorter is slow.
 >
 		call unite#custom#source('buffer,file,file_mru,file_rec',
 		\ 'sorters', 'sorter_rank')
@@ -3324,12 +3327,10 @@ A: You can use |unite-filter-matcher_fuzzy|.
 	\ 'matchers', 'matcher_fuzzy')
 <
 Note: Fuzzy matcher does not sort candidates.  If you want to sort by rank,
-you can use "sorter_rank".
+you can use "sorter_rank". But it is slow.
 >
 	call unite#filters#sorter_default#use(['sorter_rank'])
 <
-But "sorter_rank" is incomplete. Pull requests are well come.
-
 Q: I want to clear cache in candidates.
 
 A: Please use |<Plug>(unite_redraw)|.
@@ -3355,6 +3356,11 @@ Q: Unite adds unite buffer to jumplist automatically.
 
 A: Sorry. But it is hard to fix. You should use |unite-source-jump| instead of
 <C-i>/<C-o> mappings. It ignores unite buffer.
+
+Q: unite.vim is too slow.
+
+A: If you use Vim 7.3.885 or above with |if_lua| feature, unite.vim will be
+faster.
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:

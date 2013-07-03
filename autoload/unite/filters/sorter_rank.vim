@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: sorter_rank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jan 2013.
+" Last Modified: 03 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,33 +47,38 @@ function! s:sorter.filter(candidates, context) "{{{
   endfor
 
   for input in split(a:context.input, '\\\@<! ')
-    let input = substitute(substitute(input, '\\ ', ' ', 'g'), '\*', '', 'g')
+    let input = substitute(substitute(input, '\\ ', ' ', 'g'),
+          \ '\*', '', 'g')
 
     " Calc rank.
     for candidate in a:candidates
       let candidate.filter__rank +=
-            \ s:calc_rank_sequential_match(candidate.word, input)
-    endfor
-
-    for boundary_input in split(input, '\W')
-      for candidate in a:candidates
-        let candidate.filter__rank +=
-              \ s:calc_rank_sequential_match(candidate.word, boundary_input)
-      endfor
+            \ s:calc_word_distance(candidate.word, input)
     endfor
   endfor
 
-  return reverse(unite#util#sort_by(a:candidates, 'v:val.filter__rank'))
+  return unite#util#sort_by(a:candidates, 'v:val.filter__rank')
 endfunction"}}}
 
-function! s:calc_rank_sequential_match(word, input) "{{{
-  let pos = strridx(a:word, a:input)
-  if pos < 0
-    return 0
-  endif
-  let len = len(a:word)
+function! s:calc_word_distance(str1, str2) "{{{
+  let [l1, l2] = [len(a:str1), len(a:str2)]
+  let p1 = range(l2+1)
+  let p2 = []
 
-  return 80.0 * (pos + len(a:input)) / len
+  for i in range(l2+1)
+    call add(p2, 0)
+  endfor
+
+  for i in range(l1)
+    let p2[0] = p1[0] + 1
+    for j in range(l2)
+      let p2[j+1] = min([p1[j+1] + 1, p2[j]+1])
+    endfor
+    let [p1, p2] = [p2, p1]
+  endfor
+
+  " echomsg string([a:str1, a:str2, p1[l2]])
+  return p1[l2]
 endfunction"}}}
 
 let &cpo = s:save_cpo
