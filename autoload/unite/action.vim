@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Jun 2013.
+" Last Modified: 04 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -164,6 +164,9 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
   for [action_name, action] in items(action_table)
     if !has_key(action, 'name')
       let action.name = action_name
+    endif
+    if !has_key(action, 'from')
+      let action.from = ''
     endif
     if !has_key(action, 'description')
       let action.description = ''

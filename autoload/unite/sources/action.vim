@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 04 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,8 +48,11 @@ function! s:source.hooks.on_syntax(args, context) "{{{
         \ contained containedin=uniteSource__ActionDescriptionLine
   syntax match uniteSource__ActionMarker / -- /
         \ contained containedin=uniteSource__ActionDescriptionLine
+  syntax match uniteSource__ActionKind /(.\{-}) /
+        \ contained containedin=uniteSource__ActionDescriptionLine
   highlight default link uniteSource__ActionMarker Special
   highlight default link uniteSource__ActionDescription Comment
+  highlight default link uniteSource__ActionKind Type
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
@@ -96,8 +99,9 @@ function! s:source.gather_candidates(args, context) "{{{
 
   return sort(map(filter(values(uniq_actions), 'v:val.is_listed'), "{
         \   'word' : v:val.name,
-        \   'abbr' : printf('%-" . max . "s %s -- %s',
-        \          v:val.name, (v:val.is_quit ? '!' : ' '), v:val.description),
+        \   'abbr' : printf('%-" . max . "s %s -- %-15s %s',
+        \          v:val.name, (v:val.is_quit ? '!' : ' '),
+        \          '('.v:val.from.')', v:val.description),
         \   'source__candidates' : candidates,
         \   'action__action' : v:val,
         \   'source__context' : a:context,
