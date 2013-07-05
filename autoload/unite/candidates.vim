@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jun 2013.
+" Last Modified: 05 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,7 +34,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
   let ignorecase_save = &ignorecase
 
   if unite#custom#get_profile(unite.profile_name, 'smartcase')
-        \ && a:input =~ '\u'
+        \ && get(split(a:input, '\W'), -1, '') =~ '\u'
     let &ignorecase = 0
   else
     let &ignorecase =
