@@ -7,7 +7,7 @@ let s:is_windows = has('win16') || has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
 let s:is_mac = !s:is_windows && !s:is_cygwin
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
-      \   (!executable('xdg-open') && system('uname') =~? '^darwin'))
+      \   (!isdirectory('/proc') && executable('sw_vers')))
 
 " Open a file.
 function! s:open(filename) "{{{
@@ -28,7 +28,7 @@ function! s:open(filename) "{{{
           \ shellescape(filename)))
   elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
     " KDE.
-    call system(printf('%s %s &', 'kioclien exec',
+    call system(printf('%s %s &', 'kioclient exec',
           \ shellescape(filename)))
   elseif exists('$GNOME_DESKTOP_SESSION_ID')
     " GNOME.
@@ -60,7 +60,7 @@ function! s:move_file(src, dest) "{{{
 endfunction "}}}
 
 " Move a file.
-" Implemented by 'mv' executable.
+" Implemented by external program.
 " TODO: Support non-*nix like system.
 function! s:move_file_exe(src, dest)
   if !executable('mv') | return 0 | endif
@@ -88,7 +88,7 @@ function! s:copy_file(src, dest) "{{{
 endfunction "}}}
 
 " Copy a file.
-" Implemented by 'cp' executable.
+" Implemented by external program.
 " TODO: Support non-*nix like system.
 function! s:copy_file_exe(src, dest)
   if !executable('cp') | return 0 | endif
@@ -113,26 +113,31 @@ endfunction "}}}
 " Returns true if success.
 " Returns false if failure.
 function! s:mkdir_nothrow(...) "{{{
-  try
-    call call('mkdir', a:000)
-    return 1
-  catch
-    return 0
-  endtry
+  silent! return call('mkdir', a:000)
 endfunction "}}}
 
 
 " rmdir recursively.
-function! s:rmdir(path, ...)
-  let flags = a:0 ? a:1 : ''
-  if exists("*rmdir")
+if exists("*rmdir")
+  function! s:rmdir(path, ...)
     return call('rmdir', [a:path] + a:000)
-  elseif has("unix")
+  endfunction
+
+elseif has('unix')
+  function! s:rmdir(path, ...)
+    let flags = a:0 ? a:1 : ''
     let option = ''
     let option .= flags =~# 'f' ? ' -f' : ''
     let option .= flags =~# 'r' ? ' -r' : ''
-    let ret = system("/bin/rm" . option . ' ' . shellescape(a:path) . ' 2>&1')
-  elseif has("win32") || has("win95") || has("win64") || has("win16")
+    let ret = system("/bin/rm" . option . ' ' . shellescape(a:path))
+    if v:shell_error
+      throw substitute(iconv(ret, 'char', &encoding), '\n', '', 'g')
+    endif
+  endfunction
+
+elseif has("win32") || has("win95") || has("win64") || has("win16")
+  function! s:rmdir(path, ...)
+    let flags = a:0 ? a:1 : ''
     let option = ''
     if &shell =~? "sh$"
       let option .= flags =~# 'f' ? ' -f' : ''
@@ -143,11 +148,16 @@ function! s:rmdir(path, ...)
       let option .= flags =~# 'r' ? ' /S' : ''
       let ret = system("rmdir" . option . ' "' . a:path . '"')
     endif
-  endif
-  if v:shell_error
-    throw substitute(iconv(ret, 'char', &encoding), '\n', '', 'g')
-  endif
-endfunction
+    if v:shell_error
+      throw substitute(iconv(ret, 'char', &encoding), '\n', '', 'g')
+    endif
+  endfunction
+
+else
+  function! s:rmdir(path, ...)
+    throw 'vital: System.File.rmdir(): your platform is not supported'
+  endfunction
+endif
 
 
 let &cpo = s:save_cpo

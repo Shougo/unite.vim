@@ -61,21 +61,10 @@ function! s:_import(name, scripts)
   if type(a:name) == type(0)
     return s:_build_module(a:name)
   endif
-  if a:name =~# '^[^A-Z]' || a:name =~# '\W[^A-Z]'
-    throw 'vital: module name must start with capital letter: ' . a:name
+  let path = s:_get_module_path(a:name)
+  if path ==# ''
+    throw 'vital: module not found: ' . a:name
   endif
-  let target = a:name ==# '' ? '' : '/' . substitute(a:name, '\W\+', '/', 'g')
-  let target = substitute(target, '\l\zs\ze\u', '_', 'g') " OrderedSet -> Ordered_Set
-  let target = substitute(target, '[/_]\zs\u', '\l\0', 'g') " Ordered_Set -> ordered_set
-  let tailpath = printf('autoload/vital/%s%s.vim', s:self_version, target)
-
-  " Note: The extra argument to globpath() was added in Patch 7.2.051.
-  if v:version > 702 || v:version == 702 && has('patch51')
-    let paths = split(globpath(&runtimepath, tailpath, 1), "\n")
-  else
-    let paths = split(globpath(&runtimepath, tailpath), "\n")
-  endif
-  let path = s:_unify_path(get(paths, 0, ''))
   let sid = get(a:scripts, path, 0)
   if !sid
     try
@@ -90,6 +79,29 @@ function! s:_import(name, scripts)
     let a:scripts[path] = sid
   endif
   return s:_build_module(sid)
+endfunction
+
+function! s:_get_module_path(name)
+  if filereadable(a:name)
+    return s:_unify_path(a:name)
+  endif
+  if a:name ==# ''
+    let tailpath = printf('autoload/vital/%s.vim', s:self_version)
+  elseif a:name =~# '\v^\u\w*%(\.\u\w*)*$'
+    let target = '/' . substitute(a:name, '\W\+', '/', 'g')
+    let tailpath = printf('autoload/vital/%s%s.vim', s:self_version, target)
+  else
+    let tailpath = a:name
+  endif
+
+  " Note: The extra argument to globpath() was added in Patch 7.2.051.
+  if v:version > 702 || v:version == 702 && has('patch51')
+    let paths = split(globpath(&runtimepath, tailpath, 1), "\n")
+  else
+    let paths = split(globpath(&runtimepath, tailpath), "\n")
+  endif
+  call filter(paths, 'filereadable(v:val)')
+  return s:_unify_path(get(paths, 0, ''))
 endfunction
 
 function! s:_scripts()
@@ -151,12 +163,12 @@ function! s:_build_module(sid)
 endfunction
 
 function! s:_redir(cmd)
-  let oldverbosefile = &verbosefile
-  set verbosefile=
+  let [save_verbose, save_verbosefile] = [&verbose, &verbosefile]
+  set verbose=0 verbosefile=
   redir => res
     silent! execute a:cmd
   redir END
-  let &verbosefile = oldverbosefile
+  let [&verbose, &verbosefile] = [save_verbose, save_verbosefile]
   return res
 endfunction
 

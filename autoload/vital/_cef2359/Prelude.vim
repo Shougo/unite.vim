@@ -112,10 +112,6 @@ function! s:truncate(str, width)
   return ret
 endfunction
 
-function! s:strchars(str)
-  return len(substitute(a:str, '.', 'x', 'g'))
-endfunction
-
 function! s:strwidthpart(str, width)
   if a:width <= 0
     return ''
@@ -193,11 +189,12 @@ else
   endfunction
 endif
 
-let s:is_windows = has('win16') || has('win32') || has('win64')
+let s:is_windows = has('win16') || has('win32') || has('win64') || has('win95')
 let s:is_cygwin = has('win32unix')
-let s:is_mac = !s:is_windows
+let s:is_mac = !s:is_windows && !s:is_cygwin
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
       \   (!isdirectory('/proc') && executable('sw_vers')))
+let s:is_unix = has('unix')
 function! s:is_windows()
   return s:is_windows
 endfunction
@@ -206,6 +203,9 @@ function! s:is_cygwin()
 endfunction
 function! s:is_mac()
   return s:is_mac
+endfunction
+function! s:is_unix()
+  return s:is_unix
 endfunction
 
 function! s:print_error(message)
