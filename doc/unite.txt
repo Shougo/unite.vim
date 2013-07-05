@@ -655,6 +655,10 @@ g:unite_source_rec_async_command
 					*g:unite_source_rec_async_command*
 		Specify the filelist command and arguments in file_rec/async
 		source.
+>
+		" Using ack-grep as recursive command.
+		let g:unite_source_rec_async_command = 'ack -f --nofilter'
+<
 
 		The default value is "ag" or "find" and the args.
 
