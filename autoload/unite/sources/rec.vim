@@ -655,7 +655,7 @@ function! s:write_cache(context, directory, files) "{{{
           \ map(copy(a:files), 'v:val.action__path'))
   elseif s:Cache.filereadable(cache_dir, a:directory)
     " Delete old cache files.
-    call s:Cache.delete(cache_dir, a:directory)
+    call s:Cache.deletefile(cache_dir, a:directory)
   endif
 endfunction"}}}
 

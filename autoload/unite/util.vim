@@ -3,6 +3,7 @@ set cpo&vim
 
 let s:V = vital#of('unite.vim')
 let s:List = vital#of('unite.vim').import('Data.List')
+let s:String = vital#of('unite.vim').import('Data.String')
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
 
@@ -13,7 +14,7 @@ function! unite#util#truncate(...)
   return call(s:V.truncate, a:000)
 endfunction
 function! unite#util#strchars(...)
-  return call(s:V.strchars, a:000)
+  return call(s:String.strchars, a:000)
 endfunction
 function! unite#util#strwidthpart(...)
   return call(s:V.strwidthpart, a:000)
