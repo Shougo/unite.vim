@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 03 Jul 2013.
+" Last Modified: 05 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -277,15 +277,23 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
   let _ = []
   for candidate in candidates
-    let dict = {
-          \   'action__path' : candidate[0][:1].candidate[1][0],
-          \   'action__line' : candidate[1][1],
-          \   'action__text' : join(candidate[1][2:], ':'),
-          \ }
-    if dict.action__line !~ '^\d\+$'
-      let dict.action__line = dict.action__path
-      let dict.action__text = join(candidate[1][1:], ':')
-      let dict.action__path = a:context.source__target[0]
+    if len(candidate[1]) <= 1 || candidate[1][1] !~ '^\d\+$'
+      let dict = {
+            \   'action__path' : a:context.source__target[0],
+            \ }
+      if len(candidate[1]) <= 1
+        let dict.action__line = candidate[0][:1][0]
+        let dict.action__text = candidate[1][0]
+      else
+        let dict.action__line = candidate[0][:1].candidate[1][0]
+        let dict.action__text = join(candidate[1][1:], ':')
+      endif
+    else
+      let dict = {
+            \   'action__path' : candidate[0][:1].candidate[1][0],
+            \   'action__line' : candidate[1][1],
+            \   'action__text' : join(candidate[1][2:], ':'),
+            \ }
     endif
 
     if a:context.source__ssh_path != ''

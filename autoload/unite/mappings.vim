@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jul 2013.
+" Last Modified: 05 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -744,6 +744,9 @@ function! s:toggle_auto_highlight() "{{{
   let context.auto_highlight = !context.auto_highlight
 endfunction"}}}
 function! s:disable_max_candidates() "{{{
+  let unite = unite#get_current_unite()
+  let unite.disabled_max_candidates = 1
+
   call unite#force_redraw()
   call s:redraw_all_candidates()
 endfunction"}}}

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: variables.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jun 2013.
+" Last Modified: 05 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -231,6 +231,7 @@ function! unite#variables#default_context() "{{{
           \ 'unite__old_winwidth' : 0,
           \ 'unite__old_winheight' : 0,
           \ 'unite__disable_hooks' : 0,
+          \ 'unite__disable_max_candidates' : 0,
           \ }
   endif
 
