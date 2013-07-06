@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jul 2013.
+" Last Modified: 06 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -158,10 +158,10 @@ function! unite#handlers#_on_cursor_moved()  "{{{
         \ 'modifiable' : 'nomodifiable'
   if line('.') <= prompt_linenr
     nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
-          \ <ESC>:call unite#mappings#loop_cursor_up_call(
+          \ :call unite#mappings#loop_cursor_up_call(
           \    0, 'n')<CR>
     nnoremap <silent><buffer> <Plug>(unite_skip_cursor_up)
-          \ <ESC>:call unite#mappings#loop_cursor_up_call(
+          \ :call unite#mappings#loop_cursor_up_call(
           \    1, 'n')<CR>
     inoremap <silent><buffer> <Plug>(unite_select_previous_line)
           \ <ESC>:call unite#mappings#loop_cursor_up_call(

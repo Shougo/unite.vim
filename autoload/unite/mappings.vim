@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jul 2013.
+" Last Modified: 06 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -127,7 +127,7 @@ function! unite#mappings#define_default_mappings() "{{{
   inoremap <expr><buffer> <Plug>(unite_select_next_line)
         \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(0)
   inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
-        \ <ESC>:call <SID>loop_cursor_up(1, 'i')<CR>
+        \ <ESC>:call unite#mappings#loop_cursor_up_call(1, 'i')<CR>
   inoremap <expr><buffer> <Plug>(unite_select_next_page)
         \ pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)
@@ -602,66 +602,11 @@ function! s:loop_cursor_down(is_skip_not_matched) "{{{
     return repeat('j', cnt)
   endif
 endfunction"}}}
-function! s:loop_cursor_up(is_skip_not_matched, mode) "{{{
-  let is_insert = a:mode ==# 'i'
-  let prompt_linenr = unite#get_current_unite().prompt_linenr
-
-  if line('.') <= prompt_linenr
-    if !is_insert && line('.') > 2
-      call cursor(line('.') - 1, 0)
-      return
-    endif
-
-    " Loop.
-
-    call s:redraw_all_candidates()
-
-    call cursor(line('$'), 0)
-    if is_insert
-      noautocmd startinsert!
-    endif
-    return
-  endif
-
-  let num = line('.') - (prompt_linenr + 1)
-  let cnt = 1
-  if line('.') <= prompt_linenr
-    let cnt += prompt_linenr - line('.')
-  endif
-  if is_insert && line('.') == prompt_linenr+2
-    let cnt += 1
-  endif
-
-  while 1
-    let candidate = get(unite#get_unite_candidates(), num - cnt, {})
-    if num >= cnt && !empty(candidate) && (candidate.is_dummy
-          \ || (a:is_skip_not_matched && !candidate.is_matched))
-      let cnt += 1
-      continue
-    endif
-
-    break
-  endwhile
-
-  if num < 0
-    call cursor(prompt_linenr, 0)
-
-    if line('.') < winheight(0)
-      normal! zb
-    endif
-  else
-    call cursor(line('.') - cnt, 0)
-  endif
-
-  if is_insert
-    noautocmd startinsert!
-  endif
-endfunction"}}}
 function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode) "{{{
   let is_insert = a:mode ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
-  if !is_insert && line('.') > 2
+  if !is_insert && line('.') > prompt_linenr
     call cursor(line('.') - 1, 0)
     return
   endif
