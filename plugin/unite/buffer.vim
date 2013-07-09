@@ -24,7 +24,7 @@
 " }}}
 "=============================================================================
 
-if exists('g:loaded_unite_source_buffer') ||
+if exists('g:loaded_unite_source_buffer')
       \ || ($SUDO_USER != '' && $USER !=# $SUDO_USER
       \     && $HOME !=# expand('~'.$USER)
       \     && $HOME ==# expand('~'.$SUDO_USER))
