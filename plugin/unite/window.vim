@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jun 2013.
+" Last Modified: 09 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -25,7 +25,9 @@
 "=============================================================================
 
 if exists('g:loaded_unite_source_window')
-      \ || $SUDO_USER != ''
+      \ || ($SUDO_USER != '' && $USER !=# $SUDO_USER
+      \     && $HOME !=# expand('~'.$USER)
+      \     && $HOME ==# expand('~'.$SUDO_USER))
   finish
 endif
 

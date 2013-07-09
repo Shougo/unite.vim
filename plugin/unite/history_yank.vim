@@ -25,7 +25,9 @@
 "=============================================================================
 
 if exists('g:loaded_unite_source_history_yank')
-      \ || $SUDO_USER != ''
+      \ || ($SUDO_USER != '' && $USER !=# $SUDO_USER
+      \     && $HOME !=# expand('~'.$USER)
+      \     && $HOME ==# expand('~'.$SUDO_USER))
   finish
 endif
 
