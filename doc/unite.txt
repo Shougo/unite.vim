@@ -3378,7 +3378,7 @@ sources.
 A: You should use |unite#custom#profile()|.
 
 >
-	call unite#custom#profile('files', 'filters', ['sorter_rank'])
+	call unite#custom#profile('files', 'filters', 'sorter_rank')
 <
 
 ==============================================================================
