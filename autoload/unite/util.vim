@@ -231,8 +231,7 @@ function! unite#util#glob(pattern, ...) "{{{
     return vimproc#readdir(a:pattern[: -2])
   else
     " Escape [.
-    let glob = escape(a:pattern,
-          \ unite#util#is_windows() ?  '?"={}' : '?"={}[]')
+    let glob = escape(a:pattern, '?={}[]')
 
     return split(unite#util#substitute_path_separator(glob(glob)), '\n')
   endif
