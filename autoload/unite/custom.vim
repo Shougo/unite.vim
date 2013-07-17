@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: custom.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jun 2013.
+" Last Modified: 17 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,8 +51,15 @@ endfunction"}}}
 
 function! unite#custom#default_action(kind, default_action) "{{{
   let custom = unite#custom#get()
-  call unite#util#set_dictionary_helper(custom.default_actions,
-        \ a:kind, a:default_action)
+
+  let custom = unite#custom#get().default_actions
+  for key in split(a:kind, '\s*,\s*')
+    if !has_key(custom, key)
+      let custom[key] = {}
+    endif
+
+    let custom[key] = a:default_action
+  endfor
 endfunction"}}}
 
 function! unite#custom#action(kind, name, action) "{{{
