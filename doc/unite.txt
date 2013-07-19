@@ -3137,8 +3137,13 @@ action_table		Dictionary		(Required)
 				attribute is omitted, "1" is used.
 
 			is_start		(Number)	(Optional)
-				If this attribute is "1", the action start
+				If this attribute is "1", the action starts
 				unite sources.  If this attribute is omitted,
+				"0" is used.
+
+			is_tab			(Number)	(Optional)
+				If this attribute is "1", the action openes
+				new tabpage.  If this attribute is omitted,
 				"0" is used.
 
 					*unite-kind-attribute-alias_table*

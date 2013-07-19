@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jul 2013.
+" Last Modified: 19 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -176,6 +176,9 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
     endif
     if !has_key(action, 'is_start')
       let action.is_start = 0
+    endif
+    if !has_key(action, 'is_tab')
+      let action.is_tab = 1
     endif
     if !has_key(action, 'is_selectable')
       let action.is_selectable = 0
@@ -352,6 +355,7 @@ function! unite#action#do(action_name, ...) "{{{
     " Check quit flag.
     if table.action.is_quit && unite.profile_name !=# 'action'
           \ && !table.action.is_start
+          \ && !(table.action.is_tab && context.no_quit)
       call unite#all_quit_session(0)
       let is_quit = 1
     endif
