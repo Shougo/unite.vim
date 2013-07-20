@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jul 2013.
+" Last Modified: 20 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -178,7 +178,7 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
       let action.is_start = 0
     endif
     if !has_key(action, 'is_tab')
-      let action.is_tab = 1
+      let action.is_tab = 0
     endif
     if !has_key(action, 'is_selectable')
       let action.is_selectable = 0
