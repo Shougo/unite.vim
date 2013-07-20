@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Jun 2013.
+" Last Modified: 20 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -88,7 +88,7 @@ function! s:source_file.change_candidates(args, context) "{{{
   if !has_key(a:context.source__cache, glob)
     " let files = split(unite#util#substitute_path_separator(
     "       \ glob(glob)), '\n')
-    let files = unite#util#glob(glob, !is_vimfiler)
+    let files = unite#util#glob(glob, 0)
 
     if !is_vimfiler
       let files = sort(filter(copy(files), 'isdirectory(v:val)'), 1) +
@@ -362,7 +362,7 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts) "{{{
 endfunction"}}}
 
 function! unite#sources#file#complete_file(args, context, arglead, cmdline, cursorpos) "{{{
-  let files = unite#util#glob(a:arglead . '*')
+  let files = unite#util#glob(a:arglead . '*', 0)
   if a:arglead =~ '^\~'
     let home_pattern = '^'.
           \ unite#util#substitute_path_separator(expand('~')).'/'
@@ -373,7 +373,7 @@ function! unite#sources#file#complete_file(args, context, arglead, cmdline, curs
   return files
 endfunction"}}}
 function! unite#sources#file#complete_directory(args, context, arglead, cmdline, cursorpos) "{{{
-  let files = unite#util#glob(a:arglead . '*')
+  let files = unite#util#glob(a:arglead . '*', 0)
   let files = filter(files, 'isdirectory(v:val)')
   if a:arglead =~ '^\~'
     let home_pattern = '^'.
