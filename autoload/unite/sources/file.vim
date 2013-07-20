@@ -43,6 +43,7 @@ let s:source_file = {
       \ 'description' : 'candidates from file list',
       \ 'ignore_pattern' : g:unite_source_file_ignore_pattern,
       \ 'default_kind' : 'file',
+      \ 'converters' : 'converter_relative_abbr',
       \}
 
 function! s:source_file.change_candidates(args, context) "{{{
@@ -215,6 +216,7 @@ let s:source_file_new = {
       \ 'name' : 'file/new',
       \ 'description' : 'file candidates from input',
       \ 'default_kind' : 'file',
+      \ 'converters' : 'converter_relative_abbr',
       \ }
 
 function! s:source_file_new.change_candidates(args, context) "{{{
