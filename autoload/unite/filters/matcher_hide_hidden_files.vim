@@ -39,7 +39,6 @@ let s:matcher = {
 function! s:matcher.filter(candidates, context) "{{{
   if stridx(a:context.input, '.') >= 0
         \ || get(a:context, 'source__directory', '') =~ '/\.\|^\.'
-        \ || a:context.unite__is_vimfiler
     return unite#filters#filter_matcher(
           \ a:candidates, '', a:context)
   endif

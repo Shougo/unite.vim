@@ -44,7 +44,7 @@ let s:source_file = {
       \ 'ignore_pattern' : g:unite_source_file_ignore_pattern,
       \ 'default_kind' : 'file',
       \ 'matchers' : [ 'matcher_default', 'matcher_hide_hidden_files' ],
-      \ 'converters' : 'converter_relative_abbr',
+      \ 'converters' : [ 'converter_relative_abbr', 'converter_relative_word' ],
       \}
 
 function! s:source_file.change_candidates(args, context) "{{{

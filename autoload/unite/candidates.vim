@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jul 2013.
+" Last Modified: 23 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -200,7 +200,8 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     let sorters = []
     let prev_filters = []
     let post_filters = []
-    for Filter in get(custom_source, 'filters', source.filters)
+    for Filter in (context.unite__is_vimfiler ?
+          \ [] : get(custom_source, 'filters', source.filters))
       if type(Filter) != type('')
         call add((empty(matchers) ?
               \ prev_filters : post_filters), Filter)
