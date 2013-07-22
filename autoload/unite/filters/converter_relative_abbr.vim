@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: converter_relative_abbr.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 May 2013.
+" Last Modified: 22 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,6 +54,10 @@ function! s:converter.filter(candidates, context) "{{{
       let candidate.abbr = unite#util#substitute_path_separator(
             \ fnamemodify(get(candidate, 'action__path',
             \     candidate.word), ':~:.'))
+      if candidate.abbr == ''
+        let candidate.abbr = get(candidate, 'action__path',
+              \     candidate.word)
+      endif
     endfor
   finally
     if has_key(a:context, 'source__directory')
