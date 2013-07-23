@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jul 2013.
+" Last Modified: 23 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -404,40 +404,33 @@ function! unite#view#_init_cursor() "{{{
   let positions = unite#custom#get_profile(
         \ unite.profile_name, 'unite__save_pos')
   let key = unite#loaded_source_names_string()
-  let is_restore = has_key(positions, key) &&
-        \ context.select == 0
+  let is_restore = has_key(positions, key) && context.select == 0 &&
+        \   positions[key].candidate ==#
+        \     unite#helper#get_current_candidate(positions[key].pos[1])
 
   if context.start_insert && !context.auto_quit
     let unite.is_insert = 1
 
     call cursor(unite.prompt_linenr, 0)
-    if line('.') <= winheight(0)
-      normal! zb
-    endif
-    setlocal modifiable
 
+    setlocal modifiable
     startinsert!
   else
+    let unite.is_insert = 0
+
     if is_restore
       " Restore position.
       call setpos('.', positions[key].pos)
-    endif
-
-    let candidate = unite#helper#get_current_candidate()
-
-    let unite.is_insert = 0
-
-    if !is_restore
-          \ || candidate ==# unite#helper#get_current_candidate()
+    else
       call cursor(unite#helper#get_current_candidate_linenr(0), 0)
     endif
 
     keepjumps normal! 0
-    if line('.') <= winheight(0)
-      normal! zb
-    endif
-
     stopinsert
+  endif
+
+  if line('.') <= winheight(0)
+    normal! zb
   endif
 
   if context.select != 0

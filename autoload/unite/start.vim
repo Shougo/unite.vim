@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: start.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jul 2013.
+" Last Modified: 23 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,7 @@ function! unite#start#standard(sources, ...) "{{{
     if resume_bufnr > 0 &&
           \ getbufvar(resume_bufnr, 'unite').source_names ==#
           \    unite#helper#get_source_names(a:sources)
-      return unite#resume(context.buffer_name, context)
+      return unite#start#resume(context.buffer_name, context)
     endif
   endif
 
@@ -348,7 +348,7 @@ function! unite#start#resume_from_temporary(context)  "{{{
 
   " Resume unite buffer.
   let buffer_info = a:context.old_buffer_info[0]
-  call unite#resume(buffer_info.buffer_name,
+  call unite#start#resume(buffer_info.buffer_name,
         \ {'unite__direct_switch' : 1})
   call setpos('.', buffer_info.pos)
   let a:context.old_buffer_info = a:context.old_buffer_info[1:]
