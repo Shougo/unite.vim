@@ -90,7 +90,7 @@ Invoking unite will create a horizontal split buffer by default.
 	:Unite file
 <
 This example lists all the files in the current directory.  You can select one
-in the in the unite window by moving the cursor with normal Vim navigation,
+in the unite window by moving the cursor with normal Vim navigation,
 e.g. j and k.  Pressing Enter on a candidate and it will open it in a new
 buffer.
 
