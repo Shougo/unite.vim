@@ -78,6 +78,10 @@ See also `unite_default_key_mappings` for other actions.
 There is also a screencast available which shows unite in action. Thanks to
 ujihisa! http://www.ustream.tv/recorded/11240673
 
+## Frequently Asked Questions
+  * Q: Some files are not showing up in my search. What's up with that?
+  * A: You need to update unites cache. Press C-l when unite is focused.
+
 ## Install
 
 Install the distributed files into your Vim script directory which is usually
