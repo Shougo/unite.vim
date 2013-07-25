@@ -2463,6 +2463,11 @@ converter_tail
 converter_file_directory
 		A converter which separates file and directory.
 
+					*unite-filter-converter_full_path*
+converter_full_path
+		A converter which converts a candidate's word into the
+		full path of the filename.
+
 ==============================================================================
 ACTIONS						*unite-actions*
 
