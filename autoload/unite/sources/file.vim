@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jul 2013.
+" Last Modified: 25 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,7 +44,7 @@ let s:source_file = {
       \ 'ignore_pattern' : g:unite_source_file_ignore_pattern,
       \ 'default_kind' : 'file',
       \ 'matchers' : [ 'matcher_default', 'matcher_hide_hidden_files' ],
-      \ 'converters' : [ 'converter_relative_abbr', 'converter_relative_word' ],
+      \ 'converters' : [ 'converter_relative_abbr', ],
       \}
 
 function! s:source_file.change_candidates(args, context) "{{{
@@ -90,7 +90,7 @@ function! s:source_file.change_candidates(args, context) "{{{
   if !has_key(a:context.source__cache, glob)
     " let files = split(unite#util#substitute_path_separator(
     "       \ glob(glob)), '\n')
-    let files = unite#util#glob(glob, 0)
+    let files = unite#util#glob(glob, !is_vimfiler)
 
     if !is_vimfiler
       let files = sort(filter(copy(files), 'isdirectory(v:val)'), 1) +
