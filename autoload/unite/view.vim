@@ -363,12 +363,12 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
   endif
 
   if bufnr > 0
-    silent execute bufnr 'buffer'
+    silent noautocmd execute bufnr 'buffer'
   else
     if bufname('%') == ''
-      silent enew
+      noautocmd silent enew
     endif
-    silent! edit `=a:context.real_buffer_name`
+    silent! noautocmd edit `=a:context.real_buffer_name`
   endif
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
@@ -519,7 +519,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
             \ 'getwinvar(v:val, "&previewwindow") != 0')
       if !empty(preview_windows)
         " Close preview window.
-        pclose!
+        noautocmd pclose!
 
       endif
     endif

@@ -681,7 +681,7 @@ function! s:toggle_auto_preview() "{{{
   if !context.auto_preview
         \ && !unite#get_current_unite().has_preview_window
     " Close preview window.
-    pclose!
+    noautocmd pclose!
   endif
 endfunction"}}}
 function! s:toggle_auto_highlight() "{{{
