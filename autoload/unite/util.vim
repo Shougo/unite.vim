@@ -41,7 +41,7 @@ function! unite#util#print_error(...)
   return call(s:V.print_error, a:000)
 endfunction
 function! unite#util#smart_execute_command(action, word)
-  execute 'keepjumps' a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
+  execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
 endfunction
 function! unite#util#escape_file_searching(...)
   return call(s:V.escape_file_searching, a:000)

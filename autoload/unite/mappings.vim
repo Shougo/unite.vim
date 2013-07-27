@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jul 2013.
+" Last Modified: 27 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -270,7 +270,7 @@ function! unite#mappings#narrowing(word) "{{{
     startinsert!
   else
     call cursor(prompt_linenr+1, 0)
-    keepjumps normal! 0z.
+    normal! 0z.
   endif
 endfunction"}}}
 
