@@ -2,8 +2,13 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:V = vital#of('unite.vim')
-let s:List = vital#of('unite.vim').import('Data.List')
-let s:String = vital#of('unite.vim').import('Data.String')
+
+function! unite#util#get_vital() "{{{
+  return s:V
+endfunction"}}}
+
+let s:List = s:V.import('Data.List')
+let s:String = s:V.import('Data.String')
 
 " TODO use vital's
 let s:is_windows = has('win16') || has('win32') || has('win64')

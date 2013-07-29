@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jul 2013.
+" Last Modified: 29 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,7 +46,7 @@ call unite#util#set_default(
       \ 'g:unite_source_file_rec_async_command')
 "}}}
 
-let s:Cache = vital#of('unite.vim').import('System.Cache')
+let s:Cache = unite#util#get_vital().import('System.Cache')
 
 let s:continuation = { 'directory' : {}, 'file' : {} }
 

@@ -30,7 +30,7 @@ set cpo&vim
 
 
 " Variables  "{{{
-let s:V = vital#of('unite.vim')
+let s:V = unite#util#get_vital()
 let s:L = s:V.import("Data.List")
 
 " The version of MRU file format.
