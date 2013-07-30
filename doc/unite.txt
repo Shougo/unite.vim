@@ -3335,7 +3335,7 @@ A:
 
 Q: I want to use fuzzy match.
 
-A: You can use |unite-filter-matcher_fuzzy|.
+A: Yes you can use |unite-filter-matcher_fuzzy|.
 >
 	call unite#custom#source('file,file/new,buffer,file_rec',
 	\ 'matchers', 'matcher_fuzzy')
@@ -3368,13 +3368,12 @@ A:
 
 Q: Unite adds unite buffer to jumplist automatically.
 
-A: Sorry. But it is hard to fix. You should use |unite-source-jump| instead of
+A: Sorry, but it is hard to fix. You should use |unite-source-jump| instead of
 <C-i>/<C-o> mappings. It ignores unite buffer.
 
 Q: unite.vim is too slow.
 
-A: If you use Vim 7.3.885 or above with |if_lua| feature, unite.vim will be
-faster.
+A: Use Vim 7.3.885 or above with |if_lua| feature; unite.vim gets faster.
 
 Q: Support for existing vim settings like Commant-T plugin? Example,
 'wildignore', 'grepprg', 'suffixes'...
@@ -3390,6 +3389,7 @@ A: You should use |unite#custom#profile()|.
 >
 	call unite#custom#profile('files', 'filters', 'sorter_rank')
 <
+
 Q: Some files are not showing up in file_rec(/async) candidates. What's up
 with that?
 
