@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 16 Jul 2013.
+" Last Modified: 30 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -268,11 +268,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
           \ '[v:val, split(v:val[2:], ":", 1)]')
   endif
 
-  let cwd = getcwd()
-  if isdirectory(a:context.source__directory)
-    lcd `=a:context.source__directory`
-  endif
-
   if a:context.source__ssh_path != ''
     " Use ssh command.
     let [hostname, port, path] = unite#sources#ssh#parse_path(
@@ -316,8 +311,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
     call add(_, dict)
   endfor
-
-  lcd `=cwd`
 
   return _
 endfunction "}}}

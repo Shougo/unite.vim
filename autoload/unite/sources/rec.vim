@@ -41,8 +41,10 @@ call unite#util#set_default(
       \ 'g:unite_source_file_rec_max_cache_files')
 call unite#util#set_default(
       \ 'g:unite_source_rec_async_command',
-      \ (executable('ag') ? 'ag --nocolor --nogroup -g ""' :
-      \ !unite#util#is_windows() && executable('find') ? 'find' : ''),
+      \ (executable('ag') ?
+      \  'ag --nocolor --nogroup --ignore ' .
+      \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'' --hidden -g ""' :
+      \  !unite#util#is_windows() && executable('find') ? 'find' : ''),
       \ 'g:unite_source_file_rec_async_command')
 "}}}
 
