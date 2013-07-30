@@ -1,38 +1,50 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:V = vital#of('unite.vim')
-
 function! unite#util#get_vital() "{{{
+  if !exists('s:V')
+    let s:V = vital#of('unite.vim')
+  endif
   return s:V
 endfunction"}}}
 
-let s:List = s:V.import('Data.List')
-let s:String = s:V.import('Data.String')
+function! s:get_list() "{{{
+  if !exists('s:List')
+    let s:List = unite#util#get_vital().import('Data.List')
+  endif
+  return s:List
+endfunction"}}}
+
+function! s:get_string() "{{{
+  if !exists('s:String')
+    let s:String = unite#util#get_vital().import('Data.String')
+  endif
+  return s:String
+endfunction"}}}
 
 " TODO use vital's
 let s:is_windows = has('win16') || has('win32') || has('win64')
 
 function! unite#util#truncate_smart(...)
-  return call(s:V.truncate_smart, a:000)
+  return call(unite#util#get_vital().truncate_smart, a:000)
 endfunction
 function! unite#util#truncate(...)
-  return call(s:V.truncate, a:000)
+  return call(unite#util#get_vital().truncate, a:000)
 endfunction
 function! unite#util#strchars(...)
-  return call(s:String.strchars, a:000)
+  return call(s:get_string().strchars, a:000)
 endfunction
 function! unite#util#strwidthpart(...)
-  return call(s:V.strwidthpart, a:000)
+  return call(unite#util#get_vital().strwidthpart, a:000)
 endfunction
 function! unite#util#strwidthpart_reverse(...)
-  return call(s:V.strwidthpart_reverse, a:000)
+  return call(unite#util#get_vital().strwidthpart_reverse, a:000)
 endfunction
 function! unite#util#wcswidth(...)
-  return call(s:V.wcswidth, a:000)
+  return call(unite#util#get_vital().wcswidth, a:000)
 endfunction
 function! unite#util#wcswidth(...)
-  return call(s:V.wcswidth, a:000)
+  return call(unite#util#get_vital().wcswidth, a:000)
 endfunction
 function! unite#util#is_win(...)
   echoerr 'unite#util#is_win() is deprecated. use unite#util#is_windows() instead.'
@@ -42,19 +54,19 @@ function! unite#util#is_windows(...)
   return s:is_windows
 endfunction
 function! unite#util#is_mac(...)
-  return call(s:V.is_mac, a:000)
+  return call(unite#util#get_vital().is_mac, a:000)
 endfunction
 function! unite#util#print_error(...)
-  return call(s:V.print_error, a:000)
+  return call(unite#util#get_vital().print_error, a:000)
 endfunction
 function! unite#util#smart_execute_command(action, word)
   execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
 endfunction
 function! unite#util#escape_file_searching(...)
-  return call(s:V.escape_file_searching, a:000)
+  return call(unite#util#get_vital().escape_file_searching, a:000)
 endfunction
 function! unite#util#escape_pattern(...)
-  return call(s:V.escape_pattern, a:000)
+  return call(unite#util#get_vital().escape_pattern, a:000)
 endfunction
 function! unite#util#set_default(var, val, ...)  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
@@ -65,12 +77,12 @@ function! unite#util#set_default(var, val, ...)  "{{{
   endif
 endfunction"}}}
 function! unite#util#set_dictionary_helper(...)
-  return call(s:V.set_dictionary_helper, a:000)
+  return call(unite#util#get_vital().set_dictionary_helper, a:000)
 endfunction
 
 if unite#util#is_windows()
   function! unite#util#substitute_path_separator(...)
-    return call(s:V.substitute_path_separator, a:000)
+    return call(unite#util#get_vital().substitute_path_separator, a:000)
   endfunction
 else
   function! unite#util#substitute_path_separator(path)
@@ -79,13 +91,13 @@ else
 endif
 
 function! unite#util#path2directory(...)
-  return call(s:V.path2directory, a:000)
+  return call(unite#util#get_vital().path2directory, a:000)
 endfunction
 function! unite#util#path2project_directory(...)
-  return call(s:V.path2project_directory, a:000)
+  return call(unite#util#get_vital().path2project_directory, a:000)
 endfunction
 function! unite#util#has_vimproc(...)
-  return call(s:V.has_vimproc, a:000)
+  return call(unite#util#get_vital().has_vimproc, a:000)
 endfunction
 function! unite#util#has_lua()
   " Note: Disabled if_lua feature if less than 7.3.885.
@@ -93,23 +105,23 @@ function! unite#util#has_lua()
   return has('lua') && (v:version > 703 || v:version == 703 && has('patch885'))
 endfunction
 function! unite#util#system(...)
-  return call(s:V.system, a:000)
+  return call(unite#util#get_vital().system, a:000)
 endfunction
 function! unite#util#system_passwd(...)
   return call((unite#util#has_vimproc() ?
         \ 'vimproc#system_passwd' : 'system'), a:000)
 endfunction
 function! unite#util#get_last_status(...)
-  return call(s:V.get_last_status, a:000)
+  return call(unite#util#get_vital().get_last_status, a:000)
 endfunction
 function! unite#util#get_last_errmsg()
   return unite#util#has_vimproc() ? vimproc#get_last_errmsg() : ''
 endfunction
 function! unite#util#sort_by(...)
-  return call(s:List.sort_by, a:000)
+  return call(s:get_list().sort_by, a:000)
 endfunction
 function! unite#util#uniq(...)
-  return call(s:List.uniq, a:000)
+  return call(s:get_list().uniq, a:000)
 endfunction
 function! unite#util#input(prompt, ...) "{{{
   let context = unite#get_context()
@@ -167,7 +179,7 @@ function! unite#util#input_directory(message) "{{{
   return dir
 endfunction"}}}
 function! unite#util#iconv(...)
-  return call(s:V.iconv, a:000)
+  return call(unite#util#get_vital().iconv, a:000)
 endfunction
 
 function! unite#util#alternate_buffer() "{{{
@@ -257,7 +269,7 @@ function! unite#util#command_with_restore_cursor(command)
   execute next 'wincmd w'
 endfunction
 function! unite#util#expand(path) "{{{
-  return s:V.substitute_path_separator(
+  return unite#util#get_vital().substitute_path_separator(
         \ (a:path =~ '^\~') ? substitute(a:path, '^\~', expand('~'), '') :
         \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
         \               '^\$\h\w*', '\=eval(submatch(0))', '') :
