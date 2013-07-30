@@ -1322,8 +1322,8 @@ unite#get_candidates({sources}, [, {context}])	*unite#get_candidates()*
 		arguments feature is same to |unite#start()|.
 		Note: max_candidates option of sources is ignored.
 
-unite#action#do_candidates({action-name}, {candidates}, [, {context}])
 						*unite#action#do_candidates()*
+unite#action#do_candidates({action-name}, {candidates}, [, {context}])
 		Does {action-name} with {candidates}.  Unite buffer is not
 		created.  This function may not work in some actions.
 		Note: To get candidates, use |unite#get_candidates()|.
@@ -1367,21 +1367,21 @@ unite#get_status_string()			 *unite#get_status_string()*
 		Returns unite status string.  It is useful to custom
 		statusline.
 
-unite#mappings#set_current_filters({filters})
 					*unite#mappings#set_current_filters()*
+unite#mappings#set_current_filters({filters})
 		Changes current unite buffer filters.
 		Example:
 >
   nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
         \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
 <
-unite#mappings#get_current_filters()
 					*unite#mappings#get_current_filters()*
+unite#mappings#get_current_filters()
 		Gets current unite buffer filters.
 
-unite#custom#profile({profile-name}, {option-name}, {value})
 						*unite#custom#profile()*
 						*unite#set_profile()*
+unite#custom#profile({profile-name}, {option-name}, {value})
 		Set {profile-name} specialized {option-name} to {value}.
 		Note: If you use single source in unite.vim commands with
 		omitting profile name and buffer name, "source/{source-name}"
@@ -1479,24 +1479,24 @@ unite#custom#profile({profile-name}, {option-name}, {value})
 		call unite#custom#profile('source/grep', 'context',
 		\ {'no_quit' : 1})
 <
-unite#custom#substitute({profile-name}, {pattern}, {subst} [, {priority}])
 					*unite#custom#substitute()*
+unite#custom#substitute({profile-name}, {pattern}, {subst} [, {priority}])
 		Specify a replace pattern of narrowing text for a Unite buffer
 		of which name is {profile-name}.
 		Note: This is wrapper function for backward compatibility.
 
-unite#custom#default_action({kind}, {default-action})
 					*unite#custom_default_action()*
 					*unite#custom#default_action()*
+unite#custom#default_action({kind}, {default-action})
 		Changes the default action of {kind} into {default-action}.
 		You may specify multiple {kind} with separating ",".  For
 		Example:
 >
 		call unite#custom#default_action('file', 'tabopen')
 <
-unite#custom#action({kind}, {name}, {action})
 						*unite#custom#action()*
 						*unite#custom_action()*
+unite#custom#action({kind}, {name}, {action})
 		Adds an {action} of which name is {name} for {kind}.
 		You may specify multiple {kind} with separating ",".
 		For example:
@@ -1514,9 +1514,9 @@ unite#custom#action({kind}, {name}, {action})
 		call unite#custom#action('file,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen
 <
-unite#custom#alias({kind}, {name}, {action})
 						*unite#custom#alias()*
 						*unite#custom_alias()*
+unite#custom#alias({kind}, {name}, {action})
 		Defines an action of {name} which is another name of {action}
 		in {kind}.  You may specify multiple {kind} with separating
 		",".  If {action} is "nop", such action is disabled.
@@ -1524,19 +1524,19 @@ unite#custom#alias({kind}, {name}, {action})
 >
 		call unite#custom#alias('file', 'h', 'left')
 <
-unite#custom_filters({source-name}, {filters})
 						*unite#custom_filters()*
+unite#custom_filters({source-name}, {filters})
 		Note: This function is deprecated.  Please use
 		|unite#custom#source()| instead.
 
-unite#custom_max_candidates({source-name}, {max})
 					*unite#custom_max_candidates()*
+unite#custom_max_candidates({source-name}, {max})
 		Note: This function is deprecated.  Please use
 		|unite#custom#source()| instead.
 
-unite#custom#source({source-name}, {option-name}, {value})
 						*unite#custom#source()*
 						*unite#custom_source()*
+unite#custom#source({source-name}, {option-name}, {value})
 		Set {source-name} source specialized {option-name} to {value}.
 		You may specify multiple sources with separating "," in
 		{source-name}.
@@ -1573,15 +1573,15 @@ unite#custom#source({source-name}, {option-name}, {value})
 		Changes the source custom variables.  The variables are depends
 		on sources.
 
-unite#take_action({action-name}, {candidate})
 						*unite#take_action()*
+unite#take_action({action-name}, {candidate})
 		Runs an action {action-name} against {candidate}.  This will
 		be mainly used in |unite#custom#action()|.  When the action is
 		is_selectable, the {candidate} will be automatically converted
 		into a list.
 
-unite#take_parents_action({action-name}, {candidate}, {extend-candidate})
 						*unite#take_parents_action()*
+unite#take_parents_action({action-name}, {candidate}, {extend-candidate})
 		Same to |unite#take_action()| but searches the parents' action
 		table with combining {extend-candidate} on {candidate}.  This
 		is handy for reusing parents' actions.
@@ -1616,14 +1616,14 @@ unite#undef_filter({name})			*unite#undef_filter()*
 		|unite#define_filter()|.  If such a filter doesn't exist,
 		this function does nothing.
 
-unite#filters#matcher_default#use({matchers})
 					*unite#filters#matcher_default#use(()*
+unite#filters#matcher_default#use({matchers})
 		Changes the default match used by
 		|unite-filter-matcher_default| into {matchers}.
 		{matchers} must be specified with a list of matcher names.
 
-unite#filters#sorter_default#use({sorters})
 					*unite#filters#sorter_default#use(()*
+unite#filters#sorter_default#use({sorters})
 		Changes the default sorter used by
 		|unite-filter-sorter_default| into {sorters}.
 		{sorters} must be specified with a list of sorter names.
