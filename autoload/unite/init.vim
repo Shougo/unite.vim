@@ -119,6 +119,7 @@ function! unite#init#_unite_buffer() "{{{
     setlocal nofoldenable
     setlocal nomodeline
     setlocal nonumber
+    setlocal norelativenumber
     setlocal foldcolumn=0
     setlocal iskeyword+=-,+,\\,!,~
     setlocal matchpairs-=<:>
