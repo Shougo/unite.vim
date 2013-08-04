@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 31 May 2013.
+" Last Modified: 04 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -115,9 +115,23 @@ function! s:source.hooks.on_init(args, context) "{{{
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) "{{{
   syntax case ignore
-  execute 'syntax match uniteSource__VimgrepPattern /:.*\zs'
+  syntax region uniteSource__VimgrepLine
+        \ start=' ' end='$'
+        \ containedin=uniteSource__Vimgrep
+  syntax match uniteSource__VimgrepFile /^[^:]*/ contained
+        \ containedin=uniteSource__VimgrepLine
+        \ nextgroup=uniteSource__VimgrepSeparator
+  syntax match uniteSource__VimgrepSeparator /:/ contained
+        \ containedin=uniteSource__VimgrepLine
+        \ nextgroup=uniteSource__VimgrepLineNr
+  syntax match uniteSource__VimgrepLineNr /\d\+/ contained
+        \ containedin=uniteSource__VimgrepLine
+        \ nextgroup=uniteSource__VimgrepPattern
+  execute 'syntax match uniteSource__VimgrepPattern /'
         \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
-        \ . '/ contained containedin=uniteSource__Vimgrep'
+        \ . '/ contained containedin=uniteSource__VimgrepLine'
+  highlight default link uniteSource__VimgrepFile Directory
+  highlight default link uniteSource__VimgrepLineNr LineNR
   execute 'highlight default link uniteSource__VimgrepPattern'
         \ g:unite_source_vimgrep_search_word_highlight
 endfunction"}}}
