@@ -2470,6 +2470,11 @@ converter_full_path
 		A converter which converts a candidate's word into the
 		full path of the filename.
 
+					*unite-filter-converter_smart_path*
+converter_smart_path
+		A converter which converts a candidate's word into the
+		full path if you input full path.
+
 ==============================================================================
 ACTIONS						*unite-actions*
 
