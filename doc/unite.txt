@@ -2412,6 +2412,10 @@ sorter_word	Compare word sorter.
 						*unite-filter-sorter_length*
 sorter_length	Compare length sorter.
 
+						*unite-filter-sorter_ftime*
+sorter_ftime	Compare |getftime()| sorter.
+		"action__path" or "action__directory" is need.
+
 						*unite-filter-sorter_rank*
 sorter_rank	Matched rank order sorter.  The higher the matched word is or
 		the longer the matched length is, the higher the rank is.
