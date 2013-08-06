@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jul 2013.
+" Last Modified: 06 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -372,6 +372,7 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
   endif
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
+  doautocmd WinEnter
 endfunction"}}}
 
 function! unite#view#_close(buffer_name)  "{{{
