@@ -373,6 +373,7 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
   doautocmd WinEnter
+  doautocmd BufWinEnter
 endfunction"}}}
 
 function! unite#view#_close(buffer_name)  "{{{
