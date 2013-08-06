@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jul 2013.
+" Last Modified: 06 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -152,10 +152,13 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
 
-  setlocal nocursorline
+  if line('.') == prompt_linenr && !&l:modifiable
+    setlocal modifiable
+  endif
+  if line('.') != prompt_linenr && &l:modifiable
+    setlocal nomodifiable
+  endif
 
-  execute 'setlocal' line('.') == prompt_linenr ?
-        \ 'modifiable' : 'nomodifiable'
   if line('.') <= prompt_linenr
     nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
           \ :call unite#mappings#loop_cursor_up_call(
