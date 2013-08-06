@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: sorter_length.vim
+" FILE: sorter_ftime.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 06 Aug 2013.
 " License: MIT license  {{{
