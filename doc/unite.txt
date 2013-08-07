@@ -1879,6 +1879,9 @@ file		Nominates an input file as a candidate.
 						*unite-source-file/new*
 file/new	Nominates a new input file as a candidate.
 
+		Source arguments:
+		1. the file/directory path.
+
 						*unite-source-file_mru*
 file_mru	Nominates files you used recently as candidates, ordering
 		by time series.
@@ -1944,8 +1947,14 @@ directory	Nominates an input directory as a candidate.
 		".git").  If you want to open this directories, please input
 		".".
 
+		Source arguments:
+		1. the file/directory path.
+
 						*unite-source-directory/new*
 directory/new	Nominates a new input directory as a candidate.
+
+		Source arguments:
+		1. the file/directory path.
 
 						*unite-source-directory_mru*
 directory_mru	Nominates directories you used recently as candidates,
