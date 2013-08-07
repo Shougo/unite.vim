@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2013.
+" Last Modified: 07 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -300,13 +300,14 @@ function! s:change_highlight()  "{{{
 
   silent! syntax clear uniteCandidateInputKeyword
 
-  if unite#helper#get_input() == ''
+  if !context.is_changed || unite#helper#get_input() == ''
     return
   endif
 
   syntax case ignore
 
-  for input in unite#helper#get_substitute_input(unite#helper#get_input())
+  for input in unite#helper#get_substitute_input(
+        \ unite#helper#get_input())
     for pattern in map(split(input, '\\\@<! '),
           \ "substitute(escape(unite#util#escape_match(v:val), '/'),
           \   '\\\\\\@<!|', '\\\\|', 'g')")
