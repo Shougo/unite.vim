@@ -244,14 +244,10 @@ function! s:source_file_new.change_candidates(args, context) "{{{
     let input = resolve(input)
   endif
 
-  " Glob by directory name.
-  let input = substitute(input, '[^/.]*$', '', '')
-  let glob = input . (input =~ '\*$' ? '' : '*')
-
   let is_relative_path = path !~ '^\%(/\|\a\+:/\)'
 
   let newfile = unite#util#expand(
-        \ escape(substitute(a:context.path, '[*\\]', '', 'g'), ''))
+        \ escape(substitute(input, '[*\\]', '', 'g'), ''))
   if filereadable(newfile) || isdirectory(newfile)
     return []
   endif
