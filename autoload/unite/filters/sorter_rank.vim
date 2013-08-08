@@ -37,7 +37,7 @@ let s:sorter = {
       \}
 
 function! s:sorter.filter(candidates, context) "{{{
-  if a:context.input == '' || !has('float')
+  if a:context.input == '' || !has('float') || empty(a:candidates)
     return a:candidates
   endif
 
@@ -46,12 +46,22 @@ function! s:sorter.filter(candidates, context) "{{{
     let candidate.filter__rank = 0
   endfor
 
+  " let is_path = has_key(a:candidates[0], 'action__path')
+
   for input in split(a:context.input, '\\\@<! ')
     let input = substitute(substitute(input, '\\ ', ' ', 'g'),
           \ '\*', '', 'g')
 
     " Calc rank.
     let l1 = len(input)
+
+    " for candidate in a:candidates
+    "   let word = is_path ? fnamemodify(candidate.word, ':t') : candidate.word
+    "   let index = stridx(word, input[0])
+    "   let candidate.filter__rank +=
+    "         \ len(word) + (index > 0 ? index * 2 : len(word))
+    " endfor
+
     if unite#util#has_lua()
       for candidate in a:candidates
         let candidate.filter__rank +=
@@ -71,6 +81,8 @@ function! s:sorter.filter(candidates, context) "{{{
 endfunction"}}}
 
 function! s:calc_word_distance(str1, str2, l1) "{{{
+  return 
+
   let l2 = len(a:str2)
   let p1 = range(l2+1)
   let p2 = []
