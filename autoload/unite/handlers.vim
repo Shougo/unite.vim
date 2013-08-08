@@ -192,9 +192,11 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   if exists('b:current_syntax') && !context.no_cursor_line
     match
 
-    if line('.') <= prompt_linenr || mode('.') == 'i'
+    if line('.') <= prompt_linenr+1 || mode('.') == 'i' ||
+          \ split(reltimestr(reltime(unite.cursor_line_time)))[0] > '0.10'
       call s:set_cursor_line()
     endif
+    let unite.cursor_line_time = reltime()
   endif
 
   if context.auto_preview
@@ -371,6 +373,7 @@ function! s:set_cursor_line()
         \ 'uniteError /\%'.prompt_linenr.'l/' :
         \ context.cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
         \ context.cursor_line_highlight.' /\%'.line('.').'l/')
+  let unite.cursor_line_time = reltime()
 endfunction
 
 let &cpo = s:save_cpo
