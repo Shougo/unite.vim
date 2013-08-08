@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: sorter_rank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jul 2013.
+" Last Modified: 08 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -113,16 +113,12 @@ function! s:calc_word_distance_lua(str1, str2, l1) "{{{
     for j = 0, l2 do
       p2[j+1] = math.min(p1[j+1] + 1, p2[j]+1)
     end
-
-    -- Swap.
-    local tmp = p1
-    p1 = p2
-    p2 = tmp
   end
 
   vim.command('let distance = ' .. p1[l2])
 EOF
 
+  " echomsg string([a:str1, a:str2, distance])
   return distance
 endfunction"}}}
 
@@ -142,6 +138,7 @@ do
   end
 end
 EOF
+  " echomsg string(map(copy(a:candidates), '[v:val.word, v:val.filter__rank]'))
   return a:candidates
 endfunction"}}}
 
