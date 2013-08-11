@@ -217,24 +217,29 @@ let s:source_file_new = {
       \ 'name' : 'file/new',
       \ 'description' : 'file candidates from input',
       \ 'default_kind' : 'file',
+      \ 'hooks' : {},
       \ }
 
-function! s:source_file_new.change_candidates(args, context) "{{{
-  let a:context.path = s:parse_path(a:args)
-  let a:context.path .= a:context.input
-
-  let input = substitute(substitute(
-        \ a:context.path, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
-  if input == ''
-    return []
-  endif
-
-  let path = join(a:args, ':')
+function! s:source_file_new.hooks.on_init(args, context) "{{{
+  let path = unite#util#substitute_path_separator(
+        \ expand(join(a:args, ':')))
+  let path = unite#util#substitute_path_separator(
+        \ fnamemodify(path, ':p'))
   if path !=# '/' && path =~ '[\\/]$'
     " Chomp.
     let path = path[: -2]
   endif
+  let a:context.source__path = path
+endfunction"}}}
 
+function! s:source_file_new.change_candidates(args, context) "{{{
+  let input = substitute(substitute(
+        \ a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
+  if input == ''
+    return []
+  endif
+
+  let path = a:context.source__path
   if input !~ '^\%(/\|\a\+:/\)' && path != '' && path != '/'
     let input = path . '/' .  input
   endif
@@ -262,7 +267,7 @@ endfunction"}}}
 
 function! s:parse_path(args) "{{{
   let path = unite#util#substitute_path_separator(
-        \ expand(join(a:args, ':')))
+        \ unite#util#expand(join(a:args, ':')))
   let path = unite#util#substitute_path_separator(
         \ fnamemodify(path, ':p'))
 
