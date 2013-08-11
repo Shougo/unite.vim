@@ -278,7 +278,9 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) "{{{
   let is_newfile = get(a:000, 0, 0)
 
   let dict = {
-        \ 'word' : a:file, 'abbr' : a:file,
+        \ 'word' : a:file, 'abbr' :
+        \   unite#util#substitute_path_separator(
+        \        fnamemodify(a:file, ':~:.')),
         \ 'action__path' : a:file,
         \}
 
@@ -298,9 +300,6 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) "{{{
           \ unite#util#substitute_path_separator(dict.action__directory)
   endif
 
-  let abbr = unite#util#substitute_path_separator(
-        \ fnamemodify(a:file, ':~:.'))
-
   if dict.vimfiler__is_directory
     if a:file !~ '^\%(/\|\a\+:/\)$'
       let dict.abbr .= '/'
@@ -310,12 +309,12 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) "{{{
   elseif is_newfile
     if is_newfile == 1
       " New file.
-      let dict.abbr = '[new file] ' . abbr
+      let dict.abbr = '[new file] ' . dict.abbr
       let dict.kind = 'file'
     elseif is_newfile == 2
       " New directory.
       let dict.action__directory = a:file
-      let dict.abbr = '[new directory] ' . abbr
+      let dict.abbr = '[new directory] ' . dict.abbr
       let dict.kind = 'directory'
     endif
   else
