@@ -151,6 +151,20 @@ function! s:source.action_table.call.func(candidate) "{{{
 endfunction"}}}
 "}}}
 
+let s:source.action_table.edit = {
+      \ 'description' : 'edit the function from the source',
+      \ }
+function! s:source.action_table.edit.func(candidates) "{{{
+    let s:register_old = @f
+    redir @f
+    silent execute 'verbose function '.a:candidates.action__function
+    redir end
+    let s:filepath = matchstr(split(@f,'\n')[1], 'Last set from \zs.*$')
+    execute 'e '.s:filepath
+    execute search('\v^[ \t]*fu(nction)=[ !]*'.a:candidates.action__function)
+    let @f = s:register_old
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
