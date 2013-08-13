@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: function.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Dec 2012.
+" Last Modified: 13 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -155,14 +155,13 @@ let s:source.action_table.edit = {
       \ 'description' : 'edit the function from the source',
       \ }
 function! s:source.action_table.edit.func(candidates) "{{{
-    let s:register_old = @f
-    redir @f
-    silent execute 'verbose function '.a:candidates.action__function
-    redir end
-    let s:filepath = matchstr(split(@f,'\n')[1], 'Last set from \zs.*$')
-    execute 'e '.s:filepath
-    execute search('\v^[ \t]*fu(nction)=[ !]*'.a:candidates.action__function)
-    let @f = s:register_old
+  redir => func
+  silent execute 'verbose function '.a:candidates.action__function
+  redir END
+  let path = matchstr(split(func,'\n')[1], 'Last set from \zs.*$')
+  execute 'edit' fnameescape(path)
+  execute search('^[ \t]*fu\%(nction\)\?[ !]*'.
+        \ a:candidates.action__function)
 endfunction"}}}
 
 let &cpo = s:save_cpo
