@@ -420,8 +420,7 @@ function! s:get_resume_buffer(buffer_name) "{{{
   let buffer_name = a:buffer_name
   if buffer_name !~ '@\d\+$'
     " Add postfix.
-    let prefix = unite#util#is_windows() ?
-          \ '[unite] - ' : '*unite* - '
+    let prefix = '[unite] - '
     let prefix .= buffer_name
     let buffer_name .= unite#helper#get_postfix(prefix, 0)
   endif
