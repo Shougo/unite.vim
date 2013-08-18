@@ -269,18 +269,18 @@ function! unite#start#get_vimfiler_candidates(sources, ...) "{{{
     let candidates = s:get_candidates(a:sources, context)
 
     " Converts utf-8-mac to utf-8.
-    if has('mac') && has('iconv')
+    if unite#util#is_mac() && has('iconv')
       for item in candidates
-        let item.action__path = iconv(
-              \ item.action__path, 'utf-8-mac', 'utf-8')
-        let item.action__directory = iconv(
-              \ item.action__directory, 'utf-8-mac', 'utf-8')
-        let item.word = iconv(item.word, 'utf-8-mac', 'utf-8')
-        let item.abbr = iconv(item.abbr, 'utf-8-mac', 'utf-8')
-        let item.vimfiler__filename = iconv(
-              \ item.vimfiler__filename, 'utf-8-mac', 'utf-8')
-        let item.vimfiler__abbr = iconv(
-              \ item.vimfiler__abbr, 'utf-8-mac', 'utf-8')
+        let item.action__path = unite#util#iconv(
+              \ item.action__path, 'utf-8-mac', &encoding)
+        let item.action__directory = unite#util#iconv(
+              \ item.action__directory, 'utf-8-mac', &encoding)
+        let item.word = unite#util#iconv(item.word, 'utf-8-mac', &encoding)
+        let item.abbr = unite#util#iconv(item.abbr, 'utf-8-mac', &encoding)
+        let item.vimfiler__filename = unite#util#iconv(
+              \ item.vimfiler__filename, 'utf-8-mac', &encoding)
+        let item.vimfiler__abbr = unite#util#iconv(
+              \ item.vimfiler__abbr, 'utf-8-mac', &encoding)
       endfor
     endif
   finally
