@@ -15,47 +15,23 @@ endfunction
 " Substitute a:from => a:to by string.
 " To substitute by pattern, use substitute() instead.
 function! s:replace(str, from, to)
-  if a:str ==# '' || a:from ==# ''
-    return a:str
-  endif
-  let str = a:str
-  let idx = stridx(str, a:from)
-  while idx !=# -1
-    let left  = idx ==# 0 ? '' : str[: idx - 1]
-    let right = str[idx + strlen(a:from) :]
-    let str = left . a:to . right
-    let idx = stridx(str, a:from, idx + strlen(a:to))
-  endwhile
-  return str
+  return s:_replace(a:str, a:from, a:to, 'g')
 endfunction
 
 " Substitute a:from => a:to only once.
 " cf. s:replace()
-function! s:replace_once(str, from, to)
-  if a:str ==# '' || a:from ==# ''
-    return a:str
-  endif
-  let idx = stridx(a:str, a:from)
-  if idx ==# -1
-    return a:str
-  else
-    let left  = idx ==# 0 ? '' : a:str[: idx - 1]
-    let right = a:str[idx + strlen(a:from) :]
-    return left . a:to . right
-  endif
+function! s:replace_first(str, from, to)
+  return s:_replace(a:str, a:from, a:to, '')
+endfunction
+
+" implement of replace() and replace_first()
+function! s:_replace(str, from, to, flags)
+  return substitute(a:str, '\V'.escape(a:from, '\'), escape(a:to, '\'), a:flags)
 endfunction
 
 function! s:scan(str, pattern)
   let list = []
-  let pos = 0
-  let len = len(a:str)
-  while 0 <= pos && pos < len
-    let matched = matchstr(a:str, a:pattern, pos)
-    let pos = matchend(a:str, a:pattern, pos)
-    if !empty(matched)
-      call add(list, matched)
-    endif
-  endwhile
+  call substitute(a:str, a:pattern, '\=add(list, submatch(0)) == [] ? "" : ""', 'g')
   return list
 endfunction
 
@@ -67,15 +43,13 @@ function! s:common_head(strs)
   if empty(a:strs)
     return ''
   endif
-  let head = a:strs[0]
-  for str in a:strs[1 :]
-    let pat = substitute(str, '.', '[\0]', 'g')
-    let head = matchstr(head, '^\%[' . pat . ']')
-    if head ==# ''
-      break
-    endif
-  endfor
-  return head
+  let len = len(a:strs)
+  if len == 1
+    return a:strs[0]
+  endif
+  let strs = len == 2 ? a:strs : sort(copy(a:strs))
+  let pat = substitute(strs[0], '.', '[\0]', 'g')
+  return pat == '' ? '' : matchstr(strs[-1], '^\%[' . pat . ']')
 endfunction
 
 " Split to two elements of List. ([left, right])
@@ -101,7 +75,7 @@ function! s:split3(expr, pattern)
 endfunction
 
 " Slices into strings determines the number of substrings.
-" e.g.: s:splitn("neo compl cache", 2, '\s') returns ['neo', 'compl cache']
+" e.g.: s:nsplit("neo compl cache", 2, '\s') returns ['neo', 'compl cache']
 function! s:nsplit(expr, n, ...)
   let pattern = get(a:000, 0, '\s')
   let keepempty = get(a:000, 1, 1)
@@ -197,7 +171,7 @@ endfunction
 function! s:wrap(str,...)
   let _columns = a:0 > 0 ? a:1 : &columns
   return s:L.concat(
-        \ map(split(a:str, '\r\?\n'), 's:_split_by_wcswidth(v:val, _columns - 1)'))
+        \ map(split(a:str, '\r\n\|[\r\n]'), 's:_split_by_wcswidth(v:val, _columns - 1)'))
 endfunction
 
 function! s:nr2byte(nr)
@@ -234,20 +208,17 @@ endfunction
 " If a ==# b, returns -1.
 " If a !=# b, returns first index of diffrent character.
 function! s:diffidx(a, b)
-  let [a, b] = [split(a:a, '\zs'), split(a:b, '\zs')]
-  let [al, bl] = [len(a), len(b)]
-  let l = max([al, bl])
-  for i in range(l)
-    " if `i` is out of range, a[i] returns empty string.
-    if i >= al || i >= bl || a[i] !=# b[i]
-      return i > 0 ? strlen(join(a[:i-1], '')) : 0
-    endif
-  endfor
-  return -1
+  return a:a ==# a:b ? -1 : strlen(s:common_head([a:a, a:b]))
 endfunction
 
 function! s:substitute_last(expr, pat, sub)
   return substitute(a:expr, printf('.*\zs%s', a:pat), a:sub, '')
+endfunction
+
+function! s:dstring(expr)
+  let x = substitute(string(a:expr), "^'\\|'$", '', 'g')
+  let x = substitute(x, "''", "'", 'g')
+  return printf('"%s"', escape(x, '"'))
 endfunction
 
 let &cpo = s:save_cpo

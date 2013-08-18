@@ -82,7 +82,7 @@ function! s:_import(name, scripts)
 endfunction
 
 function! s:_get_module_path(name)
-  if filereadable(a:name)
+  if s:_is_absolute_path(a:name) && filereadable(a:name)
     return s:_unify_path(a:name)
   endif
   if a:name ==# ''
@@ -126,6 +126,17 @@ if filereadable(expand('<sfile>:r') . '.VIM')
 else
   function! s:_unify_path(path)
     return resolve(fnamemodify(a:path, ':p:gs?[\\/]\+?/?'))
+  endfunction
+endif
+
+" Copy from System.Filepath
+if has('win16') || has('win32') || has('win64')
+  function! s:_is_absolute_path(path)
+    return a:path =~? '^[a-z]:[/\\]'
+  endfunction
+else
+  function! s:_is_absolute_path(path)
+    return a:path[0] ==# '/'
   endfunction
 endif
 

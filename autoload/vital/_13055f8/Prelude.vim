@@ -15,6 +15,7 @@ else
     return split(R, '\n')
   endfunction
 endif
+
 " globpath() wrapper which returns List
 " and 'suffixes' and 'wildignore' does not affect
 " this function's return value.
@@ -30,15 +31,13 @@ let [
 \   s:__TYPE_FUNCREF,
 \   s:__TYPE_LIST,
 \   s:__TYPE_DICT,
-\   s:__TYPE_FLOAT
-\] = [
-\   type(3),
-\   type(""),
-\   type(function('tr')),
-\   type([]),
-\   type({}),
-\   has('float') ? type(str2float('0')) : -1
-\]
+\   s:__TYPE_FLOAT] = [
+      \   type(3),
+      \   type(""),
+      \   type(function('tr')),
+      \   type([]),
+      \   type({}),
+      \   has('float') ? type(str2float('0')) : -1]
 " __TYPE_FLOAT = -1 when -float
 " This doesn't match to anything.
 
@@ -48,13 +47,17 @@ function! s:is_numeric(Value)
   return _ ==# s:__TYPE_NUMBER
   \   || _ ==# s:__TYPE_FLOAT
 endfunction
+
 " Number
 function! s:is_integer(Value)
-  return type(a:Value) ==# s:__TYPE_NUMBER
+  echoerr 'Prelude.is_integer() is obsolete. Use its is_number() instead; they are equivalent.'
+  return s:is_number(a:Value)
 endfunction
+
 function! s:is_number(Value)
   return type(a:Value) ==# s:__TYPE_NUMBER
 endfunction
+
 " Float
 function! s:is_float(Value)
   return type(a:Value) ==# s:__TYPE_FLOAT
@@ -77,6 +80,11 @@ function! s:is_dict(Value)
 endfunction
 
 function! s:truncate_smart(str, max, footer_width, separator)
+  echoerr 'Prelude.truncate_smart() is obsolete. Use its truncate_skipping() instead; they are equivalent.'
+  return s:truncate_skipping(a:str, a:max, a:footer_width, a:separator)
+endfunction
+
+function! s:truncate_skipping(str, max, footer_width, separator)
   let width = s:wcswidth(a:str)
   if width <= a:max
     let ret = a:str
@@ -195,15 +203,19 @@ let s:is_mac = !s:is_windows && !s:is_cygwin
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
       \   (!isdirectory('/proc') && executable('sw_vers')))
 let s:is_unix = has('unix')
+
 function! s:is_windows()
   return s:is_windows
 endfunction
+
 function! s:is_cygwin()
   return s:is_cygwin
 endfunction
+
 function! s:is_mac()
   return s:is_mac
 endfunction
+
 function! s:is_unix()
   return s:is_unix
 endfunction
@@ -223,9 +235,11 @@ endfunction
 function! s:escape_file_searching(buffer_name)
   return escape(a:buffer_name, '*[]?{}, ')
 endfunction
+
 function! s:escape_pattern(str)
   return escape(a:str, '~"\.^$[]*')
 endfunction
+
 " iconv() wrapper for safety.
 function! s:iconv(expr, from, to)
   if a:from == '' || a:to == '' || a:from ==? a:to
@@ -234,22 +248,26 @@ function! s:iconv(expr, from, to)
   let result = iconv(a:expr, a:from, a:to)
   return result != '' ? result : a:expr
 endfunction
+
 " Like builtin getchar() but returns string always.
 function! s:getchar(...)
   let c = call('getchar', a:000)
   return type(c) == type(0) ? nr2char(c) : c
 endfunction
+
 " Like builtin getchar() but returns string always.
 " and do inputsave()/inputrestore() before/after getchar().
 function! s:getchar_safe(...)
   let c = s:input_helper('getchar', a:000)
   return type(c) == type("") ? c : nr2char(c)
 endfunction
+
 " Like builtin getchar() but
 " do inputsave()/inputrestore() before/after input().
 function! s:input_safe(...)
     return s:input_helper('input', a:000)
 endfunction
+
 " Do inputsave()/inputrestore() before/after calling a:funcname.
 function! s:input_helper(funcname, args)
     let success = 0
@@ -270,6 +288,7 @@ function! s:set_default(var, val)
     let {a:var} = a:val
   endif
 endfunction
+
 function! s:set_dictionary_helper(variable, keys, pattern)
   for key in split(a:keys, '\s*,\s*')
     if !has_key(a:variable, key)
@@ -277,12 +296,15 @@ function! s:set_dictionary_helper(variable, keys, pattern)
     endif
   endfor
 endfunction
+
 function! s:substitute_path_separator(path)
   return s:is_windows ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction
+
 function! s:path2directory(path)
   return s:substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
 endfunction
+
 function! s:path2project_directory(path, ...)
   let is_allow_empty = get(a:000, 0, 0)
   let search_directory = s:path2directory(a:path)
@@ -339,6 +361,7 @@ function! s:path2project_directory(path, ...)
 
   return s:substitute_path_separator(directory)
 endfunction
+
 " Check vimproc.
 function! s:has_vimproc()
   if !exists('s:exists_vimproc')
@@ -374,6 +397,7 @@ function! s:system(str, ...)
 
   return output
 endfunction
+
 function! s:get_last_status()
   return s:has_vimproc() ?
         \ vimproc#get_last_status() : v:shell_error
