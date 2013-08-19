@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Aug 2013.
+" Last Modified: 19 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -273,7 +273,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.args = unite#helper#get_source_args(a:sources)
   let unite.msgs = []
   let unite.err_msgs = []
-  let unite.redraw_hold_candidates = (unite#util#has_lua() ? 10000 : 4000)
+  let unite.redraw_hold_candidates = (unite#util#has_lua() ? 20000 : 10000)
   let unite.disabled_max_candidates = 0
   let unite.cursor_line_time = reltime()
 
