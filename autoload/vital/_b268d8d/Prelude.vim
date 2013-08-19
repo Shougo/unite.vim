@@ -305,6 +305,60 @@ function! s:path2directory(path)
   return s:substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
 endfunction
 
+function! s:_path2project_directory_git(path)
+  let parent = a:path
+
+  while 1
+    let path = parent . '/.git'
+    if isdirectory(path) || filereadable(path)
+      return parent
+    endif
+    let next = fnamemodify(parent, ':h')
+    if next == parent
+      return ''
+    endif
+    let parent = next
+  endwhile
+endfunction
+
+function! s:_path2project_directory_svn(path)
+  let search_directory = a:path
+  let directory = ''
+
+  let find_directory = s:escape_file_searching(search_directory)
+  let d = finddir('.svn', find_directory . ';')
+  if d == ''
+    return ''
+  endif
+
+  let directory = fnamemodify(d, ':p:h:h')
+
+  " Search parent directories.
+  let parent_directory = s:path2directory(
+        \ fnamemodify(directory, ':h'))
+
+  if parent_directory != ''
+    let d = finddir('.svn', parent_directory . ';')
+    if d != ''
+      let directory = s:_path2project_directory_svn(parent_directory)
+    endif
+  endif
+  return directory
+endfunction
+
+function! s:_path2project_directory_others(vcs, path)
+  let vcs = a:vcs
+  let search_directory = a:path
+  let directory = ''
+
+  let find_directory = s:escape_file_searching(search_directory)
+  let d = finddir(vcs, find_directory . ';')
+  if d == ''
+    return ''
+  endif
+  return fnamemodify(d, ':p:h:h')
+endfunction
+
 function! s:path2project_directory(path, ...)
   let is_allow_empty = get(a:000, 0, 0)
   let search_directory = s:path2directory(a:path)
@@ -312,25 +366,15 @@ function! s:path2project_directory(path, ...)
 
   " Search VCS directory.
   for vcs in ['.git', '.bzr', '.hg', '.svn']
-    let find_directory = s:escape_file_searching(search_directory)
-    let d = finddir(vcs, find_directory . ';')
-    if d == ''
-      continue
+    if vcs ==# '.git'
+      let directory = s:_path2project_directory_git(search_directory)
+    elseif vcs ==# '.svn'
+      let directory = s:_path2project_directory_svn(search_directory)
+    else
+      let directory = s:_path2project_directory_others(vcs, search_directory)
     endif
-
-    let directory = fnamemodify(d, ':p:h:h')
-
-    if vcs ==# '.svn'
-      " Search parent directories.
-      let parent_directory = s:path2directory(
-            \ fnamemodify(directory, ':h'))
-
-      if parent_directory != ''
-        let d = finddir(vcs, parent_directory . ';')
-        if d != ''
-          let directory = s:path2project_directory(parent_directory)
-        endif
-      endif
+    if directory != ''
+      break
     endif
   endfor
 
