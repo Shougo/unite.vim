@@ -66,7 +66,7 @@ function! s:make_candidates(tree, current) "{{{
     endif
   endfor
 
-  return sort(values(dict), 's:compare')
+  return dict
 endfunction"}}}
 
 function! s:compare(a, b)
@@ -104,7 +104,8 @@ function! s:source.gather_candidates(args, context) "{{{
     return []
   endif
 
-  let candidates = s:make_candidates(tree.entries, tree.seq_cur)
+  let dict = s:make_candidates(tree.entries, tree.seq_cur)
+  let candidates = sort(values(dict), 's:compare')
 
   return map(candidates, "{
         \ 'word' : printf('%s : [%s]%s',
