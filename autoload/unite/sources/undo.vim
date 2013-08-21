@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: undo.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 07 Jun 2013.
+" Last Modified: 21 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,7 +62,7 @@ function! s:make_candidates(tree, current) "{{{
           \ 'text' : text,
           \ }
     if has_key(item, 'alt')
-      call extend(dict, s:make_candidate(item.alt, a:current))
+      call extend(dict, s:make_candidates(item.alt, a:current))
     endif
   endfor
 
