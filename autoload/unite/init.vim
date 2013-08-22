@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Aug 2013.
+" Last Modified: 22 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -472,6 +472,9 @@ function! unite#init#_default_scripts(kind, names) "{{{
       let files += split(globpath(&runtimepath,
             \ 'autoload/unite/'.a:kind.'/'.prefix.'*.vim', 1), '\n')
     endfor
+
+    call filter(files, "index(g:unite_ignore_source_files,
+          \ fnamemodify(v:val, ':t')) < 0")
 
     for define in map(files,
           \ "unite#{a:kind}#{fnamemodify(v:val, ':t:r')}#define()")

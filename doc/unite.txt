@@ -472,6 +472,17 @@ g:unite_force_overwrite_statusline
 
 		The default value is 1.
 
+					*g:unite_ignore_source_files*
+g:unite_ignore_source_files
+		Ignore source filenames(not full path). You can optimize
+		source initialization.
+
+		Note: You cannot use the sources in ignored source files.
+>
+  let g:unite_ignore_source_files = ['function.vim', 'command.vim']
+<
+		The default value is [].
+
 g:unite_quick_match_table			*g:unite_quick_match_table*
 		The table of completion candidates of quick match list,
 		corresponding the narrowing text.
