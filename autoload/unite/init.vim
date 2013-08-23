@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Aug 2013.
+" Last Modified: 23 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,6 +26,11 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+" Global options definition. "{{{
+let g:unite_ignore_source_files =
+      \ get(g:, 'unite_ignore_source_files', [])
+"}}}
 
 function! unite#init#_context(context, ...) "{{{
   let source_names = get(a:000, 0, [])
