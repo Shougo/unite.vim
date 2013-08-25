@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2013.
+" Last Modified: 25 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -219,8 +219,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   endif
 
   " The current buffer is initialized.
-  let buffer_name = unite#util#is_windows() ?
-        \ '[unite] - ' : '*unite* - '
+  let buffer_name = '[unite] - '
   let buffer_name .= context.buffer_name
 
   let winnr = winnr()
