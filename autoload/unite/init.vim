@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Aug 2013.
+" Last Modified: 26 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -127,7 +127,7 @@ function! unite#init#_unite_buffer() "{{{
     setlocal foldcolumn=0
     setlocal iskeyword+=-,+,\\,!,~
     setlocal matchpairs-=<:>
-    setlocal completefunc=
+    setlocal completefunc=unite#dummy_completefunc
     setlocal omnifunc=
     match
     if has('conceal')
