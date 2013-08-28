@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Aug 2013.
+" Last Modified: 28 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -804,6 +804,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
   let current_dir_save = getcwd()
   lcd `=directory`
 
+  let hidden_save = &l:hidden
   try
     let old_filename = unite#util#substitute_path_separator(
           \ fnamemodify(a:old_filename, ':.'))
@@ -812,6 +813,8 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
 
     let bufnr = bufnr(unite#util#escape_file_searching(old_filename))
     if bufnr > 0
+      setlocal hidden
+
       " Buffer rename.
       let bufnr_save = bufnr('%')
       execute 'buffer' bufnr
@@ -827,6 +830,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
   finally
     " Restore path.
     lcd `=current_dir_save`
+    let &l:hidden = hidden_save
   endtry
 endfunction"}}}
 function! s:filename2candidate(filename) "{{{
