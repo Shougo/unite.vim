@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Aug 2013.
+" Last Modified: 31 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -124,7 +124,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__VimgrepSeparator /:/ contained
         \ containedin=uniteSource__VimgrepLine
         \ nextgroup=uniteSource__VimgrepLineNr
-  syntax match uniteSource__VimgrepLineNr /\d\+/ contained
+  syntax match uniteSource__VimgrepLineNr /\d\+\ze:/ contained
         \ containedin=uniteSource__VimgrepLine
         \ nextgroup=uniteSource__VimgrepPattern
   execute 'syntax match uniteSource__VimgrepPattern /'

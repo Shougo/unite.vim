@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 29 Aug 2013.
+" Last Modified: 31 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -155,7 +155,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__GrepSeparator /:/ contained
         \ containedin=uniteSource__GrepLine
         \ nextgroup=uniteSource__GrepLineNr
-  syntax match uniteSource__GrepLineNr /\d\+/ contained
+  syntax match uniteSource__GrepLineNr /\d\+\ze:/ contained
         \ containedin=uniteSource__GrepLine
         \ nextgroup=uniteSource__GrepPattern
   execute 'syntax match uniteSource__GrepPattern /'
