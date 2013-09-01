@@ -992,6 +992,11 @@ Normal mode mappings.
 		may run an action on multiple candidates at the same time by
 		marking multiple candidates.
 
+<Plug>(unite_toggle_mark_current_candidate_up)
+				*<Plug>(unite_toggle_mark_current_candidate_up)*
+		Toggles the mark of the candidates in the current line and
+		move up cursor.
+
 <Plug>(unite_toggle_mark_all_candidates)
 				*<Plug>(unite_toggle_mark_all_candidates)*
 		Toggles the mark of the candidates in the all lines.
@@ -1139,6 +1144,9 @@ Insert mode mappings.
 <Plug>(unite_toggle_mark_current_candidate)
 		Same to |<Plug>(unite_toggle_mark_current_candidate)|.
 
+				*i_<Plug>(unite_toggle_mark_current_candidate_up)*
+<Plug>(unite_toggle_mark_current_candidate_up)
+		Same to |<Plug>(unite_toggle_mark_current_candidate_up)|.
 <Plug>(unite_choose_action)		*i_<Plug>(unite_choose_action)*
 		Same to |<Plug>(unite_choose_action)|.
 
@@ -1208,6 +1216,7 @@ q		|<Plug>(unite_exit)|
 Q		|<Plug>(unite_all_exit)|
 <C-r>		|<Plug>(unite_restart)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
+<S-Space>	|<Plug>(unite_toggle_mark_current_candidate_up)|
 *		|<Plug>(unite_toggle_mark_all_candidates)|
 M		|<Plug>(unite_disable_max_candidates)|
 <Tab>		|<Plug>(unite_choose_action)|
@@ -1259,6 +1268,8 @@ Insert mode mappings.
 <C-g>		|i_<Plug>(unite_exit)|
 <Space>		In case when you selected a candidate,
 		|i_<Plug>(unite_toggle_mark_current_candidate)|
+<S-Space>	In case when you selected a candidate,
+		|i_<Plug>(unite_toggle_mark_current_candidate_up)|
 <C-d>		runs delete action
 <C-e>		runs edit action
 <C-t>		runs tabopen action

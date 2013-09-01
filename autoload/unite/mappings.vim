@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jul 2013.
+" Last Modified: 01 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,7 +46,9 @@ function! unite#mappings#define_default_mappings() "{{{
   nnoremap <expr><buffer> <Plug>(unite_append_end)
         \ <SID>insert_enter('A')
   nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)
-        \ :<C-u>call <SID>toggle_mark()<CR>
+        \ :<C-u>call <SID>toggle_mark('j')<CR>
+  nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate_up)
+        \ :<C-u>call <SID>toggle_mark('k')<CR>
   nnoremap <silent><buffer> <Plug>(unite_redraw)
         \ :<C-u>call <SID>redraw()<CR>
   nnoremap <silent><buffer> <Plug>(unite_rotate_next_source)
@@ -133,7 +135,9 @@ function! unite#mappings#define_default_mappings() "{{{
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)
         \ pumvisible() ? "\<PageUp>" : repeat("\<Up>", winheight(0))
   inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)
-        \ <C-o>:<C-u>call <SID>toggle_mark()<CR>
+        \ <C-o>:<C-u>call <SID>toggle_mark('j')<CR>
+  inoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate_up)
+        \ <C-o>:<C-u>call <SID>toggle_mark('k')<CR>
   inoremap <silent><buffer> <Plug>(unite_choose_action)
         \ <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <expr><buffer> <Plug>(unite_move_head)
@@ -181,6 +185,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nmap <buffer> Q         <Plug>(unite_all_exit)
   nmap <buffer> <CR>      <Plug>(unite_do_default_action)
   nmap <buffer> <Space>   <Plug>(unite_toggle_mark_current_candidate)
+  nmap <buffer> <S-Space> <Plug>(unite_toggle_mark_current_candidate_up)
   nmap <buffer> <Tab>     <Plug>(unite_choose_action)
   nmap <buffer> <C-n>     <Plug>(unite_rotate_next_source)
   nmap <buffer> <C-p>     <Plug>(unite_rotate_previous_source)
@@ -247,6 +252,8 @@ function! unite#mappings#define_default_mappings() "{{{
 
   imap <silent><buffer><expr> <Space>
         \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
+  imap <silent><buffer><expr> <S-Space>
+        \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate_up)")
 
   inoremap <silent><buffer><expr> <C-d>
         \ unite#do_action('delete')
@@ -361,7 +368,7 @@ function! s:normal_delete_backward_path() "{{{
   call unite#redraw()
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! s:toggle_mark() "{{{
+function! s:toggle_mark(...) "{{{
   let candidate = unite#helper#get_current_candidate()
   if empty(candidate) || get(candidate, 'is_dummy', 0)
     return
@@ -371,19 +378,29 @@ function! s:toggle_mark() "{{{
   let candidate.unite__marked_time = localtime()
 
   let prompt_linenr = unite#get_current_unite().prompt_linenr
-  if line('.') <= prompt_linenr
-    call cursor(prompt_linenr+1, 0)
+
+  call unite#view#_redraw_line()
+
+  let map = get(a:000, 0, '')
+  if map == ''
+    return
   endif
 
   while 1
-    call unite#view#_redraw_line()
-
-    if line('.') != line('$')
-      normal! j
+    if map ==# 'j'
+      if line('.') != line('$')
+        normal! j
+      endif
+    elseif map ==# 'k'
+      if line('.') > prompt_linenr
+        normal! k
+      endif
     endif
 
     let candidate = unite#helper#get_current_candidate()
-    if line('.') == line('$') || !get(candidate, 'is_dummy', 0)
+    if (map ==# 'j' && line('.') <= prompt_linenr ||
+          \ map ==# 'k' && line('.') == line('$')) ||
+          \ !get(candidate, 'is_dummy', 0)
       break
     endif
   endwhile
