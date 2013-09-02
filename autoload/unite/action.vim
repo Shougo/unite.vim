@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Sep 2013.
+" Last Modified: 02 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -401,7 +401,7 @@ function! unite#action#do(action_name, ...) "{{{
     endif
   endfor
 
-  if !is_quit && unite.context.keep_focus
+  if (!is_quit || unite.context.no_quit) && unite.context.keep_focus
     let winnr = bufwinnr(unite.bufnr)
 
     if winnr > 0
