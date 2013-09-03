@@ -169,6 +169,10 @@ function! s:mru.has_external_update() "{{{
 endfunction"}}}
 
 function! s:mru.save(...) "{{{
+  let self.candidates = unite#sources#mru#variables#get_mrus(self.type)
+        \ + self.candidates
+  call unite#sources#mru#variables#clear(self.type)
+
   if empty(self.candidates)
     " nothing to save, mru is not loaded
     return
