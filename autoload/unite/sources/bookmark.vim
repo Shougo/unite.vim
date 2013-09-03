@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Jul 2013.
+" Last Modified: 03 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -89,7 +89,9 @@ endfunction"}}}
 let s:source = {
       \ 'name' : 'bookmark',
       \ 'description' : 'candidates from bookmark list',
+      \ 'syntax' : 'uniteSource__Bookmark',
       \ 'action_table' : {},
+      \ 'hooks' : {},
       \}
 
 function! s:source.gather_candidates(args, context) "{{{
@@ -128,6 +130,11 @@ function! s:source.gather_candidates(args, context) "{{{
           \   }")
     endfor
     return candidates
+endfunction"}}}
+function! s:source.hooks.on_syntax(args, context) "{{{
+  syntax match uniteSource__Bookmark_Name /\[.\{-}\] /
+        \ contained containedin=uniteSource__Bookmark
+  highlight default link uniteSource__Bookmark_Name Statement
 endfunction"}}}
 function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return ['_', '*', 'default'] + map(split(glob(
