@@ -193,7 +193,7 @@ function! s:mru.save(...) "{{{
     let [ver; items] = readfile(self.mru_file.short)
     if self.version_check(ver)
       call extend(self.candidates, s:convert2candidates(items))
-      let self.candidates = s:L.uniq(a:items, 'v:val.action__path')
+      let self.candidates = s:L.uniq(items, 'v:val.action__path')
     endif
   endif
 
