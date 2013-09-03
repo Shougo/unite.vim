@@ -336,6 +336,7 @@ let s:file_mru_source = {
       \ 'syntax' : 'uniteSource__FileMru',
       \ 'default_kind' : 'file',
       \ 'ignore_pattern' : g:unite_source_file_mru_ignore_pattern,
+      \ 'max_candidates' : 200,
       \}
 
 let s:dir_mru_source = {
@@ -348,6 +349,7 @@ let s:dir_mru_source = {
       \ 'ignore_pattern' :
       \    g:unite_source_directory_mru_ignore_pattern,
       \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__mkdir' },
+      \ 'max_candidates' : 200,
       \}
 
 function! s:file_mru_source.hooks.on_syntax(args, context) "{{{
