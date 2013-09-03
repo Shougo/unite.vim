@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: buffer.vim
-" AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2010
+" FILE: variables.vim
+" AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
+" Last Modified: 30 Apr 2013
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,56 +24,25 @@
 " }}}
 "=============================================================================
 
-if exists('g:loaded_unite_source_buffer')
-      \ || ($SUDO_USER != '' && $USER !=# $SUDO_USER
-      \     && $HOME !=# expand('~'.$USER)
-      \     && $HOME ==# expand('~'.$SUDO_USER))
-  finish
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
-augroup plugin-unite-source-buffer
-  autocmd!
-  autocmd BufEnter,BufWinEnter,BufFilePost *
-        \ call s:append(expand('<amatch>'))
-augroup END
+let s:buffer_list = {}
 
-let g:loaded_unite_source_buffer = 1
-
-function! s:append(path) "{{{
-  if bufnr('%') != expand('<abuf>')
-    return
-  endif
-
-  if !exists('t:unite_buffer_dictionary')
-    let t:unite_buffer_dictionary = {}
-  endif
-
+function! unite#sources#buffer#variables#append() "{{{
   " Append the current buffer.
   let bufnr = bufnr('%')
+  let s:buffer_list[bufnr] = {
+        \ 'action__buffer_nr' : bufnr,
+        \ 'source__time' : localtime(),
+        \ }
+endfunction"}}}
 
-  if exists('*gettabvar')
-    " Delete same buffer in other tab pages.
-    for tabnr in range(1, tabpagenr('$'))
-      let buffer_dict = gettabvar(tabnr, 'unite_buffer_dictionary')
-      if type(buffer_dict) == type({}) && has_key(buffer_dict, bufnr)
-        call remove(buffer_dict, bufnr)
-      endif
-      unlet buffer_dict
-    endfor
-  endif
-
-  let t:unite_buffer_dictionary[bufnr] = 1
-
-  if !has('vim_starting') || bufname('%') != ''
-    call unite#sources#buffer#variables#append()
-  endif
+function! unite#sources#buffer#variables#get_buffer_list() "{{{
+  return s:buffer_list
 endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" __END__
 " vim: foldmethod=marker

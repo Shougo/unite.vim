@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Jun 2013.
+" Last Modified: 03 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,8 +28,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Variables  "{{{
-let s:buffer_list = {}
-
 call unite#util#set_default(
       \ 'g:unite_source_buffer_time_format',
       \ '(%Y/%m/%d %H:%M:%S) ')
@@ -37,14 +35,6 @@ call unite#util#set_default(
 
 function! unite#sources#buffer#define() "{{{
   return [s:source_buffer_all, s:source_buffer_tab]
-endfunction"}}}
-function! unite#sources#buffer#_append() "{{{
-  " Append the current buffer.
-  let bufnr = bufnr('%')
-  let s:buffer_list[bufnr] = {
-        \ 'action__buffer_nr' : bufnr,
-        \ 'source__time' : localtime(),
-        \ }
 endfunction"}}}
 
 let s:source_buffer_all = {
@@ -222,10 +212,11 @@ function! s:get_buffer_list(is_bang, is_question) "{{{
   " Make buffer list.
   let list = []
   let bufnr = 1
+  let buffer_list = unite#sources#buffer#variables#get_buffer_list()
   while bufnr <= bufnr('$')
     if s:is_listed(a:is_bang, a:is_question, bufnr)
           \ && bufnr != bufnr('%')
-      let dict = get(s:buffer_list, bufnr, {
+      let dict = get(buffer_list, bufnr, {
             \ 'action__buffer_nr' : bufnr,
             \ 'source__time' : 0,
             \ })
@@ -240,7 +231,8 @@ function! s:get_buffer_list(is_bang, is_question) "{{{
 
   if s:is_listed(a:is_bang, a:is_question, bufnr('%'))
     " Add current buffer.
-    let dict = get(s:buffer_list, bufnr('%'), {
+    let dict = get(unite#sources#buffer#variables#get_buffer_list(),
+          \ bufnr('%'), {
           \ 'action__buffer_nr' : bufnr('%'),
           \ 'source__time' : 0,
           \ })
