@@ -184,9 +184,7 @@ function! s:mru.save(...) "{{{
   endif
 
   " should load all candidates
-  if self.is_loaded < 2
-    call self.load()
-  endif
+  call self.load()
 
   if self.has_external_update() && filereadable(self.mru_file.short)
     " only need to get the short list which contains the latest MRUs
