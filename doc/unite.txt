@@ -1857,7 +1857,10 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 
 						*unite-options-resume*
 		-resume
-		Reuse previous buffer if exists.  Cf: |:UniteResume|
+		Reuse previous buffer if exists. If not, create new unite
+		buffer.  Cf: |:UniteResume|
+		Note: It uses |unite-options-buffer-name| to search previous
+		buffer. You must set it.
 
 						*unite-options-wrap*
 		-wrap
