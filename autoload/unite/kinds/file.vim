@@ -201,6 +201,11 @@ function! s:kind.action_table.diff.func(candidates)
 
   if len(a:candidates) == 1
     " :vimdiff with current buffer.
+    if &filetype ==# 'vimfiler'
+      " Move to other window.
+      wincmd w
+    endif
+
     tabnew %
     let t:title = 'vimdiff'
     call s:execute_command('vert diffsplit', a:candidates[0])
