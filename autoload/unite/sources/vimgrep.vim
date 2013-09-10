@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 31 Aug 2013.
+" Last Modified: 10 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -207,6 +207,8 @@ function! s:source.gather_candidates(args, context) "{{{
 
     " Clear qflist.
     call setqflist([])
+
+    cclose
   endtry
 
   return _
