@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Sep 2013.
+" Last Modified: 10 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -201,6 +201,8 @@ function! s:kind.action_table.diff.func(candidates)
 
   if len(a:candidates) == 1
     " :vimdiff with current buffer.
+    tabnew %
+    let t:title = 'vimdiff'
     call s:execute_command('vert diffsplit', a:candidates[0])
   elseif len(a:candidates) == 2
     " :vimdiff the other candidate.
