@@ -2409,6 +2409,11 @@ matcher_fuzzy	A matcher which filters the candidates with user given fuzzy
 		fuzzy sort, you can use |unite-filter-sorter_rank|.
 		Note: That narrowing down might be slower if this matcher is
 		used.
+		Note: If the fuzzy string is too long, falls back to
+		matcher_glob. To set the maximal length, call
+		|unite#filters#matcher_fuzzy#set_max_input_len()|
+		(default: 20).
+
 		This matcher may produce the best effect if set as
 		|unite-source-file_rec|.
 >
