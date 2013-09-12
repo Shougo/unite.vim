@@ -31,11 +31,7 @@ function! unite#filters#matcher_fuzzy#define() "{{{
   return s:matcher
 endfunction"}}}
 
-let s:max_input_len = 20
-
-function! unite#filters#matcher_fuzzy#set_max_input_len(len) "{{{
-    let s:max_input_len = a:len
-endfunction"}}}
+call unite#util#set_default('g:unite_matcher_fuzzy_max_input_length', 20)
 
 let s:matcher = {
       \ 'name' : 'matcher_fuzzy',
@@ -48,7 +44,7 @@ function! s:matcher.filter(candidates, context) "{{{
           \ a:candidates, '', a:context)
   endif
 
-  if len(a:context.input) > s:max_input_len
+  if len(a:context.input) > g:unite_matcher_fuzzy_max_input_length
     " Fall back to matcher_glob.
     return unite#filters#matcher_glob#define().filter(
           \ a:candidates, a:context)
