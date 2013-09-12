@@ -51,9 +51,10 @@ FAQ			|unite-faq|
 ==============================================================================
 INTRODUCTION					*unite-introduction*
 
-*Unite* is a common extensible interface for searching and displaying lists of
-information from within vim. It can display and search through any arbitrary
-source, from files and directories to buffers and registers.
+*unite* or *unite.vim* is a common extensible interface for searching and
+displaying lists of information from within vim. It can display and search
+through any arbitrary source, from files and directories to buffers and
+registers.
 
 The difference between |unite| and similar plug-ins like |fuzzyfinder|,
 |ctrl-p| or |ku| is, |unite| provides a standard interface for any sources.
