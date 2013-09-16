@@ -3417,6 +3417,14 @@ Q: Unite adds unite buffer to jumplist automatically.
 A: Sorry, but it is hard to fix. You should use |unite-source-jump| instead of
 <C-i>/<C-o> mappings. It ignores unite buffer.
 
+Note: In this issue, experimental settings are suggested. But I don't
+recommend them.
+https://github.com/Shougo/unite.vim/issues/278
+Because:
+1. Unite buffer name may be changed in later version.
+2. You cannot use |:UniteResume| feature.
+3. It has side effect. I cannot guarantee it works.
+
 Q: unite.vim is too slow.
 
 A: Use Vim 7.3.885 or above with |if_lua| feature; unite.vim gets faster.
