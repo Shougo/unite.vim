@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Sep 2013.
+" Last Modified: 17 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -226,7 +226,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
     setlocal modifiable
     let lines = unite#view#_convert_lines(candidates)
     let pos = getpos('.')
-    call append('$', lines)
+    silent! call append('$', lines)
   finally
     let &l:modifiable = l:modifiable_save
   endtry
