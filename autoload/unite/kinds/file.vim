@@ -106,9 +106,12 @@ function! s:kind.action_table.preview.func(candidate) "{{{
     noautocmd silent execute 'pedit!'
           \ fnameescape(a:candidate.action__path)
     if !buflisted
+      let prev_winnr = winnr('#')
+      let winnr = winnr()
       wincmd P
       doautoall BufRead
-      wincmd p
+      execute prev_winnr.'wincmd w'
+      execute winnr.'wincmd w'
     endif
   endif
 

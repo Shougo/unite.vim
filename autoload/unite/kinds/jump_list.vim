@@ -76,9 +76,12 @@ function! unite#kinds#jump_list#define() "{{{
     if empty(preview_windows)
       noautocmd silent execute 'pedit!' fnameescape(filename)
       if !buflisted
+        let prev_winnr = winnr('#')
+        let winnr = winnr()
         wincmd P
         doautoall BufRead
-        wincmd p
+        execute prev_winnr.'wincmd w'
+        execute winnr.'wincmd w'
       endif
     endif
 
@@ -266,7 +269,7 @@ function! s:open(candidate) "{{{
     if has_key(a:candidate, 'action__buffer_nr')
       silent execute 'buffer' bufnr
     else
-      edit `=a:candidate.action__path`
+      edit! `=a:candidate.action__path`
     endif
   endif
 
