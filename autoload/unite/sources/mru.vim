@@ -169,6 +169,9 @@ function! s:mru.has_external_update() "{{{
 endfunction"}}}
 
 function! s:mru.save(...) "{{{
+  " should load all candidates
+  call self.load()
+
   let self.candidates = unite#sources#mru#variables#get_mrus(self.type)
         \ + self.candidates
   call unite#sources#mru#variables#clear(self.type)
@@ -182,9 +185,6 @@ function! s:mru.save(...) "{{{
   if a:0 >= 1 && s:V.is_dict(a:1)
     call extend(opts, a:1)
   endif
-
-  " should load all candidates
-  call self.load()
 
   if self.has_external_update() && filereadable(self.mru_file.short)
     " only need to get the short list which contains the latest MRUs
