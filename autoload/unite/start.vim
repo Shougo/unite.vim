@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: start.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Sep 2013.
+" Last Modified: 21 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -198,6 +198,9 @@ function! unite#start#vimfiler_check_filetype(sources, ...) "{{{
         \ unite#helper#get_source_names(a:sources))
   let context.unite__is_vimfiler = 1
   let context.unite__is_interactive = 0
+  if !has_key(context, 'vimfiler__is_dummy')
+    let context.vimfiler__is_dummy = 0
+  endif
 
   try
     call unite#init#_current_unite(a:sources, context)
@@ -259,12 +262,16 @@ function! unite#start#get_vimfiler_candidates(sources, ...) "{{{
   let unite_save = unite#get_current_unite()
 
   try
+    let unite = unite#get_current_unite()
     let context = get(a:000, 0, {})
     let context = unite#init#_context(context,
           \ unite#helper#get_source_names(a:sources))
     let context.no_buffer = 1
     let context.unite__is_vimfiler = 1
     let context.unite__is_interactive = 0
+    if !has_key(context, 'vimfiler__is_dummy')
+      let context.vimfiler__is_dummy = 0
+    endif
 
     let candidates = s:get_candidates(a:sources, context)
 
@@ -394,20 +401,23 @@ endfunction "}}}
 
 function! s:get_candidates(sources, context) "{{{
   try
-    call unite#init#_current_unite(a:sources, a:context)
+    let current_unite = unite#init#_current_unite(a:sources, a:context)
   catch /^unite.vim: Invalid source/
     return []
   endtry
 
-  let current_unite = unite#get_current_unite()
-
   " Caching.
   let current_unite.last_input = a:context.input
   let current_unite.input = a:context.input
+  call unite#set_current_unite(current_unite)
+  call unite#set_context(a:context)
+
+  call unite#variables#enable_current_unite()
+
   call unite#candidates#_recache(a:context.input, a:context.is_redraw)
 
   let candidates = []
-  for source in unite#loaded_sources_list()
+  for source in current_unite.sources
     if !empty(source.unite__candidates)
       let candidates += source.unite__candidates
     endif

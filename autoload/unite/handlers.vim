@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Sep 2013.
+" Last Modified: 21 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -253,7 +253,7 @@ function! unite#handlers#_on_buf_unload(bufname)  "{{{
   endif
 
   " Restore options.
-  if exists('&redrawtime')
+  if has_key(unite, 'redrawtime_save')
     let &redrawtime = unite.redrawtime_save
   endif
   let &sidescrolloff = unite.sidescrolloff_save

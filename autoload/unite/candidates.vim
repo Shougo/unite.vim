@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Sep 2013.
+" Last Modified: 21 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,7 +45,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
   let context.is_redraw = a:is_force
   let context.is_changed = a:input !=# unite.last_input
 
-  for source in unite#loaded_sources_list()
+  for source in unite.sources
     let source.unite__candidates = []
   endfor
 
@@ -58,7 +58,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
 
   let filtered_count = 0
 
-  for source in unite#loaded_sources_list()
+  for source in unite.sources
     let source.unite__is_invalidate = 0
 
     if !context.no_buffer && source.max_candidates != 0
@@ -100,7 +100,7 @@ function! unite#candidates#gather(...) "{{{
 
   let unite = unite#get_current_unite()
   let unite.candidates = []
-  for source in unite#loaded_sources_list()
+  for source in unite.sources
     let unite.candidates += source.unite__candidates
   endfor
 
@@ -152,7 +152,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
 
   let candidate_sources = []
   let unite.max_source_candidates = 0
-  for source in unite#loaded_sources_list()
+  for source in unite.sources
     " Check required pattern length.
     if input_len < source.required_pattern_length
       continue
@@ -262,8 +262,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     endif
   endfor
 
-  if !a:context.hide_source_names
-        \ && len(unite#loaded_sources_list()) > 1
+  if !a:context.hide_source_names && len(unite.sources) > 1
     let unite.max_source_name =
           \ max(map(candidate_sources, 'len(v:val)')) + 1
   endif
@@ -295,7 +294,8 @@ function! s:get_source_candidates(source) "{{{
       let funcname = 'gather_candidates'
       if has_key(a:source, 'gather_candidates')
         let a:source.unite__cached_candidates +=
-              \ copy(a:source.gather_candidates(a:source.args, context))
+              \ copy(a:source.gather_candidates(a:source.args,
+              \ a:source.unite__context))
       endif
     endif
 
