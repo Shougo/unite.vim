@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2013.
+" Last Modified: 22 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,7 +92,7 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
   let candidates = map(a:context.source__buffer_list, "{
         \ 'word' : s:make_word(v:val.action__buffer_nr),
         \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
-        \        . <sid>format_time(v:val.source__time),
+        \        . s:format_time(v:val.source__time),
         \ 'action__buffer_nr' : v:val.action__buffer_nr,
         \}")
 
@@ -125,7 +125,7 @@ function! s:source_buffer_tab.gather_candidates(args, context) "{{{
   let candidates = map(list, "{
         \ 'word' : s:make_word(v:val.action__buffer_nr),
         \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
-        \        . <sid>format_time(v:val.source__time),
+        \        . s:format_time(v:val.source__time),
         \ 'action__buffer_nr' : v:val.action__buffer_nr,
         \}")
 
