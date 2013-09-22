@@ -92,7 +92,7 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
   let candidates = map(a:context.source__buffer_list, "{
         \ 'word' : s:make_word(v:val.action__buffer_nr),
         \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
-        \        . strftime(g:unite_source_buffer_time_format, v:val.source__time),
+        \        . <sid>format_time(v:val.source__time),
         \ 'action__buffer_nr' : v:val.action__buffer_nr,
         \}")
 
@@ -125,7 +125,7 @@ function! s:source_buffer_tab.gather_candidates(args, context) "{{{
   let candidates = map(list, "{
         \ 'word' : s:make_word(v:val.action__buffer_nr),
         \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
-        \        . strftime(g:unite_source_buffer_time_format, v:val.source__time),
+        \        . <sid>format_time(v:val.source__time),
         \ 'action__buffer_nr' : v:val.action__buffer_nr,
         \}")
 
@@ -251,6 +251,13 @@ function! s:is_listed(is_bang, is_question, bufnr) "{{{
         \ && (getbufvar(a:bufnr, '&filetype') !=# 'unite'
         \      || getbufvar(a:bufnr, 'unite').buffer_name !=#
         \         unite#get_current_unite().buffer_name)
+endfunction"}}}
+
+function! s:format_time(time) "{{{
+  if empty(a:time)
+    return ''
+  endif
+  return strftime(g:unite_source_buffer_time_format, a:time)
 endfunction"}}}
 
 let &cpo = s:save_cpo
