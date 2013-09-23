@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Sep 2013.
+" Last Modified: 23 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -313,6 +313,11 @@ function! unite#action#take(action_name, candidate, is_parent_action) "{{{
 endfunction"}}}
 
 function! unite#action#do(action_name, ...) "{{{
+  if &filetype == 'vimfiler' && has_key(b:vimfiler, 'unite')
+    " Restore unite condition in vimfiler.
+    call unite#set_current_unite(b:vimfiler.unite)
+  endif
+
   call unite#redraw()
 
   let candidates = get(a:000, 0,
