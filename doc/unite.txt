@@ -3468,13 +3468,10 @@ not easy to use. You should use file_rec source instead.
 
 Q: file_rec and file_rec/async cannot find all files.
 https://github.com/Shougo/unite.vim/issues/356
-
-A: It is feature.  cf: |g:unite_source_rec_max_cache_files|
-
-Q: file_rec only returning a small number of files.
 https://github.com/Shougo/unite.vim/issues/370
 
-A: The default max candidates are limited. You can custom it by
+A: It is feature.  cf: |g:unite_source_rec_max_cache_files|.
+And the default max candidates are limited. You can custom it by
 |unite#custom#source()|. >
 	call unite#custom#source('file_rec,file_rec/async',
 	\ 'max_candidates', 0)
