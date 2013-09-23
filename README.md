@@ -6,21 +6,19 @@ arbitrary sources like files, buffers, recently used files or registers.  You
 can run several pre-defined actions on a target displayed in the unite window.
 
 The difference between unite and similar plug-ins like fuzzyfinder,
-ctrl-p or ku is, unite provides an integration interface for several
-sources and you can create new interface using unite.
+ctrl-p or ku is that unite provides an integration interface for several
+sources and you can create new interfaces using unite.
 
 <img src="https://s3.amazonaws.com/github-csexton/unite-01.gif" />
 
 ## Usage
 
-In case you run unite to display files and buffers as sources to pick
-from.
+Run unite to display files and buffers as sources to pick from.
 
 	:Unite file buffer
 
 
-In case you run unite with an initial filter value (foo) to narrow
-down files.
+Run unite with an initial filter value (foo) to narrow down files.
 
 	:Unite -input=foo file
 
@@ -31,7 +29,7 @@ from the top of Vim by default.
 	:Unite file
 
 The example call above lists all the files in the current directory. You can
-choose one of them in the in the unite window by moving the cursor up and down
+choose one of them in the unite window by moving the cursor up and down
 as usual with j and k. If you type Enter on an active candidate it will open
 it in a new buffer. Enter triggers the default action for a candidate which is
 "open" for candidates of the kind "file". You can also select an alternative
@@ -81,7 +79,7 @@ ujihisa! http://www.ustream.tv/recorded/11240673
 ## Install
 
 Install the distributed files into your Vim script directory which is usually
-`~/.vim/`, or `$HOME/vimfiles` on Windows. You should consider to use one of the
+`~/.vim/`, or `$HOME/vimfiles` on Windows. You should consider using one of the
 famous package managers for Vim like vundle or neobundle to install the
 plugin.
 
