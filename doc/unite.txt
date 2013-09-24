@@ -937,6 +937,14 @@ g:unite_converter_file_directory_width
 
 		The default value is "45".
 
+				*g:unite_matcher_fuzzy_max_input_length*
+g:unite_matcher_fuzzy_max_input_length
+		Specify the maximum input pattern length for 
+		|unite-filter-matcher_fuzzy|, beyond which the matcher 
+		falls back to |unite-filter-matcher_glob|.
+
+		The default value is 20.
+
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*unite-key-mappings*
 
@@ -2410,6 +2418,10 @@ matcher_fuzzy	A matcher which filters the candidates with user given fuzzy
 		fuzzy sort, you can use |unite-filter-sorter_rank|.
 		Note: That narrowing down might be slower if this matcher is
 		used.
+		Note: If the fuzzy string is longer than
+		|g:unite_matcher_fuzzy_max_input_length|,
+		this matcher falls back to |unite-filter-matcher_glob|.
+
 		This matcher may produce the best effect if set as
 		|unite-source-file_rec|.
 >
