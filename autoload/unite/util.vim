@@ -60,7 +60,7 @@ function! unite#util#print_error(...)
   return call(unite#util#get_vital().print_error, a:000)
 endfunction
 function! unite#util#smart_execute_command(action, word)
-  execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
+  execute a:action . ' ' . fnameescape(a:word)
 endfunction
 function! unite#util#escape_file_searching(...)
   return call(unite#util#get_vital().escape_file_searching, a:000)
