@@ -657,10 +657,18 @@ g:unite_source_rec_max_cache_files
 		Specify the maximum number of files that
 		|unite-source-file_rec| saves the caches.
 
-		The default value is 1000.
+		The default value is 2000.
 
 				*g:unite_source_file_rec_max_cache_files*
 		Note: This variable is obsolete.
+
+					*g:unite_source_rec_unit*
+g:unite_source_rec_unit
+		Specify the unit of gather files in |unite-source-file_rec|.
+		If you increase the value, |unite-source-file_rec| will be
+		faster but it will block Vim long time.
+
+		The default value is 200.
 
 					*g:unite_source_rec_async_command*
 g:unite_source_rec_async_command
