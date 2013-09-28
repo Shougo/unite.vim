@@ -667,6 +667,8 @@ g:unite_source_rec_unit
 		Specify the unit of gather files in |unite-source-file_rec|.
 		If you increase the value, |unite-source-file_rec| will be
 		faster but it will block Vim long time.
+		Note: This option does not work in
+		|unite-source-file_rec/async| source.
 
 		The default value is 200.
 
