@@ -331,6 +331,7 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
   endif
 
   let continuation = a:context.source__continuation
+  let stdout = a:context.source__proc.stdout
 
   let candidates = []
   for filename in map(filter(
@@ -346,7 +347,6 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
     endif
   endfor
 
-  let stdout = a:context.source__proc.stdout
   if stdout.eof || len(continuation.files) >
         \        g:unite_source_rec_max_cache_files
     " Disable async.
