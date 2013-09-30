@@ -127,6 +127,11 @@ else
   endfunction
 endif "}}}
 
+" Returns the bool of contains any multibyte character in s:str
+function! s:contains_multibyte(str) "{{{
+  return strlen(a:str) != s:strchars(a:str)
+endfunction "}}}
+
 " Remove last character from a:str.
 " NOTE: This returns proper value
 " even if a:str contains multibyte character(s).

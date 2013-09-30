@@ -1,5 +1,8 @@
 let s:self_version = expand('<sfile>:t:r')
 
+" Note: The extra argument to globpath() was added in Patch 7.2.051.
+let s:globpath_third_arg = v:version > 702 || v:version == 702 && has('patch51')
+
 let s:loaded = {}
 
 function! s:import(name, ...)
@@ -13,7 +16,7 @@ function! s:import(name, ...)
     endif
     unlet a
   endfor
-  let module = s:_import(a:name, s:_scripts())
+  let module = s:_import(a:name)
   if empty(functions)
     call extend(target, module, 'keep')
   else
@@ -27,7 +30,6 @@ function! s:import(name, ...)
 endfunction
 
 function! s:load(...) dict
-  let scripts = s:_scripts()
   for arg in a:000
     let [name; as] = type(arg) == type([]) ? arg[: 1] : [arg, arg]
     let target = split(join(as, ''), '\W\+')
@@ -46,7 +48,7 @@ function! s:load(...) dict
     endwhile
 
     if exists('dict')
-      call extend(dict, s:_import(name, scripts))
+      call extend(dict, s:_import(name))
     endif
     unlet arg
   endfor
@@ -57,7 +59,7 @@ function! s:unload()
   let s:loaded = {}
 endfunction
 
-function! s:_import(name, scripts)
+function! s:_import(name)
   if type(a:name) == type(0)
     return s:_build_module(a:name)
   endif
@@ -65,7 +67,7 @@ function! s:_import(name, scripts)
   if path ==# ''
     throw 'vital: module not found: ' . a:name
   endif
-  let sid = get(a:scripts, path, 0)
+  let sid = get(s:_scripts(), path, 0)
   if !sid
     try
       execute 'source' fnameescape(path)
@@ -75,8 +77,7 @@ function! s:_import(name, scripts)
       " Ignore.
     endtry
 
-    let sid = len(a:scripts) + 1  " We expect that the file newly read is +1.
-    let a:scripts[path] = sid
+    let sid = s:_scripts()[path]
   endif
   return s:_build_module(sid)
 endfunction
@@ -91,11 +92,10 @@ function! s:_get_module_path(name)
     let target = '/' . substitute(a:name, '\W\+', '/', 'g')
     let tailpath = printf('autoload/vital/%s%s.vim', s:self_version, target)
   else
-    let tailpath = a:name
+    throw 'vital: Invalid module name: ' . a:name
   endif
 
-  " Note: The extra argument to globpath() was added in Patch 7.2.051.
-  if v:version > 702 || v:version == 702 && has('patch51')
+  if s:globpath_third_arg
     let paths = split(globpath(&runtimepath, tailpath, 1), "\n")
   else
     let paths = split(globpath(&runtimepath, tailpath), "\n")
@@ -106,7 +106,8 @@ endfunction
 
 function! s:_scripts()
   let scripts = {}
-  for line in split(s:_redir('scriptnames'), "\n")
+  for line in filter(split(s:_redir('scriptnames'), "\n"),
+  \                  'stridx(v:val, s:self_version) > 0')
     let list = matchlist(line, '^\s*\(\d\+\):\s\+\(.\+\)\s*$')
     if !empty(list)
       let scripts[s:_unify_path(list[2])] = list[1] - 0
@@ -145,11 +146,9 @@ function! s:_build_module(sid)
     return copy(s:loaded[a:sid])
   endif
   let prefix = '<SNR>' . a:sid . '_'
-  let funcs = s:_redir('function')
-  let filter_pat = '^\s*function ' . prefix
+  let funcs = s:_redir("function /^\<SNR>" . a:sid . '_')
   let map_pat = prefix . '\zs\w\+'
-  let functions = map(filter(split(funcs, "\n"), 'v:val =~# filter_pat'),
-  \          'matchstr(v:val, map_pat)')
+  let functions = map(split(funcs, "\n"), 'matchstr(v:val, map_pat)')
 
   let module = {}
   for func in functions
@@ -184,5 +183,5 @@ function! s:_redir(cmd)
 endfunction
 
 function! vital#{s:self_version}#new()
-  return s:_import('', s:_scripts()).load(['Prelude', ''])
+  return s:_import('').load(['Prelude', ''])
 endfunction
