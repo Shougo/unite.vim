@@ -278,7 +278,7 @@ function! unite#start#get_vimfiler_candidates(sources, ...) "{{{
     " Converts utf-8-mac to utf-8.
     if unite#util#is_mac() && has('iconv')
       for item in filter(copy(candidates),
-            \ "v:val.action__path !~# '^[\\x00-\\x7f]*$'")
+            \ "v:val.action__path =~# '[\\x00-\\x7f]'")
         let item.action__path = unite#util#iconv(
               \ item.action__path, 'utf-8-mac', &encoding)
         let item.action__directory = unite#util#iconv(
