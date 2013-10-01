@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2013.
+" Last Modified: 01 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -210,7 +210,10 @@ function! s:recache_candidates_loop(context, is_force) "{{{
 
       let name = get(unite#get_filters(Filter),
             \              'name', '')
-      if name =~# '\%(^\|_\)matcher_'
+      if name == ''
+        call unite#print_error(printf(
+              \ 'Invalid filter name "%s" is detected.', Filter))
+      elseif name =~# '\%(^\|_\)matcher_'
         call add(matchers, Filter)
       elseif name =~# '\%(^\|_\)sorter_'
         if name ==# 'sorter_default'
