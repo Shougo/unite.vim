@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: start.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Sep 2013.
+" Last Modified: 02 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -346,7 +346,7 @@ function! unite#start#resume(buffer_name, ...) "{{{
   call unite#view#_switch_unite_buffer(context.buffer_name, context)
 
   " Set parameters.
-  let unite = unite#get_current_unite()
+  let unite = b:unite
   let unite.winnr = winnr
   if !context.unite__direct_switch
     let unite.win_rest_cmd = win_rest_cmd
