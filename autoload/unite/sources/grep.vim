@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 08 Sep 2013.
+" Last Modified: 07 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -200,7 +200,7 @@ function! s:source.gather_candidates(args, context) "{{{
 
   if empty(a:context.source__target)
         \ || a:context.source__input == ''
-    call unite#print_source_message('Completed.', s:source.name)
+    call unite#print_source_message('Canceled.', s:source.name)
     let a:context.is_async = 0
     return []
   endif

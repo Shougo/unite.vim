@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Oct 2013.
+" Last Modified: 07 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -263,7 +263,7 @@ function! s:kind.action_table.grep.func(candidates) "{{{
   call unite#start_script([
         \ ['grep', map(copy(a:candidates),
         \ 'string(substitute(v:val.action__path, "/$", "", "g"))'),
-        \ ]], { 'no_quit' : 1 })
+        \ ]], { 'no_quit' : 1, 'no_empty' : 1 })
 endfunction "}}}
 
 let s:kind.action_table.grep_directory = {
@@ -276,7 +276,7 @@ let s:kind.action_table.grep_directory = {
 function! s:kind.action_table.grep_directory.func(candidates) "{{{
   call unite#start_script([
         \ ['grep', map(copy(a:candidates), 'string(v:val.action__directory)'),
-        \ ]], { 'no_quit' : 1 })
+        \ ]], { 'no_quit' : 1, 'no_empty' : 1 })
 endfunction "}}}
 
 " For vimfiler.
