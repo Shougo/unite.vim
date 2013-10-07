@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Sep 2013.
+" Last Modified: 07 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -170,6 +170,10 @@ function! s:jump(candidate, is_highlight) "{{{
   let line = get(a:candidate, 'action__line', 1)
   let pattern = get(a:candidate, 'action__pattern', '')
 
+  if line == ''
+    " Use default line number.
+    let line = 1
+  endif
   if line !~ '^\d\+$'
     call unite#print_error('unite: jump_list: Invalid action__line format.')
     return
