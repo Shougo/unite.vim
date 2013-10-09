@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Oct 2013.
+" Last Modified: 09 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -105,15 +105,13 @@ function! s:kind.action_table.preview.func(candidate) "{{{
     " If execute this command, unite.vim will be affected by events.
     noautocmd silent execute 'pedit!'
           \ fnameescape(a:candidate.action__path)
-    if !buflisted
-      let prev_winnr = winnr('#')
-      let winnr = winnr()
-      wincmd P
-      doautoall BufRead
-      setlocal nomodified
-      execute prev_winnr.'wincmd w'
-      execute winnr.'wincmd w'
-    endif
+
+    let prev_winnr = winnr('#')
+    let winnr = winnr()
+    wincmd P
+    doautoall BufRead
+    execute prev_winnr.'wincmd w'
+    execute winnr.'wincmd w'
   endif
 
   if !buflisted
