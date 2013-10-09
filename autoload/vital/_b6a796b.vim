@@ -145,14 +145,9 @@ function! s:_build_module(sid)
   if has_key(s:loaded, a:sid)
     return copy(s:loaded[a:sid])
   endif
-  let prefix = '<SNR>' . a:sid . '_'
-  let funcs = s:_redir('function')
-  let filter_pat = '^\s*function ' . prefix
-  let map_pat = prefix . '\zs\w\+'
-  let functions = map(filter(split(funcs, "\n"),
-  \          'stridx(v:val, prefix) > 0 && v:val =~# filter_pat'),
-  \          'matchstr(v:val, map_pat)')
+  let functions = s:_get_functions(a:sid)
 
+  let prefix = '<SNR>' . a:sid . '_'
   let module = {}
   for func in functions
     let module[func] = function(prefix . func)
@@ -174,6 +169,24 @@ function! s:_build_module(sid)
   let s:loaded[a:sid] = module
   return copy(module)
 endfunction
+
+if exists('+regexpengine')
+  function! s:_get_functions(sid)
+    let funcs = s:_redir(printf("function /\\%%#=2^\<SNR>%d_", a:sid))
+    let map_pat = '<SNR>' . a:sid . '_\zs\w\+'
+    return map(split(funcs, "\n"), 'matchstr(v:val, map_pat)')
+  endfunction
+else
+  function! s:_get_functions(sid)
+    let prefix = '<SNR>' . a:sid . '_'
+    let funcs = s:_redir('function')
+    let filter_pat = '^\s*function ' . prefix
+    let map_pat = prefix . '\zs\w\+'
+    return map(filter(split(funcs, "\n"),
+    \          'stridx(v:val, prefix) > 0 && v:val =~# filter_pat'),
+    \          'matchstr(v:val, map_pat)')
+  endfunction
+endif
 
 function! s:_redir(cmd)
   let [save_verbose, save_verbosefile] = [&verbose, &verbosefile]
