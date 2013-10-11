@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: common.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Jun 2013.
+" Last Modified: 11 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -75,7 +75,8 @@ let s:kind.action_table.ex = {
 function! s:kind.action_table.ex.func(candidates) "{{{
   " Result is ':| {candidate}', here '|' means the cursor position.
   call feedkeys(printf(": %s\<C-b>",
-        \ join(map(map(copy(a:candidates), 'v:val.word'),
+        \ join(map(map(copy(a:candidates),
+        \ "has_key(v:val, 'action__path') ? v:val.action__path : v:val.word"),
         \ 'escape(v:val, " *?[{`$\\%#\"|!<>")'))), 'n')
 endfunction"}}}
 
