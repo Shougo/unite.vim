@@ -2167,9 +2167,14 @@ find		Nominates "find" command output as candidates.
 line		Nominates current buffer lines as candidates.
 		Note: This source is created by t9md.
 
-		Source arguments:
-		1. the search direction. "all" or "forward" or "backward".
 		Max candidates: 100
+		Source arguments:
+		1. the search direction. "all" or "forward" or "backward".  If
+		the direction is "all" or omitted, it searches from buffer
+		top.
+		2. the wrap option. This is used when the direction is
+		"forward" or "backward". If it is omitted, 'wrapscan' option
+		will be used.
 
 		Example:
 >
@@ -2181,9 +2186,14 @@ line/fast	Nominates current buffer lines as candidates.
 		It filters candidates automatically.
 		Note: You cannot change the matcher in it.
 
-		Source arguments:
-		1. the search direction. "all" or "forward" or "backward".
 		Max candidates: 100
+		Source arguments:
+		1. the search direction. "all" or "forward" or "backward".  If
+		the direction is "all" or omitted, it searches from buffer
+		top.
+		2. the wrap option. This is used when the direction is
+		"forward" or "backward". If it is omitted, 'wrapscan' option
+		will be used.
 
 		Example:
 >
