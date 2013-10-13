@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 13 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -221,10 +221,7 @@ function! s:get_lines(context, direction, start, offset) "{{{
   let _ = []
   let linenr = start
   for line in getbufline(a:context.source__bufnr, start, end)
-    if line != ''
-      call add(_, [linenr, line])
-    endif
-
+    call add(_, [linenr, line])
     let linenr += 1
   endfor
 
