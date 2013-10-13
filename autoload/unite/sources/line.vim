@@ -123,6 +123,7 @@ function! s:on_init(args, context) "{{{
         \ (&buftype =~ 'nofile') ? expand('%:p') : bufname('%'))
   let a:context.source__bufnr = bufnr('%')
   let a:context.source__linenr = line('.')
+  let a:context.source__linemax = line('$')
   let a:context.source__is_bang =
         \ (get(a:args, 0, '') ==# '!')
 
@@ -201,7 +202,6 @@ function! s:get_lines(context, direction, start, offset) "{{{
         \ [a:start, (a:offset == 0 ? '$' : a:start + a:offset)] :
         \ [((a:offset == 0 || a:start == a:offset) ?
         \    1 : a:start - a:offset), a:start]
-  " echomsg string([start, end])
 
   let _ = []
   let linenr = start
@@ -248,9 +248,11 @@ function! s:get_context_lines(context, direction, start, offset) "{{{
 
     if a:context.source__wrap &&
           \ len(lines) <= a:context.unite__max_candidates
+      let offset = a:context.unite__max_candidates - len(lines)
       let lines += s:on_gather_candidates(
-            \ (a:direction ==# 'forward' ? 'backward' : 'forward'),
-            \ a:context, a:start-1, a:offset)
+            \ a:direction, a:context,
+            \ ((a:direction ==# 'forward') ?
+            \       1 : a:context.source__linemax), offset)
     endif
   endif
 
