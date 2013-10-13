@@ -2178,7 +2178,8 @@ line		Nominates current buffer lines as candidates.
 
 		Example:
 >
-	nnoremap <silent> /  :<C-u>Unite -buffer-name=search line -start-insert -no-quit<CR>
+	nnoremap <silent> /  :<C-u>Unite -buffer-name=search
+	\ line:forward -start-insert -no-quit<CR>
 <
 						*unite-source-line/fast*
 line/fast	Nominates current buffer lines as candidates.
@@ -2197,7 +2198,8 @@ line/fast	Nominates current buffer lines as candidates.
 
 		Example:
 >
-	nnoremap <silent> /  :<C-u>Unite -buffer-name=search line/fast -start-insert -no-quit<CR>
+	nnoremap <silent> /  :<C-u>Unite -buffer-name=search
+	\ line/fast:forward -start-insert -no-quit<CR>
 <
 						*unite-source-jump*
 jump		Nominates results of |:jumps| command as candidates.
