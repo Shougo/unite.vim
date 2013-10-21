@@ -1379,6 +1379,8 @@ unite#do_action({action-name})			*unite#do_action()*
 		the marked candidates.  This function works only when Unite
 		has been already activated.  This causes a runtime error if
 		{action-name} doesn't exist or the action is invalid.
+		Note: If you do the action, Vim's mode will be return to
+		Normal mode.
 
 		This is handy for defining a key mapping to run an action.
 
