@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Oct 2013.
+" Last Modified: 28 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -684,7 +684,8 @@ function! s:execute_command(command, candidate) "{{{
   endif
 
   call unite#util#smart_execute_command(
-        \ a:command, a:candidate.action__path)
+        \ a:command, unite#util#substitute_path_separator(
+        \   fnamemodify(a:candidate.action__path, ':~:.')))
 endfunction"}}}
 function! s:external(command, dest_dir, src_files) "{{{
   let dest_dir = a:dest_dir
