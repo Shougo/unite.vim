@@ -54,7 +54,7 @@ function! s:kind.action_table.execute.func(candidate) "{{{
 
   let cmdline = unite#util#is_windows() ?
         \ join(map(args, '"\"".v:val."\""')) :
-        \ args[0] . ' ' . join(map(args[1:], "''''.v:val.''''"))
+        \ args[0] . ' ' . join(map(args[1:], "shellescape(v:val)"))
 
   if unite#util#is_windows()
     let cmdline = unite#util#iconv(cmdline, &encoding, 'char')
