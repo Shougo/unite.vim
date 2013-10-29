@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Oct 2013.
+" Last Modified: 29 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,7 +40,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ <SID>insert_enter('i')
   nnoremap <expr><buffer> <Plug>(unite_insert_head)
         \ <SID>insert_enter('A'.
-        \  (repeat("\<Left>", len(substitute(unite#helper#get_input(), '.', 'x', 'g')))))
+        \  (repeat("\<Left>", len(substitute(
+        \    unite#helper#get_input(), '.', 'x', 'g')))))
   nnoremap <expr><buffer> <Plug>(unite_append_enter)
         \ <SID>insert_enter('a')
   nnoremap <expr><buffer> <Plug>(unite_append_end)
@@ -116,9 +117,9 @@ function! unite#mappings#define_default_mappings() "{{{
         \ (unite#get_current_unite().prompt_linenr+1)."G" : "")
         \ . ":call unite#redraw()\<CR>"
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
-        \ <SID>smart_imap("\<C-o>:\<C-u>call \<SID>all_exit()\<CR>",
+        \ <SID>smart_imap("\<ESC>:\<C-u>call \<SID>all_exit()\<CR>",
         \ (unite#helper#get_input() == '' ?
-        \ "\<C-o>:\<C-u>call \<SID>all_exit()\<CR>" : "\<C-h>"))
+        \ "\<ESC>:\<C-u>call \<SID>all_exit()\<CR>" : "\<C-h>"))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_line)
         \ <SID>smart_imap('', repeat("\<C-h>",
         \     col('.')-(len(unite#get_current_unite().prompt)+1)))

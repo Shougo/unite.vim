@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: filters.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Jun 2013.
+" Last Modified: 29 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,6 +60,9 @@ function! unite#filters#filter_matcher(list, expr, context) "{{{
           \ (a:expr ==# 'if_lua_fuzzy') ?
           \   unite#filters#lua_fuzzy_matcher(list, a:context, &ignorecase) :
           \ filter(list, a:expr)
+    echomsg string(list)
+    echomsg string(filter(list, a:expr))
+    echomsg a:expr
     let len += len(list)
     let _ += list
 
