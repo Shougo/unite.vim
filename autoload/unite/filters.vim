@@ -60,9 +60,6 @@ function! unite#filters#filter_matcher(list, expr, context) "{{{
           \ (a:expr ==# 'if_lua_fuzzy') ?
           \   unite#filters#lua_fuzzy_matcher(list, a:context, &ignorecase) :
           \ filter(list, a:expr)
-    echomsg string(list)
-    echomsg string(filter(list, a:expr))
-    echomsg a:expr
     let len += len(list)
     let _ += list
 
