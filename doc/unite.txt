@@ -277,7 +277,7 @@ More advanced configuration example:
 	          \ unite#smart_map('l', unite#do_action('default'))
 
 	  let unite = unite#get_current_unite()
-	  if unite.buffer_name =~# '^search'
+	  if unite.profile_name ==# 'search'
 	    nnoremap <silent><buffer><expr> r     unite#do_action('replace')
 	  else
 	    nnoremap <silent><buffer><expr> r     unite#do_action('rename')
