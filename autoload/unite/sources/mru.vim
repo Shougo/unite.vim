@@ -436,10 +436,10 @@ function! s:convert2candidates(items)  "{{{
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
   return { 'word' : a:list[0], 'source__time' : str2nr(a:list[1]),
-        \ 'action__path' : a:list[0], }
+        \ 'action__path' : fnamemodify(a:list[0], ':p'), }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{
-  return [ a:dict.action__path, a:dict.source__time ]
+  return [ fnamemodify(a:dict.action__path, ':~'), a:dict.source__time ]
 endfunction"}}}
 function! s:on_post_filter(args, context) "{{{
   let a:context.candidates = s:L.uniq(
