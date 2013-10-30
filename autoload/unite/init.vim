@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Oct 2013.
+" Last Modified: 30 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -536,10 +536,17 @@ function! unite#init#_loaded_sources(sources, context) "{{{
           continue
         endif
 
-        call unite#util#print_error(
-              \ 'unite.vim: Invalid source name "' .
-              \ source_name . '" is detected.')
-        throw 'unite.vim: Invalid source'
+        if source_name =~ '^-'
+          call unite#util#print_error(
+                \ 'unite.vim: Invalid option "' .
+                \ source_name . '" is detected.')
+          throw 'unite.vim: Invalid option'
+        else
+          call unite#util#print_error(
+                \ 'unite.vim: Invalid source name "' .
+                \ source_name . '" is detected.')
+          throw 'unite.vim: Invalid source'
+        endif
       endif
 
       let source = deepcopy(all_sources[source_name])

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: complete.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2013.
+" Last Modified: 30 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -85,7 +85,7 @@ function! unite#complete#vimfiler(sources, arglead, cmdline, cursorpos) "{{{
 
   try
     call unite#init#_current_unite(a:sources, context)
-  catch /^unite.vim: Invalid source/
+  catch /^unite.vim: Invalid /
     return
   endtry
 
@@ -109,7 +109,7 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
 
   try
     call unite#init#_current_unite(a:sources, context)
-  catch /^unite.vim: Invalid source/
+  catch /^unite.vim: Invalid /
     return []
   endtry
 
