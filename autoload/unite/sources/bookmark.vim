@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2013.
+" Last Modified: 30 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -69,7 +69,7 @@ function! unite#sources#bookmark#_append(filename) "{{{
   endif
 
   let path = unite#substitute_path_separator(
-        \ simplify(fnamemodify(unite#util#expand(path), ':p')))
+        \ simplify(fnamemodify(unite#util#expand(path), ':p:~')))
 
   redraw
   echo 'Path: ' . path
@@ -114,7 +114,6 @@ function! s:source.gather_candidates(args, context) "{{{
 
     let candidates = []
     for bookmark_name in bookmarks
-
       let bookmark = s:load(bookmark_name)
       let candidates += map(copy(bookmark.files), "{
           \ 'word' : (v:val[0] != '' ? '[' . v:val[0] . '] ' : '') .
