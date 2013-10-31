@@ -2174,9 +2174,9 @@ line		Nominates current buffer lines as candidates.
 		1. the search direction. "all" or "forward" or "backward".  If
 		the direction is "all" or omitted, it searches from buffer
 		top.
-		2. the wrap option. This is used when the direction is
-		"forward" or "backward". If it is omitted, 'wrapscan' option
-		will be used.
+		2. the wrap option. "wrap" or "nowrap". This is used when the
+		direction is "forward" or "backward". If it is omitted,
+		'wrapscan' option will be used.
 
 		Example:
 >
