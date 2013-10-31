@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Oct 2013.
+" Last Modified: 31 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -345,7 +345,9 @@ function! s:kind.action_table.vimfiler__move.func(candidates) "{{{
             \ candidates, dest_dir, 'move')
     endif
   finally
-    lcd `=current_dir`
+    if isdirectory(current_dir)
+      lcd `=current_dir`
+    endif
   endtry
 endfunction"}}}
 
@@ -401,7 +403,9 @@ function! s:kind.action_table.vimfiler__copy.func(candidates) "{{{
       call unite#kinds#file#do_action(a:candidates, dest_dir, 'copy')
     endif
   finally
-    lcd `=current_dir`
+    if isdirectory(current_dir)
+      lcd `=current_dir`
+    endif
   endtry
 endfunction"}}}
 function! s:check_copy_func(filename) "{{{
@@ -472,7 +476,9 @@ function! s:kind.action_table.vimfiler__rename.func(candidate) "{{{
       call unite#kinds#file#do_rename(a:candidate.action__path, filename)
     endif
   finally
-    lcd `=current_dir`
+    if isdirectory(current_dir)
+      lcd `=current_dir`
+    endif
   endtry
 endfunction"}}}
 
@@ -530,7 +536,9 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
       execute 'doautocmd BufNewFile' fnameescape(filename)
     endfor
   finally
-    lcd `=current_dir`
+    if isdirectory(current_dir)
+      lcd `=current_dir`
+    endif
   endtry
 endfunction"}}}
 
@@ -576,7 +584,9 @@ function! s:kind.action_table.vimfiler__shellcmd.func(candidate) "{{{
       call unite#start_script([['output', output]])
     endif
   finally
-    lcd `=current_dir`
+    if isdirectory(current_dir)
+      lcd `=current_dir`
+    endif
   endtry
 endfunction"}}}
 
@@ -625,7 +635,9 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidates) "{{{
       call unite#sources#file#move_files(dirname, a:candidates)
     endif
   finally
-    lcd `=current_dir`
+    if isdirectory(current_dir)
+      lcd `=current_dir`
+    endif
   endtry
 endfunction"}}}
 
@@ -655,7 +667,9 @@ function! s:kind.action_table.vimfiler__execute.func(candidates) "{{{
       call s:System.open(path)
     endfor
   finally
-    lcd `=current_dir`
+    if isdirectory(current_dir)
+      lcd `=current_dir`
+    endif
   endtry
 endfunction"}}}
 
@@ -851,7 +865,9 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
     endif
   finally
     " Restore path.
-    lcd `=current_dir_save`
+    if isdirectory(current_dir_save)
+      lcd `=current_dir_save`
+    endif
     let &l:hidden = hidden_save
   endtry
 endfunction"}}}
