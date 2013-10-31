@@ -2,7 +2,7 @@
 " FILE: alias.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          tacroe <tacroe at gmail.com>
-" Last Modified: 26 May 2012.
+" Last Modified: 31 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,6 +73,7 @@ function! s:make_aliases()
       let source.description = alias_source.description
       let source.hooks = {}
       let source.source__original_source = original_source
+      let source.source__args = a:context.source.source__args
 
       " Overwrite hooks.
       if has_key(original_source, 'hooks')
@@ -91,12 +92,22 @@ function! s:make_aliases()
       " Overwrite functions.
       for func in keys(filter(copy(original_source),
             \ 'type(v:val) == type(function("type"))'))
-        let define_function = join([
-              \ 'function! source.' . func . '(args, context)',
-              \ '  let args = a:context.source.source__args + a:args',
-              \ '  return a:context.source.source__original_source.'
-              \                    . func . '(args, a:context)',
-              \ 'endfunction'], "\n")
+        if func ==# 'complete'
+          let define_function = join([
+                \ 'function! source.' . func . '(args, context, arglead, cmdline, cursorpos)',
+                \ '  let args = self.source__args + a:args',
+                \ '  return self.source__original_source.'
+                \                    . func .
+                \   '(args, a:context, a:arglead, a:cmdline, a:cursorpos)',
+                \ 'endfunction'], "\n")
+        else
+          let define_function = join([
+                \ 'function! source.' . func . '(args, context)',
+                \ '  let args = self.source__args + a:args',
+                \ '  return self.source__original_source.'
+                \                    . func . '(args, a:context)',
+                \ 'endfunction'], "\n")
+        endif
         execute define_function
       endfor
     endfunction
