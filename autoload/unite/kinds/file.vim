@@ -853,9 +853,9 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
 
       " Buffer rename.
       let bufnr_save = bufnr('%')
-      execute 'buffer' bufnr
+      noautocmd execute 'buffer' bufnr
       saveas! `=new_filename`
-      execute 'buffer' bufnr_save
+      noautocmd execute 'buffer' bufnr_save
     endif
 
     if rename(old_filename, new_filename)
