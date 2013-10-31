@@ -169,6 +169,11 @@ function! s:mru.has_external_update() "{{{
 endfunction"}}}
 
 function! s:mru.save(...) "{{{
+  let opts = {}
+  if a:0 >= 1 && s:V.is_dict(a:1)
+    call extend(opts, a:1)
+  endif
+
   if get(opts, 'event') ==# 'VimLeavePre'
     " must reload candidates
     let self.is_loaded = 0
@@ -184,11 +189,6 @@ function! s:mru.save(...) "{{{
   if empty(self.candidates)
     " nothing to save, mru is not loaded
     return
-  endif
-
-  let opts = {}
-  if a:0 >= 1 && s:V.is_dict(a:1)
-    call extend(opts, a:1)
   endif
 
   if self.has_external_update() && filereadable(self.mru_file.short)
