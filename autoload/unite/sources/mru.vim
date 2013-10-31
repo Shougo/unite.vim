@@ -169,6 +169,11 @@ function! s:mru.has_external_update() "{{{
 endfunction"}}}
 
 function! s:mru.save(...) "{{{
+  if get(opts, 'event') ==# 'VimLeavePre'
+    " must reload candidates
+    let self.is_loaded = 0
+  endif
+
   " should load all candidates
   call self.load()
 
