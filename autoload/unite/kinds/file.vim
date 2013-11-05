@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2013.
+" Last Modified: 05 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -211,12 +211,38 @@ function! s:kind.action_table.diff.func(candidates)
 
   if len(a:candidates) == 1
     " :vimdiff with current buffer.
+    let winnr = winnr()
+
     if &filetype ==# 'vimfiler'
       " Move to other window.
       wincmd w
     endif
 
-    tabnew %
+    try
+      " Use selected candidates or current buffer.
+      if &filetype ==# 'vimfiler'
+        let file = get(vimfiler#get_marked_files(), 0, vimfiler#get_file())
+        if empty(file) || isdirectory(file.action__path)
+          echo 'Invalid candidate is detected.'
+          return
+        elseif len(vimfiler#get_marked_files()) > 1
+          echo 'Too many candidates!'
+          return
+        endif
+
+        let path = file.action__path
+      else
+        let path = bufname('%')
+      endif
+    finally
+      if winnr() != winnr
+        " Restore window.
+        execute winnr.'wincmd w'
+      endif
+    endtry
+
+    execute 'tabnew' path
+
     let t:title = 'vimdiff'
     call s:execute_command('vert diffsplit', a:candidates[0])
   elseif len(a:candidates) == 2
