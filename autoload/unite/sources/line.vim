@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 13 Oct 2013.
+" Last Modified: 06 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -246,9 +246,9 @@ function! s:get_context_lines(context, direction, start, offset) "{{{
   else
     let lines = s:on_gather_candidates(a:direction, a:context, a:start, a:offset)
 
-    if a:context.source__wrap &&
-          \ len(lines) <= a:context.unite__max_candidates
-      let offset = a:context.unite__max_candidates - len(lines)
+    if a:context.source__wrap
+      let offset = (a:offset > 0) ?
+            \ (a:context.unite__max_candidates - len(lines)) : a:offset
       let lines += s:on_gather_candidates(
             \ a:direction, a:context,
             \ ((a:direction ==# 'forward') ?
