@@ -2995,7 +2995,7 @@ filters			List		(Optional)
 matchers		List/String	(Optional)
 			The list of matchers used by the source.
 					*unite-source-attribute-sorters*
-filters			List/String	(Optional)
+sorters			List/String	(Optional)
 			The list of sorters used by the source.
 					*unite-source-attribute-converters*
 converters		List/String	(Optional)
