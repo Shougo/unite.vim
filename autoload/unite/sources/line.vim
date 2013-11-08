@@ -193,7 +193,9 @@ function! s:get_context_lines(context, direction, start) "{{{
       let max = ((a:direction ==# 'forward') ?
             \       a:context.source__linenr-1 :
             \       a:context.source__linemax-a:context.source__linenr-1)
-      let lines += s:on_gather_candidates(a:direction, a:context, start, max)
+      if max != 0
+        let lines += s:on_gather_candidates(a:direction, a:context, start, max)
+      endif
     endif
   endif
 
