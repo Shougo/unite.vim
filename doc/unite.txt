@@ -2183,26 +2183,6 @@ line		Nominates current buffer lines as candidates.
 	nnoremap <silent> /  :<C-u>Unite -buffer-name=search
 	\ line:forward -start-insert -no-quit<CR>
 <
-						*unite-source-line/fast*
-line/fast	Nominates current buffer lines as candidates.
-		This source is created for big line files(over 10000 lines).
-		It filters candidates automatically.
-		Note: You cannot change the matcher in it.
-
-		Max candidates: 100
-		Source arguments:
-		1. the search direction. "all" or "forward" or "backward".  If
-		the direction is "all" or omitted, it searches from buffer
-		top.
-		2. the wrap option. This is used when the direction is
-		"forward" or "backward". If it is omitted, 'wrapscan' option
-		will be used.
-
-		Example:
->
-	nnoremap <silent> /  :<C-u>Unite -buffer-name=search
-	\ line/fast:forward -start-insert -no-quit<CR>
-<
 						*unite-source-jump*
 jump		Nominates results of |:jumps| command as candidates.
 

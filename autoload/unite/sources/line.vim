@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 06 Nov 2013.
+" Last Modified: 08 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,7 +35,7 @@ call unite#util#set_default(
 let s:supported_search_direction = ['forward', 'backward', 'all']
 
 function! unite#sources#line#define() "{{{
-  return [s:source_line, s:source_line_fast]
+  return s:source_line
 endfunction "}}}
 
 " line source. "{{{
@@ -66,7 +66,7 @@ function! s:source_line.gather_candidates(args, context) "{{{
   let direction = a:context.source__direction
   let start = a:context.source__linenr
 
-  let _ = s:get_context_lines(a:context, direction, start, 0)
+  let _ = s:get_context_lines(a:context, direction, start)
 
   let a:context.source__format = '%' . strlen(len(_)) . 'd: %s'
 
@@ -88,35 +88,9 @@ endfunction"}}}
 let s:source_line.converters = [s:source_line.source__converter]
 "}}}
 
-" line/fast source. "{{{
-let s:source_line_fast = deepcopy(s:source_line)
-let s:source_line_fast.name = 'line/fast'
-let s:source_line_fast.syntax = 'uniteSource__LineFast'
-let s:source_line_fast.is_volatile = 1
-
-function! s:source_line_fast.hooks.on_init(args, context) "{{{
-  call s:on_init(a:args, a:context)
-
-  call unite#print_source_message(
-        \ 'Target: ' . a:context.source__path, s:source_line_fast.name)
-endfunction"}}}
-function! s:source_line_fast.gather_candidates(args, context) "{{{
-  call s:hl_refresh(a:context)
-
-  let direction = a:context.source__direction
-  let start = a:context.source__linenr
-
-  let _ = s:get_context_lines(a:context, direction, start, 500)
-
-  let a:context.source__format = '%' . strlen(len(_)) . 'd: %s'
-
-  return direction ==# 'backward' ? reverse(_) : _
-endfunction"}}}
-"}}}
-
 " Misc. "{{{
 function! s:on_init(args, context) "{{{
-  execute 'highlight default link uniteSource__LineFast_target '
+  execute 'highlight default link uniteSource__Line_target '
         \ . g:source_line_search_word_highlight
   syntax case ignore
   let a:context.source__path = unite#util#substitute_path_separator(
@@ -150,58 +124,25 @@ function! s:on_init(args, context) "{{{
   let a:context.source__direction = direction
 endfunction"}}}
 function! s:on_syntax(args, context) "{{{
-  syntax match uniteSource__LineFast_LineNr
-        \ '\(^- *+\? *\)\@<=\<\d\+\>'
-        \ contained containedin=uniteSource__LineFast
-  highlight default link uniteSource__LineFast_LineNr LineNr
   syntax match uniteSource__Line_LineNr
         \ '\(^- *+\? *\)\@<=\<\d\+\>'
         \ contained containedin=uniteSource__Line
   highlight default link uniteSource__Line_LineNr LineNr
 endfunction"}}}
-function! s:on_gather_candidates(direction, context, start, offset) "{{{
-  let _ = []
-  let start = a:start
-  let len = 0
-  while 1
-    let lines = map(s:get_lines(a:context, a:direction, start, a:offset), "{
-          \ 'word' : v:val[1],
-          \ 'is_multiline' : 1,
-          \ 'action__line' : v:val[0],
-          \ 'action__text' : v:val[1],
-          \ }")
-    if empty(lines) || start < 0
-      return _
-    endif
-
-    " Check match.
-    for input in a:context.input_list
-      let expr = unite#filters#matcher_regexp#get_expr(input, a:context)
-      if expr !=# 'if_lua'
-        call filter(lines, expr)
-      endif
-    endfor
-
-    let _ += lines
-    let len += len(lines)
-
-    if len >= a:context.unite__max_candidates || a:offset == 0
-      return _
-    endif
-
-    if a:direction ==# 'forward'
-      let start += a:offset
-    else
-      let start -= a:offset
-    endif
-  endwhile
+function! s:on_gather_candidates(direction, context, start, max) "{{{
+  return map(s:get_lines(a:context, a:direction, a:start, a:max), "{
+        \ 'word' : v:val[1],
+        \ 'is_multiline' : 1,
+        \ 'action__line' : v:val[0],
+        \ 'action__text' : v:val[1],
+        \ }")
 endfunction"}}}
-function! s:get_lines(context, direction, start, offset) "{{{
+function! s:get_lines(context, direction, start, max) "{{{
   let [start, end] =
         \ a:direction ==# 'forward' ?
-        \ [a:start, (a:offset == 0 ? '$' : a:start + a:offset)] :
-        \ [((a:offset == 0 || a:start == a:offset) ?
-        \    1 : a:start - a:offset), a:start]
+        \ [a:start, (a:max == 0 ? '$' : a:start + a:max - 1)] :
+        \ [((a:max == 0 || a:start == a:max) ?
+        \    1 : a:start - a:max), a:start]
 
   let _ = []
   let linenr = start
@@ -240,19 +181,19 @@ function! s:post_filter(args, context) "{{{
     let candidate.action__buffer_nr = a:context.source__bufnr
   endfor
 endfunction"}}}
-function! s:get_context_lines(context, direction, start, offset) "{{{
+function! s:get_context_lines(context, direction, start) "{{{
   if a:direction ==# 'all'
-    let lines = s:on_gather_candidates('forward', a:context, 1, a:offset)
+    let lines = s:on_gather_candidates('forward', a:context, 1, 0)
   else
-    let lines = s:on_gather_candidates(a:direction, a:context, a:start, a:offset)
+    let lines = s:on_gather_candidates(a:direction, a:context, a:start, 0)
 
     if a:context.source__wrap
-      let offset = (a:offset > 0) ?
-            \ (a:context.unite__max_candidates - len(lines)) : a:offset
-      let lines += s:on_gather_candidates(
-            \ a:direction, a:context,
-            \ ((a:direction ==# 'forward') ?
-            \       1 : a:context.source__linemax), offset)
+      let start = ((a:direction ==# 'forward') ?
+            \       1 : a:context.source__linemax)
+      let max = ((a:direction ==# 'forward') ?
+            \       a:context.source__linenr-1 :
+            \       a:context.source__linemax-a:context.source__linenr-1)
+      let lines += s:on_gather_candidates(a:direction, a:context, start, max)
     endif
   endif
 
