@@ -73,6 +73,26 @@ function! s:kind.action_table.tabdrop.func(candidates) "{{{
   endfor
 endfunction"}}}
 
+let s:kind.action_table.switch = {
+      \ 'description' : 'switch files by ":sbuffer" command',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.switch.func(candidates) "{{{
+  let bufpath = unite#util#substitute_path_separator(expand('%:p'))
+
+  for candidate in a:candidates
+    if bufpath !=# candidate.action__path
+      call unite#util#smart_execute_command('sbuffer',
+            \ candidate.action__path)
+
+      call unite#remove_previewed_buffer_list(
+            \ bufnr(unite#util#escape_file_searching(
+            \       candidate.action__path)))
+    endif
+  endfor
+endfunction"}}}
+
+
 let s:kind.action_table.split = {
       \ 'description' : 'horizontal split open items',
       \ 'is_selectable' : 1,
