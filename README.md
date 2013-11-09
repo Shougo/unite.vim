@@ -1,4 +1,4 @@
-[![Stories in Ready](http://badge.waffle.io/Shougo/unite.vim.png)](http://waffle.io/Shougo/unite.vim)  
+[![Stories in Ready](https://badge.waffle.io/Shougo/unite.vim.png)](https://waffle.io/Shougo/unite.vim)  
 ![Unite.vim](https://s3.amazonaws.com/github-csexton/unite-brand.png)
 
 The unite or unite.vim plug-in can search and display information from
@@ -9,7 +9,7 @@ The difference between unite and similar plug-ins like fuzzyfinder,
 ctrl-p or ku is that unite provides an integration interface for several
 sources and you can create new interfaces using unite.
 
-<img src="https://s3.amazonaws.com/github-csexton/unite-01.gif" />
+![](https://s3.amazonaws.com/github-csexton/unite-01.gif)
 
 ## Usage
 
@@ -90,9 +90,12 @@ to set a key mapping for the command. See `:h unite`.
 
 ## Resources
 
-* [Unite plugins](https://github.com/Shougo/unite.vim/wiki/unite-plugins)
+* [Unite plugins (in Japanese)](https://github.com/Shougo/unite.vim/wiki/unite-plugins)
 * [Unite.vim, the Plugin You Didn't Know You Need](http://bling.github.io/blog/2013/06/02/unite-dot-vim-the-plugin-you-didnt-know-you-need/)
-* [FAQ](https://github.com/Shougo/unite.vim/blob/master/doc/unite.txt#L3134)
+* [Replacing All The Things with Unite.vim — Codeography](http://www.codeography.com/2013/06/17/replacing-all-the-things-with-unite-vim.html)
+* [Beginner's Guide to Unite](http://usevim.com/2013/06/19/unite/)
+* [Standards: How to make a Unite plugin](http://ujihisa.blogspot.jp/2010/11/how-to-make-unite-plugin.html)
+* [FAQ (`:h unite-faq`)](https://github.com/Shougo/unite.vim/blob/master/doc/unite.txt#L3325)
 
 
 ## Screen shots
