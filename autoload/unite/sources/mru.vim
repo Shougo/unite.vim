@@ -190,8 +190,8 @@ function! s:mru.save(...) "{{{
     " only need to get the short list which contains the latest MRUs
     let [ver; items] = readfile(self.mru_file.short)
     if self.version_check(ver)
-      call extend(self.candidates, s:convert2candidates(items))
-      let self.candidates = s:L.uniq(items, 'v:val.action__path')
+      let self.candidates = s:L.uniq(extend(self.candidates,
+            \ s:convert2candidates(items)), 'v:val.action__path')
     endif
   endif
 
