@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: history_yank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jun 2013.
+" Last Modified: 12 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,27 +37,31 @@ call unite#util#set_default('g:unite_source_history_yank_file',
       \ g:unite_data_directory . '/history_yank')
 
 call unite#util#set_default('g:unite_source_history_yank_limit', 100)
+
+call unite#util#set_default(
+      \ 'g:unite_source_history_yank_save_clipboard', 0)
 "}}}
 
 function! unite#sources#history_yank#define() "{{{
   return s:source
 endfunction"}}}
 function! unite#sources#history_yank#_append() "{{{
-  if (!empty(s:yank_histories) && s:yank_histories[0][0] ==# @")
-    return
-  endif
-
-  let len_history = len(@")
-  " Ignore too long yank.
-  if len_history < 2 || len_history > 100000
-    return
-  endif
-
   call s:load()
 
-  " Append @" value.
-  call unite#util#uniq(insert(s:yank_histories,
-        \ [getreg('"'), getregtype('"')]))
+  if len(s:yank_histories) < 2
+        \ || (s:yank_histories[0][0] !=# @"
+        \     && s:yank_histories[1][0] !=# @")
+    call s:add_register('"')
+  endif
+
+  if g:unite_source_history_yank_save_clipboard
+        \ && (len(s:yank_histories) < 2
+        \    || (s:yank_histories[0][0] !=# @+
+        \        && s:yank_histories[1][0] !=# @+))
+    call s:add_register('+')
+  endif
+
+  call unite#util#uniq(s:yank_histories)
 
   if g:unite_source_history_yank_limit < len(s:yank_histories)
     let s:yank_histories =
@@ -134,6 +138,17 @@ function! s:load()  "{{{
   let s:yank_histories_file_mtime = getftime(g:unite_source_history_yank_file)
 endfunction"}}}
 
+function! s:add_register(name) "{{{
+  let len_history = len(getreg(a:name))
+  " Ignore too long yank.
+  if len_history < 2 || len_history > 100000
+    return
+  endif
+
+  " Append register value.
+  call insert(s:yank_histories,
+        \ [getreg(a:name), getregtype(a:name)])
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
