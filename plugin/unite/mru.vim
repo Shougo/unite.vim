@@ -36,7 +36,7 @@ set cpo&vim
 
 augroup plugin-unite-source-mru
   autocmd!
-  autocmd BufEnter,VimEnter,BufNew,BufWinEnter,FocusGained *
+  autocmd BufEnter,VimEnter,BufNew,BufWinEnter *
         \ call s:append(expand('<amatch>'))
   autocmd VimLeavePre *
         \ call unite#sources#mru#_save({'event' : 'VimLeavePre'})

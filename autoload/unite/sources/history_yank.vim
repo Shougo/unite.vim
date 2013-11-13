@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: history_yank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Nov 2013.
+" Last Modified: 13 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,6 +33,8 @@ let s:yank_histories = []
 " the last modified time of the yank histories file.
 let s:yank_histories_file_mtime = 0
 
+let s:prev_registers = {}
+
 call unite#util#set_default('g:unite_source_history_yank_file',
       \ g:unite_data_directory . '/history_yank')
 
@@ -46,29 +48,28 @@ function! unite#sources#history_yank#define() "{{{
   return s:source
 endfunction"}}}
 function! unite#sources#history_yank#_append() "{{{
+  let prev_histories = s:yank_histories
+
   call s:load()
 
-  if len(s:yank_histories) < 2
-        \ || (s:yank_histories[0][0] !=# @"
-        \     && s:yank_histories[1][0] !=# @")
-    call s:add_register('"')
-  endif
+  call s:add_register('"')
 
   if g:unite_source_history_yank_save_clipboard
-        \ && (len(s:yank_histories) < 2
-        \    || (s:yank_histories[0][0] !=# @+
-        \        && s:yank_histories[1][0] !=# @+))
     call s:add_register('+')
   endif
 
-  call unite#util#uniq(s:yank_histories)
+  if prev_histories !=# s:yank_histories
+    " Updated.
 
-  if g:unite_source_history_yank_limit < len(s:yank_histories)
-    let s:yank_histories =
-          \ s:yank_histories[ : g:unite_source_history_yank_limit - 1]
+    call unite#util#uniq(s:yank_histories)
+
+    if g:unite_source_history_yank_limit < len(s:yank_histories)
+      let s:yank_histories =
+            \ s:yank_histories[ : g:unite_source_history_yank_limit - 1]
+    endif
+
+    call s:save()
   endif
-
-  call s:save()
 endfunction"}}}
 
 let s:source = {
@@ -139,15 +140,22 @@ function! s:load()  "{{{
 endfunction"}}}
 
 function! s:add_register(name) "{{{
-  let len_history = len(getreg(a:name))
+  let reg = [getreg(a:name), getregtype(a:name)]
+  if get(s:prev_registers, a:name, []) ==# reg
+    " Skip same register value.
+    return
+  endif
+
+  let len_history = len(reg[0])
   " Ignore too long yank.
   if len_history < 2 || len_history > 100000
     return
   endif
 
+  let s:prev_registers[a:name] = reg
+
   " Append register value.
-  call insert(s:yank_histories,
-        \ [getreg(a:name), getregtype(a:name)])
+  call insert(s:yank_histories, reg)
 endfunction"}}}
 
 let &cpo = s:save_cpo

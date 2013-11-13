@@ -38,7 +38,7 @@ if exists('g:unite_source_history_yank_enable')
       \ && g:unite_source_history_yank_enable
   augroup plugin-unite-history-yank
     autocmd!
-    autocmd CursorMoved * silent
+    autocmd CursorMoved,FocusGained * silent
      \ call unite#sources#history_yank#_append()
   augroup END
 endif
