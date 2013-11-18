@@ -3517,6 +3517,10 @@ A: It is feature. file_rec/async does not ignore in .gitignore files by
 default.  You must change |g:unite_source_rec_async_command| value and
 re-create cache by |<Plug>(unite_redraw)| mapping.
 
+Q: matcher_fuzzy not used by ":UniteWithBufferDir file" command.
+https://github.com/Shougo/unite.vim/issues/418
+
+A: It is feature. See |g:unite_matcher_fuzzy_max_input_length|.
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
