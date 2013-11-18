@@ -3491,7 +3491,7 @@ https://github.com/Shougo/unite.vim/issues/370
 A: It is feature.  cf: |g:unite_source_rec_max_cache_files|.
 And the default max candidates are limited. You can custom it by
 |unite#custom#source()|. >
-	let g:unite_source_file_rec_max_cache_files = 0
+	let g:unite_source_rec_max_cache_files = 0
 	call unite#custom#source('file_rec,file_rec/async',
 	\ 'max_candidates', 0)
 
