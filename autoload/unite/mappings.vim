@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Oct 2013.
+" Last Modified: 19 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -273,13 +273,9 @@ function! unite#mappings#narrowing(word) "{{{
   let prompt_linenr = unite.prompt_linenr
   call setline(prompt_linenr, unite.prompt . unite.input)
   call unite#redraw()
-  if unite.is_insert
-    call cursor(prompt_linenr, 0)
-    startinsert!
-  else
-    call cursor(prompt_linenr+1, 0)
-    normal! 0z.
-  endif
+
+  call cursor(prompt_linenr, 0)
+  startinsert!
 endfunction"}}}
 
 function! unite#mappings#do_action(...) "{{{
