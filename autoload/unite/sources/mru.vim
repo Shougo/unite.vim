@@ -143,7 +143,7 @@ function! s:mru.gather_candidates(args, context) "{{{
     call filter(self.candidates,
           \ ((self.type == 'file') ?
           \ "v:val.action__path !~ '^\\a\\w\\+:'
-          \       && getftype(v:val.action__path) ==# 'file'" :
+          \       && filereadable(v:val.action__path)" :
           \ "isdirectory(v:val.action__path)"))
   endif
 
