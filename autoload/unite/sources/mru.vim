@@ -139,7 +139,7 @@ function! s:mru.gather_candidates(args, context) "{{{
         \ + self.candidates
   call unite#sources#mru#variables#clear(self.type)
 
-  if a:context.is_redraw
+  if a:context.is_redraw && g:unite_source_mru_do_validate
     call filter(self.candidates,
           \ ((self.type == 'file') ?
           \ "v:val.action__path !~ '^\\a\\w\\+:'
@@ -425,9 +425,6 @@ let s:dir_mru_source.converters = [ s:dir_mru_source.source__converter ]
 "}}}
 
 " Misc "{{{
-function! s:is_file_exist(path)  "{{{
-  return 
-endfunction"}}}
 function! s:convert2candidates(items)  "{{{
   try
     return map(a:items, 's:convert2dictionary(split(v:val, "\t"))')

@@ -549,7 +549,7 @@ g:unite_source_mru_do_validate			*g:unite_source_mru_do_validate*
 		Specify whether automatically remove invalid file paths from
 		mru history.
 
-		Effective for both file_mru and directory_mru
+		Effective for both file_mru and directory_mru.
 
 		The default value is 1
 
@@ -3521,6 +3521,12 @@ Q: matcher_fuzzy not used by ":UniteWithBufferDir file" command.
 https://github.com/Shougo/unite.vim/issues/418
 
 A: It is feature. See |g:unite_matcher_fuzzy_max_input_length|.
+
+Q: mru source is slow in large mru files.
+https://github.com/Shougo/unite.vim/issues/422
+
+A: You can set |g:unite_source_mru_do_validate| to 0. It is faster. But unite
+does not validate mru files.
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
