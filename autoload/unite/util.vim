@@ -243,7 +243,7 @@ function! unite#util#glob(pattern, ...) "{{{
   endif
 
   " let is_force_glob = get(a:000, 0, 0)
-  let is_force_glob = get(a:000, 0, 1)
+  let is_force_glob = get(a:000, 1, 1)
 
   if !is_force_glob && (a:pattern =~ '\*$' || a:pattern == '*')
         \ && unite#util#has_vimproc() && exists('*vimproc#readdir')
