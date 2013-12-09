@@ -72,7 +72,7 @@ function! s:search_dict2(name)
           \ '/usr/local/share/'.a:name,
           \ '/usr/share/'.a:name,
           \ ]
-      if !filereadable(path)
+      if filereadable(path)
         let dict = path
       endif
     endfor
