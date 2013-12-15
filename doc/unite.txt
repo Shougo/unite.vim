@@ -2172,6 +2172,8 @@ find		Nominates "find" command output as candidates.
 						*unite-source-line*
 line		Nominates current buffer lines as candidates.
 		Note: This source is created by t9md.
+		Note: In huge buffer(> 10000 lines), you must input narrowing
+		text.
 
 		Max candidates: 100
 		Source arguments:

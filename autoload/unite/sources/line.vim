@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 08 Nov 2013.
+" Last Modified: 15 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -116,6 +116,11 @@ function! s:on_init(args, context) "{{{
     let direction = 'all'
   endif
 
+  if a:context.source__linemax > 10000 && a:context.input == ''
+    " Note: In huge buffer, you must input narrowing text.
+    let a:context.input = unite#util#input('Narrowing text: ', '')
+  endif
+
   if direction !=# 'all'
     call unite#print_source_message(
           \ 'direction: ' . direction, s:source_line.name)
@@ -146,8 +151,12 @@ function! s:get_lines(context, direction, start, max) "{{{
 
   let _ = []
   let linenr = start
+  let input = tolower(a:context.input)
   for line in getbufline(a:context.source__bufnr, start, end)
-    call add(_, [linenr, line])
+    if input == '' || stridx(tolower(line), input) >= 0
+      call add(_, [linenr, line])
+    endif
+
     let linenr += 1
   endfor
 
