@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2013.
+" Last Modified: 15 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -232,6 +232,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   " Set parameters.
   let unite = {}
   let unite.winnr = winnr
+  let unite.winmax = winnr('$')
   let unite.win_rest_cmd = (!context.unite__direct_switch) ?
         \ win_rest_cmd : ''
   let unite.context = context

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Oct 2013.
+" Last Modified: 15 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -526,6 +526,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
     call s:clear_previewed_buffer_list()
 
     if winnr('$') != 1 && !unite.context.temporary
+          \ && winnr('$') == unite.winmax
       execute unite.win_rest_cmd
       execute unite.prev_winnr 'wincmd w'
     endif
