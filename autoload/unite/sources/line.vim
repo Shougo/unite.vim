@@ -159,8 +159,11 @@ function! s:get_lines(context, direction, start, max) "{{{
   let _ = []
   let linenr = start
   let input = tolower(a:context.source__input)
+  let is_expr = input =~ '[~\\.^$\[\]*]'
   for line in getbufline(a:context.source__bufnr, start, end)
-    if input == '' || stridx(tolower(line), input) >= 0
+    if input == ''
+          \ || (!is_expr && stridx(tolower(line), input) >= 0)
+          \ || line =~ input
       call add(_, [linenr, line])
     endif
 
