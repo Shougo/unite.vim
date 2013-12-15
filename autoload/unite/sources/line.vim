@@ -51,9 +51,6 @@ let s:source_line = {
 
 function! s:source_line.hooks.on_init(args, context) "{{{
   call s:on_init(a:args, a:context)
-
-  call unite#print_source_message(
-        \ 'Target: ' . a:context.source__path, s:source_line.name)
 endfunction"}}}
 function! s:source_line.hooks.on_syntax(args, context) "{{{
   call s:hl_refresh(a:context)
@@ -124,7 +121,16 @@ function! s:on_init(args, context) "{{{
 
   if direction !=# 'all'
     call unite#print_source_message(
-          \ 'direction: ' . direction, s:source_line.name)
+          \ 'Direction: ' . direction, s:source_line.name)
+  endif
+
+  call unite#print_source_message(
+        \ 'Target: ' . a:context.source__path, s:source_line.name)
+
+  if a:context.source__input != ''
+    call unite#print_source_message(
+          \ 'Narrowing text: ' . a:context.source__input,
+          \ s:source_line.name)
   endif
 
   let a:context.source__direction = direction
