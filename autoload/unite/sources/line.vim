@@ -116,9 +116,10 @@ function! s:on_init(args, context) "{{{
     let direction = 'all'
   endif
 
-  if a:context.source__linemax > 10000 && a:context.input == ''
+  let a:context.source__input = a:context.input
+  if a:context.source__linemax > 10000 && a:context.source__input == ''
     " Note: In huge buffer, you must input narrowing text.
-    let a:context.input = unite#util#input('Narrowing text: ', '')
+    let a:context.source__input = unite#util#input('Narrowing text: ', '')
   endif
 
   if direction !=# 'all'
@@ -151,7 +152,7 @@ function! s:get_lines(context, direction, start, max) "{{{
 
   let _ = []
   let linenr = start
-  let input = tolower(a:context.input)
+  let input = tolower(a:context.source__input)
   for line in getbufline(a:context.source__bufnr, start, end)
     if input == '' || stridx(tolower(line), input) >= 0
       call add(_, [linenr, line])
