@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: sorter_rank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Aug 2013.
+" Last Modified: 17 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,6 +41,11 @@ function! s:sorter.filter(candidates, context) "{{{
     return a:candidates
   endif
 
+  return unite#filters#sorter_rank#_sort(
+        \ a:candidates, a:context.input, unite#util#has_lua())
+endfunction"}}}
+
+function! unite#filters#sorter_rank#_sort(candidates, input, has_lua) "{{{
   " Initialize.
   for candidate in a:candidates
     let candidate.filter__rank = 0
@@ -48,7 +53,7 @@ function! s:sorter.filter(candidates, context) "{{{
 
   " let is_path = has_key(a:candidates[0], 'action__path')
 
-  for input in split(a:context.input, '\\\@<! ')
+  for input in split(a:input, '\\\@<! ')
     let input = substitute(substitute(input, '\\ ', ' ', 'g'),
           \ '\*', '', 'g')
 
@@ -62,7 +67,7 @@ function! s:sorter.filter(candidates, context) "{{{
     "         \ len(word) + (index > 0 ? index * 2 : len(word))
     " endfor
 
-    if unite#util#has_lua()
+    if a:has_lua
       for candidate in a:candidates
         let candidate.filter__rank +=
               \ s:calc_word_distance_lua(input, candidate.word, l1)
@@ -75,7 +80,7 @@ function! s:sorter.filter(candidates, context) "{{{
     endif
   endfor
 
-  return unite#util#has_lua() ?
+  return a:has_lua ?
         \ s:sort_lua(a:candidates) :
         \ unite#util#sort_by(a:candidates, 'v:val.filter__rank')
 endfunction"}}}
