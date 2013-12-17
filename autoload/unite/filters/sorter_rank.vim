@@ -82,7 +82,7 @@ endfunction"}}}
 
 function! s:calc_word_distance(str1, str2) "{{{
   let index = stridx(a:str2, a:str1)
-  return len(a:str2) - (index >= 0 ? (len(a:str2) - index) * 10 : 0)
+  return len(a:str2) - (index >= 0 ? ((200 - len(a:str2)) / (index+1)) : 0)
 endfunction"}}}
 
 function! s:calc_word_distance_lua(str1, str2) "{{{
@@ -91,7 +91,7 @@ function! s:calc_word_distance_lua(str1, str2) "{{{
   local word = vim.eval('a:str2')
   local index = string.find(string.lower(word), pattern, 1, true)
   local distance = string.len(word) - (index ~= nil
-     and (string.len(word) - index) * 10 or 0)
+     and ((200 - string.len(word)) / (index+1)) * 10 or 0)
   vim.command('let distance = ' .. distance)
 EOF
 
