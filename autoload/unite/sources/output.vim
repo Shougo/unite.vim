@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: output.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jun 2013.
+" Last Modified: 17 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,6 +60,10 @@ function! s:source.hooks.on_init(args, context) "{{{
   call unite#print_source_message('command: ' . command, s:source.name)
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) "{{{
+  if hlexists('uniteSource__OutputVim')
+    return
+  endif
+
   let save_current_syntax = get(b:, 'current_syntax', '')
   unlet! b:current_syntax
 
