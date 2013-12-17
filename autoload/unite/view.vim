@@ -458,6 +458,9 @@ function! unite#view#_init_cursor() "{{{
   endif
 
   if context.quick_match
+    " Move to prompt linenr.
+    call cursor(unite.prompt_linenr, 0)
+
     call unite#mappings#_quick_match(0)
   endif
 endfunction"}}}
