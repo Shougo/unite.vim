@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: sorter_rank.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Dec 2013.
+" Last Modified: 18 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -72,23 +72,26 @@ function! unite#filters#sorter_rank#_sort(candidates, input, has_lua) "{{{
     endif
   endfor
 
-  " echomsg string(a:candidates)
+  " echomsg a:input
+  " echomsg string(map(copy(unite#util#sort_by(a:candidates, 'v:val.filter__rank')),
+  "       \ '[v:val.word, v:val.filter__rank]'))
   return a:has_lua ?
         \ s:sort_lua(a:candidates) :
         \ unite#util#sort_by(a:candidates, 'v:val.filter__rank')
 endfunction"}}}
 
 function! s:calc_word_distance(str1, str2) "{{{
-  return len(a:str2) - (stridx(a:str2, a:str1) >= 0 ? len(a:str1) * 4 : 0)
+  let index = stridx(a:str2, a:str1)
+  return len(a:str2) - (index >= 0 ? (len(a:str2) - index) * 10 : 0)
 endfunction"}}}
 
 function! s:calc_word_distance_lua(str1, str2) "{{{
   lua << EOF
   local pattern = vim.eval('a:str1')
   local word = vim.eval('a:str2')
-  local distance = string.len(word) -
-    (string.find(word, pattern, 1) ~= nil
-     and string.len(pattern) or 0)
+  local index = string.find(string.lower(word), pattern, 1, true)
+  local distance = string.len(word) - (index ~= nil
+     and (string.len(word) - index) * 10 or 0)
   vim.command('let distance = ' .. distance)
 EOF
 

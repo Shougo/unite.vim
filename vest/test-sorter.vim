@@ -18,6 +18,10 @@ Context Source.run()
         ShouldEqual map(unite#filters#sorter_rank#_sort(
               \ [{'word' : 'ab12345js12345tt'}, {'word' : 'ab.js.tt'}],
               \  'abjstt', has_lua), 'v:val.word'), ['ab.js.tt', 'ab12345js12345tt']
+        ShouldEqual map(unite#filters#sorter_rank#_sort(
+              \ [{'word' : 'source/r', 'action__path' : ''},
+              \  {'word' : 'sort.vim', 'action__path' : ''}],
+              \  'so', has_lua), 'v:val.word'), ['sort.vim', 'source/r']
       endfor
     End
   endif
