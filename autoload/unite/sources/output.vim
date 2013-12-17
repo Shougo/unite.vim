@@ -60,10 +60,6 @@ function! s:source.hooks.on_init(args, context) "{{{
   call unite#print_source_message('command: ' . command, s:source.name)
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) "{{{
-  if hlexists('uniteSource__OutputVim')
-    return
-  endif
-
   let save_current_syntax = get(b:, 'current_syntax', '')
   unlet! b:current_syntax
 

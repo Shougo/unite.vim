@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Dec 2013.
+" Last Modified: 17 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -206,7 +206,14 @@ function! unite#view#_set_highlight() "{{{
         \ g:unite_abbr_highlight
 
   " Set syntax.
+  let syntax = {}
   for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+    " Skip previous syntax
+    if has_key(syntax, source.name)
+      continue
+    endif
+    let syntax[source.name] = 1
+
     let name = unite.max_source_name > 0 ?
           \ unite#helper#convert_source_name(source.name) : ''
 
