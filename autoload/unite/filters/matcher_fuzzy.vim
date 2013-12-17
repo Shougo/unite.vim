@@ -62,7 +62,7 @@ function! s:matcher.filter(candidates, context) "{{{
     endif
 
     let input = substitute(substitute(unite#util#escape_match(input),
-          \ '[[:alnum:]._/-]', '\0[^\0]\{-}', 'g'), '\*\*', '*', 'g')
+          \ '[[:alnum:]._/-]\ze.', '\0[^\0]\{-}', 'g'), '\*\*', '*', 'g')
 
     let expr = (input =~ '^!') ?
           \ 'v:val.word !~ ' . string(input[1:]) :
