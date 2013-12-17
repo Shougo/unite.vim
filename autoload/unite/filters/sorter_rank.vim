@@ -51,91 +51,47 @@ function! unite#filters#sorter_rank#_sort(candidates, input, has_lua) "{{{
     let candidate.filter__rank = 0
   endfor
 
-  " let is_path = has_key(a:candidates[0], 'action__path')
+  let is_path = has_key(a:candidates[0], 'action__path')
 
   for input in split(a:input, '\\\@<! ')
-    let input = substitute(substitute(input, '\\ ', ' ', 'g'),
-          \ '\*', '', 'g')
-
-    " Calc rank.
-    let l1 = len(input)
-
-    " for candidate in a:candidates
-    "   let word = is_path ? fnamemodify(candidate.word, ':t') : candidate.word
-    "   let index = stridx(word, input[0])
-    "   let candidate.filter__rank +=
-    "         \ len(word) + (index > 0 ? index * 2 : len(word))
-    " endfor
+    let input = tolower(substitute(substitute(input, '\\ ', ' ', 'g'),
+          \ '\*', '', 'g'))
 
     if a:has_lua
       for candidate in a:candidates
         let candidate.filter__rank +=
-              \ s:calc_word_distance_lua(input, candidate.word, l1)
+              \ s:calc_word_distance_lua(input, (is_path ?
+              \  fnamemodify(candidate.word, ':t') : candidate.word))
       endfor
     else
       for candidate in a:candidates
         let candidate.filter__rank +=
-              \ s:calc_word_distance(input, candidate.word, l1)
+              \ s:calc_word_distance(input, (is_path ?
+              \  fnamemodify(candidate.word, ':t') : candidate.word))
       endfor
     endif
   endfor
 
+  " echomsg string(a:candidates)
   return a:has_lua ?
         \ s:sort_lua(a:candidates) :
         \ unite#util#sort_by(a:candidates, 'v:val.filter__rank')
 endfunction"}}}
 
-function! s:calc_word_distance(str1, str2, l1) "{{{
-  return 
-
-  let l2 = len(a:str2)
-  let p1 = range(l2+1)
-  let p2 = []
-
-  for i in range(l2+1)
-    call add(p2, 0)
-  endfor
-
-  for i in range(a:l1)
-    let p2[0] = p1[0] + 1
-    for j in range(l2)
-      let p2[j+1] = min([p1[j+1] + 1, p2[j]+1])
-    endfor
-    let [p1, p2] = [p2, p1]
-  endfor
-
-  " echomsg string([a:str1, a:str2, p1[l2]])
-  return p1[l2]
+function! s:calc_word_distance(str1, str2) "{{{
+  return len(a:str2) - (stridx(a:str2, a:str1) >= 0 ? len(a:str1) * 4 : 0)
 endfunction"}}}
 
-function! s:calc_word_distance_lua(str1, str2, l1) "{{{
+function! s:calc_word_distance_lua(str1, str2) "{{{
   lua << EOF
-  local str1 = vim.eval('a:str1')
-  local str2 = vim.eval('a:str2')
-  local l1 = vim.eval('a:l1')
-  local l2 = string.len(str2)
-  local p1 = {}
-  local p2 = {}
-
-  local cnt = 0
-  for i = 0, l2+1 do
-    p1[i] = cnt
-    p2[i] = 0
-
-    cnt = cnt + 1
-  end
-
-  for i = 0, l1 do
-    p2[0] = p1[0] + 1
-    for j = 0, l2 do
-      p2[j+1] = math.min(p1[j+1] + 1, p2[j]+1)
-    end
-  end
-
-  vim.command('let distance = ' .. p1[l2])
+  local pattern = vim.eval('a:str1')
+  local word = vim.eval('a:str2')
+  local distance = string.len(word) -
+    (string.find(word, pattern, 1) ~= nil
+     and string.len(pattern) or 0)
+  vim.command('let distance = ' .. distance)
 EOF
 
-  " echomsg string([a:str1, a:str2, distance])
   return distance
 endfunction"}}}
 
@@ -155,7 +111,6 @@ do
   end
 end
 EOF
-  " echomsg string(map(copy(a:candidates), '[v:val.word, v:val.filter__rank]'))
   return a:candidates
 endfunction"}}}
 
