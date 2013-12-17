@@ -2080,7 +2080,17 @@ output		Nominates executed Vim command as candidates.
 
 		Source arguments:
 		1. Vim command.
+		2~. command args(but you cannot use only character "!")
 
+		If the last argument is "!", it prints by dummy candidates.
+		This behavior is useful for output message.
+>
+		" It outputs "foo bar".
+		:Unite output:echo:"foo:bar"
+		:Unite output:echo\ "foo\ bar"
+		" It outputs "foo bar" by dummy.
+		:Unite output:echo:"foo:bar":!
+<
 						*unite-source-command*
 command		Nominates Vim Ex commands as candidates.
 		Note: To gather Vim internal commands, unite.vim uses
