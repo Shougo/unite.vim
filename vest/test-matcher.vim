@@ -9,19 +9,19 @@ Context Source.run()
   if has('lua')
     It tests lua matcher.
       ShouldEqual unite#filters#lua_matcher(
-            \ [{'word' : 'foo'}], 'foo', 0), [{'word' : 'foo'}]
+            \ [{'word' : 'foo'}], { 'input' : 'foo' }, 0), [{'word' : 'foo'}]
       ShouldEqual unite#filters#lua_matcher(
-            \ [{'word' : 'foo'}], 'bar', 0), []
+            \ [{'word' : 'foo'}], { 'input' : 'bar' }, 0), []
       ShouldEqual unite#filters#lua_matcher(
-            \ [{'word' : 'Foo'}], 'foo', 0), []
+            \ [{'word' : 'Foo'}], { 'input' : 'foo'}, 0), []
       ShouldEqual unite#filters#lua_matcher(
-            \ [{'word' : 'Foo'}], 'foo', 1), [{'word' : 'Foo'}]
+            \ [{'word' : 'Foo'}], { 'input' : 'foo'}, 1), [{'word' : 'Foo'}]
       ShouldEqual unite#filters#lua_matcher(
-            \ [{'word' : 'Foo'}, {'word' : 'Bar'}], 'foo', 1), [{'word' : 'Foo'}]
+            \ [{'word' : 'Foo'}, {'word' : 'Bar'}], { 'input' : 'foo' }, 1), [{'word' : 'Foo'}]
       ShouldEqual unite#filters#lua_matcher(
             \ [{'word' : 'foo'}, {'word' : 'bar'},
             \  {'word' : 'foobar'}, {'word' : 'baz'}],
-            \ 'foo', 0), [{'word' : 'foo'}, {'word' : 'foobar'}]
+            \ { 'input' : 'foo' }, 0), [{'word' : 'foo'}, {'word' : 'foobar'}]
       End
   endif
 End

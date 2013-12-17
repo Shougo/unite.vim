@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: filters.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Oct 2013.
+" Last Modified: 17 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -141,7 +141,7 @@ endfunction"}}}
 function! unite#filters#fuzzy_escape(string) "{{{
   " Escape string for lua regexp.
   return substitute(unite#filters#escape(a:string),
-        \ '[[:alnum:]._/-]', '\0.*', 'g')
+        \ '[[:alnum:]._/-]', '\0[^\0]-', 'g')
 endfunction"}}}
 
 function! unite#filters#escape(string) "{{{
