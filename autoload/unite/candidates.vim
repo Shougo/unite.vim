@@ -309,7 +309,7 @@ function! s:get_source_candidates(source) "{{{
         let a:source.unite__cached_candidates +=
               \ a:source.async_gather_candidates(a:source.args, context)
 
-        if context.unite__is_interactive
+        if (!context.sync && context.unite__is_interactive)
               \ || !a:source.unite__context.is_async
           break
         endif
