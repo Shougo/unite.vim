@@ -47,61 +47,61 @@ endfunction"}}}
 
 function! unite#filters#sorter_rank#_sort(candidates, input, has_lua) "{{{
   " Initialize.
+  let is_path = has_key(a:candidates[0], 'action__path')
   for candidate in a:candidates
     let candidate.filter__rank = 0
+    let candidate.filter__word = is_path ?
+          \ fnamemodify(candidate.word, ':t') : candidate.word
   endfor
 
-  let is_path = has_key(a:candidates[0], 'action__path')
 
-  for input in split(a:input, '\\\@<! ')
-    let input = tolower(substitute(substitute(input, '\\ ', ' ', 'g'),
-          \ '\*', '', 'g'))
+  let inputs = map(split(a:input, '\\\@<! '), "
+        \ tolower(substitute(substitute(v:val, '\\\\ ', ' ', 'g'),
+        \ '\\*', '', 'g'))")
 
-    if a:has_lua
-      for candidate in a:candidates
-        let candidate.filter__rank +=
-              \ s:calc_word_distance_lua(input, (is_path ?
-              \  fnamemodify(candidate.word, ':t') : candidate.word))
-      endfor
-    else
-      for candidate in a:candidates
-        let candidate.filter__rank +=
-              \ s:calc_word_distance(input, (is_path ?
-              \  fnamemodify(candidate.word, ':t') : candidate.word))
-      endfor
-    endif
-  endfor
+  let candidates = a:has_lua ?
+        \ s:sort_lua(a:candidates, inputs) :
+        \ s:sort_vim(a:candidates, inputs)
 
   " echomsg a:input
-  " echomsg string(map(copy(unite#util#sort_by(a:candidates, 'v:val.filter__rank')),
+  " echomsg string(map(copy(candidates),
   "       \ '[v:val.word, v:val.filter__rank]'))
-  return a:has_lua ?
-        \ s:sort_lua(a:candidates) :
-        \ unite#util#sort_by(a:candidates, 'v:val.filter__rank')
+
+  return candidates
 endfunction"}}}
 
-function! s:calc_word_distance(str1, str2) "{{{
-  let index = stridx(a:str2, a:str1)
-  return len(a:str2) - (index >= 0 ? ((200 - len(a:str2)) / (index+1)) : 0)
+function! s:sort_vim(candidates, inputs) "{{{
+  for input in a:inputs
+    for candidate in a:candidates
+      let index = stridx(candidate.filter__word, input)
+      let candidate.filter__rank += len(candidate.filter__word)
+            \ - (index >= 0 ? ((200 - len(candidate.filter__word))
+            \      / (index+1)) : 0)
+    endfor
+  endfor
+
+  return unite#util#sort_by(a:candidates, 'v:val.filter__rank')
 endfunction"}}}
 
-function! s:calc_word_distance_lua(str1, str2) "{{{
-  lua << EOF
-  local pattern = vim.eval('a:str1')
-  local word = vim.eval('a:str2')
-  local index = string.find(string.lower(word), pattern, 1, true)
-  local distance = string.len(word) - (index ~= nil
-     and ((200 - string.len(word)) / (index+1)) * 10 or 0)
-  vim.command('let distance = ' .. distance)
-EOF
-
-  return distance
-endfunction"}}}
-
-function! s:sort_lua(candidates) "{{{
+function! s:sort_lua(candidates, inputs) "{{{
   lua << EOF
 do
   local candidates = vim.eval('a:candidates')
+
+  -- Calc rank
+  local inputs = vim.eval('a:inputs')
+  for i = 0, #inputs-1 do
+    for j = 0, #candidates-1 do
+      local word = candidates[j].filter__word
+      local index = string.find(string.lower(word), inputs[i], 1, true)
+
+      candidates[j].filter__rank = candidates[j].filter__rank
+        + string.len(word) - (index ~= nil
+        and ((200 - string.len(word)) / (index+1)) * 10 or 0)
+    end
+  end
+
+  -- Sort
   local t = {}
   for i = 1, #candidates do
     t[i] = candidates[i-1]
