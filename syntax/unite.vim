@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jun 2013.
+" Last Modified: 19 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,7 +34,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 syntax match uniteQuickMatchLine /^.|.*/
-      \ contains=uniteQuickMatchTrigger,uniteCandidateSourceName,uniteCandidateAbbr
+      \ contains=uniteQuickMatchTrigger,uniteCandidateSourceName
 syntax match uniteQuickMatchTrigger /^.|/ contained
 syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 

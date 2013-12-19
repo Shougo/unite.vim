@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Dec 2013.
+" Last Modified: 19 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -636,6 +636,13 @@ function! unite#init#_sources(...) "{{{
         endif
 
         let source = extend(source, default_source, 'keep')
+        if source.syntax == ''
+          " Set default syntax.
+          let source.syntax = 'uniteSource__' .
+                \ substitute(substitute(source.name,
+                \   '\%(^\|[^[:alnum:]]\+\)\zs[[:alnum:]]',
+                \   '\u\0', 'g'), '[^[:alnum:]]', '', 'g')
+        endif
 
         if !empty(source.action_table)
           let action = values(source.action_table)[0]

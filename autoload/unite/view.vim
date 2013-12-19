@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Dec 2013.
+" Last Modified: 19 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -184,7 +184,7 @@ function! unite#view#_set_highlight() "{{{
   execute 'syntax region uniteNonMarkedLine start=/^'.
         \ candidate_icon.' / end=''$'' keepend'.
         \ ' contains=uniteCandidateMarker,'.
-        \ 'uniteCandidateSourceName,uniteCandidateAbbr'
+        \ 'uniteCandidateSourceName'
   execute 'syntax match uniteCandidateMarker /^'.
         \ candidate_icon.' / contained'
 
@@ -201,9 +201,6 @@ function! unite#view#_set_highlight() "{{{
     execute 'syntax match uniteCandidateSourceName /^'.
           \ candidate_icon.' / contained'
   endif
-
-  execute 'highlight default link uniteCandidateAbbr'
-        \ g:unite_abbr_highlight
 
   " Set syntax.
   let syntax = {}
@@ -641,12 +638,6 @@ endfunction"}}}
 
 function! s:set_syntax() "{{{
   let unite = unite#get_current_unite()
-  let source_padding = 3
-
-  let abbr_head = unite.max_source_name+source_padding
-  silent! syntax clear uniteCandidateAbbr
-  execute 'syntax region uniteCandidateAbbr' 'start=/\%'
-        \ .(abbr_head).'c/ end=/$/ keepend contained'
 
   " Set syntax.
   for source in filter(copy(unite.sources), 'v:val.syntax != ""')
