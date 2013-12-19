@@ -22,6 +22,18 @@ Context Source.run()
             \ [{'word' : 'foo'}, {'word' : 'bar'},
             \  {'word' : 'foobar'}, {'word' : 'baz'}],
             \ { 'input' : 'foo' }, 0), [{'word' : 'foo'}, {'word' : 'foobar'}]
+      ShouldEqual unite#filters#lua_fuzzy_matcher(
+            \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}],
+            \ { 'input' : 'cl' }, 0), [{'word' : '/Users/core.cljs'}]
+      ShouldEqual unite#filters#lua_fuzzy_matcher(
+            \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}],
+            \ { 'input' : 'co' }, 0), [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}]
+      ShouldEqual unite#filters#lua_fuzzy_matcher(
+            \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}],
+            \ { 'input' : '/U' }, 0), [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}]
+      ShouldEqual unite#filters#lua_fuzzy_matcher(
+            \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}],
+            \ { 'input' : '/Us' }, 0), [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}]
       End
   endif
 End
