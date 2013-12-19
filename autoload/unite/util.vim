@@ -26,7 +26,7 @@ endfunction"}}}
 let s:is_windows = has('win16') || has('win32') || has('win64')
 
 function! unite#util#truncate_smart(...)
-  return call(unite#util#get_vital().truncate_smart, a:000)
+  return call(unite#util#get_vital().truncate_skipping, a:000)
 endfunction
 function! unite#util#truncate(...)
   return call(unite#util#get_vital().truncate, a:000)
