@@ -119,7 +119,7 @@ function! s:source.gather_candidates(args, context) "{{{
           \ 'word' : (v:val[0] != '' ? '[' . v:val[0] . '] ' : '') .
           \          (fnamemodify(v:val[1], ':~:.') != '' ?
           \           fnamemodify(v:val[1], ':~:.') : v:val[1]),
-          \ 'kind' : (isdirectory(v:val[1]) ? 'directory' : 'jump_list'),
+          \ 'kind' : (isdirectory(fnamemodify(v:val[1],':p')) ? 'directory' : 'jump_list'),
           \ 'source_bookmark_name' : bookmark_name,
           \ 'source_entry_name' : v:val[0],
           \ 'action__path' : v:val[1],
