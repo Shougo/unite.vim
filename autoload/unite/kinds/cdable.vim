@@ -27,6 +27,10 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Variables {{{
+call unite#util#set_default('g:unite_kind_openable_cd_command', 'cd')
+call unite#util#set_default('g:unite_kind_openable_lcd_command', 'lcd')
+" }}}
 function! unite#kinds#cdable#define() "{{{
   return s:kind
 endfunction"}}}

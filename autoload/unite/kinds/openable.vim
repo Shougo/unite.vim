@@ -29,8 +29,6 @@ set cpo&vim
 
 " Variables  "{{{
 call unite#util#set_default('g:unite_kind_openable_persist_open_blink_time', '250m')
-call unite#util#set_default('g:unite_kind_openable_cd_command', 'cd')
-call unite#util#set_default('g:unite_kind_openable_lcd_command', 'lcd')
 "}}}
 function! unite#kinds#openable#define() "{{{
   return s:kind
