@@ -247,8 +247,8 @@ More advanced configuration example:
 	"let g:unite_split_rule = 'botright'
 
 	" Prompt choices.
-	"let g:unite_prompt = '笶ｫ '
-	"let g:unite_prompt = 'ﾂｻ '
+	"let g:unite_prompt = '❫ '
+	"let g:unite_prompt = '» '
 
 	autocmd FileType unite call s:unite_my_settings()
 	function! s:unite_my_settings()"{{{
