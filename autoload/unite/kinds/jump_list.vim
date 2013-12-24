@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Oct 2013.
+" Last Modified: 25 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,22 +74,17 @@ function! unite#kinds#jump_list#define() "{{{
     let preview_windows = filter(range(1, winnr('$')),
           \ 'getwinvar(v:val, "&previewwindow") != 0')
     if empty(preview_windows)
-      noautocmd silent execute 'pedit!' fnameescape(filename)
-      if !buflisted
-        let prev_winnr = winnr('#')
-        let winnr = winnr()
-        wincmd P
-        doautoall BufRead
-        setlocal nomodified
-        execute prev_winnr.'wincmd w'
-        execute winnr.'wincmd w'
-      endif
+      noautocmd silent! execute 'pedit!' fnameescape(filename)
     endif
 
     let prev_winnr = winnr('#')
     let winnr = winnr()
     wincmd P
     let bufnr = s:open(a:candidate)
+    if !buflisted
+      doautoall BufRead
+      setlocal nomodified
+    endif
     call s:jump(a:candidate, 1)
     execute prev_winnr.'wincmd w'
     execute winnr.'wincmd w'
