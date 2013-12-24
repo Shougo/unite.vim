@@ -82,7 +82,7 @@ function! unite#kinds#jump_list#define() "{{{
     wincmd P
     let bufnr = s:open(a:candidate)
     if !buflisted
-      doautoall BufRead
+      doautocmd BufRead
       setlocal nomodified
     endif
     call s:jump(a:candidate, 1)
