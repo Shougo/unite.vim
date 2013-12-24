@@ -80,18 +80,17 @@ function! unite#kinds#jump_list#define() "{{{
     let prev_winnr = winnr('#')
     let winnr = winnr()
     wincmd P
+
     let bufnr = s:open(a:candidate)
     if !buflisted
       doautocmd BufRead
       setlocal nomodified
-    endif
-    call s:jump(a:candidate, 1)
-    execute prev_winnr.'wincmd w'
-    execute winnr.'wincmd w'
-
-    if !buflisted
       call unite#add_previewed_buffer_list(bufnr)
     endif
+    call s:jump(a:candidate, 1)
+
+    execute prev_winnr.'wincmd w'
+    execute winnr.'wincmd w'
   endfunction"}}}
 
   let kind.action_table.highlight = {
