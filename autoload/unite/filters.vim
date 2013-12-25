@@ -109,7 +109,6 @@ function! unite#filters#lua_fuzzy_matcher(candidates, context, ignorecase) "{{{
   endif
 
   let pattern = unite#filters#fuzzy_escape(a:context.input)
-  echomsg pattern
 
   lua << EOF
 do
