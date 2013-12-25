@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 15 Dec 2013.
+" Last Modified: 26 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,9 +28,9 @@
 " original verion is http://d.hatena.ne.jp/thinca/20101105/1288896674
 
 call unite#util#set_default(
-      \ 'g:source_line_enable_highlight', 1)
+      \ 'g:unite_source_line_enable_highlight', 1)
 call unite#util#set_default(
-      \ 'g:source_line_search_word_highlight', 'Search')
+      \ 'g:unite_source_line_search_word_highlight', 'Search')
 
 let s:supported_search_direction = ['forward', 'backward', 'all']
 
@@ -88,7 +88,7 @@ let s:source_line.converters = [s:source_line.source__converter]
 " Misc. "{{{
 function! s:on_init(args, context) "{{{
   execute 'highlight default link uniteSource__Line_target '
-        \ . g:source_line_search_word_highlight
+        \ . g:unite_source_line_search_word_highlight
   syntax case ignore
   let a:context.source__path = unite#util#substitute_path_separator(
         \ (&buftype =~ 'nofile') ? expand('%:p') : bufname('%'))
@@ -176,7 +176,7 @@ endfunction"}}}
 function! s:hl_refresh(context) "{{{
   silent! syntax clear uniteSource__Line_target
   syntax case ignore
-  if a:context.input == '' || !g:source_line_enable_highlight
+  if a:context.input == '' || !g:unite_source_line_enable_highlight
     return
   endif
 
