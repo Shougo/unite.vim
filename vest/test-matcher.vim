@@ -34,6 +34,9 @@ Context Source.run()
       ShouldEqual unite#filters#lua_fuzzy_matcher(
             \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}],
             \ { 'input' : '/Us' }, 0), [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}]
+      ShouldEqual unite#filters#lua_fuzzy_matcher(
+            \ [{'word' : '/unite/sources/find.vim'}],
+            \ { 'input' : '/u/s/f' }, 0), [{'word' : '/unite/sources/find.vim'}]
       End
   endif
 End

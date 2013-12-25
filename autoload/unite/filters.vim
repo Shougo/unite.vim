@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: filters.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Dec 2013.
+" Last Modified: 26 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -109,6 +109,7 @@ function! unite#filters#lua_fuzzy_matcher(candidates, context, ignorecase) "{{{
   endif
 
   let pattern = unite#filters#fuzzy_escape(a:context.input)
+  echomsg pattern
 
   lua << EOF
 do
@@ -141,7 +142,7 @@ endfunction"}}}
 function! unite#filters#fuzzy_escape(string) "{{{
   " Escape string for lua regexp.
   return substitute(unite#filters#escape(a:string),
-        \ '[[:alnum:]._-]\ze.', '\0[^\0/]-', 'g')
+        \ '[[:alnum:]._-]\ze.', '\0[^/]-', 'g')
 endfunction"}}}
 
 function! unite#filters#escape(string) "{{{
