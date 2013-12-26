@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Dec 2013.
+" Last Modified: 26 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -365,7 +365,7 @@ function! s:set_cursor_line()
         \ line('$') <= prompt_linenr ?
         \ 'uniteError /\%'.prompt_linenr.'l/' :
         \ context.cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-        \ context.cursor_line_highlight.' /^\%#.*/')
+        \ context.cursor_line_highlight.' /\%'.line('.').'l/')
   let unite.cursor_line_time = reltime()
 endfunction
 
