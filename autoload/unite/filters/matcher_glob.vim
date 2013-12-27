@@ -36,6 +36,11 @@ let s:matcher = {
       \ 'description' : 'glob matcher',
       \}
 
+function! s:matcher.pattern(input) "{{{
+  return substitute(unite#util#escape_match(a:input),
+          \ '\\\@<!|', '\\|', 'g')
+endfunction"}}}
+
 function! s:matcher.filter(candidates, context) "{{{
   if a:context.input == ''
     return unite#filters#filter_matcher(

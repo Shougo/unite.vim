@@ -301,14 +301,34 @@ function! s:change_highlight()  "{{{
 
   syntax case ignore
 
-  for input in unite#helper#get_substitute_input(
+  for input_str in unite#helper#get_substitute_input(
         \ unite#helper#get_input())
-    for pattern in map(split(input, '\\\@<! '),
-          \ "substitute(escape(unite#util#escape_match(v:val), '/'),
-          \   '\\\\\\@<!|', '\\\\|', 'g')")
-      for source in filter(copy(unite.sources), 'v:val.syntax != ""')
-        execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
-              \ 'containedin='.source.syntax.' contained'
+    let input_list = []
+    for input in split(input_str, '\\\@<! ')
+      if input !~ '^[!:]'
+        let input = substitute(input, '\\ ', ' ', 'g')
+        call add(input_list, input)
+      endif
+    endfor
+
+    for source in filter(copy(unite.sources), 'v:val.syntax != ""')
+      let matchers = get(source, "matchers", [])
+      for matcher_str in matchers
+        let pattern = ""
+        if type(matcher_str) == type("")
+          let matcher = unite#get_filters(matcher_str)
+          if !empty(matcher) && has_key(matcher, "pattern")
+            let patterns = []
+            for input in input_list
+              call add(patterns, escape(matcher.pattern(input), '/'))
+            endfor
+            let pattern = join(patterns, '\|')
+          endif
+        endif
+        if !empty(pattern)
+          execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
+                \ 'containedin='.source.syntax.' contained'
+        endif
       endfor
     endfor
   endfor

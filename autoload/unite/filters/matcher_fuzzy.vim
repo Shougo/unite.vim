@@ -38,6 +38,11 @@ let s:matcher = {
       \ 'description' : 'fuzzy matcher',
       \}
 
+function! s:matcher.pattern(input) "{{{
+  return substitute(substitute(unite#util#escape_match(a:input),
+        \ '\([[:alnum:]_-]\|\\\.\)\ze.', '\0[^/]\\{-}', 'g'), '\*\*', '*', 'g')
+endfunction"}}}
+
 function! s:matcher.filter(candidates, context) "{{{
   if a:context.input == ''
     return unite#filters#filter_matcher(
