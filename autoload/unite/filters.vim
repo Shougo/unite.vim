@@ -141,13 +141,15 @@ endfunction"}}}
 function! unite#filters#fuzzy_escape(string) "{{{
   " Escape string for lua regexp.
   return substitute(unite#filters#escape(a:string),
-        \ '[[:alnum:]._-]\ze.', '\0[^/]-', 'g')
+        \ '\([[:alnum:]_-]\|%.\)\ze.', '\0[^/]-', 'g')
 endfunction"}}}
 
 function! unite#filters#escape(string) "{{{
   " Escape string for lua regexp.
-  return substitute(a:string,
-        \ '[%\[\]().*+?^$-]', '%\0', 'g')
+  return substitute(substitute(substitute(a:string,
+        \ '[%\[\]().+?^$-]', '%\0', 'g'),
+        \ '\*\@<!\*\*\@!', '[^/]*', 'g'),
+        \ '\*\*\+', '.*', 'g')
 endfunction"}}}
 
 let &cpo = s:save_cpo

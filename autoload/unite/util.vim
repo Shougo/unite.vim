@@ -314,7 +314,7 @@ endfunction"}}}
 
 function! unite#util#escape_match(str) "{{{
   return substitute(substitute(escape(a:str, '~\.^$[]'),
-        \ '\*\@<!\*', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
+        \ '\*\@<!\*\*\@!', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 
 let &cpo = s:save_cpo
