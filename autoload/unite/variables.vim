@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: variables.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Dec 2013.
+" Last Modified: 28 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -153,6 +153,10 @@ function! unite#variables#filters(...) "{{{
   if a:0 == 0
     call unite#init#_default_scripts('filters', [])
   else
+    if a:1 == type(function('tr'))
+      return a:1
+    endif
+
     call unite#init#_default_scripts('filters', [a:1])
   endif
 

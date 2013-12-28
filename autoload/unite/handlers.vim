@@ -301,8 +301,6 @@ function! s:change_highlight()  "{{{
 
   syntax case ignore
 
-  let custom = unite#custom#get()
-
   for input_str in unite#helper#get_substitute_input(
         \ unite#helper#get_input())
     let input_list = map(filter(split(input_str, '\\\@<! '),
@@ -310,13 +308,11 @@ function! s:change_highlight()  "{{{
           \ "substitute(v:val, '\\\\ ', ' ', 'g')")
 
     for source in filter(copy(unite.sources), "v:val.syntax != ''")
-      for matcher in filter(copy(map(filter(
-            \ copy(get(source, 'matchers', [])),
-            \ "type(v:val) == type('')"), 'unite#get_filters(v:val)')),
+      for matcher in filter(copy(map(copy(source.filters),
+            \ 'unite#get_filters(v:val)')),
             \ "has_key(v:val, 'pattern')")
         let patterns = map(copy(input_list),
               \ "escape(matcher.pattern(v:val), '/')")
-        " echomsg string(matcher)
 
         execute 'syntax match uniteCandidateInputKeyword'
               \ '/'.join(patterns, '\|').'/'

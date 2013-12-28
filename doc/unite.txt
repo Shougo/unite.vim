@@ -2998,7 +2998,8 @@ description		String		(Optional)
 syntax			String		(Optional)
 			The syntax name used within the source.  This syntax
 			name is defined automatically by unite itself.
-			If it's omitted, it's set to "".
+			If it's omitted, it's set to
+			"uniteSource__(source name)".
 			This is used to configure the source's own highlight.
 			According to the unite's naming conversion to avoid
 			the syntax name conflicted, use syntax name like
