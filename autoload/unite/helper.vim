@@ -322,7 +322,7 @@ function! unite#helper#choose_window() "{{{
 
     while 1
       echohl PreProc
-      echon 'select-window > '
+      echon 'choose > '
       echohl Normal
 
       let num = str2nr(nr2char(getchar()))
