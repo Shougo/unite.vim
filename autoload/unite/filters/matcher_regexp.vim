@@ -36,6 +36,10 @@ let s:matcher = {
       \ 'description' : 'regular expression matcher',
       \}
 
+function! s:matcher.pattern(input) "{{{
+  return a:input
+endfunction"}}}
+
 function! s:matcher.filter(candidates, context) "{{{
   if a:context.input == ''
     return unite#filters#filter_matcher(

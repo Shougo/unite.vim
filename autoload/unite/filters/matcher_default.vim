@@ -36,6 +36,17 @@ let s:matcher = {
       \ 'description' : 'default matcher',
       \}
 
+function! s:matcher.pattern(input) "{{{
+  let patterns = []
+  for default in s:default_matchers
+    let filter = unite#get_filters(default)
+    if !empty(filter) && has_key(filter, "pattern")
+      call add(patterns, filter.pattern(a:input))
+    endif
+  endfor
+  return join(patterns,'\|')
+endfunction"}}}
+
 function! s:matcher.filter(candidates, context) "{{{
   let candidates = a:candidates
   for default in s:default_matchers
