@@ -95,9 +95,12 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context) "{{{
-  let bookmark_name = get(a:args, 0, 'default')
+  let bookmark_name = get(a:args, 0, '')
   if bookmark_name =~ '/$'
     let bookmark_name = bookmark_name[: -2]
+  endif
+  if bookmark_name == ''
+    let bookmark_name = 'default'
   endif
 
   if bookmark_name == '_'
@@ -147,13 +150,13 @@ function! s:source.vimfiler_complete(args, context, arglead, cmdline, cursorpos)
   return self.complete(a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 function! s:source.vimfiler_check_filetype(args, context) "{{{
-  return ['directory', join(a:args, ':')]
+  return ['directory', get(a:args, 0, 'default')]
 endfunction"}}}
 function! s:source.vimfiler_gather_candidates(args, context) "{{{
   let exts = unite#util#is_windows() ?
         \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
 
-  if join(a:args, ':') =~ '^/\|^\a:'
+  if join(a:args, ':') =~ '^/.\|^\a:'
     " Fall back to file source.
     return unite#sources#file#get_file_source().vimfiler_gather_candidates(
           \ a:args, a:context)
