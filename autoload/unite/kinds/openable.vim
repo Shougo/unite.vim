@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: openable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jul 2013.
+" Last Modified: 28 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,6 +48,23 @@ let s:kind.action_table.tabopen = {
 function! s:kind.action_table.tabopen.func(candidates) "{{{
   for candidate in a:candidates
     tabnew
+    call unite#take_action('open', candidate)
+  endfor
+endfunction"}}}
+
+let s:kind.action_table.choose = {
+      \ 'description' : 'choose windows and open items',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.choose.func(candidates) "{{{
+  for candidate in a:candidates
+    if winnr('$') != 1
+      let winnr = unite#helper#choose_window()
+      if winnr > 0 && winnr != winnr()
+        execute winnr.'wincmd w'
+      endif
+    endif
+
     call unite#take_action('open', candidate)
   endfor
 endfunction"}}}

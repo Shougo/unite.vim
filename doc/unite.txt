@@ -2576,6 +2576,7 @@ openable					*unite-action-openable*
 Defines an interface for files that can be opened.  It requires an inheriting
 kind to define "open" action.
 	tabopen		Open the file in a new tab.
+	choose		Open the file in a selected window.
 	tabdrop		Open the file by the ":tab drop" command.
 	split		Open the file, splitting horizontally.
 	vsplit		Open the file, splitting vertically.
