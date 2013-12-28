@@ -3318,6 +3318,11 @@ filter			Function		(Required)
 description		String		(Optional)
 			The filter description string.
 
+						*unite-filter-attribute-pattern*
+pattern			Function		(Optional)
+			Returns highlight pattern for input.
+			Note: It is available only matchers.
+
 ==============================================================================
 EXTERNAL SOURCES				*unite-external-sources*
 
