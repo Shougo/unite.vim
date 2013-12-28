@@ -153,10 +153,6 @@ function! unite#variables#filters(...) "{{{
   if a:0 == 0
     call unite#init#_default_scripts('filters', [])
   else
-    if a:1 == type(function('tr'))
-      return a:1
-    endif
-
     call unite#init#_default_scripts('filters', [a:1])
   endif
 

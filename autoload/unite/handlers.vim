@@ -308,8 +308,9 @@ function! s:change_highlight()  "{{{
           \ "substitute(v:val, '\\\\ ', ' ', 'g')")
 
     for source in filter(copy(unite.sources), "v:val.syntax != ''")
-      for matcher in filter(copy(map(copy(source.filters),
-            \ 'unite#get_filters(v:val)')),
+      for matcher in filter(copy(map(filter(
+            \ copy(source.filters),
+            \ "type(v:val) == type('')"), 'unite#get_filters(v:val)')),
             \ "has_key(v:val, 'pattern')")
         let patterns = map(copy(input_list),
               \ "escape(matcher.pattern(v:val), '/')")
