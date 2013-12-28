@@ -38,6 +38,10 @@ function! unite#sources#file#define() "{{{
   return [s:source_file, s:source_file_new]
 endfunction"}}}
 
+function! unite#sources#file#get_file_source() "{{{
+  return s:source_file
+endfunction"}}}
+
 let s:source_file = {
       \ 'name' : 'file',
       \ 'description' : 'candidates from file list',

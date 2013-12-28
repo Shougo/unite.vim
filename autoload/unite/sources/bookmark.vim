@@ -96,6 +96,9 @@ let s:source = {
 
 function! s:source.gather_candidates(args, context) "{{{
   let bookmark_name = get(a:args, 0, 'default')
+  if bookmark_name =~ '/$'
+    let bookmark_name = bookmark_name[: -2]
+  endif
 
   if bookmark_name == '_'
     let bookmark_name = '*'
@@ -122,7 +125,7 @@ function! s:source.gather_candidates(args, context) "{{{
           \ 'kind' : (isdirectory(fnamemodify(v:val[1],':p')) ? 'directory' : 'jump_list'),
           \ 'source_bookmark_name' : bookmark_name,
           \ 'source_entry_name' : v:val[0],
-          \ 'action__path' : v:val[1],
+          \ 'action__path' : substitute(v:val[1], '[/\\\\]$', '', ''),
           \ 'action__line' : v:val[2],
           \ 'action__pattern' : v:val[3],
           \ 'action__directory' : unite#path2directory(v:val[1]),
@@ -143,17 +146,28 @@ endfunction"}}}
 function! s:source.vimfiler_complete(args, context, arglead, cmdline, cursorpos) "{{{
   return self.complete(a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
-function! s:source.vimfiler_check_filetype(args, context, arglead, cmdline, cursorpos) "{{{
-  return ['directory', get(a:args, 0, 'default')]
+function! s:source.vimfiler_check_filetype(args, context) "{{{
+  return ['directory', join(a:args, ':')]
 endfunction"}}}
 function! s:source.vimfiler_gather_candidates(args, context) "{{{
   let exts = unite#util#is_windows() ?
         \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
 
+  if join(a:args, ':') =~ '^/\|^\a:'
+    " Fall back to file source.
+    return unite#sources#file#get_file_source().vimfiler_gather_candidates(
+          \ a:args, a:context)
+  endif
+
   let candidates = self.gather_candidates(a:args, a:context)
   for candidate in candidates
+    let candidate.vimfiler__is_directory =
+          \ isdirectory(candidate.action__path)
     call unite#sources#file#create_vimfiler_dict(candidate, exts)
+    let candidate.vimfiler__filename =
+          \ fnamemodify(candidate.action__path, ':t')
   endfor
+
   return candidates
 endfunction"}}}
 
