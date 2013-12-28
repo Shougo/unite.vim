@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2013.
+" Last Modified: 28 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -209,7 +209,7 @@ function! s:source_file.complete(args, context, arglead, cmdline, cursorpos) "{{
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 function! s:source_file.vimfiler_complete(args, context, arglead, cmdline, cursorpos) "{{{
-  return unite#sources#file#complete_file(
+  return self.complete(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 

@@ -311,13 +311,13 @@ function! unite#helper#choose_window() "{{{
   try
     let winnr_save = winnr()
     for [winnr, statusline] in save_statuslines
-      execute winnr.'wincmd w'
+      noautocmd execute winnr.'wincmd w'
       let &l:statusline =
             \ "%{repeat(' ', winwidth(0)/2-len(winnr())).winnr()}"
       redraw
     endfor
 
-    execute winnr_save.'wincmd w'
+    noautocmd execute winnr_save.'wincmd w'
     redraw
 
     while 1
@@ -326,7 +326,7 @@ function! unite#helper#choose_window() "{{{
       echohl Normal
 
       let num = str2nr(nr2char(getchar()))
-      if num > 0 && winbufnr(num) > 0
+      if num == 0 || winbufnr(num) > 0
         return num
       endif
 
@@ -337,12 +337,12 @@ function! unite#helper#choose_window() "{{{
 
     let winnr_save = winnr()
     for [winnr, statusline] in save_statuslines
-      execute winnr.'wincmd w'
+      noautocmd execute winnr.'wincmd w'
       let &l:statusline = statusline
       redraw
     endfor
 
-    execute winnr_save.'wincmd w'
+    noautocmd execute winnr_save.'wincmd w'
     redraw
   endtry
 endfunction"}}}

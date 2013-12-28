@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2013.
+" Last Modified: 28 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -139,6 +139,15 @@ function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return ['_', '*', 'default'] + map(split(glob(
         \ g:unite_source_bookmark_directory . '/' . a:arglead . '*'), '\n'),
         \ "fnamemodify(v:val, ':t')")
+endfunction"}}}
+function! s:source.vimfiler_complete(args, context, arglead, cmdline, cursorpos) "{{{
+  return self.complete(a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
+endfunction"}}}
+function! s:source.vimfiler_check_filetype(args, context, arglead, cmdline, cursorpos) "{{{
+  return ['directory', get(a:args, 0, 'default')]
+endfunction"}}}
+function! s:source.vimfiler_gather_candidates(args, context, arglead, cmdline, cursorpos) "{{{
+  return self.complete(a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 
 " Actions "{{{
