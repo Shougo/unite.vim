@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Dec 2013.
+" Last Modified: 28 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -301,34 +301,26 @@ function! s:change_highlight()  "{{{
 
   syntax case ignore
 
+  let custom = unite#custom#get()
+
   for input_str in unite#helper#get_substitute_input(
         \ unite#helper#get_input())
-    let input_list = []
-    for input in split(input_str, '\\\@<! ')
-      if input !~ '^[!:]'
-        let input = substitute(input, '\\ ', ' ', 'g')
-        call add(input_list, input)
-      endif
-    endfor
+    let input_list = map(filter(split(input_str, '\\\@<! '),
+          \ "v:val !~ '^[!:]'"),
+          \ "substitute(v:val, '\\\\ ', ' ', 'g')")
 
-    for source in filter(copy(unite.sources), 'v:val.syntax != ""')
-      let matchers = get(source, "matchers", [])
-      for matcher_str in matchers
-        let pattern = ""
-        if type(matcher_str) == type("")
-          let matcher = unite#get_filters(matcher_str)
-          if !empty(matcher) && has_key(matcher, "pattern")
-            let patterns = []
-            for input in input_list
-              call add(patterns, escape(matcher.pattern(input), '/'))
-            endfor
-            let pattern = join(patterns, '\|')
-          endif
-        endif
-        if !empty(pattern)
-          execute 'syntax match uniteCandidateInputKeyword' '/'.pattern.'/'
-                \ 'containedin='.source.syntax.' contained'
-        endif
+    for source in filter(copy(unite.sources), "v:val.syntax != ''")
+      for matcher in filter(copy(map(filter(
+            \ copy(get(source, 'matchers', [])),
+            \ "type(v:val) == type('')"), 'unite#get_filters(v:val)')),
+            \ "has_key(v:val, 'pattern')")
+        let patterns = map(copy(input_list),
+              \ "escape(matcher.pattern(v:val), '/')")
+        " echomsg string(matcher)
+
+        execute 'syntax match uniteCandidateInputKeyword'
+              \ '/'.join(patterns, '\|').'/'
+              \ 'containedin='.source.syntax.' contained'
       endfor
     endfor
   endfor
