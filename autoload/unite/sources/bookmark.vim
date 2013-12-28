@@ -95,27 +95,27 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context) "{{{
-    let bookmark_name = get(a:args, 0, 'default')
+  let bookmark_name = get(a:args, 0, 'default')
 
-    if bookmark_name == '_'
-      let bookmark_name = '*'
-    endif
+  if bookmark_name == '_'
+    let bookmark_name = '*'
+  endif
 
-    if stridx(bookmark_name, '*') != -1
-      let bookmarks = map(filter(
+  if stridx(bookmark_name, '*') != -1
+    let bookmarks = map(filter(
           \ unite#util#glob(
           \     g:unite_source_bookmark_directory . '/' . bookmark_name),
           \ 'filereadable(v:val)'),
           \ 'fnamemodify(v:val, ":t:r")'
           \)
-    else
-      let bookmarks = [bookmark_name]
-    endif
+  else
+    let bookmarks = [bookmark_name]
+  endif
 
-    let candidates = []
-    for bookmark_name in bookmarks
-      let bookmark = s:load(bookmark_name)
-      let candidates += map(copy(bookmark.files), "{
+  let candidates = []
+  for bookmark_name in bookmarks
+    let bookmark = s:load(bookmark_name)
+    let candidates += map(copy(bookmark.files), "{
           \ 'word' : (v:val[0] != '' ? '[' . v:val[0] . '] ' : '') .
           \          (fnamemodify(v:val[1], ':~:.') != '' ?
           \           fnamemodify(v:val[1], ':~:.') : v:val[1]),
@@ -127,8 +127,8 @@ function! s:source.gather_candidates(args, context) "{{{
           \ 'action__pattern' : v:val[3],
           \ 'action__directory' : unite#path2directory(v:val[1]),
           \   }")
-    endfor
-    return candidates
+  endfor
+  return candidates
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__Bookmark_Name /\[.\{-}\] /
@@ -146,8 +146,15 @@ endfunction"}}}
 function! s:source.vimfiler_check_filetype(args, context, arglead, cmdline, cursorpos) "{{{
   return ['directory', get(a:args, 0, 'default')]
 endfunction"}}}
-function! s:source.vimfiler_gather_candidates(args, context, arglead, cmdline, cursorpos) "{{{
-  return self.complete(a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
+function! s:source.vimfiler_gather_candidates(args, context) "{{{
+  let exts = unite#util#is_windows() ?
+        \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
+
+  let candidates = self.gather_candidates(a:args, a:context)
+  for candidate in candidates
+    call unite#sources#file#create_vimfiler_dict(candidate, exts)
+  endfor
+  return candidates
 endfunction"}}}
 
 " Actions "{{{

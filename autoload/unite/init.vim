@@ -120,6 +120,7 @@ function! unite#init#_unite_buffer() "{{{
     setlocal nolist
     setlocal nobuflisted
     setlocal nocursorbind
+    setlocal noscrollbind
     setlocal noswapfile
     setlocal nospell
     setlocal noreadonly
