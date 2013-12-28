@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Dec 2013.
+" Last Modified: 29 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -416,10 +416,16 @@ function! unite#view#_init_cursor() "{{{
   if context.start_insert && !context.auto_quit
     let unite.is_insert = 1
 
-    call cursor(unite.prompt_linenr, 0)
+    if is_restore
+      " Restore position.
+      call setpos('.', positions[key].pos)
+      startinsert
+    else
+      call cursor(unite.prompt_linenr, 0)
+      startinsert!
+    endif
 
     setlocal modifiable
-    startinsert!
   else
     let unite.is_insert = 0
 
