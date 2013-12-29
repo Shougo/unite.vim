@@ -356,6 +356,7 @@ function! unite#start#resume(buffer_name, ...) "{{{
   let unite.context = context
   let unite.is_finalized = 0
   let unite.preview_candidate = {}
+  let unite.highlight_candidate = {}
 
   call unite#set_current_unite(unite)
 
