@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helpers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Dec 2013.
+" Last Modified: 29 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -304,6 +304,12 @@ function! unite#helper#get_source_args(sources) "{{{
 endfunction"}}}
 
 function! unite#helper#choose_window() "{{{
+  " Create key table.
+  let keys = {}
+  for [key, number] in items(g:unite_quick_match_table)
+    let keys[number] = key
+  endfor
+
   " Save statusline.
   let save_statuslines = map(range(1, winnr('$')),
         \ "[v:val, getbufvar(winbufnr(v:val), '&statusline')]")
@@ -313,7 +319,7 @@ function! unite#helper#choose_window() "{{{
     for [winnr, statusline] in save_statuslines
       noautocmd execute winnr.'wincmd w'
       let &l:statusline =
-            \ "%{repeat(' ', winwidth(0)/2-len(winnr())).winnr()}"
+            \ repeat(' ', winwidth(0)/2-len(winnr())).get(keys, winnr()-1, 0)
       redraw
     endfor
 
@@ -325,7 +331,9 @@ function! unite#helper#choose_window() "{{{
       echon 'choose > '
       echohl Normal
 
-      let num = str2nr(nr2char(getchar()))
+      let num = get(g:unite_quick_match_table,
+            \ nr2char(getchar()), 0)
+      echomsg num
       if num == 0 || winbufnr(num) > 0
         return num
       endif
