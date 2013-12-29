@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: start.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Dec 2013.
+" Last Modified: 30 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -361,6 +361,8 @@ function! unite#start#resume(buffer_name, ...) "{{{
   call unite#set_current_unite(unite)
 
   call unite#view#_init_cursor()
+
+  call unite#view#_resize_window()
 endfunction"}}}
 
 function! unite#start#resume_from_temporary(context)  "{{{
