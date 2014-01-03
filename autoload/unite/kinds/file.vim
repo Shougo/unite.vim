@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Nov 2013.
+" Last Modified: 02 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -173,6 +173,16 @@ function! s:kind.action_table.backup.func(candidates) "{{{
     let filename = candidate.action__path . '.' . strftime('%y%m%d_%H%M')
 
     call unite#sources#file#copy_files(filename, [candidate])
+  endfor
+endfunction"}}}
+
+let s:kind.action_table.read = {
+      \ 'description' : ':read files',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.read.func(candidates) "{{{
+  for candidate in a:candidates
+    call s:execute_command('read', candidate)
   endfor
 endfunction"}}}
 

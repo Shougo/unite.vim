@@ -2631,6 +2631,7 @@ Opens a file into a new buffer.  This kind extends |unite-action-openable| and
 	grep		Grep the files.
 	grep_directory	Grep the files in the directories.
 	wunix		Write by unix fileformat.
+	read		|:read| files. It is useful insert template files.
 	diff		diff with the other candidate or current buffer.
 	dirdiff		|:DirDiff| with the other candidate.
 			(|DirDiff.vim| plugin is needed.)

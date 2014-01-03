@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Dec 2013.
+" Last Modified: 03 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -126,8 +126,8 @@ function! s:source.gather_candidates(args, context) "{{{
           \          (fnamemodify(v:val[1], ':~:.') != '' ?
           \           fnamemodify(v:val[1], ':~:.') : v:val[1]),
           \ 'kind' : (isdirectory(fnamemodify(v:val[1],':p')) ? 'directory' : 'jump_list'),
-          \ 'source_bookmark_name' : bookmark_name,
-          \ 'source_entry_name' : v:val[0],
+          \ 'source__bookmark_name' : bookmark_name,
+          \ 'source__bookmark_orig' : v:val,
           \ 'action__path' : substitute(v:val[1], '[/\\\\]$', '', ''),
           \ 'action__line' : v:val[2],
           \ 'action__pattern' : v:val[3],
@@ -183,11 +183,10 @@ let s:source.action_table.delete = {
       \ }
 function! s:source.action_table.delete.func(candidates) "{{{
   for candidate in a:candidates
-    let bookmark = s:bookmarks[candidate.source_bookmark_name]
+    let bookmark = get(s:bookmarks, candidate.source__bookmark_name, [])
     call filter(bookmark.files, 'v:val !=# ' .
-          \ string([candidate.source_entry_name, candidate.action__path,
-          \      candidate.action__line, candidate.action__pattern]))
-    call s:save(candidate.source_bookmark_name, bookmark)
+          \ string(candidate.source__bookmark_orig))
+    call s:save(candidate.source__bookmark_name, bookmark)
   endfor
 endfunction"}}}
 
