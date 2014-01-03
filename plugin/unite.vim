@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Sep 2013.
+" Last Modified: 03 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,10 +59,6 @@ let g:unite_prompt =
       \ get(g:, 'unite_prompt', '> ')
 let g:unite_enable_start_insert =
       \ get(g:, 'unite_enable_start_insert', 0)
-let g:unite_enable_ignore_case =
-      \ get(g:, 'unite_enable_ignore_case', &ignorecase)
-let g:unite_enable_smart_case =
-      \ get(g:, 'unite_enable_smart_case', &infercase)
 let g:unite_split_rule =
       \ get(g:, 'unite_split_rule', 'topleft')
 let g:unite_enable_split_vertically =
