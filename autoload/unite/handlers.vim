@@ -170,10 +170,6 @@ function! unite#handlers#_on_cursor_moved()  "{{{
           \ <ESC>:call unite#mappings#loop_cursor_up_call(
           \    1, 'i')<CR>
   else
-    if winline() <= winheight('$') / 2
-      normal! zz
-    endif
-
     nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
           \ unite#mappings#loop_cursor_up_expr(0)
     nnoremap <expr><buffer> <Plug>(unite_skip_cursor_up)
