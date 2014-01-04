@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Dec 2013.
+" Last Modified: 04 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -205,7 +205,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
 
   " Check lines. "{{{
   if !context.auto_resize &&
-        \ winheight(0) < line('$') && line('.') + winheight(0) / 2 < line('$')
+        \ winheight(0) < line('$') && line('.') + winheight(0) < line('$')
     return
   endif
 
