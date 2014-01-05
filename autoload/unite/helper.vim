@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helpers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Dec 2013.
+" Last Modified: 05 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -332,9 +332,8 @@ function! unite#helper#choose_window() "{{{
       echohl Normal
 
       let num = get(g:unite_quick_match_table,
-            \ nr2char(getchar()), 0)
-      echomsg num
-      if num == 0 || winbufnr(num) > 0
+            \ nr2char(getchar()), 0) + 1
+      if num < 0 || winbufnr(num) > 0
         return num
       endif
 
