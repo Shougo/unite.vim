@@ -37,11 +37,8 @@ let s:sorter = {
       \}
 
 function! s:sorter.filter(candidates, context) "{{{
-  return sort(a:candidates, 's:compare_word')
-endfunction"}}}
-
-function! s:compare_word(a, b) "{{{
-  return a:a.word > a:b.word
+  return unite#util#sort_by(a:candidates, (&ignorecase ?
+        \ 'tolower(v:val.word)' : 'v:val.word'))
 endfunction"}}}
 
 let &cpo = s:save_cpo
