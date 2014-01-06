@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Dec 2013.
+" Last Modified: 07 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -64,8 +64,13 @@ function! unite#view#_redraw_candidates(...) "{{{
   call s:set_syntax()
 endfunction"}}}
 function! unite#view#_redraw_line(...) "{{{
+  let prompt_linenr = unite#get_current_unite().prompt_linenr
   let linenr = a:0 > 0 ? a:1 : line('.')
-  if linenr <= unite#get_current_unite().prompt_linenr || &filetype !=# 'unite'
+  if linenr ==# prompt_linenr
+    let linenr += 1
+  endif
+
+  if linenr <= prompt_linenr || &filetype !=# 'unite'
     " Ignore.
     return
   endif
@@ -74,7 +79,7 @@ function! unite#view#_redraw_line(...) "{{{
   setlocal modifiable
 
   let candidate = unite#get_unite_candidates()[linenr -
-        \ (unite#get_current_unite().prompt_linenr+1)]
+        \ (prompt_linenr+1)]
   call setline(linenr, unite#view#_convert_lines([candidate])[0])
 
   let &l:modifiable = modifiable_save

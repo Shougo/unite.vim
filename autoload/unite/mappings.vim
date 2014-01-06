@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jan 2014.
+" Last Modified: 07 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -365,7 +365,11 @@ function! s:normal_delete_backward_path() "{{{
   call unite#redraw()
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! s:toggle_mark(...) "{{{
+function! s:toggle_mark(map) "{{{
+  if line('.') == unite#get_current_unite().prompt_linenr
+    call cursor(line('.')+1, 0)
+  endif
+
   let candidate = unite#helper#get_current_candidate()
   if empty(candidate) || get(candidate, 'is_dummy', 0)
     return
@@ -374,33 +378,11 @@ function! s:toggle_mark(...) "{{{
   let candidate.unite__is_marked = !candidate.unite__is_marked
   let candidate.unite__marked_time = localtime()
 
-  let prompt_linenr = unite#get_current_unite().prompt_linenr
-
   call unite#view#_redraw_line()
 
-  let map = get(a:000, 0, '')
-  if map == ''
-    return
-  endif
-
-  while 1
-    if map ==# 'j'
-      if line('.') != line('$')
-        normal! j
-      endif
-    elseif map ==# 'k'
-      if line('.') > prompt_linenr
-        normal! k
-      endif
-    endif
-
-    let candidate = unite#helper#get_current_candidate()
-    if (map ==# 'j' && line('.') <= prompt_linenr ||
-          \ map ==# 'k' && line('.') == line('$')) ||
-          \ !get(candidate, 'is_dummy', 0)
-      break
-    endif
-  endwhile
+  execute 'normal!' a:map ==# 'j' ?
+        \ s:loop_cursor_down(1) :
+        \ unite#mappings#loop_cursor_up_expr(1)
 endfunction"}}}
 function! s:toggle_mark_all_candidates() "{{{
   call s:redraw_all_candidates()
