@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: start.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Dec 2013.
+" Last Modified: 08 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -169,7 +169,7 @@ function! unite#start#temporary(sources, ...) "{{{
 
   let buffer_name = get(a:000, 1,
         \ matchstr(context.buffer_name, '^\S\+')
-        \ . ' - ' . len(context.old_buffer_info))
+        \ . '-' . len(context.old_buffer_info))
 
   let context.buffer_name = buffer_name
 

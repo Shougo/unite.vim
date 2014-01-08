@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: complete.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2013.
+" Last Modified: 08 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,8 +68,7 @@ endfunction"}}}
 
 function! unite#complete#buffer_name(arglead, cmdline, cursorpos) "{{{
   let _ = map(filter(range(1, bufnr('$')), '
-        \ getbufvar(v:val, "&filetype") ==# "unite" &&
-        \ !getbufvar(v:val, "unite").context.temporary'),
+        \ getbufvar(v:val, "&filetype") ==# "unite"),
         \ 'getbufvar(v:val, "unite").buffer_name')
   let _ += unite#variables#options()
 

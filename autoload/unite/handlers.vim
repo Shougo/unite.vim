@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jan 2014.
+" Last Modified: 08 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -309,9 +309,9 @@ function! s:change_highlight()  "{{{
             \ "type(v:val) == type('')"), 'unite#get_filters(v:val)')),
             \ "has_key(v:val, 'pattern')")
         let patterns = map(copy(input_list),
-              \ "escape(matcher.pattern(v:val), '/')")
+              \ "escape(matcher.pattern(v:val), '/~')")
 
-        execute 'syntax match uniteCandidateInputKeyword'
+        silent! execute 'syntax match uniteCandidateInputKeyword'
               \ '/'.join(patterns, '\|').'/'
               \ 'containedin='.source.syntax.' contained'
       endfor
