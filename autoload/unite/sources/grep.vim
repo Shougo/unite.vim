@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 07 Oct 2013.
+" Last Modified: 08 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -177,6 +177,7 @@ function! s:source.hooks.on_post_filter(args, context) "{{{
           \ 'file/ssh' : 'file'), 'jump_list']
     let candidate.action__directory =
           \ unite#util#path2directory(candidate.action__path)
+    let candidate.action__col_pattern = a:context.source__input
     let candidate.is_multiline = 1
   endfor
 endfunction"}}}

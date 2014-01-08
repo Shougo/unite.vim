@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Dec 2013.
+" Last Modified: 08 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -176,13 +176,19 @@ function! s:jump(candidate, is_highlight) "{{{
   if !has_key(a:candidate, 'action__pattern')
     " Jump to the line number.
     let col = get(a:candidate, 'action__col', 0)
-    if col == 0
-      if line('.') != line
-        execute line
+    if col == 0 && has_key(a:candidate, 'action__col_pattern')
+      " Search col pattern.
+      let pattern = a:candidate.action__col_pattern
+      if pattern == ''
+        " Use context.input
+        let pattern = unite#get_context().input
       endif
-    else
-      call cursor(line, col)
+
+      let col = 0
+      silent! let col = match(getline(line), pattern) + 1
     endif
+
+    call cursor(line, col)
 
     call s:open_current_line(a:is_highlight)
     return
@@ -198,24 +204,24 @@ function! s:jump(candidate, is_highlight) "{{{
         execute line
       endif
     else
-      call search(pattern, 'w')
+      silent! call search(pattern, 'w')
     endif
 
     call s:open_current_line(a:is_highlight)
     return
   endif
 
-  call search(pattern, 'w')
+  silent! call search(pattern, 'w')
 
   let lnum_prev = line('.')
-  call search(pattern, 'w')
+  silent! call search(pattern, 'w')
   let lnum = line('.')
   if lnum != lnum_prev
     " Detected same pattern lines!!
     let start_lnum = lnum
     while source.calc_signature(lnum) !=#
           \ a:candidate.action__signature
-      call search(pattern, 'w')
+      silent! call search(pattern, 'w')
       let lnum = line('.')
       if lnum == start_lnum
         " Not found.

@@ -2328,6 +2328,10 @@ jump_list	An interface for jumping to the file position.  This kind
 				The column number in the file you'll jump
 				into.
 
+			action__col_pattern	(String)	(Optional)
+				The column search pattern in the file you'll
+				jump into.
+
 			action__pattern		(String)	(Optional)
 				The search pattern after the file is opened.
 

@@ -2,7 +2,7 @@
 " FILE: line.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          t9md <taqumd at gmail.com>
-" Last Modified: 26 Dec 2013.
+" Last Modified: 08 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -191,6 +191,7 @@ function! s:converter(candidates, context) "{{{
   for candidate in a:candidates
     let candidate.abbr = printf(a:context.source__format,
           \ candidate.action__line, candidate.action__text)
+    let candidate.action__col_pattern = a:context.source__input
   endfor
 
   return a:candidates
