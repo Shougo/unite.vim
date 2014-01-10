@@ -2482,6 +2482,10 @@ matcher_context	A matcher which filters the candidates with user given glob
 		the pattern starts "^", will use regexp pattern(head match).
 		Note: The filter is created by hrsh7th.
 
+					*unite-filter-matcher_project_files*
+matcher_project_files
+		Project files filter.  It removes non project files.
+
 						*unite-filter-sorter_default*
 sorter_default	The default sorter used by |unite-filter-default|.
 		["sorter_nothing"] is set initially.
@@ -3570,6 +3574,16 @@ Q: I don't want to get input lag like ctrlp.vim.
 
 A: You can use |unite-options-sync|. But unite.vim may block your Vim in long
 time.
+
+Q: I want to restrict the files I see to the current project or the current
+directory.
+https://github.com/Shougo/unite.vim/issues/456
+
+A: You should use |unite-filter-matcher_project_files|. >
+  call unite#custom#source(
+        \ 'file_mru', 'matchers',
+        \ ['matcher_project_files', 'matcher_fuzzy'])
+<
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
