@@ -889,7 +889,14 @@ g:unite_source_history_yank_file
 		Specify the file to write the information of yank history.
 		If this variable is empty, saving history is disabled.
 
+
 		The default value is |g:unite_data_directory|; '/history_yank'
+		If you want to another variable the defined in
+		|g:unite_data_directory| you have to specify the full path.
+
+		Example:
+>
+		let g:unite_source_history_yank_file=$HOME.'/.vim/yankring.txt'
 
 					*g:unite_source_history_save_clipboard*
 g:unite_source_history_yank_save_clipboard
@@ -955,8 +962,8 @@ g:unite_converter_file_directory_width
 
 				*g:unite_matcher_fuzzy_max_input_length*
 g:unite_matcher_fuzzy_max_input_length
-		Specify the maximum input pattern length for 
-		|unite-filter-matcher_fuzzy|, beyond which the matcher 
+		Specify the maximum input pattern length for
+		|unite-filter-matcher_fuzzy|, beyond which the matcher
 		falls back to |unite-filter-matcher_glob|.
 
 		The default value is 20.
@@ -1555,7 +1562,7 @@ unite#custom#action({kind}, {name}, {action})
 		\ }
 		function! my_tabopen.func(candidates)
 		  call unite#take_action('tabopen', a:candidates)
-		
+
 		  let dir = isdirectory(a:candidate.word) ?
 		  \    a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
 		  execute g:unite_kind_openable_lcd_command '`=dir`'
@@ -1958,7 +1965,7 @@ file_mru	Nominates files you used recently as candidates, ordering
 		including `*`, `_`, or `all`, `long`
 
 		For example, `Unite file_mru:long`
-		
+
 		The mru code is overhauled to tracking long mru history.
 		Set a large number like 5000 for the long limit will not
 		impact vim performance.
@@ -2146,7 +2153,7 @@ grep		Nominates "grep" command output as candidates.
 		Settings Example:
 >
 	let g:unite_source_grep_max_candidates = 200
-	
+
 	if executable('ag')
 	  " Use ag in unite grep source.
 	  let g:unite_source_grep_command = 'ag'
