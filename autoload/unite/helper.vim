@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helpers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jan 2014.
+" Last Modified: 11 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -311,7 +311,7 @@ function! unite#helper#choose_window() "{{{
   endfor
 
   " Save statusline.
-  let save_statuslines = map(range(1, winnr('$')),
+  let save_statuslines = map(unite#helper#get_choose_windows(),
         \ "[v:val, getbufvar(winbufnr(v:val), '&statusline')]")
 
   try
@@ -353,6 +353,13 @@ function! unite#helper#choose_window() "{{{
     redraw
   endtry
 endfunction"}}}
+
+function! unite#helper#get_choose_windows() "{{{
+  return filter(range(1, winnr('$')), "v:val != winnr()
+        \ && !getwinvar(v:val, '&previewwindow')
+        \ && !getwinvar(v:val, '&filetype') !=# 'qf'")
+endfunction"}}}
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
