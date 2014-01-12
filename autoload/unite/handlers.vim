@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jan 2014.
+" Last Modified: 12 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -184,7 +184,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
     match
 
     if line('.') <= prompt_linenr+1 || mode('.') == 'i' ||
-          \ split(reltimestr(reltime(unite.cursor_line_time)))[0] > '0.15'
+          \ split(reltimestr(reltime(unite.cursor_line_time)))[0] > '0.10'
       call s:set_cursor_line()
     endif
     let unite.cursor_line_time = reltime()
@@ -368,9 +368,9 @@ function! s:set_cursor_line()
 
   execute 'match' (line('.') <= prompt_linenr ?
         \ line('$') <= prompt_linenr ?
-        \ 'uniteError /\%'.prompt_linenr.'l/' :
-        \ context.cursor_line_highlight.' /\%'.(prompt_linenr+1).'l/' :
-        \ context.cursor_line_highlight.' /\%'.line('.').'l/')
+        \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
+        \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
+        \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')
   let unite.cursor_line_time = reltime()
 endfunction
 
