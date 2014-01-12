@@ -442,8 +442,8 @@ g:unite_abbr_highlight				*g:unite_abbr_highlight*
 
 		The default value is "Normal".
 
-				*g:unite_enable_use_short_source_names*
-g:unite_enable_use_short_source_names
+				*g:unite_enable_short_source_names*
+g:unite_enable_short_source_names
 		If this variable is 1, unite buffer will show short source
 		names.
 
