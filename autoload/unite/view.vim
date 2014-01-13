@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jan 2014.
+" Last Modified: 13 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -609,7 +609,7 @@ function! unite#view#_print_message(message) "{{{
   if !empty(unite)
     let unite.msgs += message
   endif
-  echohl Comment | call s:redraw_echo(message) | echohl None
+  echohl Comment | call s:redraw_echo(message[: &cmdheight-1]) | echohl None
 endfunction"}}}
 function! unite#view#_print_source_message(message, source_name) "{{{
   call unite#view#_print_message(
