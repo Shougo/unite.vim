@@ -3396,8 +3396,7 @@ A: You should use |<Plug>(unite_all_exit)| instead of |<Plug>(unite_exit)|.
 Q: How to make direct action (or choose action menu) to current file or given
 path?
 
-A:
->
+A: >
 	call unite#do_candidates_action('some_action',
 	\  unite#get_candidates([['file', expand('%')]]))
 <
@@ -3431,8 +3430,7 @@ https://github.com/osyo-manga/vim-powerline-unite-theme
 
 Q: I want to match candidates by filename.
 
-A:
->
+A: >
   call unite#custom#source(
         \ 'buffer,file_rec/async,file_rec,file_mru', 'matchers',
         \ ['converter_tail', 'matcher_default'])
@@ -3499,7 +3497,6 @@ Q: I want the strength of the match to overpower the order in which I list
 sources.
 
 A: You should use |unite#custom#profile()|.
-
 >
 	call unite#custom#profile('files', 'filters', 'sorter_rank')
 <
@@ -3529,6 +3526,7 @@ not easy to use. You should use file_rec source instead.
 Q: file_rec and file_rec/async cannot find all files.
 https://github.com/Shougo/unite.vim/issues/356
 https://github.com/Shougo/unite.vim/issues/370
+https://github.com/Shougo/unite.vim/issues/459
 
 A: It is feature.  cf: |g:unite_source_rec_max_cache_files|.
 And the default max candidates are limited. You can custom it by
@@ -3537,7 +3535,9 @@ And the default max candidates are limited. You can custom it by
 	call unite#custom#source('file_rec,file_rec/async',
 	\ 'max_candidates', 0)
 
-And you must clear previous cache in file_rec sources.
+And you must clear previous cache in file_rec sources and wait until the cache
+is completed("Directory traverse was completed" message is showed).
+In large files directory, to make cache is slow. So I don't recommend it.
 To clear cache, you must execute |<Plug>(unite_redraw)| in unite
 buffer(in default it is mapped to <C-l>).
 
