@@ -49,11 +49,6 @@ function! s:is_numeric(Value)
 endfunction
 
 " Number
-function! s:is_integer(Value)
-  echoerr 'Prelude.is_integer() is obsolete. Use its is_number() instead; they are equivalent.'
-  return s:is_number(a:Value)
-endfunction
-
 function! s:is_number(Value)
   return type(a:Value) ==# s:__TYPE_NUMBER
 endfunction
@@ -220,7 +215,14 @@ function! s:is_unix()
   return s:is_unix
 endfunction
 
+function! s:_deprecated(fname, newname)
+  echomsg printf("Vital.Prelude.%s is deprecated! Please use %s instead.",
+        \ a:fname, a:newname)
+endfunction
+
 function! s:print_error(message)
+  call s:_deprecated('print_error', 'Vital.Vim.Message.error')
+
   echohl ErrorMsg
   for m in split(a:message, "\n")
     echomsg m
@@ -249,14 +251,14 @@ function! s:iconv(expr, from, to)
   return result != '' ? result : a:expr
 endfunction
 
-" Like builtin getchar() but returns string always.
+" This is like builtin getchar() but always returns string.
 function! s:getchar(...)
   let c = call('getchar', a:000)
   return type(c) == type(0) ? nr2char(c) : c
 endfunction
 
-" Like builtin getchar() but returns string always.
-" and do inputsave()/inputrestore() before/after getchar().
+" This is like builtin getchar() but always returns string,
+" and also does inputsave()/inputrestore() before/after getchar().
 function! s:getchar_safe(...)
   let c = s:input_helper('getchar', a:000)
   return type(c) == type("") ? c : nr2char(c)
@@ -265,22 +267,22 @@ endfunction
 " Like builtin getchar() but
 " do inputsave()/inputrestore() before/after input().
 function! s:input_safe(...)
-    return s:input_helper('input', a:000)
+  return s:input_helper('input', a:000)
 endfunction
 
 " Do inputsave()/inputrestore() before/after calling a:funcname.
 function! s:input_helper(funcname, args)
-    let success = 0
-    if inputsave() !=# success
-        throw 'inputsave() failed'
+  let success = 0
+  if inputsave() !=# success
+    throw 'inputsave() failed'
+  endif
+  try
+    return call(a:funcname, a:args)
+  finally
+    if inputrestore() !=# success
+      throw 'inputrestore() failed'
     endif
-    try
-        return call(a:funcname, a:args)
-    finally
-        if inputrestore() !=# success
-            throw 'inputrestore() failed'
-        endif
-    endtry
+  endtry
 endfunction
 
 function! s:set_default(var, val)
@@ -380,8 +382,9 @@ function! s:path2project_directory(path, ...)
 
   " Search project file.
   if directory == ''
-    for d in ['build.xml', 'prj.el', '.project', 'pom.xml',
-          \ 'Makefile', 'configure', 'Rakefile', 'NAnt.build', 'tags', 'gtags']
+    for d in ['build.xml', 'prj.el', '.project', 'pom.xml', 'package.json',
+          \ 'Makefile', 'configure', 'Rakefile', 'NAnt.build',
+          \ 'P4CONFIG', 'tags', 'gtags']
       let d = findfile(d, s:escape_file_searching(search_directory) . ';')
       if d != ''
         let directory = fnamemodify(d, ':p:h')

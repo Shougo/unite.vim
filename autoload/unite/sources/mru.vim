@@ -190,7 +190,7 @@ function! s:mru.save(...) "{{{
     " only need to get the short list which contains the latest MRUs
     let [ver; items] = readfile(self.mru_file.short)
     if self.version_check(ver)
-      let self.candidates = s:L.uniq(extend(self.candidates,
+      let self.candidates = s:L.uniq_by(extend(self.candidates,
             \ s:convert2candidates(items)), 'v:val.action__path')
     endif
   endif
@@ -199,7 +199,7 @@ function! s:mru.save(...) "{{{
     call self.validate()
   endif
 
-  let self.candidates = s:L.uniq(self.candidates, 'v:val.action__path')
+  let self.candidates = s:L.uniq_by(self.candidates, 'v:val.action__path')
 
   call writefile([self.version] + map(copy(
       \ self.candidates[: self.limit.short - 1]),
@@ -441,7 +441,7 @@ function! s:convert2list(dict)  "{{{
   return [ fnamemodify(a:dict.action__path, ':~'), a:dict.source__time ]
 endfunction"}}}
 function! s:on_post_filter(args, context) "{{{
-  let a:context.candidates = s:L.uniq(
+  let a:context.candidates = s:L.uniq_by(
         \ a:context.candidates, 'v:val.action__path')
   for candidate in a:context.candidates
     let candidate.action__directory =

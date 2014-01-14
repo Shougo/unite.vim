@@ -226,6 +226,10 @@ function! s:dstring(expr)
   return printf('"%s"', escape(x, '"'))
 endfunction
 
+function! s:lines(str)
+  return split(a:str, '\r\?\n')
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

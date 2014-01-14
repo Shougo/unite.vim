@@ -24,18 +24,27 @@ function! s:cons(x, xs)
   return [a:x] + a:xs
 endfunction
 
-" TODO spec
 function! s:conj(xs, x)
   return a:xs + [a:x]
 endfunction
 
 " Removes duplicates from a list.
 function! s:uniq(list, ...)
-  let list = a:0 ? map(copy(a:list), printf('[v:val, %s]', a:1)) : copy(a:list)
+  if a:0
+    echomsg "Vital.Data.List.uniq() with 2 arguments is deprecated! Please use uniq_by() instead, if you still want to use the 2nd argument."
+    return s:uniq_by(a:list, a:1)
+  else
+    return s:uniq_by(a:list, 'v:val')
+  endif
+endfunction
+
+" Removes duplicates from a list.
+function! s:uniq_by(list, f)
+  let list = map(copy(a:list), printf('[v:val, %s]', a:f))
   let i = 0
   let seen = {}
   while i < len(list)
-    let key = string(a:0 ? list[i][1] : list[i])
+    let key = string(list[i][1])
     if has_key(seen, key)
       call remove(list, i)
     else
@@ -43,7 +52,7 @@ function! s:uniq(list, ...)
       let i += 1
     endif
   endwhile
-  return a:0 ? map(list, 'v:val[0]') : list
+  return map(list, 'v:val[0]')
 endfunction
 
 function! s:clear(list)
@@ -56,30 +65,29 @@ endfunction
 " Concatenates a list of lists.
 " XXX: Should we verify the input?
 function! s:concat(list)
-  let list = []
+  let memo = []
   for Value in a:list
-    let list += Value
+    let memo += Value
   endfor
-  return list
+  return memo
 endfunction
 
-" Flattens a list.
+" Take each elements from lists to a new list.
 function! s:flatten(list, ...)
   let limit = a:0 > 0 ? a:1 : -1
-  let list = []
+  let memo = []
   if limit == 0
     return a:list
   endif
   let limit -= 1
   for Value in a:list
-    if type(Value) == type([])
-      let list += s:flatten(Value, limit)
-    else
-      call add(list, Value)
-    endif
+    let memo +=
+          \ type(Value) == type([]) ?
+          \   s:flatten(Value, limit) :
+          \   [Value]
     unlet! Value
   endfor
-  return list
+  return memo
 endfunction
 
 " Sorts a list with expression to compare each two values.
@@ -105,11 +113,6 @@ function! s:sort_by(list, expr)
   \      'a:a[1] ==# a:b[1] ? 0 : a:a[1] ># a:b[1] ? 1 : -1'), 'v:val[0]')
 endfunction
 
-function! s:max(list, expr)
-  echoerr 'Data.List.max() is obsolete. Use its max_by() instead.'
-  return s:max_by(a:list, a:expr)
-endfunction
-
 " Returns a maximum value in {list} through given {expr}.
 " Returns 0 if {list} is empty.
 " v:val is used in {expr}
@@ -119,11 +122,6 @@ function! s:max_by(list, expr)
   endif
   let list = map(copy(a:list), a:expr)
   return a:list[index(list, max(list))]
-endfunction
-
-function! s:min(list, expr)
-  echoerr 'Data.List.min() is obsolete. Use its min_by() instead.'
-  return s:min_by(a:list, a:expr)
 endfunction
 
 " Returns a minimum value in {list} through given {expr}.
@@ -227,15 +225,7 @@ endfunction
 
 " similar to Haskell's Prelude.foldr
 function! s:foldr(f, init, xs)
-  let memo = a:init
-  for i in reverse(range(0, len(a:xs) - 1))
-    let x = a:xs[i]
-    let expr = substitute(a:f, 'v:val', string(x), 'g')
-    let expr = substitute(expr, 'v:memo', string(memo), 'g')
-    unlet memo
-    let memo = eval(expr)
-  endfor
-  return memo
+  return s:foldl(a:f, a:init, reverse(copy(a:xs)))
 endfunction
 
 " similar to Haskell's Prelude.fold11
