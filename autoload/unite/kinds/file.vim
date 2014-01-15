@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jan 2014.
+" Last Modified: 15 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -869,6 +869,8 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
   " Convert to relative path.
   let old_filename = substitute(fnamemodify(a:old_filename, ':p'),
         \ '[/\\]$', '', '')
+  let new_filename = substitute(fnamemodify(a:new_filename, ':p'),
+        \ '[/\\]$', '', '')
   let directory = unite#util#substitute_path_separator(
         \ fnamemodify(old_filename, ':h'))
   let current_dir_save = getcwd()
@@ -877,9 +879,9 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
   let hidden_save = &l:hidden
   try
     let old_filename = unite#util#substitute_path_separator(
-          \ fnamemodify(a:old_filename, ':.'))
+          \ fnamemodify(old_filename, ':.'))
     let new_filename = unite#util#substitute_path_separator(
-          \ fnamemodify(a:new_filename, ':.'))
+          \ fnamemodify(new_filename, ':.'))
 
     let bufnr = bufnr(unite#util#escape_file_searching(old_filename))
     if bufnr > 0
@@ -890,9 +892,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
       noautocmd execute 'buffer' bufnr
       saveas! `=new_filename`
       noautocmd execute 'buffer' bufnr_save
-    endif
-
-    if rename(old_filename, new_filename)
+    elseif rename(old_filename, new_filename)
       call unite#print_error(
             \ printf('Failed file rename: "%s" to "%s".',
             \   a:old_filename, a:new_filename))
