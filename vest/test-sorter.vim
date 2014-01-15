@@ -30,6 +30,17 @@ Context Source.run()
       endfor
     End
   endif
+
+  It tests group feature.
+    ShouldEqual unite#candidates#_group_post_filters([
+          \ {'word' : 'foo', 'group' : 'bar'},
+          \ {'word' : 'bar', 'group' : 'baz'}]), [
+          \ {'word' : 'bar', 'is_dummy' : 1},
+          \ {'word' : 'foo', 'group' : 'bar'},
+          \ {'word' : 'baz', 'is_dummy' : 1},
+          \ {'word' : 'bar', 'group' : 'baz'},
+          \]
+  End
 End
 
 Fin

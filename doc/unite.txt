@@ -3005,6 +3005,12 @@ is_listed		Number		(Optional)
 			If the source is internal, it must be set to 0.  If
 			it's omitted, it's set to 1.
 
+					*unite-source-attribute-is_grouped*
+is_grouped		Number		(Optional)
+			Whether the source candidates are grouped.
+			Grouped candidates must have "group" attribute.
+			If it's omitted, it's set to 0.
+
 					*unite-source-attribute-description*
 description		String		(Optional)
 			The description of the source.
@@ -3138,6 +3144,13 @@ NOTATION					*unite-notation*
 				"command"], "file" (default) actions will be
 				overwritten by "command" action.  You should
 				use source default action instead of kind.
+
+			group			(String)	(Optional)
+				The candidate group name.
+				It is inserted in candidates automatically.
+				Note: It is required and used when
+				|unite-source-attribute-is_grouped| is non
+				zero.
 
 			is_dummy		(Number)	(Optional)
 				If the candidate is dummy.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jan 2014.
+" Last Modified: 16 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -75,6 +75,11 @@ function! unite#candidates#_recache(input, is_force) "{{{
               \ | echohl None
         let filtered_count += 1
       endif
+    endif
+
+    if source.is_grouped
+      let source.unite__candidates =
+            \ unite#candidates#_group_post_filters(source.unite__candidates)
     endif
 
     " Call post_filter hook.
@@ -338,6 +343,30 @@ function! s:get_source_candidates(source) "{{{
 
   return a:source.unite__cached_candidates
         \ + a:source.unite__cached_change_candidates
+endfunction"}}}
+
+function! unite#candidates#_group_post_filters(candidates) "{{{
+  " Post filters for group
+  let groups = {}
+  for i in range(0, len(a:candidates) - 1)
+    let group = a:candidates[i].group
+    if has_key(groups, 'group')
+      call add(groups[group].indexes, i)
+    else
+      let groups[group] = { 'index' : i, 'indexes' : [i] }
+    endif
+  endfor
+
+  let _ = []
+  for [group, val] in unite#util#sort_by(items(groups), 'v:val[1].index')
+    " Add group candidate
+    call add(_, {'word' : group, 'is_dummy' : 1})
+
+    " Add children candidates
+    let _ += map(val.indexes, 'a:candidates[v:val]')
+  endfor
+
+  return _
 endfunction"}}}
 
 let &cpo = s:save_cpo
