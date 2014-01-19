@@ -357,7 +357,8 @@ endfunction"}}}
 function! unite#helper#get_choose_windows() "{{{
   return filter(range(1, winnr('$')), "v:val != winnr()
         \ && !getwinvar(v:val, '&previewwindow')
-        \ && getwinvar(v:val, '&buftype') !~# 'nofile'
+        \ && (getwinvar(v:val, '&buftype') !~# 'nofile'
+        \   || getwinvar(v:val, '&buftype') =~# 'acwrite')
         \ && !getwinvar(v:val, '&filetype') !=# 'qf'")
 endfunction"}}}
 
