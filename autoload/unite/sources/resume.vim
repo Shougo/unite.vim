@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: resume.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jan 2014.
+" Last Modified: 20 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,8 @@ function! s:source.gather_candidates(args, context) "{{{
         \          . join(map(filter(copy(v:val.args),
         \           'type(v:val) == type([])'),
         \           'len(v:val[1]) == 0 ? v:val[0] :
-        \            v:val[0].'':''.join(v:val[1], '':'')')),
+        \            v:val[0].'':''.join(filter(copy(v:val[1]),
+        \            ''type(v:val) == 1''), '':'')')),
         \            v:val.buffer_name),
         \ 'action__command' : 'UniteResume ' . v:val.buffer_name,
         \ 'source__time' : v:val.access_time,
