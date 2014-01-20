@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jan 2014.
+" Last Modified: 21 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -119,7 +119,9 @@ function! unite#init#_unite_buffer() "{{{
     setlocal buftype=nofile
     setlocal nolist
     setlocal nobuflisted
-    setlocal nocursorbind
+    if has('cursorbind')
+      setlocal nocursorbind
+    endif
     setlocal noscrollbind
     setlocal noswapfile
     setlocal nospell
