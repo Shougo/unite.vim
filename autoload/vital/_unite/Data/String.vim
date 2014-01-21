@@ -48,7 +48,7 @@ function! s:common_head(strs)
     return a:strs[0]
   endif
   let strs = len == 2 ? a:strs : sort(copy(a:strs))
-  let pat = substitute(strs[0], '.', '[\0]', 'g')
+  let pat = substitute(strs[0], '.', '\="[" . escape(submatch(0), "^\\") . "]"', 'g')
   return pat == '' ? '' : matchstr(strs[-1], '^\%[' . pat . ']')
 endfunction
 

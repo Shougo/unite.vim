@@ -3,7 +3,7 @@ set cpo&vim
 
 function! unite#util#get_vital() "{{{
   if !exists('s:V')
-    let s:V = vital#of('unite.vim')
+    let s:V = vital#of('unite')
   endif
   return s:V
 endfunction"}}}
@@ -20,6 +20,13 @@ function! s:get_string() "{{{
     let s:String = unite#util#get_vital().import('Data.String')
   endif
   return s:String
+endfunction"}}}
+
+function! s:get_message() "{{{
+  if !exists('s:Message')
+    let s:Message = unite#util#get_vital().import('Vim.Message')
+  endif
+  return s:Message
 endfunction"}}}
 
 " TODO use vital's
@@ -57,7 +64,7 @@ function! unite#util#is_mac(...)
   return call(unite#util#get_vital().is_mac, a:000)
 endfunction
 function! unite#util#print_error(...)
-  return call(unite#util#get_vital().print_error, a:000)
+  return call(s:get_message().error, a:000)
 endfunction
 function! unite#util#smart_execute_command(action, word)
   execute a:action . ' ' . fnameescape(a:word)
