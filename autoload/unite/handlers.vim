@@ -39,7 +39,7 @@ function! unite#handlers#_on_insert_leave()  "{{{
   let unite = unite#get_current_unite()
 
   if line('.') != unite.prompt_linenr
-    normal! 0
+    call cursor(1, 0)
   endif
 
   let unite.is_insert = 0

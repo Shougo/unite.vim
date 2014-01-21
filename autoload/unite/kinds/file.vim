@@ -592,7 +592,7 @@ function! s:kind.action_table.vimfiler__shell.func(candidate) "{{{
   let files = unite#get_context().vimfiler__files
   if !empty(files)
     call setline(line('.'), getline('.') . ' ' . join(files))
-    normal! l
+    call cursor(0, col('.')+1)
   endif
 endfunction"}}}
 
