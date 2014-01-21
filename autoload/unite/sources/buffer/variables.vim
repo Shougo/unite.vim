@@ -29,11 +29,10 @@ set cpo&vim
 
 let s:buffer_list = {}
 
-function! unite#sources#buffer#variables#append() "{{{
+function! unite#sources#buffer#variables#append(bufnr) "{{{
   " Append the current buffer.
-  let bufnr = bufnr('%')
-  let s:buffer_list[bufnr] = {
-        \ 'action__buffer_nr' : bufnr,
+  let s:buffer_list[a:bufnr] = {
+        \ 'action__buffer_nr' : a:bufnr,
         \ 'source__time' : localtime(),
         \ }
 endfunction"}}}
