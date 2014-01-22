@@ -127,7 +127,6 @@ function! unite#candidates#gather(...) "{{{
   if unite.context.unique
     " Uniq filter.
     let candidates = unite#util#uniq_by(candidates, 'v:val.word')
-    echomsg string(candidates)
   endif
 
   return candidates

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jan 2014.
+" Last Modified: 23 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,6 +73,9 @@ function! s:source_buffer_all.hooks.on_syntax(args, context) "{{{
 endfunction"}}}
 function! s:source_buffer_all.hooks.on_post_filter(args, context) "{{{
   for candidate in a:context.candidates
+    let candidate.action__path =
+          \ unite#util#substitute_path_separator(
+          \       fnamemodify(s:make_word(candidate.action__buffer_nr), ':p'))
     let candidate.action__directory =
           \ s:get_directory(candidate.action__buffer_nr)
   endfor
@@ -87,12 +90,11 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
   endif
 
   let candidates = map(a:context.source__buffer_list, "{
-        \ 'word' : s:make_word(v:val.action__buffer_nr),
+        \ 'word' : unite#util#substitute_path_separator(
+        \       fnamemodify(s:make_word(v:val.action__buffer_nr), ':p')),
         \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
         \        . s:format_time(v:val.source__time),
         \ 'action__buffer_nr' : v:val.action__buffer_nr,
-        \ 'action__path' : unite#util#substitute_path_separator(
-        \       fnamemodify(s:make_word(v:val.action__buffer_nr), ':p')),
         \}")
 
   return candidates
@@ -122,12 +124,11 @@ function! s:source_buffer_tab.gather_candidates(args, context) "{{{
         \ 'has_key(t:unite_buffer_dictionary, v:val.action__buffer_nr)')
 
   let candidates = map(list, "{
-        \ 'word' : s:make_word(v:val.action__buffer_nr),
+        \ 'word' : unite#util#substitute_path_separator(
+        \       fnamemodify(s:make_word(v:val.action__buffer_nr), ':p')),
         \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
         \        . s:format_time(v:val.source__time),
         \ 'action__buffer_nr' : v:val.action__buffer_nr,
-        \ 'action__path' : unite#util#substitute_path_separator(
-        \       fnamemodify(s:make_word(v:val.action__buffer_nr), ':p')),
         \}")
 
   return candidates
