@@ -52,24 +52,28 @@ function! s:append(path) "{{{
   endif
 
   " Append the current buffer.
-  for bufnr in [bufnr('%'), bufnr('#')]
-    if exists('*gettabvar') && bufnr == bufnr('%')
-      " Delete same buffer in other tab pages.
-      for tabnr in range(1, tabpagenr('$'))
-        let buffer_dict = gettabvar(tabnr, 'unite_buffer_dictionary')
-        if type(buffer_dict) == type({}) && has_key(buffer_dict, bufnr)
-          call remove(buffer_dict, bufnr)
-        endif
-        unlet buffer_dict
-      endfor
-    endif
-
-    let t:unite_buffer_dictionary[bufnr] = 1
+  let bufnr = bufnr('%')
+  if exists('*gettabvar') && bufnr == bufnr('%')
+    " Delete same buffer in other tab pages.
+    for tabnr in range(1, tabpagenr('$'))
+      let buffer_dict = gettabvar(tabnr, 'unite_buffer_dictionary')
+      if type(buffer_dict) == type({}) && has_key(buffer_dict, bufnr)
+        call remove(buffer_dict, bufnr)
+      endif
+      unlet buffer_dict
+    endfor
+  endif
 
     if !has('vim_starting') || bufname(bufnr) != ''
-      call unite#sources#buffer#variables#append(bufnr)
-    endif
-  endfor
+    call unite#sources#buffer#variables#append(bufnr)
+  endif
+
+  let t:unite_buffer_dictionary[bufnr] = 1
+  if bufname(bufnr('#')) != '' && !has_key(
+        \ unite#sources#buffer#variables#get_buffer_list(), bufnr('#'))
+    call unite#sources#buffer#variables#append(bufnr('#'))
+    let t:unite_buffer_dictionary[bufnr('#')] = 1
+  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo
