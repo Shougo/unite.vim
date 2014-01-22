@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jan 2014.
+" Last Modified: 23 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -123,6 +123,12 @@ function! unite#candidates#gather(...) "{{{
     let candidates = unite#helper#call_filter(
           \ filter_name, candidates, unite.context)
   endfor
+
+  if unite.context.unique
+    " Uniq filter.
+    let candidates = unite#util#uniq_by(candidates, 'v:val.word')
+    echomsg string(candidates)
+  endif
 
   return candidates
 endfunction"}}}

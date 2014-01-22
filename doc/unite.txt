@@ -1927,6 +1927,10 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 		Disable asynchronous mode like |ctrlp| plugin.
 		It is useful if you don't want to get input lag.
 
+						*unite-options-unique*
+		-unique
+		Unique candidates by word attribute.
+
 ==============================================================================
 SOURCES						*unite-sources*
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Jan 2014.
+" Last Modified: 23 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -481,7 +481,7 @@ function! unite#init#_default_scripts(kind, names) "{{{
     endif
 
     let files = []
-    for prefix in filter(unite#util#uniq_by([
+    for prefix in filter(unite#util#uniq([
           \ prefix_name, postfix_name, postfix_name2]),
           \ "name == '' || v:val != ''")
       let files += split(globpath(&runtimepath,

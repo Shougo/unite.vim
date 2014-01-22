@@ -131,7 +131,7 @@ function! unite#util#uniq(...)
   return call(s:get_list().uniq, a:000)
 endfunction
 function! unite#util#uniq_by(...)
-  return call(s:get_list().uniq, a:000)
+  return call(s:get_list().uniq_by, a:000)
 endfunction
 function! unite#util#input(prompt, ...) "{{{
   let context = unite#get_context()

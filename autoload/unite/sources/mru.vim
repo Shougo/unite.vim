@@ -438,7 +438,7 @@ function! s:convert2dictionary(list)  "{{{
         \ 'action__path' : fnamemodify(a:list[0], ':p'), }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{
-  return [ fnamemodify(a:dict.action__path, ':~'), a:dict.source__time ]
+  return [ a:dict.action__path, a:dict.source__time ]
 endfunction"}}}
 function! s:on_post_filter(args, context) "{{{
   let a:context.candidates = s:L.uniq_by(

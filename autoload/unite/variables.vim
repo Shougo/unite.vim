@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: variables.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Dec 2013.
+" Last Modified: 22 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -103,7 +103,7 @@ function! unite#variables#options() "{{{
           \ '-auto-quit', '-no-focus',
           \ '-long-source-names', '-short-source-names',
           \ '-multi-line', '-resume', '-wrap', '-select=', '-log',
-          \ '-truncate', '-tab', '-sync',
+          \ '-truncate', '-tab', '-sync', '-unique',
           \]
   endif
 
@@ -224,6 +224,7 @@ function! unite#variables#default_context() "{{{
           \ 'truncate' : 0,
           \ 'tab' : 0,
           \ 'sync' : 0,
+          \ 'unique' : 0,
           \ 'execute_command' : '',
           \ 'unite__direct_switch' : 0,
           \ 'unite__is_interactive' : 1,
