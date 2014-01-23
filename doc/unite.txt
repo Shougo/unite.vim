@@ -937,16 +937,18 @@ g:unite_kind_openable_persist_open_blink_time
 		The default value is "250m"
 
 				*g:unite_kind_cdable_cd_command*
-				*g:unite_kind_openable_cd_command*
 g:unite_kind_cdable_cd_command
+				*g:unite_kind_openable_cd_command*
+g:unite_kind_openable_cd_command
 		Specify the Vim command for cd action.
 		This command must interpret |`=|.
 
 		The default value is "cd".
 
 				*g:unite_kind_cdable_lcd_command*
-				*g:unite_kind_openable_lcd_command*
 g:unite_kind_cdable_lcd_command
+				*g:unite_kind_openable_lcd_command*
+g:unite_kind_openable_lcd_command
 		Specify the Vim command for lcd action.
 		This command must interpret |`=|.
 
