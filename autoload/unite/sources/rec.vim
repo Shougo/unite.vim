@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Nov 2013.
+" Last Modified: 23 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,8 +43,7 @@ call unite#util#set_default('g:unite_source_rec_unit', 200)
 call unite#util#set_default(
       \ 'g:unite_source_rec_async_command',
       \ (executable('ag') ?
-      \  'ag --nocolor --nogroup --skip-vcs-ignores --ignore ' .
-      \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'' --ignore ''_darcs'' --hidden -g ""' :
+      \  'ag --nocolor --nogroup --hidden -g ""' :
       \  !unite#util#is_windows() && executable('find') ? 'find' : ''),
       \ 'g:unite_source_file_rec_async_command')
 "}}}
