@@ -434,8 +434,8 @@ function! s:convert2candidates(items)  "{{{
   endtry
 endfunction"}}}
 function! s:convert2dictionary(list)  "{{{
-  return { 'word' : a:list[0], 'source__time' : str2nr(a:list[1]),
-        \ 'action__path' : fnamemodify(a:list[0], ':p'), }
+  return { 'word' : a:list[0], 'source__time' : a:list[1],
+        \ 'action__path' : a:list[0] }
 endfunction"}}}
 function! s:convert2list(dict)  "{{{
   return [ a:dict.action__path, a:dict.source__time ]
