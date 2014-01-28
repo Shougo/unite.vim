@@ -105,24 +105,32 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
   let context = {}
   let context = unite#init#_context(context,
         \ unite#helper#get_source_names(a:sources))
-  let context.unite__is_interactive = 0
-  let context.unite__is_complete = 1
 
+  let save_intructive = context.unite__is_interactive
+  let save_is_complete = context.unite__is_complete
   try
-    call unite#init#_current_unite(a:sources, context)
-  catch /^unite.vim: Invalid /
-    return []
+    let context.unite__is_interactive = 0
+    let context.unite__is_complete = 1
+
+    try
+      call unite#init#_current_unite(a:sources, context)
+    catch /^unite.vim: Invalid /
+      return []
+    endtry
+
+    let _ = []
+
+    let [args, options] = unite#helper#parse_options_args(a:cmdline)
+    for source in unite#init#_loaded_sources(args, context)
+      if has_key(source, 'complete')
+        let _ += source.complete(
+              \ source.args, context, a:arglead, a:cmdline, a:cursorpos)
+      endif
+    endfor
+  finally
+    let context.unite__is_interactive = save_intructive
+    let context.unite__is_complete = save_is_complete
   endtry
-
-  let _ = []
-
-  let [args, options] = unite#helper#parse_options_args(a:cmdline)
-  for source in unite#init#_loaded_sources(args, context)
-    if has_key(source, 'complete')
-      let _ += source.complete(
-            \ source.args, context, a:arglead, a:cmdline, a:cursorpos)
-    endif
-  endfor
 
   return _
 endfunction"}}}
