@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jan 2014.
+" Last Modified: 28 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,6 +44,26 @@ function! unite#candidates#_recache(input, is_force) "{{{
   let context = unite.context
   let context.is_redraw = a:is_force
   let context.is_changed = a:input !=# unite.last_input
+
+  if empty(unite.args) && a:input != ''
+    if a:input !~ '^.\{-}\%(\\\@<!\s\)\+'
+      " Use manual source.
+      let sources = unite#init#_loaded_sources(['manual'], context)
+    else
+      " Use specified source.
+      let [args, _] = unite#helper#parse_options_args(
+            \ matchstr(a:input, '^.\{-}\%(\\\@<!\s\)\+'))
+      let sources = unite#init#_loaded_sources(args, context)
+    endif
+
+    if unite.sources !=# sources
+      " Initialize.
+      call unite#helper#call_hook(sources, 'on_init')
+    endif
+
+    let unite.sources = sources
+    let unite.source_names = unite#helper#get_source_names(sources)
+  endif
 
   for source in unite.sources
     let source.unite__candidates = []

@@ -28,11 +28,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#start#standard(sources, ...) "{{{
-  if empty(a:sources)
-    call unite#print_error('[unite.vim] Source names are required.')
-    return
-  endif
-
   " Check command line window.
   if unite#util#is_cmdwin()
     call unite#print_error(
@@ -44,6 +39,15 @@ function! unite#start#standard(sources, ...) "{{{
   let context = get(a:000, 0, {})
   let context = unite#init#_context(context,
         \ unite#helper#get_source_names(a:sources))
+
+  if empty(a:sources)
+    if !get(context, 'no_start_insert', 0)
+      let context.start_insert = 1
+    endif
+
+    call unite#print_message(
+          \ '[unite.vim] manual mode: Please input source name')
+  endif
 
   if context.resume
     " Check resume buffer.

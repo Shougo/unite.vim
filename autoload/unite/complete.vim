@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: complete.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jan 2014.
+" Last Modified: 28 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,10 +36,10 @@ function! unite#complete#source(arglead, cmdline, cursorpos) "{{{
 
   if a:arglead !~ ':'
     " Option names completion.
-    let _ +=  copy(unite#variables#options())
+    let _ += copy(unite#variables#options())
 
     " Source name completion.
-    if mode() ==# 'c' || unite#util#is_cmdwin()
+    if mode() ==# 'c' || unite#util#is_cmdwin() || &l:filetype ==# 'unite'
       let _ += keys(filter(unite#init#_sources([], a:arglead),
             \ 'v:val.is_listed'))
     endif
@@ -51,16 +51,18 @@ function! unite#complete#source(arglead, cmdline, cursorpos) "{{{
     let _  = map(_, 'source_name.":".v:val')
   endif
 
-  if source_name != '' && (mode() ==# 'c' || unite#util#is_cmdwin())
+  if source_name != '' && (mode() ==# 'c' ||
+        \ unite#util#is_cmdwin() || &l:filetype ==# 'unite')
     " Source args completion.
     let args = source_name . ':' . join(source_args[: -2], ':')
     if args !~ ':$'
       let args .= ':'
     endif
+
     let _ += map(unite#args_complete(
           \ [insert(copy(source_args), source_name)],
-          \ join(source_args, ':'), a:cmdline, a:cursorpos),
-          \ "args.escape(v:val, ':')")
+          \ join(source_args, ':'), args, a:cursorpos),
+          \ "args . escape(v:val, ':')")
   endif
 
   return sort(filter(_, 'stridx(v:val, a:arglead) == 0'))
@@ -113,7 +115,9 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
   endtry
 
   let _ = []
-  for source in unite#loaded_sources_list()
+
+  let [args, options] = unite#helper#parse_options_args(a:cmdline)
+  for source in unite#init#_loaded_sources(args, context)
     if has_key(source, 'complete')
       let _ += source.complete(
             \ source.args, context, a:arglead, a:cmdline, a:cursorpos)

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jan 2014.
+" Last Modified: 28 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -367,7 +367,7 @@ function! s:set_cursor_line()
   let context = unite.context
 
   execute '2match' (line('.') <= prompt_linenr ?
-        \ line('$') <= prompt_linenr ?
+        \ line('$') <= prompt_linenr && context.input != '' ?
         \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
         \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
         \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')

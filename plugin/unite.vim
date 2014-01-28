@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jan 2014.
+" Last Modified: 28 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -95,7 +95,7 @@ endif
 "}}}
 
 " Wrapper command.
-command! -nargs=+ -complete=customlist,unite#complete#source
+command! -nargs=* -complete=customlist,unite#complete#source
       \ Unite
       \ call s:call_unite_empty(<q-args>)
 function! s:call_unite_empty(args) "{{{
