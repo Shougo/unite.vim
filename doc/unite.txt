@@ -325,6 +325,9 @@ COMMANDS 					*unite-commands*
 		by your filter string) will be ordered in the same order that
 		you specify the {sources}.
 
+		If {sources} are empty, you can input source name and args
+		manually.
+
 		For example:
 
 		:Unite file buffer
