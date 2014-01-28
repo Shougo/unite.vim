@@ -93,7 +93,7 @@ function! s:source.gather_candidates(args, context) "{{{
   endif
 
   if unite#util#is_windows() &&
-        \ vimproc#get_command_name('find') =~? '/Windows/system.*/find\.exe$'
+        \ vimproc#get_command_name(g:unite_source_find_command) =~? '/Windows/system.*/find\.exe$'
     call unite#print_source_message('Detected windows find command.', s:source.name)
     let a:context.is_async = 0
     return []
