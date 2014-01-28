@@ -45,8 +45,10 @@ function! unite#candidates#_recache(input, is_force) "{{{
   let context.is_redraw = a:is_force
   let context.is_changed = a:input !=# unite.last_input
 
-  if empty(unite.args) && a:input != ''
-    if a:input !~ '^.\{-}\%(\\\@<!\s\)\+'
+  if empty(unite.args)
+    if a:input == ''
+      let sources = []
+    elseif a:input !~ '^.\{-}\%(\\\@<!\s\)\+'
       " Use manual source.
       let sources = unite#init#_loaded_sources(['manual'], context)
     else

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jan 2014.
+" Last Modified: 28 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -142,6 +142,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     if context.is_redraw
           \ || input !=# unite.last_input
           \ || unite.is_async
+          \ || empty(unite.args)
       " Recaching.
       call unite#candidates#_recache(input, a:is_force)
     endif
