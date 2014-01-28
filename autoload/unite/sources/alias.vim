@@ -2,7 +2,7 @@
 " FILE: alias.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          tacroe <tacroe at gmail.com>
-" Last Modified: 31 Oct 2013.
+" Last Modified: 28 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,7 +36,10 @@ endfunction
 
 function! s:make_aliases()
   let aliases = []
-  for [name, config] in items(g:unite_source_alias_aliases)
+
+  let user_aliases = map(copy(g:unite_source_alias_aliases),
+        \ "type(v:val) == type('') ? { 'source' : v:val } : v:val")
+  for [name, config] in items(user_aliases)
     let args =
           \ (!has_key(config, 'args')) ? [] :
           \ (type(config.args) == type([])) ?
