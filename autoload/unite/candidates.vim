@@ -53,7 +53,11 @@ function! unite#candidates#_recache(input, is_force) "{{{
       " Use specified source.
       let [args, _] = unite#helper#parse_options_args(
             \ matchstr(a:input, '^.\{-}\%(\\\@<!\s\)\+'))
-      let sources = unite#init#_loaded_sources(args, context)
+      try
+        let sources = unite#init#_loaded_sources(args, context)
+      catch
+        let sources = []
+      endtry
     endif
 
     if unite.sources !=# sources
