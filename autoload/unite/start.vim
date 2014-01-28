@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: start.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jan 2014.
+" Last Modified: 28 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,7 +29,7 @@ set cpo&vim
 
 function! unite#start#standard(sources, ...) "{{{
   if empty(a:sources)
-    call unite#print_error('[unite.vim] Source names is required.')
+    call unite#print_error('[unite.vim] Source names are required.')
     return
   endif
 
