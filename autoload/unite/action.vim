@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Nov 2013.
+" Last Modified: 29 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -354,8 +354,6 @@ function! unite#action#do(action_name, ...) "{{{
     let unite = unite#get_current_unite()
   endif
 
-  let context = unite#get_context()
-
   " Execute action.
   let is_quit = 0
   let is_redraw = 0
@@ -364,7 +362,7 @@ function! unite#action#do(action_name, ...) "{{{
     " Check quit flag.
     if table.action.is_quit && unite.profile_name !=# 'action'
           \ && !table.action.is_start
-          \ && !(table.action.is_tab && context.no_quit)
+          \ && !(table.action.is_tab && unite.context.no_quit)
       call unite#all_quit_session(0)
       let is_quit = 1
     endif
@@ -392,7 +390,7 @@ function! unite#action#do(action_name, ...) "{{{
     endtry
 
     " Executes command.
-    if context.execute_command != ''
+    if unite.context.execute_command != ''
       execute context.execute_command
     endif
 
