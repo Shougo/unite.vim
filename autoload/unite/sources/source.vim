@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: source.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Jun 2013.
+" Last Modified: 29 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,7 +36,20 @@ let s:source = {
       \ 'description' : 'candidates from sources list',
       \ 'default_action' : 'start',
       \ 'default_kind' : 'source',
+      \ 'hooks' : {},
+      \ 'syntax' : 'uniteSource__Source',
       \}
+
+function! s:source.hooks.on_syntax(args, context) "{{{
+  syntax match uniteSource__SourceDescriptionLine / -- .*$/
+        \ contained containedin=uniteSource__Source
+  syntax match uniteSource__SourceDescription /.*$/
+        \ contained containedin=uniteSource__SourceDescriptionLine
+  syntax match uniteSource__SourceMarker / -- /
+        \ contained containedin=uniteSource__SourceDescriptionLine
+  highlight default link uniteSource__SourceMarker Special
+  highlight default link uniteSource__SourceDescription Comment
+endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
   let sources = filter(values(unite#get_all_sources()),
