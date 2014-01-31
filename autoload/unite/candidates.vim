@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2014.
+" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -63,12 +63,13 @@ function! unite#candidates#_recache(input, is_force) "{{{
     endif
 
     if unite.sources !=# sources
+      let unite.sources = sources
+      let unite.source_names = unite#helper#get_source_names(sources)
+
       " Initialize.
       call unite#helper#call_hook(sources, 'on_init')
+      call unite#view#_set_highlight()
     endif
-
-    let unite.sources = sources
-    let unite.source_names = unite#helper#get_source_names(sources)
   endif
 
   for source in unite.sources

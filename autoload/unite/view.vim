@@ -174,11 +174,12 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
 endfunction"}}}
 
 function! unite#view#_set_highlight() "{{{
+  syntax clear
+
   let unite = unite#get_current_unite()
 
   " Set highlight.
   let match_prompt = escape(unite.prompt, '\/*~.^$[]')
-  silent! syntax clear uniteInputPrompt
   execute 'syntax match uniteInputPrompt'
         \ '/^'.match_prompt.'/ contained'
 
@@ -235,6 +236,8 @@ function! unite#view#_set_highlight() "{{{
   endfor
 
   call s:set_syntax()
+
+  let b:current_syntax = 'unite'
 endfunction"}}}
 
 function! unite#view#_resize_window() "{{{

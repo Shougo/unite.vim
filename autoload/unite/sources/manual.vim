@@ -37,7 +37,20 @@ let s:source = {
       \ 'action_table' : {},
       \ 'default_action' : 'narrow',
       \ 'is_listed' : 0,
+      \ 'hooks' : {},
+      \ 'syntax' : 'uniteSource__Manual',
       \}
+
+function! s:source.hooks.on_syntax(args, context) "{{{
+  syntax match uniteSource__ManualDescriptionLine / -- .*$/
+        \ contained containedin=uniteSource__Manual
+  syntax match uniteSource__ManualDescription /.*$/
+        \ contained containedin=uniteSource__ManualDescriptionLine
+  syntax match uniteSource__ManualMarker / -- /
+        \ contained containedin=uniteSource__ManualDescriptionLine
+  highlight default link uniteSource__ManualMarker Special
+  highlight default link uniteSource__ManualDescription Comment
+endfunction"}}}
 
 function! s:source.change_candidates(args, context) "{{{
   let _ = []

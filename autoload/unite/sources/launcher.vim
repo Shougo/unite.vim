@@ -39,6 +39,7 @@ let s:source = {
       \ 'description' : 'candidates from executable files',
       \ 'default_kind' : 'guicmd',
       \ 'converters' : 'converter_file_directory',
+      \ 'max_candidates' : 100,
       \ }
 
 let s:cached_result = {}
