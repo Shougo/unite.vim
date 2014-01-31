@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: manual.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 29 Jan 2014.
+" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,6 +54,15 @@ function! s:source.change_candidates(args, context) "{{{
             \ 'word' : v:val,
             \ 'source__word' : v:val . ':',
             \ }")
+    endif
+    if exists('g:unite_source_menu_menus')
+      " Add menu sources
+      let _ += values(map(copy(g:unite_source_menu_menus), "{
+            \ 'word' : 'menu:'.v:key,
+            \ 'abbr' : unite#util#truncate('menu:'.v:key, 25) .
+            \         (get(v:val, 'description') != '' ?
+            \            ' -- ' . v:val.description : '')
+            \ }"))
     endif
   else
     let _ += map(unite#complete#source(a:context.input,
