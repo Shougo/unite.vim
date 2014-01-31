@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: launcher.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2012.
+" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,6 +38,7 @@ let s:source = {
       \ 'name' : 'launcher',
       \ 'description' : 'candidates from executable files',
       \ 'default_kind' : 'guicmd',
+      \ 'converters' : 'converter_file_directory',
       \ }
 
 let s:cached_result = {}
@@ -51,7 +52,7 @@ function! s:source.gather_candidates(args, context) "{{{
 
   if !has_key(s:cached_result, path) || a:context.is_redraw
     " Search executable files from $PATH.
-    let files = split(globpath(path, '*'), '\n')
+    let files = unite#util#uniq(split(globpath(path, '*'), '\n'))
 
     if unite#util#is_windows()
       let exts = escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.')
