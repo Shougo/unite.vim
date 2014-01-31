@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2014.
+" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -70,7 +70,7 @@ function! unite#view#_redraw_line(...) "{{{
     let linenr += 1
   endif
 
-  if linenr <= prompt_linenr || &filetype !=# 'unite'
+  if linenr == prompt_linenr || &filetype !=# 'unite'
     " Ignore.
     return
   endif

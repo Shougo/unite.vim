@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jan 2014.
+" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -327,7 +327,7 @@ function! unite#action#do(action_name, ...) "{{{
 
   let unite = unite#get_current_unite()
   if empty(candidates)
-    let num = (line('.') <= unite.prompt_linenr) ? 0 :
+    let num = (line('.') == unite.prompt_linenr) ? 0 :
           \ (line('.') - (unite.prompt_linenr + 1))
     if line('$') - (unite.prompt_linenr + 1) < num
       " Ignore.

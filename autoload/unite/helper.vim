@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helpers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2014.
+" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -270,7 +270,7 @@ endfunction"}}}
 
 function! unite#helper#get_current_candidate(...) "{{{
   let linenr = a:0 >= 1? a:1 : line('.')
-  let num = linenr <= unite#get_current_unite().prompt_linenr ?
+  let num = linenr == unite#get_current_unite().prompt_linenr ?
         \ 0 : linenr - (unite#get_current_unite().prompt_linenr+1)
 
   return get(unite#get_unite_candidates(), num, {})

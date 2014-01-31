@@ -113,7 +113,7 @@ function! unite#mappings#define_default_mappings() "{{{
   inoremap <silent><buffer> <Plug>(unite_exit)
         \ <ESC>:<C-u>call <SID>exit()<CR>
   inoremap <silent><expr><buffer> <Plug>(unite_insert_leave)
-        \ "\<ESC>0".((line('.') <= unite#get_current_unite().prompt_linenr) ?
+        \ "\<ESC>0".((line('.') == unite#get_current_unite().prompt_linenr) ?
         \ (unite#get_current_unite().prompt_linenr+1)."G" : "")
         \ . ":call unite#redraw()\<CR>"
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
@@ -482,7 +482,7 @@ function! s:rotate_source(is_next) "{{{
   call unite#view#_redraw_candidates()
 endfunction"}}}
 function! s:print_candidate() "{{{
-  if line('.') <= unite#get_current_unite().prompt_linenr
+  if line('.') == unite#get_current_unite().prompt_linenr
     " Ignore.
     return
   endif
@@ -500,7 +500,7 @@ function! s:print_message_log() "{{{
   endfor
 endfunction"}}}
 function! s:insert_selected_candidate() "{{{
-  if line('.') <= unite#get_current_unite().prompt_linenr
+  if line('.') == unite#get_current_unite().prompt_linenr
     " Ignore.
     return
   endif
@@ -563,7 +563,7 @@ function! s:loop_cursor_down(is_skip_not_matched) "{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
-  if line('.') <= prompt_linenr && !is_insert
+  if line('.') == prompt_linenr && !is_insert
     return line('.') == line('$') &&
           \ empty(unite#get_unite_candidates()) ? '2G' : 'j'
   endif
@@ -579,7 +579,7 @@ function! s:loop_cursor_down(is_skip_not_matched) "{{{
 
   let num = line('.') - (prompt_linenr + 1)
   let cnt = 1
-  if line('.') <= prompt_linenr
+  if line('.') == prompt_linenr
     let cnt += prompt_linenr - line('.')
   endif
   if is_insert && line('.') == prompt_linenr
@@ -628,7 +628,7 @@ function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched) "{{{
 
   let num = line('.') - (prompt_linenr + 1)
   let cnt = 1
-  if line('.') <= prompt_linenr
+  if line('.') == prompt_linenr
     let cnt += prompt_linenr - line('.')
   endif
   if is_insert && line('.') == prompt_linenr+2
@@ -697,7 +697,7 @@ function! s:disable_max_candidates() "{{{
   call s:redraw_all_candidates()
 endfunction"}}}
 function! s:narrowing_path() "{{{
-  if line('.') <= unite#get_current_unite().prompt_linenr
+  if line('.') == unite#get_current_unite().prompt_linenr
     " Ignore.
     return
   endif

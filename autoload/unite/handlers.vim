@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2014.
+" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -183,7 +183,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   if exists('b:current_syntax') && !context.no_cursor_line
     2match
 
-    if line('.') <= prompt_linenr+1 || mode('.') == 'i' ||
+    if abs(line('.') - prompt_linenr) <= 1 || mode('.') == 'i' ||
           \ split(reltimestr(reltime(unite.cursor_line_time)))[0] > '0.10'
       call s:set_cursor_line()
     endif
@@ -263,7 +263,7 @@ endfunction"}}}
 function! unite#handlers#_on_insert_char_pre()  "{{{
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
-  if line('.') <= prompt_linenr
+  if line('.') == prompt_linenr
     return
   endif
 
@@ -366,8 +366,8 @@ function! s:set_cursor_line()
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
 
-  execute '2match' (line('.') <= prompt_linenr ?
-        \ line('$') <= prompt_linenr && context.input != '' ?
+  execute '2match' (line('.') == prompt_linenr ?
+        \ line('$') == prompt_linenr && context.input != '' ?
         \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
         \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
         \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')
