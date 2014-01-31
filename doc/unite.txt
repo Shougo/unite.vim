@@ -1983,7 +1983,7 @@ file_mru	Nominates files you used recently as candidates, ordering
 						*unite-source-file_rec*
 file_rec	Gather files recursive and nominates all directory or file
 		names under the search directory(argument 1) or the current
-		directly(if argument is omitted) as candidates.  This may get
+		directory (if argument is omitted) as candidates.  This may get
 		Vim frozen when there are too many candidates.  The candidates
 		are cached by file_rec source.  To clear cache, use
 		|<Plug>(unite_redraw)| keymapping.
