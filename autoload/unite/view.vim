@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2014.
+" Last Modified: 01 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -173,8 +173,13 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
   endif
 endfunction"}}}
 
-function! unite#view#_set_highlight() "{{{
+function! unite#view#_set_syntax() "{{{
   syntax clear
+
+  syntax match uniteQuickMatchLine /^.|.*/
+        \ contains=uniteQuickMatchTrigger,uniteCandidateSourceName
+  syntax match uniteQuickMatchTrigger /^.|/ contained
+  syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 
   let unite = unite#get_current_unite()
 

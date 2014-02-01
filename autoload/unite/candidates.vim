@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: candidates.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2014.
+" Last Modified: 01 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,7 +68,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
 
       " Initialize.
       call unite#helper#call_hook(sources, 'on_init')
-      call unite#view#_set_highlight()
+      call unite#view#_set_syntax()
     endif
   endif
 
