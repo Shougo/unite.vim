@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: start.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2014.
+" Last Modified: 01 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,7 +46,7 @@ function! unite#start#standard(sources, ...) "{{{
     endif
 
     call unite#print_message(
-          \ '[unite.vim] manual mode: Please input source name')
+          \ '[unite.vim] interactive mode: Please input source name')
   endif
 
   if context.resume

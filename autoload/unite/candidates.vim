@@ -49,8 +49,8 @@ function! unite#candidates#_recache(input, is_force) "{{{
     if a:input == ''
       let sources = []
     elseif a:input !~ '^.\{-}\%(\\\@<!\s\)\+'
-      " Use manual source.
-      let sources = unite#init#_loaded_sources(['manual'], context)
+      " Use interactive source.
+      let sources = unite#init#_loaded_sources(['interactive'], context)
     else
       " Use specified source.
       let [args, _] = unite#helper#parse_options_args(

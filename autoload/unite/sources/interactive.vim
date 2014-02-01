@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: manual.vim
+" FILE: interactive.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 31 Jan 2014.
+" Last Modified: 01 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,29 +27,29 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#manual#define()
+function! unite#sources#interactive#define()
   return s:source
 endfunction
 
 let s:source = {
-      \ 'name' : 'manual',
-      \ 'description' : 'candidates from unite sources by manual',
+      \ 'name' : 'interactive',
+      \ 'description' : 'candidates from unite sources by interactive',
       \ 'action_table' : {},
       \ 'default_action' : 'narrow',
       \ 'is_listed' : 0,
       \ 'hooks' : {},
-      \ 'syntax' : 'uniteSource__Manual',
+      \ 'syntax' : 'uniteSource__Interactive',
       \}
 
 function! s:source.hooks.on_syntax(args, context) "{{{
-  syntax match uniteSource__ManualDescriptionLine / -- .*$/
-        \ contained containedin=uniteSource__Manual
-  syntax match uniteSource__ManualDescription /.*$/
-        \ contained containedin=uniteSource__ManualDescriptionLine
-  syntax match uniteSource__ManualMarker / -- /
-        \ contained containedin=uniteSource__ManualDescriptionLine
-  highlight default link uniteSource__ManualMarker Special
-  highlight default link uniteSource__ManualDescription Comment
+  syntax match uniteSource__InteractiveDescriptionLine / -- .*$/
+        \ contained containedin=uniteSource__Interactive
+  syntax match uniteSource__InteractiveDescription /.*$/
+        \ contained containedin=uniteSource__InteractiveDescriptionLine
+  syntax match uniteSource__InteractiveMarker / -- /
+        \ contained containedin=uniteSource__InteractiveDescriptionLine
+  highlight default link uniteSource__InteractiveMarker Special
+  highlight default link uniteSource__InteractiveDescription Comment
 endfunction"}}}
 
 function! s:source.change_candidates(args, context) "{{{
