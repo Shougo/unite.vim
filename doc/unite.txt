@@ -3259,7 +3259,7 @@ See Wiki page(Japanese).
 https://github.com/Shougo/unite.vim/wiki/unite-plugins
 
 ==============================================================================
-FAQ						*unite-faq*
+FAQ						*unite-mru-faq*
 
 Q: I want to delete files in unite buffer.
 
