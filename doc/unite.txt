@@ -186,10 +186,6 @@ it is recommended to use |unite-source-file_rec/async| source, which requires
 >
 	nnoremap <leader>r :<C-u>Unite -start-insert file_rec/async:!<CR>
 <
-Most recently used files:
->
-	nnoremap <leader>m :<C-u>Unite file_mru<CR>
-<
 Search through yank history. First, this must be enabled to track yank
 history, then the mapping set.
 >
@@ -200,7 +196,7 @@ Since you can pass in multiple sources into unite you can easily create a
 mapping that will open up a unite pane with the sources you frequently use.
 To see buffers, recent files then bookmarks:
 >
-	nnoremap <silent> <leader>b :<C-u>Unite buffer file_mru bookmark<CR>
+	nnoremap <silent> <leader>b :<C-u>Unite buffer bookmark<CR>
 <
 Much more spophisticated mappings can be configured to very quickly find what
 you need in vim.
@@ -212,16 +208,14 @@ More advanced configuration example:
 	nmap    f [unite]
 
 	nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir
-	        \ -buffer-name=files buffer file_mru bookmark file<CR>
+	        \ -buffer-name=files buffer bookmark file<CR>
 	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
-	        \ -buffer-name=files -prompt=%\  buffer file_mru bookmark file<CR>
+	        \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
 	nnoremap <silent> [unite]r  :<C-u>Unite
 	        \ -buffer-name=register register<CR>
 	nnoremap <silent> [unite]o  :<C-u>Unite outline<CR>
 	nnoremap <silent> [unite]f
 	        \ :<C-u>Unite -buffer-name=resume resume<CR>
-	nnoremap <silent> [unite]d
-	        \ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
 	nnoremap <silent> [unite]ma
 	        \ :<C-u>Unite mapping<CR>
 	nnoremap <silent> [unite]me
@@ -231,15 +225,11 @@ More advanced configuration example:
 	nnoremap <silent> [unite]s
 	        \ :<C-u>Unite -buffer-name=files -no-split
 	        \ jump_point file_point buffer_tab
-	        \ file_rec:! file file/new file_mru<CR>
+	        \ file_rec:! file file/new<CR>
 
 	" Start insert.
 	"let g:unite_enable_start_insert = 1
 	"let g:unite_enable_short_source_names = 1
-
-	" To track long mru history.
-	"let g:unite_source_file_mru_long_limit = 3000
-	"let g:unite_source_directory_mru_long_limit = 3000
 
 	" Like ctrlp.vim settings.
 	"let g:unite_enable_start_insert = 1
@@ -291,12 +281,8 @@ More advanced configuration example:
 	  imap <silent><buffer><expr> <C-s>     unite#do_action('split')
 	endfunction"}}}
 
-	let g:unite_source_file_mru_limit = 200
 	let g:unite_cursor_line_highlight = 'TabLineSel'
 	let g:unite_abbr_highlight = 'TabLine'
-
-	" For optimize.
-	let g:unite_source_file_mru_filename_format = ''
 
 	if executable('jvgrep')
 	  " For jvgrep.
@@ -524,99 +510,6 @@ g:unite_source_file_ignore_pattern	*g:unite_source_file_ignore_pattern*
 		Note: This variable must be set before using |unite|.
 
 		Refer autoload/unite/sources/file.vim about the default value.
-
-					*g:unite_source_file_mru_time_format*
-g:unite_source_file_mru_time_format
-		Specify the output format of the last access time of
-		|unite-source-file_mru|. Uses |strftime()| formatting.
-
-		The default value is "(%Y/%m/%d %H:%M:%S) ".
-
-				*g:unite_source_file_mru_filename_format*
-g:unite_source_file_mru_filename_format
-		Specify the output format of the filename of
-		|unite-source-file_mru|.  The format is same to
-		|fnamemodify()|.  If this variable is empty, drawing speed
-		is faster.
-
-		The default value is ":~:.".
-
-g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
-		Specifies the file to write the information of most recent
-		used files.
-
-		The default value is |g:unite_data_directory|; '/file_mru'
-
-g:unite_source_mru_do_validate			*g:unite_source_mru_do_validate*
-		Specify whether automatically remove invalid file paths from
-		mru history.
-
-		Effective for both file_mru and directory_mru.
-
-		The default value is 1
-
-					*g:unite_source_mru_update_interval*
-g:unite_source_mru_update_interval
-		Specify the update interval to save updated mru
-		files/directories to disk.
-
-		Effective for both file_mru and directory_mru
-
-		The default value is 600 (10 minutes)
-
-g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
-		The number of recent file candidates to show in default
-		file_mru window.
-
-		The default value is 100.
-
-					*g:unite_source_file_mru_long_limit*
-g:unite_source_file_mru_long_limit
-		The maximum number of most recent files to save.
-
-		Refer to |unite-source-file_mru| for details.
-
-		The default value is 1000.
-
-		Note: The mru code has been optimized, you can set a large
-		number like 5000 without impact the performance.
-
-				*g:unite_source_file_mru_ignore_pattern*
-g:unite_source_file_mru_ignore_pattern
-		Refer autoload/unite/sources/file_mru.vim about the default
-		value.
-
-		Note: This function is deprecated.  Please use
-		|unite#custom#source()| instead.
-
-		Note: This variable must be set before using |unite|.
-
-				*g:unite_source_directory_mru_time_format*
-g:unite_source_directory_mru_time_format
-				*g:unite_source_directory_mru_filename_format*
-g:unite_source_directory_mru_filename_format
-				*g:unite_source_directory_mru_file*
-g:unite_source_directory_mru_file
-
-		The default value is |g:unite_data_directory|; '/directory_mru'
-
-				*g:unite_source_directory_mru_limit*
-g:unite_source_directory_mru_limit
-
-		The default value is 100.
-
-				*g:unite_source_directory_mru_long_limit*
-g:unite_source_directory_mru_long_limit
-
-		Refer to |unite-source-file_mru| for details.
-
-		The default value is 1000.
-
-				*g:unite_source_directory_mru_ignore_pattern*
-g:unite_source_directory_mru_ignore_pattern
-
-		Same as |unite-source-file_mru| except that the
-		targets are |unite-source-directory_mru|.
 
 g:unite_source_bookmark_directory	*g:unite_source_bookmark_directory*
 		Specify the directory where |unite-source-bookmark| writes
@@ -1956,30 +1849,6 @@ file/new	Nominates a new input file as a candidate.
 		Source arguments:
 		1. the file/directory path.
 
-						*unite-source-file_mru*
-file_mru	Nominates files you used recently as candidates, ordering
-		by time series.
-
-		For file_mru and directory_mru source, two lists are
-		maintained
-
-		1. short list for quick start; |g:unite_source_file_mru_limit|
-		2. long list for tracking mru history.
-		|g:unite_source_file_mru_long_limit|
-
-		Normally, only the short list are shown in the unite window.
-		To load the long list  Hit the key associated with
-		|<Plug>(unite_redraw)| to trigger the unite redraw event.
-
-		Or, you can start file_mru/directory_mru with argument
-		including `*`, `_`, or `all`, `long`
-
-		For example, `Unite file_mru:long`
-
-		The mru code is overhauled to tracking long mru history.
-		Set a large number like 5000 for the long limit will not
-		impact vim performance.
-
 						*unite-source-file_rec*
 file_rec	Gather files recursive and nominates all directory or file
 		names under the search directory(argument 1) or the current
@@ -2029,12 +1898,6 @@ directory/new	Nominates a new input directory as a candidate.
 
 		Source arguments:
 		1. the file/directory path.
-
-						*unite-source-directory_mru*
-directory_mru	Nominates directories you used recently as candidates,
-		ordering by time series.
-
-		Refer to |unite-source-file_mru|
 
 						*unite-source-buffer*
 buffer		Nominates opened buffers as candidates, ordering by time
@@ -2528,7 +2391,7 @@ sorter_rank	Matched rank order sorter.  The higher the matched word is or
 		This sorter is useful for file candidate source.
 		Note: This sorter is slow.
 >
-		call unite#custom#source('buffer,file,file_mru,file_rec',
+		call unite#custom#source('buffer,file,file_rec',
 		\ 'sorters', 'sorter_rank')
 <
 						*unite-filter-sorter_reverse*
@@ -2731,12 +2594,6 @@ source						*unite-action-source*
 
 Actions of each sources
 
-file_mru					*unite-action-source-file_mru*
-	delete		Delete from most recent used file candidates.
-
-directory_mru				*unite-action-source-directory_mru*
-	delete		Delete from most recent used directory candidates.
-
 bookmark					*unite-action-source-bookmark*
 	delete		Delete from bookmark file candidates.
 
@@ -2900,8 +2757,9 @@ hooks			Dictionary		(Optional)
 			"unite#get_current_unite().abbr_head".
 			Example:
 >
-			syntax match uniteSource_FileMru_Time /(.*)/ contained containedin=uniteSource_FileMru
-			highlight default link uniteSource_FileMru_Time Statement
+			  syntax match uniteSource__Buffer_Name /[^/ \[\]]\+\s/
+			        \ contained containedin=uniteSource__Buffer
+			  highlight default link uniteSource__Buffer_Name Function
 <
 			Note you must set the contained in of the same syntax
 			name as for |unite-source-attribute-syntax|.
@@ -3462,10 +3320,10 @@ Q: I want to match candidates by filename.
 
 A: >
   call unite#custom#source(
-        \ 'buffer,file_rec/async,file_rec,file_mru', 'matchers',
+        \ 'buffer,file_rec/async,file_rec', 'matchers',
         \ ['converter_tail', 'matcher_default'])
   call unite#custom#source(
-        \ 'file_rec/async,file_rec,file_mru', 'converters',
+        \ 'file_rec/async,file_rec', 'converters',
         \ ['converter_file_directory'])
 <
 
@@ -3597,30 +3455,10 @@ https://github.com/Shougo/unite.vim/issues/418
 
 A: It is feature. See |g:unite_matcher_fuzzy_max_input_length|.
 
-Q: mru source is slow in large mru files.
-https://github.com/Shougo/unite.vim/issues/422
-
-A: You can set |g:unite_source_mru_do_validate| to 0. It is faster. But unite
-does not validate mru files.
-
 Q: I don't want to get input lag like ctrlp.vim.
 
 A: You can use |unite-options-sync|. But unite.vim may block your Vim in long
 time.
-
-Q: I want to restrict the files I see to the current project or the current
-directory.
-https://github.com/Shougo/unite.vim/issues/456
-
-A: You should use |unite-filter-matcher_project_files|. >
-  call unite#custom#source(
-        \ 'file_mru', 'matchers',
-        \ ['matcher_project_files', 'matcher_fuzzy'])
-<
-Q: I want to disable mru source.
-
-A: You should set g:loaded_unite_source_mru option. >
-  let g:loaded_unite_source_mru = 1
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
