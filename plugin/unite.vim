@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2014.
+" Last Modified: 04 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -86,8 +86,8 @@ let g:unite_candidate_icon =
 let g:unite_force_overwrite_statusline =
       \ get(g:, 'unite_force_overwrite_statusline', 1)
 let g:unite_data_directory =
-      \ substitute(substitute(fnamemodify(get(
-      \   g:, 'unite_data_directory', '~/.unite'),
+      \ substitute(substitute(fnamemodify(
+      \ get(g:, 'unite_data_directory', '~/.cache/unite'),
       \  ':p'), '\\', '/', 'g'), '/$', '', '')
 if !isdirectory(g:unite_data_directory)
   call mkdir(g:unite_data_directory, 'p')
