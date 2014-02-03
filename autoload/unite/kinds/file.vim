@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Jan 2014.
+" Last Modified: 03 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -892,6 +892,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
       noautocmd execute 'buffer' bufnr
       execute 'saveas!' fnameescape(new_filename)
       noautocmd execute 'buffer' bufnr_save
+      silent! execute 'bdelete!' fnameescape(old_filename)
       silent! call delete(old_filename)
     elseif rename(old_filename, new_filename)
       call unite#print_error(
