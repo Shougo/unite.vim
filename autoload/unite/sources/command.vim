@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Apr 2013.
+" Last Modified: 05 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,6 +38,7 @@ let s:source = {
       \ 'name' : 'command',
       \ 'description' : 'candidates from Ex command',
       \ 'default_action' : 'edit',
+      \ 'default_kind' : 'command',
       \ 'max_candidates' : 200,
       \ 'action_table' : {},
       \ 'matchers' : 'matcher_regexp',
@@ -82,9 +83,9 @@ function! s:source.gather_candidates(args, context) "{{{
     let dict = {
           \ 'word' : word,
           \ 'abbr' : printf('%-16s %s', word, prototype),
-          \ 'kind' : 'command',
           \ 'action__command' : word . ' ',
           \ 'source__command' : ':'.word,
+          \ 'action__histadd' : 1,
           \ }
     let dict.action__description = dict.abbr
 
@@ -104,9 +105,9 @@ function! s:source.change_candidates(args, context) "{{{
     return [{
           \ 'word' : dummy,
           \ 'abbr' : printf('[new command] %s', dummy),
-          \ 'kind' : 'command',
           \ 'source' : 'command',
           \ 'action__command' : dummy,
+          \ 'action__histadd' : 1,
           \}]
   endif
 
@@ -129,10 +130,10 @@ function! s:caching_from_neocomplcache_dict() "{{{
           \ matchstr(line, keyword_pattern), '[\[\]]', '', 'g')
     call add(keyword_list, {
           \ 'word' : line,
-          \ 'kind' : 'command',
           \ 'action__command' : word . ' ',
           \ 'action__description' : line,
           \ 'source__command' : ':'.word,
+          \ 'action__histadd' : 1,
           \})
   endfor
 

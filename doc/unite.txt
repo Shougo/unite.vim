@@ -2268,6 +2268,9 @@ command		An interface for Ex commands of Vim.
 
 			action__command		(String)	(Required)
 				The command to run.
+			action__histadd		(Number)	(Optional)
+				If it is none zero, unite will add the execute
+				command to the history.
 
 						*unite-kind-window*
 window		An interface for Windows of Vim.
