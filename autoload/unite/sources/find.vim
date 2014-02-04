@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: find.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Feb 2014.
+" Last Modified: 05 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,7 +60,6 @@ let s:source = {
       \ 'hooks' : {},
       \ 'matchers' : ['matcher_regexp'],
       \ 'ignore_pattern' : g:unite_source_find_ignore_pattern,
-      \ 'default_kind' : 'command',
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
