@@ -37,20 +37,7 @@ function! s:source.hooks.on_init(args, context)
   let a:context.source__path = expand('%')
 endfunction
 
-function! s:create_candidate(val)
-  let matches = matchlist(a:val, '^\(.*\)\t\(.*\)$')
-
-  if empty(matches)
-    return { 'word' : 'none' }
-  endif
-
-  return {
-        \ 'word' : matches[1],
-        \ 'action__command' : matches[2]
-        \ }
-endfunction
-
-function! s:source.gather_candidates(args, context)
+function! s:source.gather_candidates(args, context) "{{{
   if len(a:args) < 2
     call unite#print_source_error(
           \ ':Unite script:command:path', s:source.name)
@@ -59,7 +46,7 @@ function! s:source.gather_candidates(args, context)
   endif
 
   let runner = a:args[0]
-  let script = globpath(&runtimepath, a:args[1])
+  let script = globpath(&runtimepath, a:args[1], 1)
   if script == ''
     let script = a:args[1]
   endif
@@ -91,9 +78,9 @@ function! s:source.gather_candidates(args, context)
     let lines = split(system(printf("%s %s %s", runner, script, a:context.source__path)), "\n")
     return filter(map(lines, 's:create_candidate(v:val)'), 'len(v:val) > 0')
   end
-endfunction
+endfunction"}}}
 
-function! s:source.async_gather_candidates(args, context)
+function! s:source.async_gather_candidates(args, context) "{{{
   if 1
     let a:context.is_async = 0
     return []
@@ -110,7 +97,34 @@ function! s:source.async_gather_candidates(args, context)
       return []
     end
   end
-endfunction
+endfunction"}}}
+
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
+  if len(a:args) < 1
+    let path = substitute($PATH,
+          \ (unite#util#is_windows() ? ';' : ':'), ',', 'g')
+    return filter(map(unite#sources#launcher#get_executables(path),
+          \ "fnamemodify(v:val, ':t')"), "stridx(v:val, a:arglead) == 0")
+  elseif len(a:args) == 2
+    return unite#sources#file#complete_file(
+          \ a:args, a:context, split(a:arglead, ':')[1], a:cmdline, a:cursorpos)
+  else
+    return []
+  endif
+endfunction"}}}
+
+function! s:create_candidate(val) "{{{
+  let matches = matchlist(a:val, '^\(.*\)\t\(.*\)$')
+
+  if empty(matches)
+    return { 'word' : 'none', 'is_dummy' : 1 }
+  endif
+
+  return {
+        \ 'word' : matches[1],
+        \ 'action__command' : matches[2]
+        \ }
+endfunction"}}}
 
 function! unite#sources#script#define()
   return s:source

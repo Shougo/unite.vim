@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: launcher.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2014.
+" Last Modified: 04 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,25 +52,28 @@ function! s:source.gather_candidates(args, context) "{{{
   endif
 
   if !has_key(s:cached_result, path) || a:context.is_redraw
-    " Search executable files from $PATH.
-    let files = unite#util#uniq(split(globpath(path, '*'), '\n'))
-
-    if unite#util#is_windows()
-      let exts = escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.')
-      let pattern = '"." . fnamemodify(v:val, ":e") =~? '.string(exts)
-    else
-      let pattern = 'executable(v:val)'
-    endif
-
-    call filter(files, pattern)
-
-    let s:cached_result[path] = map(files, "{
+    let s:cached_result[path] = map(
+          \ unite#sources#launcher#get_executables(path), "{
           \ 'word' : v:val,
           \ 'action__path' : v:val,
           \ }")
   endif
 
   return s:cached_result[path]
+endfunction"}}}
+
+function! unite#sources#launcher#get_executables(path) "{{{
+  " Search executable files from $PATH.
+  let files = unite#util#uniq(split(globpath(a:path, '*'), '\n'))
+
+  if unite#util#is_windows()
+    let exts = escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.')
+    let pattern = '"." . fnamemodify(v:val, ":e") =~? '.string(exts)
+  else
+    let pattern = 'executable(v:val)'
+  endif
+
+  return filter(files, pattern)
 endfunction"}}}
 
 let &cpo = s:save_cpo
