@@ -59,7 +59,10 @@ function! s:source.gather_candidates(args, context)
   endif
 
   let runner = a:args[0]
-  let script = a:args[1]
+  let script = globpath(&runtimepath, a:args[1])
+  if script == ''
+    let script = a:args[1]
+  endif
 
   if !executable(runner)
     call unite#print_source_error(
