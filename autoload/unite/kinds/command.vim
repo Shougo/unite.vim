@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jan 2014.
+" Last Modified: 04 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -83,7 +83,6 @@ function! s:kind.action_table.edit.func(candidate) "{{{
     call s:add_history(type, command)
     execute command
   endif
-  " call feedkeys(':' . a:candidate.action__command, 'n')
 endfunction"}}}
 "}}}
 function! s:add_history(type, command)

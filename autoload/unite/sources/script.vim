@@ -33,9 +33,14 @@ let s:source = {
       \ 'default_kind' : 'command',
       \ }
 
-function! s:source.hooks.on_init(args, context)
+function! s:source.hooks.on_init(args, context) "{{{
   let a:context.source__path = expand('%')
-endfunction
+endfunction"}}}
+function! s:source.hooks.on_close(args, context) "{{{
+  if has_key(a:context, 'source__proc')
+    call a:context.source__proc.kill()
+  endif
+endfunction "}}}
 
 function! s:source.gather_candidates(args, context) "{{{
   if len(a:args) < 2
@@ -63,40 +68,49 @@ function! s:source.gather_candidates(args, context) "{{{
     return []
   endif
 
-  if 0
-    let state = {}
-    let state.fname = tempname()
-    let state.complete = tempname()
-    let a:context.source__state = state
-    let cmd = printf("(%s %s %s > %s ; echo OK > %s)&",
-          \ runner, script, a:context.source__path,
-          \ state.fname, state.complete)
-    call system(cmd)
-    return []
-  else
+  let cmdline = printf('%s "%s" "%s"',
+          \ runner, script, a:context.source__path)
+  if !unite#util#has_vimproc()
     let a:context.is_async = 0
-    let lines = split(system(printf("%s %s %s", runner, script, a:context.source__path)), "\n")
-    return filter(map(lines, 's:create_candidate(v:val)'), 'len(v:val) > 0')
+    let lines = split(unite#util#system(cmdline), "\n")
+    return map(lines, 's:create_candidate(v:val)')
   end
+
+  " Use vimproc
+  let a:context.source__proc = vimproc#plineopen3(
+        \ vimproc#util#iconv(cmdline, &encoding, 'char'))
+  return []
 endfunction"}}}
 
 function! s:source.async_gather_candidates(args, context) "{{{
-  if 1
+  if !has_key(a:context, 'source__proc')
     let a:context.is_async = 0
+    call unite#print_source_message('Completed.', s:source.name)
     return []
-  else
-    if filereadable(a:context.source__state.complete) &&
-          \ readfile(a:context.source__state.complete) == ["OK"]
-      let a:context.is_async = 0
-      let lines = readfile(a:context.source__state.fname)
-      let result = filter(map(lines, 's:create_candidate(v:val)'), 'len(v:val) > 0')
-      call delete(a:context.source__state.complete)
-      call delete(a:context.source__state.fname)
-      return result
-    else
-      return []
-    end
-  end
+  endif
+
+  let stderr = a:context.source__proc.stderr
+  if !stderr.eof
+    " Print error.
+    let errors = filter(stderr.read_lines(-1, 100),
+          \ "v:val !~ '^\\s*$'")
+    if !empty(errors)
+      call unite#print_source_error(errors, s:source.name)
+    endif
+  endif
+
+  let stdout = a:context.source__proc.stdout
+  if stdout.eof
+    " Disable async.
+    let a:context.is_async = 0
+    call unite#print_source_message('Completed.', s:source.name)
+
+    call a:context.source__proc.waitpid()
+  endif
+
+  return map(stdout.read_lines(-1, 100),
+          \ "s:create_candidate(unite#util#iconv(
+          \    v:val, 'char', &encoding))")
 endfunction"}}}
 
 function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
