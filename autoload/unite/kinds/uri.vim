@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: uri.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jul 2013.
+" Last Modified: 04 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,7 @@ function! s:kind.action_table.start.func(candidates) "{{{
       let path = substitute(path, '/', '\\', 'g')
     endif
 
-    call s:System.open(path)
+    call unite#util#open(path)
   endfor
 endfunction"}}}
 "}}}

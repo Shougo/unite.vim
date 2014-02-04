@@ -14,19 +14,23 @@ function! s:get_list() "{{{
   endif
   return s:List
 endfunction"}}}
-
 function! s:get_string() "{{{
   if !exists('s:String')
     let s:String = unite#util#get_vital().import('Data.String')
   endif
   return s:String
 endfunction"}}}
-
 function! s:get_message() "{{{
   if !exists('s:Message')
     let s:Message = unite#util#get_vital().import('Vim.Message')
   endif
   return s:Message
+endfunction"}}}
+function! s:get_system() "{{{
+  if !exists('s:System')
+    let s:System = unite#util#get_vital().import('System.File')
+  endif
+  return s:System
 endfunction"}}}
 
 " TODO use vital's
@@ -269,7 +273,7 @@ function! unite#util#glob(pattern, ...) "{{{
     return split(unite#util#substitute_path_separator(glob(glob)), '\n')
   endif
 endfunction"}}}
-function! unite#util#command_with_restore_cursor(command)
+function! unite#util#command_with_restore_cursor(command) "{{{
   let pos = getpos('.')
   let current = winnr()
 
@@ -281,7 +285,7 @@ function! unite#util#command_with_restore_cursor(command)
   call setpos('.', pos)
 
   execute next 'wincmd w'
-endfunction
+endfunction"}}}
 function! unite#util#expand(path) "{{{
   return unite#util#get_vital().substitute_path_separator(
         \ (a:path =~ '^\~') ? substitute(a:path, '^\~', expand('~'), '') :
@@ -329,6 +333,10 @@ endfunction"}}}
 function! unite#util#escape_match(str) "{{{
   return substitute(substitute(escape(a:str, '~\.^$[]'),
         \ '\*\@<!\*\*\@!', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
+endfunction"}}}
+
+function! unite#util#open(path) "{{{
+  return s:get_system().open(a:path)
 endfunction"}}}
 
 let &cpo = s:save_cpo

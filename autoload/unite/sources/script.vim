@@ -29,51 +29,69 @@
 
 let s:source = {
       \ 'name': 'script',
-      \ 'hooks': {}
+      \ 'hooks': {},
+      \ 'default_kind' : 'command',
       \ }
 
 function! s:source.hooks.on_init(args, context)
-  let s:buffer = {
-        \ 'path' : expand('%'),
-        \ }
+  let a:context.source__path = expand('%')
 endfunction
 
 function! s:create_candidate(val)
   let matches = matchlist(a:val, '^\(.*\)\t\(.*\)$')
 
-  if len(matches) == 0
-    return {"word": "none"}
+  if empty(matches)
+    return { 'word' : 'none' }
   endif
+
   return {
-        \ "word": matches[1],
-        \ "source": "script",
-        \ "kind": "command",
-        \ "action__command": matches[2]
+        \ 'word' : matches[1],
+        \ 'action__command' : matches[2]
         \ }
 endfunction
 
 function! s:source.gather_candidates(args, context)
+  if len(a:args) < 2
+    call unite#print_source_error(
+          \ ':Unite script:command:path', s:source.name)
+    let a:context.is_async = 0
+    return []
+  endif
+
   let runner = a:args[0]
   let script = a:args[1]
-  if has("unix")
+
+  if !executable(runner)
+    call unite#print_source_error(
+          \ 'command is not executable: ' . runner, s:source.name)
+    let a:context.is_async = 0
+    return []
+  elseif !filereadable(script)
+    call unite#print_source_error(
+          \ 'script file is not readable: ' . script, s:source.name)
+    let a:context.is_async = 0
+    return []
+  endif
+
+  if 0
     let state = {}
     let state.fname = tempname()
     let state.complete = tempname()
     let a:context.source__state = state
     let cmd = printf("(%s %s %s > %s ; echo OK > %s)&",
-          \ runner, script, s:buffer.path,
+          \ runner, script, a:context.source__path,
           \ state.fname, state.complete)
     call system(cmd)
     return []
   else
     let a:context.is_async = 0
-    let lines = split(system(printf("%s %s %s", runner, script, s:buffer.path)), "\n")
+    let lines = split(system(printf("%s %s %s", runner, script, a:context.source__path)), "\n")
     return filter(map(lines, 's:create_candidate(v:val)'), 'len(v:val) > 0')
   end
 endfunction
 
 function! s:source.async_gather_candidates(args, context)
-  if !has("unix")
+  if 1
     let a:context.is_async = 0
     return []
   else
