@@ -199,5 +199,5 @@ function! s:_redir(cmd)
 endfunction
 
 function! vital#{s:self_version}#new()
-  return s:_import('').load(['Prelude', ''])
+  return s:_import('')
 endfunction
