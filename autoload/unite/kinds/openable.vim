@@ -97,12 +97,13 @@ function! s:kind.action_table.switch.func(candidates) "{{{
 
   for candidate in a:candidates
     if bufpath !=# candidate.action__path
-      call unite#util#smart_execute_command('sbuffer',
-            \ candidate.action__path)
-
-      call unite#remove_previewed_buffer_list(
+      let target = has_key(candidate, 'action__buffer_nr') ?
+            \ candidate.action__buffer_nr :
             \ bufnr(unite#util#escape_file_searching(
-            \       candidate.action__path)))
+            \       candidate.action__path))
+
+      call unite#util#smart_execute_command('sbuffer', target)
+      call unite#remove_previewed_buffer_list(target)
     endif
   endfor
 endfunction"}}}
