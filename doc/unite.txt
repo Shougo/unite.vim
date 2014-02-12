@@ -1169,6 +1169,9 @@ J		|<Plug>(unite_skip_cursor_down)|
 K		|<Plug>(unite_skip_cursor_up)|
 ?		|<Plug>(unite_quick_help)|
 N		|<Plug>(unite_new_candidate)|
+.		|<Plug>(unite_narrowing_dot)|
+<2-LeftMouse>	|<Plug>(unite_do_default_action)|
+<RightMouse>	|<Plug>(unite_exit)|
 <CR>		In case when you selected a candidate, runs default action
 b		In case when you selected a candidate, runs bookmark action
 d		In case when you selected a candidate, runs delete action
@@ -1178,7 +1181,6 @@ yy		In case when you selected a candidate, runs yank action
 p		runs preview action
 x		In case when you selected a candidate, runs
 		|<Plug>(unite_quick_match_default_action)|
-.		|<Plug>(unite_narrowing_dot)|
 
 Insert mode mappings.
 {lhs}		{rhs}
@@ -1204,6 +1206,8 @@ Insert mode mappings.
 		|i_<Plug>(unite_toggle_mark_current_candidate)|
 <S-Space>	In case when you selected a candidate,
 		|i_<Plug>(unite_toggle_mark_current_candidate_up)|
+<2-LeftMouse>	|i_<Plug>(unite_do_default_action)|
+<RightMouse>	|i_<Plug>(unite_exit)|
 <C-d>		runs delete action
 <C-e>		runs edit action
 <C-t>		runs tabopen action

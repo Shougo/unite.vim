@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2014.
+" Last Modified: 12 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -207,6 +207,8 @@ function! unite#mappings#define_default_mappings() "{{{
   nmap <buffer> ?         <Plug>(unite_quick_help)
   nmap <buffer> N         <Plug>(unite_new_candidate)
   nmap <buffer> .         <Plug>(unite_narrowing_dot)
+  nmap <buffer> <2-LeftMouse>   <Plug>(unite_do_default_action)
+  nmap <buffer> <RightMouse>    <Plug>(unite_exit)
 
   nmap <silent><buffer><expr> a
         \ unite#smart_map("\<Plug>(unite_append_enter)",
@@ -250,6 +252,8 @@ function! unite#mappings#define_default_mappings() "{{{
     imap <buffer> <ESC>     <Plug>(unite_insert_leave)
   endif
   imap <buffer> <C-g>     <Plug>(unite_exit)
+  imap <buffer> <2-LeftMouse>   <Plug>(unite_do_default_action)
+  imap <buffer> <RightMouse>    <Plug>(unite_exit)
 
   imap <silent><buffer><expr> <Space>
         \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
