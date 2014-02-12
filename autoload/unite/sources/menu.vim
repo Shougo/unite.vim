@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: menu.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Feb 2013.
+" Last Modified: 12 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,14 +43,14 @@ function! s:source.gather_candidates(args, context) "{{{
   let menu_name = get(a:args, 0, '')
   if menu_name == ''
     " All menus.
-    return values(map(copy(g:unite_source_menu_menus), "{
+    return unite#util#sort_by(values(map(copy(g:unite_source_menu_menus), "{
           \ 'word' : v:key,
           \ 'abbr' : (v:key . (has_key(v:val, 'description') ?
           \                   ' - ' . v:val.description : '')),
           \ 'kind' : 'source',
           \ 'action__source_name' : 'menu',
           \ 'action__source_args' : [v:key],
-          \ }"))
+          \ }")), 'v:val.word')
   endif
 
   " Check menu name.
