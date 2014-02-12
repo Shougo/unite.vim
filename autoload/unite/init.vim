@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2014.
+" Last Modified: 12 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -80,6 +80,11 @@ function! unite#init#_context(context, ...) "{{{
   if get(context, 'long_source_names', 0)
     " Disable short name.
     let context.short_source_names = 0
+  endif
+  if get(context, 'here', 0)
+    " Set direction.
+    let context.horizontal = 1
+    let context.direction = 'belowright'
   endif
   if &l:modified && !&l:hidden
     " Split automatically.
@@ -292,9 +297,9 @@ function! unite#init#_current_unite(sources, context) "{{{
 
   if context.here
     let context.winheight = winheight(0) - winline() +
-          \ unite.prompt_linenr + 1
-    if context.winheight < 7
-      let context.winheight = 7
+          \ unite.prompt_linenr
+    if context.winheight < 5
+      let context.winheight = 5
     endif
   endif
 
