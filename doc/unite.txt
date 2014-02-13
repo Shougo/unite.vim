@@ -1279,6 +1279,7 @@ d		In case when you selected a candidate, runs delete action
 e		In case when you selected a candidate, runs narrow action
 t		In case when you selected a candidate, runs tabopen action
 yy		In case when you selected a candidate, runs yank action
+o		In case when you selected a candidate, runs open action
 p		runs preview action
 x		In case when you selected a candidate, runs
 		|<Plug>(unite_quick_match_default_action)|
@@ -1312,6 +1313,7 @@ Insert mode mappings.
 <C-e>		runs edit action
 <C-t>		runs tabopen action
 <C-y>		runs yank action
+<C-o>		runs open action
 
 Visual mode mappings.
 {lhs}		{rhs}
