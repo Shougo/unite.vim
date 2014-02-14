@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Feb 2014.
+" Last Modified: 14 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -466,19 +466,19 @@ function! unite#view#_init_cursor() "{{{
     call unite#view#_redraw_candidates(1)
   endif
 
+  if context.quick_match
+    " Move to prompt linenr.
+    call cursor(unite.prompt_linenr, 0)
+
+    call unite#mappings#_quick_match(0)
+  endif
+
   if context.no_focus
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
       execute bufwinnr(unite.prev_bufnr).'wincmd w'
     endif
-  endif
-
-  if context.quick_match
-    " Move to prompt linenr.
-    call cursor(unite.prompt_linenr, 0)
-
-    call unite#mappings#_quick_match(0)
   endif
 endfunction"}}}
 
