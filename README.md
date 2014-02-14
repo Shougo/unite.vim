@@ -88,8 +88,8 @@ sources to the command you wish to select from as parameters. However, it's a
 pain in the ass to run the command explicitly every time, so I recommend you
 to set a key mapping for the command. See `:h unite`.
 
-Note: MRU sources are splitted.  To use mru sources, you must install it.
-https://github.com/Shougo/unite-mru
+Note: MRU sources are splitted.  To use mru sources, you must install neomru.
+https://github.com/Shougo/neomru.vim
 
 ## Resources
 
