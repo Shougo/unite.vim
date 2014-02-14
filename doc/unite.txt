@@ -534,8 +534,8 @@ g:unite_source_file_mru_time_format
 
 				*g:unite_source_file_mru_filename_format*
 g:unite_source_file_mru_filename_format
-		Specify the output format of the filename of
-		|unite-source-file_mru|.  The format is same to
+		Specify the output format of the filename for
+		|unite-source-file_mru|.  The format is the same as with
 		|fnamemodify()|.  If this variable is empty, drawing speed
 		is faster.
 
@@ -615,7 +615,7 @@ g:unite_source_directory_mru_long_limit
 				*g:unite_source_directory_mru_ignore_pattern*
 g:unite_source_directory_mru_ignore_pattern
 
-		Same as |unite-source-file_mru| except that the
+		Similar to |unite-source-file_mru|, except that the
 		targets are |unite-source-directory_mru|.
 
 g:unite_source_bookmark_directory	*g:unite_source_bookmark_directory*
@@ -1176,61 +1176,61 @@ Insert mode mappings.
 		Shows the previous candidate page.
 
 <Plug>(unite_do_default_action)		*i_<Plug>(unite_do_default_action)*
-		Same to |<Plug>(unite_do_default_action)|.
+		The same as |<Plug>(unite_do_default_action)|.
 
 				*i_<Plug>(unite_toggle_mark_current_candidate)*
 <Plug>(unite_toggle_mark_current_candidate)
-		Same to |<Plug>(unite_toggle_mark_current_candidate)|.
+		The same as |<Plug>(unite_toggle_mark_current_candidate)|.
 
 				*i_<Plug>(unite_toggle_mark_current_candidate_up)*
 <Plug>(unite_toggle_mark_current_candidate_up)
-		Same to |<Plug>(unite_toggle_mark_current_candidate_up)|.
+		The same as |<Plug>(unite_toggle_mark_current_candidate_up)|.
 <Plug>(unite_choose_action)		*i_<Plug>(unite_choose_action)*
-		Same to |<Plug>(unite_choose_action)|.
+		The same as |<Plug>(unite_choose_action)|.
 
 <Plug>(unite_move_head)				*i_<Plug>(unite_move_head)*
 		Goes to the top of the line.
 
 				*i_<Plug>(unite_quick_match_default_action)*
 <Plug>(unite_quick_match_default_action)
-		Same to |<Plug>(unite_quick_match_default_action)|.
+		The same as |<Plug>(unite_quick_match_default_action)|.
 
 				*i_<Plug>(unite_quick_match_choose_action)*
 <Plug>(unite_quick_match_choose_action)
-		Same to |<Plug>(unite_quick_match_choose_action)|.
+		The same as |<Plug>(unite_quick_match_choose_action)|.
 
 <Plug>(unite_input_directory)		*i_<Plug>(unite_input_directory)*
-		Same to |<Plug>(unite_input_directory)|.
+		The same as |<Plug>(unite_input_directory)|.
 
 				*i_<Plug>(unite_toggle_transpose_window)*
 <Plug>(unite_toggle_selected_candidates)
-		Same to |<Plug>(unite_toggle_transpose_window)|.
+		The same as |<Plug>(unite_toggle_transpose_window)|.
 
 <Plug>(unite_narrowing_path)		*i_<Plug>(unite_narrowing_path)*
-		Same to |<Plug>(unite_narrowing_path)|.
+		The same as |<Plug>(unite_narrowing_path)|.
 
 				*i_<Plug>(unite_narrowing_input_history)*
 <Plug>(unite_narrowing_input_history)
-		Same to |<Plug>(unite_narrowing_input_history)|.
+		The same as |<Plug>(unite_narrowing_input_history)|.
 
 <Plug>(unite_toggle_auto_preview)	*i_<Plug>(unite_toggle_auto_preview)*
-		Same to |<Plug>(unite_toggle_auto_preview)|.
+		The same as |<Plug>(unite_toggle_auto_preview)|.
 
 				*i_<Plug>(unite_disable_max_candidates)*
 <Plug>(unite_disable_max_candidates)
-		Same to |<Plug>(unite_disable_max_candidates)|.
+		The same as |<Plug>(unite_disable_max_candidates)|.
 
 <Plug>(unite_redraw)				*i_<Plug>(unite_redraw)*
-		Same to |<Plug>(unite_redraw)|.
+		The same as |<Plug>(unite_redraw)|.
 
 <Plug>(unite_print_candidate)		*i_<Plug>(unite_print_candidate)*
-		Same to |<Plug>(unite_print_candidate)|.
+		The same as |<Plug>(unite_print_candidate)|.
 
 <Plug>(unite_print_message_log)		*i_<Plug>(unite_print_message_log)*
-		Same to |<Plug>(unite_print_message_log)|.
+		The same as |<Plug>(unite_print_message_log)|.
 
 <Plug>(unite_new_candidate)			*i_<Plug>(unite_new_candidate)*
-		Same to |<Plug>(unite_new_candidate)|.
+		The same as |<Plug>(unite_new_candidate)|.
 
 Visual mode mappings.
 
@@ -1379,10 +1379,10 @@ unite#start_complete({sources}, [{context}])	*unite#start_complete()*
 		\ 'input' : vimshell#get_cur_text()})
 <
 unite#get_candidates({sources}, [, {context}])	*unite#get_candidates()*
-		Get a list of all candidates of sources.  Unite buffer is not
-		created.  This function may not work in some sources.  The
-		arguments feature is same to |unite#start()|.
-		Note: max_candidates option of sources is ignored.
+		Get a list of all source candidates.  A unite buffer is not
+		created.  This function may not work with some sources.
+		The arguments are the same as with |unite#start()|.
+		Note: the max_candidates source option is ignored.
 
 						*unite#action#do_candidates()*
 unite#action#do_candidates({action-name}, {candidates}, [, {context}])
@@ -1646,7 +1646,7 @@ unite#take_action({action-name}, {candidate})
 
 						*unite#take_parents_action()*
 unite#take_parents_action({action-name}, {candidate}, {extend-candidate})
-		Same to |unite#take_action()| but searches the parents' action
+		Similar to |unite#take_action()|, but searches the parents' action
 		table with combining {extend-candidate} on {candidate}.  This
 		is handy for reusing parents' actions.
 
@@ -1704,8 +1704,9 @@ OPTIONS						*unite-options*
 {options} are options for a unite buffer.  You may give the following
 parameters for an option.  You need to escape spaces with "\".
 
-Note: In unite.vim, options converts to a context dictionary.
-The "-buffer-name" option is same to "buffer_name" key in context.
+Note: In unite.vim options are converted to a context dictionary.
+The "-buffer-name" option is the same as the "buffer_name" key in 
+the context dictionary.
 
 						*unite-options-buffer-name*
 		-buffer-name={buffer-name}
@@ -1714,10 +1715,10 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 
 						*unite-options-profile-name*
 		-profile-name={profile-name}		(String)
-		Specify a profile name.  The default profile name is same to
-		buffer name.  But if you use single source and omit buffer
-		name, "source/{source-name}" is used.  So you can define source
-		specific profile.
+		Specify a profile name.  The default profile name is the same
+		as the buffer name.  But if you use a single source and omit
+		the buffer name, "source/{source-name}" is used.  This way
+		you can define source specific profiles.
 
 						*unite-options-input*
 		-input={input-text}
@@ -1766,9 +1767,9 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 
 						*unite-options-immediately*
 		-immediately
-		If the number of candidates is exactly one, it runs default
-		action immediately.  If candidate is empty, it doesn't open any
-		unite buffer.
+		If the number of candidates is exactly one, it runs the
+		default action immediately.  If the candidate list is 
+		empty, it does not open any unite buffer.
 
 						*unite-options-no-empty*
 		-no-empty
@@ -1776,11 +1777,11 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 
 						*unite-options-auto-preview*
 		-auto-preview
-		When you selected a candidate, it runs "preview" action
+		When you select a candidate, it runs the "preview" action
 		automatically.
 						*unite-options-auto-highlight*
 		-auto-highlight
-		When you selected a candidate, it runs "highlight" action
+		When you select a candidate, it runs the "highlight" action
 		automatically.
 
 						*unite-options-complete*
@@ -1806,12 +1807,12 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 
 						*unite-options-direction*
 		-direction={direction}
-		Defines split position rule.  The default value is the same to
-		|g:unite_split_rule|.
+		Defines split position rule.  The default value is
+		as |g:unite_split_rule|.
 
 						*unite-options-no-split*
 		-no-split
-		No split unite buffer and no resize window.
+		Open the unite buffer in the current window.
 
 						*unite-options-verbose*
 		-verbose
@@ -1882,7 +1883,7 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 
 						*unite-options-no-focus*
 		-no-focus
-		No the focus on the unite buffer after opening a unite buffer.
+		Do not focus the unite buffer after opening it.
 
 					*unite-options-short-source-names*
 		-short-source-names
@@ -1899,10 +1900,10 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 
 						*unite-options-resume*
 		-resume
-		Reuse previous buffer if exists. If not, create new unite
-		buffer.  Cf: |:UniteResume|
-		Note: It uses |unite-options-buffer-name| to search previous
-		buffer. You must set it.
+		Reuse any previous buffer.  If none exist, a new unite
+		buffer gets created.  Cf: |:UniteResume|
+		Note: It uses |unite-options-buffer-name| to search for
+		previous buffers, which must be set.
 
 						*unite-options-wrap*
 		-wrap
@@ -1913,22 +1914,21 @@ The "-buffer-name" option is same to "buffer_name" key in context.
 
 						*unite-options-select*
 		-select={select-candidate-index}
-		If it is set, unite will select specified candidate.
-		Note: The candidate index is 0-origin.
+		If it is set, unite will select the specified candidate.
+		Note: The candidate index is 0-based.
 
 						*unite-options-log*
 		-log
-		Enable log mode.  In log mode, cursor move to bottom
-		automatically.
+		Enable log mode.  In log mode, the cursor is placed at the
+		bottom automatically.
 
 						*unite-options-truncate*
 		-truncate
-		If it is set, lines longer than the width of the window will
-		truncate candidate abbr.
+		Truncate lines longer than the window's width.
 
 						*unite-options-tab*
 		-tab
-		Open new unite buffer by new tabpage.
+		Open a new unite buffer in a new tabpage.
 
 						*unite-options-sync*
 		-sync
@@ -1945,9 +1945,8 @@ SOURCES						*unite-sources*
 						*unite-source-file*
 file		Nominates an input file as a candidate.
 		Note: This source doesn't nominate files in the parent
-		directory (Example: "../") or hidden files(Example:
-		".gitignore").  If you want to open these files, please input
-		".".
+		directory (e.g. "../") or hidden files (e.g. ".gitignore").
+		If you want to open these files, please input ".".
 
 		Source arguments:
 		1. the file/directory path.
@@ -2003,15 +2002,15 @@ file_rec	Gather files recursive and nominates all directory or file
 		1. the search directory.
 
 						*unite-source-file_rec/async*
-file_rec/async	Same as |unite-source-file_rec|, but get files asynchronously.
+file_rec/async	Similar to |unite-source-file_rec|, but get files asynchronously.
 		Note: This source requires vimproc.
-		Note: This source requires "ag" or "find" command.
+		Note: This source requires the "ag" or "find" command.
 		Note: Windows "find" command is not supported.
-		Note: If you edit file by Vim, file_rec/async source will
-		update cache file.
-		Note: If the candidates are over
-		|g:unite_source_file_rec_max_cache_files|, it will disable
-		make cache.
+		Note: If you edit one of the files in Vim, the
+		file_rec/async source will update its cache.
+		Note: If there are more than
+		|g:unite_source_file_rec_max_cache_files| candidates,
+		caching will be disabled.
 
 		Source arguments:
 		1. the search directory.
@@ -2051,7 +2050,7 @@ buffer		Nominates opened buffers as candidates, ordering by time
 						*unite-source-buffer_tab*
 buffer_tab	Nominates opened buffers only in the current tab as
 		candidates, ordering by time series.
-		Argument specification is same to buffer source.
+		Arguments are the same as for |unite-source-buffer|.
 
 		Source arguments:
 		1. "!" or "?".
@@ -2576,7 +2575,7 @@ converter_relative_word
 converter_relative_abbr
 		A converter which converts a candidate's abbr into a
 		corresponding relative path.
-		Specification of this term is almost the same as
+		Specification of this term is similar to
 		|unite-filter-converter_relative_word|.
 
 					*unite-filter-converter_tail*
@@ -2856,7 +2855,7 @@ change_candidates	Function	(Optional)
 			This function takes {args} and {context} as its
 			parameter and returns a list of {candidate}.
 			The specification of the parameters and the returned
-			value is same as
+			value is the same as for
 			|unite-source-attribute-gather_candidates|.
 
 			*unite-source-attribute-async_gather_candidates*
@@ -2869,7 +2868,7 @@ async_gather_candidates	Function	(Optional)
 			and returns a list of {candidate}.
 
 			The specification of the parameters and the returned
-			value is same as
+			value is the same as for
 			|unite-source-attribute-gather_candidates|.
 
 					*unite-source-attribute-complete*
@@ -2951,7 +2950,8 @@ action_table		Dictionary		(Optional)
 			Adds source's own action table.
 			In this dictionary, the key is the kind and the value
 			is the action table.  The specification of action
-			table is same as |unite-kind-attribute-action_table|.
+			table is the same as for
+			|unite-kind-attribute-action_table|.
 			With this dictionary, you can define original
 			|unite-kind-attribute-action_table| for each kind in
 			source's own context.
@@ -3369,7 +3369,7 @@ filter			Function		(Required)
 			This function takes {candidates} and {context} as its
 			parameter and returns a list of {candidate}.
 			The specification of the parameters and the returned
-			value is same as
+			value is the same as for
 			|unite-source-attribute-gather_candidates|.
 
 					*unite-filter-attribute-description*
