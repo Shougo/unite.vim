@@ -69,8 +69,8 @@ function! unite#complete#source(arglead, cmdline, cursorpos) "{{{
 endfunction"}}}
 
 function! unite#complete#buffer_name(arglead, cmdline, cursorpos) "{{{
-  let _ = map(filter(range(1, bufnr('$')), '
-        \ getbufvar(v:val, "&filetype") ==# "unite"),
+  let _ = map(filter(range(1, bufnr('$')),
+        \ 'getbufvar(v:val, "&filetype") ==# "unite"'),
         \ 'getbufvar(v:val, "unite").buffer_name')
   let _ += unite#variables#options()
 
