@@ -140,6 +140,25 @@ function! s:call_unite_buffer_dir(args) "{{{
 endfunction"}}}
 
 command! -nargs=+ -complete=customlist,unite#complete#source
+      \ UniteWithProjectDir
+      \ call s:call_unite_project_dir(<q-args>)
+function! s:call_unite_project_dir(args) "{{{
+  let [args, options] = unite#helper#parse_options_args(a:args)
+  if !has_key(options, 'input')
+    let path = &filetype ==# 'vimfiler' ?
+          \ b:vimfiler.current_dir :
+          \ unite#substitute_path_separator(getcwd())
+    let path = unite#util#path2project_directory(path)
+    if path !~ '/$'
+      let path .= '/'
+    endif
+    let options.input = escape(path, ' ')
+  endif
+
+  call unite#start(args, options)
+endfunction"}}}
+
+command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithCursorWord call s:call_unite_cursor_word(<q-args>)
 function! s:call_unite_cursor_word(args) "{{{
   let [args, options] = unite#helper#parse_options_args(a:args)

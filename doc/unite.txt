@@ -351,6 +351,10 @@ COMMANDS 					*unite-commands*
 		Equivalent to |:Unite| except that it targets the buffer's
 		directory for the initial narrowing text.
 
+:UniteWithProjectDir [{options}] {sources}	*:UniteWithProjectDir*
+		Equivalent to |:Unite| except that it targets the project
+		directory for the initial narrowing text.
+
 :UniteWithInput [{options}] {sources}		*:UniteWithInput*
 		Equivalent to |:Unite| except that it will prompt the user for
 		narrowing text before opening the unite buffer.
