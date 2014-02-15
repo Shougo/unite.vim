@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 08 Jan 2014.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,18 +68,25 @@ function! s:source.hooks.on_init(args, context) "{{{
     return
   endif
 
-  if type(get(a:args, 0, '')) == type([])
-    let a:context.source__target = a:args[0]
+  let args = unite#helper#parse_project_bang(a:args)
+
+  if a:context.is_restart
+    let directory = unite#util#input('Target: ',
+          \ directory, 'dir', a:context.source_name)
+  endif
+
+  if type(get(args, 0, '')) == type([])
+    let a:context.source__target = args[0]
     let targets = a:context.source__target
   else
-    let default = get(a:args, 0, '')
+    let default = get(args, 0, '')
 
     if default == ''
       let default = '.'
     endif
 
-    if type(get(a:args, 0, '')) == type('')
-          \ && get(a:args, 0, '') == ''
+    if type(get(args, 0, '')) == type('')
+          \ && get(args, 0, '') == ''
           \ && a:context.input == ''
       let target = unite#util#substitute_path_separator(
             \ unite#util#input('Target: ', default, 'file'))
@@ -107,9 +114,9 @@ function! s:source.hooks.on_init(args, context) "{{{
           \ 'substitute(v:val, "\\*\\+$", "", "")')
   endif
 
-  let a:context.source__extra_opts = get(a:args, 1, '')
+  let a:context.source__extra_opts = get(args, 1, '')
 
-  let a:context.source__input = get(a:args, 2, a:context.input)
+  let a:context.source__input = get(args, 2, a:context.input)
   if a:context.source__input == ''
     let a:context.source__input = unite#util#input('Pattern: ')
   endif

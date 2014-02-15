@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 08 Jan 2014.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -76,18 +76,20 @@ let s:source = {
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
-  if type(get(a:args, 0, '')) == type([])
-    let a:context.source__target = a:args[0]
+  let args = unite#helper#parse_options_args(a:args)
+
+  if type(get(args, 0, '')) == type([])
+    let a:context.source__target = args[0]
     let targets = a:context.source__target
   else
-    let default = get(a:args, 0, '')
+    let default = get(args, 0, '')
 
     if default == ''
       let default = '**'
     endif
 
-    if type(get(a:args, 0, '')) == type('')
-          \ && get(a:args, 0, '') == ''
+    if type(get(args, 0, '')) == type('')
+          \ && get(args, 0, '') == ''
       let target = unite#util#substitute_path_separator(
             \ unite#util#input('Target: ', default, 'file'))
     else
@@ -103,7 +105,7 @@ function! s:source.hooks.on_init(args, context) "{{{
           \ 'substitute(v:val, "\\*\\+$", "", "")')
   endif
 
-  let a:context.source__input = get(a:args, 1, '')
+  let a:context.source__input = get(args, 1, '')
   if a:context.source__input == ''
     let a:context.source__input = unite#util#input('Pattern: ')
   endif

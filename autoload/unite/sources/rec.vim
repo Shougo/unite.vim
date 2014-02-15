@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jan 2014.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -413,8 +413,8 @@ endfunction"}}}
 
 " Misc.
 function! s:get_path(args, context) "{{{
-  let directory = get(
-        \ filter(copy(a:args), "v:val != '!'"), 0, '')
+  let args = unite#helper#parse_project_bang(a:args)
+  let directory = get(args, 0, '')
   if directory == ''
     let directory = isdirectory(a:context.input) ?
           \ a:context.input : getcwd()
@@ -423,11 +423,6 @@ function! s:get_path(args, context) "{{{
   if a:context.is_restart
     let directory = unite#util#input('Target: ',
           \ directory, 'dir', a:context.source_name)
-  endif
-
-  if get(a:args, 0, '') == '!'
-    " Use project directory.
-    return unite#util#path2project_directory(directory, 1)
   endif
 
   let directory = unite#util#substitute_path_separator(

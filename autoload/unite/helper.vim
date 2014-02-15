@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helpers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2014.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -158,6 +158,20 @@ function! unite#helper#parse_options_args(args) "{{{
   endfor
 
   return [_, options]
+endfunction"}}}
+
+function! unite#helper#parse_project_bang(args) "{{{
+  let args = filter(copy(a:args), "v:val != '!'")
+  if empty(args)
+    let args = ['']
+  endif
+
+  if get(a:args, 0, '') == '!'
+    " Use project directory.
+    let args[0] = unite#util#path2project_directory(args[0], 1)
+  endif
+
+  return args
 endfunction"}}}
 
 function! unite#helper#get_marked_candidates() "{{{
