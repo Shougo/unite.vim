@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Feb 2014.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -183,14 +183,17 @@ function! unite#mappings#define_default_mappings() "{{{
   nmap <buffer> I         <Plug>(unite_insert_head)
   nmap <buffer> A         <Plug>(unite_append_end)
   nmap <buffer> q         <Plug>(unite_exit)
+  nmap <buffer> <C-g>     <Plug>(unite_exit)
   nmap <buffer> Q         <Plug>(unite_all_exit)
+  nmap <buffer> g<C-g>    <Plug>(unite_all_exit)
   nmap <buffer> <CR>      <Plug>(unite_do_default_action)
   nmap <buffer> <Space>   <Plug>(unite_toggle_mark_current_candidate)
   nmap <buffer> <S-Space> <Plug>(unite_toggle_mark_current_candidate_up)
   nmap <buffer> <Tab>     <Plug>(unite_choose_action)
   nmap <buffer> <C-n>     <Plug>(unite_rotate_next_source)
   nmap <buffer> <C-p>     <Plug>(unite_rotate_previous_source)
-  nmap <buffer> <C-g>     <Plug>(unite_print_message_log)
+  nmap <buffer> <C-a>     <Plug>(unite_print_message_log)
+  nmap <buffer> <C-k>     <Plug>(unite_print_candidate)
   nmap <buffer> <C-l>     <Plug>(unite_redraw)
   nmap <buffer> gg        <Plug>(unite_cursor_top)
   nmap <buffer> G         <Plug>(unite_cursor_bottom)
@@ -251,7 +254,7 @@ function! unite#mappings#define_default_mappings() "{{{
   imap <buffer> <Home>    <Plug>(unite_move_head)
   imap <buffer> <C-l>     <Plug>(unite_redraw)
   if has('gui_running')
-    imap <buffer> <ESC>     <Plug>(unite_insert_leave)
+    imap <buffer> <ESC>   <Plug>(unite_insert_leave)
   endif
   imap <buffer> <C-g>     <Plug>(unite_exit)
   imap <buffer> <2-LeftMouse>   <Plug>(unite_do_default_action)
