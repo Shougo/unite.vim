@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Feb 2014.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -396,6 +396,22 @@ endfunction"}}}
 
 function! unite#view#_close(buffer_name)  "{{{
   let buffer_name = a:buffer_name
+
+  if buffer_name == ''
+    " Use last unite buffer.
+    if !exists('t:unite') ||
+          \ !bufexists(t:unite.last_unite_bufnr)
+      call unite#util#print_error('No unite buffer.')
+      return
+    endif
+
+    let buffer_name = getbufvar(
+          \ t:unite.last_unite_bufnr, 'unite').buffer_name
+  endif
+
+  " Search unite window.
+  let quit_winnr = unite#helper#get_unite_winnr(buffer_name)
+
   if buffer_name !~ '@\d\+$'
     " Add postfix.
     let prefix = '[unite] - '
@@ -403,9 +419,6 @@ function! unite#view#_close(buffer_name)  "{{{
     let buffer_name .= unite#helper#get_postfix(
           \ prefix, 0, tabpagebuflist(tabpagenr()))
   endif
-
-  " Search unite window.
-  let quit_winnr = unite#helper#get_unite_winnr(a:buffer_name)
 
   if quit_winnr > 0
     " Quit unite buffer.

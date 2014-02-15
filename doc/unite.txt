@@ -368,8 +368,10 @@ COMMANDS 					*unite-commands*
 		Note: Reuses the last unite buffer you used in current tab if
 		you skip specifying {buffer-name}.
 
-:UniteClose {buffer-name}			*:UniteClose*
+:UniteClose [{buffer-name}]			*:UniteClose*
 		Closes the unite buffer with {buffer-name}.
+		Note: Closes the last unite buffer you used in current tab if
+		you skip specifying {buffer-name}.
 
 The commands of source				*:unite-sources-commands*
 
