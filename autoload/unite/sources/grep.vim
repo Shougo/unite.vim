@@ -2,7 +2,7 @@
 " FILE: grep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
 "          Tomohiro Nishimura <tomohiro68 at gmail.com>
-" Last Modified: 15 Feb 2014.
+" Last Modified: 18 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,17 +68,19 @@ function! s:source.hooks.on_init(args, context) "{{{
     return
   endif
 
-  let args = unite#helper#parse_project_bang(a:args)
-
   if a:context.is_restart
     let directory = unite#util#input('Target: ',
           \ directory, 'dir', a:context.source_name)
   endif
 
-  if type(get(args, 0, '')) == type([])
+  if type(get(a:args, 0, '')) == type([])
+    let args = a:args
+
     let a:context.source__target = args[0]
     let targets = a:context.source__target
   else
+    let args = unite#helper#parse_project_bang(a:args)
+
     let default = get(args, 0, '')
 
     if default == ''
