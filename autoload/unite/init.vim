@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Feb 2014.
+" Last Modified: 18 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -558,7 +558,7 @@ function! unite#init#_loaded_sources(sources, context) "{{{
           call unite#util#print_error(
                 \ 'unite.vim: Invalid source name "' .
                 \ source_name . '" is detected.')
-          call neosnippet#util#print_error(
+          call unite#util#print_error(
                 \ 'To use MRU features, you must install neomru from ' .
                 \ 'https://github.com/Shougo/neomru.vim.')
           throw 'unite.vim: Invalid source'
