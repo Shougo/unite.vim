@@ -119,13 +119,7 @@ function! s:system(str, ...)
     let args += [input] + rest
   endif
 
-  if use_vimproc
-    " vimproc's parser seems to treat # as a comment
-    let args[0] = escape(args[0], '#')
-    let funcname = 'vimproc#system'
-  else
-    let funcname = 'system'
-  endif
+  let funcname = use_vimproc ? 'vimproc#system' : 'system'
   let output = call(funcname, args)
   let output = s:iconv(output, 'char', &encoding)
 
