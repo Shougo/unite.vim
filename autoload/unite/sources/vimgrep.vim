@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimgrep.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 15 Feb 2014.
+" Last Modified: 18 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -76,7 +76,7 @@ let s:source = {
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
-  let args = unite#helper#parse_options_args(a:args)
+  let args = unite#helper#parse_project_bang(a:args)
 
   if type(get(args, 0, '')) == type([])
     let a:context.source__target = args[0]
