@@ -68,11 +68,6 @@ function! s:source.hooks.on_init(args, context) "{{{
     return
   endif
 
-  if a:context.is_restart
-    let directory = unite#util#input('Target: ',
-          \ a:context.source__directory, 'dir', a:context.source_name)
-  endif
-
   if type(get(a:args, 0, '')) == type([])
     let args = a:args
 
