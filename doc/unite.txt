@@ -1628,6 +1628,7 @@ the context dictionary.
 		as the buffer name.  But if you use a single source and omit
 		the buffer name, "source/{source-name}" is used.  This way
 		you can define source specific profiles.
+		Note: https://github.com/Shougo/unite.vim/issues/277
 
 						*unite-options-input*
 		-input={input-text}
