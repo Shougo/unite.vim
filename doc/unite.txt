@@ -168,7 +168,7 @@ With off the fexibility and power that unite gives you it is recommended that
 you create some normal mode mappings for invoking unite in your .vimrc file.
 
 A simple mapping that will configure <leader>-f to browse for a file in the
-current working dorectory:
+current working directory:
 >
 	nnoremap <leader>f :<C-u>Unite file<CR>
 <
