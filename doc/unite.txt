@@ -1626,8 +1626,8 @@ the context dictionary.
 		-profile-name={profile-name}		(String)
 		Specify a profile name.  The default profile name is the same
 		as the buffer name.  But if you use a single source and omit
-		the buffer name, "source/{source-name}" is used.  This way
-		you can define source specific profiles.
+		the buffer name, "source/{source-name}" or "default" is used.
+		This way you can define source specific profiles.
 		Note: https://github.com/Shougo/unite.vim/issues/277
 
 						*unite-options-input*
