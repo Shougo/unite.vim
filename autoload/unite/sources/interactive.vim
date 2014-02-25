@@ -60,12 +60,12 @@ function! s:source.change_candidates(args, context) "{{{
             \ 'word' : v:val.name,
             \ 'abbr' : unite#util#truncate(v:val.name, 25) .
             \         (v:val.description != '' ? ' -- ' . v:val.description : ''),
-            \ 'source__word' : v:val.name . ':',
+            \ 'source__word' : v:val.name . ': ',
             \ }")
     if exists('*neobundle#get_unite_sources')
       let _ += map(neobundle#get_unite_sources(), "{
             \ 'word' : v:val,
-            \ 'source__word' : v:val . ':',
+            \ 'source__word' : v:val . ': ',
             \ }")
     endif
     if exists('g:unite_source_menu_menus')
@@ -75,14 +75,14 @@ function! s:source.change_candidates(args, context) "{{{
             \ 'abbr' : unite#util#truncate('menu:'.v:key, 25) .
             \         (get(v:val, 'description') != '' ?
             \            ' -- ' . v:val.description : ''),
-            \ 'source__word' : 'menu:' . v:key . ':',
+            \ 'source__word' : 'menu:' . v:key . ' ',
             \ }"))
     endif
   else
     let _ += map(unite#complete#source(a:context.input,
           \ 'Unite ' . a:context.input, 0), "{
           \ 'word' : v:val,
-          \ 'source__word' : v:val . ':',
+          \ 'source__word' : v:val . ': ',
           \ }")
   endif
 
@@ -95,7 +95,7 @@ let s:source.action_table.narrow = {
       \ 'is_quit' : 0,
       \ }
 function! s:source.action_table.narrow.func(candidate) "{{{
-  call unite#mappings#narrowing(a:candidate.source__word)
+  call unite#mappings#narrowing(a:candidate.source__word, 0)
 endfunction"}}}
 "}}}
 

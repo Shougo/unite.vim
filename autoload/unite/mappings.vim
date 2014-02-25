@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Feb 2014.
+" Last Modified: 25 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -277,15 +277,13 @@ function! unite#mappings#define_default_mappings() "{{{
         \ unite#do_action('open')
 endfunction"}}}
 
-function! unite#mappings#narrowing(word) "{{{
+function! unite#mappings#narrowing(word, ...) "{{{
+  let is_escape = get(a:000, 0, 1)
+
   setlocal modifiable
   let unite = unite#get_current_unite()
 
-  let unite.input = (empty(unite.args)
-        \ && unite.input =~ '^.\{-}\%(\\\@<!\s\)\+\zs.*') ?
-        \ matchstr(unite.input, '^.\{-}\%(\\\@<!\s\)\+') : ''
-
-  let unite.input .= escape(a:word, ' *')
+  let unite.input .= is_escape ? escape(a:word, ' *') : a:word
   let prompt_linenr = unite.prompt_linenr
   call setline(prompt_linenr, unite.prompt . unite.input)
   call unite#redraw()
