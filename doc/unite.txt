@@ -297,7 +297,7 @@ More advanced configuration example:
 	" For ack.
 	if executable('ack-grep')
 	  " let g:unite_source_grep_command = 'ack-grep'
-	  " let g:unite_source_grep_default_opts = '--no-heading --no-color -a -H'
+	  " let g:unite_source_grep_default_opts = '--no-heading --no-color -k -H'
 	  " let g:unite_source_grep_recursive_opt = ''
 	endif
 <
@@ -2059,7 +2059,7 @@ grep		Nominates "grep" command output as candidates.
 	  " Use ack in unite grep source.
 	  let g:unite_source_grep_command = 'ack-grep'
 	  let g:unite_source_grep_default_opts =
-	  \ '--no-heading --no-color -a -H'
+	  \ '--no-heading --no-color -k -H'
 	  let g:unite_source_grep_recursive_opt = ''
 	endif
 <
