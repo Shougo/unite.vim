@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Feb 2014.
+" Last Modified: 05 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -554,18 +554,15 @@ function! unite#init#_loaded_sources(sources, context) "{{{
                 \ 'unite.vim: Invalid option "' .
                 \ source_name . '" is detected.')
           throw 'unite.vim: Invalid option'
-        elseif source_name ==# 'file_mru' || source_name ==# 'directory_mru'
-          call unite#util#print_error(
-                \ 'unite.vim: Invalid source name "' .
-                \ source_name . '" is detected.')
-          call unite#util#print_error(
-                \ 'To use MRU features, you must install neomru from ' .
-                \ 'https://github.com/Shougo/neomru.vim.')
-          throw 'unite.vim: Invalid source'
         else
           call unite#util#print_error(
                 \ 'unite.vim: Invalid source name "' .
                 \ source_name . '" is detected.')
+          if source_name ==# 'file_mru' || source_name ==# 'directory_mru'
+            call unite#util#print_error(
+                  \ 'To use MRU features, you must install neomru from ' .
+                  \ 'https://github.com/Shougo/neomru.vim.')
+          endif
           throw 'unite.vim: Invalid source'
         endif
       endif
