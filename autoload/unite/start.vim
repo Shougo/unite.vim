@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: start.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Feb 2014.
+" Last Modified: 06 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -166,6 +166,7 @@ function! unite#start#temporary(sources, ...) "{{{
   let context.is_restart = 0
   let context.quick_match = 0
   let context.start_insert = g:unite_enable_start_insert
+  let context.no_start_insert = 0
 
   if context.script
     " Set buffer-name automatically.
