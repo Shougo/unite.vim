@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Feb 2014.
+" Last Modified: 11 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -562,7 +562,7 @@ function! unite#mappings#_quick_match(is_choose) "{{{
   endif
 endfunction"}}}
 function! s:input_directory() "{{{
-  let path = unite#substitute_path_separator(
+  let path = unite#util#substitute_path_separator(
         \ input('Input narrowing directory: ',
         \         unite#helper#get_input(), 'dir'))
   let path = path.(path == '' || path =~ '/$' ? '' : '/')

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Feb 2014.
+" Last Modified: 11 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -77,7 +77,7 @@ function! s:source_buffer_all.hooks.on_post_filter(args, context) "{{{
           \ unite#util#substitute_path_separator(
           \       fnamemodify(s:make_word(candidate.action__buffer_nr), ':p'))
     let candidate.action__directory =
-          \ s:get_directory(candidate.action__buffer_nr)
+          \ unite#helper#get_buffer_directory(candidate.action__buffer_nr)
   endfor
 endfunction"}}}
 
@@ -194,19 +194,6 @@ function! s:make_abbr(bufnr, flags) "{{{
 endfunction"}}}
 function! s:compare(candidate_a, candidate_b) "{{{
   return a:candidate_b.source__time - a:candidate_a.source__time
-endfunction"}}}
-function! s:get_directory(bufnr) "{{{
-  let filetype = getbufvar(a:bufnr, '&filetype')
-  if filetype ==# 'vimfiler'
-    let dir = getbufvar(a:bufnr, 'vimfiler').current_dir
-  elseif filetype ==# 'vimshell'
-    let dir = getbufvar(a:bufnr, 'vimshell').current_dir
-  else
-    let path = unite#util#substitute_path_separator(bufname(a:bufnr))
-    let dir = unite#path2directory(path)
-  endif
-
-  return dir
 endfunction"}}}
 function! s:get_buffer_list(is_bang, is_question) "{{{
   " Get :ls flags.

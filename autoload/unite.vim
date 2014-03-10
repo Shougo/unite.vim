@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2014.
+" Last Modified: 11 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -248,9 +248,6 @@ function! unite#clear_message() "{{{
 endfunction"}}}
 function! unite#substitute_path_separator(path) "{{{
   return unite#util#substitute_path_separator(a:path)
-endfunction"}}}
-function! unite#path2directory(path) "{{{
-  return unite#util#path2directory(a:path)
 endfunction"}}}
 "}}}
 

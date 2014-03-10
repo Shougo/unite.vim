@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jan 2014.
+" Last Modified: 11 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,10 +65,12 @@ function! unite#sources#bookmark#_append(filename) "{{{
       let path = getbufvar(bufnr(filename), 'vimfiler').current_dir
     elseif &filetype ==# 'vimshell'
       let path = getbufvar(bufnr(filename), 'vimshell').current_dir
+    elseif &filetype ==# 'vinarise'
+      let path = getbufvar(bufnr(filename), 'vinarise').filename
     endif
   endif
 
-  let path = unite#substitute_path_separator(
+  let path = unite#util#substitute_path_separator(
         \ simplify(fnamemodify(unite#util#expand(path), ':p:~')))
 
   redraw
@@ -131,7 +133,7 @@ function! s:source.gather_candidates(args, context) "{{{
           \ 'action__path' : substitute(v:val[1], '[/\\\\]$', '', ''),
           \ 'action__line' : v:val[2],
           \ 'action__pattern' : v:val[3],
-          \ 'action__directory' : unite#path2directory(v:val[1]),
+          \ 'action__directory' : unite#util#path2directory(v:val[1]),
           \   }")
   endfor
   return candidates

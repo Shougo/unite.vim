@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Feb 2014.
+" Last Modified: 11 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -111,7 +111,7 @@ function! s:call_unite_current_dir(args) "{{{
   if !has_key(options, 'input')
     let path = &filetype ==# 'vimfiler' ?
           \ b:vimfiler.current_dir :
-          \ unite#substitute_path_separator(fnamemodify(getcwd(), ':p'))
+          \ unite#util#substitute_path_separator(fnamemodify(getcwd(), ':p'))
     if path !~ '/$'
       let path .= '/'
     endif
@@ -127,9 +127,7 @@ command! -nargs=+ -complete=customlist,unite#complete#source
 function! s:call_unite_buffer_dir(args) "{{{
   let [args, options] = unite#helper#parse_options_args(a:args)
   if !has_key(options, 'input')
-    let path = &filetype ==# 'vimfiler' ?
-          \ b:vimfiler.current_dir :
-          \ unite#substitute_path_separator(fnamemodify(bufname('%'), ':p:h'))
+    let path = unite#helper#get_buffer_directory(bufnr('%'))
     if path !~ '/$'
       let path .= '/'
     endif
@@ -147,7 +145,7 @@ function! s:call_unite_project_dir(args) "{{{
   if !has_key(options, 'input')
     let path = &filetype ==# 'vimfiler' ?
           \ b:vimfiler.current_dir :
-          \ unite#substitute_path_separator(getcwd())
+          \ unite#util#substitute_path_separator(getcwd())
     let path = unite#util#path2project_directory(path)
     if path !~ '/$'
       let path .= '/'
@@ -185,7 +183,7 @@ command! -nargs=+ -complete=customlist,unite#complete#source
 function! s:call_unite_input_directory(args) "{{{
   let [args, options] = unite#helper#parse_options_args(a:args)
   if !has_key(options, 'input')
-    let path = unite#substitute_path_separator(
+    let path = unite#util#substitute_path_separator(
           \ input('Input narrowing directory: ', '', 'dir'))
     if isdirectory(path) && path !~ '/$'
       let path .= '/'

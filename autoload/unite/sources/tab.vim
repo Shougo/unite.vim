@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: tab.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2013.
+" Last Modified: 11 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,7 @@ function! s:source.gather_candidates(args, context) "{{{
     " Get current window buffer in tabs.
     let bufnr = tabpagebuflist(i)[tabpagewinnr(i) - 1]
 
-    let bufname = unite#substitute_path_separator(
+    let bufname = unite#util#substitute_path_separator(
           \ (i == tabpagenr() ?
           \       bufname('#') : bufname(bufnr)))
     if bufname == ''
@@ -65,7 +65,7 @@ function! s:source.gather_candidates(args, context) "{{{
         let title = '[' . title . ']'
       endif
 
-      let cwd = unite#substitute_path_separator(
+      let cwd = unite#util#substitute_path_separator(
             \ (i == tabpagenr() ? getcwd() : gettabvar(i, 'cwd')))
       if cwd !~ '/$'
         let cwd .= '/'
