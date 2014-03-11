@@ -878,6 +878,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
   let current_dir_save = getcwd()
   lcd `=directory`
 
+  let hidden_save = &l:hidden
   try
     let old_filename = unite#util#substitute_path_separator(
           \ fnamemodify(old_filename, ':.'))
@@ -893,14 +894,18 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
 
     if bufnr > 0
       " Buffer rename.
-      silent! execute 'bdelete!' fnameescape(old_filename)
-      silent! execute 'badd' fnameescape(new_filename)
+      setlocal hidden
+      let bufnr_save = bufnr('%')
+      noautocmd execute 'buffer' bufnr
+      silent execute 'file' fnameescape(new_filename)
+      noautocmd execute 'buffer' bufnr_save
     endif
   finally
     " Restore path.
     if isdirectory(current_dir_save)
       lcd `=current_dir_save`
     endif
+    let &l:hidden = hidden_save
   endtry
 endfunction"}}}
 function! s:filename2candidate(filename) "{{{
