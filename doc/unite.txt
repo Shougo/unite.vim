@@ -120,7 +120,7 @@ This example would match bar/foo or buzz/bar/foo.
 Note: The unite action |file_rec| (read: file recursive) does a recursive
 file search by default without the need to set wildcards.
 
-Multiple keywords can be be use to narrow down the candidates.  They are
+Multiple keywords can be used to narrow down the candidates.  They are
 separated by either a space " " or a pipe "|", and act like a logical AND.
 >
 	foo bar
