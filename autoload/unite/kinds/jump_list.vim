@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: jump_list.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jan 2014.
+" Last Modified: 17 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -161,6 +161,12 @@ endfunction"}}}
 
 " Misc.
 function! s:jump(candidate, is_highlight) "{{{
+  if !a:is_highlight && s:convert_path(bufname('%')) ==#
+        \ s:convert_path(s:get_filename(a:candidate))
+    " Save current line in jump_list
+    execute 'normal!' line('.').'G'
+  endif
+
   let line = get(a:candidate, 'action__line', 1)
   let pattern = get(a:candidate, 'action__pattern', '')
 
@@ -292,6 +298,9 @@ function! s:get_bufnr(candidate) "{{{
         \ a:candidate.action__buffer_nr :
         \ bufnr(unite#util#escape_file_searching(
         \     a:candidate.action__path))
+endfunction"}}}
+function! s:convert_path(path) "{{{
+  return unite#util#substitute_path_separator(fnamemodify(a:path, ':p'))
 endfunction"}}}
 
 let &cpo = s:save_cpo
