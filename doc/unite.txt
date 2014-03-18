@@ -435,6 +435,14 @@ g:unite_cursor_line_highlight		*g:unite_cursor_line_highlight*
 
 		The default value is "PmenuSel".
 
+g:unite_cursor_line_time		*g:unite_cursor_line_time*
+		Specify the cursor line highlight time.
+		If you scrolls cursor quickly less than it, unite will skip
+		cursor line highlight.
+		If it is "0.0", this feature will be disabled.
+
+		The default value is "0.10".
+
 g:unite_abbr_highlight				*g:unite_abbr_highlight*
 		Specify abbreviated candidates highlight.
 

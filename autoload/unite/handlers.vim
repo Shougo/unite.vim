@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Feb 2014.
+" Last Modified: 19 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -184,7 +184,8 @@ function! unite#handlers#_on_cursor_moved()  "{{{
     2match
 
     if abs(line('.') - prompt_linenr) <= 1 || mode('.') == 'i' ||
-          \ split(reltimestr(reltime(unite.cursor_line_time)))[0] > '0.10'
+          \ split(reltimestr(reltime(unite.cursor_line_time)))[0]
+          \    > g:unite_cursor_line_time
       call s:set_cursor_line()
     endif
     let unite.cursor_line_time = reltime()
