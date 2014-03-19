@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: find.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 05 Feb 2014.
+" Last Modified: 18 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,6 +26,7 @@
 
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_find_command', 'find')
+call unite#util#set_default('g:unite_source_find_default_opts', '')
 call unite#util#set_default('g:unite_source_find_max_candidates', 100)
 call unite#util#set_default('g:unite_source_find_ignore_pattern',
       \'\~$\|\.\%(bak\|sw[po]\)$\|'.
@@ -73,7 +74,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     redraw
     echo "Please input command-line(quote is needed) Ex: -name '*.vim'"
     let a:context.source__input = unite#util#input(
-          \ printf('%s %s ', g:unite_source_find_command,
+          \ printf('%s %s %s ', g:unite_source_find_command, g:unite_source_find_default_opts,
           \   a:context.source__target), '-name ')
   endif
 endfunction"}}}
@@ -102,7 +103,7 @@ function! s:source.gather_candidates(args, context) "{{{
     let a:context.is_async = 1
   endif
 
-  let cmdline = printf('%s %s %s', g:unite_source_find_command,
+  let cmdline = printf('%s %s %s %s', g:unite_source_find_command, g:unite_source_find_default_opts,
     \   string(a:context.source__target), a:context.source__input)
   call unite#print_source_message('Command-line: ' . cmdline, s:source.name)
   let a:context.source__proc = vimproc#pgroup_open(
