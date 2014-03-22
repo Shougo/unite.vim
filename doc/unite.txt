@@ -1938,9 +1938,10 @@ buffer		Nominates opened buffers as candidates, ordering by time
 		If argument 1 is "!", both listed and non-listed buffer are
 		displayed.
 		If argument 1 is "?", non-listed buffer is displayed.
+		If argument 1 is "+", only modified buffers are displayed.
 
 		Source arguments:
-		1. "!" or "?".
+		1. "!", "?", or "+".
 
 						*unite-source-buffer_tab*
 buffer_tab	Nominates opened buffers only in the current tab as

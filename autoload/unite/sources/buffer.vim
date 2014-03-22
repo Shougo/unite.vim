@@ -50,9 +50,12 @@ function! s:source_buffer_all.hooks.on_init(args, context) "{{{
         \ (get(a:args, 0, '') ==# '!')
   let a:context.source__is_question =
         \ (get(a:args, 0, '') ==# '?')
+  let a:context.source__is_plus =
+        \ (get(a:args, 0, '') ==# '+')
   let a:context.source__buffer_list =
         \ s:get_buffer_list(a:context.source__is_bang,
-        \                   a:context.source__is_question)
+        \                   a:context.source__is_question,
+        \                   a:context.source__is_plus)
 endfunction"}}}
 function! s:source_buffer_all.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__Buffer_Name /[^/ \[\]]\+\s/
@@ -86,7 +89,8 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
     " Recaching.
     let a:context.source__buffer_list =
           \ s:get_buffer_list(a:context.source__is_bang,
-          \                   a:context.source__is_question)
+          \                   a:context.source__is_question,
+          \                   a:context.source__is_plus)
   endif
 
   let candidates = map(a:context.source__buffer_list, "{
@@ -115,7 +119,8 @@ function! s:source_buffer_tab.gather_candidates(args, context) "{{{
     " Recaching.
     let a:context.source__buffer_list =
           \ s:get_buffer_list(a:context.source__is_bang,
-          \                   a:context.source__is_question)
+          \                   a:context.source__is_question,
+          \                   a:context.source__is_plus)
   endif
 
   if !exists('t:unite_buffer_dictionary')
@@ -195,7 +200,7 @@ endfunction"}}}
 function! s:compare(candidate_a, candidate_b) "{{{
   return a:candidate_b.source__time - a:candidate_a.source__time
 endfunction"}}}
-function! s:get_buffer_list(is_bang, is_question) "{{{
+function! s:get_buffer_list(is_bang, is_question, is_plus) "{{{
   " Get :ls flags.
   redir => output
   silent! ls
@@ -211,7 +216,7 @@ function! s:get_buffer_list(is_bang, is_question) "{{{
   let bufnr = 1
   let buffer_list = unite#sources#buffer#variables#get_buffer_list()
   while bufnr <= bufnr('$')
-    if s:is_listed(a:is_bang, a:is_question, bufnr)
+    if s:is_listed(a:is_bang, a:is_question, a:is_plus, bufnr)
           \ && bufnr != bufnr('%')
       let dict = get(buffer_list, bufnr, {
             \ 'action__buffer_nr' : bufnr,
@@ -226,7 +231,7 @@ function! s:get_buffer_list(is_bang, is_question) "{{{
 
   call sort(list, 's:compare')
 
-  if s:is_listed(a:is_bang, a:is_question, bufnr('%'))
+  if s:is_listed(a:is_bang, a:is_question, a:is_plus, bufnr('%'))
     " Add current buffer.
     let dict = get(unite#sources#buffer#variables#get_buffer_list(),
           \ bufnr('%'), {
@@ -241,10 +246,11 @@ function! s:get_buffer_list(is_bang, is_question) "{{{
   return list
 endfunction"}}}
 
-function! s:is_listed(is_bang, is_question, bufnr) "{{{
+function! s:is_listed(is_bang, is_question, is_plus, bufnr) "{{{
   return bufexists(a:bufnr) &&
         \ (a:is_question ? !buflisted(a:bufnr) :
         \    (a:is_bang || buflisted(a:bufnr)))
+        \ && (!a:is_plus || getbufvar(a:bufnr, '&mod'))
         \ && (getbufvar(a:bufnr, '&filetype') !=# 'unite'
         \      || getbufvar(a:bufnr, 'unite').buffer_name !=#
         \         unite#get_current_unite().buffer_name)
