@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Jul 2013.
+" Last Modified: 25 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -145,7 +145,16 @@ function! s:source.action_table.do.func(candidate) "{{{
   " Check quit flag.
   if !a:candidate.action__action.is_quit
         \ && context.temporary
+    let input = unite#get_current_unite().input
+
     call unite#start#resume_from_temporary(context)
+
+    if input != ''
+      " Apply previous input changes
+      let unite = unite#get_current_unite()
+      let unite.input = ''
+      call unite#mappings#narrowing(input, 0)
+    endif
 
     " Check invalidate cache flag.
     if a:candidate.action__action.is_invalidate_cache
