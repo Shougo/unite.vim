@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Mar 2014.
+" Last Modified: 24 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -77,7 +77,7 @@ function! unite#handlers#_on_cursor_moved_i()  "{{{
   endif
 endfunction"}}}
 function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
-  let unite = getbufvar(a:bufnr, 'unite')
+  silent! let unite = getbufvar(a:bufnr, 'unite')
   if type(unite) != type({})
         \ || bufwinnr(a:bufnr) < 1
     return
@@ -239,7 +239,7 @@ function! unite#handlers#_on_buf_unload(bufname)  "{{{
   2match
 
   " Save unite value.
-  let unite = getbufvar(a:bufname, 'unite')
+  silent! let unite = getbufvar(a:bufname, 'unite')
   if type(unite) != type({})
     " Invalid unite.
     return
