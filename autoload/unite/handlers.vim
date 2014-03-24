@@ -367,7 +367,7 @@ function! s:check_redraw() "{{{
     call s:change_highlight()
   endif
 endfunction"}}}
-function! s:set_cursor_line()
+function! s:set_cursor_line() "{{{
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
@@ -378,7 +378,7 @@ function! s:set_cursor_line()
         \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
         \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')
   let unite.cursor_line_time = reltime()
-endfunction
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
