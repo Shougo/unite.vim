@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: rec.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Feb 2014.
+" Last Modified: 24 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -425,9 +425,7 @@ function! s:get_path(args, context) "{{{
           \ directory, 'dir', a:context.source_name)
   endif
 
-  let directory = unite#util#substitute_path_separator(
-        \ substitute(fnamemodify(directory, ':p'), '^\~',
-        \ unite#util#substitute_path_separator($HOME), ''))
+  let directory = unite#util#expand(directory)
 
   if directory =~ '/$'
     let directory = directory[: -2]
