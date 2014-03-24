@@ -3504,6 +3504,8 @@ re-create cache by |<Plug>(unite_redraw)| mapping.
 
 Q: matcher_fuzzy not used by ":UniteWithBufferDir file" command.
 https://github.com/Shougo/unite.vim/issues/418
+Problem with ":Unite file_rec" with long input.
+https://github.com/Shougo/unite.vim/issues/517
 
 A: It is a feature. See |g:unite_matcher_fuzzy_max_input_length|.
 

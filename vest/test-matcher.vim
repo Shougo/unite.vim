@@ -37,6 +37,14 @@ Context Source.run()
       ShouldEqual unite#filters#lua_fuzzy_matcher(
             \ [{'word' : '/unite/sources/find.vim'}],
             \ { 'input' : '/u/s/f' }, 0), [{'word' : '/unite/sources/find.vim'}]
+      ShouldEqual unite#filters#lua_fuzzy_matcher(
+            \ [{'word' : 'app/code/local/Tbuy/Utils/Block/LocalCurrency.php'}],
+            \ { 'input' : 'apcoltbuyutilsblockl' }, 1),
+            \ [{'word' : 'app/code/local/Tbuy/Utils/Block/LocalCurrency.php'}]
+      ShouldEqual unite#filters#lua_fuzzy_matcher(
+            \ [{'word' : 'app/code/local/Tbuy/Utils/Block/LocalCurrency.php'}],
+            \ { 'input' : 'apcoltbuyutilsblocklo' }, 1),
+            \ [{'word' : 'app/code/local/Tbuy/Utils/Block/LocalCurrency.php'}]
       End
   endif
 End
