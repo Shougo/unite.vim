@@ -105,7 +105,7 @@ https://github.com/Shougo/neomru.vim
 
 unite file source
 -----------------
-![Unite file source.](https://a248.e.akamai.net/camo.github.com/079f081e01557032ce18e5118c8576036763854b/687474703a2f2f6779617a6f2e636f6d2f37333739663130343130383436333263363666616566396361663365316630392e706e67)
+![Unite file source.](http://gyazo.com/7379f1041084632c66faef9caf3e1f09.png)
 
 unite action source
 -------------------
