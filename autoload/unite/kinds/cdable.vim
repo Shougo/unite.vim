@@ -113,6 +113,22 @@ function! s:kind.action_table.tabnew_cd.func(candidate) "{{{
   endif
 endfunction"}}}
 
+let s:kind.action_table.tabnew_lcd = {
+      \ 'description' : 'open a new tab page here with lcd',
+      \ 'is_tab' : 1,
+      \ }
+function! s:kind.action_table.tabnew_lcd.func(candidate) "{{{
+  if !s:check_is_directory(a:candidate.action__directory)
+    return
+  endif
+
+  if &filetype ==# 'vimfiler' || &filetype ==# 'vimshell'
+    tabnew | call s:external_cd(a:candidate)
+  elseif a:candidate.action__directory != ''
+    tabnew | execute g:unite_kind_cdable_lcd_command '`=a:candidate.action__directory`'
+  endif
+endfunction"}}}
+
 let s:kind.action_table.narrow = {
       \ 'description' : 'narrowing candidates by directory name',
       \ 'is_quit' : 0,
