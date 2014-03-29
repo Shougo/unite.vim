@@ -390,6 +390,7 @@ VARIABLES 					*unite-variables*
 g:unite_update_time				*g:unite_update_time*
 		The time interval for updating the canidate list as the filter
 		text it typed.
+		If it is 0, this feature is disabled.
 
 		In Msec.
 
