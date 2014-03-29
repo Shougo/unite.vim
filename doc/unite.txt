@@ -2544,6 +2544,8 @@ Defines an interface for files you can move to with cd command.
 			current directory to it.
 	tabnew_cd	Open a new tab page and change the current
 			directory to it.
+	tabnew_lcd	Open a new tab page and change the current
+			directory only for the tab.
 	narrow		Narrow down candidates by the directory name.
 			Note: This action makes a temporary buffer.  To leave
 			the temporary buffer directly, you must use
