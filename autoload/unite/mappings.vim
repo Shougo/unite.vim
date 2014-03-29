@@ -545,7 +545,7 @@ function! unite#mappings#_quick_match(is_choose) "{{{
         \ || quick_match_table[char] >= len(unite.current_candidates)
     call unite#util#print_error('Canceled.')
 
-    if unite.context.quick_match
+    if unite.context.quick_match && char == "\<ESC>"
       call unite#force_quit_session()
     endif
     return
@@ -554,10 +554,6 @@ function! unite#mappings#_quick_match(is_choose) "{{{
   let candidate = unite.current_candidates[quick_match_table[char]]
   if candidate.is_dummy
     call unite#util#print_error('Canceled.')
-
-    if unite.context.quick_match
-      call unite#force_quit_session()
-    endif
     return
   endif
 
