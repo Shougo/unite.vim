@@ -144,6 +144,10 @@ function! unite#candidates#gather(...) "{{{
   let candidates = unite#init#_candidates(
         \ unite.candidates[: unite.candidates_pos-1])
 
+  let unite.context.unite__max_candidates = 0
+  let unite.context.input_list =
+        \ split(unite.context.input, '\\\@<! ', 1)
+
   " Post filter.
   for filter_name in unite.post_filters
     let candidates = unite#helper#call_filter(
