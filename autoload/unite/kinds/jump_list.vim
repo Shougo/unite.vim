@@ -51,14 +51,20 @@ function! unite#kinds#jump_list#define() "{{{
         \ }
   function! kind.action_table.open.func(candidates) "{{{
     for candidate in a:candidates
-      let bufnr = s:open(candidate)
+      if s:convert_path(bufname('%')) ==#
+            \ s:convert_path(s:get_filename(candidate))
+        " Save current line in jump_list
+        execute 'normal!' line('.').'G'
+      else
+        let bufnr = s:open(candidate)
+        call unite#remove_previewed_buffer_list(bufnr)
+      endif
+
       call s:jump(candidate, 0)
 
       " Open folds.
       normal! zv
       call s:adjust_scroll(s:best_winline())
-
-      call unite#remove_previewed_buffer_list(bufnr)
     endfor
   endfunction"}}}
 
@@ -160,12 +166,6 @@ endfunction"}}}
 
 " Misc.
 function! s:jump(candidate, is_highlight) "{{{
-  if !a:is_highlight && s:convert_path(bufname('%')) ==#
-        \ s:convert_path(s:get_filename(a:candidate))
-    " Save current line in jump_list
-    execute 'normal!' line('.').'G'
-  endif
-
   let line = get(a:candidate, 'action__line', 1)
   let pattern = get(a:candidate, 'action__pattern', '')
 
