@@ -854,6 +854,14 @@ g:unite_kind_jump_list_after_jump_scroll
 
 		The default value is 25.
 
+g:unite_kind_file_vertical_preview		*g:unite_kind_file_vertical_preview*
+		If this variable is 1, Unite will open the preview window
+		(when executing the file preview action) vertically rather than
+		horizontally. It will take up half the width of the current
+		Unite buffer.
+
+		The default value is 0.
+
 			*g:unite_kind_openable_persist_open_blink_time*
 g:unite_kind_openable_persist_open_blink_time
 		The amount of blink time after "persist_open" action from
