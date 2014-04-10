@@ -385,7 +385,7 @@ function! unite#candidates#_group_post_filters(candidates) "{{{
   let groups = {}
   for i in range(0, len(a:candidates) - 1)
     let group = a:candidates[i].group
-    if has_key(groups, 'group')
+    if has_key(groups, group)
       call add(groups[group].indexes, i)
     else
       let groups[group] = { 'index' : i, 'indexes' : [i] }
