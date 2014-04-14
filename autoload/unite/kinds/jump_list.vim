@@ -277,10 +277,10 @@ function! s:open(candidate) "{{{
   let bufnr = s:get_bufnr(a:candidate)
   if bufnr != bufnr('%')
     if has_key(a:candidate, 'action__buffer_nr')
-      silent execute 'buffer' bufnr
+      silent execute 'keepjumps buffer' bufnr
     else
       call unite#util#smart_execute_command(
-            \ 'edit!', unite#util#substitute_path_separator(
+            \ 'keepjumps edit!', unite#util#substitute_path_separator(
             \   fnamemodify(a:candidate.action__path, ':~:.')))
     endif
   endif
