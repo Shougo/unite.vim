@@ -2461,7 +2461,7 @@ sorter_rank	Matched rank order sorter.  The higher the matched word is or
 						*unite-filter-sorter_selecta
 sorter_selecta	Another matched rank order sorter. Uses the scoring algorithm
 		from selecta: https://github.com/garybernhardt/selecta.
-		The shorter the matched length is, the higher the rank is.
+		If the matched length is shorter, the rank is higher.
 		This sorter is useful for file candidate source.
 		Note: This sorter requires |if_ruby| support.
 >
