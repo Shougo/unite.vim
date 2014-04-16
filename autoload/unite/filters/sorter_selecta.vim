@@ -29,7 +29,11 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#filters#sorter_selecta#define() 
-  return s:sorter
+  if has('ruby')
+    return s:sorter
+  else
+    return {}
+  endif
 endfunction
 
 let s:sorter = {
@@ -143,9 +147,7 @@ function! s:def_ruby()
 RUBYEOF
 endfunction
 
-if has('ruby')
-  call s:def_ruby()
-endif
+call s:def_ruby()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
