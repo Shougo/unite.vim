@@ -2395,7 +2395,8 @@ matcher_fuzzy	A matcher which filters the candidates with user given fuzzy
 		This recognizes "!" as negative.
 		Narrowing down can be done by word.
 		Note: This matcher does not sort candidates. If you want to
-		use fuzzy sort, you can use |unite-filter-sorter_rank|.
+		use fuzzy sort, you can use |unite-filter-sorter_rank| or
+		|unite-filter-sorter_selecta|.
 		Note: The narrowing down might be slower if this matcher is
 		used.
 		Note: If the fuzzy string is longer than
@@ -2456,6 +2457,16 @@ sorter_rank	Matched rank order sorter.  The higher the matched word is or
 >
 		call unite#custom#source('buffer,file,file_rec',
 		\ 'sorters', 'sorter_rank')
+<
+						*unite-filter-sorter_selecta
+sorter_selecta	Another matched rank order sorter. Uses the scoring algorithm
+		from selecta: https://github.com/garybernhardt/selecta.
+		If the matched length is shorter, the rank is higher.
+		This sorter is useful for file candidate source.
+		Note: This sorter requires |if_ruby| support.
+>
+		call unite#custom#source('buffer,file,file_rec',
+		\ 'sorters', 'sorter_selecta')
 <
 						*unite-filter-sorter_reverse*
 sorter_reverse	Reverse order sorter.
@@ -3382,7 +3393,7 @@ A: Yes you can use |unite-filter-matcher_fuzzy|.
 	\ 'matchers', 'matcher_fuzzy')
 <
 Note: Fuzzy matcher does not sort candidates.  If you want to sort by rank,
-you can use "sorter_rank". But it is slow.
+you can use "sorter_rank" or "sorter_selecta". But it is slow.
 >
 	call unite#filters#sorter_default#use(['sorter_rank'])
 <
