@@ -116,6 +116,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
     let source.unite__candidates =
           \ unite#init#_candidates_source(
           \   source.unite__context.candidates, source.name)
+    let source.unite__len_candidates = len(source.unite__candidates)
   endfor
 
   " Update async state.
@@ -298,7 +299,6 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     let a:context.execute_command = context.execute_command
 
     let source.unite__candidates += source_candidates
-    let source.unite__len_candidates = len(source_candidates)
     if !empty(source_candidates)
       call add(candidate_sources,
             \ unite#helper#convert_source_name(source.name))
