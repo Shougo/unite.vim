@@ -909,9 +909,10 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
       " Buffer rename.
       setlocal hidden
       let bufnr_save = bufnr('%')
-      noautocmd execute 'buffer' bufnr
-      silent execute 'file' fnameescape(new_filename)
-      noautocmd execute 'buffer' bufnr_save
+      noautocmd silent! execute 'buffer' bufnr
+      silent execute (&l:buftype == '' ? 'file' : 'saveas')
+            \ fnameescape(new_filename)
+      noautocmd silent! execute 'buffer' bufnr_save
     endif
   finally
     " Restore path.
