@@ -557,6 +557,8 @@ function! unite#mappings#_quick_match(is_choose) "{{{
     return
   endif
 
+  stopinsert
+
   if a:is_choose
     call unite#mappings#_choose_action([candidate])
   else
