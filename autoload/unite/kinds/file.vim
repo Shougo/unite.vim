@@ -899,20 +899,24 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
           \ fnamemodify(new_filename, ':.'))
 
     let bufnr = bufnr(unite#util#escape_file_searching(old_filename))
-    if rename(old_filename, new_filename)
-      call unite#print_error(
-            \ printf('Failed file rename: "%s" to "%s".',
-            \   a:old_filename, a:new_filename))
-    endif
-
     if bufnr > 0
       " Buffer rename.
       setlocal hidden
       let bufnr_save = bufnr('%')
-      noautocmd silent! execute 'buffer' bufnr
-      silent execute (&l:buftype == '' ? 'file' : 'saveas')
+      noautocmd silent execute 'buffer' bufnr
+      silent execute (&l:buftype == '' ? 'saveas!' : 'file')
             \ fnameescape(new_filename)
-      noautocmd silent! execute 'buffer' bufnr_save
+      if &l:buftype == ''
+        " Remove old buffer.
+        silent bdelete! #
+      endif
+      noautocmd silent execute 'buffer' bufnr_save
+    endif
+
+    if rename(old_filename, new_filename)
+      call unite#print_error(
+            \ printf('Failed file rename: "%s" to "%s".',
+            \   a:old_filename, a:new_filename))
     endif
   finally
     " Restore path.
