@@ -49,11 +49,7 @@ function! s:kind.action_table.execute.func(candidates) "{{{
     if get(candidate, 'action__histadd', 0)
       call s:add_history(type, command)
     endif
-    try
-      execute type . command
-    catch /E486/
-      " Ignore search pattern error.
-    endtry
+    call s:execute_command(type . command)
   endfor
 endfunction"}}}
 let s:kind.action_table.edit = {
@@ -84,7 +80,7 @@ function! s:kind.action_table.edit.func(candidate) "{{{
     if get(a:candidate, 'action__histadd', 0)
       call s:add_history(type, command)
     endif
-    execute command
+    call s:execute_command(command)
   endif
 endfunction"}}}
 "}}}
@@ -93,6 +89,19 @@ function! s:add_history(type, command) "{{{
   if a:type ==# '/'
     let @/ = a:command
   endif
+endfunction"}}}
+function! s:execute_command(command) "{{{
+  let temp = tempname()
+  try
+    call writefile([a:command], temp)
+    execute 'source' fnameescape(temp)
+  catch /E486/
+    " Ignore search pattern error.
+  finally
+    if filereadable(temp)
+      call delete(temp)
+    endif
+  endtry
 endfunction"}}}
 
 let &cpo = s:save_cpo
