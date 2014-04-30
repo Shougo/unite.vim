@@ -331,9 +331,6 @@ function! unite#start#resume(buffer_name, ...) "{{{
     return
   endif
 
-  let winnr = winnr()
-  let win_rest_cmd = winrestcmd()
-
   if type(getbufvar(bufnr, 'unite')) != type({})
     " Unite buffer is released.
     call unite#util#print_error(
@@ -342,6 +339,11 @@ function! unite#start#resume(buffer_name, ...) "{{{
   endif
 
   let context = getbufvar(bufnr, 'unite').context
+
+  let winnr = winnr()
+  let win_rest_cmd = context.unite__direct_switch ||
+        \ unite#helper#get_unite_winnr(context.buffer_name) > 0 ?
+        \ '' : winrestcmd()
 
   let new_context = get(a:000, 0, {})
   if has_key(new_context, 'no_start_insert')
