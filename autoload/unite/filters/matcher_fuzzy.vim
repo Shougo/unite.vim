@@ -54,6 +54,9 @@ function! s:matcher.filter(candidates, context) "{{{
           \ a:candidates, a:context)
   endif
 
+  " Fix for numeric problem.
+  let $LC_NUMERIC = 'en_US.utf8'
+
   let candidates = a:candidates
   for input_orig in a:context.input_list
     let input = substitute(unite#util#expand(input_orig), '\\ ', ' ', 'g')
