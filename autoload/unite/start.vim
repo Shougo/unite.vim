@@ -193,6 +193,7 @@ function! unite#start#temporary(sources, ...) "{{{
     let unite.update_time_save = unite_save.update_time_save
   endif
   let unite.winnr = unite_save.winnr
+  let unite.has_preview_window = unite_save.has_preview_window
 
   " Restore current directory.
   execute 'lcd' fnameescape(cwd)
