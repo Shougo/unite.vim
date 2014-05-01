@@ -282,17 +282,11 @@ function! unite#view#_resize_window() "{{{
     let context.is_resize = 1
   elseif context.vertical
         \ && context.unite__old_winwidth  == 0
-        " \ && winwidth(winnr()) != context.winwidth
-        " \ && (context.unite__old_winwidth  == 0 ||
-        " \     winheight(winnr()) == context.unite__old_winheight)
     execute 'vertical resize' context.winwidth
 
     let context.is_resize = 1
   elseif !context.vertical
-        \ && context.unite__old_winheight  == 0
-        " \ && winheight(winnr()) != context.winheight
-        " \ && (context.unite__old_winheight == 0 ||
-        " \     winwidth(winnr()) == context.unite__old_winwidth)
+        \ && (context.unite__old_winheight == 0 || context.auto_preview)
     execute 'resize' context.winheight
 
     let context.is_resize = 1

@@ -90,6 +90,9 @@ function! unite#init#_context(context, ...) "{{{
     " Set buffer-name automatically.
     let context.buffer_name = join(source_names)
   endif
+  if get(context, 'auto_preview', 0)
+    let context.winheight -= &previewheight
+  endif
 
   let context.is_changed = 0
 
