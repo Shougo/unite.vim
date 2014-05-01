@@ -210,8 +210,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   if !context.create && !context.temporary
         \ && context.unite__is_interactive
     let winnr = unite#helper#get_unite_winnr(context.buffer_name)
-    if winnr > 0 && unite#helper#get_source_args(a:sources) !=#
-          \ getbufvar(winbufnr(winnr), 'unite').args
+    if winnr > 0
       execute winnr 'wincmd w'
 
       if context.input == ''
