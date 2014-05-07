@@ -687,12 +687,19 @@ function! s:redraw_echo(expr) "{{{
     return
   endif
 
-  let msg = s:msg2list(a:expr)
-  let height = max([1, &cmdheight])
-  for i in range(0, len(msg)-1, height)
-    redraw
-    echo join(msg[i : i+height-1], "\n")
-  endfor
+  let more_save = &more
+  try
+    set nomore
+
+    let msg = s:msg2list(a:expr)
+    let height = max([1, &cmdheight])
+    for i in range(0, len(msg)-1, height)
+      redraw
+      echo join(msg[i : i+height-1], "\n")
+    endfor
+  finally
+    let &more = more_save
+  endtry
 endfunction"}}}
 
 let &cpo = s:save_cpo
