@@ -51,11 +51,11 @@ function! unite#kinds#jump_list#define() "{{{
         \ }
   function! kind.action_table.open.func(candidates) "{{{
     for candidate in a:candidates
-      if s:convert_path(bufname('%')) ==#
+      " Save current line in jump_list
+      execute 'normal!' line('.').'G'
+
+      if s:convert_path(bufname('%')) !=#
             \ s:convert_path(s:get_filename(candidate))
-        " Save current line in jump_list
-        execute 'normal!' line('.').'G'
-      else
         let bufnr = s:open(candidate)
         call unite#remove_previewed_buffer_list(bufnr)
       endif
