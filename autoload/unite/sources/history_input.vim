@@ -59,7 +59,7 @@ let s:source.action_table.narrow = {
       \ }
 function! s:source.action_table.narrow.func(candidate) "{{{
   call unite#force_quit_session()
-  call unite#mappings#narrowing(a:candidate.word)
+  call unite#mappings#narrowing(a:candidate.word, 0)
 endfunction"}}}
 
 let s:source.action_table.delete = {
