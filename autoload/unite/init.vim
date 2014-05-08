@@ -267,7 +267,7 @@ function! unite#init#_current_unite(sources, context) "{{{
         \  'v:val.unite__context.is_async')) > 0
   let unite.access_time = localtime()
   let unite.is_finalized = 0
-  let unite.previewd_buffer_list = []
+  let unite.previewed_buffer_list = []
   let unite.post_filters = unite#util#convert2list(
         \ unite#custom#get_profile(unite.profile_name, 'filters'))
   let unite.preview_candidate = {}
