@@ -110,8 +110,8 @@ endfunction
 function! unite#util#smart_execute_command(action, word)
   execute a:action . ' ' . fnameescape(a:word)
 endfunction
-function! unite#util#escape_file_searching(...)
-  return call(s:get_prelude().escape_file_searching, a:000)
+function! unite#util#escape_file_searching(buffer_name)
+  return escape(a:buffer_name, '*[]?{},')
 endfunction
 function! unite#util#escape_pattern(...)
   return call(s:get_prelude().escape_pattern, a:000)
