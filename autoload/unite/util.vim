@@ -111,7 +111,8 @@ function! unite#util#smart_execute_command(action, word)
   execute a:action . ' ' . fnameescape(a:word)
 endfunction
 function! unite#util#escape_file_searching(buffer_name)
-  return escape(a:buffer_name, '*[]?{},')
+  " You should not escape for buflisted() or bufnr()
+  return a:buffer_name
 endfunction
 function! unite#util#escape_pattern(...)
   return call(s:get_prelude().escape_pattern, a:000)
