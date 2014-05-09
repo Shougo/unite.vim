@@ -73,8 +73,7 @@ function! unite#filters#matcher_glob#glob_matcher(candidates, input, context) "{
     return a:candidates
   elseif input =~ '\\\@<![*|]'
     " Wildcard(*) or OR(|).
-    let input = substitute(unite#util#escape_match(input),
-          \ '\\\@<!|', '\\|', 'g')
+    let input = s:matcher.pattern(input)
     let expr = 'v:val.word =~ ' . string(input)
   elseif unite#util#has_lua()
     let expr = 'if_lua'
