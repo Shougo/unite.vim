@@ -213,6 +213,21 @@ function! s:kind.action_table.persist_open.func(candidate) "{{{
   endif
 endfunction"}}}
 
+let s:kind.action_table.tabsplit = {
+      \ 'description' : 'tabopen and split items',
+      \ 'is_selectable' : 1,
+      \ 'is_tab' : 1,
+      \ }
+function! s:kind.action_table.tabsplit.func(candidates) "{{{
+  tabnew
+  silent call unite#take_action('open', a:candidates[0])
+  for candidate in a:candidates[1:]
+    silent call unite#take_action('vsplit', candidate)
+  endfor
+
+  " Resize all windows
+  wincmd =
+endfunction"}}}
 "}}}
 
 let &cpo = s:save_cpo

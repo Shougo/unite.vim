@@ -2555,6 +2555,7 @@ kind to define "open" action.
 	below		Open the file in the bottom, splitting horizontally.
 	persist_open	Open the file in alternate window.  unite window
 			isn't closed.
+	tabsplit	Open the files and vsplit in a new tab.
 
 cdable						*unite-action-cdable*
 Defines an interface for files you can move to with cd command.
