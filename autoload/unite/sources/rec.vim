@@ -112,7 +112,7 @@ function! s:source_file_rec.async_gather_candidates(args, context) "{{{
             \ 'Directory traverse was completed.', self.name)
     else
       call unite#print_source_message(
-            \ 'Too many candiates.', self.name)
+            \ 'Too many candidates.', self.name)
     endif
 
     " Disable async.
@@ -364,7 +364,7 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
             \ 'Directory traverse was completed.', self.name)
     else
       call unite#print_source_message(
-            \ 'Too many candiates.', self.name)
+            \ 'Too many candidates.', self.name)
     endif
     let a:context.is_async = 0
     let continuation.end = 1
