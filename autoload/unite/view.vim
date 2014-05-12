@@ -688,8 +688,10 @@ function! s:redraw_echo(expr) "{{{
   endif
 
   let more_save = &more
+  let showcmd_save = &showcmd
   try
     set nomore
+    set noshowcmd
 
     let msg = map(s:msg2list(a:expr), "unite#util#truncate_smart(
           \ v:val, &columns-1, &columns/2, '...')")
@@ -700,6 +702,7 @@ function! s:redraw_echo(expr) "{{{
     endfor
   finally
     let &more = more_save
+    let &showcmd = showcmd_save
   endtry
 endfunction"}}}
 
