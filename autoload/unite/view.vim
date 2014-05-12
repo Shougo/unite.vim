@@ -691,8 +691,8 @@ function! s:redraw_echo(expr) "{{{
   try
     set nomore
 
-    let msg = map(s:msg2list(a:expr), "unite#util#truncate_wrap(
-          \ v:val, &columns-5, &columns/2, '...')")
+    let msg = map(s:msg2list(a:expr), "unite#util#truncate_smart(
+          \ v:val, &columns-1, &columns/2, '...')")
     let height = max([1, &cmdheight])
     for i in range(0, len(msg)-1, height)
       redraw
