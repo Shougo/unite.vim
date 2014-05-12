@@ -43,7 +43,7 @@ let s:kind.action_table.insert = {
 function! s:kind.action_table.insert.func(candidate) "{{{
   call unite#kinds#common#insert_word(
         \ a:candidate.action__complete_word,
-        \ { 'pos' : a:candidate.action__complete_pos})
+        \ { 'col' : a:candidate.action__complete_pos})
 endfunction"}}}
 
 let s:kind.action_table.preview = {
