@@ -722,6 +722,47 @@ function! s:kind.action_table.vimfiler__execute.func(candidates) "{{{
   endtry
 endfunction"}}}
 
+let s:kind.action_table.vimfiler__external_filer = {
+      \ 'description' : 'open file with external file explorer',
+      \ 'is_listed' : 0,
+      \ }
+function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
+  let vimfiler_current_dir =
+        \ get(unite#get_context(), 'vimfiler__current_directory', '')
+  if vimfiler_current_dir == ''
+    let vimfiler_current_dir = getcwd()
+  endif
+  let current_dir = getcwd()
+
+  try
+    lcd `=vimfiler_current_dir`
+
+    let filer = ''
+    if unite#util#is_mac()
+      let filer = 'open -a Finder -R '
+    elseif unite#util#is_windows()
+      let filer = 'explorer /SELECT,'
+    elseif executable('nautilus')
+      let filer = 'nautilus -s '
+    endif
+
+    let path = a:candidate.action__path
+    if unite#util#is_windows() && path =~ '^//'
+      " substitute separator for UNC.
+      let path = substitute(path, '/', '\\', 'g')
+    endif
+
+    if filer != ''
+      call unite#util#system(filer . '"' . path . '"')
+    else
+      call s:System.open(fnamemodify(path, ':h'))
+    endif
+  finally
+    if isdirectory(current_dir)
+      lcd `=current_dir`
+    endif
+  endtry
+endfunction"}}}
 let s:kind.action_table.vimfiler__write = {
       \ 'description' : 'save file',
       \ 'is_listed' : 0,
