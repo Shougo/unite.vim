@@ -753,8 +753,19 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
     endif
 
     if filer != ''
-      call unite#util#system(filer . '"' . path . '"')
-    else
+      let output = unite#util#system(filer . '"' . path . '"')
+      if output != ''
+        " Error
+        if executable('nautilus')
+          " Not supported "-s" option
+          let filer = ''
+        else
+          call unite#util#print_error('[unite] ' . output)
+        endif
+      endif
+    endif
+
+    if filer == ''
       call s:System.open(fnamemodify(path, ':h'))
     endif
   finally
