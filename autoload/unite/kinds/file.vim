@@ -744,6 +744,10 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
       let filer = 'explorer /SELECT,'
     elseif executable('nautilus')
       let filer = 'nautilus -s '
+    else
+      " Not supported
+      call s:System.open(fnamemodify(path, ':h'))
+      return
     endif
 
     let path = a:candidate.action__path
@@ -752,21 +756,14 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
       let path = substitute(path, '/', '\\', 'g')
     endif
 
-    if filer != ''
+    let output = unite#util#system(filer . '"' . path . '"')
+    if output != '' && executable('nautilus')
+      " Not supported "-s" option
+      let filer = 'nautilus '
       let output = unite#util#system(filer . '"' . path . '"')
-      if output != ''
-        " Error
-        if executable('nautilus')
-          " Not supported "-s" option
-          let filer = ''
-        else
-          call unite#util#print_error('[unite] ' . output)
-        endif
-      endif
     endif
-
-    if filer == ''
-      call s:System.open(fnamemodify(path, ':h'))
+    if output != ''
+      call unite#util#print_error('[unite] ' . output)
     endif
   finally
     if isdirectory(current_dir)
