@@ -30,6 +30,9 @@ set cpo&vim
 if !exists('g:unite_kind_file_vertical_preview')
   let g:unite_kind_file_vertical_preview = 0
 endif
+if !exists('g:unite_kind_file_preview_max_filesize')
+  let g:unite_kind_file_preview_max_filesize = 1000000
+endif
 "}}}
 
 " Global options definition. "{{{
@@ -104,6 +107,14 @@ function! s:kind.action_table.preview.func(candidate) "{{{
         \ unite#util#escape_file_searching(
         \ a:candidate.action__path))
   if filereadable(a:candidate.action__path)
+    if getfsize(a:candidate.action__path) >
+          \ g:unite_kind_file_preview_max_filesize
+      call unite#print_error(printf(
+            \ '[unite.vim] The file size of "%s" is too huge.' ,
+            \    a:candidate.action__path))
+      return
+    endif
+
     " If execute this command, unite.vim will be affected by events.
     if g:unite_kind_file_vertical_preview
       let unite_winwidth = winwidth(0)

@@ -862,6 +862,12 @@ g:unite_kind_file_vertical_preview		*g:unite_kind_file_vertical_preview*
 
 		The default value is 0.
 
+					*g:unite_kind_file_preview_max_filesize*
+g:unite_kind_file_preview_max_filesize
+		It is max file size of preview action in file kind.
+
+		The default value is 1000000.
+
 			*g:unite_kind_openable_persist_open_blink_time*
 g:unite_kind_openable_persist_open_blink_time
 		The amount of blink time after "persist_open" action from
