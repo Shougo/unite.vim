@@ -532,6 +532,12 @@ function! s:kind.action_table.vimfiler__rename.func(candidate) "{{{
     if filename != '' && filename !=# a:candidate.action__path
       call unite#kinds#file#do_rename(a:candidate.action__path, filename)
     endif
+
+    if &filetype ==# 'vimfiler'
+      call vimfiler#view#_force_redraw_screen()
+      call vimfiler#mappings#search_cursor(
+            \ unite#util#substitute_path_separator(fnamemodify(filename, ':p')))
+    endif
   finally
     if isdirectory(current_dir)
       lcd `=current_dir`
@@ -693,6 +699,12 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidates) "{{{
     " Move marked files.
     if !get(context, 'vimfiler__is_dummy', 1) && len(dirnames) == 1
       call unite#sources#file#move_files(dirname, a:candidates)
+    endif
+
+    if &filetype ==# 'vimfiler'
+      call vimfiler#view#_force_redraw_screen()
+      call vimfiler#mappings#search_cursor(
+            \ unite#util#substitute_path_separator(fnamemodify(dirname, ':p')))
     endif
   finally
     if isdirectory(current_dir)
