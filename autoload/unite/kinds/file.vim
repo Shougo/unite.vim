@@ -737,35 +737,33 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
   try
     lcd `=vimfiler_current_dir`
 
-    let filer = ''
-    if unite#util#is_mac()
-      let filer = 'open -a Finder -R '
-    elseif unite#util#is_windows()
-      let filer = 'explorer /SELECT,'
-    elseif executable('nautilus')
-      let filer = 'nautilus -s '
-    else
-      " Not supported
-      call s:System.open(fnamemodify(path, ':h'))
-      return
-    endif
-
     let path = a:candidate.action__path
     if unite#util#is_windows() && path =~ '^//'
       " substitute separator for UNC.
       let path = substitute(path, '/', '\\', 'g')
     endif
 
-    let output = unite#util#system(filer . '"' . path . '"')
-    if output != '' && executable('nautilus')
-      " Not supported "-s" option
+    let filer = ''
+    if unite#util#is_mac()
+      let filer = 'open -a Finder -R '
+    elseif unite#util#is_windows()
+      let filer = 'explorer /SELECT,'
+    elseif executable('nautilus')
+      " Note: Older nautilus does not support "-s" option...
       let filer = 'nautilus '
+
       if isdirectory(path)
         " Use parent path
         let path = fnamemodify(path, ':h')
       endif
-      let output = unite#util#system(filer . '"' . path . '"')
+    else
+      " Not supported
+      call s:System.open(fnamemodify(path, ':h'))
+      return
     endif
+
+    let output = unite#util#system(filer . '"' . path . '"' .
+          \ (!unite#util#is_windows() ? ' &' : ''))
     if output != ''
       call unite#util#print_error('[unite] ' . output)
     endif
