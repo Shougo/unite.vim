@@ -2514,6 +2514,11 @@ converter_tail
 		A converter which converts a candidate's word into the
 		tail of the filename.
 
+					*unite-filter-converter_tail_abbr*
+converter_tail_abbr
+		A converter which converts a candidate's abbr into the
+		tail of the filename.
+
 					*unite-filter-converter_file_directory*
 converter_file_directory
 		A converter which separates the file and directory.
