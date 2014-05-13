@@ -530,6 +530,12 @@ g:unite_source_file_ignore_pattern	*g:unite_source_file_ignore_pattern*
 
 		Refer to autoload/unite/sources/file.vim for the default value.
 
+g:unite_source_file_show_full_path	*g:unite_source_file_show_full_path*
+		If true, display the full path to the file candidates in the
+		Unite buffer. If false, display just the filename.
+
+		The default value is 1.
+
 g:unite_source_bookmark_directory	*g:unite_source_bookmark_directory*
 		Specify the directory where |unite-source-bookmark| writes
 		its bookmarks.

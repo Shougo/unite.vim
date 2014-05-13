@@ -31,6 +31,7 @@ let s:is_windows = unite#util#is_windows()
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_file_ignore_pattern',
       \'\%(^\|/\)\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|DS_Store|pyc|zwc|sw[po]\)$')
+call unite#util#set_default('g:unite_source_file_show_full_path', 1)
 "}}}
 
 function! unite#sources#file#define() "{{{
@@ -286,6 +287,10 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) "{{{
         \ 'word' : a:file, 'abbr' : a:file,
         \ 'action__path' : a:file,
         \}
+
+  if !g:unite_source_file_show_full_path
+    let dict.abbr = fnamemodify(a:file, ':t')
+  endif
 
   let dict.vimfiler__is_directory =
         \ isdirectory(dict.action__path)
