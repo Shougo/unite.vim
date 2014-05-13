@@ -760,6 +760,10 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
     if output != '' && executable('nautilus')
       " Not supported "-s" option
       let filer = 'nautilus '
+      if isdirectory(path)
+        " Use parent path
+        let path = fnamemodify(path, ':h')
+      endif
       let output = unite#util#system(filer . '"' . path . '"')
     endif
     if output != ''
