@@ -599,6 +599,10 @@ g:unite_source_rec_async_command
 					*g:unite_source_file_rec_async_command*
 		Note: This variable is obsolete.
 
+					*g:unite_source_rec_git_command*
+g:unite_source_rec_git_command
+		Specify the git command in file_rec/git source.
+
 g:unite_source_grep_command		*g:unite_source_grep_command*
 		Set grep command.
 
@@ -1919,8 +1923,8 @@ file_rec	Gather files recursive and nominates all directory or file
 
 						*unite-source-file_rec/async*
 file_rec/async	Similar to |unite-source-file_rec|, but get files asynchronously.
-		Note: This source requires vimproc.
-		Note: This source requires the "ag" or "find" command.
+		Note: It requires vimproc.
+		Note: It requires the "ag" or "find" command.
 		Note: Windows "find" command is not supported.
 		Note: If you edit one of the files in Vim, the
 		file_rec/async source will update its cache.
@@ -1930,6 +1934,20 @@ file_rec/async	Similar to |unite-source-file_rec|, but get files asynchronously.
 
 		Source arguments:
 		1. the search directory.
+
+						*unite-source-file_rec/git*
+file_rec/git	Similar to |unite-source-file_rec|, but get files by "git
+		ls-files" command.  It is faster than file_rec/async source.
+		Note: It requires vimproc.
+		Note: It requires "git" command.
+		Note: It searches from current directory only.
+
+		Source arguments:
+		1. "git ls-files" arguments
+
+		Example: >
+	nnoremap <silent> ,ug  :<C-u>Unite
+	\ file_rec/async:--cached:--others:--exclude-standard<CR>
 
 						*unite-source-directory*
 directory	Nominates an input directory as a candidate.
@@ -2136,11 +2154,10 @@ line		Nominates current buffer lines as candidates.
 		direction is "forward" or "backward". If it is omitted,
 		'wrapscan' option will be used.
 
-		Example:
->
+		Example: >
 	nnoremap <silent> /  :<C-u>Unite -buffer-name=search
 	\ line:forward -start-insert -no-quit<CR>
-<
+
 						*unite-source-jump*
 jump		Nominates results of |:jumps| command as candidates.
 
