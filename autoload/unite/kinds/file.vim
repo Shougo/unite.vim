@@ -763,8 +763,7 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
     lcd `=vimfiler_current_dir`
 
     let path = a:candidate.action__path
-    if unite#util#is_windows() && path =~ '^//'
-      " substitute separator for UNC.
+    if unite#util#is_windows()
       let path = substitute(path, '/', '\\', 'g')
     endif
 
