@@ -54,7 +54,10 @@ function! unite#sources#history_yank#_append() "{{{
   call s:add_register('"')
 
   if g:unite_source_history_yank_save_clipboard
-    call s:add_register('+')
+    " Skip if registers are identical.
+    if @" != @+
+      call s:add_register('+')
+    endif
   endif
 
   if prev_histories !=# s:yank_histories
