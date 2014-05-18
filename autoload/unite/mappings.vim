@@ -539,6 +539,8 @@ function! unite#mappings#_quick_match(is_choose) "{{{
 
   call unite#view#_redraw_candidates()
 
+  stopinsert
+
   let unite = unite#get_current_unite()
 
   if !has_key(quick_match_table, char)
@@ -556,8 +558,6 @@ function! unite#mappings#_quick_match(is_choose) "{{{
     call unite#util#print_error('Canceled.')
     return
   endif
-
-  stopinsert
 
   if a:is_choose
     call unite#mappings#_choose_action([candidate])
