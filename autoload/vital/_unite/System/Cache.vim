@@ -59,21 +59,12 @@ function! s:check_old_cache(cache_dir, filename)
   return ret
 endfunction
 
-" Check md5.
-try
-  call md5#md5()
-  let s:exists_md5 = 1
-catch
-  let s:exists_md5 = 0
-endtry
-
 function! s:_create_hash(dir, str)
   if len(a:dir) + len(a:str) < 150
     let hash = substitute(substitute(
           \ a:str, ':', '=-', 'g'), '[/\\]', '=+', 'g')
-  elseif s:exists_md5
-    " Use md5.vim.
-    let hash = md5#md5(a:str)
+  elseif exists('*sha256')
+    let hash = sha256(a:str)
   else
     " Use simple hash.
     let sum = 0

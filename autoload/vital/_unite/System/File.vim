@@ -17,7 +17,9 @@ function! s:open(filename) "{{{
   " Detect desktop environment.
   if s:is_windows
     " For URI only.
-    let filename = iconv(filename, &encoding, 'char')
+    if v:version < 704 || (v:version == 704 && !has('patch122'))
+      let filename = iconv(filename, &encoding, 'char')
+    endif
     silent execute '!start rundll32 url.dll,FileProtocolHandler' filename
   elseif s:is_cygwin
     " Cygwin.
