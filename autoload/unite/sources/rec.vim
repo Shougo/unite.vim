@@ -42,7 +42,7 @@ call unite#util#set_default('g:unite_source_rec_unit', 200)
 call unite#util#set_default(
       \ 'g:unite_source_rec_async_command', (
       \  executable('ag') ?
-      \  'ag --nocolor --nogroup --hidden -g ""' :
+      \  'ag --follow --nocolor --nogroup --hidden -g ""' :
       \  executable('pt') ?
       \  'pt --nocolor --nogroup -l ""' :
       \  !unite#util#is_windows() && executable('find') ? 'find' : ''),
@@ -316,7 +316,7 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   if command !~# '^find '
     let command .= ' ' . string(directory)
     if command ==# 'find'
-      let command .= ' -type '.
+      let command .= ' -L -type '.
         \    (a:context.source__is_directory ? 'd' : 'f')
     endif
   endif
