@@ -360,6 +360,11 @@ COMMANDS 					*unite-commands*
 		Equivalent to |:Unite| except that it will prompt the user for
 		narrowing text before opening the unite buffer.
 
+						*:UniteWithInputDirectory*
+:UniteWithInputDirectory [{options}] {sources}
+		Equivalent to |:Unite| except that it will prompt the user for
+		narrowing directory before opening the unite buffer.
+
 :UniteWithCursorWord [{options}] {sources}	*:UniteWithCursorWord*
 		Equivalent to |:Unite| except that it targets the word under
 		the cursor for the initial narrowing text.
