@@ -58,8 +58,7 @@ function! s:source_file.change_candidates(args, context) "{{{
 
   let is_vimfiler = get(a:context, 'is_vimfiler', 0)
 
-  let input = substitute(substitute(
-        \ unite#util#expand(a:context.path), '\\ ', ' ', 'g'),
+  let input = substitute(unite#util#expand(a:context.path),
         \ '^\a\+:\zs\*/', '/', '')
 
   let path = join(a:args, ':')
@@ -237,9 +236,9 @@ function! s:source_file_new.hooks.on_init(args, context) "{{{
 endfunction"}}}
 
 function! s:source_file_new.change_candidates(args, context) "{{{
-  let input = substitute(substitute(
-        \ unite#util#expand(a:context.path), '\\ ', ' ', 'g'),
+  let input = substitute(unite#util#expand(a:context.path),
         \ '^\a\+:\zs\*/', '/', '')
+  echomsg string(input)
   if input == ''
     return []
   endif
