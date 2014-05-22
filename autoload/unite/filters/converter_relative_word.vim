@@ -36,6 +36,12 @@ let s:converter = {
       \}
 
 function! s:converter.filter(candidates, context) "{{{
+  if a:context.input =~ '^\%(/\|\a\+:/\)'
+    " Use full path.
+    return unite#filters#converter_full_path#define().filter(
+          \ a:candidates, a:context)
+  endif
+
   try
     let directory = unite#util#substitute_path_separator(getcwd())
     if has_key(a:context, 'source__directory')

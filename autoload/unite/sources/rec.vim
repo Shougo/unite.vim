@@ -490,7 +490,7 @@ function! s:get_path(args, context) "{{{
 
   let directory = unite#util#expand(directory)
 
-  if directory =~ '/$'
+  if directory != '/' && directory =~ '/$'
     let directory = directory[: -2]
   endif
 
