@@ -316,7 +316,7 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   if command !~# '^find '
     let command .= ' ' . string(directory)
     if command ==# 'find'
-      let command .= ' -L -type '.
+      let command .= ' -follow -type '.
         \    (a:context.source__is_directory ? 'd' : 'f')
     endif
   endif
