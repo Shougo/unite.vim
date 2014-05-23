@@ -19,7 +19,7 @@ When you report an issue, please use the following issue template.
     set runtimepath+=~/path/to/unite.vim/
     ```
 
-    * Reproducable ways from Vim starting
+    * Reproducible ways from Vim starting
 
      0.startup vim.
      1.
@@ -51,7 +51,7 @@ When you report an issue, please use the following issue template.
   endif
   ```
 
-* Reproducable ways from Vim starting
+* Reproducible ways from Vim starting
 
   0.startup vim.
   1.`:Unite file/new`.
