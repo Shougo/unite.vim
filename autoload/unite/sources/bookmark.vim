@@ -33,7 +33,7 @@ let s:VERSION = '0.1.0'
 let s:bookmarks = {}
 
 call unite#util#set_default('g:unite_source_bookmark_directory',
-      \ g:unite_data_directory . '/bookmark')
+      \ unite#get_data_directory() . '/bookmark')
 "}}}
 
 function! unite#sources#bookmark#define() "{{{
@@ -41,6 +41,7 @@ function! unite#sources#bookmark#define() "{{{
 endfunction"}}}
 function! unite#sources#bookmark#_append(filename) "{{{
   if !isdirectory(g:unite_source_bookmark_directory)
+        \ && !unite#util#is_sudo()
     call mkdir(g:unite_source_bookmark_directory, 'p')
   endif
 
@@ -211,6 +212,10 @@ endfunction"}}}
 
 " Misc
 function! s:save(filename, bookmark)  "{{{
+  if unite#util#is_sudo()
+    return
+  endif
+
   let filename = g:unite_source_bookmark_directory . '/' . a:filename
   call writefile([s:VERSION] + map(copy(a:bookmark.files), 'join(v:val, "\t")'),
         \ filename)

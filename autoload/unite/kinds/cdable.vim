@@ -332,6 +332,10 @@ endfunction"}}}
 
 function! s:check_is_directory(directory)
   if !isdirectory(a:directory)
+    if unite#util#is_sudo()
+      return 0
+    endif
+
     let yesno = input(printf(
           \ 'Directory path "%s" is not exists. Create? : ', a:directory))
     redraw

@@ -35,7 +35,7 @@ let s:yank_histories_file_mtime = 0
 let s:prev_registers = {}
 
 call unite#util#set_default('g:unite_source_history_yank_file',
-      \ g:unite_data_directory . '/history_yank')
+      \ unite#get_data_directory() . '/history_yank')
 
 call unite#util#set_default('g:unite_source_history_yank_limit', 100)
 
@@ -108,6 +108,7 @@ endfunction"}}}
 
 function! s:save()  "{{{
   if g:unite_source_history_yank_file == ''
+        \ || unite#util#is_sudo()
     return
   endif
 

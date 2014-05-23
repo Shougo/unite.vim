@@ -28,16 +28,6 @@ if exists('g:loaded_unite')
 elseif v:version < 702
   echoerr 'unite.vim does not work this version of Vim "' . v:version . '".'
   finish
-elseif $SUDO_USER != '' && $USER !=# $SUDO_USER
-      \ && $HOME !=# expand('~'.$USER)
-      \ && $HOME ==# expand('~'.$SUDO_USER)
-  echohl Error
-  echomsg 'unite.vim disabled: "sudo vim" is detected and $HOME is set to '
-        \.'your user''s home. '
-        \.'You may want to use the sudo.vim plugin, the "-H" option '
-        \.'with "sudo" or set always_set_home in /etc/sudoers instead.'
-  echohl None
-  finish
 endif
 
 let s:save_cpo = &cpo
@@ -86,13 +76,6 @@ let g:unite_candidate_icon =
       \ get(g:, 'unite_candidate_icon', ' ')
 let g:unite_force_overwrite_statusline =
       \ get(g:, 'unite_force_overwrite_statusline', 1)
-let g:unite_data_directory =
-      \ substitute(substitute(fnamemodify(
-      \ get(g:, 'unite_data_directory', '~/.cache/unite'),
-      \  ':p'), '\\', '/', 'g'), '/$', '', '')
-if !isdirectory(g:unite_data_directory)
-  call mkdir(g:unite_data_directory, 'p')
-endif
 "}}}
 
 " Wrapper command.

@@ -72,7 +72,7 @@ Context Source.run()
     call unite#custom_max_candidates('file_mru', 1)
     let candidates = unite#get_candidates(['file_mru'])
     ShouldEqual len(candidates), len(readfile(
-          \ g:unite_data_directory . '/file_mru'))-1
+          \ unite#helper#get_data_directory() . '/file_mru'))-1
 
     let candidates = unite#get_candidates([
           \ ['grep', 'unite.vim/plugin', '', 'vim']])

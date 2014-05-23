@@ -228,6 +228,19 @@ endfunction"}}}
 function! unite#get_source_variables(context) "{{{
   return a:context.source.variables
 endfunction"}}}
+function! unite#get_data_directory() "{{{
+  let g:unite_data_directory =
+        \ substitute(substitute(fnamemodify(
+        \ get(g:, 'unite_data_directory', '~/.cache/unite'),
+        \  ':p'), '\\', '/', 'g'), '/$', '', '')
+
+  if !isdirectory(g:unite_data_directory)
+    call mkdir(g:unite_data_directory, 'p')
+  endif
+
+  return g:unite_data_directory
+endfunction"}}}
+
 
 " Utils.
 function! unite#print_error(message) "{{{

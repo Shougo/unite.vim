@@ -377,6 +377,12 @@ function! unite#util#open(path) "{{{
   return s:get_system().open(a:path)
 endfunction"}}}
 
+function! unite#util#is_sudo() "{{{
+  return $SUDO_USER != '' && $USER !=# $SUDO_USER
+        \ && $HOME !=# expand('~'.$USER)
+        \ && $HOME ==# expand('~'.$SUDO_USER)
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

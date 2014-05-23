@@ -162,7 +162,7 @@ function! s:kind.action_table.mkdir.func(candidate) "{{{
 
   if filereadable(dirname) || isdirectory(dirname)
     echo dirname . ' is already exists.'
-  else
+  elseif !unite#util#is_sudo()
     call mkdir(dirname, 'p')
   endif
 endfunction"}}}
@@ -583,7 +583,7 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
       endif
 
       let dir = fnamemodify(filename, ':h')
-      if dir != '' && !isdirectory(dir)
+      if dir != '' && !isdirectory(dir) && !unite#util#is_sudo()
         " Auto create directory.
         call mkdir(dir, 'p')
       endif
@@ -816,8 +816,9 @@ endfunction"}}}
 function! s:execute_command(command, candidate) "{{{
   let dir = unite#util#path2directory(a:candidate.action__path)
   " Auto make directory.
-  if dir !~ '^\a\+:' && !isdirectory(dir) && unite#util#input_yesno(
-        \   printf('"%s" does not exist. Create?', dir))
+  if dir !~ '^\a\+:' && !isdirectory(dir) && !unite#util#is_sudo()
+        \ && unite#util#input_yesno(
+        \       printf('"%s" does not exist. Create?', dir))
     call mkdir(dir, 'p')
   endif
 
