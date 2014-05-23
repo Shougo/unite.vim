@@ -160,6 +160,8 @@ function! unite#candidates#gather(...) "{{{
     let candidates = unite#util#uniq_by(candidates, 'v:val.word')
   endif
 
+  let unite.view_candidates = candidates
+
   return candidates
 endfunction"}}}
 

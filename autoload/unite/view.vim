@@ -270,7 +270,7 @@ function! unite#view#_resize_window() "{{{
 
   if context.auto_resize
     " Auto resize.
-    let max_len = unite.prompt_linenr + len(unite.candidates)
+    let max_len = unite.prompt_linenr + len(unite.view_candidates)
     silent! execute 'resize' min([max_len, context.winheight])
     if line('.') <= winheight(0)
       normal! zb

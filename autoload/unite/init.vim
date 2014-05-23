@@ -275,6 +275,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.max_source_name = 0
   let unite.candidates_pos = 0
   let unite.candidates = []
+  let unite.view_candidates = []
   let unite.max_source_candidates = 0
   let unite.is_multi_line = 0
   let unite.args = unite#helper#get_source_args(a:sources)
