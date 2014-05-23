@@ -145,6 +145,9 @@ function! unite#candidates#gather(...) "{{{
   let candidates = unite#init#_candidates(
         \ unite.candidates[: unite.candidates_pos-1])
 
+  let unite.candidates_len = len(candidates) +
+        \ len(unite.candidates[unite.candidates_pos :])
+
   let unite.context.unite__max_candidates = 0
   let unite.context.input_list =
         \ split(unite.context.input, '\\\@<! ', 1)
@@ -159,8 +162,6 @@ function! unite#candidates#gather(...) "{{{
     " Uniq filter.
     let candidates = unite#util#uniq_by(candidates, 'v:val.word')
   endif
-
-  let unite.view_candidates = candidates
 
   return candidates
 endfunction"}}}
