@@ -38,7 +38,9 @@ let s:matcher = {
       \}
 
 function! s:matcher.pattern(input) "{{{
-  return substitute(substitute(unite#util#escape_match(a:input),
+  let [head, input] = unite#filters#matcher_fuzzy#get_fuzzy_input(
+        \ unite#util#escape_match(a:input))
+  return substitute(head . substitute(input,
         \ '\([[:alnum:]_/-]\|\\\.\)\ze.', '\0.\\{-}', 'g'), '\*\*', '*', 'g')
 endfunction"}}}
 
@@ -46,12 +48,6 @@ function! s:matcher.filter(candidates, context) "{{{
   if a:context.input == ''
     return unite#filters#filter_matcher(
           \ a:candidates, '', a:context)
-  endif
-
-  if len(a:context.input) > g:unite_matcher_fuzzy_max_input_length
-    " Fall back to matcher_glob.
-    return unite#filters#matcher_glob#define().filter(
-          \ a:candidates, a:context)
   endif
 
   " Fix for numeric problem.
@@ -83,6 +79,24 @@ function! s:matcher.filter(candidates, context) "{{{
   endfor
 
   return candidates
+endfunction"}}}
+
+function! unite#filters#matcher_fuzzy#get_fuzzy_input(input) "{{{
+  let input = a:input
+  let head = ''
+  if len(input) > g:unite_matcher_fuzzy_max_input_length
+    let pos = strridx(input, '/')
+    if pos > 0
+      let head = input[: pos-1]
+      let input = input[pos :]
+    endif
+    if len(input) > g:unite_matcher_fuzzy_max_input_length
+      let head = input
+      let input = ''
+    endif
+  endif
+
+  return [head, input]
 endfunction"}}}
 
 let &cpo = s:save_cpo
