@@ -37,6 +37,12 @@ function! unite#view#_redraw_prompt() "{{{
     setlocal modifiable
     call setline(unite.prompt_linenr,
           \ unite.prompt . unite.context.input)
+
+    silent! syntax clear uniteInputLine
+    execute 'syntax match uniteInputLine'
+          \ '/\%'.unite.prompt_linenr.'l.*/'
+          \ 'contains=uniteInputPrompt,uniteInputPromptError,'.
+          \ 'uniteInputCommand'
   finally
     let &l:modifiable = modifiable_save
   endtry
@@ -223,10 +229,6 @@ function! unite#view#_set_syntax() "{{{
         \ candidate_icon.' / contained'
 
   if unite.prompt_linenr > 0
-    execute 'syntax match uniteInputLine'
-          \ '/\%'.unite.prompt_linenr.'l.*/'
-          \ 'contains=uniteInputPrompt,uniteInputPromptError,'.
-          \ 'uniteInputCommand'
   endif
 
   silent! syntax clear uniteCandidateSourceName

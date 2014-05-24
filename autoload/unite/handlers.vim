@@ -32,6 +32,13 @@ function! unite#handlers#_on_insert_enter()  "{{{
 
   if &filetype ==# 'unite'
     setlocal modifiable
+
+    if unite.prompt_linenr == 0
+      " Restore prompt
+      let unite.prompt_linenr = unite.init_prompt_linenr
+      call append(0, '')
+      call unite#view#_redraw_prompt()
+    endif
   endif
 endfunction"}}}
 function! unite#handlers#_on_insert_leave()  "{{{
@@ -149,11 +156,13 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
 
-  if line('.') == prompt_linenr && !&l:modifiable
-    setlocal modifiable
-  endif
-  if line('.') != prompt_linenr && &l:modifiable
-    setlocal nomodifiable
+  if prompt_linenr > 0
+    if line('.') == prompt_linenr && !&l:modifiable
+      setlocal modifiable
+    endif
+    if line('.') != prompt_linenr && &l:modifiable
+      setlocal nomodifiable
+    endif
   endif
 
   if line('.') == 1

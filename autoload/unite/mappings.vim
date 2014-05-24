@@ -448,7 +448,10 @@ function! s:insert_enter(key) "{{{
   setlocal modifiable
 
   let unite = unite#get_current_unite()
-  if line('.') != unite.prompt_linenr
+
+  if unite.prompt_linenr == 0
+    return unite.init_prompt_linenr . 'GzbA'
+  elseif (unite.prompt_linenr > 0 && line('.') != unite.prompt_linenr)
         \ || col('.') <= len(unite.prompt)
     return unite.prompt_linenr.'GzbA'
   endif

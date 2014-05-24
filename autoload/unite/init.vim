@@ -261,7 +261,10 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.input = context.input
   let unite.last_input = context.input
   let unite.sidescrolloff_save = &sidescrolloff
-  let unite.prompt_linenr = 1
+  let unite.init_prompt_linenr = 1
+  let unite.prompt_linenr =
+        \ (context.input == '' && !context.start_insert) ?
+        \ 0 : unite.init_prompt_linenr
   let unite.is_async =
         \ len(filter(copy(sources),
         \  'v:val.unite__context.is_async')) > 0
