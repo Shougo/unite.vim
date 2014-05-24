@@ -198,7 +198,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
     if line('.') == prompt_linenr || mode('.') == 'i' ||
           \ split(reltimestr(reltime(unite.cursor_line_time)))[0]
           \    > g:unite_cursor_line_time
-      call s:set_cursor_line()
+      call unite#view#_set_cursor_line()
     endif
     let unite.cursor_line_time = reltime()
   endif
@@ -304,7 +304,7 @@ function! s:change_highlight()  "{{{
   let context = unite#get_context()
   let prompt_linenr = unite.prompt_linenr
   if !context.no_cursor_line
-    call s:set_cursor_line()
+    call unite#view#_set_cursor_line()
   endif
 
   silent! syntax clear uniteCandidateInputKeyword
@@ -380,18 +380,6 @@ function! s:check_redraw() "{{{
     call unite#redraw()
     call s:change_highlight()
   endif
-endfunction"}}}
-function! s:set_cursor_line() "{{{
-  let unite = unite#get_current_unite()
-  let prompt_linenr = unite.prompt_linenr
-  let context = unite.context
-
-  execute '2match' (line('.') == prompt_linenr ?
-        \ line('$') == prompt_linenr && context.input != '' ?
-        \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
-        \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
-        \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')
-  let unite.cursor_line_time = reltime()
 endfunction"}}}
 
 function! s:cursor_up() "{{{

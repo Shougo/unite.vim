@@ -47,6 +47,22 @@ function! unite#view#_redraw_prompt() "{{{
     let &l:modifiable = modifiable_save
   endtry
 endfunction"}}}
+function! unite#view#_remove_prompt() "{{{
+  let unite = unite#get_current_unite()
+
+  let modifiable_save = &l:modifiable
+  try
+    setlocal modifiable
+
+    silent! execute (unite.prompt_linenr).'delete _'
+    silent! syntax clear uniteInputLine
+  finally
+    let &l:modifiable = modifiable_save
+  endtry
+
+  call cursor(unite.init_prompt_linenr, 0)
+  let unite.prompt_linenr = 0
+endfunction"}}}
 function! unite#view#_redraw_candidates(...) "{{{
   let is_gather_all = get(a:000, 0, 0)
 
@@ -623,6 +639,19 @@ function! unite#view#_quit(is_force, ...)  "{{{
 
   " Restore unite.
   call unite#set_current_unite(unite_save)
+endfunction"}}}
+
+function! unite#view#_set_cursor_line() "{{{
+  let unite = unite#get_current_unite()
+  let prompt_linenr = unite.prompt_linenr
+  let context = unite.context
+
+  execute '2match' (line('.') == prompt_linenr ?
+        \ line('$') == prompt_linenr && context.input != '' ?
+        \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
+        \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
+        \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')
+  let unite.cursor_line_time = reltime()
 endfunction"}}}
 
 " Message output.

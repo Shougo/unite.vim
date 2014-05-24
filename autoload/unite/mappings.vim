@@ -460,6 +460,11 @@ endfunction"}}}
 function! s:insert_leave() "{{{
   call unite#helper#skip_prompt()
   call unite#redraw()
+
+  if unite#get_context().input == ''
+    " Remove prompt
+    call unite#view#_remove_prompt()
+  endif
 endfunction"}}}
 function! s:redraw() "{{{
   call unite#clear_message()
