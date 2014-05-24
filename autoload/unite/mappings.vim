@@ -105,9 +105,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>do_new_candidate_action()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)
-        \ :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1]
-        \  - unite#get_current_unite().prompt_linenr-1,
-        \ getpos("'>")[1] - unite#get_current_unite().prompt_linenr - 1)<CR>
+        \ :<C-u>call <SID>toggle_mark_candidates(
+        \      getpos("'<")[1], getpos("'>")[1])<CR>
 
   inoremap <silent><buffer> <Plug>(unite_exit)
         \ <ESC>:<C-u>call <SID>exit()<CR>
@@ -281,11 +280,11 @@ function! unite#mappings#narrowing(word, ...) "{{{
   let unite = unite#get_current_unite()
 
   let unite.input .= is_escape ? escape(a:word, ' *') : a:word
-  let prompt_linenr = unite.prompt_linenr
-  call setline(prompt_linenr, unite.prompt . unite.input)
+  let unite.context.input = unite.input
+  call unite#view#_redraw_prompt(unite)
   call unite#redraw()
 
-  call cursor(prompt_linenr, 0)
+  call unite#helper#cursor_prompt(unite)
   startinsert!
 endfunction"}}}
 
@@ -369,10 +368,10 @@ endfunction"}}}
 function! s:normal_delete_backward_path() "{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
-  call setline(unite#get_current_unite().prompt_linenr,
-        \ substitute(getline(unite#get_current_unite().prompt_linenr)[
-        \    len(unite#get_current_unite().prompt):],
-        \                 '[^/ ]*.$', '', ''))
+  let unite = unite#get_current_unite()
+  let unite.context.input = substitute(unite#helper#get_input(),
+        \ '[^/ ]*.$', '', '')
+  call unite#view#_redraw_prompt(unite)
   call unite#redraw()
   let &l:modifiable = modifiable_save
 endfunction"}}}

@@ -27,10 +27,18 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#view#_redraw_prompt(unite) "{{{
-  if a:unite.prompt_linenr > 0
+  if a:unite.prompt_linenr < 0
+    return
+  endif
+
+  let modifiable_save = &l:modifiable
+  try
+    setlocal modifiable
     call setline(a:unite.prompt_linenr,
           \ a:unite.prompt . a:unite.context.input)
-  endif
+  finally
+    let &l:modifiable = modifiable_save
+  endtry
 endfunction"}}}
 function! unite#view#_redraw_candidates(...) "{{{
   let is_gather_all = get(a:000, 0, 0)
