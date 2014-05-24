@@ -84,8 +84,22 @@ function! unite#view#_redraw_candidates(...) "{{{
   try
     setlocal modifiable
 
+    if context.prompt_direction !=# 'below'
+      call unite#view#_redraw_prompt()
+    endif
+
     call unite#view#_set_candidates_lines(
           \ unite#view#_convert_lines(candidates))
+
+    if context.prompt_direction ==# 'below'
+      if empty(candidates)
+        let unite.prompt_linenr = 1
+      else
+        call append(unite.prompt_linenr, '')
+        let unite.prompt_linenr += 1
+      endif
+      call unite#view#_redraw_prompt()
+    endif
 
     let unite.current_candidates = candidates
   finally
@@ -96,8 +110,16 @@ function! unite#view#_redraw_candidates(...) "{{{
   endtry
 
   if context.input == '' && context.log
+        \ || context.prompt_direction ==# 'below'
     " Move to bottom.
     call cursor(line('$'), 0)
+    if context.prompt_direction ==# 'below' && mode() == 'i'
+      let col = col('.')
+      normal! zb
+
+      " Restore position
+      call cursor(0, col)
+    endif
   endif
 
   " Set syntax.
@@ -248,9 +270,6 @@ function! unite#view#_set_syntax() "{{{
   execute 'syntax match uniteCandidateMarker /^'.
         \ candidate_icon.' / contained'
 
-  if unite.prompt_linenr > 0
-  endif
-
   silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0
     syntax match uniteCandidateSourceName
@@ -323,7 +342,7 @@ function! unite#view#_resize_window() "{{{
     endif
     silent! execute 'resize' min([max_len, context.winheight])
     if line('.') <= winheight(0)
-      normal! zb
+      call unite#view#_set_syntax()
     endif
     if mode() ==# 'i' && col('.') == (col('$') - 1)
       startinsert!
@@ -511,7 +530,7 @@ function! unite#view#_init_cursor() "{{{
   endif
 
   if line('.') <= winheight(0)
-    normal! zb
+    call unite#view#_set_cursor()
   endif
 
   if context.select != 0
@@ -700,6 +719,9 @@ function! unite#view#_clear_message() "{{{
   let unite = unite#get_current_unite()
   let unite.msgs = []
   redraw
+endfunction"}}}
+function! unite#view#_set_cursor() "{{{
+  normal! zt
 endfunction"}}}
 
 function! unite#view#_get_status_string() "{{{

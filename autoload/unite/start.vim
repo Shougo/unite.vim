@@ -104,15 +104,7 @@ function! unite#start#standard(sources, ...) "{{{
 
   setlocal modifiable
 
-  " Redraw prompt.
-  silent % delete _
-  if context.prompt_direction ==# 'below'
-    call unite#view#_redraw_candidates()
-    call unite#view#_redraw_prompt()
-  else
-    call unite#view#_redraw_prompt()
-    call unite#view#_redraw_candidates()
-  endif
+  call unite#view#_redraw_candidates()
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
 
