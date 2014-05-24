@@ -26,16 +26,17 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#view#_redraw_prompt(unite) "{{{
-  if a:unite.prompt_linenr < 0
+function! unite#view#_redraw_prompt() "{{{
+  let unite = unite#get_current_unite()
+  if unite.prompt_linenr < 0
     return
   endif
 
   let modifiable_save = &l:modifiable
   try
     setlocal modifiable
-    call setline(a:unite.prompt_linenr,
-          \ a:unite.prompt . a:unite.context.input)
+    call setline(unite.prompt_linenr,
+          \ unite.prompt . unite.context.input)
   finally
     let &l:modifiable = modifiable_save
   endtry
@@ -455,7 +456,7 @@ function! unite#view#_init_cursor() "{{{
       call setpos('.', positions[key].pos)
       startinsert
     else
-      call unite#helper#cursor_prompt(unite)
+      call unite#helper#cursor_prompt()
       startinsert!
     endif
 
@@ -487,7 +488,7 @@ function! unite#view#_init_cursor() "{{{
   endif
 
   if context.quick_match
-    call unite#helper#cursor_prompt(unite)
+    call unite#helper#cursor_prompt()
 
     call unite#mappings#_quick_match(0)
   endif
