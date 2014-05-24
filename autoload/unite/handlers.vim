@@ -30,16 +30,20 @@ function! unite#handlers#_on_insert_enter()  "{{{
   let unite = unite#get_current_unite()
   let unite.is_insert = 1
 
-  if &filetype ==# 'unite'
-    setlocal modifiable
-
-    if unite.prompt_linenr == 0
-      " Restore prompt
-      let unite.prompt_linenr = unite.init_prompt_linenr
-      call append(0, '')
-      call unite#view#_redraw_prompt()
-    endif
+  if &filetype !=# 'unite'
+    return
   endif
+
+  setlocal modifiable
+
+  if unite.prompt_linenr != 0
+    return
+  endif
+
+  " Restore prompt
+  let unite.prompt_linenr = unite.init_prompt_linenr
+  call append(0, '')
+  call unite#view#_redraw_prompt()
 endfunction"}}}
 function! unite#handlers#_on_insert_leave()  "{{{
   let unite = unite#get_current_unite()
@@ -223,9 +227,6 @@ function! unite#handlers#_on_cursor_moved()  "{{{
         \  || unite.context.winheight == 0) ?
         \ winheight(0) : unite.context.winheight
   let candidates = unite#candidates#_gather_pos(height)
-  if context.prompt_direction ==# 'below'
-    let unite.init_prompt_linenr += len(candidates)
-  endif
   if !context.auto_resize && empty(candidates)
     " Nothing.
     return
@@ -236,8 +237,8 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   let modifiable_save = &l:modifiable
   try
     setlocal modifiable
-    let lines = unite#view#_convert_lines(candidates)
     let pos = getpos('.')
+    let lines = unite#view#_convert_lines(candidates)
     silent! call append('$', lines)
   finally
     let &l:modifiable = l:modifiable_save

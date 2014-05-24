@@ -60,7 +60,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nnoremap <silent><buffer> <Plug>(unite_print_message_log)
         \ :<C-u>call <SID>print_message_log()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
-        \ max([1, unite#get_current_unite().prompt_linenr]).'G0z.'
+        \ 'gg0z.'
   nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
         \ :<C-u>call <SID>redraw_all_candidates()<CR>G
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)

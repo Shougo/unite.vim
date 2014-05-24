@@ -49,6 +49,9 @@ function! unite#view#_redraw_prompt() "{{{
 endfunction"}}}
 function! unite#view#_remove_prompt() "{{{
   let unite = unite#get_current_unite()
+  if unite.prompt_linenr == 0
+    return
+  endif
 
   let modifiable_save = &l:modifiable
   try
@@ -135,16 +138,12 @@ function! unite#view#_set_candidates_lines(lines) "{{{
     setlocal modifiable
 
     " Clear candidates
-    if unite.prompt_linenr >= 0
-      silent! execute (unite.prompt_linenr+1).',$delete _'
-    else
+    if unite.context.prompt_direction ==# 'below'
       silent! execute '1,'.(unite.prompt_linenr-1).'$delete _'
-    endif
-
-    if unite.prompt_linenr >= 0
-      call setline(unite.prompt_linenr+1, a:lines)
+      call setline(1, a:lines)
     else
-      call append(0, a:lines)
+      silent! execute (unite.prompt_linenr+1).',$delete _'
+      call setline(unite.prompt_linenr+1, a:lines)
     endif
   finally
     call setpos('.', pos)

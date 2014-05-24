@@ -411,7 +411,8 @@ function! unite#helper#skip_prompt() "{{{
   " Skip prompt linenr.
   let unite = unite#get_current_unite()
   if line('.') == unite.prompt_linenr
-    call cursor(line('.')+1, 1)
+    call cursor(line('.') + (unite.context.prompt_direction
+          \ ==# 'below' ? -1 : 1), 1)
   endif
 endfunction"}}}
 

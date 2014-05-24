@@ -106,8 +106,13 @@ function! unite#start#standard(sources, ...) "{{{
 
   " Redraw prompt.
   silent % delete _
-  call unite#view#_redraw_prompt()
-  call unite#view#_redraw_candidates()
+  if context.prompt_direction ==# 'below'
+    call unite#view#_redraw_candidates()
+    call unite#view#_redraw_prompt()
+  else
+    call unite#view#_redraw_prompt()
+    call unite#view#_redraw_candidates()
+  endif
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
 
