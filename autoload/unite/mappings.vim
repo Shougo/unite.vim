@@ -595,7 +595,7 @@ function! unite#mappings#cursor_up(is_skip_not_matched) "{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
-  let num = line('.')
+  let num = line('.') - 1
   let cnt = 1
   if line('.') == prompt_linenr
     let cnt += 1
@@ -623,7 +623,7 @@ function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
-  let num = line('.')
+  let num = line('.') - 1
   let cnt = 1
   if line('.') == prompt_linenr
     let cnt += 1
