@@ -141,6 +141,7 @@ function! unite#view#_set_candidates_lines(lines) "{{{
     if unite.context.prompt_direction ==# 'below'
       silent! execute '1,'.(unite.prompt_linenr-1).'$delete _'
       call setline(1, a:lines)
+      silent! execute (unite.prompt_linenr+1).',$delete _'
     else
       silent! execute (unite.prompt_linenr+1).',$delete _'
       call setline(unite.prompt_linenr+1, a:lines)
@@ -650,7 +651,11 @@ function! unite#view#_set_cursor_line() "{{{
   let context = unite.context
 
   execute '2match' (line('.') == prompt_linenr ?
-        \ line('$') == prompt_linenr && context.input != '' ?
+        \     (context.prompt_direction !=# 'below'
+        \   && line('$') == prompt_linenr)
+        \  || (context.prompt_direction ==# 'below'
+        \   && 1 == prompt_linenr)
+        \ && context.input != '' ?
         \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
         \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
         \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')

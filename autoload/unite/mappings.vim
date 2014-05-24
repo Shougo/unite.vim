@@ -281,8 +281,14 @@ function! unite#mappings#narrowing(word, ...) "{{{
 
   let unite.input .= is_escape ? escape(a:word, ' *') : a:word
   let unite.context.input = unite.input
-  call unite#view#_redraw_prompt()
-  call unite#redraw()
+  if unite.context.prompt_direction ==# 'below'
+    call unite#view#_remove_prompt()
+    call unite#redraw()
+    call unite#view#_redraw_prompt()
+  else
+    call unite#view#_redraw_prompt()
+    call unite#redraw()
+  endif
 
   call unite#helper#cursor_prompt()
   startinsert!
@@ -369,8 +375,15 @@ function! s:normal_delete_backward_path() "{{{
   let unite = unite#get_current_unite()
   let unite.context.input = substitute(unite#helper#get_input(),
         \ '[^/ ]*.$', '', '')
-  call unite#view#_redraw_prompt()
-  call unite#redraw()
+
+  if unite.context.prompt_direction ==# 'below'
+    call unite#view#_remove_prompt()
+    call unite#redraw()
+    call unite#view#_redraw_prompt()
+  else
+    call unite#view#_redraw_prompt()
+    call unite#redraw()
+  endif
 endfunction"}}}
 function! s:toggle_mark(map) "{{{
   call unite#helper#skip_prompt()
