@@ -386,8 +386,7 @@ function! s:toggle_mark(map) "{{{
   call unite#view#_redraw_line()
 
   execute 'normal!' a:map ==# 'j' ?
-        \ s:loop_cursor_down(1) :
-        \ unite#mappings#loop_cursor_up_expr(1)
+        \ unite#mappings#cursor_down(1) : unite#mappings#cursor_up(1)
 endfunction"}}}
 function! s:toggle_mark_all_candidates() "{{{
   call s:redraw_all_candidates()
@@ -564,70 +563,27 @@ function! s:input_directory() "{{{
   let path = path.(path == '' || path =~ '/$' ? '' : '/')
   call unite#mappings#narrowing(path)
 endfunction"}}}
-function! s:loop_cursor_down(is_skip_not_matched) "{{{
-  let is_insert = mode() ==# 'i'
-  let prompt_linenr = unite#get_current_unite().prompt_linenr
-
-  if line('.') == prompt_linenr && !is_insert
-    return line('.') == line('$') &&
-          \ empty(unite#get_unite_candidates()) ? '2G' : 'j'
-  endif
-
-  if line('.') == line('$')
-    " Loop.
-    if is_insert
-      return "\<C-Home>\<End>".repeat("\<Down>", prompt_linenr-1)."\<End>"
-    else
-      return prompt_linenr.'G0z.'
-    endif
-  endif
-
-  let num = line('.') - (prompt_linenr + 1)
-  let cnt = 1
-  if line('.') == prompt_linenr
-    let cnt += prompt_linenr - line('.')
-  endif
-  if is_insert && line('.') == prompt_linenr
-    let cnt += 1
-  endif
-
-  while 1
-    let candidate = get(unite#get_unite_candidates(), num + cnt, {})
-    if !empty(candidate) && (candidate.is_dummy
-          \ || (a:is_skip_not_matched && !candidate.is_matched))
-      let cnt += 1
-      continue
-    endif
-
-    break
-  endwhile
-
-  if is_insert
-    return "\<Home>" . repeat("\<Down>", cnt)
-  else
-    return repeat('j', cnt)
-  endif
-endfunction"}}}
-function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode) "{{{
-  let is_insert = a:mode ==# 'i'
-  let prompt_linenr = unite#get_current_unite().prompt_linenr
-
-  if !is_insert && line('.') > prompt_linenr
-    call cursor(line('.') - 1, 0)
-    return
-  endif
-
+function! unite#mappings#loop_cursor_up(mode) "{{{
   " Loop.
-
   call s:redraw_all_candidates()
 
-  if is_insert
+  if a:mode ==# 'i'
     noautocmd startinsert
   endif
 
   call cursor(line('$'), 1)
 endfunction"}}}
-function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched) "{{{
+function! unite#mappings#loop_cursor_down(mode) "{{{
+  " Loop.
+  call s:redraw_all_candidates()
+
+  if a:mode ==# 'i'
+    noautocmd startinsert
+  endif
+
+  call cursor(1, 1)
+endfunction"}}}
+function! unite#mappings#cursor_up(is_skip_not_matched) "{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
@@ -653,7 +609,7 @@ function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched) "{{{
 
   if num < 0
     if is_insert
-      return "\<C-Home>\<End>"."\<Home>"
+      return "\<C-Home>\<End>"
     else
       return prompt_linenr.'G0z.'
     endif
@@ -667,6 +623,36 @@ function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched) "{{{
     endif
   else
     return repeat('k', cnt)
+  endif
+endfunction"}}}
+function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
+  let is_insert = mode() ==# 'i'
+  let prompt_linenr = unite#get_current_unite().prompt_linenr
+
+  let num = line('.') - (prompt_linenr + 1)
+  let cnt = 1
+  if line('.') == prompt_linenr
+    let cnt += prompt_linenr - line('.')
+  endif
+  if is_insert && line('.') == prompt_linenr
+    let cnt += 1
+  endif
+
+  while 1
+    let candidate = get(unite#get_unite_candidates(), num + cnt, {})
+    if !empty(candidate) && (candidate.is_dummy
+          \ || (a:is_skip_not_matched && !candidate.is_matched))
+      let cnt += 1
+      continue
+    endif
+
+    break
+  endwhile
+
+  if is_insert
+    return "\<Home>" . repeat("\<Down>", cnt)
+  else
+    return repeat('j', cnt)
   endif
 endfunction"}}}
 function! s:toggle_transpose_window() "{{{
@@ -702,12 +688,11 @@ function! s:disable_max_candidates() "{{{
   call s:redraw_all_candidates()
 endfunction"}}}
 function! s:narrowing_path() "{{{
-  if line('.') == unite#get_current_unite().prompt_linenr
+  let candidate = unite#helper#get_current_candidate()
+  if empty(unite#helper#get_current_candidate())
     " Ignore.
     return
   endif
-
-  let candidate = unite#helper#get_current_candidate()
   call unite#mappings#narrowing(has_key(candidate, 'action__path')?
         \ candidate.action__path : candidate.word)
 endfunction"}}}

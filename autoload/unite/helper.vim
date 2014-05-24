@@ -404,7 +404,7 @@ endfunction"}}}
 function! unite#helper#cursor_prompt() "{{{
   " Move to prompt linenr.
   let unite = unite#get_current_unite()
-  call cursor(max([a:unite.prompt_linenr, 1]), 0)
+  call cursor(max([unite.prompt_linenr, 1]), 0)
 endfunction"}}}
 
 function! unite#helper#skip_prompt() "{{{

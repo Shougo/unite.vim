@@ -286,8 +286,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.cursor_line_time = reltime()
 
   if context.here
-    let context.winheight = winheight(0) - winline() +
-          \ unite.prompt_linenr
+    let context.winheight = winheight(0) - winline() + 1
     if context.winheight < 5
       let context.winheight = 5
     endif

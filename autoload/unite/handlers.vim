@@ -156,34 +156,37 @@ function! unite#handlers#_on_cursor_moved()  "{{{
     setlocal nomodifiable
   endif
 
-  if line('.') <= prompt_linenr
+  if line('.') == 1
     nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
-          \ :call unite#mappings#loop_cursor_up_call(
-          \    0, 'n')<CR>
+          \ :call unite#mappings#loop_cursor_up('n')<CR>
     nnoremap <silent><buffer> <Plug>(unite_skip_cursor_up)
-          \ :call unite#mappings#loop_cursor_up_call(
-          \    1, 'n')<CR>
+          \ :call unite#mappings#loop_cursor_up('n')<CR>
     inoremap <silent><buffer> <Plug>(unite_select_previous_line)
-          \ <ESC>:call unite#mappings#loop_cursor_up_call(
-          \    0, 'i')<CR>
+          \ <ESC>:call unite#mappings#loop_cursor_up('i')<CR>
     inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
-          \ <ESC>:call unite#mappings#loop_cursor_up_call(
-          \    1, 'i')<CR>
+          \ <ESC>:call unite#mappings#loop_cursor_up('i')<CR>
+
+    call s:cursor_down()
+  elseif line('.') == line('$')
+    nnoremap <silent><buffer> <Plug>(unite_loop_cursor_down)
+          \ :call unite#mappings#loop_cursor_down('n')<CR>
+    nnoremap <silent><buffer> <Plug>(unite_skip_cursor_down)
+          \ :call unite#mappings#loop_cursor_down('n')<CR>
+    inoremap <silent><buffer> <Plug>(unite_select_next_line)
+          \ <ESC>:call unite#mappings#loop_cursor_down('i')<CR>
+    inoremap <silent><buffer> <Plug>(unite_skip_next_line)
+          \ <ESC>:call unite#mappings#loop_cursor_down('i')<CR>
+
+    call s:cursor_up()
   else
-    nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
-          \ unite#mappings#loop_cursor_up_expr(0)
-    nnoremap <expr><buffer> <Plug>(unite_skip_cursor_up)
-          \ unite#mappings#loop_cursor_up_expr(1)
-    inoremap <expr><buffer> <Plug>(unite_select_previous_line)
-          \ unite#mappings#loop_cursor_up_expr(0)
-    inoremap <expr><buffer> <Plug>(unite_skip_previous_line)
-          \ unite#mappings#loop_cursor_up_expr(1)
+    call s:cursor_up()
+    call s:cursor_down()
   endif
 
   if exists('b:current_syntax') && !context.no_cursor_line
     2match
 
-    if abs(line('.') - prompt_linenr) <= 1 || mode('.') == 'i' ||
+    if line('.') == prompt_linenr || mode('.') == 'i' ||
           \ split(reltimestr(reltime(unite.cursor_line_time)))[0]
           \    > g:unite_cursor_line_time
       call s:set_cursor_line()
@@ -380,6 +383,27 @@ function! s:set_cursor_line() "{{{
         \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
         \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')
   let unite.cursor_line_time = reltime()
+endfunction"}}}
+
+function! s:cursor_up() "{{{
+  nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
+        \ unite#mappings#cursor_up(0)
+  nnoremap <expr><buffer> <Plug>(unite_skip_cursor_up)
+        \ unite#mappings#cursor_up(1)
+  inoremap <expr><buffer> <Plug>(unite_select_previous_line)
+        \ unite#mappings#cursor_up(0)
+  inoremap <expr><buffer> <Plug>(unite_skip_previous_line)
+        \ unite#mappings#cursor_up(1)
+endfunction"}}}
+function! s:cursor_down() "{{{
+  nnoremap <expr><buffer> <Plug>(unite_loop_cursor_down)
+        \ unite#mappings#cursor_down(0)
+  nnoremap <expr><buffer> <Plug>(unite_skip_cursor_down)
+        \ unite#mappings#cursor_down(1)
+  inoremap <expr><buffer> <Plug>(unite_select_next_line)
+        \ unite#mappings#cursor_down(0)
+  inoremap <expr><buffer> <Plug>(unite_skip_next_line)
+        \ unite#mappings#cursor_down(1)
 endfunction"}}}
 
 let &cpo = s:save_cpo

@@ -122,8 +122,6 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     let winnr_save = winnr()
 
     execute a:winnr 'wincmd w'
-
-    let line_save = unite.prompt_linenr
   endif
 
   try
@@ -167,11 +165,6 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     let unite.context.is_redraw = 0
   finally
     if a:winnr > 0
-      if unite.prompt_linenr != line_save
-        " Updated.
-        call cursor(line('$'), 0)
-      endif
-
       " Restore current unite.
       call unite#set_current_unite(unite_save)
       execute winnr_save 'wincmd w'
@@ -213,10 +206,12 @@ function! unite#view#_set_syntax() "{{{
   execute 'syntax match uniteCandidateMarker /^'.
         \ candidate_icon.' / contained'
 
-  execute 'syntax match uniteInputLine'
-        \ '/\%'.unite.prompt_linenr.'l.*/'
-        \ 'contains=uniteInputPrompt,uniteInputPromptError,'.
-        \ 'uniteInputCommand'
+  if unite.prompt_linenr > 0
+    execute 'syntax match uniteInputLine'
+          \ '/\%'.unite.prompt_linenr.'l.*/'
+          \ 'contains=uniteInputPrompt,uniteInputPromptError,'.
+          \ 'uniteInputCommand'
+  endif
 
   silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0
@@ -284,7 +279,10 @@ function! unite#view#_resize_window() "{{{
 
   if context.auto_resize
     " Auto resize.
-    let max_len = unite.prompt_linenr + unite.candidates_len
+    let max_len = unite.candidates_len
+    if unite.prompt_linenr > 0
+      let max_len += 1
+    endif
     silent! execute 'resize' min([max_len, context.winheight])
     if line('.') <= winheight(0)
       normal! zb
