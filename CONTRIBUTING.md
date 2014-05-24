@@ -21,7 +21,7 @@ When you report an issue, please use the following issue template.
 
     * How to reproduce
 
-     0.startup vim.
+     0. startup vim.
      1.
      2.
      3.
@@ -53,9 +53,9 @@ When you report an issue, please use the following issue template.
 
 * How to reproduce
 
-  0.startup vim.
-  1.`:Unite file/new`.
-  2.Input `C:/Foo\ Bar/test.txt`
-  3.Enter candidate.
-  4.`:w`
-  5.Can not be saved.
+  0. startup vim.
+  1. `:Unite file/new`.
+  2. Input `C:/Foo\ Bar/test.txt`
+  3. Enter candidate.
+  4. `:w`
+  5. Can not be saved.
