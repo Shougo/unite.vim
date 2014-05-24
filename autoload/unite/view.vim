@@ -48,26 +48,23 @@ function! unite#view#_redraw_candidates(...) "{{{
 
   let candidates = unite#candidates#gather(is_gather_all)
 
-  let modifiable_save = &l:modifiable
-  setlocal modifiable
-
-  let lines = unite#view#_convert_lines(candidates)
   let pos = getpos('.')
-  let unite = unite#get_current_unite()
-  if len(lines) < len(unite.current_candidates)
-    silent! execute (unite.prompt_linenr+1).',$delete _'
-  endif
-  call setline(unite.prompt_linenr+1, lines)
+  let modifiable_save = &l:modifiable
+  try
+    setlocal modifiable
 
-  let &l:modifiable = l:modifiable_save
+    call unite#view#_set_candidates_lines(
+          \ unite#view#_convert_lines(candidates))
 
-  let unite = unite#get_current_unite()
-  let context = unite.context
-  let unite.current_candidates = candidates
-
-  if pos != getpos('.')
-    call setpos('.', pos)
-  endif
+    let unite = unite#get_current_unite()
+    let context = unite.context
+    let unite.current_candidates = candidates
+  finally
+    let &l:modifiable = l:modifiable_save
+    if pos != getpos('.')
+      call setpos('.', pos)
+    endif
+  endtry
 
   if context.input == '' && context.log
     " Move to bottom.
@@ -98,16 +95,35 @@ function! unite#view#_redraw_line(...) "{{{
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! unite#view#_quick_match_redraw(quick_match_table) "{{{
-  let modifiable_save = &l:modifiable
-  setlocal modifiable
-
-  call setline(unite#get_current_unite().prompt_linenr+1,
+  call unite#view#_set_candidates_lines(
         \ unite#view#_convert_lines(
-        \ unite#get_current_unite().current_candidates,
-        \ a:quick_match_table))
+        \   unite#get_current_unite().current_candidates,
+        \   a:quick_match_table))
   redraw
+endfunction"}}}
+function! unite#view#_set_candidates_lines(lines) "{{{
+  let unite = unite#get_current_unite()
+  let modifiable_save = &l:modifiable
+  try
+    let pos = getpos('.')
+    setlocal modifiable
 
-  let &l:modifiable = modifiable_save
+    " Clear candidates
+    if unite.prompt_linenr >= 0
+      silent! execute (unite.prompt_linenr+1).',$delete _'
+    else
+      silent! execute '1,'.(unite.prompt_linenr-1).'$delete _'
+    endif
+
+    if unite.prompt_linenr >= 0
+      call setline(unite.prompt_linenr+1, a:lines)
+    else
+      call append(0, a:lines)
+    endif
+  finally
+    call setpos('.', pos)
+    let &l:modifiable = modifiable_save
+  endtry
 endfunction"}}}
 
 function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
