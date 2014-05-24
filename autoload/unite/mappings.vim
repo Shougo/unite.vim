@@ -373,7 +373,7 @@ function! s:normal_delete_backward_path() "{{{
   call unite#redraw()
 endfunction"}}}
 function! s:toggle_mark(map) "{{{
-  call unite#helper#next_prompt(unite#get_current_unite())
+  call unite#helper#skip_prompt()
 
   let candidate = unite#helper#get_current_candidate()
   if empty(candidate) || get(candidate, 'is_dummy', 0)
@@ -636,7 +636,7 @@ function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched) "{{{
   if line('.') == prompt_linenr
     let cnt += prompt_linenr - line('.')
   endif
-  if is_insert && line('.') == prompt_linenr+2
+  if is_insert && line('.') == 2
     let cnt += 1
   endif
 
@@ -653,7 +653,7 @@ function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched) "{{{
 
   if num < 0
     if is_insert
-      return "\<C-Home>\<End>".repeat("\<Down>", prompt_linenr)."\<Home>"
+      return "\<C-Home>\<End>"."\<Home>"
     else
       return prompt_linenr.'G0z.'
     endif

@@ -84,7 +84,7 @@ function! unite#view#_redraw_line(...) "{{{
     let linenr += 1
   endif
 
-  if linenr == prompt_linenr || &filetype !=# 'unite'
+  if &filetype !=# 'unite'
     " Ignore.
     return
   endif
@@ -92,8 +92,7 @@ function! unite#view#_redraw_line(...) "{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
 
-  let candidate = unite#get_unite_candidates()[linenr -
-        \ (prompt_linenr+1)]
+  let candidate = unite#helper#get_current_candidate(linenr)
   call setline(linenr, unite#view#_convert_lines([candidate])[0])
 
   let &l:modifiable = modifiable_save
