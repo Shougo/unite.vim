@@ -12,7 +12,7 @@ When you report an issue, please use the following issue template.
 
     * Minimal vimrc less than 50 lines
 
-    ```
+    ```VimL
     " Your vimrc
     set nocompatible
 
@@ -44,7 +44,7 @@ When you report an issue, please use the following issue template.
 
 * Minimal vimrc less than 50 lines
 
-  ```
+  ```VimL
   if has('vim_starting')
   set nocompatible
   set runtimepath+=~/.cache/neobundle/unite.vim/
