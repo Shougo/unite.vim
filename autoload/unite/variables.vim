@@ -102,7 +102,7 @@ function! unite#variables#options() "{{{
           \ '-auto-quit', '-no-focus',
           \ '-long-source-names', '-short-source-names',
           \ '-multi-line', '-resume', '-wrap', '-select=', '-log',
-          \ '-truncate', '-tab', '-sync', '-unique',
+          \ '-truncate', '-tab', '-sync', '-unique', '-prompt-direction=',
           \]
   endif
 
@@ -225,6 +225,7 @@ function! unite#variables#default_context() "{{{
           \ 'sync' : 0,
           \ 'unique' : 0,
           \ 'execute_command' : '',
+          \ 'prompt_direction' : '',
           \ 'unite__direct_switch' : 0,
           \ 'unite__is_interactive' : 1,
           \ 'unite__is_complete' : 0,

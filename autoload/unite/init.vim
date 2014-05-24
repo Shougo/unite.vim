@@ -93,6 +93,10 @@ function! unite#init#_context(context, ...) "{{{
   if get(context, 'auto_preview', 0)
     let context.winheight -= &previewheight
   endif
+  if context.prompt_direction == ''
+    let context.prompt_direction =
+          \ context.direction =~# 'below' ? 'below' : 'top'
+  endif
 
   let context.is_changed = 0
 
