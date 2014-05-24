@@ -68,7 +68,13 @@ function! unite#view#_redraw_candidates(...) "{{{
 
   call unite#view#_resize_window()
 
+  let unite = unite#get_current_unite()
+  let context = unite.context
+
   let candidates = unite#candidates#gather(is_gather_all)
+  if context.prompt_direction ==# 'below'
+    let unite.init_prompt_linenr = len(candidates)
+  endif
 
   let pos = getpos('.')
   let modifiable_save = &l:modifiable
@@ -78,8 +84,6 @@ function! unite#view#_redraw_candidates(...) "{{{
     call unite#view#_set_candidates_lines(
           \ unite#view#_convert_lines(candidates))
 
-    let unite = unite#get_current_unite()
-    let context = unite.context
     let unite.current_candidates = candidates
   finally
     let &l:modifiable = l:modifiable_save
@@ -499,7 +503,7 @@ function! unite#view#_init_cursor() "{{{
       " Restore position.
       call setpos('.', positions[key].pos)
     else
-      call cursor(unite#helper#get_current_candidate_linenr(0), 0)
+      call unite#helper#cursor_prompt()
     endif
 
     call cursor(0, 1)

@@ -223,6 +223,9 @@ function! unite#handlers#_on_cursor_moved()  "{{{
         \  || unite.context.winheight == 0) ?
         \ winheight(0) : unite.context.winheight
   let candidates = unite#candidates#_gather_pos(height)
+  if context.prompt_direction ==# 'below'
+    let unite.init_prompt_linenr += len(candidates)
+  endif
   if !context.auto_resize && empty(candidates)
     " Nothing.
     return

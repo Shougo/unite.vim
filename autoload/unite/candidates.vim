@@ -136,6 +136,10 @@ function! unite#candidates#gather(...) "{{{
     let unite.candidates += source.unite__candidates
   endfor
 
+  if unite.context.prompt_direction ==# 'below'
+    let unite.candidates = reverse(unite.candidates)
+  endif
+
   if is_gather_all
     let unite.candidates_pos = len(unite.candidates)
   elseif unite.context.is_redraw || unite.candidates_pos == 0
