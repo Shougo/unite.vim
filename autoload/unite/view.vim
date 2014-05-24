@@ -26,6 +26,12 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! unite#view#_redraw_prompt(unite) "{{{
+  if a:unite.prompt_linenr > 0
+    call setline(a:unite.prompt_linenr,
+          \ a:unite.prompt . a:unite.context.input)
+  endif
+endfunction"}}}
 function! unite#view#_redraw_candidates(...) "{{{
   let is_gather_all = get(a:000, 0, 0)
 
@@ -441,7 +447,7 @@ function! unite#view#_init_cursor() "{{{
       call setpos('.', positions[key].pos)
       startinsert
     else
-      call cursor(unite.prompt_linenr, 0)
+      call unite#helper#cursor_prompt(unite)
       startinsert!
     endif
 
@@ -473,8 +479,7 @@ function! unite#view#_init_cursor() "{{{
   endif
 
   if context.quick_match
-    " Move to prompt linenr.
-    call cursor(unite.prompt_linenr, 0)
+    call unite#helper#cursor_prompt(unite)
 
     call unite#mappings#_quick_match(0)
   endif

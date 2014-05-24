@@ -401,6 +401,11 @@ function! unite#helper#get_buffer_directory(bufnr) "{{{
   return dir
 endfunction"}}}
 
+function! unite#helper#cursor_prompt(unite) "{{{
+  " Move to prompt linenr.
+  call cursor(max([a:unite.prompt_linenr, 1]), 0)
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

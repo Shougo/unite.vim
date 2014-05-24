@@ -106,9 +106,7 @@ function! unite#start#standard(sources, ...) "{{{
 
   " Redraw prompt.
   silent % delete _
-  call setline(unite.prompt_linenr,
-        \ unite.prompt . unite.context.input)
-
+  call unite#view#_redraw_prompt(unite)
   call unite#view#_redraw_candidates()
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))

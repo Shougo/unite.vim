@@ -60,7 +60,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nnoremap <silent><buffer> <Plug>(unite_print_message_log)
         \ :<C-u>call <SID>print_message_log()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
-        \ unite#get_current_unite().prompt_linenr.'G0z.'
+        \ max([1, unite#get_current_unite().prompt_linenr]).'G0z.'
   nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
         \ :<C-u>call <SID>redraw_all_candidates()<CR>G
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
@@ -111,10 +111,8 @@ function! unite#mappings#define_default_mappings() "{{{
 
   inoremap <silent><buffer> <Plug>(unite_exit)
         \ <ESC>:<C-u>call <SID>exit()<CR>
-  inoremap <silent><expr><buffer> <Plug>(unite_insert_leave)
-        \ "\<ESC>0".((line('.') == unite#get_current_unite().prompt_linenr) ?
-        \ (unite#get_current_unite().prompt_linenr+1)."G" : "")
-        \ . ":call unite#redraw()\<CR>"
+  inoremap <silent><buffer> <Plug>(unite_insert_leave)
+        \ <ESC>:<C-u>call <SID>insert_leave()<CR>
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
         \ <SID>smart_imap("\<ESC>:\<C-u>call \<SID>all_exit()\<CR>",
         \ (unite#helper#get_input() == '' ?
@@ -467,6 +465,12 @@ function! s:insert_enter(key) "{{{
     return unite.prompt_linenr.'GzbA'
   endif
   return a:key
+endfunction"}}}
+function! s:insert_leave() "{{{
+  if line('.') == unite#get_current_unite().prompt_linenr
+    call cursor(unite#get_current_unite().prompt_linenr + 1, 1)
+  endif
+  call unite#redraw()
 endfunction"}}}
 function! s:redraw() "{{{
   call unite#clear_message()

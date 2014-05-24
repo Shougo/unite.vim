@@ -326,9 +326,7 @@ function! unite#action#do(action_name, ...) "{{{
 
   let unite = unite#get_current_unite()
   if empty(candidates)
-    let num = (line('.') == unite.prompt_linenr) ? 0 :
-          \ (line('.') - (unite.prompt_linenr + 1))
-    if line('$') - (unite.prompt_linenr + 1) < num
+    if empty(unite#helper#get_current_candidate())
       " Ignore.
       return []
     endif
