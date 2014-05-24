@@ -587,12 +587,9 @@ function! unite#mappings#cursor_up(is_skip_not_matched) "{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
-  let num = line('.') - (prompt_linenr + 1)
+  let num = line('.')
   let cnt = 1
   if line('.') == prompt_linenr
-    let cnt += prompt_linenr - line('.')
-  endif
-  if is_insert && line('.') == 2
     let cnt += 1
   endif
 
@@ -607,20 +604,9 @@ function! unite#mappings#cursor_up(is_skip_not_matched) "{{{
     break
   endwhile
 
-  if num < 0
-    if is_insert
-      return "\<C-Home>\<End>"
-    else
-      return prompt_linenr.'G0z.'
-    endif
-  endif
-
   if is_insert
-    if line('.') <= prompt_linenr + 2
-      return repeat("\<Up>", cnt) . "\<End>"
-    else
-      return "\<Home>" . repeat("\<Up>", cnt)
-    endif
+    return repeat("\<Up>", cnt) .
+          \ ((line('.') - cnt) <= prompt_linenr ? "\<End>" : "\<Home>")
   else
     return repeat('k', cnt)
   endif
@@ -629,12 +615,9 @@ function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
-  let num = line('.') - (prompt_linenr + 1)
+  let num = line('.')
   let cnt = 1
   if line('.') == prompt_linenr
-    let cnt += prompt_linenr - line('.')
-  endif
-  if is_insert && line('.') == prompt_linenr
     let cnt += 1
   endif
 
@@ -650,7 +633,8 @@ function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
   endwhile
 
   if is_insert
-    return "\<Home>" . repeat("\<Down>", cnt)
+    return repeat("\<Down>", cnt) .
+          \ ((line('.') + cnt) <= prompt_linenr ? "\<End>" : "\<Home>")
   else
     return repeat('j', cnt)
   endif
