@@ -42,6 +42,7 @@ function! unite#handlers#_on_insert_leave()  "{{{
   endif
 
   let unite.is_insert = 0
+  let unite.context.input = unite#helper#get_input()
 
   if &filetype ==# 'unite'
     setlocal nomodifiable

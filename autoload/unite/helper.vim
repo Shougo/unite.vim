@@ -180,6 +180,10 @@ endfunction"}}}
 
 function! unite#helper#get_input() "{{{
   let unite = unite#get_current_unite()
+  if mode() !=# 'i'
+    return unite.context.input
+  endif
+
   " Prompt check.
   if stridx(getline(unite.prompt_linenr), unite.prompt) != 0
     let modifiable_save = &l:modifiable
