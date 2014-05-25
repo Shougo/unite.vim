@@ -530,7 +530,9 @@ function! unite#view#_init_cursor() "{{{
   endif
 
   if line('.') <= winheight(0)
-    call unite#view#_set_cursor()
+        \ || (context.prompt_direction ==# 'below'
+        \     && (line('$') - line('.')) <= winheight(0))
+    normal! zb
   endif
 
   if context.select != 0
@@ -719,9 +721,6 @@ function! unite#view#_clear_message() "{{{
   let unite = unite#get_current_unite()
   let unite.msgs = []
   redraw
-endfunction"}}}
-function! unite#view#_set_cursor() "{{{
-  normal! zt
 endfunction"}}}
 
 function! unite#view#_get_status_string() "{{{
