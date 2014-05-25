@@ -161,8 +161,8 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   let context = unite.context
 
   if prompt_linenr > 0
-    if line('.') == prompt_linenr && !&l:modifiable
-      setlocal modifiable
+    if line('.') == prompt_linenr
+      let &l:modifiable = col('.') > len(context.prompt)
     endif
     if line('.') != prompt_linenr && &l:modifiable
       setlocal nomodifiable
