@@ -287,8 +287,14 @@ endfunction"}}}
 
 function! unite#helper#get_current_candidate(...) "{{{
   let linenr = a:0 >= 1? a:1 : line('.')
-  let num = linenr == unite#get_current_unite().prompt_linenr ?
-        \ 0 : linenr - (unite#get_current_unite().prompt_linenr+1)
+  let unite = unite#get_current_unite()
+  if unite.context.prompt_direction ==# 'below'
+    let num = linenr == unite.prompt_linenr ?
+          \ -1 : linenr - line('$')
+  else
+    let num = linenr == unite.prompt_linenr ?
+          \ 0 : linenr - 1
+  endif
 
   return get(unite#get_unite_candidates(), num, {})
 endfunction"}}}
@@ -404,7 +410,8 @@ endfunction"}}}
 function! unite#helper#cursor_prompt() "{{{
   " Move to prompt linenr.
   let unite = unite#get_current_unite()
-  call cursor(unite.init_prompt_linenr, 0)
+  call cursor((unite.context.prompt_direction ==# 'below' ?
+        \ line('$') : unite.init_prompt_linenr), 0)
 endfunction"}}}
 
 function! unite#helper#skip_prompt() "{{{
