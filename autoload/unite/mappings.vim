@@ -464,8 +464,7 @@ function! s:insert_enter(key) "{{{
 
   if unite.prompt_linenr == 0
     return unite.init_prompt_linenr . 'GzbA'
-  elseif (unite.prompt_linenr > 0 && line('.') != unite.prompt_linenr)
-        \ || col('.') <= len(unite.prompt)
+  elseif line('.') != unite.prompt_linenr || col('.') <= len(unite.prompt)
     return unite.prompt_linenr.'GzbA'
   endif
   return a:key
@@ -713,12 +712,23 @@ function! s:narrowing_dot() "{{{
 endfunction"}}}
 
 function! s:get_quick_match_table() "{{{
-  let offset = line('.') - unite#get_current_unite().prompt_linenr - 1
-  if offset < 0
-    let offset = 0
+  let unite = unite#get_current_unite()
+  let offset = unite.context.prompt_direction ==# 'below' ?
+        \ (unite.prompt_linenr - line('.')) :
+        \ (line('.') - unite.prompt_linenr - 1)
+  let offset += 1
+  if line('.') == unite.prompt_linenr
+    let offset = 2
+  endif
+  if unite.context.prompt_direction ==# 'below'
+    let offset = offset * -1
   endif
 
   let table = deepcopy(g:unite_quick_match_table)
+  if unite.context.prompt_direction ==# 'below'
+    let max = len(unite.current_candidates)
+    call map(table, 'max - v:val')
+  endif
   for key in keys(table)
     let table[key] += offset
   endfor
