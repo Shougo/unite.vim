@@ -293,7 +293,7 @@ function! unite#helper#get_current_candidate(...) "{{{
           \ -1 : linenr - line('$')
   else
     let num = linenr == unite.prompt_linenr ?
-          \ 0 : linenr - 1
+          \ 0 : linenr - 1 - unite.prompt_linenr
   endif
 
   return get(unite#get_unite_candidates(), num, {})
