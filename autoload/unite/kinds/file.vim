@@ -786,8 +786,11 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
       return
     endif
 
-    let output = unite#util#system(filer . '"' . path . '"' .
-          \ (!unite#util#is_windows() ? ' &' : ''))
+    if unite#util#is_windows()
+      let output = system(filer . '"' . path . '"')
+    else
+      let output = unite#util#system(filer . "'" . path . "' &")
+    endif
     if output != ''
       call unite#util#print_error('[unite] ' . output)
     endif
