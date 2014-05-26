@@ -43,8 +43,6 @@ call unite#util#set_default(
       \ 'g:unite_source_rec_async_command', (
       \  executable('ag') ?
       \  'ag --follow --nocolor --nogroup --hidden -g ""' :
-      \  executable('pt') ?
-      \  'pt --nocolor --nogroup -l ""' :
       \  !unite#util#is_windows() && executable('find') ? 'find' : ''),
       \ 'g:unite_source_file_rec_async_command')
 call unite#util#set_default(
