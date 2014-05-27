@@ -342,16 +342,21 @@ function! unite#view#_resize_window() "{{{
     if unite.prompt_linenr > 0
       let max_len += 1
     endif
+
+    let pos = getpos('.')
+    let winheight = winheight(0)
+
     silent! execute 'resize' min([max_len, context.winheight])
-    normal! zb
+
     if line('.') <= winheight(0)
       call unite#view#_set_syntax()
     endif
     if mode() ==# 'i' && col('.') == (col('$') - 1)
+      normal! zb
       startinsert!
     endif
 
-    let context.is_resize = 1
+    let context.is_resize = winheight != winheight(0)
   elseif context.vertical
         \ && context.unite__old_winwidth  == 0
     execute 'vertical resize' context.winwidth
