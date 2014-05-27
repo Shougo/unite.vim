@@ -163,9 +163,9 @@ function! unite#view#_set_candidates_lines(lines) "{{{
     if unite.context.prompt_direction ==# 'below'
       silent! execute '1,'.(unite.prompt_linenr-1).'$delete _'
       call setline(1, a:lines)
-      if unite.prompt_linenr != 0
-        silent! execute (unite.prompt_linenr+1).',$delete _'
-      endif
+      let start = (unite.prompt_linenr == 0) ?
+            \ len(a:lines)+1 : unite.prompt_linenr+1
+      silent! execute start.',$delete _'
     else
       silent! execute (unite.prompt_linenr+1).',$delete _'
       call setline(unite.prompt_linenr+1, a:lines)
