@@ -60,7 +60,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nnoremap <silent><buffer> <Plug>(unite_print_message_log)
         \ :<C-u>call <SID>print_message_log()<CR>
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
-        \ unite#get_current_unite().prompt_linenr.'G0z.'
+        \ 'gg0z.'
   nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
         \ :<C-u>call <SID>redraw_all_candidates()<CR>G
   nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
@@ -105,16 +105,13 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>do_new_candidate_action()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)
-        \ :<C-u>call <SID>toggle_mark_candidates(getpos("'<")[1]
-        \  - unite#get_current_unite().prompt_linenr-1,
-        \ getpos("'>")[1] - unite#get_current_unite().prompt_linenr - 1)<CR>
+        \ :<C-u>call <SID>toggle_mark_candidates(
+        \      getpos("'<")[1], getpos("'>")[1])<CR>
 
   inoremap <silent><buffer> <Plug>(unite_exit)
         \ <ESC>:<C-u>call <SID>exit()<CR>
-  inoremap <silent><expr><buffer> <Plug>(unite_insert_leave)
-        \ "\<ESC>0".((line('.') == unite#get_current_unite().prompt_linenr) ?
-        \ (unite#get_current_unite().prompt_linenr+1)."G" : "")
-        \ . ":call unite#redraw()\<CR>"
+  inoremap <silent><buffer> <Plug>(unite_insert_leave)
+        \ <ESC>:<C-u>call <SID>insert_leave()<CR>
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
         \ <SID>smart_imap("\<ESC>:\<C-u>call \<SID>all_exit()\<CR>",
         \ (unite#helper#get_input() == '' ?
@@ -283,11 +280,17 @@ function! unite#mappings#narrowing(word, ...) "{{{
   let unite = unite#get_current_unite()
 
   let unite.input .= is_escape ? escape(a:word, ' *') : a:word
-  let prompt_linenr = unite.prompt_linenr
-  call setline(prompt_linenr, unite.prompt . unite.input)
-  call unite#redraw()
+  let unite.context.input = unite.input
+  if unite.context.prompt_direction ==# 'below'
+    call unite#view#_remove_prompt()
+    call unite#redraw()
+    call unite#view#_redraw_prompt()
+  else
+    call unite#view#_redraw_prompt()
+    call unite#redraw()
+  endif
 
-  call cursor(prompt_linenr, 0)
+  call unite#helper#cursor_prompt()
   startinsert!
 endfunction"}}}
 
@@ -369,19 +372,21 @@ function! s:delete_backward_path() "{{{
   return repeat("\<C-h>", unite#util#strchars(path))
 endfunction"}}}
 function! s:normal_delete_backward_path() "{{{
-  let modifiable_save = &l:modifiable
-  setlocal modifiable
-  call setline(unite#get_current_unite().prompt_linenr,
-        \ substitute(getline(unite#get_current_unite().prompt_linenr)[
-        \    len(unite#get_current_unite().prompt):],
-        \                 '[^/ ]*.$', '', ''))
-  call unite#redraw()
-  let &l:modifiable = modifiable_save
+  let unite = unite#get_current_unite()
+  let unite.context.input = substitute(unite#helper#get_input(),
+        \ '[^/ ]*.$', '', '')
+
+  if unite.context.prompt_direction ==# 'below'
+    call unite#view#_remove_prompt()
+    call unite#redraw()
+    call unite#view#_redraw_prompt()
+  else
+    call unite#view#_redraw_prompt()
+    call unite#redraw()
+  endif
 endfunction"}}}
 function! s:toggle_mark(map) "{{{
-  if line('.') == unite#get_current_unite().prompt_linenr
-    call cursor(line('.')+1, 0)
-  endif
+  call unite#helper#skip_prompt()
 
   let candidate = unite#helper#get_current_candidate()
   if empty(candidate) || get(candidate, 'is_dummy', 0)
@@ -394,8 +399,7 @@ function! s:toggle_mark(map) "{{{
   call unite#view#_redraw_line()
 
   execute 'normal!' a:map ==# 'j' ?
-        \ s:loop_cursor_down(1) :
-        \ unite#mappings#loop_cursor_up_expr(1)
+        \ unite#mappings#cursor_down(1) : unite#mappings#cursor_up(1)
 endfunction"}}}
 function! s:toggle_mark_all_candidates() "{{{
   call s:redraw_all_candidates()
@@ -409,17 +413,14 @@ function! s:toggle_mark_candidates(start, end) "{{{
   endif
 
   let unite = unite#get_current_unite()
-  let offset = unite.prompt_linenr+1
-  let cnt = a:start
-  while cnt <= a:end
-    let candidate = unite#get_unite_candidates()[cnt]
-    let candidate.unite__is_marked = !candidate.unite__is_marked
-    let candidate.unite__marked_time = localtime()
-
-    call unite#view#_redraw_line(cnt + offset)
-
-    let cnt += 1
-  endwhile
+  call cursor(a:start, 1)
+  for cnt in range(a:start, a:end)
+    if line('.') == unite.prompt_linenr
+      call unite#helper#skip_prompt()
+    else
+      call s:toggle_mark('j')
+    endif
+  endfor
 endfunction"}}}
 function! s:quick_help() "{{{
   let unite = unite#get_current_unite()
@@ -427,14 +428,12 @@ function! s:quick_help() "{{{
   call unite#start_temporary([['mapping', bufnr('%')]], {}, 'mapping-help')
 endfunction"}}}
 function! s:choose_action() "{{{
-  let unite = unite#get_current_unite()
-  if line('$') < (unite.prompt_linenr+1)
-    " Ignore.
-    return
-  endif
-
   let candidates = unite#helper#get_marked_candidates()
   if empty(candidates)
+    if empty(unite#helper#get_current_candidate())
+      return
+    endif
+
     let candidates = [ unite#helper#get_current_candidate() ]
   endif
 
@@ -462,11 +461,17 @@ function! s:insert_enter(key) "{{{
   setlocal modifiable
 
   let unite = unite#get_current_unite()
-  if line('.') != unite.prompt_linenr
-        \ || col('.') <= len(unite.prompt)
+
+  if unite.prompt_linenr == 0
+    return unite.init_prompt_linenr . 'GzbA'
+  elseif line('.') != unite.prompt_linenr || col('.') <= len(unite.prompt)
     return unite.prompt_linenr.'GzbA'
   endif
   return a:key
+endfunction"}}}
+function! s:insert_leave() "{{{
+  call unite#helper#skip_prompt()
+  call unite#redraw()
 endfunction"}}}
 function! s:redraw() "{{{
   call unite#clear_message()
@@ -490,12 +495,12 @@ function! s:rotate_source(is_next) "{{{
   call unite#view#_redraw_candidates()
 endfunction"}}}
 function! s:print_candidate() "{{{
-  if line('.') == unite#get_current_unite().prompt_linenr
+  let candidate = unite#helper#get_current_candidate()
+  if empty(candidate)
     " Ignore.
     return
   endif
 
-  let candidate = unite#helper#get_current_candidate()
   echo 'abbr: ' . candidate.unite__abbr
   echo 'word: ' . candidate.word
 endfunction"}}}
@@ -508,12 +513,12 @@ function! s:print_message_log() "{{{
   endfor
 endfunction"}}}
 function! s:insert_selected_candidate() "{{{
-  if line('.') == unite#get_current_unite().prompt_linenr
+  let candidate = unite#helper#get_current_candidate()
+  if empty(candidate)
     " Ignore.
     return
   endif
 
-  let candidate = unite#helper#get_current_candidate()
   call unite#mappings#narrowing(candidate.word)
 endfunction"}}}
 function! unite#mappings#_quick_match(is_choose) "{{{
@@ -573,30 +578,61 @@ function! s:input_directory() "{{{
   let path = path.(path == '' || path =~ '/$' ? '' : '/')
   call unite#mappings#narrowing(path)
 endfunction"}}}
-function! s:loop_cursor_down(is_skip_not_matched) "{{{
+function! unite#mappings#loop_cursor_up(mode) "{{{
+  " Loop.
+  call s:redraw_all_candidates()
+
+  if a:mode ==# 'i'
+    noautocmd startinsert
+  endif
+
+  call cursor(line('$'), 1)
+endfunction"}}}
+function! unite#mappings#loop_cursor_down(mode) "{{{
+  " Loop.
+  call s:redraw_all_candidates()
+
+  if a:mode ==# 'i'
+    noautocmd startinsert
+  endif
+
+  call cursor(1, 1)
+endfunction"}}}
+function! unite#mappings#cursor_up(is_skip_not_matched) "{{{
   let is_insert = mode() ==# 'i'
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
-  if line('.') == prompt_linenr && !is_insert
-    return line('.') == line('$') &&
-          \ empty(unite#get_unite_candidates()) ? '2G' : 'j'
-  endif
-
-  if line('.') == line('$')
-    " Loop.
-    if is_insert
-      return "\<C-Home>\<End>".repeat("\<Down>", prompt_linenr-1)."\<End>"
-    else
-      return prompt_linenr.'G0z.'
-    endif
-  endif
-
-  let num = line('.') - (prompt_linenr + 1)
+  let num = line('.') - 1
   let cnt = 1
   if line('.') == prompt_linenr
-    let cnt += prompt_linenr - line('.')
+    let cnt += 1
   endif
-  if is_insert && line('.') == prompt_linenr
+
+  while 1
+    let candidate = get(unite#get_unite_candidates(), num - cnt, {})
+    if num >= cnt && !empty(candidate) && (candidate.is_dummy
+          \ || (a:is_skip_not_matched && !candidate.is_matched))
+      let cnt += 1
+      continue
+    endif
+
+    break
+  endwhile
+
+  if is_insert
+    return repeat("\<Up>", cnt) .
+          \ ((line('.') - cnt) <= prompt_linenr ? "\<End>" : "\<Home>")
+  else
+    return repeat('k', cnt)
+  endif
+endfunction"}}}
+function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
+  let is_insert = mode() ==# 'i'
+  let prompt_linenr = unite#get_current_unite().prompt_linenr
+
+  let num = line('.') - 1
+  let cnt = 1
+  if line('.') == prompt_linenr
     let cnt += 1
   endif
 
@@ -612,70 +648,10 @@ function! s:loop_cursor_down(is_skip_not_matched) "{{{
   endwhile
 
   if is_insert
-    return "\<Home>" . repeat("\<Down>", cnt)
+    return repeat("\<Down>", cnt) .
+          \ ((line('.') + cnt) <= prompt_linenr ? "\<End>" : "\<Home>")
   else
     return repeat('j', cnt)
-  endif
-endfunction"}}}
-function! unite#mappings#loop_cursor_up_call(is_skip_not_matched, mode) "{{{
-  let is_insert = a:mode ==# 'i'
-  let prompt_linenr = unite#get_current_unite().prompt_linenr
-
-  if !is_insert && line('.') > prompt_linenr
-    call cursor(line('.') - 1, 0)
-    return
-  endif
-
-  " Loop.
-
-  call s:redraw_all_candidates()
-
-  if is_insert
-    noautocmd startinsert
-  endif
-
-  call cursor(line('$'), 1)
-endfunction"}}}
-function! unite#mappings#loop_cursor_up_expr(is_skip_not_matched) "{{{
-  let is_insert = mode() ==# 'i'
-  let prompt_linenr = unite#get_current_unite().prompt_linenr
-
-  let num = line('.') - (prompt_linenr + 1)
-  let cnt = 1
-  if line('.') == prompt_linenr
-    let cnt += prompt_linenr - line('.')
-  endif
-  if is_insert && line('.') == prompt_linenr+2
-    let cnt += 1
-  endif
-
-  while 1
-    let candidate = get(unite#get_unite_candidates(), num - cnt, {})
-    if num >= cnt && !empty(candidate) && (candidate.is_dummy
-          \ || (a:is_skip_not_matched && !candidate.is_matched))
-      let cnt += 1
-      continue
-    endif
-
-    break
-  endwhile
-
-  if num < 0
-    if is_insert
-      return "\<C-Home>\<End>".repeat("\<Down>", prompt_linenr)."\<Home>"
-    else
-      return prompt_linenr.'G0z.'
-    endif
-  endif
-
-  if is_insert
-    if line('.') <= prompt_linenr + 2
-      return repeat("\<Up>", cnt) . "\<End>"
-    else
-      return "\<Home>" . repeat("\<Up>", cnt)
-    endif
-  else
-    return repeat('k', cnt)
   endif
 endfunction"}}}
 function! s:toggle_transpose_window() "{{{
@@ -711,12 +687,11 @@ function! s:disable_max_candidates() "{{{
   call s:redraw_all_candidates()
 endfunction"}}}
 function! s:narrowing_path() "{{{
-  if line('.') == unite#get_current_unite().prompt_linenr
+  let candidate = unite#helper#get_current_candidate()
+  if empty(unite#helper#get_current_candidate())
     " Ignore.
     return
   endif
-
-  let candidate = unite#helper#get_current_candidate()
   call unite#mappings#narrowing(has_key(candidate, 'action__path')?
         \ candidate.action__path : candidate.word)
 endfunction"}}}
@@ -737,12 +712,23 @@ function! s:narrowing_dot() "{{{
 endfunction"}}}
 
 function! s:get_quick_match_table() "{{{
-  let offset = line('.') - unite#get_current_unite().prompt_linenr - 1
-  if offset < 0
-    let offset = 0
+  let unite = unite#get_current_unite()
+  let offset = unite.context.prompt_direction ==# 'below' ?
+        \ (unite.prompt_linenr - line('.')) :
+        \ (line('.') - unite.prompt_linenr - 1)
+  let offset += 1
+  if line('.') == unite.prompt_linenr
+    let offset = 2
+  endif
+  if unite.context.prompt_direction ==# 'below'
+    let offset = offset * -1
   endif
 
   let table = deepcopy(g:unite_quick_match_table)
+  if unite.context.prompt_direction ==# 'below'
+    let max = len(unite.current_candidates)
+    call map(table, 'max - v:val')
+  endif
   for key in keys(table)
     let table[key] += offset
   endfor

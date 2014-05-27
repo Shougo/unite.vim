@@ -26,37 +26,100 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! unite#view#_redraw_prompt() "{{{
+  let unite = unite#get_current_unite()
+  if unite.prompt_linenr < 0
+    return
+  endif
+
+  let modifiable_save = &l:modifiable
+  try
+    setlocal modifiable
+    call setline(unite.prompt_linenr,
+          \ unite.prompt . unite.context.input)
+
+    silent! syntax clear uniteInputLine
+    execute 'syntax match uniteInputLine'
+          \ '/\%'.unite.prompt_linenr.'l.*/'
+          \ 'contains=uniteInputPrompt,uniteInputPromptError,'.
+          \ 'uniteInputCommand'
+  finally
+    let &l:modifiable = modifiable_save
+  endtry
+endfunction"}}}
+function! unite#view#_remove_prompt() "{{{
+  let unite = unite#get_current_unite()
+  if unite.prompt_linenr == 0
+    return
+  endif
+
+  let modifiable_save = &l:modifiable
+  try
+    setlocal modifiable
+
+    silent! execute (unite.prompt_linenr).'delete _'
+    silent! syntax clear uniteInputLine
+  finally
+    let &l:modifiable = modifiable_save
+  endtry
+
+  call cursor(unite.init_prompt_linenr, 0)
+  let unite.prompt_linenr = 0
+endfunction"}}}
 function! unite#view#_redraw_candidates(...) "{{{
   let is_gather_all = get(a:000, 0, 0)
 
   call unite#view#_resize_window()
 
-  let candidates = unite#candidates#gather(is_gather_all)
-
-  let modifiable_save = &l:modifiable
-  setlocal modifiable
-
-  let lines = unite#view#_convert_lines(candidates)
-  let pos = getpos('.')
-  let unite = unite#get_current_unite()
-  if len(lines) < len(unite.current_candidates)
-    silent! execute (unite.prompt_linenr+1).',$delete _'
-  endif
-  call setline(unite.prompt_linenr+1, lines)
-
-  let &l:modifiable = l:modifiable_save
-
   let unite = unite#get_current_unite()
   let context = unite.context
-  let unite.current_candidates = candidates
 
-  if pos != getpos('.')
-    call setpos('.', pos)
+  let candidates = unite#candidates#gather(is_gather_all)
+  if context.prompt_direction ==# 'below'
+    let unite.init_prompt_linenr = len(candidates)
   endif
 
+  let pos = getpos('.')
+  let modifiable_save = &l:modifiable
+  try
+    setlocal modifiable
+
+    if context.prompt_direction !=# 'below'
+      call unite#view#_redraw_prompt()
+    endif
+
+    call unite#view#_set_candidates_lines(
+          \ unite#view#_convert_lines(candidates))
+
+    if context.prompt_direction ==# 'below'
+      if empty(candidates)
+        let unite.prompt_linenr = 1
+      else
+        call append(unite.prompt_linenr, '')
+        let unite.prompt_linenr += 1
+      endif
+      call unite#view#_redraw_prompt()
+    endif
+
+    let unite.current_candidates = candidates
+  finally
+    let &l:modifiable = l:modifiable_save
+    if pos != getpos('.')
+      call setpos('.', pos)
+    endif
+  endtry
+
   if context.input == '' && context.log
+        \ || context.prompt_direction ==# 'below'
     " Move to bottom.
     call cursor(line('$'), 0)
+    if context.prompt_direction ==# 'below' && mode() == 'i'
+      let col = col('.')
+      normal! zb
+
+      " Restore position
+      call cursor(0, col)
+    endif
   endif
 
   " Set syntax.
@@ -69,7 +132,7 @@ function! unite#view#_redraw_line(...) "{{{
     let linenr += 1
   endif
 
-  if linenr == prompt_linenr || &filetype !=# 'unite'
+  if &filetype !=# 'unite'
     " Ignore.
     return
   endif
@@ -77,23 +140,38 @@ function! unite#view#_redraw_line(...) "{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
 
-  let candidate = unite#get_unite_candidates()[linenr -
-        \ (prompt_linenr+1)]
+  let candidate = unite#helper#get_current_candidate(linenr)
   call setline(linenr, unite#view#_convert_lines([candidate])[0])
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! unite#view#_quick_match_redraw(quick_match_table) "{{{
-  let modifiable_save = &l:modifiable
-  setlocal modifiable
-
-  call setline(unite#get_current_unite().prompt_linenr+1,
+  call unite#view#_set_candidates_lines(
         \ unite#view#_convert_lines(
-        \ unite#get_current_unite().current_candidates,
-        \ a:quick_match_table))
+        \   unite#get_current_unite().current_candidates,
+        \   a:quick_match_table))
   redraw
+endfunction"}}}
+function! unite#view#_set_candidates_lines(lines) "{{{
+  let unite = unite#get_current_unite()
+  let modifiable_save = &l:modifiable
+  try
+    let pos = getpos('.')
+    setlocal modifiable
 
-  let &l:modifiable = modifiable_save
+    " Clear candidates
+    if unite.context.prompt_direction ==# 'below'
+      silent! execute '1,'.(unite.prompt_linenr-1).'$delete _'
+      call setline(1, a:lines)
+      silent! execute (unite.prompt_linenr+1).',$delete _'
+    else
+      silent! execute (unite.prompt_linenr+1).',$delete _'
+      call setline(unite.prompt_linenr+1, a:lines)
+    endif
+  finally
+    call setpos('.', pos)
+    let &l:modifiable = modifiable_save
+  endtry
 endfunction"}}}
 
 function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
@@ -108,8 +186,6 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     let winnr_save = winnr()
 
     execute a:winnr 'wincmd w'
-
-    let line_save = unite.prompt_linenr
   endif
 
   try
@@ -153,11 +229,6 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     let unite.context.is_redraw = 0
   finally
     if a:winnr > 0
-      if unite.prompt_linenr != line_save
-        " Updated.
-        call cursor(line('$'), 0)
-      endif
-
       " Restore current unite.
       call unite#set_current_unite(unite_save)
       execute winnr_save 'wincmd w'
@@ -198,11 +269,6 @@ function! unite#view#_set_syntax() "{{{
         \ 'uniteCandidateSourceName'
   execute 'syntax match uniteCandidateMarker /^'.
         \ candidate_icon.' / contained'
-
-  execute 'syntax match uniteInputLine'
-        \ '/\%'.unite.prompt_linenr.'l.*/'
-        \ 'contains=uniteInputPrompt,uniteInputPromptError,'.
-        \ 'uniteInputCommand'
 
   silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0
@@ -270,10 +336,13 @@ function! unite#view#_resize_window() "{{{
 
   if context.auto_resize
     " Auto resize.
-    let max_len = unite.prompt_linenr + unite.candidates_len
+    let max_len = unite.candidates_len
+    if unite.prompt_linenr > 0
+      let max_len += 1
+    endif
     silent! execute 'resize' min([max_len, context.winheight])
     if line('.') <= winheight(0)
-      normal! zb
+      call unite#view#_set_syntax()
     endif
     if mode() ==# 'i' && col('.') == (col('$') - 1)
       startinsert!
@@ -436,14 +505,8 @@ function! unite#view#_init_cursor() "{{{
   if context.start_insert && !context.auto_quit
     let unite.is_insert = 1
 
-    if is_restore
-      " Restore position.
-      call setpos('.', positions[key].pos)
-      startinsert
-    else
-      call cursor(unite.prompt_linenr, 0)
-      startinsert!
-    endif
+    call unite#helper#cursor_prompt()
+    startinsert!
 
     setlocal modifiable
   else
@@ -453,7 +516,7 @@ function! unite#view#_init_cursor() "{{{
       " Restore position.
       call setpos('.', positions[key].pos)
     else
-      call cursor(unite#helper#get_current_candidate_linenr(0), 0)
+      call unite#helper#cursor_prompt()
     endif
 
     call cursor(0, 1)
@@ -461,6 +524,8 @@ function! unite#view#_init_cursor() "{{{
   endif
 
   if line('.') <= winheight(0)
+        \ || (context.prompt_direction ==# 'below'
+        \     && (line('$') - line('.')) <= winheight(0))
     normal! zb
   endif
 
@@ -473,8 +538,7 @@ function! unite#view#_init_cursor() "{{{
   endif
 
   if context.quick_match
-    " Move to prompt linenr.
-    call cursor(unite.prompt_linenr, 0)
+    call unite#helper#cursor_prompt()
 
     call unite#mappings#_quick_match(0)
   endif
@@ -594,6 +658,23 @@ function! unite#view#_quit(is_force, ...)  "{{{
 
   " Restore unite.
   call unite#set_current_unite(unite_save)
+endfunction"}}}
+
+function! unite#view#_set_cursor_line() "{{{
+  let unite = unite#get_current_unite()
+  let prompt_linenr = unite.prompt_linenr
+  let context = unite.context
+
+  execute '2match' (line('.') == prompt_linenr ?
+        \     (context.prompt_direction !=# 'below'
+        \   && line('$') == prompt_linenr)
+        \  || (context.prompt_direction ==# 'below'
+        \   && 1 == prompt_linenr)
+        \ && context.input != '' ?
+        \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
+        \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
+        \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')
+  let unite.cursor_line_time = reltime()
 endfunction"}}}
 
 " Message output.

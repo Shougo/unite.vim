@@ -1678,7 +1678,12 @@ the context dictionary.
 
 						*unite-options-prompt*
 		-prompt={prompt-text}
-		Specify a prompt.  The default value is '> '.
+		Specify the prompt.  The default value is '> '.
+
+						*unite-options-prompt-direction*
+		-prompt-direction="top" or "below"
+		Specify the prompt direction.  The default value is "below" if
+		|unite-options-direction| contains "below".
 
 						*unite-options-default-action*
 		-default-action={default-action}

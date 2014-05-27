@@ -136,7 +136,11 @@ function! unite#candidates#gather(...) "{{{
     let unite.candidates += source.unite__candidates
   endfor
 
-  if is_gather_all
+  if unite.context.prompt_direction ==# 'below'
+    let unite.candidates = reverse(unite.candidates)
+  endif
+
+  if is_gather_all || unite.context.prompt_direction ==# 'below'
     let unite.candidates_pos = len(unite.candidates)
   elseif unite.context.is_redraw || unite.candidates_pos == 0
     let unite.candidates_pos = line('.') + winheight(0)
@@ -147,6 +151,9 @@ function! unite#candidates#gather(...) "{{{
 
   let unite.candidates_len = len(candidates) +
         \ len(unite.candidates[unite.candidates_pos :])
+  if unite.context.prompt_direction ==# 'below'
+    let unite.prompt_linenr = unite.candidates_len
+  endif
 
   let unite.context.unite__max_candidates = 0
   let unite.context.input_list =

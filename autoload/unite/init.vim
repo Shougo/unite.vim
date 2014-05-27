@@ -93,6 +93,10 @@ function! unite#init#_context(context, ...) "{{{
   if get(context, 'auto_preview', 0)
     let context.winheight -= &previewheight
   endif
+  if context.prompt_direction == ''
+    let context.prompt_direction =
+          \ (context.direction =~# 'below') ? 'below' : 'top'
+  endif
 
   let context.is_changed = 0
 
@@ -261,7 +265,11 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.input = context.input
   let unite.last_input = context.input
   let unite.sidescrolloff_save = &sidescrolloff
-  let unite.prompt_linenr = 1
+  let unite.init_prompt_linenr = 1
+  let unite.prompt_linenr =
+        \ (context.input == '' && !context.start_insert
+        \  && context.prompt_direction !=# 'below') ?
+        \ 0 : unite.init_prompt_linenr
   let unite.is_async =
         \ len(filter(copy(sources),
         \  'v:val.unite__context.is_async')) > 0
@@ -286,8 +294,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.cursor_line_time = reltime()
 
   if context.here
-    let context.winheight = winheight(0) - winline() +
-          \ unite.prompt_linenr
+    let context.winheight = winheight(0) - winline() + 1
     if context.winheight < 5
       let context.winheight = 5
     endif
