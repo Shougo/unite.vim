@@ -714,7 +714,9 @@ endfunction"}}}
 function! s:get_quick_match_table() "{{{
   let unite = unite#get_current_unite()
   let offset = unite.context.prompt_direction ==# 'below' ?
-        \ (unite.prompt_linenr - line('.')) :
+        \ (unite.prompt_linenr == 0 ?
+        \  line('$') - line('.') + 1 :
+        \  unite.prompt_linenr - line('.')) :
         \ (line('.') - unite.prompt_linenr - 1)
   let offset += 1
   if line('.') == unite.prompt_linenr
