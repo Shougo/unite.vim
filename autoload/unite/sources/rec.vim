@@ -431,7 +431,8 @@ function! s:source_file_git.gather_candidates(args, context) "{{{
     return deepcopy(continuation.files)
   endif
 
-  let command = g:unite_source_rec_git_command . ' ls-files ' . join(a:args)
+  let command = g:unite_source_rec_git_command
+        \ . ' ls-files --full-name ' . join(a:args)
   let args = split(command) + a:args
   if empty(args) || !executable(args[0])
     call unite#print_source_message('git command : "'.
@@ -486,7 +487,7 @@ function! s:get_path(args, context) "{{{
           \ directory, 'dir', a:context.source_name)
   endif
 
-  let directory = unite#util#expand(directory)
+  let directory = unite#util#expand(fnamemodify(directory, ':p'))
 
   if directory != '/' && directory =~ '/$'
     let directory = directory[: -2]
