@@ -152,7 +152,11 @@ function! unite#candidates#gather(...) "{{{
   let unite.candidates_len = len(candidates) +
         \ len(unite.candidates[unite.candidates_pos :])
   if unite.context.prompt_direction ==# 'below'
-    let unite.prompt_linenr = unite.candidates_len
+    if unite.prompt_linenr == 0
+      let unite.init_prompt_linenr = unite.candidates_len
+    else
+      let unite.prompt_linenr = unite.candidates_len
+    endif
   endif
 
   let unite.context.unite__max_candidates = 0

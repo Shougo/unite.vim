@@ -267,9 +267,11 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.sidescrolloff_save = &sidescrolloff
   let unite.init_prompt_linenr = 1
   let unite.prompt_linenr =
-        \ (context.input == '' && !context.start_insert
-        \  && context.prompt_direction !=# 'below') ?
+        \ (context.input == '' && !context.start_insert) ?
         \ 0 : unite.init_prompt_linenr
+        " \ (context.input == '' && !context.start_insert
+        " \  && context.prompt_direction !=# 'below') ?
+        " \ 0 : unite.init_prompt_linenr
   let unite.is_async =
         \ len(filter(copy(sources),
         \  'v:val.unite__context.is_async')) > 0

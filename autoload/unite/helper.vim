@@ -289,7 +289,9 @@ function! unite#helper#get_current_candidate(...) "{{{
   let linenr = a:0 >= 1? a:1 : line('.')
   let unite = unite#get_current_unite()
   if unite.context.prompt_direction ==# 'below'
-    let num = linenr == unite.prompt_linenr ?
+    let num = unite.prompt_linenr == 0 ?
+          \ linenr - line('$') - 1 :
+          \ linenr == unite.prompt_linenr ?
           \ -1 : linenr - line('$')
   else
     let num = linenr == unite.prompt_linenr ?

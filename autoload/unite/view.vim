@@ -91,7 +91,7 @@ function! unite#view#_redraw_candidates(...) "{{{
     call unite#view#_set_candidates_lines(
           \ unite#view#_convert_lines(candidates))
 
-    if context.prompt_direction ==# 'below'
+    if context.prompt_direction ==# 'below' && unite.prompt_linenr != 0
       if empty(candidates)
         let unite.prompt_linenr = 1
       else
@@ -163,7 +163,9 @@ function! unite#view#_set_candidates_lines(lines) "{{{
     if unite.context.prompt_direction ==# 'below'
       silent! execute '1,'.(unite.prompt_linenr-1).'$delete _'
       call setline(1, a:lines)
-      silent! execute (unite.prompt_linenr+1).',$delete _'
+      if unite.prompt_linenr != 0
+        silent! execute (unite.prompt_linenr+1).',$delete _'
+      endif
     else
       silent! execute (unite.prompt_linenr+1).',$delete _'
       call setline(unite.prompt_linenr+1, a:lines)

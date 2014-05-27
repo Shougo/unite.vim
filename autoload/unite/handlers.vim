@@ -42,7 +42,11 @@ function! unite#handlers#_on_insert_enter()  "{{{
 
   " Restore prompt
   let unite.prompt_linenr = unite.init_prompt_linenr
-  call append(0, '')
+  call append((unite.context.prompt_direction ==# 'below' ?
+        \ '$' : 0), '')
+  if unite.context.prompt_direction ==# 'below'
+    let unite.prompt_linenr += 1
+  endif
   call unite#view#_redraw_prompt()
 endfunction"}}}
 function! unite#handlers#_on_insert_leave()  "{{{
