@@ -76,6 +76,8 @@ function! unite#kinds#jump_list#define() "{{{
     let filename = s:get_filename(a:candidate)
     let bufwinnr = bufwinnr(
           \ unite#util#escape_file_searching(filename))
+    let buflisted = buflisted(
+          \ unite#util#escape_file_searching(filename))
     let preview_windows = filter(range(1, winnr('$')),
           \ 'getwinvar(v:val, "&previewwindow") != 0')
     if empty(preview_windows)
@@ -89,7 +91,9 @@ function! unite#kinds#jump_list#define() "{{{
       if bufwinnr < 0
         doautocmd BufRead
         setlocal nomodified
-        call unite#add_previewed_buffer_list(bufnr)
+        if !buflisted
+          call unite#add_previewed_buffer_list(bufnr)
+        endif
       endif
       call s:jump(a:candidate, 1)
     finally
