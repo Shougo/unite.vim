@@ -414,7 +414,9 @@ function! s:toggle_mark(map) "{{{
 
   call unite#view#_redraw_line()
 
-  execute 'normal!' a:map ==# 'j' ?
+  let context = unite#get_context()
+  execute 'normal!' (a:map ==# 'j' && context.prompt_direction !=# 'below'
+        \ || a:map ==# 'k' && context.prompt_direction !=# 'below') ?
         \ unite#mappings#cursor_down(1) : unite#mappings#cursor_up(1)
 endfunction"}}}
 function! s:toggle_mark_all_candidates() "{{{
