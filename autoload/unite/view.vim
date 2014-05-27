@@ -343,6 +343,7 @@ function! unite#view#_resize_window() "{{{
       let max_len += 1
     endif
     silent! execute 'resize' min([max_len, context.winheight])
+    normal! zb
     if line('.') <= winheight(0)
       call unite#view#_set_syntax()
     endif
