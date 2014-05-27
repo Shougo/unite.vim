@@ -156,6 +156,9 @@ function! unite#candidates#gather(...) "{{{
       let unite.init_prompt_linenr = unite.candidates_len
     else
       let unite.prompt_linenr = unite.candidates_len
+      if unite.prompt_linenr == 0
+        let unite.prompt_linenr = 1
+      endif
     endif
   endif
 
