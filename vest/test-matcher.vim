@@ -54,6 +54,21 @@ Context Source.run()
         ShouldEqual unite#filters#matcher_fuzzy#get_fuzzy_input(
               \  'fooooooooooooooooooooo/oooooooooooo'),
               \ ['fooooooooooooooooooooo', '/oooooooooooo']
+
+        ShouldEqual unite#helper#paths2candidates(
+              \  ['foo']), [
+              \ {'word' : 'foo', 'action__path' : 'foo'},
+              \ ]
+
+        ShouldEqual unite#filters#converter_relative_word#lua([
+              \  {'word' : '/foo/foo'},
+              \  {'word' :
+              \   unite#util#substitute_path_separator(expand('~/')).'bar'},
+              \  {'word' : '/foo/foo', 'action__path' : '/foo/baz'},
+              \ ], '/foo'), [
+              \ {'word' : 'foo'}, {'word' : 'bar'},
+              \ {'word' : 'baz', 'action__path' : '/foo/baz'}
+              \ ]
     finally
       let g:unite_matcher_fuzzy_max_input_length = fuzzy_save
     endtry

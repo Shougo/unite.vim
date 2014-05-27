@@ -423,6 +423,33 @@ function! unite#helper#skip_prompt() "{{{
   endif
 endfunction"}}}
 
+if unite#util#has_lua()
+  function! unite#helper#paths2candidates(paths) "{{{
+    let candidates = []
+  lua << EOF
+do
+  local paths = vim.eval('a:paths')
+  local candidates = vim.eval('candidates')
+  for path in paths() do
+    local candidate = vim.dict()
+    candidate.word = path
+    candidate.action__path = path
+    candidates:add(candidate)
+  end
+end
+EOF
+
+    return candidates
+  endfunction"}}}
+else
+  function! unite#helper#paths2candidates(paths) "{{{
+    return map(a:paths, "{
+          \ 'word' : v:val,
+          \ 'action__path' : v:val,
+          \ }")
+  endfunction"}}}
+endif
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
