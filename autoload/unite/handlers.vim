@@ -27,14 +27,14 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#handlers#_on_insert_enter()  "{{{
-  let unite = unite#get_current_unite()
-  let unite.is_insert = 1
-
   if &filetype !=# 'unite'
     return
   endif
 
   setlocal modifiable
+
+  let unite = unite#get_current_unite()
+  let unite.is_insert = 1
 
   if unite.prompt_linenr != 0
     return
@@ -44,9 +44,6 @@ function! unite#handlers#_on_insert_enter()  "{{{
   let unite.prompt_linenr = unite.init_prompt_linenr
   call append((unite.context.prompt_direction ==# 'below' ?
         \ '$' : 0), '')
-  if unite.context.prompt_direction ==# 'below'
-    let unite.prompt_linenr += 1
-  endif
   call unite#view#_redraw_prompt()
 endfunction"}}}
 function! unite#handlers#_on_insert_leave()  "{{{

@@ -35,16 +35,27 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>all_exit()<CR>
   nnoremap <silent><buffer> <Plug>(unite_choose_action)
         \ :<C-u>call <SID>choose_action()<CR>
-  nnoremap <expr><buffer> <Plug>(unite_insert_enter)
-        \ <SID>insert_enter('i')
-  nnoremap <expr><buffer> <Plug>(unite_insert_head)
-        \ <SID>insert_enter('A'.
-        \  (repeat("\<Left>", len(substitute(
-        \    unite#helper#get_input(), '.', 'x', 'g')))))
-  nnoremap <expr><buffer> <Plug>(unite_append_enter)
-        \ <SID>insert_enter('a')
-  nnoremap <expr><buffer> <Plug>(unite_append_end)
-        \ <SID>insert_enter('A')
+  if b:unite.prompt_linenr == 0
+    nnoremap <silent><buffer> <Plug>(unite_insert_enter)
+          \ :<C-u>call <SID>insert_enter2()<CR>
+    nnoremap <silent><buffer> <Plug>(unite_insert_head)
+          \ :<C-u>call <SID>insert_enter2()<CR>
+    nnoremap <silent><buffer> <Plug>(unite_append_enter)
+          \ :<C-u>call <SID>insert_enter2()<CR>
+    nnoremap <silent><buffer> <Plug>(unite_append_end)
+          \ :<C-u>call <SID>insert_enter2()<CR>
+  else
+    nnoremap <expr><buffer> <Plug>(unite_insert_enter)
+          \ <SID>insert_enter('i')
+    nnoremap <expr><buffer> <Plug>(unite_insert_head)
+          \ <SID>insert_enter('A'.
+          \  (repeat("\<Left>", len(substitute(
+          \    unite#helper#get_input(), '.', 'x', 'g')))))
+    nnoremap <expr><buffer> <Plug>(unite_append_enter)
+          \ <SID>insert_enter('a')
+    nnoremap <expr><buffer> <Plug>(unite_append_end)
+          \ <SID>insert_enter('A')
+  endif
   nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate)
         \ :<C-u>call <SID>toggle_mark('j')<CR>
   nnoremap <silent><buffer> <Plug>(unite_toggle_mark_current_candidate_up)
@@ -467,12 +478,32 @@ function! s:insert_enter(key) "{{{
 
   let unite = unite#get_current_unite()
 
-  if unite.prompt_linenr == 0
-    return unite.init_prompt_linenr . 'GzbA'
-  elseif line('.') != unite.prompt_linenr || col('.') <= len(unite.prompt)
+  if line('.') != unite.prompt_linenr || col('.') <= len(unite.prompt)
     return unite.prompt_linenr.'GzbA'
   endif
   return a:key
+endfunction"}}}
+function! s:insert_enter2() "{{{
+  nnoremap <expr><buffer> <Plug>(unite_insert_enter)
+        \ <SID>insert_enter('i')
+  nnoremap <expr><buffer> <Plug>(unite_insert_head)
+        \ <SID>insert_enter('A'.
+        \  (repeat("\<Left>", len(substitute(
+        \    unite#helper#get_input(), '.', 'x', 'g')))))
+  nnoremap <expr><buffer> <Plug>(unite_append_enter)
+        \ <SID>insert_enter('a')
+  nnoremap <expr><buffer> <Plug>(unite_append_end)
+        \ <SID>insert_enter('A')
+
+  setlocal modifiable
+
+  " Restore prompt
+  call unite#handlers#_on_insert_enter()
+
+  let unite = unite#get_current_unite()
+  call cursor(unite.init_prompt_linenr, 0)
+  normal! zb
+  startinsert!
 endfunction"}}}
 function! s:insert_leave() "{{{
   call unite#helper#skip_prompt()

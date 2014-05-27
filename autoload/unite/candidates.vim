@@ -153,7 +153,7 @@ function! unite#candidates#gather(...) "{{{
         \ len(unite.candidates[unite.candidates_pos :])
   if unite.context.prompt_direction ==# 'below'
     if unite.prompt_linenr == 0
-      let unite.init_prompt_linenr = unite.candidates_len
+      let unite.init_prompt_linenr = unite.candidates_len + 1
     else
       let unite.prompt_linenr = unite.candidates_len
       if unite.prompt_linenr == 0

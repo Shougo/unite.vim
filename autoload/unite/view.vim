@@ -76,7 +76,7 @@ function! unite#view#_redraw_candidates(...) "{{{
 
   let candidates = unite#candidates#gather(is_gather_all)
   if context.prompt_direction ==# 'below'
-    let unite.init_prompt_linenr = len(candidates)
+    let unite.init_prompt_linenr = len(candidates) + 1
   endif
 
   let pos = getpos('.')

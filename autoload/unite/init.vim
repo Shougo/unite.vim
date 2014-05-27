@@ -186,9 +186,9 @@ function! unite#init#_unite_buffer() "{{{
       autocmd plugin-unite InsertCharPre <buffer>
             \ call unite#handlers#_on_insert_char_pre()
     endif
-
-    call unite#mappings#define_default_mappings()
   endif
+
+  call unite#mappings#define_default_mappings()
 
   let &l:wrap = context.wrap
 
