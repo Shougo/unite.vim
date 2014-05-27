@@ -282,7 +282,11 @@ function! unite#mappings#narrowing(word, ...) "{{{
   let unite.input .= is_escape ? escape(a:word, ' *') : a:word
   let unite.context.input = unite.input
   if unite.context.prompt_direction ==# 'below'
-    call unite#view#_remove_prompt()
+    if unite.prompt_linenr != 0
+      let unite.prompt_linenr = 1
+    else
+      call unite#view#_remove_prompt()
+    endif
     call unite#redraw()
     call unite#view#_redraw_prompt()
   else
@@ -291,6 +295,7 @@ function! unite#mappings#narrowing(word, ...) "{{{
   endif
 
   call unite#helper#cursor_prompt()
+  normal! zb
   startinsert!
 endfunction"}}}
 
