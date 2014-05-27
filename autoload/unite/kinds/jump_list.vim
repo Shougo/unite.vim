@@ -74,7 +74,7 @@ function! unite#kinds#jump_list#define() "{{{
         \ }
   function! kind.action_table.preview.func(candidate) "{{{
     let filename = s:get_filename(a:candidate)
-    let buflisted = buflisted(
+    let bufwinnr = bufwinnr(
           \ unite#util#escape_file_searching(filename))
     let preview_windows = filter(range(1, winnr('$')),
           \ 'getwinvar(v:val, "&previewwindow") != 0')
@@ -86,7 +86,7 @@ function! unite#kinds#jump_list#define() "{{{
     wincmd P
     try
       let bufnr = s:open(a:candidate)
-      if !buflisted
+      if bufwinnr < 0
         doautocmd BufRead
         setlocal nomodified
         call unite#add_previewed_buffer_list(bufnr)
