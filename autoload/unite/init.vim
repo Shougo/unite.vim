@@ -95,7 +95,7 @@ function! unite#init#_context(context, ...) "{{{
   endif
   if context.prompt_direction == ''
     let context.prompt_direction =
-          \ (context.direction =~# 'below') ? 'below' : 'top'
+          \ (context.direction =~# 'bel\|bot') ? 'below' : 'top'
   endif
 
   let context.is_changed = 0
