@@ -748,7 +748,6 @@ endfunction"}}}
 function! s:narrowing_dot() "{{{
   call unite#mappings#narrowing(unite#helper#get_input().'.')
 endfunction"}}}
-
 function! s:get_quick_match_table() "{{{
   let unite = unite#get_current_unite()
   let offset = unite.context.prompt_direction ==# 'below' ?
@@ -756,9 +755,9 @@ function! s:get_quick_match_table() "{{{
         \  line('$') - line('.') + 1 :
         \  unite.prompt_linenr - line('.')) :
         \ (line('.') - unite.prompt_linenr - 1)
-  let offset += 1
   if line('.') == unite.prompt_linenr
-    let offset = 2
+    let offset = unite.context.prompt_direction
+          \ ==# 'below' ? 1 : 0
   endif
   if unite.context.prompt_direction ==# 'below'
     let offset = offset * -1
