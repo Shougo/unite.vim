@@ -671,6 +671,10 @@ function! unite#view#_quit(is_force, ...)  "{{{
 endfunction"}}}
 
 function! unite#view#_set_cursor_line() "{{{
+  if !exists('b:current_syntax')
+    return
+  endif
+
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
