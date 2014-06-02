@@ -1684,6 +1684,8 @@ the context dictionary.
 		-prompt-direction="top" or "below"
 		Specify the prompt direction.  The default value is "below" if
 		|unite-options-direction| contains "below".
+		Note: If it is "below", *unite-options-auto-resize* is used
+		automatically.
 
 						*unite-options-default-action*
 		-default-action={default-action}
