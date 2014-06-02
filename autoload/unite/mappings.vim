@@ -482,7 +482,8 @@ function! s:insert_enter(key) "{{{
 
   if line('.') != unite.prompt_linenr || col('.') <= len(unite.prompt)
     return unite.prompt_linenr.'Gzb0' .
-          \ repeat('l', unite#util#strchars(unite.prompt)-1) . 'a'
+          \ repeat('l', unite#util#strchars(unite.prompt)
+          \   + unite#util#strchars(unite.context.input)-1) . 'a'
   endif
   return a:key
 endfunction"}}}
