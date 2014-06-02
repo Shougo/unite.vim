@@ -707,16 +707,15 @@ function! unite#view#_print_source_error(message, source_name) "{{{
 endfunction"}}}
 function! unite#view#_print_message(message) "{{{
   let context = unite#get_context()
-  if get(context, 'silent', 0)
-    return
-  endif
-
   let unite = unite#get_current_unite()
   let message = s:msg2list(a:message)
   if !empty(unite)
     let unite.msgs += message
   endif
-  echohl Comment | call s:redraw_echo(message[: &cmdheight-1]) | echohl None
+
+  if !get(context, 'silent', 0)
+    echohl Comment | call s:redraw_echo(message[: &cmdheight-1]) | echohl None
+  endif
 endfunction"}}}
 function! unite#view#_print_source_message(message, source_name) "{{{
   call unite#view#_print_message(
