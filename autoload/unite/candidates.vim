@@ -162,6 +162,10 @@ function! unite#candidates#gather(...) "{{{
     endif
   endif
 
+  if empty(candidates) && unite.prompt_linenr == 0
+    let unite.prompt_linenr = 1
+  endif
+
   let unite.context.unite__max_candidates = 0
   let unite.context.input_list =
         \ split(unite.context.input, '\\\@<! ', 1)

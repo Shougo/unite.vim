@@ -675,17 +675,18 @@ function! unite#view#_set_cursor_line() "{{{
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
 
-  execute '2match' (line('.') == prompt_linenr ?
-        \     (context.prompt_direction !=# 'below'
-        \   && line('$') == prompt_linenr)
-        \  || (context.prompt_direction ==# 'below'
-        \   && 1 == prompt_linenr)
-        \ && context.input != '' ?
-        \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
-        \ context.cursor_line_highlight.' /^\%'.
-        \   (prompt_linenr+(context.prompt_direction ==#
-        \                   'below' ? -1 : 1)).'l.*/' :
-        \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')
+  if line('.') == prompt_linenr
+    execute '2match' (context.prompt_direction !=# 'below'
+          \   && line('$') == prompt_linenr)
+          \  || (context.prompt_direction ==# 'below'
+          \   && prompt_linenr == 1) ?
+          \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
+          \ context.cursor_line_highlight.' /^\%'.
+          \   (prompt_linenr+(context.prompt_direction ==#
+          \                   'below' ? -1 : 1)).'l.*/'
+  else
+    execute '2match' context.cursor_line_highlight.' /^\%'.line('.').'l.*/'
+  endif
   let unite.cursor_line_time = reltime()
 endfunction"}}}
 
