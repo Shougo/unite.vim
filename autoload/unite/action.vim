@@ -388,7 +388,7 @@ function! unite#action#do(action_name, ...) "{{{
 
     " Executes command.
     if unite.context.execute_command != ''
-      execute context.execute_command
+      execute unite.context.execute_command
     endif
 
     " Check invalidate cache flag.
