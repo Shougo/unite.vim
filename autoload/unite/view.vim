@@ -558,6 +558,8 @@ function! unite#view#_init_cursor() "{{{
       execute bufwinnr(unite.prev_bufnr).'wincmd w'
     endif
   endif
+
+  call unite#view#_set_cursor_line()
 endfunction"}}}
 
 function! unite#view#_quit(is_force, ...)  "{{{
@@ -680,7 +682,9 @@ function! unite#view#_set_cursor_line() "{{{
         \   && 1 == prompt_linenr)
         \ && context.input != '' ?
         \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
-        \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
+        \ context.cursor_line_highlight.' /^\%'.
+        \   (prompt_linenr+(context.prompt_direction ==#
+        \                   'below' ? -1 : 1)).'l.*/' :
         \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')
   let unite.cursor_line_time = reltime()
 endfunction"}}}
