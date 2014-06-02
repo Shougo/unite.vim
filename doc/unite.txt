@@ -1980,11 +1980,12 @@ buffer		Nominates opened buffers as candidates, ordering by time
 		series.
 		If argument 1 is "!", both listed and non-listed buffer are
 		displayed.
-		If argument 1 is "?", non-listed buffer is displayed.
+		If argument 1 is "?", non-listed buffers are displayed.
 		If argument 1 is "+", only modified buffers are displayed.
+		If argument 1 is "-", only file buffers are displayed.
 
 		Source arguments:
-		1. "!", "?", or "+".
+		1. "!", "?", "+" or "-".
 
 						*unite-source-buffer_tab*
 buffer_tab	Nominates opened buffers only in the current tab as
@@ -1992,7 +1993,7 @@ buffer_tab	Nominates opened buffers only in the current tab as
 		Arguments are the same as for |unite-source-buffer|.
 
 		Source arguments:
-		1. "!" or "?".
+		1. "!", "?", "+" or "-".
 
 						*unite-source-tab*
 tab		Nominates opened tabs as candidates, regarding t:cwd as the
