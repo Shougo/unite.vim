@@ -30,7 +30,7 @@ set cpo&vim
 call unite#util#set_default(
       \ 'g:unite_source_rec_ignore_pattern',
       \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|DS_Store\|zwc\|pyc\|sw[po]\|class\)$'.
-      \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-.*\)\?\)\%($\|/\)',
+      \'\|\%(^\|/\)\%(\.hg\|\.git\|\.bzr\|\.svn\|tags\%(-\a\+\)\?\)\%($\|/\)',
       \ 'g:unite_source_file_rec_ignore_pattern')
 call unite#util#set_default(
       \ 'g:unite_source_rec_min_cache_files', 100,
