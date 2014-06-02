@@ -481,7 +481,8 @@ function! s:insert_enter(key) "{{{
   let unite = unite#get_current_unite()
 
   if line('.') != unite.prompt_linenr || col('.') <= len(unite.prompt)
-    return unite.prompt_linenr.'GzbA'
+    return unite.prompt_linenr.'Gzb0' .
+          \ repeat('l', unite#util#strchars(unite.prompt)-1) . 'a'
   endif
   return a:key
 endfunction"}}}
