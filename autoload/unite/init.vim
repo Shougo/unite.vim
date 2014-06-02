@@ -96,7 +96,7 @@ function! unite#init#_context(context, ...) "{{{
   if context.prompt_direction == ''
     let context.prompt_direction =
           \ (context.direction =~# 'bel\|bot')
-          \  && !context.vertical ? 'below' : 'top'
+          \  && !context.vertical && !context.log ? 'below' : 'top'
   endif
   if context.prompt_direction ==# 'below'
     let context.auto_resize = 1
