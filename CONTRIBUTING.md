@@ -21,7 +21,7 @@ When you report an issue, please use the following issue template.
 
     * How to reproduce
 
-     0. startup vim.
+     0. startup vim (Write with option arguments if necessary).
      1.
      2.
      3.
@@ -45,6 +45,7 @@ When you report an issue, please use the following issue template.
 * Minimal vimrc less than 50 lines
 
   ```VimL
+  " minimal.vimrc
   if has('vim_starting')
   set nocompatible
   set runtimepath+=~/.cache/neobundle/unite.vim/
@@ -53,7 +54,7 @@ When you report an issue, please use the following issue template.
 
 * How to reproduce
 
-  0. startup vim.
+  0. startup vim: `vim -u minimal.vimrc`
   1. `:Unite file/new`.
   2. Input `C:/Foo\ Bar/test.txt`
   3. Enter candidate.
