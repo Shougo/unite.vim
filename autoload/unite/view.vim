@@ -683,7 +683,7 @@ function! unite#view#_set_cursor_line() "{{{
     execute '2match' (context.prompt_direction !=# 'below'
           \   && line('$') == prompt_linenr)
           \  || (context.prompt_direction ==# 'below'
-          \   && prompt_linenr == 1) ?
+          \   && prompt_linenr == 1) ? context.input == '' ? '' :
           \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
           \ context.cursor_line_highlight.' /^\%'.
           \   (prompt_linenr+(context.prompt_direction ==#
