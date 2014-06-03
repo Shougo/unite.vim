@@ -348,9 +348,6 @@ function! unite#view#_resize_window() "{{{
 
     silent! execute 'resize' min([max_len, context.winheight])
 
-    if line('.') <= winheight(0)
-      call unite#view#_set_syntax()
-    endif
     if mode() ==# 'i' && col('.') == (col('$') - 1)
       normal! zb
       startinsert!
