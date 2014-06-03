@@ -82,6 +82,9 @@ function! unite#candidates#_recache(input, is_force) "{{{
     call s:recache_candidates_loop(context, a:is_force)
   endfor
 
+  " Restore prompt input
+  let context.input = a:input
+
   let filtered_count = 0
 
   for source in unite.sources
