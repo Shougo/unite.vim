@@ -668,7 +668,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
 endfunction"}}}
 
 function! unite#view#_set_cursor_line() "{{{
-  if !exists('b:current_syntax')
+  if !exists('b:current_syntax') || &filetype !=# 'unite'
     return
   endif
 
