@@ -306,7 +306,7 @@ function! unite#mappings#narrowing(word, ...) "{{{
   endif
 
   call unite#helper#cursor_prompt()
-  normal! zb
+  call unite#view#_bottom_cursor()
   startinsert!
 endfunction"}}}
 
@@ -506,7 +506,7 @@ function! s:insert_enter2() "{{{
 
   let unite = unite#get_current_unite()
   call cursor(unite.init_prompt_linenr, 0)
-  normal! zb
+  call unite#view#_bottom_cursor()
   startinsert!
 endfunction"}}}
 function! s:insert_leave() "{{{
