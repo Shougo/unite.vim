@@ -421,24 +421,31 @@ function! s:toggle_mark(map) "{{{
 endfunction"}}}
 function! s:toggle_mark_all_candidates() "{{{
   call s:redraw_all_candidates()
-  call s:toggle_mark_candidates(0,
-        \     len(unite#get_unite_candidates()) - 1)
+  call s:toggle_mark_candidates(1,
+        \     len(unite#get_unite_candidates()))
 endfunction"}}}
 function! s:toggle_mark_candidates(start, end) "{{{
-  if a:start < 0 || a:end >= len(unite#get_unite_candidates())
+  if a:start < 0 || a:end > len(unite#get_unite_candidates())
     " Ignore.
     return
   endif
 
   let unite = unite#get_current_unite()
-  call cursor(a:start, 1)
-  for cnt in range(a:start, a:end)
-    if line('.') == unite.prompt_linenr
-      call unite#helper#skip_prompt()
-    else
-      call s:toggle_mark('j')
-    endif
-  endfor
+
+  let pos = getpos('.')
+  try
+    call cursor(a:start, 1)
+    for cnt in range(a:start, a:end)
+      if line('.') == unite.prompt_linenr
+        call unite#helper#skip_prompt()
+      else
+        call s:toggle_mark('j')
+      endif
+    endfor
+  finally
+    call setpos('.', pos)
+    call unite#view#_bottom_cursor()
+  endtry
 endfunction"}}}
 function! s:quick_help() "{{{
   let unite = unite#get_current_unite()
