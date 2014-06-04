@@ -1680,6 +1680,11 @@ the context dictionary.
 		-prompt={prompt-text}
 		Specify the prompt.  The default value is '> '.
 
+						*unite-options-prompt-visible*
+		-prompt-visible
+		Visible prompt if narrowing text is empty.
+		Note: It is old prompt behavior.
+
 						*unite-options-prompt-direction*
 		-prompt-direction="top" or "below"
 		Specify the prompt direction.  The default value is "below" if
