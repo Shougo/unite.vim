@@ -1176,6 +1176,9 @@ Insert mode mappings.
 <Plug>(unite_new_candidate)			*i_<Plug>(unite_new_candidate)*
 		The same as |<Plug>(unite_new_candidate)|.
 
+<Plug>(unite_complete)				*i_<Plug>(unite_complete)*
+		Complete narrowing text by candidate words.
+
 Visual mode mappings.
 
 				*v_<Plug>(unite_toggle_selected_candidates)*

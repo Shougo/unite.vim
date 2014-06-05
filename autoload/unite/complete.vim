@@ -137,6 +137,7 @@ endfunction"}}}
 function! unite#complete#gather(candidates, input) "{{{
   let dup = {}
   let _ = []
+  let search_input = tolower(a:input)
   for candidate in a:candidates
     let start = 0
     while start >= 0
@@ -145,7 +146,7 @@ function! unite#complete#gather(candidates, input) "{{{
       if start >= 0
         let end = matchend(candidate.word, '\h\w*', start)
         let str = candidate.word[start : end -1]
-        if stridx(str, a:input) == 0
+        if stridx(tolower(str), search_input) == 0
               \ && str !=# a:input && !has_key(dup, str)
           let dup[str] = 1
           call add(_, str)

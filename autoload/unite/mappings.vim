@@ -178,6 +178,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ <C-o>:<C-u>call <SID>do_new_candidate_action()<CR>
   inoremap <silent><buffer> <Plug>(unite_print_message_log)
         \ <C-o>:<C-u>call <SID>print_message_log()<CR>
+  inoremap <expr><silent><buffer> <Plug>(unite_complete)
+        \ <SID>complete()
   "}}}
 
   if exists('g:unite_no_default_keymappings')
@@ -326,11 +328,13 @@ function! unite#mappings#set_current_filters(filters) "{{{
 endfunction"}}}
 
 function! s:smart_imap(lhs, rhs) "{{{
+  call s:clear_complete()
   return line('.') != unite#get_current_unite().prompt_linenr ||
         \ col('.') <= (unite#util#wcswidth(unite#get_current_unite().prompt)) ?
         \ a:lhs : a:rhs
 endfunction"}}}
 function! s:smart_imap2(lhs, rhs) "{{{
+  call s:clear_complete()
   return line('.') <= (len(unite#get_current_unite().prompt)+1) ?
        \ a:lhs : a:rhs
 endfunction"}}}
@@ -783,6 +787,39 @@ function! s:get_quick_match_table() "{{{
     let table[key] += offset
   endfor
   return table
+endfunction"}}}
+
+function! s:complete() "{{{
+  let unite = unite#get_current_unite()
+  let input = matchstr(unite#get_input(), '\h\w*$')
+  let cur_text = unite#get_input()[: -len(input)-1]
+
+  if !has_key(unite, 'complete_cur_text')
+        \ || cur_text !=# unite.complete_cur_text
+    " Recache
+    let unite.complete_candidates =
+          \ unite#complete#gather(unite.current_candidates, input)
+    let unite.complete_candidate_num = 0
+    let unite.complete_cur_text = cur_text
+  endif
+
+  let candidate = get(unite.complete_candidates,
+        \ unite.complete_candidate_num, input)
+  let unite.complete_candidate_num += 1
+  if unite.complete_candidate_num >= len(unite.complete_candidates)
+    " Cycle
+    let unite.complete_candidate_num = 0
+  endif
+
+  return repeat("\<C-h>", unite#util#strchars(input)) . candidate
+endfunction"}}}
+function! s:clear_complete() "{{{
+  let unite = unite#get_current_unite()
+  if has_key(unite, 'complete_cur_text')
+    call remove(unite, 'complete_cur_text')
+  endif
+
+  return ''
 endfunction"}}}
 "}}}
 
