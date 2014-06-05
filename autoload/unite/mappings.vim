@@ -796,15 +796,20 @@ function! s:complete() "{{{
 
   if !has_key(unite, 'complete_cur_text')
         \ || cur_text !=# unite.complete_cur_text
+        \ || index(unite.complete_candidates, input) < 0
     " Recache
     let unite.complete_candidates =
           \ unite#complete#gather(unite.current_candidates, input)
     let unite.complete_candidate_num = 0
     let unite.complete_cur_text = cur_text
+    let unite.complete_input = input
   endif
 
-  echo printf('match %d of %d',
-        \ unite.complete_candidate_num+1, len(unite.complete_candidates))
+  call unite#view#_redraw_echo(printf('match %d of %d : %s',
+        \ unite.complete_candidate_num+1, len(unite.complete_candidates),
+        \ join(unite.complete_candidates[unite.complete_candidate_num+1 :
+        \      unite.complete_candidate_num + 10])))
+
   let candidate = get(unite.complete_candidates,
         \ unite.complete_candidate_num, input)
   let unite.complete_candidate_num += 1
