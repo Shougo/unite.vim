@@ -476,7 +476,8 @@ function! s:get_path(args, context) "{{{
           \ directory, 'dir', a:context.source_name)
   endif
 
-  let directory = unite#util#expand(fnamemodify(directory, ':p'))
+  let directory = unite#util#substitute_path_separator(
+        \ fnamemodify(unite#util#expand(directory), ':p'))
 
   if directory != '/' && directory =~ '/$'
     let directory = directory[: -2]
