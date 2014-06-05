@@ -720,7 +720,7 @@ function! unite#view#_print_message(message) "{{{
   endif
 
   if !get(context, 'silent', 0)
-    echohl Comment | call unite#util#_redraw_echo(message[: &cmdheight-1]) | echohl None
+    echohl Comment | call unite#view#_redraw_echo(message[: &cmdheight-1]) | echohl None
   endif
 endfunction"}}}
 function! unite#view#_print_source_message(message, source_name) "{{{
