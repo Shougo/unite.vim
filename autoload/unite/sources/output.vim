@@ -68,7 +68,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   unlet! b:current_syntax
 
   try
-    syntax include @Vim syntax/vim.vim
+    silent! syntax include @Vim syntax/vim.vim
     syntax region uniteSource__OutputVim
           \ start=' ' end='$' contains=@Vim containedin=uniteSource__Output
   finally
