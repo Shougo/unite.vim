@@ -134,6 +134,33 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
   return _
 endfunction"}}}
 
+function! unite#complete#gather(candidates, input) "{{{
+  let dup = {}
+  let _ = []
+  for candidate in a:candidates
+    let start = 0
+    while start >= 0
+      let start = match(candidate.word, '\h\w*', start)
+
+      if start >= 0
+        let end = matchend(candidate.word, '\h\w*', start)
+        let str = candidate.word[start : end -1]
+        if stridx(str, a:input) == 0
+              \ && str !=# a:input && !has_key(dup, str)
+          let dup[str] = 1
+          call add(_, str)
+        endif
+
+        let start = end
+      endif
+    endwhile
+  endfor
+
+  call add(_, a:input)
+
+  return _
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
