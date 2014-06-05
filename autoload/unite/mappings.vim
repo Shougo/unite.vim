@@ -803,6 +803,8 @@ function! s:complete() "{{{
     let unite.complete_cur_text = cur_text
   endif
 
+  echo printf('match %d of %d',
+        \ unite.complete_candidate_num+1, len(unite.complete_candidates))
   let candidate = get(unite.complete_candidates,
         \ unite.complete_candidate_num, input)
   let unite.complete_candidate_num += 1
@@ -817,6 +819,8 @@ function! s:clear_complete() "{{{
   let unite = unite#get_current_unite()
   if has_key(unite, 'complete_cur_text')
     call remove(unite, 'complete_cur_text')
+    redraw
+    echo ''
   endif
 
   return ''
