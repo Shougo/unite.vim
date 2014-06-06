@@ -2050,6 +2050,10 @@ window		Nominates opened windows as candidates, ordering by time
 		Source arguments:
 		1. "no-current" removes current window from candidates.
 
+						*unite-source-window/gui*
+window/gui	Nominates opened GUI windows as candidates.
+		Note: "wmctrl" command is needed.  For Linux only.
+
 						*unite-source-output*
 output		Nominates executed Vim command as candidates.
 
@@ -2741,6 +2745,11 @@ command						*unite-action-source-command*
 function					*unite-action-source-function*
 	call		Call the function and print result.
 	preview		View the help documentation.
+
+window/gui				 *unite-action-source-window/gui*
+	open		Move to the window.
+	delete		Close the window.
+	rename		Change the title of the window.
 
 						*unite-default-action*
 Default actions
