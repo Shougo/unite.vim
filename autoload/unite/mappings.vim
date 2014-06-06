@@ -798,8 +798,10 @@ function! s:complete() "{{{
         \ || cur_text !=# unite.complete_cur_text
         \ || index(unite.complete_candidates, input) < 0
     " Recache
+    let start = reltime()
     let unite.complete_candidates =
           \ unite#complete#gather(unite.current_candidates, input)
+    echomsg string(reltimestr(reltime(start)))
     let unite.complete_candidate_num = 0
     let unite.complete_cur_text = cur_text
     let unite.complete_input = input

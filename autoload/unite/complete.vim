@@ -135,29 +135,70 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
 endfunction"}}}
 
 function! unite#complete#gather(candidates, input) "{{{
+  return unite#util#has_lua() ?
+        \ unite#complete#gather_lua(a:candidates, a:input) :
+        \ unite#complete#gather_vim(a:candidates, a:input)
+endfunction"}}}
+
+function! unite#complete#gather_vim(candidates, input) "{{{
   let dup = {}
   let _ = []
   let search_input = tolower(a:input)
+  let len_input = len(a:input)
   for candidate in a:candidates
-    let start = 0
+    let start = match(candidate.word, '\h\w*')
     while start >= 0
-      let start = match(candidate.word, '\h\w*', start)
-
-      if start >= 0
-        let end = matchend(candidate.word, '\h\w*', start)
-        let str = candidate.word[start : end -1]
-        if stridx(tolower(str), search_input) == 0
-              \ && str !=# a:input && !has_key(dup, str)
-          let dup[str] = 1
-          call add(_, str)
-        endif
-
-        let start = end
+      let end = matchend(candidate.word, '\h\w*', start)
+      let str = candidate.word[start : end -1]
+      if len(str) > len_input
+            \ && stridx(tolower(str), search_input) == 0
+            \ && !has_key(dup, str)
+        let dup[str] = 1
+        call add(_, str)
       endif
+
+      let start = match(candidate.word, '\h\w*', end)
     endwhile
   endfor
 
   call add(_, a:input)
+
+  return _
+endfunction"}}}
+
+function! unite#complete#gather_lua(candidates, input) "{{{
+  let _ = []
+  let search_input = tolower(a:input)
+  let len_input = len(a:input)
+
+  lua << EOF
+do
+  local dup = {}
+  local _ = vim.eval('_')
+  local candidates = vim.eval('a:candidates')
+  local len_input = vim.eval('len_input')
+  local search_input = vim.eval('search_input')
+  for i = 0, #candidates-1, 1 do
+    local start_index, end_index = string.find(
+         candidates[i].word, '[a-zA-Z_][0-9a-zA-Z_]*')
+
+    while start_index ~= nil and start_index >= 1 do
+      local str = string.sub(candidates[i].word, start_index, end_index)
+
+      if string.len(str) > len_input
+            and string.sub(string.lower(str), 1, len_input) == search_input
+            and dup[str] == nil then
+        dup[str] = 1
+        _:add(str)
+      end
+
+      start_index = end_index + 1
+      start_index, end_index = string.find(
+          candidates[i].word, '[a-zA-Z_][0-9a-zA-Z_]*', start_index)
+    end
+  end
+end
+EOF
 
   return _
 endfunction"}}}
