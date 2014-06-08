@@ -309,14 +309,14 @@ function! unite#view#_set_syntax() "{{{
 endfunction"}}}
 
 function! unite#view#_resize_window() "{{{
-  if &filetype !=# 'unite' || winnr('$') == 1
+  if &filetype !=# 'unite'
     return
   endif
 
   let context = unite#get_context()
   let unite = unite#get_current_unite()
 
-  if winheight(0) + &cmdheight + 2 > &lines
+  if winheight(0) + &cmdheight + 2 >= &lines
     " Cannot resize.
     let context.is_resize = 0
     return
