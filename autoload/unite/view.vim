@@ -316,7 +316,8 @@ function! unite#view#_resize_window() "{{{
   let context = unite#get_context()
   let unite = unite#get_current_unite()
 
-  if context.no_split && !context.auto_resize
+  if winheight(0) + &cmdheight + 2 > &lines
+    " Cannot resize.
     let context.is_resize = 0
     return
   endif
