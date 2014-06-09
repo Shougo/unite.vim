@@ -46,6 +46,8 @@ let g:unite_update_time =
       \ get(g:, 'unite_update_time', 500)
 let g:unite_prompt =
       \ get(g:, 'unite_prompt', '> ')
+let g:unite_prompt_direction =
+      \ get(g:, 'unite_prompt_direction', '')
 let g:unite_enable_start_insert =
       \ get(g:, 'unite_enable_start_insert', 0)
 let g:unite_split_rule =
