@@ -345,7 +345,9 @@ function! unite#view#_resize_window() "{{{
 
     silent! execute 'resize' min([max_len, context.winheight])
 
-    call unite#view#_bottom_cursor()
+    if line('.') == unite.prompt_linenr
+      call unite#view#_bottom_cursor()
+    endif
 
     let context.is_resize = winheight != winheight(0)
   elseif context.vertical
