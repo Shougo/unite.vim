@@ -198,7 +198,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   endif
 
   if exists('b:current_syntax') && !context.no_cursor_line
-    2match
+    call unite#view#_clear_match()
 
     if prompt_linenr == 0 ||
           \ line('.') == prompt_linenr || mode('.') == 'i' ||
@@ -254,7 +254,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   endif"}}}
 endfunction"}}}
 function! unite#handlers#_on_buf_unload(bufname)  "{{{
-  2match
+  call unite#view#_clear_match()
 
   " Save unite value.
   silent! let unite = getbufvar(a:bufname, 'unite')

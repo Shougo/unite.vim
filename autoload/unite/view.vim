@@ -672,17 +672,21 @@ function! unite#view#_set_cursor_line() "{{{
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
 
-  if line('.') == prompt_linenr
-    execute '2match' (context.prompt_direction !=# 'below'
+  call unite#view#_clear_match()
+
+  if line('.') != prompt_linenr
+    let unite.match_id = matchadd(context.cursor_line_highlight,
+          \ '^\%'.line('.').'l.*')
+  elseif (context.prompt_direction !=# 'below'
           \   && line('$') == prompt_linenr)
-          \  || (context.prompt_direction ==# 'below'
-          \   && prompt_linenr == 1) ? context.input == '' ? '' :
-          \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
-          \ context.cursor_line_highlight.' /^\%'.
-          \   (prompt_linenr+(context.prompt_direction ==#
-          \                   'below' ? -1 : 1)).'l.*/'
+          \ || (context.prompt_direction ==# 'below'
+          \   && prompt_linenr == 1)
+    let unite.match_id = matchadd('uniteError',
+          \ '^\%'.prompt_linenr.'l.*')
   else
-    execute '2match' context.cursor_line_highlight.' /^\%'.line('.').'l.*/'
+    let unite.match_id = matchadd(context.cursor_line_highlight,
+          \ '^\%'.(prompt_linenr+(context.prompt_direction ==#
+          \                   'below' ? -1 : 1)).'l.*')
   endif
   let unite.cursor_line_time = reltime()
 endfunction"}}}
@@ -694,6 +698,12 @@ function! unite#view#_bottom_cursor() "{{{
   finally
     call setpos('.', pos)
   endtry
+endfunction"}}}
+function! unite#view#_clear_match() "{{{
+  let unite = unite#get_current_unite()
+  if unite.match_id > 0
+    silent! call matchdelete(unite.match_id)
+  endif
 endfunction"}}}
 
 " Message output.
