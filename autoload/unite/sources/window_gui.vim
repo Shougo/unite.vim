@@ -52,6 +52,10 @@ function! s:source.gather_candidates(args, context) "{{{
   for line in split(unite#util#system('wmctrl -lpx'), '\n')
     let list = matchlist(line, '^\(\S\+\)\s\+\d\+\s\+\(\d\+\)\s\+'
           \ . '\(\S\+\)\s\+\S\+\s\+\(.*\)$')
+    if len(list) < 6
+      continue
+    endif
+
     let [line, id, pid, class, title; rest] = list
 
     " Skip current Vim and Desktop
