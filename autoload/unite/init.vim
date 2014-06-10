@@ -34,14 +34,18 @@ let g:unite_ignore_source_files =
 function! unite#init#_context(context, ...) "{{{
   let source_names = get(a:000, 0, [])
 
+  let default_context = extend(copy(unite#variables#default_context()),
+        \ unite#custom#get_profile('default', 'context'))
+
   let profile_name = get(a:context, 'profile_name',
         \ ((len(source_names) == 1 && !has_key(a:context, 'buffer_name')) ?
         \    'source/' . source_names[0] :
         \    get(a:context, 'buffer_name', 'default')))
-
-  " Overwrite default_context by profile context.
-  let default_context = extend(copy(unite#variables#default_context()),
-        \ unite#custom#get_profile(profile_name, 'context'))
+  if profile_name !=# 'default'
+    " Overwrite default_context by profile context.
+    call extend(default_context,
+          \ unite#custom#get_profile(profile_name, 'context'))
+  endif
 
   let context = extend(default_context, a:context)
 
