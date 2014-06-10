@@ -143,6 +143,11 @@ function! unite#candidates#gather(...) "{{{
     let unite.candidates = reverse(unite.candidates)
   endif
 
+  if unite.context.unique
+    " Uniq filter.
+    let unite.candidates = unite#util#uniq_by(unite.candidates, 'v:val.word')
+  endif
+
   if is_gather_all || unite.context.prompt_direction ==# 'below'
     let unite.candidates_pos = len(unite.candidates)
   elseif unite.context.is_redraw || unite.candidates_pos == 0
@@ -178,11 +183,6 @@ function! unite#candidates#gather(...) "{{{
     let candidates = unite#helper#call_filter(
           \ filter_name, candidates, unite.context)
   endfor
-
-  if unite.context.unique
-    " Uniq filter.
-    let candidates = unite#util#uniq_by(candidates, 'v:val.word')
-  endif
 
   return candidates
 endfunction"}}}
