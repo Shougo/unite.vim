@@ -50,6 +50,12 @@ function! s:matcher.filter(candidates, context) "{{{
           \ a:candidates, '', a:context)
   endif
 
+  if len(a:context.input) == 1
+    " Fallback to glob matcher.
+    return unite#filters#matcher_glob#define().filter(
+          \ a:candidates, a:context)
+  endif
+
   " Fix for numeric problem.
   let $LC_NUMERIC = 'en_US.utf8'
 
