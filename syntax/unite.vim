@@ -34,9 +34,9 @@ set cpo&vim
 
 highlight default link uniteError  Error
 
-highlight default link uniteQuickMatchTrigger  Special
 highlight default link uniteMarkedLine  Statement
 highlight default link uniteCandidateSourceName  Type
+highlight default link uniteQuickMatchMarker  Special
 highlight default link uniteCandidateMarker  Special
 highlight default link uniteCandidateInputKeyword  Function
 

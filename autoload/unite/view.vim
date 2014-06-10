@@ -244,9 +244,7 @@ endfunction"}}}
 function! unite#view#_set_syntax() "{{{
   syntax clear
 
-  syntax match uniteQuickMatchLine /^.|.*/
-        \ contains=uniteQuickMatchTrigger,uniteCandidateSourceName
-  syntax match uniteQuickMatchTrigger /^.|/ contained
+  syntax match uniteQuickMatchMarker /^.|/ contained
   syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 
   let unite = unite#get_current_unite()
@@ -292,9 +290,9 @@ function! unite#view#_set_syntax() "{{{
     execute 'highlight default link'
           \ source.syntax g:unite_abbr_highlight
 
-    execute printf('syntax match %s "^['.g:unite_candidate_icon.' ] %s" '.
-          \ 'nextgroup='.source.syntax.
-          \ ' keepend contains=uniteCandidateMarker,%s',
+    execute printf('syntax match %s "^\%(['.g:unite_candidate_icon.' ] \|.|\)%s" '.
+          \ 'nextgroup='.source.syntax. ' keepend
+          \ contains=uniteCandidateMarker,uniteQuickMatchMarker,%s',
           \ 'uniteSourceLine__'.source.syntax,
           \ (name == '' ? '' : name . '\>'),
           \ (name == '' ? '' : 'uniteCandidateSourceName')
