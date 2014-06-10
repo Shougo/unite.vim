@@ -42,20 +42,6 @@ if exists('g:unite_lcd_command')
 endif
 "}}}
 " Global options definition. "{{{
-let g:unite_update_time =
-      \ get(g:, 'unite_update_time', 200)
-let g:unite_prompt =
-      \ get(g:, 'unite_prompt', '> ')
-let g:unite_enable_start_insert =
-      \ get(g:, 'unite_enable_start_insert', 0)
-let g:unite_split_rule =
-      \ get(g:, 'unite_split_rule', 'topleft')
-let g:unite_enable_split_vertically =
-      \ get(g:, 'unite_enable_split_vertically', 0)
-let g:unite_winheight =
-      \ get(g:, 'unite_winheight', 20)
-let g:unite_winwidth =
-      \ get(g:, 'unite_winwidth', 90)
 let g:unite_quick_match_table =
       \ get(g:, 'unite_quick_match_table', {
       \     'a' : 0, 's' : 1, 'd' : 2, 'f' : 3, 'g' : 4, 'h' : 5, 'j' : 6, 'k' : 7, 'l' : 8, ';' : 9,
@@ -64,8 +50,6 @@ let g:unite_quick_match_table =
       \ })
 let g:unite_abbr_highlight =
       \ get(g:, 'unite_abbr_highlight', 'Normal')
-let g:unite_cursor_line_highlight =
-      \ get(g:, 'unite_cursor_line_highlight', 'PmenuSel')
 let g:unite_cursor_line_time =
       \ get(g:, 'unite_cursor_line_time', '0.10')
 let g:unite_enable_short_source_names =
