@@ -1842,7 +1842,6 @@ the context dictionary.
 						*unite-options-silent*
 		-silent
 		Shuts messages up in unite buffer.
-		Note: It is default option.
 
 						*unite-options-auto-quit*
 		-auto-quit

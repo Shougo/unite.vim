@@ -728,7 +728,7 @@ function! unite#view#_print_message(message) "{{{
     let unite.msgs += message
   endif
 
-  if !get(context, 'silent', 1)
+  if !get(context, 'silent', 0)
     echohl Comment | call unite#view#_redraw_echo(message[: &cmdheight-1]) | echohl None
   endif
 endfunction"}}}
@@ -750,9 +750,11 @@ function! unite#view#_redraw_echo(expr) "{{{
 
   let more_save = &more
   let showcmd_save = &showcmd
+  let ruler_save = &ruler
   try
     set nomore
     set noshowcmd
+    set noruler
 
     let msg = map(s:msg2list(a:expr), "unite#util#truncate_smart(
           \ v:val, &columns-1, &columns/2, '...')")
@@ -764,6 +766,7 @@ function! unite#view#_redraw_echo(expr) "{{{
   finally
     let &more = more_save
     let &showcmd = showcmd_save
+    let &ruler = ruler_save
   endtry
 endfunction"}}}
 

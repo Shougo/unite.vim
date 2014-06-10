@@ -209,7 +209,7 @@ function! unite#variables#default_context() "{{{
           \ 'hide_source_names' : 0,
           \ 'max_multi_lines' : 5,
           \ 'here' : 0,
-          \ 'silent' : 1,
+          \ 'silent' : 0,
           \ 'keep_focus' : 0,
           \ 'auto_quit' : 0,
           \ 'is_redraw' : 0,
