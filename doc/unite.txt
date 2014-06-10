@@ -407,6 +407,12 @@ g:unite_prompt			                *g:unite_prompt*
 
 		The default value is '> '.
 
+g:unite_prompt_direction			*g:unite_prompt_direction*
+		Unite default prompt direction. Can also be set with
+		`-prompt-direction` command line argument.
+
+		The default value is ''.
+
 g:unite_enable_start_insert			*g:unite_enable_start_insert*
 		If this variable is 1, unite buffer will be in Insert Mode
 		immediately.

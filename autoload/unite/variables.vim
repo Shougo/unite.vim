@@ -226,7 +226,7 @@ function! unite#variables#default_context() "{{{
           \ 'sync' : 0,
           \ 'unique' : 0,
           \ 'execute_command' : '',
-          \ 'prompt_direction' : '',
+          \ 'prompt_direction' : g:unite_prompt_direction,
           \ 'prompt_visible' : 0,
           \ 'unite__direct_switch' : 0,
           \ 'unite__is_interactive' : 1,
