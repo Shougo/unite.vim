@@ -673,18 +673,18 @@ function! unite#view#_set_cursor_line() "{{{
   call unite#view#_clear_match()
 
   if line('.') != prompt_linenr
-    let unite.match_id = matchadd(context.cursor_line_highlight,
-          \ '^\%'.line('.').'l.*')
+    call matchadd(context.cursor_line_highlight,
+          \ '^\%'.line('.').'l.*', 10, unite.match_id)
   elseif (context.prompt_direction !=# 'below'
           \   && line('$') == prompt_linenr)
           \ || (context.prompt_direction ==# 'below'
           \   && prompt_linenr == 1)
-    let unite.match_id = matchadd('uniteError',
-          \ '^\%'.prompt_linenr.'l.*')
+    call matchadd('uniteError',
+          \ '^\%'.prompt_linenr.'l.*', 10, unite.match_id)
   else
-    let unite.match_id = matchadd(context.cursor_line_highlight,
+    call matchadd(context.cursor_line_highlight,
           \ '^\%'.(prompt_linenr+(context.prompt_direction ==#
-          \                   'below' ? -1 : 1)).'l.*')
+          \                   'below' ? -1 : 1)).'l.*', 10, unite.match_id)
   endif
   let unite.cursor_line_time = reltime()
 endfunction"}}}

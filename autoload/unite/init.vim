@@ -296,7 +296,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.redraw_hold_candidates = (unite#util#has_lua() ? 20000 : 10000)
   let unite.disabled_max_candidates = 0
   let unite.cursor_line_time = reltime()
-  let unite.match_id = -1
+  let unite.match_id = 11
 
   if context.here
     let context.winheight = winheight(0) - winline() + 1
