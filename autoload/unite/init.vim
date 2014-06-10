@@ -74,9 +74,6 @@ function! unite#init#_context(context, ...) "{{{
   if context.tab
     let context.no_split = 1
   endif
-  if !has_key(context, 'short_source_names')
-    let context.short_source_names = g:unite_enable_short_source_names
-  endif
   if get(context, 'long_source_names', 0)
     " Disable short name.
     let context.short_source_names = 0

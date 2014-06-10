@@ -406,13 +406,6 @@ g:unite_abbr_highlight				*g:unite_abbr_highlight*
 
 		The default value is "Normal".
 
-				*g:unite_enable_short_source_names*
-g:unite_enable_short_source_names
-		If this variable is 1, unite buffer will show short source
-		names.
-
-		The default value is 0.
-
 g:unite_marked_icon				*g:unite_marked_icon*
 		Controls unite marked candidates icon.
 
@@ -876,54 +869,53 @@ g:unite_update_time				*g:unite_update_time*
 		The time interval for updating the canidate list as the filter
 		text it typed in Msec.
 		If it is 0, this feature is disabled.
-
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_prompt			                *g:unite_prompt*
 		Unite default prompt.  Can also be set with the `-prompt`
 		command line argument.
-
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_enable_start_insert			*g:unite_enable_start_insert*
 		If this variable is 1, unite buffer will be in Insert Mode
 		immediately.
-
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_split_rule				*g:unite_split_rule*
 		Defines split position rule.
-
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 
 					*g:unite_enable_split_vertically*
 g:unite_enable_split_vertically
 		If this variable is 1, unite window is split vertically.
-
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_winheight				*g:unite_winheight*
 		The height of unite window when split horizontally. Ignored
 		when splitting vertically.
-
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_winwidth				*g:unite_winwidth*
 		The width of unite window when split vertically. Ignored
 		when splitting horizontally.
-
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_cursor_line_highlight		*g:unite_cursor_line_highlight*
 		Specify the cursor line highlight group.
+		Note: It is deprecated variable.  Please use
+		|unite#custom#profile()| instead.
 
+				*g:unite_enable_short_source_names*
+g:unite_enable_short_source_names
+		If this variable is 1, unite buffer will show short source
+		names.
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 

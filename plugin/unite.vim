@@ -52,8 +52,6 @@ let g:unite_abbr_highlight =
       \ get(g:, 'unite_abbr_highlight', 'Normal')
 let g:unite_cursor_line_time =
       \ get(g:, 'unite_cursor_line_time', '0.10')
-let g:unite_enable_short_source_names =
-      \ get(g:, 'unite_enable_short_source_names', 0)
 let g:unite_marked_icon =
       \ get(g:, 'unite_marked_icon', '*')
 let g:unite_candidate_icon =

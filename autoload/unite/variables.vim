@@ -250,6 +250,7 @@ function! s:initialize_default() "{{{
         \ 'execute_command' : '',
         \ 'prompt_direction' : '',
         \ 'prompt_visible' : 0,
+        \ 'short_source_names' : 0,
         \ 'unite__direct_switch' : 0,
         \ 'unite__is_interactive' : 1,
         \ 'unite__is_complete' : 0,
@@ -271,6 +272,7 @@ function! s:initialize_default() "{{{
         \ ['cursor_line_highlight',
         \    'g:unite_cursor_line_highlight'],
         \ ['update_time', 'g:unite_update_time'],
+        \ ['short_source_names', 'g:unite_enable_short_source_names'],
         \ ], "exists(v:val[1])")
     let s:default_context[context] = {var}
   endfor
