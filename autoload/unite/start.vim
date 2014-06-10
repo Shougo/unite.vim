@@ -44,8 +44,10 @@ function! unite#start#standard(sources, ...) "{{{
       let context.start_insert = 1
     endif
 
-    call unite#print_message(
+    echohl Comment
+    call unite#view#_redraw_echo(
           \ '[unite.vim] interactive mode: Please input source name')
+    echohl None
   endif
 
   if context.resume

@@ -728,7 +728,7 @@ function! unite#view#_print_message(message) "{{{
     let unite.msgs += message
   endif
 
-  if !get(context, 'silent', 0)
+  if !get(context, 'silent', 1)
     echohl Comment | call unite#view#_redraw_echo(message[: &cmdheight-1]) | echohl None
   endif
 endfunction"}}}
