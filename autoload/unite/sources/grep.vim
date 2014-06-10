@@ -275,7 +275,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
     call a:context.source__proc.waitpid()
   endif
 
-  let candidates = map(stdout.read_lines(-1, 100),
+  let candidates = map(stdout.read_lines(-1, 1000),
           \ "unite#util#iconv(v:val, g:unite_source_grep_encoding, &encoding)")
   if variables.default_opts =~ '^-[^-]*l'
         \ || a:context.source__extra_opts =~ '^-[^-]*l'

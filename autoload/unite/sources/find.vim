@@ -124,7 +124,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   endif
 
   let candidates = map(filter(
-        \ stdout.read_lines(-1, 100), "v:val !~ '^\\s*$'"),
+        \ stdout.read_lines(-1, 1000), "v:val !~ '^\\s*$'"),
         \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
 
   if isdirectory(a:context.source__target)

@@ -107,7 +107,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
     call a:context.source__proc.waitpid()
   endif
 
-  return map(stdout.read_lines(-1, 100),
+  return map(stdout.read_lines(-1, 1000),
           \ "s:create_candidate(unite#util#iconv(
           \    v:val, 'char', &encoding))")
 endfunction"}}}

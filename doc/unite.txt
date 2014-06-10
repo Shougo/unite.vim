@@ -399,7 +399,7 @@ g:unite_update_time				*g:unite_update_time*
 
 		In Msec.
 
-		The default value is 500.
+		The default value is 200.
 
 g:unite_prompt			                *g:unite_prompt*
 		Unite default prompt.  Can also be set with the `-prompt`
@@ -576,7 +576,7 @@ g:unite_source_rec_max_cache_files
 		Specify the maximum number of files that
 		|unite-source-file_rec| saves the caches.
 
-		The default value is 2000.
+		The default value is 20000.
 
 				*g:unite_source_file_rec_max_cache_files*
 		Note: This variable is obsolete.
@@ -589,7 +589,7 @@ g:unite_source_rec_unit
 		Note: This option does not work in
 		|unite-source-file_rec/async| source.
 
-		The default value is 200.
+		The default value is 4000.
 
 					*g:unite_source_rec_async_command*
 g:unite_source_rec_async_command

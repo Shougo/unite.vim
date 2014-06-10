@@ -43,7 +43,7 @@ endif
 "}}}
 " Global options definition. "{{{
 let g:unite_update_time =
-      \ get(g:, 'unite_update_time', 500)
+      \ get(g:, 'unite_update_time', 200)
 let g:unite_prompt =
       \ get(g:, 'unite_prompt', '> ')
 let g:unite_enable_start_insert =

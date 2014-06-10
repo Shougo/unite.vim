@@ -36,9 +36,9 @@ call unite#util#set_default(
       \ 'g:unite_source_rec_min_cache_files', 100,
       \ 'g:unite_source_file_rec_min_cache_files')
 call unite#util#set_default(
-      \ 'g:unite_source_rec_max_cache_files', 2000,
+      \ 'g:unite_source_rec_max_cache_files', 20000,
       \ 'g:unite_source_file_rec_max_cache_files')
-call unite#util#set_default('g:unite_source_rec_unit', 200)
+call unite#util#set_default('g:unite_source_rec_unit', 4000)
 call unite#util#set_default(
       \ 'g:unite_source_rec_async_command', (
       \  executable('ag') ?
@@ -338,7 +338,7 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
 
   let candidates = unite#helper#paths2candidates(
         \ filter(map(filter(
-        \   stdout.read_lines(-1, 100), 'v:val != ""'),
+        \   stdout.read_lines(-1, 1000), 'v:val != ""'),
         \   "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')"),
         \   'v:val !=# a:context.source__directory
         \ && v:val !~? a:context.source.ignore_pattern'))
