@@ -91,6 +91,10 @@ function! unite#variables#options() "{{{
           \ "'-' . substitute(v:val[0], '_', '-', 'g') .
           \ (type(v:val[1]) == type(0) && (v:val[1] == 0 || v:val[1] == 1) ?
           \   '' : '=')")
+
+    " Generic no options.
+    let s:options += map(filter(copy(s:options),
+          \ "v:val[-1:] != '='"), "'-no' . v:val")
   endif
 
   return s:options

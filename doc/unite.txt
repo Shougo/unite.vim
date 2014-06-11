@@ -1671,6 +1671,12 @@ Note: In unite.vim options are converted to a context dictionary.
 The "-buffer-name" option is the same as the "buffer_name" key in 
 the context dictionary.
 
+						*unite-options-no-*
+		-no-{option-name}
+		Disable {option-name} flag.
+		Note: If you use both {option-name} and -no-{option-name} in
+		same unite buffer, it is undefined.
+
 						*unite-options-buffer-name*
 		-buffer-name={buffer-name}
 		Specify a buffer name. The default buffer name is "default".
@@ -1709,12 +1715,8 @@ the context dictionary.
 		Specify a default action.  The default value is 'default'.
 
 					*unite-options-start-insert*
-					*unite-options-no-start-insert*
 		-start-insert
 		Opens a unite buffer in the narrowing mode.
-
-		-no-start-insert
-		Opens a unite buffer in the normal mode.
 
 		When both options are undefined, it depends on
 		|g:unite_enable_start_insert| option.
@@ -1725,6 +1727,23 @@ the context dictionary.
 		Doesn't close unite buffer after firing an action.  Unless you
 		specify it, a unite buffer gets closed when you selected an
 		action which is "is_quit".
+
+						*unite-options-no-empty*
+		-no-empty
+		If candidate is empty, it doesn't open any unite buffer.
+
+						*unite-options-no-split*
+		-no-split
+		Open the unite buffer in the current window.
+
+						*unite-options-no-cursor-line*
+		-no-cursor-line
+		Disable cursor line highlight.  This option is useful for
+		animation source.
+
+						*unite-options-no-focus*
+		-no-focus
+		Do not focus the unite buffer after opening it.
 
 						*unite-options-keep-focus*
 		-keep-focus
@@ -1746,10 +1765,6 @@ the context dictionary.
 		If the number of candidates is exactly one, it runs the
 		default action immediately.  If the candidate list is 
 		empty, it does not open any unite buffer.
-
-						*unite-options-no-empty*
-		-no-empty
-		If candidate is empty, it doesn't open any unite buffer.
 
 						*unite-options-auto-preview*
 		-auto-preview
@@ -1787,10 +1802,6 @@ the context dictionary.
 		Defines split position rule.  The default value is
 		"topleft".
 
-						*unite-options-no-split*
-		-no-split
-		Open the unite buffer in the current window.
-
 						*unite-options-verbose*
 		-verbose
 		Print verbose warning messages.
@@ -1827,11 +1838,6 @@ the context dictionary.
 		-abbr-highlight={highlight-name}
 		Specify abbreviated candidates highlight.
 
-						*unite-options-no-cursor-line*
-		-no-cursor-line
-		Disable cursor line highlight.  This option is useful for
-		animation source.
-
 					*unite-options-hide-source-names*
 		-hide-source-names
 		Hides source names.
@@ -1861,10 +1867,6 @@ the context dictionary.
 		-auto-quit
 		Closes unite buffer automatically when all candidates are
 		shown.
-
-						*unite-options-no-focus*
-		-no-focus
-		Do not focus the unite buffer after opening it.
 
 					*unite-options-short-source-names*
 		-short-source-names

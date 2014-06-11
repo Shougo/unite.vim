@@ -55,13 +55,15 @@ function! unite#init#_context(context, ...) "{{{
           \ unite#custom#get_profile(profile_name, 'context'))
   endif
 
+  " Generic no.
+  for [option, value] in filter(items(context),
+        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]")
+    let context[option[2:]] = 0
+  endfor
+
   " Complex initializer.
   if get(context, 'complete', 1) && !has_key(a:context, 'start_insert')
     let context.start_insert = 1
-  endif
-  if get(context, 'no_start_insert', 0)
-    " Disable start insert.
-    let context.start_insert = 0
   endif
   if has_key(context, 'horizontal')
     " Disable vertically.
