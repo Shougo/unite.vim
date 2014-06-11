@@ -230,7 +230,7 @@ function! s:initialize_default() "{{{
         \ 'multi_line' : 0,
         \ 'resume' : 0,
         \ 'wrap' : 0,
-        \ 'select' : 0,
+        \ 'select' : -1,
         \ 'log' : 0,
         \ 'truncate' : 0,
         \ 'tab' : 0,

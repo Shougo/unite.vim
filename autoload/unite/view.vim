@@ -500,7 +500,7 @@ function! unite#view#_init_cursor() "{{{
   let positions = unite#custom#get_profile(
         \ unite.profile_name, 'unite__save_pos')
   let key = unite#loaded_source_names_string()
-  let is_restore = has_key(positions, key) && context.select == 0 &&
+  let is_restore = has_key(positions, key) && context.select <= 0 &&
         \   positions[key].candidate ==#
         \     unite#helper#get_current_candidate(positions[key].pos[1])
 
@@ -531,10 +531,10 @@ function! unite#view#_init_cursor() "{{{
     call unite#view#_bottom_cursor()
   endif
 
-  if context.select != 0
+  if context.select > 0
     " Select specified candidate.
     call cursor(unite#helper#get_current_candidate_linenr(
-          \ context.select), 0)
+          \ context.select), -1)
   elseif context.input == '' && context.log
     call unite#view#_redraw_candidates(1)
   endif
