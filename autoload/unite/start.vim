@@ -368,6 +368,7 @@ function! unite#start#resume(buffer_name, ...) "{{{
 
   call unite#set_current_unite(unite)
 
+  call unite#view#_resize_window()
   call unite#view#_init_cursor()
 endfunction"}}}
 
