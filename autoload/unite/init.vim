@@ -71,7 +71,7 @@ function! unite#init#_context(context, ...) "{{{
   endif
   if context.immediately
     " Ignore empty unite buffer.
-    let context.no_empty = 1
+    let context.empty = 0
   endif
   if context.tab
     let context.no_split = 1

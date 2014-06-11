@@ -82,7 +82,7 @@ function! unite#start#standard(sources, ...) "{{{
   call unite#candidates#_recache(context.input, context.is_redraw)
 
   if !current_unite.is_async &&
-        \ (context.immediately || context.no_empty) "{{{
+        \ (context.immediately || !context.empty) "{{{
     let candidates = unite#candidates#gather()
 
     if empty(candidates)
