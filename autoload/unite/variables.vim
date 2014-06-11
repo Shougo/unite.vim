@@ -226,7 +226,7 @@ function! s:initialize_default() "{{{
         \ 'is_redraw' : 0,
         \ 'is_restart' : 0,
         \ 'is_resize' : 0,
-        \ 'no_focus' : 0,
+        \ 'focus' : 1,
         \ 'multi_line' : 0,
         \ 'resume' : 0,
         \ 'wrap' : 0,

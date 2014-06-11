@@ -545,7 +545,7 @@ function! unite#view#_init_cursor() "{{{
     call unite#mappings#_quick_match(0)
   endif
 
-  if context.no_focus
+  if !context.focus
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
