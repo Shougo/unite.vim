@@ -88,6 +88,9 @@ function! unite#handlers#_on_cursor_moved_i()  "{{{
     startinsert!
   endif
 endfunction"}}}
+function! unite#handlers#_on_text_changed()  "{{{
+  call s:check_redraw()
+endfunction"}}}
 function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
   silent! let unite = getbufvar(a:bufnr, 'unite')
   if type(unite) != type({})

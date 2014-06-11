@@ -202,7 +202,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
       call unite#clear_message()
     endif
 
-    let input = unite#helper#get_input()
+    let input = unite#helper#get_input(1)
     if !context.is_redraw && input ==# unite.last_input
           \ && !unite.is_async
           \ && !context.is_resize

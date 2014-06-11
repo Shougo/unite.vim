@@ -191,6 +191,11 @@ function! unite#init#_unite_buffer() "{{{
       autocmd plugin-unite InsertCharPre <buffer>
             \ call unite#handlers#_on_insert_char_pre()
     endif
+    if v:version > 703 || v:version == 703 && has('patch867')
+      " Enable auto narrow feature.
+      autocmd plugin-unite TextChanged <buffer>
+            \ call unite#handlers#_on_text_changed()
+    endif
   endif
 
   call unite#mappings#define_default_mappings()

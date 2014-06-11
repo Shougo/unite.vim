@@ -178,10 +178,15 @@ function! unite#helper#get_marked_candidates() "{{{
         \ 'v:val.unite__is_marked'), 'v:val.unite__marked_time')
 endfunction"}}}
 
-function! unite#helper#get_input() "{{{
+function! unite#helper#get_input(...) "{{{
+  let is_force = get(a:000, 0, 0)
   let unite = unite#get_current_unite()
-  if mode() !=# 'i'
+  if !is_force && mode() !=# 'i'
     return unite.context.input
+  endif
+
+  if unite.prompt_linenr == 0
+    return ''
   endif
 
   " Prompt check.
