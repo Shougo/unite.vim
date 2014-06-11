@@ -247,7 +247,7 @@ function! unite#start#get_candidates(sources, ...) "{{{
     let context = get(a:000, 0, {})
     let context = unite#init#_context(context,
           \ unite#helper#get_source_names(a:sources))
-    let context.no_buffer = 1
+    let context.buffer = 0
     let context.unite__is_interactive = 0
 
     " Finalize.
@@ -272,7 +272,7 @@ function! unite#start#get_vimfiler_candidates(sources, ...) "{{{
     let context = get(a:000, 0, {})
     let context = unite#init#_context(context,
           \ unite#helper#get_source_names(a:sources))
-    let context.no_buffer = 1
+    let context.unite__not_buffer = 1
     let context.unite__is_vimfiler = 1
     let context.unite__is_interactive = 0
     if !has_key(context, 'vimfiler__is_dummy')

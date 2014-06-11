@@ -217,7 +217,6 @@ function! s:initialize_default() "{{{
         \ 'abbr_highlight' : 'Normal',
         \ 'no_cursor_line' : 0,
         \ 'update_time' : 200,
-        \ 'no_buffer' : 0,
         \ 'hide_source_names' : 0,
         \ 'max_multi_lines' : 5,
         \ 'here' : 0,
@@ -253,6 +252,7 @@ function! s:initialize_default() "{{{
         \ 'unite__old_winheight' : 0,
         \ 'unite__disable_hooks' : 0,
         \ 'unite__disable_max_candidates' : 0,
+        \ 'unite__not_buffer' : 0,
         \ }
 
   " For compatibility(deprecated variables)

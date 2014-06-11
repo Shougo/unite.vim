@@ -90,7 +90,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
   for source in unite.sources
     let source.unite__is_invalidate = 0
 
-    if !context.no_buffer && source.max_candidates != 0
+    if !context.unite__not_buffer && source.max_candidates != 0
           \ && context.unite__is_interactive
           \ && !unite.disabled_max_candidates
           \ && len(source.unite__candidates) > source.max_candidates
