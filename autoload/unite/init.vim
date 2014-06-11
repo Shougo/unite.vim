@@ -74,7 +74,7 @@ function! unite#init#_context(context, ...) "{{{
     let context.empty = 0
   endif
   if context.tab
-    let context.no_split = 1
+    let context.split = 0
   endif
   if get(context, 'long_source_names', 0)
     " Disable short name.
@@ -87,7 +87,7 @@ function! unite#init#_context(context, ...) "{{{
   endif
   if &l:modified && !&l:hidden
     " Split automatically.
-    let context.no_split = 0
+    let context.split = 1
   endif
   if !has_key(a:context, 'buffer_name') && context.script
     " Set buffer-name automatically.

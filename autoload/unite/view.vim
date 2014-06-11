@@ -429,7 +429,7 @@ endfunction"}}}
 function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
   " Search unite window.
   let winnr = unite#helper#get_unite_winnr(a:buffer_name)
-  if !a:context.no_split && winnr > 0
+  if a:context.split && winnr > 0
     silent execute winnr 'wincmd w'
     return
   endif
@@ -437,7 +437,7 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
   " Search unite buffer.
   let bufnr = unite#helper#get_unite_bufnr(a:buffer_name)
 
-  if !a:context.no_split && !a:context.unite__direct_switch
+  if a:context.split && !a:context.unite__direct_switch
     " Split window.
     execute a:context.direction ((bufnr > 0) ?
           \ ((a:context.vertical) ? 'vsplit' : 'split') :
@@ -602,7 +602,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
   if a:is_force || context.quit
     let bufname = bufname('%')
 
-    if winnr('$') == 1 || context.no_split
+    if winnr('$') == 1 || !context.split
       call unite#util#alternate_buffer()
     elseif is_all || !context.temporary
       close!

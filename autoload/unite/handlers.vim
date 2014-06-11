@@ -107,7 +107,7 @@ function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
 
   call s:restore_statusline()
 
-  if !unite.context.no_split && winnr('$') != 1
+  if unite.context.split && winnr('$') != 1
     call unite#view#_resize_window()
   endif
 
@@ -231,7 +231,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   endif
 
   let height =
-        \ (unite.context.no_split
+        \ (!unite.context.split
         \  || unite.context.winheight == 0) ?
         \ winheight(0) : unite.context.winheight
   let candidates = unite#candidates#_gather_pos(height)
