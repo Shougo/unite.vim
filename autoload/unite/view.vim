@@ -347,6 +347,7 @@ function! unite#view#_resize_window() "{{{
     silent! execute 'resize' min([max_len, context.winheight])
 
     if line('.') == unite.prompt_linenr
+          \ || line('$') < winheight
       call unite#view#_bottom_cursor()
     endif
 
@@ -525,16 +526,10 @@ function! unite#view#_init_cursor() "{{{
     stopinsert
   endif
 
-  if line('.') <= winheight(0)
-        \ || (context.prompt_direction ==# 'below'
-        \     && (line('$') - line('.')) <= winheight(0))
-    call unite#view#_bottom_cursor()
-  endif
-
   if context.select > 0
     " Select specified candidate.
     call cursor(unite#helper#get_current_candidate_linenr(
-          \ context.select), -1)
+          \ context.select), 0)
   elseif context.input == '' && context.log
     call unite#view#_redraw_candidates(1)
   endif
@@ -543,6 +538,12 @@ function! unite#view#_init_cursor() "{{{
     call unite#helper#cursor_prompt()
 
     call unite#mappings#_quick_match(0)
+  endif
+
+  if line('.') <= winheight(0)
+        \ || (context.prompt_direction ==# 'below'
+        \     && (line('$') - line('.')) <= winheight(0))
+    call unite#view#_bottom_cursor()
   endif
 
   if !context.focus
