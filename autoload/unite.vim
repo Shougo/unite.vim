@@ -312,7 +312,7 @@ function! unite#force_quit_session()  "{{{
   call unite#view#_quit(1)
 
   let context = unite#get_context()
-  if context.temporary && !empty(context.old_buffer_info)
+  if context.temporary && !empty(context.unite__old_buffer_info)
     call unite#start#resume_from_temporary(context)
   endif
 endfunction"}}}
@@ -320,7 +320,7 @@ function! unite#quit_session()  "{{{
   call unite#view#_quit(0)
 
   let context = unite#get_context()
-  if context.temporary && !empty(context.old_buffer_info)
+  if context.temporary && !empty(context.unite__old_buffer_info)
     call unite#start#resume_from_temporary(context)
   endif
 endfunction"}}}

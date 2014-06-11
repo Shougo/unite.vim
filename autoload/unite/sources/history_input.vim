@@ -41,7 +41,7 @@ let s:source = {
 function! s:source.gather_candidates(args, context) "{{{
   let context = unite#get_context()
   let inputs = unite#get_profile(
-        \ context.old_buffer_info[0].profile_name, 'unite__inputs')
+        \ context.unite__old_buffer_info[0].profile_name, 'unite__inputs')
   let key = context.old_source_names_string
   if !has_key(inputs, key)
     return []
@@ -71,7 +71,7 @@ let s:source.action_table.delete = {
 function! s:source.action_table.delete.func(candidates) "{{{
   let context = unite#get_context()
   let inputs = unite#get_profile(
-        \ context.old_buffer_info[0].profile_name, 'unite__inputs')
+        \ context.unite__old_buffer_info[0].profile_name, 'unite__inputs')
   let key = context.old_source_names_string
   if !has_key(inputs, key)
     return

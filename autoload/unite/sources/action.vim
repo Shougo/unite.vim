@@ -119,15 +119,15 @@ let s:source.action_table.do = {
 function! s:source.action_table.do.func(candidate) "{{{
   let context = a:candidate.source__context
 
-  if !empty(context.old_buffer_info)
+  if !empty(context.unite__old_buffer_info)
     " Restore buffer_name and profile_name.
     let buffer_name =
-          \ get(get(context.old_buffer_info, 0, {}), 'buffer_name', '')
+          \ get(get(context.unite__old_buffer_info, 0, {}), 'buffer_name', '')
     if buffer_name != ''
       let context.buffer_name = buffer_name
     endif
     let profile_name =
-          \ get(get(context.old_buffer_info, 0, {}), 'profile_name', '')
+          \ get(get(context.unite__old_buffer_info, 0, {}), 'profile_name', '')
     if profile_name != ''
       let context.profile_name = profile_name
     endif

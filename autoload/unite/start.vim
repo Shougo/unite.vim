@@ -132,7 +132,7 @@ function! unite#start#temporary(sources, ...) "{{{
 
   if !empty(unite) && !empty(old_context)
     let context = deepcopy(old_context)
-    let context.old_buffer_info = insert(context.old_buffer_info, {
+    let context.unite__old_buffer_info = insert(context.unite__old_buffer_info, {
           \ 'buffer_name' : unite.buffer_name,
           \ 'pos' : getpos('.'),
           \ 'profile_name' : unite.profile_name,
@@ -141,7 +141,7 @@ function! unite#start#temporary(sources, ...) "{{{
     let context = {}
     let context = unite#init#_context(context,
           \ unite#helper#get_source_names(a:sources))
-    let context.old_buffer_info = []
+    let context.unite__old_buffer_info = []
   endif
 
   let new_context = get(a:000, 0, {})
@@ -173,7 +173,7 @@ function! unite#start#temporary(sources, ...) "{{{
 
   let buffer_name = get(a:000, 1,
         \ matchstr(context.buffer_name, '^\S\+')
-        \ . '-' . len(context.old_buffer_info))
+        \ . '-' . len(context.unite__old_buffer_info))
 
   let context.buffer_name = buffer_name
 
@@ -372,7 +372,7 @@ function! unite#start#resume(buffer_name, ...) "{{{
 endfunction"}}}
 
 function! unite#start#resume_from_temporary(context)  "{{{
-  if empty(a:context.old_buffer_info)
+  if empty(a:context.unite__old_buffer_info)
     return
   endif
 
@@ -381,11 +381,11 @@ function! unite#start#resume_from_temporary(context)  "{{{
   let unite_save = unite#get_current_unite()
 
   " Resume unite buffer.
-  let buffer_info = a:context.old_buffer_info[0]
+  let buffer_info = a:context.unite__old_buffer_info[0]
   call unite#start#resume(buffer_info.buffer_name,
         \ {'unite__direct_switch' : 1})
   call setpos('.', buffer_info.pos)
-  let a:context.old_buffer_info = a:context.old_buffer_info[1:]
+  let a:context.unite__old_buffer_info = a:context.unite__old_buffer_info[1:]
 
   " Overwrite unite.
   let unite = unite#get_current_unite()

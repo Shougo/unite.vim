@@ -259,10 +259,10 @@ function! unite#helper#get_unite_winnr(buffer_name) "{{{
     if !empty(buffer_context) &&
           \ buffer_context.buffer_name ==# a:buffer_name
       if buffer_context.temporary
-            \ && !empty(filter(copy(buffer_context.old_buffer_info),
+            \ && !empty(filter(copy(buffer_context.unite__old_buffer_info),
             \ 'v:val.buffer_name ==# buffer_context.buffer_name'))
         " Disable resume.
-        let buffer_context.old_buffer_info = []
+        let buffer_context.unite__old_buffer_info = []
       endif
       return winnr
     endif
@@ -277,10 +277,10 @@ function! unite#helper#get_unite_bufnr(buffer_name) "{{{
     if !empty(buffer_context) &&
           \ buffer_context.buffer_name ==# a:buffer_name
       if buffer_context.temporary
-            \ && !empty(filter(copy(buffer_context.old_buffer_info),
+            \ && !empty(filter(copy(buffer_context.unite__old_buffer_info),
             \ 'v:val.buffer_name ==# buffer_context.buffer_name'))
         " Disable resume.
-        let buffer_context.old_buffer_info = []
+        let buffer_context.unite__old_buffer_info = []
       endif
 
       return bufnr
