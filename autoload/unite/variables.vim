@@ -86,25 +86,11 @@ endfunction"}}}
 
 function! unite#variables#options() "{{{
   if !exists('s:options')
-    let s:options = [
-          \ '-buffer-name=', '-profile-name=', '-input=', '-prompt=',
-          \ '-default-action=', '-start-insert',
-          \ '-no-start-insert', '-no-quit',
-          \ '-winwidth=', '-winheight=',
-          \ '-immediately', '-no-empty',
-          \ '-auto-preview', '-auto-highlight', '-complete',
-          \ '-vertical', '-horizontal', '-direction=', '-no-split',
-          \ '-verbose', '-auto-resize',
-          \ '-toggle', '-quick-match', '-create',
-          \ '-cursor-line-highlight=', '-no-cursor-line',
-          \ '-update-time=', '-hide-source-names', '-hide-status-line',
-          \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
-          \ '-auto-quit', '-no-focus',
-          \ '-long-source-names', '-short-source-names',
-          \ '-multi-line', '-resume', '-wrap', '-select=', '-log',
-          \ '-truncate', '-tab', '-sync', '-unique', '-prompt-direction=',
-          \ '-prompt-visible',
-          \]
+    let s:options = map(filter(items(unite#variables#default_context()),
+          \ "v:val[0] !~ '^unite__'"),
+          \ "'-' . substitute(v:val[0], '_', '-', 'g') .
+          \ (type(v:val[1]) == type(0) && (v:val[1] == 0 || v:val[1] == 1) ?
+          \   '' : '=')")
   endif
 
   return s:options
@@ -202,7 +188,7 @@ function! s:initialize_default() "{{{
         \ 'start_insert' : 0,
         \ 'complete' : 0,
         \ 'script' : 0,
-        \ 'col' : col('.'),
+        \ 'col' : -1,
         \ 'no_quit' : 0,
         \ 'buffer_name' : 'default',
         \ 'profile_name' : '',
