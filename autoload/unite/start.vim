@@ -149,6 +149,8 @@ function! unite#start#temporary(sources, ...) "{{{
   " Overwrite context.
   let context = extend(context, new_context)
 
+  let default_context = unite#custom#get_profile('default', 'context')
+
   let context.temporary = 1
   let context.unite__direct_switch = 1
   let context.input = ''
@@ -161,7 +163,7 @@ function! unite#start#temporary(sources, ...) "{{{
   let context.is_resize = 0
   let context.is_restart = 0
   let context.quick_match = 0
-  let context.start_insert = g:unite_enable_start_insert
+  let context.start_insert = get(default_context, 'start_insert', 0)
   let context.no_start_insert = 0
 
   if context.script
