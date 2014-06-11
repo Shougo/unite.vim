@@ -1677,6 +1677,29 @@ the context dictionary.
 		Note: If you use both {option-name} and -no-{option-name} in
 		same unite buffer, it is undefined.
 
+						*unite-options-no-quit*
+		-no-quit
+		Doesn't close unite buffer after firing an action.  Unless you
+		specify it, a unite buffer gets closed when you selected an
+		action which is "is_quit".
+
+						*unite-options-no-empty*
+		-no-empty
+		If candidate is empty, it doesn't open any unite buffer.
+
+						*unite-options-no-split*
+		-no-split
+		Open the unite buffer in the current window.
+
+						*unite-options-no-cursor-line*
+		-no-cursor-line
+		Disable cursor line highlight.  This option is useful for
+		animation source.
+
+						*unite-options-no-focus*
+		-no-focus
+		Do not focus the unite buffer after opening it.
+
 						*unite-options-buffer-name*
 		-buffer-name={buffer-name}
 		Specify a buffer name. The default buffer name is "default".
@@ -1721,29 +1744,6 @@ the context dictionary.
 		When both options are undefined, it depends on
 		|g:unite_enable_start_insert| option.
 		The behavior is undefined when both options are defined.
-
-						*unite-options-no-quit*
-		-no-quit
-		Doesn't close unite buffer after firing an action.  Unless you
-		specify it, a unite buffer gets closed when you selected an
-		action which is "is_quit".
-
-						*unite-options-no-empty*
-		-no-empty
-		If candidate is empty, it doesn't open any unite buffer.
-
-						*unite-options-no-split*
-		-no-split
-		Open the unite buffer in the current window.
-
-						*unite-options-no-cursor-line*
-		-no-cursor-line
-		Disable cursor line highlight.  This option is useful for
-		animation source.
-
-						*unite-options-no-focus*
-		-no-focus
-		Do not focus the unite buffer after opening it.
 
 						*unite-options-keep-focus*
 		-keep-focus

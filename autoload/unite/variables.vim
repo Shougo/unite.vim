@@ -193,7 +193,7 @@ function! s:initialize_default() "{{{
         \ 'complete' : 0,
         \ 'script' : 0,
         \ 'col' : -1,
-        \ 'no_quit' : 0,
+        \ 'quit' : 1,
         \ 'buffer_name' : 'default',
         \ 'profile_name' : '',
         \ 'prompt' : '> ',

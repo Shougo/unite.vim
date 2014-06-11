@@ -359,7 +359,7 @@ function! unite#action#do(action_name, ...) "{{{
     " Check quit flag.
     if table.action.is_quit && unite.profile_name !=# 'action'
           \ && !table.action.is_start
-          \ && !(table.action.is_tab && unite.context.no_quit)
+          \ && !(table.action.is_tab && !unite.context.quit)
       call unite#all_quit_session(0)
       let is_quit = 1
     endif
@@ -401,7 +401,7 @@ function! unite#action#do(action_name, ...) "{{{
     endif
   endfor
 
-  if (!is_quit || unite.context.no_quit) && unite.context.keep_focus
+  if (!is_quit || !unite.context.quit) && unite.context.keep_focus
     let winnr = bufwinnr(unite.bufnr)
 
     if winnr > 0

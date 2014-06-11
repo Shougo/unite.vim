@@ -58,7 +58,7 @@ function! unite#init#_context(context, ...) "{{{
   " Generic no.
   for [option, value] in filter(items(context),
         \ "stridx(v:val[0], 'no_') == 0 && v:val[1]")
-    let context[option[2:]] = 0
+    let context[option[3:]] = 0
   endfor
 
   " Complex initializer.

@@ -599,7 +599,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
     endif
   endif
 
-  if a:is_force || !context.no_quit
+  if a:is_force || context.quit
     let bufname = bufname('%')
 
     if winnr('$') == 1 || context.no_split
