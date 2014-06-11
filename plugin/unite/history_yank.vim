@@ -40,6 +40,11 @@ if exists('g:unite_source_history_yank_enable')
     autocmd CursorMoved,FocusGained * silent
      \ call unite#sources#history_yank#_append()
   augroup END
+
+  if v:version > 703 || v:version == 703 && has('patch867')
+    autocmd plugin-unite-history-yank TextChanged * silent
+     \ call unite#sources#history_yank#_append()
+  endif
 endif
 
 let g:loaded_unite_source_history_yank = 1
