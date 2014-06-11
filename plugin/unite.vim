@@ -52,10 +52,6 @@ let g:unite_abbr_highlight =
       \ get(g:, 'unite_abbr_highlight', 'Normal')
 let g:unite_cursor_line_time =
       \ get(g:, 'unite_cursor_line_time', '0.10')
-let g:unite_marked_icon =
-      \ get(g:, 'unite_marked_icon', '*')
-let g:unite_candidate_icon =
-      \ get(g:, 'unite_candidate_icon', ' ')
 let g:unite_force_overwrite_statusline =
       \ get(g:, 'unite_force_overwrite_statusline', 1)
 "}}}

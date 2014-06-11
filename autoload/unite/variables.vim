@@ -236,6 +236,8 @@ function! s:initialize_default() "{{{
         \ 'prompt_direction' : '',
         \ 'prompt_visible' : 0,
         \ 'short_source_names' : 0,
+        \ 'candidate_icon' : ' ',
+        \ 'marked_icon' : '*',
         \ 'unite__old_buffer_info' : [],
         \ 'unite__direct_switch' : 0,
         \ 'unite__is_interactive' : 1,
@@ -259,6 +261,8 @@ function! s:initialize_default() "{{{
         \    'g:unite_cursor_line_highlight'],
         \ ['update_time', 'g:unite_update_time'],
         \ ['short_source_names', 'g:unite_enable_short_source_names'],
+        \ ['candidate_icon', 'g:unite_candidate_icon'],
+        \ ['marked_icon', 'g:unite_marked_icon'],
         \ ], "exists(v:val[1])")
     let s:default_context[context] = {var}
   endfor

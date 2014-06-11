@@ -254,17 +254,19 @@ function! unite#view#_set_syntax() "{{{
   execute 'syntax match uniteInputPrompt'
         \ '/^'.match_prompt.'/ contained'
 
-  let marked_icon = unite#util#escape_pattern(g:unite_marked_icon)
-  execute 'syntax region uniteMarkedLine start=/^'.
-        \ marked_icon.'/ end=''$'' keepend'
-
-  let candidate_icon = unite#util#escape_pattern(g:unite_candidate_icon)
+  let candidate_icon = unite#util#escape_pattern(
+        \ unite.context.candidate_icon)
   execute 'syntax region uniteNonMarkedLine start=/^'.
         \ candidate_icon.' / end=''$'' keepend'.
         \ ' contains=uniteCandidateMarker,'.
         \ 'uniteCandidateSourceName'
   execute 'syntax match uniteCandidateMarker /^'.
         \ candidate_icon.' / contained'
+
+  let marked_icon = unite#util#escape_pattern(
+        \ unite.context.marked_icon)
+  execute 'syntax region uniteMarkedLine start=/^'.
+        \ marked_icon.'/ end=''$'' keepend'
 
   silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0
@@ -290,7 +292,8 @@ function! unite#view#_set_syntax() "{{{
     execute 'highlight default link'
           \ source.syntax g:unite_abbr_highlight
 
-    execute printf('syntax match %s "^\%(['.g:unite_candidate_icon.' ] \|.|\)%s" '.
+    execute printf('syntax match %s "^\%(['.
+          \ unite.context.candidate_icon.' ] \|.|\)%s" '.
           \ 'nextgroup='.source.syntax. ' keepend
           \ contains=uniteCandidateMarker,uniteQuickMatchMarker,%s',
           \ 'uniteSourceLine__'.source.syntax,
@@ -385,8 +388,8 @@ function! unite#view#_convert_lines(candidates, ...) "{{{
 
   return map(copy(a:candidates),
         \ "(v:val.is_dummy ? '  ' :
-        \   v:val.unite__is_marked ? g:unite_marked_icon . ' ' :
-        \   empty(quick_match_table) ? g:unite_candidate_icon . ' ' :
+        \   v:val.unite__is_marked ? context.marked_icon . ' ' :
+        \   empty(quick_match_table) ? context.candidate_icon . ' ' :
         \   get(keys, v:key, '  '))
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(unite#helper#convert_source_name(

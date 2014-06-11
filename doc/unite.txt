@@ -406,20 +406,6 @@ g:unite_abbr_highlight				*g:unite_abbr_highlight*
 
 		The default value is "Normal".
 
-g:unite_marked_icon				*g:unite_marked_icon*
-		Controls unite marked candidates icon.
-
-		Note: This must be one character.
-
-		Default value is "*".
-
-g:unite_candidate_icon				*g:unite_candidate_icon*
-		Controls unite normal candidates icon.
-
-		Note: It must be one character.
-
-		Default value is " ".
-
 					*g:unite_force_overwrite_statusline*
 g:unite_force_overwrite_statusline
 		If this variable is 1, unite will overwrite 'statusline'
@@ -916,6 +902,18 @@ g:unite_cursor_line_highlight		*g:unite_cursor_line_highlight*
 g:unite_enable_short_source_names
 		If this variable is 1, unite buffer will show short source
 		names.
+		Note: It is deprecated variable.  Please use
+		|unite#custom#profile()| instead.
+
+g:unite_marked_icon				*g:unite_marked_icon*
+		It controls unite marked candidates icon.
+		Note: This must be one character.
+		Note: It is deprecated variable.  Please use
+		|unite#custom#profile()| instead.
+
+g:unite_candidate_icon				*g:unite_candidate_icon*
+		It controls unite normal candidates icon.
+		Note: It must be one character.
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 
@@ -1917,6 +1915,16 @@ the context dictionary.
 						*unite-options-unique*
 		-unique
 		Unique candidates by word attribute.
+
+						*unite-options-candidate-icon*
+		-candidate-icon={icon-text}
+		Specify the candidate icon text.  The default value is ' '.
+		Note: It must be one character.
+
+						*unite-options-marked-icon*
+		-marked-icon={icon-text}
+		Specify the marked icon text.  The default value is '*'.
+		Note: It must be one character.
 
 ==============================================================================
 SOURCES						*unite-sources*
