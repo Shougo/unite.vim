@@ -113,9 +113,9 @@ function! unite#kinds#jump_list#define() "{{{
       let context = unite.context
       let current_winnr = winnr()
 
-      if context.vertical 
+      if context.vertical
           setlocal winfixwidth
-      else 
+      else
           setlocal winfixheight
       endif
 
