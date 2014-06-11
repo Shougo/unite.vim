@@ -40,10 +40,6 @@ function! unite#start#standard(sources, ...) "{{{
         \ unite#helper#get_source_names(a:sources))
 
   if empty(a:sources)
-    if !get(context, 'no_start_insert', 0)
-      let context.start_insert = 1
-    endif
-
     echohl Comment
     call unite#view#_redraw_echo(
           \ '[unite.vim] interactive mode: Please input source name')
@@ -164,7 +160,6 @@ function! unite#start#temporary(sources, ...) "{{{
   let context.is_restart = 0
   let context.quick_match = 0
   let context.start_insert = get(default_context, 'start_insert', 0)
-  let context.no_start_insert = 0
 
   if context.script
     " Set buffer-name automatically.
@@ -345,10 +340,11 @@ function! unite#start#resume(buffer_name, ...) "{{{
         \ '' : winrestcmd()
 
   let new_context = get(a:000, 0, {})
-  if has_key(new_context, 'no_start_insert')
-        \ && new_context.no_start_insert
-    let new_context.start_insert = 0
-  endif
+  " Generic no.
+  for [option, value] in filter(items(new_context),
+        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]")
+    let new_context[option[3:]] = 0
+  endfor
   call extend(context, new_context)
 
   call unite#view#_switch_unite_buffer(context.buffer_name, context)
