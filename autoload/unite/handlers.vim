@@ -200,7 +200,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
     call s:cursor_down()
   endif
 
-  if exists('b:current_syntax') && !context.no_cursor_line
+  if exists('b:current_syntax') && context.cursor_line
     call unite#view#_clear_match()
 
     let is_prompt = (prompt_linenr == 0 &&
@@ -315,7 +315,7 @@ function! s:change_highlight()  "{{{
 
   let context = unite#get_context()
   let prompt_linenr = unite.prompt_linenr
-  if !context.no_cursor_line
+  if context.cursor_line
     call unite#view#_set_cursor_line()
   endif
 

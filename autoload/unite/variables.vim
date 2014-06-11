@@ -215,7 +215,7 @@ function! s:initialize_default() "{{{
         \ 'create' : 0,
         \ 'cursor_line_highlight' : 'PmenuSel',
         \ 'abbr_highlight' : 'Normal',
-        \ 'no_cursor_line' : 0,
+        \ 'cursor_line' : 1,
         \ 'update_time' : 200,
         \ 'hide_source_names' : 0,
         \ 'max_multi_lines' : 5,
