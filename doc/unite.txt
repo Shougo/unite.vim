@@ -393,14 +393,6 @@ The commands of source				*:unite-sources-commands*
 ------------------------------------------------------------------------------
 VARIABLES 					*unite-variables*
 
-g:unite_cursor_line_time		*g:unite_cursor_line_time*
-		Specify the cursor line highlight time.
-		If you scrolls cursor quickly less than it, unite will skip
-		cursor line highlight.
-		If it is "0.0", this feature will be disabled.
-
-		The default value is "0.10".
-
 					*g:unite_force_overwrite_statusline*
 g:unite_force_overwrite_statusline
 		If this variable is 1, unite will overwrite 'statusline'
@@ -914,6 +906,14 @@ g:unite_candidate_icon				*g:unite_candidate_icon*
 
 g:unite_abbr_highlight				*g:unite_abbr_highlight*
 		Specify abbreviated candidates highlight.
+		Note: It is deprecated variable.  Please use
+		|unite#custom#profile()| instead.
+
+g:unite_cursor_line_time		*g:unite_cursor_line_time*
+		Specify the cursor line highlight time.
+		If you scrolls cursor quickly less than it, unite will skip
+		cursor line highlight.
+		If it is "0.0", this feature will be disabled.
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 
@@ -1929,6 +1929,13 @@ the context dictionary.
 		-marked-icon={icon-text}
 		Specify the marked icon text.  The default value is '*'.
 		Note: It must be one character.
+
+						*unite-options-cursor-line-time*
+		-cursor-line-time={icon-text}
+		Specify the cursor line highlight time.
+		If you scrolls cursor quickly less than it, unite will skip
+		cursor line highlight.
+		If it is "0.0", this feature will be disabled.
 
 ==============================================================================
 SOURCES						*unite-sources*

@@ -203,10 +203,13 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   if exists('b:current_syntax') && !context.no_cursor_line
     call unite#view#_clear_match()
 
-    if prompt_linenr == 0 ||
-          \ line('.') == prompt_linenr || mode('.') == 'i' ||
+    let is_prompt = (prompt_linenr == 0 &&
+          \ (context.prompt_direction == 'below'
+          \   && line('.') == line('$') || line('.') == 1))
+          \ || line('.') == prompt_linenr
+    if is_prompt || mode('.') == 'i' ||
           \ split(reltimestr(reltime(unite.cursor_line_time)))[0]
-          \    > g:unite_cursor_line_time
+          \    > context.cursor_line_time
       call unite#view#_set_cursor_line()
     endif
     let unite.cursor_line_time = reltime()
