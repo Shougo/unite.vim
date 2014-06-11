@@ -290,7 +290,7 @@ function! unite#view#_set_syntax() "{{{
           \ unite#helper#convert_source_name(source.name) : ''
 
     execute 'highlight default link'
-          \ source.syntax g:unite_abbr_highlight
+          \ source.syntax unite.context.abbr_highlight
 
     execute printf('syntax match %s "^\%(['.
           \ unite.context.candidate_icon.' ] \|.|\)%s" '.

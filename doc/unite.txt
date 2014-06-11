@@ -401,11 +401,6 @@ g:unite_cursor_line_time		*g:unite_cursor_line_time*
 
 		The default value is "0.10".
 
-g:unite_abbr_highlight				*g:unite_abbr_highlight*
-		Specify abbreviated candidates highlight.
-
-		The default value is "Normal".
-
 					*g:unite_force_overwrite_statusline*
 g:unite_force_overwrite_statusline
 		If this variable is 1, unite will overwrite 'statusline'
@@ -914,6 +909,11 @@ g:unite_marked_icon				*g:unite_marked_icon*
 g:unite_candidate_icon				*g:unite_candidate_icon*
 		It controls unite normal candidates icon.
 		Note: It must be one character.
+		Note: It is deprecated variable.  Please use
+		|unite#custom#profile()| instead.
+
+g:unite_abbr_highlight				*g:unite_abbr_highlight*
+		Specify abbreviated candidates highlight.
 		Note: It is deprecated variable.  Please use
 		|unite#custom#profile()| instead.
 
@@ -1819,9 +1819,13 @@ the context dictionary.
 		animation source.
 
 					*unite-options-cursor-line-highlight*
-		-cursor-line-high-light={highlight-name}
+		-cursor-line-highlight={highlight-name}
 		Change cursor line highlight.  If this option is omitted,
 		"PmenuSel" is used.
+
+					*unite-options-abbr-highlight*
+		-abbr-highlight={highlight-name}
+		Specify abbreviated candidates highlight.
 
 						*unite-options-no-cursor-line*
 		-no-cursor-line
