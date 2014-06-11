@@ -309,7 +309,7 @@ function! unite#mappings#narrowing(word, ...) "{{{
 
   call unite#helper#cursor_prompt()
   call unite#view#_bottom_cursor()
-  startinsert!
+  startinsert
 endfunction"}}}
 
 function! unite#mappings#do_action(...) "{{{
