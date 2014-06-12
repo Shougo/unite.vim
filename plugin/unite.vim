@@ -48,8 +48,6 @@ let g:unite_quick_match_table =
       \     'q' : 10, 'w' : 11, 'e' : 12, 'r' : 13, 't' : 14, 'y' : 15, 'u' : 16, 'i' : 17, 'o' : 18, 'p' : 19,
       \     '1' : 20, '2' : 21, '3' : 22, '4' : 23, '5' : 24, '6' : 25, '7' : 26, '8' : 27, '9' : 28, '0' : 29,
       \ })
-let g:unite_abbr_highlight =
-      \ get(g:, 'unite_abbr_highlight', 'Normal')
 let g:unite_force_overwrite_statusline =
       \ get(g:, 'unite_force_overwrite_statusline', 1)
 "}}}
