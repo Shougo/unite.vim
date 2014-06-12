@@ -359,6 +359,7 @@ function! unite#start#resume(buffer_name, ...) "{{{
   let unite.access_time = localtime()
   let unite.context = context
   let unite.is_finalized = 0
+  let unite.is_resume = 1
   let unite.preview_candidate = {}
   let unite.highlight_candidate = {}
 
