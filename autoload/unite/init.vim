@@ -76,10 +76,6 @@ function! unite#init#_context(context, ...) "{{{
   if context.tab
     let context.split = 0
   endif
-  if get(context, 'long_source_names', 0)
-    " Disable short name.
-    let context.short_source_names = 0
-  endif
   if get(context, 'here', 0)
     " Set direction.
     let context.horizontal = 1
