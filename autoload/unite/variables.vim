@@ -204,6 +204,7 @@ function! s:initialize_default() "{{{
         \ 'empty' : 1,
         \ 'auto_preview' : 0,
         \ 'auto_highlight' : 0,
+        \ 'horizontal' : 0,
         \ 'vertical' : 0,
         \ 'direction' : 'topleft',
         \ 'split' : 1,
