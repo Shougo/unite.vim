@@ -98,6 +98,7 @@ function! unite#init#_context(context, ...) "{{{
           \  && !context.vertical && !context.log ? 'below' : 'top'
   endif
   if context.prompt_direction ==# 'below'
+        \ && !get(context, 'no_auto_resize', 0)
     let context.auto_resize = 1
   endif
 
