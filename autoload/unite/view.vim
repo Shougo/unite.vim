@@ -676,8 +676,12 @@ function! unite#view#_set_cursor_line() "{{{
   endif
 
   let unite = unite#get_current_unite()
-  let prompt_linenr = unite.prompt_linenr
   let context = unite.context
+  if !context.cursor_line
+    return
+  endif
+
+  let prompt_linenr = unite.prompt_linenr
 
   call unite#view#_clear_match()
 

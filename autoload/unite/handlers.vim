@@ -200,19 +200,22 @@ function! unite#handlers#_on_cursor_moved()  "{{{
     call s:cursor_down()
   endif
 
-  if exists('b:current_syntax') && context.cursor_line
+  if exists('b:current_syntax')
     call unite#view#_clear_match()
 
     let is_prompt = (prompt_linenr == 0 &&
           \ (context.prompt_direction == 'below'
           \   && line('.') == line('$') || line('.') == 1))
           \ || line('.') == prompt_linenr
-    if is_prompt || mode('.') == 'i' ||
-          \ split(reltimestr(reltime(unite.cursor_line_time)))[0]
+    if is_prompt || mode('.') == 'i'
+          \ || abs(line('.') - unite.prev_line) != 1
+          \ || split(reltimestr(reltime(unite.cursor_line_time)))[0]
           \    > context.cursor_line_time
       call unite#view#_set_cursor_line()
     endif
+
     let unite.cursor_line_time = reltime()
+    let unite.prev_line = line('.')
   endif
 
   if context.auto_preview
@@ -315,9 +318,7 @@ function! s:change_highlight()  "{{{
 
   let context = unite#get_context()
   let prompt_linenr = unite.prompt_linenr
-  if context.cursor_line
-    call unite#view#_set_cursor_line()
-  endif
+  call unite#view#_set_cursor_line()
 
   silent! syntax clear uniteCandidateInputKeyword
 

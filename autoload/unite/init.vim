@@ -125,6 +125,7 @@ function! unite#init#_unite_buffer() "{{{
   let unite = unite#get_current_unite()
 
   let unite.bufnr = bufnr('%')
+  let unite.prev_line = line('.')
 
   " Note: If unite buffer initialize is incomplete, &modified or &modifiable.
   if !is_bufexists || &modified || &modifiable
