@@ -517,7 +517,7 @@ g:unite_source_rec_async_command
 		" Using ack-grep as recursive command.
 		let g:unite_source_rec_async_command = 'ack -f --nofilter'
 <
-		The default value is "ag" or "find" and the args.
+		The default value is "find" and the args.
 
 					*g:unite_source_file_rec_async_command*
 		Note: This variable is obsolete.
