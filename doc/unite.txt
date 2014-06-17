@@ -2859,7 +2859,7 @@ change_candidates	Function	(Optional)
 			change_candidates() generates new candidates
 			based on the changed input string. Unite adds these
 			candidates to the candidates cached from the initial 
-			|unites-source-attribute-gather_candidates|.
+			|unite-source-attribute-gather_candidates|.
 
 			This function takes {args} and {context} parameters
 			and returns a {candidate} list, as described in
