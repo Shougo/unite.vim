@@ -292,14 +292,14 @@ More advanced configuration example:
 	if executable('jvgrep')
 	  " For jvgrep.
 	  let g:unite_source_grep_command = 'jvgrep'
-	  let g:unite_source_grep_default_opts = '--exclude ''\.(git|svn|hg|bzr)'''
+	  let g:unite_source_grep_default_opts = '-i --exclude ''\.(git|svn|hg|bzr)'''
 	  let g:unite_source_grep_recursive_opt = '-R'
 	endif
 
 	" For ack.
 	if executable('ack-grep')
 	  " let g:unite_source_grep_command = 'ack-grep'
-	  " let g:unite_source_grep_default_opts = '--no-heading --no-color -k -H'
+	  " let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
 	  " let g:unite_source_grep_recursive_opt = ''
 	endif
 <
@@ -2153,20 +2153,20 @@ grep		Nominates "grep" command output as candidates.
 	  " Use ag in unite grep source.
 	  let g:unite_source_grep_command = 'ag'
 	  let g:unite_source_grep_default_opts =
-	  \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
+	  \ '-i --line-numbers --nocolor --nogroup --hidden --ignore ' .
 	  \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
 	  let g:unite_source_grep_recursive_opt = ''
 	elseif executable('pt')
 	  " Use pt in unite grep source.
 	  " https://github.com/monochromegane/the_platinum_searcher
 	  let g:unite_source_grep_command = 'pt'
-	  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
+	  let g:unite_source_grep_default_opts = '-i --nogroup --nocolor'
 	  let g:unite_source_grep_recursive_opt = ''
 	elseif executable('ack-grep')
 	  " Use ack in unite grep source.
 	  let g:unite_source_grep_command = 'ack-grep'
 	  let g:unite_source_grep_default_opts =
-	  \ '--no-heading --no-color -k -H'
+	  \ '-i --no-heading --no-color -k -H'
 	  let g:unite_source_grep_recursive_opt = ''
 	endif
 <
