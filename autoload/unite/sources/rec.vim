@@ -305,14 +305,12 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   endif
 
   " Note: If find command and args used, uses whole command line.
-  if command ==# 'find' || command =~# '^find '
-    if command ==# 'find'
-      let command .= ' ' . string(directory)
-      let command .= ' -follow -type '.
-            \    (a:context.source__is_directory ? 'd' : 'f')
-    else
-      let command .= ' ' . string(directory)
-    endif
+  if command ==# 'find'
+    let command .= ' ' . string(directory)
+    let command .= ' -follow -type '.
+          \    (a:context.source__is_directory ? 'd' : 'f')
+  else
+    let command .= ' ' . string(directory)
   endif
   let a:context.source__proc = vimproc#pgroup_open(command)
 
