@@ -687,16 +687,16 @@ function! unite#view#_set_cursor_line() "{{{
   call unite#view#_clear_match()
 
   if line('.') != prompt_linenr
-    call s:match_line(context.cursor_line_highlight,
+    call unite#view#_match_line(context.cursor_line_highlight,
           \ line('.'), unite.match_id)
   elseif (context.prompt_direction !=# 'below'
           \   && line('$') == prompt_linenr)
           \ || (context.prompt_direction ==# 'below'
           \   && prompt_linenr == 1)
-    call s:match_line('uniteError',
+    call unite#view#_match_line('uniteError',
           \ prompt_linenr, unite.match_id)
   else
-    call s:match_line(context.cursor_line_highlight,
+    call unite#view#_match_line(context.cursor_line_highlight,
           \ prompt_linenr+(context.prompt_direction ==#
           \                   'below' ? -1 : 1), unite.match_id)
   endif
@@ -784,6 +784,11 @@ function! unite#view#_redraw_echo(expr) "{{{
   endtry
 endfunction"}}}
 
+function! unite#view#_match_line(highlight, line, id) "{{{
+  return has('patch7.4.340') ?
+        \ matchaddpos(a:highlight, [a:line], 10, a:id) :
+        \ matchadd(a:highlight, '^\%'.a:line.'l.*', 10, a:id)
+endfunction"}}}
 
 function! unite#view#_get_status_string() "{{{
   return !exists('b:unite') ? '' : ((b:unite.is_async ? '[async] ' : '') .
@@ -828,12 +833,6 @@ endfunction"}}}
 
 function! s:msg2list(expr) "{{{
   return type(a:expr) ==# type([]) ? a:expr : split(a:expr, '\n')
-endfunction"}}}
-
-function! s:match_line(highlight, line, id) "{{{
-  return has('patch7.4.340') ?
-        \ matchaddpos(a:highlight, [a:line], 10, a:id) :
-        \ matchadd(a:highlight, '^\%'.a:line.'l.*', 10, a:id)
 endfunction"}}}
 
 let &cpo = s:save_cpo
