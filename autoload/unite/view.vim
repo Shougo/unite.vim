@@ -559,6 +559,7 @@ function! unite#view#_init_cursor() "{{{
     endif
   endif
 
+  let unite.prev_line = line('.')
   call unite#view#_set_cursor_line()
 endfunction"}}}
 

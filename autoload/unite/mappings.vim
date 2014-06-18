@@ -675,7 +675,7 @@ function! unite#mappings#cursor_up(is_skip_not_matched) "{{{
     return repeat("\<Up>", cnt) .
           \ ((line('.') - cnt) <= prompt_linenr ? "\<End>" : "\<Home>")
   else
-    return repeat('k', cnt)
+    return cnt == 1 ? 'k' : cnt.'k'
   endif
 endfunction"}}}
 function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
@@ -704,7 +704,7 @@ function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
     return repeat("\<Down>", cnt) .
           \ ((line('.') + cnt) <= prompt_linenr ? "\<End>" : "\<Home>")
   else
-    return repeat('j', cnt)
+    return cnt == 1 ? 'j' : cnt.'j'
   endif
 endfunction"}}}
 function! s:toggle_transpose_window() "{{{
