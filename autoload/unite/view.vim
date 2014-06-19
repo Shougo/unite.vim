@@ -785,7 +785,7 @@ function! unite#view#_redraw_echo(expr) "{{{
 endfunction"}}}
 
 function! unite#view#_match_line(highlight, line, id) "{{{
-  return has('patch7.4.340') ?
+  return (v:version > 704 || (v:version == 704 && has("patch330"))) ?
         \ matchaddpos(a:highlight, [a:line], 10, a:id) :
         \ matchadd(a:highlight, '^\%'.a:line.'l.*', 10, a:id)
 endfunction"}}}
