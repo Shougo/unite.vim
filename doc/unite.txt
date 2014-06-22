@@ -431,7 +431,7 @@ g:unite_data_directory				*g:unite_data_directory*
 
 g:unite_no_default_keymappings		*g:unite_no_default_keymappings*
 		If this variable is 1, unite doesn't set any default key
-		mappings.  Not recomended.  You shouldn't set this to 1 unless
+		mappings.  Not recommended.  You shouldn't set this to 1 unless
 		you have a specific reason.
 
 		This variable doesn't exist unless you define it explicitly.
@@ -839,7 +839,7 @@ g:unite_matcher_fuzzy_max_input_length
 DEPRECATED VARIABLES				*unite-deprecated-variables*
 
 g:unite_update_time				*g:unite_update_time*
-		The time interval for updating the canidate list as the filter
+		The time interval for updating the candidate list as the filter
 		text it typed in Msec.
 		If it is 0, this feature is disabled.
 		Note: It is deprecated variable.  Please use
@@ -2833,7 +2833,7 @@ gather_candidates	Function	(Required*)
 			This function is called once when the source in
 			initialized, and again whenever the user invokes
 			|<Plug>(unite_redraw)| to reload the source. If the
-			source is registerd as |unite-source-is_volatile|,
+			source is registered as |unite-source-is_volatile|,
 			gather_candidates() is called on _every_ change of the
 			input string. This function takes {args} and {context} as
 			parameters and returns a {candidate} list. {args} is a
@@ -2879,7 +2879,7 @@ async_gather_candidates	Function	(Optional)
 
 					*unite-source-attribute-complete*
 complete		Function	(Optional)
-			This function provides auto-completeion at the command
+			This function provides auto-completion at the command
 			line when the source is invoked via |:Unite| {source}.
 
 			This function takes {args}, {context}, {arglead},
