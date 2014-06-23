@@ -305,10 +305,14 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   endif
 
   " Note: If find command and args used, uses whole command line.
-  if command ==# 'find'
+  if args[0] ==# 'find'
     let command .= ' ' . string(directory)
-    let command .= ' -follow -type '.
-          \    (a:context.source__is_directory ? 'd' : 'f')
+
+    if g:unite_source_rec_async_command ==# 'find'
+      " Default option.
+      let command .= ' -follow -type '.
+            \    (a:context.source__is_directory ? 'd' : 'f')
+    endif
   else
     let command .= ' ' . string(directory)
   endif
