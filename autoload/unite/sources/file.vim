@@ -245,21 +245,21 @@ function! s:source_file_new.change_candidates(args, context) "{{{
     let input = path . '/' .  input
   endif
 
-  " Substitute *. -> .* .
-  let input = substitute(input, '\*\.', '.*', 'g')
+  " Substitute *
+  let input = substitute(input, '\*', '', 'g')
 
-  if input !~ '\*' && s:is_windows && getftype(input) == 'link'
+  if s:is_windows && getftype(input) == 'link'
     " Resolve link.
     let input = unite#util#substitute_path_separator(resolve(input))
   endif
-
-  let is_relative_path = path !~ '^\%(/\|\a\+:/\)'
 
   if filereadable(input) || isdirectory(input)
     return []
   endif
 
-  " Return newfile candidate.
+  let is_relative_path = path !~ '^\%(/\|\a\+:/\)'
+
+  " Return new file candidate.
   return [unite#sources#file#create_file_dict(
         \ input, is_relative_path, 1)]
 endfunction"}}}
