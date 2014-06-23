@@ -310,8 +310,8 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
 
     if g:unite_source_rec_async_command ==# 'find'
       " Default option.
-      let command .= ' -follow -type '.
-            \    (a:context.source__is_directory ? 'd' : 'f')
+      let command .= ' -path ''*/\.*'' -prune -o -type l -print -o -type '
+            \ . (a:context.source__is_directory ? 'd' : 'f') . ' -print'
     endif
   else
     let command .= ' ' . string(directory)
@@ -345,10 +345,7 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
     let paths = map(paths, 'unite#util#substitute_path_separator(v:val)')
   endif
 
-  let candidates = unite#helper#paths2candidates(
-        \ filter(paths,
-        \   'v:val !=# a:context.source__directory
-        \ && v:val !~? a:context.source.ignore_pattern'))
+  let candidates = unite#helper#paths2candidates(paths)
 
   if stdout.eof || (
         \  g:unite_source_rec_max_cache_files > 0 &&
