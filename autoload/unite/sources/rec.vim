@@ -316,7 +316,7 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   else
     let command .= ' ' . string(directory)
   endif
-  let a:context.source__proc = vimproc#pgroup_open(command)
+  let a:context.source__proc = vimproc#pgroup_open(command, 1)
 
   " Close handles.
   call a:context.source__proc.stdin.close()
