@@ -147,7 +147,8 @@ endfunction"}}}
 
 function! unite#filters#escape(string) "{{{
   " Escape string for lua regexp.
-  return substitute(substitute(substitute(a:string,
+  return substitute(substitute(substitute(substitute(a:string,
+        \ '\\ ', ' ', 'g'),
         \ '[%\[\]().+?^$-]', '%\0', 'g'),
         \ '\*\@<!\*\*\@!', '.*', 'g'),
         \ '\*\*\+', '.*', 'g')
