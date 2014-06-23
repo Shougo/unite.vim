@@ -1643,19 +1643,19 @@ unite#undef_filter({name})			*unite#undef_filter()*
 		|unite#define_filter()|.  If such a filter doesn't exist,
 		this function does nothing.
 
-					*unite#filters#matcher_default#use(()*
+					*unite#filters#matcher_default#use()*
 unite#filters#matcher_default#use({matchers})
 		Changes the default match used by
 		|unite-filter-matcher_default| into {matchers}.
 		{matchers} must be specified with a list of matcher names.
 
-					*unite#filters#sorter_default#use(()*
+					*unite#filters#sorter_default#use()*
 unite#filters#sorter_default#use({sorters})
 		Changes the default sorter used by
 		|unite-filter-sorter_default| into {sorters}.
 		{sorters} must be specified with a list of sorter names.
 
-					*unite#filters#converter_default#use(()*
+					*unite#filters#converter_default#use()*
 unite#filters#converter_default#use({converters})
 		Changes the default converter used by
 		|unite-filter-converter_default| into {converters}.
