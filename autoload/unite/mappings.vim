@@ -296,6 +296,7 @@ function! unite#mappings#narrowing(word, ...) "{{{
   let unite.context.input = unite.input
 
   call unite#handlers#_on_insert_enter()
+  call unite#view#_redraw_prompt()
   call unite#helper#cursor_prompt()
   call unite#view#_bottom_cursor()
   startinsert!
