@@ -26,6 +26,8 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+let s:is_windows = unite#util#is_windows()
+
 function! unite#sources#directory#define() "{{{
   return [s:source_directory, s:source_directory_new]
 endfunction"}}}
@@ -96,47 +98,49 @@ let s:source_directory_new = {
       \ 'description' : 'directory candidates from input',
       \ 'default_kind' : 'directory',
       \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__mkdir' },
+      \ 'hooks' : {},
       \ }
 
-function! s:source_directory_new.change_candidates(args, context) "{{{
-  let input_list = filter(split(a:context.input,
-        \                     '\\\@<! ', 1), 'v:val !~ "!"')
-  let input = empty(input_list) ? '' : input_list[0]
-  let input = substitute(substitute(
-        \ a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
-  if input == ''
-    return []
-  endif
-
-  let path = join(a:args, ':')
+function! s:source_directory_new.hooks.on_init(args, context) "{{{
+  let path = unite#util#substitute_path_separator(
+        \ expand(join(a:args, ':')))
+  let path = unite#util#substitute_path_separator(
+        \ fnamemodify(path, ':p'))
   if path !=# '/' && path =~ '[\\/]$'
     " Chomp.
     let path = path[: -2]
   endif
+  let a:context.source__path = path
+endfunction"}}}
 
+function! s:source_directory_new.change_candidates(args, context) "{{{
+  let input = unite#util#expand(a:context.path)
+  if input == ''
+    return []
+  endif
+
+  let path = a:context.source__path
   if input !~ '^\%(/\|\a\+:/\)' && path != '' && path != '/'
     let input = path . '/' .  input
   endif
 
-  " Substitute *. -> .* .
-  let input = substitute(input, '\*\.', '.*', 'g')
+  " Substitute *
+  let input = substitute(input, '\*', '', 'g')
 
-  if input !~ '\*' && unite#util#is_windows() && getftype(input) == 'link'
+  if s:is_windows && getftype(input) == 'link'
     " Resolve link.
-    let input = resolve(input)
+    let input = unite#util#substitute_path_separator(resolve(input))
+  endif
+
+  if filereadable(input) || isdirectory(input)
+    return []
   endif
 
   let is_relative_path = path !~ '^\%(/\|\a\+:/\)'
 
-  let newfile = unite#util#expand(
-        \ escape(substitute(input, '[*\\]', '', 'g'), ''))
-  if filereadable(newfile) || isdirectory(newfile)
-    return []
-  endif
-
-  " Return newfile candidate.
+  " Return new directory candidate.
   return [unite#sources#file#create_file_dict(
-        \ newfile, is_relative_path, 2)]
+        \ input, is_relative_path, 2)]
 endfunction"}}}
 
 let &cpo = s:save_cpo
