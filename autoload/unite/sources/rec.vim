@@ -338,10 +338,15 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
   let continuation = a:context.source__continuation
   let stdout = a:context.source__proc.stdout
 
+  let paths = map(filter(
+        \   stdout.read_lines(-1, 2000), 'v:val != ""'),
+        \   "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
+  if unite#util#is_windows()
+    let paths = map(paths, 'unite#util#substitute_path_separator(v:val)')
+  endif
+
   let candidates = unite#helper#paths2candidates(
-        \ filter(map(filter(
-        \   stdout.read_lines(-1, 1000), 'v:val != ""'),
-        \   "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')"),
+        \ filter(paths,
         \   'v:val !=# a:context.source__directory
         \ && v:val !~? a:context.source.ignore_pattern'))
 
