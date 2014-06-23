@@ -1497,6 +1497,8 @@ unite#custom#profile({profile-name}, {option-name}, {value})
 		default context.
 		Note: If you want to change default context, you should use
 		"default" profile name.
+		Valid key context is in |unite-options|.  But "-" is
+		substituted to "_", and "-" prefix is removed.
 
 		Example:
 >
