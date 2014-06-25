@@ -2008,7 +2008,7 @@ file_rec/git	Similar to |unite-source-file_rec|, but get files by "git
 
 		Example: >
 	nnoremap <silent> ,ug  :<C-u>Unite
-	\ file_rec/async:--cached:--others:--exclude-standard<CR>
+	\ file_rec/git:--cached:--others:--exclude-standard<CR>
 
 						*unite-source-directory*
 directory	Nominates an input directory as a candidate.
