@@ -318,6 +318,7 @@ function! unite#view#_resize_window() "{{{
   let unite = unite#get_current_unite()
 
   if winheight(0) + &cmdheight + 2 >= &lines
+        \ && !context.vertical
     " Cannot resize.
     let context.is_resize = 0
     return
