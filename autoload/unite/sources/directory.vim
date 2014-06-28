@@ -72,49 +72,17 @@ let s:source_directory_new = {
       \ 'description' : 'directory candidates from input',
       \ 'default_kind' : 'directory',
       \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__mkdir' },
-      \ 'hooks' : {},
       \ }
 
-function! s:source_directory_new.hooks.on_init(args, context) "{{{
-  let path = unite#util#substitute_path_separator(
-        \ expand(join(a:args, ':')))
-  let path = unite#util#substitute_path_separator(
-        \ fnamemodify(path, ':p'))
-  if path !=# '/' && path =~ '[\\/]$'
-    " Chomp.
-    let path = path[: -2]
-  endif
-  let a:context.source__path = path
-endfunction"}}}
-
 function! s:source_directory_new.change_candidates(args, context) "{{{
-  let input = unite#util#expand(a:context.path)
-  if input == ''
+  let path = unite#sources#file#_get_path(a:args, a:context)
+  let input = unite#sources#file#_get_input(path, a:context)
+
+  if input == '' || filereadable(input) || isdirectory(input)
     return []
   endif
 
-  let path = a:context.source__path
-  if input !~ '^\%(/\|\a\+:/\)' && path != '' && path != '/'
-    let input = path . '/' .  input
-  endif
-
-  " Substitute *
-  let input = substitute(input, '\*', '', 'g')
-
-  if s:is_windows && getftype(input) == 'link'
-    " Resolve link.
-    let input = unite#util#substitute_path_separator(resolve(input))
-  endif
-
-  if filereadable(input) || isdirectory(input)
-    return []
-  endif
-
-  let is_relative_path = path !~ '^\%(/\|\a\+:/\)'
-
-  " Return new directory candidate.
-  return [unite#sources#file#create_file_dict(
-        \ input, is_relative_path, 2)]
+  return [unite#sources#file#create_file_dict(input, 0, 2)]
 endfunction"}}}
 
 let &cpo = s:save_cpo

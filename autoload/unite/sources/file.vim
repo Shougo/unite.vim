@@ -196,49 +196,17 @@ let s:source_file_new = {
       \ 'name' : 'file/new',
       \ 'description' : 'file candidates from input',
       \ 'default_kind' : 'file',
-      \ 'hooks' : {},
       \ }
 
-function! s:source_file_new.hooks.on_init(args, context) "{{{
-  let path = unite#util#substitute_path_separator(
-        \ expand(join(a:args, ':')))
-  let path = unite#util#substitute_path_separator(
-        \ fnamemodify(path, ':p'))
-  if path !=# '/' && path =~ '[\\/]$'
-    " Chomp.
-    let path = path[: -2]
-  endif
-  let a:context.source__path = path
-endfunction"}}}
-
 function! s:source_file_new.change_candidates(args, context) "{{{
-  let input = unite#util#expand(a:context.path)
-  if input == ''
+  let path = unite#sources#file#_get_path(a:args, a:context)
+  let input = unite#sources#file#_get_input(path, a:context)
+
+  if input == '' || filereadable(input) || isdirectory(input)
     return []
   endif
 
-  let path = a:context.source__path
-  if input !~ '^\%(/\|\a\+:/\)' && path != '' && path != '/'
-    let input = path . '/' .  input
-  endif
-
-  " Substitute *
-  let input = substitute(input, '\*', '', 'g')
-
-  if s:is_windows && getftype(input) == 'link'
-    " Resolve link.
-    let input = unite#util#substitute_path_separator(resolve(input))
-  endif
-
-  if filereadable(input) || isdirectory(input)
-    return []
-  endif
-
-  let is_relative_path = path !~ '^\%(/\|\a\+:/\)'
-
-  " Return new file candidate.
-  return [unite#sources#file#create_file_dict(
-        \ input, is_relative_path, 1)]
+  return [unite#sources#file#create_file_dict(input, 0, 1)]
 endfunction"}}}
 
 function! unite#sources#file#_get_path(args, context) "{{{
@@ -252,6 +220,23 @@ function! unite#sources#file#_get_path(args, context) "{{{
   endif
 
   return path
+endfunction"}}}
+
+function! unite#sources#file#_get_input(path, context) "{{{
+  let input = unite#util#expand(a:context.input)
+  if input !~ '^\%(/\|\a\+:/\)' && a:path != ''
+    let input = a:path . input
+  endif
+
+  " Substitute *
+  let input = substitute(input, '\*', '', 'g')
+
+  if s:is_windows && getftype(input) == 'link'
+    " Resolve link.
+    let input = resolve(input)
+  endif
+
+  return input
 endfunction"}}}
 
 function! unite#sources#file#_get_glob(path, context) "{{{
