@@ -246,15 +246,14 @@ function! s:recache_candidates_loop(context, is_force) "{{{
           \ "v:val !~ '^[!:]'"), 0, '')
     let context.unite__max_candidates =
           \ (unite.disabled_max_candidates ? 0 : source.max_candidates)
+    if context.unite__is_vimfiler
+      " Disable ignore feature.
+      let source.ignore_pattern = ''
+    endif
 
     let source_candidates = s:get_source_candidates(source)
 
     let custom_source = get(custom.sources, source.name, {})
-    if source.ignore_pattern != '' && !context.unite__is_vimfiler
-      call filter(source_candidates,
-            \ "get(v:val, 'action__path', v:val.word)
-            \             !~# source.ignore_pattern")
-    endif
 
     " Call pre_filter hook.
     let context.candidates = source_candidates
@@ -363,8 +362,9 @@ function! s:get_source_candidates(source) "{{{
       let funcname = 'gather_candidates'
       if has_key(a:source, 'gather_candidates')
         let a:source.unite__cached_candidates +=
-              \ copy(a:source.gather_candidates(a:source.args,
-              \ a:source.unite__context))
+              \ s:ignore_candidates(copy(
+              \  a:source.gather_candidates(a:source.args,
+              \  a:source.unite__context)), a:source.ignore_pattern)
       endif
     endif
 
@@ -373,7 +373,9 @@ function! s:get_source_candidates(source) "{{{
       let funcname = 'async_gather_candidates'
       while 1
         let a:source.unite__cached_candidates +=
-              \ a:source.async_gather_candidates(a:source.args, context)
+              \ s:ignore_candidates(
+              \  a:source.async_gather_candidates(a:source.args, context),
+              \  a:source.ignore_pattern)
 
         if (!context.sync && context.unite__is_interactive)
               \ || !a:source.unite__context.is_async
@@ -388,8 +390,9 @@ function! s:get_source_candidates(source) "{{{
       " Recaching.
       let funcname = 'change_candidates'
       let a:source.unite__cached_change_candidates =
-            \ a:source.change_candidates(
-            \     a:source.args, a:source.unite__context)
+            \ s:ignore_candidates(a:source.change_candidates(
+            \     a:source.args, a:source.unite__context),
+            \   a:source.ignore_pattern)
     endif
   catch
     call unite#print_error(v:throwpoint)
@@ -404,6 +407,12 @@ function! s:get_source_candidates(source) "{{{
 
   return a:source.unite__cached_candidates
         \ + a:source.unite__cached_change_candidates
+endfunction"}}}
+
+function! s:ignore_candidates(candidates, pattern) "{{{
+  return a:pattern == '' ? a:candidates :
+        \ filter(a:candidates,
+        \ "get(v:val, 'action__path', v:val.word) !~# a:pattern")
 endfunction"}}}
 
 function! unite#candidates#_group_post_filters(candidates) "{{{
