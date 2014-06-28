@@ -441,7 +441,7 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
 
   if a:context.split && !a:context.unite__direct_switch
     " Split window.
-    execute a:context.direction ((bufnr > 0) ?
+    noautocmd execute a:context.direction ((bufnr > 0) ?
           \ ((a:context.vertical) ? 'vsplit' : 'split') :
           \ ((a:context.vertical) ? 'vnew' : 'new'))
   endif
