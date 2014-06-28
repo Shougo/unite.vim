@@ -46,34 +46,8 @@ function! s:source_directory.change_candidates(args, context) "{{{
     let a:context.source__cache = {}
   endif
 
-  let input_list = filter(split(a:context.input,
-        \                     '\\\@<! ', 1), 'v:val !~ "!"')
-  let input = empty(input_list) ? '' : input_list[0]
-  let input = substitute(substitute(
-        \ a:context.input, '\\ ', ' ', 'g'), '^\a\+:\zs\*/', '/', '')
-
-  let path = join(a:args, ':')
-  if path !=# '/' && path =~ '[\\/]$'
-    " Chomp.
-    let path = path[: -2]
-  endif
-
-  if input !~ '^\%(/\|\a\+:/\)' && path != '' && path != '/'
-    let input = path . '/' .  input
-  endif
-  let is_relative_path = input !~ '^\%(/\|\a\+:/\)' && path == ''
-
-  " Substitute *. -> .* .
-  let input = substitute(input, '\*\.', '.*', 'g')
-
-  if input !~ '\*' && unite#util#is_windows() && getftype(input) == 'link'
-    " Resolve link.
-    let input = resolve(input)
-  endif
-
-  " Glob by directory name.
-  let input = substitute(input, '[^/.]*$', '', '')
-  let glob = input . (input =~ '\*$' ? '' : '*')
+  let path = unite#sources#file#_get_path(a:args, a:context)
+  let glob = unite#sources#file#_get_glob(path, a:context)
 
   if !has_key(a:context.source__cache, glob)
     let files = sort(filter(copy(unite#util#glob(glob)),
@@ -81,7 +55,7 @@ function! s:source_directory.change_candidates(args, context) "{{{
           \ '^\\%(/\\|\\a\\+:/\\)$\\|\\%(^\\|/\\)\\.$'"), 1)
 
     let a:context.source__cache[glob] = map(files,
-          \ 'unite#sources#file#create_file_dict(v:val, is_relative_path)')
+          \ 'unite#sources#file#create_file_dict(v:val, 0)')
   endif
 
   let candidates = copy(a:context.source__cache[glob])

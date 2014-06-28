@@ -58,39 +58,16 @@ function! s:source_file.change_candidates(args, context) "{{{
 
   let is_vimfiler = get(a:context, 'is_vimfiler', 0)
 
-  let input = unite#util#expand(a:context.path)
-
-  let path = join(a:args, ':')
-  if path !=# '/' && path =~ '[\\/]$'
-    " Chomp.
-    let path = path[: -2]
-  endif
+  let path = unite#sources#file#_get_path(a:args, a:context)
 
   if !isdirectory(path) && filereadable(path)
     return [ unite#sources#file#create_file_dict(
           \      path, path !~ '^\%(/\|\a\+:/\)') ]
   endif
 
-  if input !~ '^\%(/\|\a\+:/\)' && path != '' && path != '/'
-    let input = path . '/' .  input
-  endif
-  let is_relative_path = input !~ '^\%(/\|\a\+:/\)' && path == ''
-
-  " Substitute *. -> .* .
-  let input = substitute(input, '\*\.', '.*', 'g')
-
-  if input !~ '\*' && s:is_windows && getftype(input) == 'link'
-    " Resolve link.
-    let input = resolve(input)
-  endif
-
-  " Glob by directory name.
-  let input = substitute(input, '[^/.]*$', '', '')
-  let glob = input . (input =~ '\*$' ? '' : '*')
+  let glob = unite#sources#file#_get_glob(path, a:context)
 
   if !has_key(a:context.source__cache, glob)
-    " let files = split(unite#util#substitute_path_separator(
-    "       \ glob(glob)), '\n')
     let files = unite#util#glob(glob, !is_vimfiler)
 
     if !is_vimfiler
@@ -100,7 +77,7 @@ function! s:source_file.change_candidates(args, context) "{{{
     endif
 
     let a:context.source__cache[glob] = map(files,
-          \ 'unite#sources#file#create_file_dict(v:val, is_relative_path)')
+          \ 'unite#sources#file#create_file_dict(v:val, 0)')
   endif
 
   let candidates = copy(a:context.source__cache[glob])
@@ -262,6 +239,38 @@ function! s:source_file_new.change_candidates(args, context) "{{{
   " Return new file candidate.
   return [unite#sources#file#create_file_dict(
         \ input, is_relative_path, 1)]
+endfunction"}}}
+
+function! unite#sources#file#_get_path(args, context) "{{{
+  let path = unite#util#substitute_path_separator(
+        \ unite#util#expand(join(a:args, ':')))
+  if path != '' && path !~ '/$'
+    let path .= '/'
+  endif
+  if path == ''
+    let path = a:context.path
+  endif
+
+  return path
+endfunction"}}}
+
+function! unite#sources#file#_get_glob(path, context) "{{{
+  let input = unite#util#expand(a:context.input)
+  if input !~ '^\%(/\|\a\+:/\)' && a:path != ''
+    let input = a:path . input
+  endif
+
+  " Substitute *. -> .* .
+  let input = substitute(input, '\*\.', '.*', 'g')
+
+  if input !~ '\*' && s:is_windows && getftype(input) == 'link'
+    " Resolve link.
+    let input = resolve(input)
+  endif
+
+  " Glob by directory name.
+  let input = substitute(input, '[^/.]*$', '', '')
+  return input . (input =~ '\*$' ? '' : '*')
 endfunction"}}}
 
 function! s:parse_path(args) "{{{

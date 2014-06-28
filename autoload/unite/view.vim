@@ -793,7 +793,8 @@ endfunction"}}}
 
 function! unite#view#_get_status_string() "{{{
   return !exists('b:unite') ? '' : ((b:unite.is_async ? '[async] ' : '') .
-        \ join(unite#helper#loaded_source_names_with_args(), ', '))
+        \ join(unite#helper#loaded_source_names_with_args(), ', ')
+        \ . (b:unite.context.path == '' ? '' : ' ['. b:unite.context.path.']'))
 endfunction"}}}
 
 function! unite#view#_add_previewed_buffer_list(bufnr) "{{{
