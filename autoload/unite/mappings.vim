@@ -102,8 +102,6 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>toggle_auto_preview()<CR>
   nnoremap <buffer><silent> <Plug>(unite_toggle_auto_highlight)
         \ :<C-u>call <SID>toggle_auto_highlight()<CR>
-  nnoremap <buffer><silent> <Plug>(unite_narrowing_path)
-        \ :<C-u>call <SID>narrowing_path()<CR>
   nnoremap <buffer><silent> <Plug>(unite_narrowing_input_history)
         \ :<C-u>call <SID>narrowing_input_history()<CR>
   nnoremap <buffer><silent> <Plug>(unite_narrowing_dot)
@@ -166,8 +164,6 @@ function! unite#mappings#define_default_mappings() "{{{
         \ <C-o>:<C-u>call <SID>toggle_auto_preview()<CR>
   inoremap <silent><buffer> <Plug>(unite_toggle_auto_highlight)
         \ <C-o>:<C-u>call <SID>toggle_auto_highlight()<CR>
-  inoremap <silent><buffer> <Plug>(unite_narrowing_path)
-        \ <C-o>:<C-u>call <SID>narrowing_path()<CR>
   inoremap <silent><buffer> <Plug>(unite_narrowing_input_history)
         \ <C-o>:<C-u>call <SID>narrowing_input_history()<CR>
   inoremap <silent><buffer> <Plug>(unite_disable_max_candidates)
@@ -728,15 +724,6 @@ function! s:disable_max_candidates() "{{{
 
   call unite#force_redraw()
   call s:redraw_all_candidates()
-endfunction"}}}
-function! s:narrowing_path() "{{{
-  let candidate = unite#helper#get_current_candidate()
-  if empty(unite#helper#get_current_candidate())
-    " Ignore.
-    return
-  endif
-  call unite#mappings#narrowing(has_key(candidate, 'action__path')?
-        \ candidate.action__path : candidate.word)
 endfunction"}}}
 function! s:narrowing_input_history() "{{{
   call unite#start_temporary(

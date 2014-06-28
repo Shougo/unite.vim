@@ -154,6 +154,33 @@ function! unite#filters#escape(string) "{{{
         \ '\*\*\+', '.*', 'g')
 endfunction"}}}
 
+function! unite#filters#lua_filter_head(candidates, input) "{{{
+  let input = tolower(a:input)
+
+lua << EOF
+do
+  local input = vim.eval('input')
+  local candidates = vim.eval('a:candidates')
+  for i = #candidates-1, 0, -1 do
+    local word = string.lower(candidates[i].action__path)
+        or string.lower(candidates[i].word)
+    if (string.find(word, input, 1, true)) ~= 1 then
+      candidates[i] = nil
+    end
+  end
+end
+EOF
+
+  return a:candidates
+endfunction"}}}
+
+function! unite#filters#vim_filter_head(candidates, input) "{{{
+  let input = tolower(a:input)
+  return filter(a:candidates,
+        \ "stridx(tolower(get(v:val, 'action__path',
+        \      v:val.word)), input) == 0")
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

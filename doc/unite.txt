@@ -1053,9 +1053,6 @@ Normal mode mappings.
 <Plug>(unite_toggle_transpose_window)
 		Change the unite buffer's split direction.
 
-<Plug>(unite_narrowing_path)			*<Plug>(unite_narrowing_path)*
-		Narrowing candidates by candidate path (or word).
-
 				*<Plug>(unite_narrowing_input_history)*
 <Plug>(unite_narrowing_input_history)
 		Narrowing candidates by input history.
@@ -1727,6 +1724,10 @@ the context dictionary.
 						*unite-options-input*
 		-input={input-text}
 		Specify an initial narrowing text.  The default value is ''.
+
+						*unite-options-path*
+		-path={input-text}
+		Specify an initial narrowing path.  The default value is ''.
 
 						*unite-options-prompt*
 		-prompt={prompt-text}

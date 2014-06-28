@@ -101,6 +101,9 @@ function! unite#init#_context(context, ...) "{{{
         \ && !get(context, 'no_auto_resize', 0)
     let context.auto_resize = 1
   endif
+  if context.path != '' && context.path !~ '/$'
+    let context.path .= '/'
+  endif
 
   let context.is_changed = 0
 

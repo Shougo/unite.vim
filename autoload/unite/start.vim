@@ -140,6 +140,9 @@ function! unite#start#temporary(sources, ...) "{{{
     let context.unite__old_buffer_info = []
   endif
 
+  let context.input = ''
+  let context.path = ''
+
   let new_context = get(a:000, 0, {})
 
   " Overwrite context.
@@ -149,7 +152,6 @@ function! unite#start#temporary(sources, ...) "{{{
 
   let context.temporary = 1
   let context.unite__direct_switch = 1
-  let context.input = ''
   let context.auto_preview = 0
   let context.auto_highlight = 0
   let context.unite__is_vimfiler = 0

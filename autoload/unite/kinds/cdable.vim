@@ -138,13 +138,8 @@ function! s:kind.action_table.narrow.func(candidate) "{{{
     return
   endif
 
-  call unite#start_temporary([['file'], ['file/new'], ['directory/new']])
-  let directory = isdirectory(a:candidate.word) ?
-        \ a:candidate.word : a:candidate.action__directory
-  if directory[-1:] != '/'
-    let directory .= '/'
-  endif
-  call unite#mappings#narrowing(directory)
+  call unite#start_temporary([['file'], ['file/new'], ['directory/new']],
+        \ {'path' : a:candidate.action__directory})
 endfunction"}}}
 
 let s:kind.action_table.vimshell = {
