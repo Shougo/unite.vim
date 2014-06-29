@@ -31,10 +31,12 @@ let s:is_windows = unite#util#is_windows()
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_file_ignore_pattern',
       \'\%(^\|/\)\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|DS_Store|pyc|zwc|sw[po]\)$')
+call unite#util#set_default(
+      \ 'g:unite_source_file_async_command', 'ls')
 "}}}
 
 function! unite#sources#file#define() "{{{
-  return [s:source_file, s:source_file_new]
+  return [s:source_file, s:source_file_new, s:source_file_async]
 endfunction"}}}
 
 function! unite#sources#file#get_file_source() "{{{
@@ -207,6 +209,112 @@ function! s:source_file_new.change_candidates(args, context) "{{{
   endif
 
   return [unite#sources#file#create_file_dict(input, 0, 1)]
+endfunction"}}}
+
+let s:source_file_async = {
+      \ 'name' : 'file/async',
+      \ 'description' : 'asynchronous candidates from file list',
+      \ 'ignore_pattern' : g:unite_source_file_ignore_pattern,
+      \ 'default_kind' : 'file',
+      \ 'matchers' : [ 'converter_relative_word',
+      \     'matcher_default', 'matcher_hide_hidden_files' ],
+      \ 'hooks' : {},
+      \}
+
+let s:source_file_async.complete = s:source_file.complete
+
+function! s:source_file_async.hooks.on_close(args, context) "{{{
+  if has_key(a:context, 'source__proc')
+    call a:context.source__proc.kill()
+  endif
+endfunction "}}}
+
+function! s:source_file_async.change_candidates(args, context) "{{{
+  if !has_key(a:context, 'source__cache') || a:context.is_redraw
+        \ || a:context.is_invalidate
+    " Initialize cache.
+    let a:context.source__cache = {}
+  endif
+
+  if !unite#util#has_vimproc()
+    call unite#print_source_message(
+          \ 'vimproc plugin is not installed.', self.name)
+    let a:context.is_async = 0
+    return []
+  endif
+
+  let path = unite#sources#file#_get_path(a:args, a:context)
+  let input = unite#sources#file#_get_input(path, a:context)
+  " Glob by directory name.
+  let directory = substitute(input, '[^/.]*$', '', '')
+  let glob = directory . (directory =~ '\*$' ? '' : '*')
+
+  if has_key(a:context.source__cache, glob)
+    let a:context.is_async = 0
+    return copy(a:context.source__cache[glob])
+  endif
+
+  let command = g:unite_source_file_async_command
+  let args = split(command)
+  if empty(args) || !executable(args[0])
+    call unite#print_source_message('async command : "'.
+          \ command.'" is not executable.', self.name)
+    let a:context.is_async = 0
+    return []
+  endif
+
+  if has_key(a:context, 'source__proc') && a:context.is_async
+    call a:context.source__proc.kill()
+  endif
+
+  if directory == ''
+    let directory = unite#util#substitute_path_separator(getcwd())
+  endif
+  let command .= ' ' . string(directory)
+  let a:context.source__proc = vimproc#pgroup_open(command, 0)
+  let a:context.source__glob = glob
+  let a:context.source__candidates = []
+
+  " Close handles.
+  call a:context.source__proc.stdin.close()
+
+  return []
+endfunction"}}}
+
+function! s:source_file_async.async_gather_candidates(args, context) "{{{
+  let stderr = a:context.source__proc.stderr
+  if !stderr.eof
+    " Print error.
+    let errors = filter(stderr.read_lines(-1, 100),
+          \ "v:val !~ '^\\s*$'")
+    if !empty(errors)
+      call unite#print_source_error(errors, self.name)
+    endif
+  endif
+
+  let stdout = a:context.source__proc.stdout
+
+  let paths = map(filter(
+        \   stdout.read_lines(-1, 2000), 'v:val != ""'),
+        \   "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
+  if unite#util#is_windows()
+    let paths = map(paths, 'unite#util#substitute_path_separator(v:val)')
+  endif
+
+  let candidates = unite#helper#paths2candidates(paths)
+  let a:context.source__candidates += candidates
+
+  if stdout.eof
+    " Disable async.
+    call unite#print_source_message(
+          \ 'Directory traverse was completed.', self.name)
+    let a:context.is_async = 0
+    call a:context.source__proc.waitpid()
+    let a:context.source__cache[a:context.source__glob] =
+          \ a:context.source__candidates
+  endif
+
+  return deepcopy(candidates)
 endfunction"}}}
 
 function! unite#sources#file#_get_path(args, context) "{{{

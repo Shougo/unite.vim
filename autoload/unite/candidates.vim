@@ -365,6 +365,17 @@ function! s:get_source_candidates(source) "{{{
       endif
     endif
 
+    if has_key(a:source, 'change_candidates')
+          \ && (context.is_redraw || context.is_changed
+          \     || a:source.unite__is_invalidate)
+      " Recaching.
+      let funcname = 'change_candidates'
+      let a:source.unite__cached_change_candidates =
+            \ s:ignore_candidates(a:source.change_candidates(
+            \     a:source.args, a:source.unite__context),
+            \   a:source.ignore_pattern, context.path)
+    endif
+
     if a:source.unite__context.is_async
       " Get asynchronous candidates.
       let funcname = 'async_gather_candidates'
@@ -379,17 +390,6 @@ function! s:get_source_candidates(source) "{{{
           break
         endif
       endwhile
-    endif
-
-    if has_key(a:source, 'change_candidates')
-          \ && (context.is_redraw || context.is_changed
-          \     || a:source.unite__is_invalidate)
-      " Recaching.
-      let funcname = 'change_candidates'
-      let a:source.unite__cached_change_candidates =
-            \ s:ignore_candidates(a:source.change_candidates(
-            \     a:source.args, a:source.unite__context),
-            \   a:source.ignore_pattern, context.path)
     endif
   catch
     call unite#print_error(v:throwpoint)

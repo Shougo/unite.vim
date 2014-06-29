@@ -453,6 +453,13 @@ g:unite_source_file_ignore_pattern	*g:unite_source_file_ignore_pattern*
 
 		Refer to autoload/unite/sources/file.vim for the default value.
 
+					*g:unite_source_file_async_command*
+g:unite_source_file_async_command
+		Specify the filelist command and arguments in file/async
+		source.
+
+		The default value is "ls".
+
 g:unite_source_bookmark_directory	*g:unite_source_bookmark_directory*
 		Specify the directory where |unite-source-bookmark| writes
 		its bookmarks.
@@ -1965,6 +1972,9 @@ file/new	Nominates a new input file as a candidate.
 
 		Source arguments:
 		1. the file/directory path.
+
+						*unite-source-file/async*
+file/async	Similar to |unite-source-file|, but get files asynchronously.
 
 						*unite-source-file_rec*
 file_rec	Gather files recursive and nominates all directory or file
