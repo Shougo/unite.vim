@@ -306,6 +306,8 @@ function! unite#view#_set_syntax() "{{{
 
   call s:set_syntax()
 
+  call unite#view#_redraw_prompt()
+
   let b:current_syntax = 'unite'
 endfunction"}}}
 
