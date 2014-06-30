@@ -171,6 +171,8 @@ function! unite#handlers#_on_cursor_moved()  "{{{
     if line('.') != prompt_linenr && &l:modifiable
       setlocal nomodifiable
     endif
+  else
+    setlocal nomodifiable
   endif
 
   if line('.') == 1
