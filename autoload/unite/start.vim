@@ -145,7 +145,8 @@ function! unite#start#temporary(sources, ...) "{{{
   " Overwrite context.
   let context = extend(context, new_context)
 
-  let default_context = unite#custom#get_profile('default', 'context')
+  let default_context = extend(copy(unite#variables#default_context()),
+        \ unite#custom#get_profile('default', 'context'))
 
   let context.temporary = 1
   let context.unite__direct_switch = 1
