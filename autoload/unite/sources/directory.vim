@@ -37,6 +37,7 @@ let s:source_directory = {
       \ 'description' : 'candidates from directory list',
       \ 'default_kind' : 'directory',
       \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__mkdir' },
+      \ 'hooks' : {},
       \}
 
 function! s:source_directory.change_candidates(args, context) "{{{
@@ -52,6 +53,9 @@ function! s:source_directory.complete(args, context, arglead, cmdline, cursorpos
   return map(filter(split(glob(a:arglead . '*'), '\n'),
         \ 'isdirectory(v:val)'), "v:val.'/'")
 endfunction"}}}
+function! s:source_directory.hooks.on_close(args, context) "{{{
+  call unite#sources#file#_clear_cache()
+endfunction "}}}
 
 let s:source_directory_new = {
       \ 'name' : 'directory/new',

@@ -628,7 +628,7 @@ function! s:write_cache(context, directory, files) "{{{
   let cache_dir = unite#get_data_directory() . '/rec/' .
         \ (a:context.source__is_directory ? 'directory' : 'file')
 
-  if g:unite_source_rec_min_cache_files > 0
+  if g:unite_source_rec_min_cache_files >= 0
         \ && !unite#util#is_sudo()
         \ && len(a:files) >
         \ g:unite_source_rec_min_cache_files

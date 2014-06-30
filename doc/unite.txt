@@ -460,6 +460,15 @@ g:unite_source_file_async_command
 
 		The default value is "ls".
 
+					*g:unite_source_file_min_cache_files*
+g:unite_source_file_min_cache_files
+		Specify the minimum number of files that
+		|unite-source-file| saves the caches.  Any cache isn't
+		saved if the number of files is less than this value or this
+		value is 0.
+
+		The default value is 100.
+
 g:unite_source_bookmark_directory	*g:unite_source_bookmark_directory*
 		Specify the directory where |unite-source-bookmark| writes
 		its bookmarks.

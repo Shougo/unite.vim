@@ -28,11 +28,15 @@ set cpo&vim
 
 let s:is_windows = unite#util#is_windows()
 
+let s:Cache = unite#util#get_vital().import('System.Cache')
+
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_file_ignore_pattern',
       \'\%(^\|/\)\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|DS_Store|pyc|zwc|sw[po]\)$')
 call unite#util#set_default(
       \ 'g:unite_source_file_async_command', 'ls')
+call unite#util#set_default(
+      \ 'g:unite_source_file_min_cache_files', 100)
 
 let s:cache_files = {}
 "}}}
@@ -51,6 +55,7 @@ let s:source_file = {
       \ 'ignore_pattern' : g:unite_source_file_ignore_pattern,
       \ 'default_kind' : 'file',
       \ 'matchers' : [ 'matcher_default', 'matcher_hide_hidden_files' ],
+      \ 'hooks' : {},
       \}
 
 function! s:source_file.change_candidates(args, context) "{{{
@@ -174,6 +179,10 @@ function! s:source_file.vimfiler_complete(args, context, arglead, cmdline, curso
   return self.complete(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
+
+function! s:source_file.hooks.on_close(args, context) "{{{
+  call unite#sources#file#_clear_cache()
+endfunction "}}}
 
 let s:source_file_new = {
       \ 'name' : 'file/new',
@@ -339,7 +348,6 @@ function! unite#sources#file#_get_files(input, context) "{{{
 
   let is_vimfiler = get(a:context, 'is_vimfiler', 0)
   if !is_vimfiler && !a:context.is_redraw
-        \ && !a:context.is_invalidate
         \ && has_key(s:cache_files, directory)
         \ && getftime(directory) <= s:cache_files[directory].time
     return copy(s:cache_files[directory].files)
@@ -349,20 +357,36 @@ function! unite#sources#file#_get_files(input, context) "{{{
   " Substitute *. -> .* .
   let glob = substitute(glob, '\*\.', '.*', 'g')
 
-  let files = unite#util#glob(glob, !is_vimfiler)
+  let cache_dir = unite#get_data_directory() . '/file'
+  let start = reltime()
+  let files = s:Cache.filereadable(cache_dir, directory) ?
+        \ s:Cache.readfile(cache_dir, directory) :
+        \ unite#util#glob(glob, !is_vimfiler)
 
   if !is_vimfiler
     let files = sort(filter(copy(files),
           \ "v:val != '.' && isdirectory(v:val)"), 1) +
           \ sort(filter(copy(files), "!isdirectory(v:val)"), 1)
+
+    let s:cache_files[directory] = {
+          \ 'time' : getftime(directory),
+          \ 'input' : input,
+          \ 'files' : files,
+          \ }
+
+    if g:unite_source_file_min_cache_files >= 0
+          \ && len(files) >= g:unite_source_file_min_cache_files
+          \ && s:Cache.check_old_cache(cache_dir, directory)
+          \ && stridx(input, '*') < 0
+      call s:Cache.writefile(cache_dir, directory, files)
+    endif
   endif
 
-  let s:cache_files[directory] = {
-        \ 'time' : getftime(directory),
-        \ 'files' : files,
-        \ }
-
   return copy(files)
+endfunction"}}}
+function! unite#sources#file#_clear_cache() "{{{
+  " Don't save cache when using glob
+  call filter(s:cache_files, "stridx(v:val.input, '*') < 0")
 endfunction"}}}
 
 function! s:parse_path(args) "{{{
