@@ -33,6 +33,8 @@ call unite#util#set_default('g:unite_source_file_ignore_pattern',
       \'\%(^\|/\)\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|DS_Store|pyc|zwc|sw[po]\)$')
 call unite#util#set_default(
       \ 'g:unite_source_file_async_command', 'ls')
+
+let s:cache_files = {}
 "}}}
 
 function! unite#sources#file#define() "{{{
@@ -52,14 +54,6 @@ let s:source_file = {
       \}
 
 function! s:source_file.change_candidates(args, context) "{{{
-  if !has_key(a:context, 'source__cache') || a:context.is_redraw
-        \ || a:context.is_invalidate
-    " Initialize cache.
-    let a:context.source__cache = {}
-  endif
-
-  let is_vimfiler = get(a:context, 'is_vimfiler', 0)
-
   let path = unite#sources#file#_get_path(a:args, a:context)
 
   if !isdirectory(path) && filereadable(path)
@@ -67,24 +61,11 @@ function! s:source_file.change_candidates(args, context) "{{{
           \      path, path !~ '^\%(/\|\a\+:/\)') ]
   endif
 
-  let glob = unite#sources#file#_get_glob(path, a:context)
+  let input = unite#sources#file#_get_input(path, a:context)
+  let files = unite#sources#file#_get_files(input, a:context)
 
-  if !has_key(a:context.source__cache, glob)
-    let files = unite#util#glob(glob, !is_vimfiler)
-
-    if !is_vimfiler
-      let files = sort(filter(copy(files),
-            \ "v:val != '.' && isdirectory(v:val)"), 1) +
-            \ sort(filter(copy(files), "!isdirectory(v:val)"), 1)
-    endif
-
-    let a:context.source__cache[glob] = map(files,
+  return map(unite#sources#file#_get_files(input, a:context),
           \ 'unite#sources#file#create_file_dict(v:val, 0)')
-  endif
-
-  let candidates = copy(a:context.source__cache[glob])
-
-  return candidates
 endfunction"}}}
 function! s:source_file.vimfiler_check_filetype(args, context) "{{{
   let path = s:parse_path(a:args)
@@ -203,6 +184,7 @@ let s:source_file_new = {
 function! s:source_file_new.change_candidates(args, context) "{{{
   let path = unite#sources#file#_get_path(a:args, a:context)
   let input = unite#sources#file#_get_input(path, a:context)
+  let input = substitute(input, '\*', '', 'g')
 
   if input == '' || filereadable(input) || isdirectory(input)
     return []
@@ -336,9 +318,6 @@ function! unite#sources#file#_get_input(path, context) "{{{
     let input = a:path . input
   endif
 
-  " Substitute *
-  let input = substitute(input, '\*', '', 'g')
-
   if s:is_windows && getftype(input) == 'link'
     " Resolve link.
     let input = resolve(input)
@@ -347,23 +326,43 @@ function! unite#sources#file#_get_input(path, context) "{{{
   return input
 endfunction"}}}
 
-function! unite#sources#file#_get_glob(path, context) "{{{
-  let input = unite#util#expand(a:context.input)
-  if input !~ '^\%(/\|\a\+:/\)' && a:path != ''
-    let input = a:path . input
-  endif
-
-  " Substitute *. -> .* .
-  let input = substitute(input, '\*\.', '.*', 'g')
-
-  if input !~ '\*' && s:is_windows && getftype(input) == 'link'
-    " Resolve link.
-    let input = resolve(input)
-  endif
-
+function! unite#sources#file#_get_files(input, context) "{{{
   " Glob by directory name.
-  let input = substitute(input, '[^/.]*$', '', '')
-  return input . (input =~ '\*$' ? '' : '*')
+  let input = substitute(a:input, '[^/.]*$', '', '')
+
+  let directory = substitute(input, '\*', '', 'g')
+  if directory == ''
+    let directory = getcwd()
+  endif
+  let directory = unite#util#substitute_path_separator(
+        \ fnamemodify(directory, ':p'))
+
+  let is_vimfiler = get(a:context, 'is_vimfiler', 0)
+  if !is_vimfiler && !a:context.is_redraw
+        \ && !a:context.is_invalidate
+        \ && has_key(s:cache_files, directory)
+        \ && getftime(directory) <= s:cache_files[directory].time
+    return copy(s:cache_files[directory].files)
+  endif
+
+  let glob = input . (input =~ '\*$' ? '' : '*')
+  " Substitute *. -> .* .
+  let glob = substitute(glob, '\*\.', '.*', 'g')
+
+  let files = unite#util#glob(glob, !is_vimfiler)
+
+  if !is_vimfiler
+    let files = sort(filter(copy(files),
+          \ "v:val != '.' && isdirectory(v:val)"), 1) +
+          \ sort(filter(copy(files), "!isdirectory(v:val)"), 1)
+  endif
+
+  let s:cache_files[directory] = {
+        \ 'time' : getftime(directory),
+        \ 'files' : files,
+        \ }
+
+  return copy(files)
 endfunction"}}}
 
 function! s:parse_path(args) "{{{

@@ -40,27 +40,13 @@ let s:source_directory = {
       \}
 
 function! s:source_directory.change_candidates(args, context) "{{{
-  if !has_key(a:context, 'source__cache') || a:context.is_redraw
-        \ || a:context.is_invalidate
-    " Initialize cache.
-    let a:context.source__cache = {}
-  endif
-
   let path = unite#sources#file#_get_path(a:args, a:context)
-  let glob = unite#sources#file#_get_glob(path, a:context)
+  let input = unite#sources#file#_get_input(path, a:context)
 
-  if !has_key(a:context.source__cache, glob)
-    let files = sort(filter(copy(unite#util#glob(glob)),
+  return map(sort(filter(unite#sources#file#_get_files(input, a:context),
           \ "isdirectory(v:val) && v:val !~
-          \ '^\\%(/\\|\\a\\+:/\\)$\\|\\%(^\\|/\\)\\.$'"), 1)
-
-    let a:context.source__cache[glob] = map(files,
+          \ '^\\%(/\\|\\a\\+:/\\)$\\|\\%(^\\|/\\)\\.$'"), 1),
           \ 'unite#sources#file#create_file_dict(v:val, 0)')
-  endif
-
-  let candidates = copy(a:context.source__cache[glob])
-
-  return candidates
 endfunction"}}}
 function! s:source_directory.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return map(filter(split(glob(a:arglead . '*'), '\n'),
@@ -77,6 +63,7 @@ let s:source_directory_new = {
 function! s:source_directory_new.change_candidates(args, context) "{{{
   let path = unite#sources#file#_get_path(a:args, a:context)
   let input = unite#sources#file#_get_input(path, a:context)
+  let input = substitute(input, '\*', '', 'g')
 
   if input == '' || filereadable(input) || isdirectory(input)
     return []
