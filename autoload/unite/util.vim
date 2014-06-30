@@ -125,9 +125,6 @@ function! unite#util#set_default(var, val, ...)  "{{{
           \ {alternate_var} : a:val
   endif
 endfunction"}}}
-function! unite#util#set_dictionary_helper(...)
-  return call(s:get_prelude().set_dictionary_helper, a:000)
-endfunction
 
 if unite#util#is_windows()
   function! unite#util#substitute_path_separator(...)
