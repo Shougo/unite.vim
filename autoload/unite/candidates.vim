@@ -411,7 +411,7 @@ endfunction"}}}
 
 function! s:ignore_candidates(candidates, pattern) "{{{
   return a:pattern == '' ? a:candidates :
-        \ filter(a:candidates,
+        \ filter(copy(a:candidates),
         \ "get(v:val, 'action__path', v:val.word) !~# a:pattern")
 endfunction"}}}
 
