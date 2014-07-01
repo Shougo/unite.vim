@@ -467,6 +467,7 @@ function! unite#mappings#_choose_action(candidates, ...) "{{{
   let context.buffer_name = 'action'
   let context.profile_name = 'action'
   let context.start_insert = 1
+  let context.truncate = 1
 
   call call((has_key(context, 'vimfiler__current_directory') ?
         \ 'unite#start' : 'unite#start_temporary'),
