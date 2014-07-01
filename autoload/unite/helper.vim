@@ -449,7 +449,7 @@ EOF
   endfunction"}}}
 else
   function! unite#helper#paths2candidates(paths) "{{{
-    return map(a:paths, "{
+    return map(copy(a:paths), "{
           \ 'word' : v:val,
           \ 'action__path' : v:val,
           \ }")
