@@ -177,11 +177,11 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     return
   endif
 
+  let unite_save = unite#variables#current_unite()
+  let winnr_save = winnr()
   if a:winnr > 0
     " Set current unite.
     let unite = getbufvar(winbufnr(a:winnr), 'unite')
-    let unite_save = unite#variables#current_unite()
-    let winnr_save = winnr()
 
     execute a:winnr 'wincmd w'
   endif
@@ -344,7 +344,6 @@ function! unite#view#_resize_window() "{{{
       let max_len += 1
     endif
 
-    let pos = getpos('.')
     let winheight = winheight(0)
 
     silent! execute 'resize' min([max_len, context.winheight])
@@ -377,9 +376,11 @@ function! unite#view#_convert_lines(candidates, ...) "{{{
   let quick_match_table = get(a:000, 0, {})
 
   let unite = unite#get_current_unite()
-  let context = unite.context
-  let [max_width, max_source_name] =
-        \ unite#helper#adjustments(winwidth(0)-1, unite.max_source_name, 2)
+  let context = unite#get_context()
+  " @vimlint(EVL102, 0, l:max_source_name)
+  let [max_width, max_source_name] = unite#helper#adjustments(
+        \ winwidth(0)-1, unite.max_source_name, 2)
+  " @vimlint(EVL102, 1, l:max_source_name)
   if unite.max_source_name == 0
     let max_width -= 1
   endif
@@ -414,7 +415,6 @@ function! unite#view#_do_auto_preview() "{{{
   call unite#action#do('preview', [], {})
 
   " Restore window size.
-  let context = unite#get_context()
   if s:has_preview_window()
     call unite#view#_resize_window()
   endif

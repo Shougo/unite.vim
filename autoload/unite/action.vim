@@ -299,12 +299,12 @@ function! unite#action#take(action_name, candidate, is_parent_action) "{{{
         \   candidate_head.source, candidate_head.kind)
         \ : a:action_name
 
-  if !has_key(action_table, a:action_name)
-    " throw 'unite.vim: no such action ' . a:action_name
+  if !has_key(action_table, action_name)
+    " throw 'unite.vim: no such action ' . action_name
     return 1
   endif
 
-  let action = action_table[a:action_name]
+  let action = action_table[action_name]
   " Convert candidates.
   call action.func(
         \ (action.is_selectable && type(a:candidate) != type([])) ?
@@ -343,6 +343,7 @@ function! unite#action#do(action_name, ...) "{{{
   let action_tables = s:get_candidates_action_table(
         \ a:action_name, candidates, sources)
 
+  let old_context = {}
   if !empty(new_context)
     " Set new context.
     let new_context = extend(
@@ -441,15 +442,13 @@ function! unite#action#do_candidates(action_name, candidates, ...) "{{{
 endfunction"}}}
 
 function! unite#action#_get_candidate_action_table(candidate, sources) "{{{
-  let Self = unite#get_self_functions()[-1]
-
   return unite#action#get_action_table(
-        \ a:candidate.source, a:candidate.kind, Self, 0, a:sources)
+        \ a:candidate.source, a:candidate.kind,
+        \ unite#get_self_functions()[-1], 0, a:sources)
 endfunction"}}}
 
 function! s:get_candidates_action_table(action_name, candidates, sources) "{{{
   let action_tables = []
-  let Self = unite#get_self_functions()[-1]
   for candidate in a:candidates
     let action_table = unite#action#_get_candidate_action_table(
           \ candidate, a:sources)

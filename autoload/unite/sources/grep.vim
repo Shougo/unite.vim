@@ -132,9 +132,9 @@ function! s:source.hooks.on_init(args, context) "{{{
     endif
 
     if get(vimfiler, 'source', '') ==# 'ssh'
-      let [hostname, port, path] =
+      let [hostname, port] =
             \ unite#sources#ssh#parse_path(
-            \  vimfiler.source.':'.vimfiler.current_dir)
+            \  vimfiler.source.':'.vimfiler.current_dir)[:1]
       let a:context.source__ssh_path =
             \ printf('%s://%s:%s/', vimfiler.source, hostname, port)
 
@@ -224,8 +224,8 @@ function! s:source.gather_candidates(args, context) "{{{
     \)
   if a:context.source__ssh_path != ''
     " Use ssh command.
-    let [hostname, port, path] =
-          \ unite#sources#ssh#parse_path(a:context.source__ssh_path)
+    let [hostname, port] =
+          \ unite#sources#ssh#parse_path(a:context.source__ssh_path)[:1]
     let cmdline = substitute(substitute(
           \ g:unite_kind_file_ssh_command . ' ' . cmdline,
           \   '\<HOSTNAME\>', hostname, 'g'), '\<PORT\>', port, 'g')
@@ -286,12 +286,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
     let candidates = map(filter(candidates,
           \  'v:val =~ "^.\\+:.\\+$"'),
           \ '[v:val, split(v:val[2:], ":", 1)]')
-  endif
-
-  if a:context.source__ssh_path != ''
-    " Use ssh command.
-    let [hostname, port, path] = unite#sources#ssh#parse_path(
-          \     a:context.source__ssh_path)
   endif
 
   let _ = []

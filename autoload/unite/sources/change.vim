@@ -47,7 +47,6 @@ function! s:source.hooks.on_init(args, context) "{{{
   redir END
 
   let result = []
-  let max_width = (winwidth(0) - 5)
   for change in split(redir, '\n')[1:]
     let list = split(change)
     if len(list) < 4

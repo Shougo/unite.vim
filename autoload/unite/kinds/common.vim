@@ -91,8 +91,6 @@ let s:kind.action_table.insert_directory = {
       \ 'description' : 'insert directory',
       \ }
 function! s:kind.action_table.insert_directory.func(candidate) "{{{
-  let context = unite#get_current_unite().context
-
   if has_key(a:candidate,'action__directory')
       let directory = a:candidate.action__directory
   elseif has_key(a:candidate, 'action__path')

@@ -52,8 +52,8 @@ function! unite#candidates#_recache(input, is_force) "{{{
       let sources = unite#init#_loaded_sources(['interactive'], context)
     else
       " Use specified source.
-      let [args, _] = unite#helper#parse_options_args(
-            \ matchstr(a:input, '^.\{-}\%(\\\@<!\s\)\+'))
+      let args = unite#helper#parse_options_args(
+            \ matchstr(a:input, '^.\{-}\%(\\\@<!\s\)\+'))[0]
       try
         let sources = unite#init#_loaded_sources(args, context)
       catch

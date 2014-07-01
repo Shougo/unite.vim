@@ -56,8 +56,8 @@ function! unite#init#_context(context, ...) "{{{
   endif
 
   " Generic no.
-  for [option, value] in filter(items(context),
-        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]")
+  for option in map(filter(items(context),
+        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]"), 'v:val[0]')
     let context[option[3:]] = 0
   endfor
 
@@ -333,8 +333,10 @@ endfunction"}}}
 function! unite#init#_candidates(candidates) "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
-  let [max_width, max_source_name] =
-        \ unite#helper#adjustments(winwidth(0)-5, unite.max_source_name, 2)
+  " @vimlint(EVL102, 0, l:max_source_name)
+  let [max_width, max_source_name] = unite#helper#adjustments(winwidth(0)-5,
+        \ unite.max_source_name, 2)
+  " @vimlint(EVL102, 1, l:max_source_name)
   let is_multiline = 0
 
   let candidates = []

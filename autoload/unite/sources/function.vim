@@ -56,8 +56,6 @@ function! s:source.gather_candidates(args, context) "{{{
     if line =~ '^<SNR>'
       continue
     endif
-    let orig_line = line
-
     let word = matchstr(line, '\h[[:alnum:]_:#.]*\ze()\?')
     if word == ''
       continue

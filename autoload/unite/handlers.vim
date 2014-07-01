@@ -319,7 +319,6 @@ function! s:change_highlight()  "{{{
   endif
 
   let context = unite#get_context()
-  let prompt_linenr = unite.prompt_linenr
   call unite#view#_set_cursor_line()
 
   silent! syntax clear uniteCandidateInputKeyword

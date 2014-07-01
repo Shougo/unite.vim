@@ -100,8 +100,7 @@ function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
 
   let pattern = '\.\%(\h\w*\)\?$\|' .
         \ neocomplete#get_keyword_pattern_end('vim')
-  let [cur_keyword_pos, cur_keyword_str] =
-        \ neocomplete#match_word(a:arglead, pattern)
+  let cur_keyword_str = neocomplete#match_word(a:arglead, pattern)[1]
   return map(neocomplete#sources#vim#helper#command(
         \ a:arglead, cur_keyword_str), 'v:val.word')
 endfunction"}}}

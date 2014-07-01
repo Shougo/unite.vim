@@ -94,7 +94,9 @@ function! s:source.gather_candidates(args, context) "{{{
   let max_name = max(map(copy(actions), 'len(v:val.name)'))
   let max_kind = max(map(copy(actions), 'len(v:val.from)')) + 2
 
+  " @vimlint(EVL102, 0, l:sources)
   let sources = map(copy(candidates), 'v:val.source')
+  " @vimlint(EVL102, 1, l:sources)
 
   return sort(map(actions, "{
         \   'word' : v:val.name,
@@ -168,8 +170,6 @@ endfunction"}}}
 "}}}
 
 function! s:get_actions(candidates, sources) "{{{
-  let Self = unite#get_self_functions()[-1]
-
   let actions = unite#action#_get_candidate_action_table(
         \ a:candidates[0], a:sources)
 

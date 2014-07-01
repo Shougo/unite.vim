@@ -107,11 +107,9 @@ function! unite#filters#lua_fuzzy_matcher(candidates, context, ignorecase) "{{{
     return []
   endif
 
-  let pattern = unite#filters#fuzzy_escape(a:context.input)
-
   lua << EOF
 do
-  local pattern = vim.eval('pattern')
+  local pattern = vim.eval('unite#filters#fuzzy_escape(a:context.input)')
   local input = vim.eval('a:context.input')
   local candidates = vim.eval('a:candidates')
   if vim.eval('&ignorecase') ~= 0 then

@@ -70,6 +70,8 @@ function! unite#filters#sorter_selecta#_sort(candidates, input)
 endfunction
 
 function! s:sort_ruby(candidates, inputs) 
+  " @vimlint(EVL102, 0, l:input)
+  " @vimlint(EVL102, 0, l:candidate)
   for input in a:inputs
     for candidate in a:candidates
 ruby << RUBYEOF
@@ -78,6 +80,8 @@ ruby << RUBYEOF
 RUBYEOF
     endfor
   endfor
+  " @vimlint(EVL102, 1, l:input)
+  " @vimlint(EVL102, 1, l:candidate)
 
   return unite#util#sort_by(a:candidates, 'v:val.filter__rank')
 endfunction"}}}
@@ -89,25 +93,25 @@ function! s:def_ruby()
       def score(choice, query)
         return 1.0 if query.length == 0
         return 0.0 if choice.length == 0
-  
+
         choice = choice.downcase
         query = query.downcase
-  
+
         match_length = compute_match_length(choice, query.each_char.to_a)
         return 0.0 unless match_length
-  
+
         # Penalize longer matches.
         score = query.length.to_f / match_length.to_f
-  
+
         # Normalize vs. the length of the choice, penalizing longer strings.
         score / choice.length
       end
-  
+
       # Find the length of the shortest substring matching the given characters.
       def compute_match_length(string, chars)
         first_char, *rest = chars
         first_indexes = find_char_in_string(string, first_char)
-  
+
         first_indexes.map do |first_index|
           last_index = find_end_of_match(string, rest, first_index)
           if last_index
@@ -117,7 +121,7 @@ function! s:def_ruby()
           end
         end.compact.min
       end
-  
+
       # Find all occurrences of the character in the string, returning their indexes.
       def find_char_in_string(string, char)
         index = 0
@@ -131,7 +135,7 @@ function! s:def_ruby()
         end
         indexes
       end
-  
+
       # Find each of the characters in the string, moving strictly left to right.
       def find_end_of_match(string, chars, first_index)
         last_index = first_index

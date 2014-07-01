@@ -56,7 +56,7 @@ function! s:source.gather_candidates(args, context) "{{{
       continue
     endif
 
-    let [line, id, pid, class, title; rest] = list
+    let [line, id, pid, class, title] = list[:4]
 
     " Skip current Vim and Desktop
     if pid != current && class !=# 'N/A'

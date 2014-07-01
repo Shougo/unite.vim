@@ -67,8 +67,6 @@ function! s:source_file.change_candidates(args, context) "{{{
   endif
 
   let input = unite#sources#file#_get_input(path, a:context)
-  let files = unite#sources#file#_get_files(input, a:context)
-
   return map(unite#sources#file#_get_files(input, a:context),
           \ 'unite#sources#file#create_file_dict(v:val, 0)')
 endfunction"}}}
@@ -358,7 +356,6 @@ function! unite#sources#file#_get_files(input, context) "{{{
   let glob = substitute(glob, '\*\.', '.*', 'g')
 
   let cache_dir = unite#get_data_directory() . '/file'
-  let start = reltime()
   let files = s:Cache.filereadable(cache_dir, directory) ?
         \ s:Cache.readfile(cache_dir, directory) :
         \ unite#util#glob(glob, !is_vimfiler)

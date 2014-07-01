@@ -29,6 +29,7 @@ let s:is_unix = has('unix')
 " Unix:
 " using :! , execute program in the background by shell.
 function! s:spawn(expr, ...)
+  let shellslash = 0
   if s:is_windows
     let shellslash = &l:shellslash
     setlocal noshellslash

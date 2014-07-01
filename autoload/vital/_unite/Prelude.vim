@@ -322,7 +322,6 @@ endfunction
 function! s:_path2project_directory_others(vcs, path)
   let vcs = a:vcs
   let search_directory = a:path
-  let directory = ''
 
   let find_directory = s:escape_file_searching(search_directory)
   let d = finddir(vcs, find_directory . ';')

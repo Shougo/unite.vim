@@ -60,9 +60,11 @@ let s:kind.action_table.delete = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.delete.func(candidates) "{{{
+  " @vimlint(EVL102, 0, l:candidate)
   for candidate in sort(a:candidates, 's:compare')
     close
   endfor
+  " @vimlint(EVL102, 1, l:candidate)
 endfunction"}}}
 
 let s:kind.action_table.preview = {

@@ -425,6 +425,7 @@ function! s:toggle_mark_candidates(start, end) "{{{
   let pos = getpos('.')
   try
     call cursor(a:start, 1)
+    " @vimlint(EVL102, 0, l:cnt)
     for cnt in range(a:start, a:end)
       if line('.') == unite.prompt_linenr
         call unite#helper#skip_prompt()
@@ -432,14 +433,13 @@ function! s:toggle_mark_candidates(start, end) "{{{
         call s:toggle_mark('j')
       endif
     endfor
+    " @vimlint(EVL102, 1, l:cnt)
   finally
     call setpos('.', pos)
     call unite#view#_bottom_cursor()
   endtry
 endfunction"}}}
 function! s:quick_help() "{{{
-  let unite = unite#get_current_unite()
-
   call unite#start_temporary([['mapping', bufnr('%')]], {}, 'mapping-help')
 endfunction"}}}
 function! s:choose_action() "{{{
@@ -513,13 +513,12 @@ function! s:insert_leave() "{{{
 endfunction"}}}
 function! s:redraw() "{{{
   call unite#clear_message()
-
-  let unite = unite#get_current_unite()
   call unite#force_redraw()
 endfunction"}}}
 function! s:rotate_source(is_next) "{{{
   let unite = unite#get_current_unite()
 
+  " @vimlint(EVL102, 0, l:source)
   for source in unite#loaded_sources_list()
     let unite.sources = a:is_next ?
           \ add(unite.sources[1:], unite.sources[0]) :
@@ -529,6 +528,7 @@ function! s:rotate_source(is_next) "{{{
       break
     endif
   endfor
+  " @vimlint(EVL102, 1, l:source)
 
   call unite#view#_redraw_candidates()
 endfunction"}}}

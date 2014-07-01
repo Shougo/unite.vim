@@ -847,7 +847,7 @@ function! s:external(command, dest_dir, src_files) "{{{
         \'\$dest\>', escape('"'.dest_dir.'"', '&'), 'g')
   let command_line = escape(command_line, '`')
 
-  let output = unite#util#system(command_line)
+  call unite#util#system(command_line)
 
   return unite#util#get_last_status()
 endfunction"}}}

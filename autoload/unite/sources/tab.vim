@@ -105,8 +105,6 @@ function! s:source.gather_candidates(args, context) "{{{
             \ '[No Name]' : bufname(winbufnr(v:val))))"), "\n")
       execute 'tabnext' tabnr
     endif
-    let word = exists('*gettabvar') && gettabvar(i, 'title') != '' ?
-          \ gettabvar(i, 'title') : bufname
 
     call add(candidates, {
           \ 'word' : abbr,

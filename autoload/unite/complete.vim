@@ -27,7 +27,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#complete#source(arglead, cmdline, cursorpos) "{{{
-  let [ret, options] = unite#helper#parse_options_args(a:cmdline)
+  let ret = unite#helper#parse_options_args(a:cmdline)[0]
   let source_name = ret[-1][0]
   let source_args = ret[-1][1:]
 
@@ -119,7 +119,7 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
 
     let _ = []
 
-    let [args, options] = unite#helper#parse_options_args(a:cmdline)
+    let args = unite#helper#parse_options_args(a:cmdline)[0]
     for source in unite#init#_loaded_sources(args, context)
       if has_key(source, 'complete')
         let _ += source.complete(
@@ -168,16 +168,14 @@ endfunction"}}}
 
 function! unite#complete#gather_lua(candidates, input) "{{{
   let _ = []
-  let search_input = tolower(a:input)
-  let len_input = len(a:input)
 
   lua << EOF
 do
   local dup = {}
   local _ = vim.eval('_')
   local candidates = vim.eval('a:candidates')
-  local len_input = vim.eval('len_input')
-  local search_input = vim.eval('search_input')
+  local len_input = vim.eval('len(a:input)')
+  local search_input = vim.eval('tolower(a:input)')
   for i = 0, #candidates-1, 1 do
     local start_index, end_index = string.find(
          candidates[i].word, '[a-zA-Z_][0-9a-zA-Z_]*')

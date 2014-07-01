@@ -32,7 +32,6 @@ function! unite#helper#call_hook(sources, hook_name) "{{{
     return
   endif
 
-  let _ = []
   for source in a:sources
     if !has_key(source.hooks, a:hook_name)
       continue

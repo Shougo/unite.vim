@@ -98,8 +98,6 @@ function! unite#start#standard(sources, ...) "{{{
 
   call unite#variables#disable_current_unite()
 
-  let unite = unite#get_current_unite()
-
   setlocal modifiable
 
   call unite#view#_redraw_candidates()
@@ -266,7 +264,6 @@ function! unite#start#get_vimfiler_candidates(sources, ...) "{{{
   let unite_save = unite#get_current_unite()
 
   try
-    let unite = unite#get_current_unite()
     let context = get(a:000, 0, {})
     let context = unite#init#_context(context,
           \ unite#helper#get_source_names(a:sources))
@@ -344,8 +341,8 @@ function! unite#start#resume(buffer_name, ...) "{{{
 
   let new_context = get(a:000, 0, {})
   " Generic no.
-  for [option, value] in filter(items(new_context),
-        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]")
+  for option in map(filter(items(new_context),
+        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]"), "v:val[0]")
     let new_context[option[3:]] = 0
   endfor
   call extend(context, new_context)
