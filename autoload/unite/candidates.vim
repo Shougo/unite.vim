@@ -407,14 +407,16 @@ function! s:get_source_candidates(source) "{{{
 endfunction"}}}
 
 function! s:ignore_candidates(candidates, pattern, path) "{{{
+  let candidates = copy(a:candidates)
+
   if a:pattern != ''
-    call filter(a:candidates,
+    let candidates = filter(candidates,
         \ "get(v:val, 'action__path', v:val.word) !~# a:pattern")
   endif
 
   if a:path != ''
-    call unite#filters#{unite#util#has_lua()? 'lua' : 'vim'}
-          \_filter_head(a:candidates, a:path)
+    let candidates = unite#filters#{unite#util#has_lua()? 'lua' : 'vim'}
+          \_filter_head(candidates, a:path)
   endif
 
   return a:candidates
