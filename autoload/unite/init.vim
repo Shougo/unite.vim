@@ -265,6 +265,7 @@ function! unite#init#_current_unite(sources, context) "{{{
         \ unite.buffer_name
   let unite.prev_bufnr = bufnr('%')
   let unite.prev_winnr = winnr()
+  let unite.prev_line = 0
   let unite.update_time_save = &updatetime
   let unite.statusline = '*unite* : %{unite#get_status_string()}'
 
