@@ -164,16 +164,8 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
 
-  if prompt_linenr > 0
-    if line('.') == prompt_linenr && !&l:modifiable
-      let &l:modifiable = col('.') > len(context.prompt)
-    endif
-    if line('.') != prompt_linenr && &l:modifiable
-      setlocal nomodifiable
-    endif
-  else
-    setlocal nomodifiable
-  endif
+  let &l:modifiable = line('.') == prompt_linenr
+        \ && col('.') >= len(context.prompt)
 
   if line('.') == 1
     nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
