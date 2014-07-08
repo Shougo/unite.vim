@@ -186,6 +186,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     execute a:winnr 'wincmd w'
   endif
 
+  let pos = getpos('.')
   try
     if &filetype !=# 'unite'
       return
@@ -226,6 +227,10 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     call unite#view#_redraw_candidates(is_gather_all)
     let unite.context.is_redraw = 0
   finally
+    if getpos('.') !=# pos
+      call setpos('.', pos)
+    endif
+
     if a:winnr > 0
       " Restore current unite.
       call unite#set_current_unite(unite_save)
