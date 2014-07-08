@@ -74,10 +74,6 @@ function! unite#mappings#define_default_mappings() "{{{
         \ 'gg0z.'
   nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
         \ :<C-u>call <SID>redraw_all_candidates()<CR>G
-  nnoremap <buffer><expr> <Plug>(unite_loop_cursor_down)
-        \ <SID>loop_cursor_down(0)
-  nnoremap <buffer><expr> <Plug>(unite_skip_cursor_down)
-        \ <SID>loop_cursor_down(1)
   nnoremap <buffer><silent> <Plug>(unite_next_screen)
         \ :<C-u>call <SID>move_screen(1)<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_half_screen)
@@ -132,10 +128,6 @@ function! unite#mappings#define_default_mappings() "{{{
         \ <SID>smart_imap('', "\<C-w>")
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_path)
         \ <SID>smart_imap('', <SID>delete_backward_path())
-  inoremap <expr><buffer> <Plug>(unite_select_next_line)
-        \ pumvisible() ? "\<C-n>" : <SID>loop_cursor_down(0)
-  inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
-        \ <ESC>:call unite#mappings#loop_cursor_up_call(1, 'i')<CR>
   inoremap <expr><buffer> <Plug>(unite_select_next_page)
         \ pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)

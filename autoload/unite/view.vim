@@ -564,6 +564,7 @@ function! unite#view#_init_cursor() "{{{
 
   let unite.prev_line = line('.')
   call unite#view#_set_cursor_line()
+  call unite#handlers#_on_cursor_moved()
 endfunction"}}}
 
 function! unite#view#_quit(is_force, ...)  "{{{
