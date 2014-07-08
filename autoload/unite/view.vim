@@ -372,15 +372,15 @@ function! unite#view#_resize_window() "{{{
   let context.unite__old_winwidth = winwidth(winnr())
 endfunction"}}}
 
+" @vimlint(EVL102, 1, l:max_source_name)
+" @vimlint(EVL102, 1, l:context)
 function! unite#view#_convert_lines(candidates, ...) "{{{
   let quick_match_table = get(a:000, 0, {})
 
   let unite = unite#get_current_unite()
   let context = unite#get_context()
-  " @vimlint(EVL102, 0, l:max_source_name)
   let [max_width, max_source_name] = unite#helper#adjustments(
         \ winwidth(0)-1, unite.max_source_name, 2)
-  " @vimlint(EVL102, 1, l:max_source_name)
   if unite.max_source_name == 0
     let max_width -= 1
   endif
@@ -402,6 +402,8 @@ function! unite#view#_convert_lines(candidates, ...) "{{{
         \ . unite#util#truncate_wrap(v:val.unite__abbr, " . max_width
         \    .  ", (context.truncate ? 0 : max_width/2), '..')")
 endfunction"}}}
+" @vimlint(EVL102, 0, l:max_source_name)
+" @vimlint(EVL102, 0, l:context)
 
 function! unite#view#_do_auto_preview() "{{{
   let unite = unite#get_current_unite()

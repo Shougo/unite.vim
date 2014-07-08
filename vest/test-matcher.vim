@@ -9,7 +9,7 @@ Context Source.run()
   if has('lua')
     call unite#filters#matcher_fuzzy#define()
 
-    let fuzzy_save = g:unite_matcher_fuzzy_max_input_length
+    let g:fuzzy_save = g:unite_matcher_fuzzy_max_input_length
     try
       let g:unite_matcher_fuzzy_max_input_length = 20
 
@@ -70,7 +70,7 @@ Context Source.run()
               \ {'word' : 'baz', 'action__path' : '/foo/baz'}
               \ ]
     finally
-      let g:unite_matcher_fuzzy_max_input_length = fuzzy_save
+      let g:unite_matcher_fuzzy_max_input_length = g:fuzzy_save
     endtry
     End
   endif

@@ -8,24 +8,24 @@ set cpo&vim
 Context Source.run()
   if has('lua')
     It tests sorter rank.
-      for has_lua in range(2)
+      for g:has_lua in range(2)
         ShouldEqual map(unite#filters#sorter_rank#_sort(
               \ [{'word' : 'g/vimrc.ln'}, {'word' : 'gvimrc.ln'}],
-              \  'gvimr', has_lua), 'v:val.word'), ['gvimrc.ln', 'g/vimrc.ln']
+              \  'gvimr', g:has_lua), 'v:val.word'), ['gvimrc.ln', 'g/vimrc.ln']
         ShouldEqual map(unite#filters#sorter_rank#_sort(
               \ [{'word' : 'g/vimrc.ln'}, {'word' : 'gvimrc.ln'}],
-              \  'gvimrc', has_lua), 'v:val.word'), ['gvimrc.ln', 'g/vimrc.ln']
+              \  'gvimrc', g:has_lua), 'v:val.word'), ['gvimrc.ln', 'g/vimrc.ln']
         ShouldEqual map(unite#filters#sorter_rank#_sort(
               \ [{'word' : 'ab12345js12345tt'}, {'word' : 'ab.js.tt'}],
-              \  'abjstt', has_lua), 'v:val.word'), ['ab.js.tt', 'ab12345js12345tt']
+              \  'abjstt', g:has_lua), 'v:val.word'), ['ab.js.tt', 'ab12345js12345tt']
         ShouldEqual map(unite#filters#sorter_rank#_sort(
               \ [{'word' : 'source/r', 'action__path' : ''},
               \  {'word' : 'sort.vim', 'action__path' : ''}],
-              \  'so', has_lua), 'v:val.word'), ['sort.vim', 'source/r']
+              \  'so', g:has_lua), 'v:val.word'), ['sort.vim', 'source/r']
         ShouldEqual map(unite#filters#sorter_rank#_sort(
               \ [{'word' : 'spammers.txt', 'action__path' : ''},
               \  {'word' : 'thread_parsing.py', 'action__path' : ''}],
-              \  'pars', has_lua), 'v:val.word'),
+              \  'pars', g:has_lua), 'v:val.word'),
               \ ['thread_parsing.py', 'spammers.txt']
       endfor
     End
