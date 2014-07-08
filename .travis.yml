@@ -3,4 +3,4 @@ before_script:
     - git clone https://github.com/ynkdir/vim-vimlparser /tmp/vim-vimlparser
 
 script:
-  - sh /tmp/vim-vimlint/bin/vimlint.sh -l /tmp/vim-vimlint -p /tmp/vim-vimlparser autoload
+    - sh /tmp/vim-vimlint/bin/vimlint.sh -l /tmp/vim-vimlint -p /tmp/vim-vimlparser -e EVL103=1 autoload
