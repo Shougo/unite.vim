@@ -387,14 +387,12 @@ function! s:toggle_mark(map) "{{{
   call unite#helper#skip_prompt()
 
   let candidate = unite#helper#get_current_candidate()
-  if empty(candidate) || get(candidate, 'is_dummy', 0)
-    return
+  if !get(candidate, 'is_dummy', 0)
+    let candidate.unite__is_marked = !candidate.unite__is_marked
+    let candidate.unite__marked_time = localtime()
+
+    call unite#view#_redraw_line()
   endif
-
-  let candidate.unite__is_marked = !candidate.unite__is_marked
-  let candidate.unite__marked_time = localtime()
-
-  call unite#view#_redraw_line()
 
   let context = unite#get_context()
   execute 'normal!' (a:map ==# 'j' && context.prompt_direction !=# 'below'
@@ -403,11 +401,10 @@ function! s:toggle_mark(map) "{{{
 endfunction"}}}
 function! s:toggle_mark_all_candidates() "{{{
   call s:redraw_all_candidates()
-  call s:toggle_mark_candidates(1,
-        \     len(unite#get_unite_candidates()))
+  call s:toggle_mark_candidates(1, line('$'))
 endfunction"}}}
 function! s:toggle_mark_candidates(start, end) "{{{
-  if a:start < 0 || a:end > len(unite#get_unite_candidates())
+  if a:start < 0
     " Ignore.
     return
   endif
