@@ -607,8 +607,7 @@ function! s:init_continuation(context, directory) "{{{
           \ 'rest' : [],
           \ 'directory' : a:directory, 'end' : 1,
           \ }
-  elseif a:context.is_redraw
-        \ || !has_key(continuation, a:directory)
+  else
     let a:context.is_async = 1
 
     let continuation[a:directory] = {
