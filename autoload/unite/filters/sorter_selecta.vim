@@ -69,9 +69,9 @@ function! unite#filters#sorter_selecta#_sort(candidates, input)
   return candidates
 endfunction
 
+" @vimlint(EVL102, 1, l:input)
+" @vimlint(EVL102, 1, l:candidate)
 function! s:sort_ruby(candidates, inputs) 
-  " @vimlint(EVL102, 0, l:input)
-  " @vimlint(EVL102, 0, l:candidate)
   for input in a:inputs
     for candidate in a:candidates
 ruby << RUBYEOF
@@ -80,11 +80,11 @@ ruby << RUBYEOF
 RUBYEOF
     endfor
   endfor
-  " @vimlint(EVL102, 1, l:input)
-  " @vimlint(EVL102, 1, l:candidate)
 
   return unite#util#sort_by(a:candidates, 'v:val.filter__rank')
 endfunction"}}}
+" @vimlint(EVL102, 0, l:input)
+" @vimlint(EVL102, 0, l:candidate)
 
 function! s:def_ruby()
   ruby << RUBYEOF

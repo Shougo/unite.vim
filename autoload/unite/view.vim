@@ -178,13 +178,13 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
   endif
 
   let pos = getpos('.')
+  let unite = unite#get_current_unite()
+  let context = unite.context
+
   try
     if &filetype !=# 'unite'
       return
     endif
-
-    let unite = unite#get_current_unite()
-    let context = unite.context
 
     if !context.is_redraw
       let context.is_redraw = a:is_force

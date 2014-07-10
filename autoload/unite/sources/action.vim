@@ -54,6 +54,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   highlight default link uniteSource__ActionKind Type
 endfunction"}}}
 
+" @vimlint(EVL102, 1, l:sources)
 function! s:source.gather_candidates(args, context) "{{{
   if empty(a:args)
     return
@@ -94,9 +95,7 @@ function! s:source.gather_candidates(args, context) "{{{
   let max_name = max(map(copy(actions), 'len(v:val.name)'))
   let max_kind = max(map(copy(actions), 'len(v:val.from)')) + 2
 
-  " @vimlint(EVL102, 0, l:sources)
   let sources = map(copy(candidates), 'v:val.source')
-  " @vimlint(EVL102, 1, l:sources)
 
   return sort(map(actions, "{
         \   'word' : v:val.name,
@@ -109,6 +108,7 @@ function! s:source.gather_candidates(args, context) "{{{
         \   'source__source_names' : sources,
         \ }"), 's:compare_word')
 endfunction"}}}
+" @vimlint(EVL102, 0, l:sources)
 
 function! s:compare_word(i1, i2)
   return (a:i1.word ># a:i2.word) ? 1 : -1
