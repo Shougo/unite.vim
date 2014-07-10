@@ -153,11 +153,9 @@ function! unite#filters#escape(string) "{{{
 endfunction"}}}
 
 function! unite#filters#lua_filter_head(candidates, input) "{{{
-  let input = tolower(a:input)
-
 lua << EOF
 do
-  local input = vim.eval('input')
+  local input = vim.eval('tolower(a:input)')
   local candidates = vim.eval('a:candidates')
   for i = #candidates-1, 0, -1 do
     local word = string.lower(candidates[i].action__path)
