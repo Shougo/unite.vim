@@ -109,6 +109,16 @@ function! unite#view#_redraw_candidates(...) "{{{
     endif
   endtry
 
+  if context.input == '' && context.log
+        \ || context.prompt_direction ==# 'below'
+    " Move to bottom.
+    call cursor(line('$'), 0)
+  endif
+
+  if context.prompt_direction ==# 'below' && mode() ==# 'i'
+    call unite#view#_bottom_cursor()
+  endif
+
   " Set syntax.
   call s:set_syntax()
 endfunction"}}}
@@ -218,16 +228,11 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     call unite#view#_redraw_candidates(is_gather_all)
     let unite.context.is_redraw = 0
   finally
-    if getpos('.') !=# pos
+    if empty(unite.args) && getpos('.') !=# pos
       call setpos('.', pos)
-    endif
 
-    if context.input == '' && context.log
-          \ || context.prompt_direction ==# 'below'
-      " Move to bottom.
-      call cursor(line('$'), 0)
-
-      if context.prompt_direction ==# 'below' && mode() == 'i'
+      if context.prompt_direction ==# 'below'
+        call cursor(line('$'), 0)
         call unite#view#_bottom_cursor()
       endif
     endif
