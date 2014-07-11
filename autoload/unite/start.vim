@@ -75,6 +75,7 @@ function! unite#start#standard(sources, ...) "{{{
   let current_unite = unite#variables#current_unite()
   let current_unite.last_input = context.input
   let current_unite.input = context.input
+  let current_unite.last_path = context.path
   call unite#candidates#_recache(context.input, context.is_redraw)
 
   if !current_unite.is_async &&
@@ -418,6 +419,7 @@ function! s:get_candidates(sources, context) "{{{
   " Caching.
   let current_unite.last_input = a:context.input
   let current_unite.input = a:context.input
+  let current_unite.last_path = a:context.path
   call unite#set_current_unite(current_unite)
   call unite#set_context(a:context)
 

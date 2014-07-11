@@ -87,7 +87,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nnoremap <silent><buffer><expr> <Plug>(unite_do_default_action)
         \ unite#do_action(unite#get_current_unite().context.default_action)
   nnoremap <silent><buffer> <Plug>(unite_delete_backward_path)
-        \ :<C-u>call <SID>normal_delete_backward_path()<CR>
+        \ :<C-u>call <SID>delete_backward_path()<CR>
   nnoremap <silent><buffer> <Plug>(unite_restart)
         \ :<C-u>call <SID>restart()<CR>
   nnoremap <buffer><silent> <Plug>(unite_toggle_mark_all_candidates)
@@ -126,8 +126,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \     col('.')-(len(unite#get_current_unite().prompt)+1)))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_word)
         \ <SID>smart_imap('', "\<C-w>")
-  inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_path)
-        \ <SID>smart_imap('', <SID>delete_backward_path())
+  inoremap <silent><buffer> <Plug>(unite_delete_backward_path)
+        \ <C-o>:<C-u>call <SID>delete_backward_path()<CR>
   inoremap <expr><buffer> <Plug>(unite_select_next_page)
         \ pumvisible() ? "\<PageDown>" : repeat("\<Down>", winheight(0))
   inoremap <expr><buffer> <Plug>(unite_select_previous_page)
@@ -360,28 +360,9 @@ function! s:restart() "{{{
   call unite#start(sources, context)
 endfunction"}}}
 function! s:delete_backward_path() "{{{
-  let cur_text =
-        \ (mode() ==# 'i' ? (col('.')-1) : col('.')) >= len(getline('.')) ?
-        \      getline('.') :
-        \      matchstr(getline('.'),
-        \         '^.*\%' . col('.') . 'c' . (mode() ==# 'i' ? '' : '.'))
-  let path = matchstr(cur_text[
-        \ len(unite#get_context().prompt):], '[^/ ]*.$')
-  return repeat("\<C-h>", unite#util#strchars(path))
-endfunction"}}}
-function! s:normal_delete_backward_path() "{{{
-  let unite = unite#get_current_unite()
-  let unite.context.input = substitute(unite#helper#get_input(),
-        \ '[^/ ]*.$', '', '')
-
-  if unite.context.prompt_direction ==# 'below'
-    call unite#view#_remove_prompt()
-    call unite#redraw()
-    call unite#view#_redraw_prompt()
-  else
-    call unite#view#_redraw_prompt()
-    call unite#redraw()
-  endif
+  let context = unite#get_context()
+  let context.path = substitute(context.path, '[^/ ]*.$', '', '')
+  call unite#redraw()
 endfunction"}}}
 function! s:toggle_mark(map) "{{{
   call unite#helper#skip_prompt()

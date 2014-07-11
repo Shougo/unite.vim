@@ -43,6 +43,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
   let context = unite.context
   let context.is_redraw = a:is_force
   let context.is_changed = a:input !=# unite.last_input
+        \ || context.path !=# unite.last_path
 
   if empty(unite.args)
     if a:input == ''
@@ -226,6 +227,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     " Set context.
     let context = source.unite__context
     let context.input = a:context.input
+    let context.path = a:context.path
     let context.source_name = source.name
 
     if source.required_pattern_length > 0

@@ -205,7 +205,9 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     endif
 
     let input = unite#helper#get_input(1)
-    if !context.is_redraw && input ==# unite.last_input
+    if !context.is_redraw
+          \ && input ==# unite.last_input
+          \ && context.path ==# unite.last_path
           \ && !unite.is_async
           \ && !context.is_resize
           \ && !a:is_gather_all
@@ -216,6 +218,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
 
     if context.is_redraw
           \ || input !=# unite.last_input
+          \ || context.path !=# unite.last_path
           \ || unite.is_async
           \ || empty(unite.args)
       " Recaching.
@@ -223,6 +226,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     endif
 
     let unite.last_input = input
+    let unite.last_path = context.path
 
     " Redraw.
     call unite#view#_redraw_candidates(is_gather_all)

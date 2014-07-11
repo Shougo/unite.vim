@@ -279,6 +279,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.prompt = context.prompt
   let unite.input = context.input
   let unite.last_input = context.input
+  let unite.last_path = context.path
   let unite.sidescrolloff_save = &sidescrolloff
   let unite.init_prompt_linenr = 1
   let unite.prompt_linenr =
