@@ -28,15 +28,11 @@ set cpo&vim
 
 let s:is_windows = unite#util#is_windows()
 
-let s:Cache = unite#util#get_vital().import('System.Cache')
-
 " Variables  "{{{
 call unite#util#set_default('g:unite_source_file_ignore_pattern',
       \'\%(^\|/\)\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|DS_Store|pyc|zwc|sw[po]\)$')
 call unite#util#set_default(
-      \ 'g:unite_source_file_async_command', 'ls')
-call unite#util#set_default(
-      \ 'g:unite_source_file_min_cache_files', 100)
+      \ 'g:unite_source_file_async_command', 'ls -a')
 
 let s:cache_files = {}
 "}}}
@@ -223,6 +219,7 @@ function! s:source_file_async.change_candidates(args, context) "{{{
         \ || a:context.is_invalidate
     " Initialize cache.
     let a:context.source__cache = {}
+    let a:context.is_async = 1
   endif
 
   if !unite#util#has_vimproc()
@@ -235,13 +232,7 @@ function! s:source_file_async.change_candidates(args, context) "{{{
   let path = unite#sources#file#_get_path(a:args, a:context)
   let input = unite#sources#file#_get_input(path, a:context)
   " Glob by directory name.
-  let directory = substitute(input, '[^/.]*$', '', '')
-  let glob = directory . (directory =~ '\*$' ? '' : '*')
-
-  if has_key(a:context.source__cache, glob)
-    let a:context.is_async = 0
-    return copy(a:context.source__cache[glob])
-  endif
+  let directory = substitute(input, '[^/]*$', '', '')
 
   let command = g:unite_source_file_async_command
   let args = split(command)
@@ -261,7 +252,7 @@ function! s:source_file_async.change_candidates(args, context) "{{{
   endif
   let command .= ' ' . string(directory)
   let a:context.source__proc = vimproc#pgroup_open(command, 0)
-  let a:context.source__glob = glob
+  let a:context.source__directory = directory
   let a:context.source__candidates = []
 
   " Close handles.
@@ -284,7 +275,8 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
   let stdout = a:context.source__proc.stdout
 
   let paths = map(filter(
-        \   stdout.read_lines(-1, 2000), 'v:val != ""'),
+        \   stdout.read_lines(-1, 2000),
+        \   "v:val != '' && v:val !=# '.'"),
         \   "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
   if unite#util#is_windows()
     let paths = map(paths, 'unite#util#substitute_path_separator(v:val)')
@@ -299,8 +291,6 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
           \ 'Directory traverse was completed.', self.name)
     let a:context.is_async = 0
     call a:context.source__proc.waitpid()
-    let a:context.source__cache[a:context.source__glob] =
-          \ a:context.source__candidates
   endif
 
   return deepcopy(candidates)
@@ -348,6 +338,7 @@ function! unite#sources#file#_get_files(input, context) "{{{
   if !is_vimfiler && !a:context.is_redraw
         \ && has_key(s:cache_files, directory)
         \ && getftime(directory) <= s:cache_files[directory].time
+        \ && input ==# s:cache_files[directory].input
     return copy(s:cache_files[directory].files)
   endif
 
@@ -356,9 +347,7 @@ function! unite#sources#file#_get_files(input, context) "{{{
   let glob = substitute(glob, '\*\.', '.*', 'g')
 
   let cache_dir = unite#get_data_directory() . '/file'
-  let files = s:Cache.filereadable(cache_dir, directory) ?
-        \ s:Cache.readfile(cache_dir, directory) :
-        \ unite#util#glob(glob, !is_vimfiler)
+  let files = unite#util#glob(glob, !is_vimfiler)
 
   if !is_vimfiler
     let files = sort(filter(copy(files),
@@ -370,13 +359,6 @@ function! unite#sources#file#_get_files(input, context) "{{{
           \ 'input' : input,
           \ 'files' : files,
           \ }
-
-    if g:unite_source_file_min_cache_files >= 0
-          \ && len(files) >= g:unite_source_file_min_cache_files
-          \ && s:Cache.check_old_cache(cache_dir, directory)
-          \ && stridx(input, '*') < 0
-      call s:Cache.writefile(cache_dir, directory, files)
-    endif
   endif
 
   return copy(files)
