@@ -346,7 +346,6 @@ function! unite#sources#file#_get_files(input, context) "{{{
   " Substitute *. -> .* .
   let glob = substitute(glob, '\*\.', '.*', 'g')
 
-  let cache_dir = unite#get_data_directory() . '/file'
   let files = unite#util#glob(glob, !is_vimfiler)
 
   if !is_vimfiler
