@@ -71,7 +71,7 @@ endfunction
 
 " @vimlint(EVL102, 1, l:input)
 " @vimlint(EVL102, 1, l:candidate)
-function! s:sort_ruby(candidates, inputs) 
+function! s:sort_ruby(candidates, inputs)
   for input in a:inputs
     for candidate in a:candidates
 ruby << RUBYEOF

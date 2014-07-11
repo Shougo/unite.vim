@@ -59,13 +59,11 @@ let s:kind.action_table.delete = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
-" @vimlint(EVL102, 1, l:candidate)
 function! s:kind.action_table.delete.func(candidates) "{{{
-  for candidate in sort(a:candidates, 's:compare')
+  for _ in sort(a:candidates, 's:compare')
     close
   endfor
 endfunction"}}}
-" @vimlint(EVL102, 0, l:candidate)
 
 let s:kind.action_table.preview = {
       \ 'description' : 'preview window',
