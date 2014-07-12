@@ -42,7 +42,8 @@ function! s:matcher.filter(candidates, context) "{{{
   endif
 
   return filter(a:candidates, "
-        \ get(v:val, 'action__path', v:val.word) !~ '/\\.[^/]*/\\?$'")
+        \ get(v:val, 'action__path', v:val.word) !~
+        \    '\\%(^\\|/\\)\\.[^/]*/\\?$'")
 endfunction"}}}
 
 let &cpo = s:save_cpo

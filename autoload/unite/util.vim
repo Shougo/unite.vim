@@ -288,9 +288,11 @@ function! unite#util#glob(pattern, ...) "{{{
   else
     " Escape [.
     let glob = escape(a:pattern, '?={}[]')
+    let glob2 = escape(substitute(a:pattern,
+          \ '[^/]*$', '', '') . '.*', '?={}[]')
 
     return unite#util#uniq(split(unite#util#substitute_path_separator(glob(glob)), '\n')
-          \ + split(unite#util#substitute_path_separator(glob(glob.'.*')), '\n'))
+          \ + split(unite#util#substitute_path_separator(glob(glob2)), '\n'))
   endif
 endfunction"}}}
 function! unite#util#command_with_restore_cursor(command) "{{{
