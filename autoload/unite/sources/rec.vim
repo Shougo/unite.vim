@@ -522,7 +522,7 @@ function! s:get_files(context, files, level, max_unit, ignore_pattern) "{{{
       let child_index = 0
       let children = exists('*vimproc#readdir') ?
             \ vimproc#readdir(file) :
-            \ unite#util#glob(file.'/*') + unite#util#glob(file.'/.*')
+            \ unite#util#glob(file.'/*')
       for child in children
         let child = substitute(child, '\/$', '', '')
         let child_index += 1

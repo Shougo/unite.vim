@@ -93,12 +93,6 @@ function! s:source_file.vimfiler_gather_candidates(args, context) "{{{
     let context.is_vimfiler = 1
     let context.path .= path
     let candidates = self.change_candidates(a:args, context)
-
-    if !exists('*vimproc#readdir')
-      " Add doted files.
-      let context.path .= '.'
-      let candidates += self.change_candidates(a:args, context)
-    endif
     call filter(candidates, 'v:val.word !~ "/\\.\\.\\?$"')
 
     " echomsg reltimestr(reltime(start))
@@ -325,7 +319,7 @@ endfunction"}}}
 
 function! unite#sources#file#_get_files(input, context) "{{{
   " Glob by directory name.
-  let input = substitute(a:input, '[^/.]*$', '', '')
+  let input = substitute(a:input, '[^/]*$', '', '')
 
   let directory = substitute(input, '\*', '', 'g')
   if directory == ''
@@ -335,7 +329,7 @@ function! unite#sources#file#_get_files(input, context) "{{{
         \ fnamemodify(directory, ':p'))
 
   let is_vimfiler = get(a:context, 'is_vimfiler', 0)
-  if !is_vimfiler && !a:context.is_redraw
+  if !a:context.is_redraw
         \ && has_key(s:cache_files, directory)
         \ && getftime(directory) <= s:cache_files[directory].time
         \ && input ==# s:cache_files[directory].input
