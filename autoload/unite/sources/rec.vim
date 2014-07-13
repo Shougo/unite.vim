@@ -98,8 +98,7 @@ function! s:source_file_rec.async_gather_candidates(args, context) "{{{
 
   let [continuation.rest, files] =
         \ s:get_files(a:context, continuation.rest,
-        \   1, g:unite_source_rec_unit,
-        \   a:context.source.ignore_pattern)
+        \   1, g:unite_source_rec_unit)
 
   if empty(continuation.rest) || (
         \  g:unite_source_rec_max_cache_files > 0 &&
@@ -489,7 +488,7 @@ function! s:get_path(args, context) "{{{
 
   return directory
 endfunction"}}}
-function! s:get_files(context, files, level, max_unit, ignore_pattern) "{{{
+function! s:get_files(context, files, level, max_unit) "{{{
   let continuation_files = []
   let ret_files = []
   let files_index = 0
@@ -497,7 +496,7 @@ function! s:get_files(context, files, level, max_unit, ignore_pattern) "{{{
   for file in a:files
     let files_index += 1
 
-    if file =~ '/\.\+$' || file =~? a:ignore_pattern
+    if file =~? '/\.\+$\|/\%(\.hg\|\.git\|\.bzr\|\.svn\)/'
       continue
     endif
 
@@ -527,7 +526,7 @@ function! s:get_files(context, files, level, max_unit, ignore_pattern) "{{{
         let child = substitute(child, '\/$', '', '')
         let child_index += 1
 
-        if child =~ '/\.\+$' || child =~? a:ignore_pattern
+        if child =~? '/\.\+$\|/\%(\.hg\|\.git\|\.bzr\|\.svn\)/'
           continue
         endif
 
@@ -547,7 +546,7 @@ function! s:get_files(context, files, level, max_unit, ignore_pattern) "{{{
           if a:level < 5 && ret_files_len < a:max_unit
             let [continuation_files_child, ret_files_child] =
                   \ s:get_files(a:context, [child], a:level + 1,
-                  \  a:max_unit - ret_files_len, a:ignore_pattern)
+                  \  a:max_unit - ret_files_len)
             let continuation_files += continuation_files_child
 
             if !a:context.source__is_directory
