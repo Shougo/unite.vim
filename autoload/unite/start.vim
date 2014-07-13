@@ -158,8 +158,8 @@ function! unite#start#temporary(sources, ...) "{{{
   let context.default_action = 'default'
   let context.unite__old_winwidth = 0
   let context.unite__old_winheight = 0
-  let context.is_resize = 0
-  let context.is_restart = 0
+  let context.unite__is_resize = 0
+  let context.unite__is_restart = 0
   let context.quick_match = 0
   let context.start_insert = get(default_context, 'start_insert', 0)
 

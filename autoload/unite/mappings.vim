@@ -353,7 +353,7 @@ function! s:restart() "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
   let context.resume = 0
-  let context.is_restart = 1
+  let context.unite__is_restart = 1
   let sources = map(deepcopy(unite.sources),
         \ 'empty(v:val.args) ? v:val.name : [v:val.name] + v:val.args')
   call unite#force_quit_session()

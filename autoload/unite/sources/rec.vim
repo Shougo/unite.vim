@@ -475,7 +475,7 @@ function! s:get_path(args, context) "{{{
           \ a:context.input : getcwd()
   endif
 
-  if a:context.is_restart
+  if a:context.unite__is_restart
     let directory = unite#util#input('Target: ',
           \ directory, 'dir', a:context.source_name)
   endif

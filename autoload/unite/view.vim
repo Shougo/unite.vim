@@ -209,7 +209,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
           \ && input ==# unite.last_input
           \ && context.path ==# unite.last_path
           \ && !unite.is_async
-          \ && !context.is_resize
+          \ && !context.unite__is_resize
           \ && !a:is_gather_all
       return
     endif
@@ -338,7 +338,7 @@ function! unite#view#_resize_window() "{{{
         \ && !context.vertical)
         \ || !context.resize
     " Cannot resize.
-    let context.is_resize = 0
+    let context.unite__is_resize = 0
     return
   endif
 
@@ -349,7 +349,7 @@ function! unite#view#_resize_window() "{{{
     " Disabled resize.
     let context.winwidth = 0
     let context.winheight = 0
-    let context.is_resize = 1
+    let context.unite__is_resize = 1
     return
   endif
 
@@ -369,19 +369,19 @@ function! unite#view#_resize_window() "{{{
       call unite#view#_bottom_cursor()
     endif
 
-    let context.is_resize = winheight != winheight(0)
+    let context.unite__is_resize = winheight != winheight(0)
   elseif context.vertical
         \ && context.unite__old_winwidth  == 0
     execute 'vertical resize' context.winwidth
 
-    let context.is_resize = 1
+    let context.unite__is_resize = 1
   elseif !context.vertical
         \ && (context.unite__old_winheight == 0 || context.auto_preview)
     execute 'resize' context.winheight
 
-    let context.is_resize = 1
+    let context.unite__is_resize = 1
   else
-    let context.is_resize = 0
+    let context.unite__is_resize = 0
   endif
 
   let context.unite__old_winheight = winheight(winnr())
