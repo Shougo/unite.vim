@@ -334,8 +334,9 @@ function! unite#view#_resize_window() "{{{
   let context = unite#get_context()
   let unite = unite#get_current_unite()
 
-  if winheight(0) + &cmdheight + 2 >= &lines
-        \ && !context.vertical
+  if (winheight(0) + &cmdheight + 2 >= &lines
+        \ && !context.vertical)
+        \ || !context.resize
     " Cannot resize.
     let context.is_resize = 0
     return
@@ -345,7 +346,7 @@ function! unite#view#_resize_window() "{{{
         \ && context.unite__old_winheight != 0
         \ && winheight(0) != context.unite__old_winheight
         \ && winwidth(0) != context.unite__old_winwidth
-    " Disabled auto resize.
+    " Disabled resize.
     let context.winwidth = 0
     let context.winheight = 0
     let context.is_resize = 1

@@ -212,6 +212,7 @@ function! s:initialize_default() "{{{
         \ 'temporary' : 0,
         \ 'verbose' : 0,
         \ 'auto_resize' : 0,
+        \ 'resize' : 1,
         \ 'toggle' : 0,
         \ 'quick_match' : 0,
         \ 'create' : 0,

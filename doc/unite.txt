@@ -1830,6 +1830,10 @@ the context dictionary.
 		-auto-resize
 		Auto resize unite buffer height by candidates number.
 
+						*unite-options-no-resize*
+		-no-resize
+		Do not resize the unite buffer after opening it.
+
 						*unite-options-toggle*
 		-toggle
 		Close unite buffer window if one of the same buffer name
