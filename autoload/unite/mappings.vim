@@ -237,9 +237,9 @@ function! unite#mappings#define_default_mappings() "{{{
   " Insert mode key-mappings.
   imap <buffer> <TAB>     <Plug>(unite_choose_action)
   imap <buffer> <C-n>     <Plug>(unite_select_next_line)
-  imap <buffer> <Down>     <Plug>(unite_select_next_line)
+  imap <buffer> <Down>    <Plug>(unite_select_next_line)
   imap <buffer> <C-p>     <Plug>(unite_select_previous_line)
-  imap <buffer> <Up>     <Plug>(unite_select_previous_line)
+  imap <buffer> <Up>      <Plug>(unite_select_previous_line)
   imap <buffer> <C-f>     <Plug>(unite_select_next_page)
   imap <buffer> <C-b>     <Plug>(unite_select_previous_page)
   imap <buffer> <CR>      <Plug>(unite_do_default_action)
