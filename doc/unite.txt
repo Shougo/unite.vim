@@ -3458,7 +3458,10 @@ Q: How to make direct action (or choose action menu) to current file or given
 path?
 
 A: >
-	call unite#do_candidates_action('some_action',
+	call unite#action#do_candidates('some_action',
+	\  unite#get_candidates([['file', expand('%')]]))
+
+	call unite#mappings#_choose_action(
 	\  unite#get_candidates([['file', expand('%')]]))
 <
 Q: unite.vim statusline conflicts with powerline.
