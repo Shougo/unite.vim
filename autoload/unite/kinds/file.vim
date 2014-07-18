@@ -311,7 +311,7 @@ endfunction
 
 " For grep.
 let s:kind.action_table.grep = {
-      \   'description': 'grep this files',
+      \   'description': 'grep this file',
       \   'is_quit': 1,
       \   'is_invalidate_cache': 1,
       \   'is_selectable': 1,
@@ -325,7 +325,7 @@ function! s:kind.action_table.grep.func(candidates) "{{{
 endfunction "}}}
 
 let s:kind.action_table.grep_directory = {
-      \   'description': 'grep this directories',
+      \   'description': 'grep this directory',
       \   'is_quit': 1,
       \   'is_invalidate_cache': 1,
       \   'is_selectable': 1,
