@@ -309,7 +309,7 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
 
     if g:unite_source_rec_async_command ==# 'find'
       " Default option.
-      let command .= ' -type l -print -o -type '
+      let command .= ' -path ''*/\.git/*'' -prune -o -type l -print -o -type '
             \ . (a:context.source__is_directory ? 'd' : 'f') . ' -print'
     endif
   else
