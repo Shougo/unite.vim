@@ -36,6 +36,7 @@ let s:source_directory = {
       \ 'name' : 'directory',
       \ 'description' : 'candidates from directory list',
       \ 'default_kind' : 'directory',
+      \ 'matchers' : [ 'matcher_default', 'matcher_hide_hidden_files' ],
       \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__mkdir' },
       \ 'hooks' : {},
       \}
