@@ -158,9 +158,9 @@ do
   local input = vim.eval('tolower(a:input)')
   local candidates = vim.eval('a:candidates')
   for i = #candidates-1, 0, -1 do
-    local word = string.lower(candidates[i].action__path)
-        or string.lower(candidates[i].word)
-    if (string.find(word, input, 1, true)) ~= 1 then
+    local word = candidates[i].action__path
+        or candidates[i].word
+    if string.find(string.lower(word), input, 1, true) ~= 1 then
       candidates[i] = nil
     end
   end
