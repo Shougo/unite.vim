@@ -470,8 +470,8 @@ function! s:get_path(args, context) "{{{
   let args = unite#helper#parse_project_bang(a:args)
   let directory = get(args, 0, '')
   if directory == ''
-    let directory = isdirectory(a:context.input) ?
-          \ a:context.input : getcwd()
+    let directory = isdirectory(a:context.path) ?
+          \ a:context.path : getcwd()
   endif
 
   if a:context.unite__is_restart
