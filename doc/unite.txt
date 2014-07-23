@@ -445,6 +445,12 @@ g:unite_source_buffer_time_format
 
 		The default value is "(%Y/%m/%d %H:%M:%S) ".
 
+					*g:unite_source_buffer_show_filetype*
+g:unite_source_buffer_show_filetype
+		If this variable is set to 0 filetype for candidates of
+		|unite-source-buffer| will be omitted.
+		The default value is 1.
+
 g:unite_source_file_ignore_pattern	*g:unite_source_file_ignore_pattern*
 		Note: This variable is deprecated.  Please use
 		|unite#custom#source()| instead.

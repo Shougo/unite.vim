@@ -30,6 +30,9 @@ set cpo&vim
 call unite#util#set_default(
       \ 'g:unite_source_buffer_time_format',
       \ '(%Y/%m/%d %H:%M:%S) ')
+call unite#util#set_default(
+      \ 'g:unite_source_buffer_show_filetype',
+      \ 1)
 "}}}
 
 function! unite#sources#buffer#define() "{{{
@@ -196,7 +199,7 @@ function! s:make_abbr(bufnr, flags) "{{{
             \ '\=printf("%*s %-*s", 3, submatch(1), 4, submatch(2))', 'g') . path
     endif
 
-    if filetype != ''
+    if g:unite_source_buffer_show_filetype && filetype != ''
       let path .= ' [' . filetype . ']'
     endif
   endif
