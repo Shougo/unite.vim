@@ -46,8 +46,8 @@ let s:kind.action_table.tabopen = {
       \ }
 function! s:kind.action_table.tabopen.func(candidates) "{{{
   for candidate in a:candidates
-    tabnew
-    call unite#take_action('open', candidate)
+    call unite#util#smart_execute_command('tabnew',
+          \ candidate.action__path)
   endfor
 endfunction"}}}
 
