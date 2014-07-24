@@ -219,8 +219,8 @@ let s:kind.action_table.tabsplit = {
       \ 'is_tab' : 1,
       \ }
 function! s:kind.action_table.tabsplit.func(candidates) "{{{
-  tabnew
-  silent call unite#take_action('open', a:candidates[0])
+  call unite#util#smart_execute_command('tabnew',
+        \ a:candidates[0].action__path)
   for candidate in a:candidates[1:]
     silent call unite#take_action('vsplit', candidate)
   endfor
