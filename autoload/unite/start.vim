@@ -282,8 +282,6 @@ function! unite#start#get_vimfiler_candidates(sources, ...) "{{{
             \ "v:val.action__path =~# '[^\\x00-\\x7f]'")
         let item.action__path = unite#util#iconv(
               \ item.action__path, 'utf-8-mac', &encoding)
-        let item.action__directory = unite#util#iconv(
-              \ item.action__directory, 'utf-8-mac', &encoding)
         let item.word = unite#util#iconv(item.word, 'utf-8-mac', &encoding)
         let item.abbr = unite#util#iconv(item.abbr, 'utf-8-mac', &encoding)
         let item.vimfiler__filename = unite#util#iconv(

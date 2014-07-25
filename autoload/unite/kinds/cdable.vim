@@ -47,14 +47,15 @@ let s:kind.action_table.cd = {
       \ 'description' : 'change current directory',
       \ }
 function! s:kind.action_table.cd.func(candidate) "{{{
-  if !s:check_is_directory(a:candidate.action__directory)
+  let directory = unite#helper#get_candidate_directory(a:candidate)
+  if !s:check_is_directory(directory)
     return
   endif
 
   if &filetype ==# 'vimfiler' || &filetype ==# 'vimshell'
     call s:external_cd(a:candidate)
-  elseif a:candidate.action__directory != ''
-    execute g:unite_kind_cdable_cd_command '`=a:candidate.action__directory`'
+  else
+    execute g:unite_kind_cdable_cd_command fnameescape(directory)
   endif
 endfunction"}}}
 
@@ -62,14 +63,15 @@ let s:kind.action_table.lcd = {
       \ 'description' : 'change window local current directory',
       \ }
 function! s:kind.action_table.lcd.func(candidate) "{{{
-  if !s:check_is_directory(a:candidate.action__directory)
+  let directory = unite#helper#get_candidate_directory(a:candidate)
+  if !s:check_is_directory(directory)
     return
   endif
 
   if &filetype ==# 'vimfiler' || &filetype ==# 'vimshell'
     call s:external_cd(a:candidate)
-  elseif a:candidate.action__directory != ''
-    execute g:unite_kind_cdable_lcd_command '`=a:candidate.action__directory`'
+  else
+    execute g:unite_kind_cdable_lcd_command fnameescape(directory)
   endif
 endfunction"}}}
 
@@ -77,17 +79,12 @@ let s:kind.action_table.project_cd = {
       \ 'description' : 'change current directory to project directory',
       \ }
 function! s:kind.action_table.project_cd.func(candidate) "{{{
-  if !s:check_is_directory(a:candidate.action__directory)
+  let directory = unite#helper#get_candidate_directory(a:candidate)
+  if !s:check_is_directory(directory)
     return
   endif
 
-  if a:candidate.action__directory == ''
-    " Ignore.
-    return
-  endif
-
-  let directory = unite#util#path2project_directory(
-        \ a:candidate.action__directory)
+  let directory = unite#util#path2project_directory(directory)
 
   if isdirectory(directory)
     let candidate = copy(a:candidate)
@@ -101,14 +98,15 @@ let s:kind.action_table.tabnew_cd = {
       \ 'is_tab' : 1,
       \ }
 function! s:kind.action_table.tabnew_cd.func(candidate) "{{{
-  if !s:check_is_directory(a:candidate.action__directory)
+  let directory = unite#helper#get_candidate_directory(a:candidate)
+  if !s:check_is_directory(directory)
     return
   endif
 
   if &filetype ==# 'vimfiler' || &filetype ==# 'vimshell'
     tabnew | call s:external_cd(a:candidate)
-  elseif a:candidate.action__directory != ''
-    tabnew | execute g:unite_kind_cdable_cd_command '`=a:candidate.action__directory`'
+  else
+    tabnew | execute g:unite_kind_cdable_cd_command fnameescape(directory)
   endif
 endfunction"}}}
 
@@ -117,14 +115,15 @@ let s:kind.action_table.tabnew_lcd = {
       \ 'is_tab' : 1,
       \ }
 function! s:kind.action_table.tabnew_lcd.func(candidate) "{{{
-  if !s:check_is_directory(a:candidate.action__directory)
+  let directory = unite#helper#get_candidate_directory(a:candidate)
+  if !s:check_is_directory(directory)
     return
   endif
 
   if &filetype ==# 'vimfiler' || &filetype ==# 'vimshell'
     tabnew | call s:external_cd(a:candidate)
-  elseif a:candidate.action__directory != ''
-    tabnew | execute g:unite_kind_cdable_lcd_command '`=a:candidate.action__directory`'
+  else
+    tabnew | execute g:unite_kind_cdable_lcd_command fnameescape(directory)
   endif
 endfunction"}}}
 
@@ -134,12 +133,13 @@ let s:kind.action_table.narrow = {
       \ 'is_start' : 1,
       \ }
 function! s:kind.action_table.narrow.func(candidate) "{{{
-  if !s:check_is_directory(a:candidate.action__directory)
+  let directory = unite#helper#get_candidate_directory(a:candidate)
+  if !s:check_is_directory(directory)
     return
   endif
 
   call unite#start_temporary([['file'], ['file/new'], ['directory/new']],
-        \ {'path' : a:candidate.action__directory})
+        \ {'path' : directory})
 endfunction"}}}
 
 let s:kind.action_table.vimshell = {
@@ -150,11 +150,12 @@ function! s:kind.action_table.vimshell.func(candidate) "{{{
     echo 'vimshell is not installed.'
     return
   endif
-  if !s:check_is_directory(a:candidate.action__directory)
+  let directory = unite#helper#get_candidate_directory(a:candidate)
+  if !s:check_is_directory(directory)
     return
   endif
 
-  execute 'VimShell' escape(a:candidate.action__directory, '\ ')
+  execute 'VimShell' escape(directory, '\ ')
 endfunction"}}}
 
 let s:kind.action_table.tabvimshell = {
@@ -167,11 +168,12 @@ function! s:kind.action_table.tabvimshell.func(candidate) "{{{
     return
   endif
 
-  if !s:check_is_directory(a:candidate.action__directory)
+  let directory = unite#helper#get_candidate_directory(a:candidate)
+  if !s:check_is_directory(directory)
     return
   endif
 
-  execute 'VimShellTab' escape(a:candidate.action__directory, '\ ')
+  execute 'VimShellTab' escape(directory, '\ ')
 endfunction"}}}
 
 let s:kind.action_table.vimfiler = {
@@ -183,14 +185,15 @@ function! s:kind.action_table.vimfiler.func(candidate) "{{{
     return
   endif
 
-  if !s:check_is_directory(a:candidate.action__directory)
+  let directory = unite#helper#get_candidate_directory(a:candidate)
+  if !s:check_is_directory(directory)
     return
   endif
 
-  execute 'VimFiler' escape(a:candidate.action__directory, '\ ')
+  execute 'VimFiler' escape(directory, '\ ')
 
   if has_key(a:candidate, 'action__path')
-        \ && a:candidate.action__directory !=# a:candidate.action__path
+        \ && directory !=# a:candidate.action__path
     " Move cursor.
     call vimfiler#mappings#search_cursor(a:candidate.action__path)
     call s:move_vimfiler_cursor(a:candidate)
@@ -207,14 +210,15 @@ function! s:kind.action_table.tabvimfiler.func(candidate) "{{{
     return
   endif
 
-  if !s:check_is_directory(a:candidate.action__directory)
+  let directory = unite#helper#get_candidate_directory(a:candidate)
+  if !s:check_is_directory(directory)
     return
   endif
 
-  execute 'VimFilerTab' escape(a:candidate.action__directory, '\ ')
+  execute 'VimFilerTab' escape(directory, '\ ')
 
   if has_key(a:candidate, 'action__path')
-        \ && a:candidate.action__directory !=# a:candidate.action__path
+        \ && directory !=# a:candidate.action__path
     " Move cursor.
     call vimfiler#mappings#search_cursor(a:candidate.action__path)
     call s:move_vimfiler_cursor(a:candidate)
@@ -228,7 +232,8 @@ let s:cdable_action_rec = {
       \}
 
 function! s:cdable_action_rec.func(candidate)
-  call unite#start_script([['file_rec', a:candidate.action__directory]])
+  call unite#start_script([['file_rec',
+        \ unite#helper#get_candidate_directory(a:candidate)]])
 endfunction
 
 let s:cdable_action_rec_parent = {
@@ -238,7 +243,7 @@ let s:cdable_action_rec_parent = {
 
 function! s:cdable_action_rec_parent.func(candidate)
   call unite#start_script([['file_rec', unite#util#substitute_path_separator(
-        \ fnamemodify(a:candidate.action__directory, ':h'))
+        \ fnamemodify(unite#helper#get_candidate_directory(a:candidate), ':h'))
         \ ]])
 endfunction
 
@@ -249,7 +254,8 @@ let s:cdable_action_rec_project = {
 
 function! s:cdable_action_rec_project.func(candidate)
   call unite#start_script([['file_rec', unite#util#substitute_path_separator(
-        \ unite#util#path2project_directory(a:candidate.action__directory))
+        \ unite#util#path2project_directory(
+        \   unite#helper#get_candidate_directory(a:candidate)))
         \ ]])
 endfunction
 
@@ -259,7 +265,8 @@ let s:cdable_action_rec_async = {
       \}
 
 function! s:cdable_action_rec_async.func(candidate)
-  call unite#start_script([['file_rec/async', a:candidate.action__directory]])
+  call unite#start_script([['file_rec/async',
+        \ unite#helper#get_candidate_directory(a:candidate)]])
 endfunction
 
 let s:cdable_action_rec_parent_async = {
@@ -269,7 +276,7 @@ let s:cdable_action_rec_parent_async = {
 
 function! s:cdable_action_rec_parent_async.func(candidate)
   call unite#start_script([['file_rec/async', unite#util#substitute_path_separator(
-        \ fnamemodify(a:candidate.action__directory, ':h'))
+        \ fnamemodify(unit#helper#get_candidate_directory(a:candidate), ':h'))
         \ ]])
 endfunction
 
@@ -280,7 +287,8 @@ let s:cdable_action_rec_project_async = {
 
 function! s:cdable_action_rec_project_async.func(candidate)
   call unite#start_script([['file_rec/async', unite#util#substitute_path_separator(
-        \ unite#util#path2project_directory(a:candidate.action__directory))
+        \ unite#util#path2project_directory(
+        \   unite#helper#get_candidate_directory(a:candidate)))
         \ ]])
 endfunction
 
@@ -306,11 +314,12 @@ unlet! s:cdable_action_rec_parent_async
 
 
 function! s:external_cd(candidate) "{{{
+  let directory = unite#helper#get_candidate_directory(a:candidate)
   if &filetype ==# 'vimfiler'
-    call vimfiler#mappings#cd(a:candidate.action__directory)
+    call vimfiler#mappings#cd(directory)
     call s:move_vimfiler_cursor(a:candidate)
   elseif &filetype ==# 'vimshell'
-    execute 'VimShell' escape(a:candidate.action__directory, '\\ ')
+    execute 'VimShell' escape(directory, '\\ ')
   endif
 endfunction"}}}
 function! s:move_vimfiler_cursor(candidate) "{{{
@@ -319,7 +328,8 @@ function! s:move_vimfiler_cursor(candidate) "{{{
   endif
 
   if has_key(a:candidate, 'action__path')
-        \ && a:candidate.action__directory !=# a:candidate.action__path
+        \ && a:candidate.action__path !=#
+        \     unite#helper#get_candidate_directory(a:candidate)
     " Move cursor.
     call vimfiler#mappings#search_cursor(a:candidate.action__path)
   endif

@@ -304,8 +304,8 @@ function! s:kind.action_table.dirdiff.func(candidates)
     " :DirDiff the other candidate.
     tabnew
     let t:title = 'DirDiff'
-    execute 'DirDiff' a:candidates[0].action__directory
-          \ a:candidates[1].action__directory
+    execute 'DirDiff' unite#helper#get_candidate_directory(a:candidates[0])
+          \ unite#helper#get_candidate_directory(a:candidates[1])
   endif
 endfunction
 
@@ -333,7 +333,8 @@ let s:kind.action_table.grep_directory = {
       \ }
 function! s:kind.action_table.grep_directory.func(candidates) "{{{
   call unite#start_script([
-        \ ['grep', map(copy(a:candidates), 'string(v:val.action__directory)'),
+        \ ['grep', map(copy(a:candidates),
+        \  'string(unite#helper#get_candidate_directory(v:val))'),
         \ ]], { 'no_quit' : 1, 'no_empty' : 1 })
 endfunction "}}}
 
@@ -620,7 +621,8 @@ function! s:kind.action_table.vimfiler__shell.func(candidate) "{{{
     return
   endif
 
-  call vimshell#init#_start(a:candidate.action__directory,
+  call vimshell#init#_start(
+        \ unite#helper#get_candidate_directory(a:candidate),
         \ { 'popup' : 1, 'toggle' : 0 })
 
   let files = unite#get_context().vimfiler__files
@@ -1004,13 +1006,6 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
     endif
     let &l:hidden = hidden_save
   endtry
-endfunction"}}}
-function! s:filename2candidate(filename) "{{{
-  return {
-        \ 'action__directory' :
-        \       unite#util#path2directory(a:filename),
-        \ 'action__path' : a:filename,
-        \ }
 endfunction"}}}
 
 function! unite#kinds#file#do_action(candidates, dest_dir, action_name) "{{{

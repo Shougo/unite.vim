@@ -41,7 +41,7 @@ let s:action_find = {
   \ }
 function! s:action_find.func(candidate) "{{{
   call unite#start_script([['find',
-        \ a:candidate.action__directory]],
+        \ unit#helper#get_candidate_directory(a:candidate)]],
         \ {'no_quit' : 1})
 endfunction "}}}
 if executable(g:unite_source_find_command) && unite#util#has_vimproc()
@@ -136,7 +136,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
     \   'word' : unite#util#substitute_path_separator(v:val),
     \   'kind' : (isdirectory(v:val) ? 'directory' : 'file'),
     \   'action__path' : unite#util#substitute_path_separator(v:val),
-    \   'action__directory' : unite#util#path2directory(v:val),
     \ }")
 
   if isdirectory(a:context.source__target)

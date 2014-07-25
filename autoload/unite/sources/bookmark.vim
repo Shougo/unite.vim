@@ -134,7 +134,6 @@ function! s:source.gather_candidates(args, context) "{{{
           \ 'action__path' : substitute(v:val[1], '[/\\\\]$', '', ''),
           \ 'action__line' : v:val[2],
           \ 'action__pattern' : v:val[3],
-          \ 'action__directory' : unite#util#path2directory(v:val[1]),
           \   }")
   endfor
   return candidates

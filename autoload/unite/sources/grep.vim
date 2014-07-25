@@ -178,8 +178,6 @@ function! s:source.hooks.on_post_filter(args, context) "{{{
   for candidate in a:context.candidates
     let candidate.kind = [((a:context.source__ssh_path != '') ?
           \ 'file/ssh' : 'file'), 'jump_list']
-    let candidate.action__directory =
-          \ unite#util#path2directory(candidate.action__path)
     let candidate.action__col_pattern = a:context.source__input
     let candidate.is_multiline = 1
   endfor

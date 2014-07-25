@@ -456,6 +456,12 @@ else
   endfunction"}}}
 endif
 
+function! unite#helper#get_candidate_directory(candidate) "{{{
+  return has_key(a:candidate, 'action__directory') ?
+        \ a:candidate.action__directory :
+        \ unite#util#path2directory(a:candidate.action__path)
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

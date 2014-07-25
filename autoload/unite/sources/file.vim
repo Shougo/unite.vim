@@ -386,14 +386,6 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) "{{{
         \                    fnamemodify(a:file, ':p'))
   endif
 
-  let dict.action__directory = dict.vimfiler__is_directory ?
-        \ dict.action__path : fnamemodify(dict.action__path, ':h')
-
-  if s:is_windows
-    let dict.action__directory =
-          \ unite#util#substitute_path_separator(dict.action__directory)
-  endif
-
   if dict.vimfiler__is_directory
     if a:file !~ '^\%(/\|\a\+:/\)$'
       let dict.abbr .= '/'
@@ -409,7 +401,6 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) "{{{
       let dict.kind = 'file'
     elseif is_newfile == 2
       " New directory.
-      let dict.action__directory = a:file
       let dict.abbr = '[new directory] ' . dict.abbr
       let dict.kind = 'directory'
     endif
@@ -424,7 +415,7 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts) "{{{
     if len(a:candidate.action__path) > 200
       " Convert to relative path.
       let current_dir_save = getcwd()
-      lcd `=a:candidate.action__directory`
+      lcd `=unite#helper#get_candidate_directory(a:candidate)`
 
       let filename = unite#util#substitute_path_separator(
             \ fnamemodify(a:candidate.action__path, ':.'))
@@ -505,7 +496,8 @@ let s:cdable_action_file = {
       \}
 
 function! s:cdable_action_file.func(candidate)
-  call unite#start_script([['file', a:candidate.action__directory]])
+  call unite#start_script([['file',
+        \ unite#helper#get_candidate_directory(a:candidate)]])
 endfunction
 
 call unite#custom_action('cdable', 'file', s:cdable_action_file)

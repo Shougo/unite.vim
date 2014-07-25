@@ -2324,7 +2324,7 @@ openable	An interface that can open.  This doesn't require any keys,
 						*unite-kind-cdable*
 cdable		An interface that can change the working directory.
 
-			action__directory	(String)	(Required)
+			action__directory	(String)	(Optional)
 				The target directory.
 
 						*unite-kind-file*

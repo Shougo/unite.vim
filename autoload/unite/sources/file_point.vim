@@ -64,8 +64,6 @@ function! s:source.gather_candidates(args, context) "{{{
           \   'word' : a:context.source__filename,
           \   'kind' : 'file',
           \   'action__path' : a:context.source__filename,
-          \   'action__directory' : unite#util#path2directory(
-          \               a:context.source__filename),
           \ }]
   else
     " File not found.

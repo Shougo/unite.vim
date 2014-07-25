@@ -47,7 +47,6 @@ function! s:source.gather_candidates(args, context) "{{{
         \ 'abbr' : unite#util#substitute_path_separator(
         \         fnamemodify(unite#util#expand(v:val), ':~')),
         \ 'action__path' : unite#util#expand(v:val),
-        \ 'action__directory' : unite#util#expand(v:val),
         \ 'source__runtimepath' : v:val,
         \ }")
 endfunction"}}}
