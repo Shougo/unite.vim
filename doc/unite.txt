@@ -1053,7 +1053,7 @@ Normal mode mappings.
 		Narrows with inputting directory name.
 
 <Plug>(unite_delete_backward_path)	*<Plug>(unite_delete_backward_path)*
-		Deletes a path upward.  Refer to
+		Deletes a narrowing text or a path upward.  Refer to
 		|i_<Plug>(unite_delete_backward_path)|.
 
 				*<Plug>(unite_toggle_transpose_window)*

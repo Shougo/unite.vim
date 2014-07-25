@@ -361,8 +361,13 @@ function! s:restart() "{{{
 endfunction"}}}
 function! s:delete_backward_path() "{{{
   let context = unite#get_context()
-  let context.path = substitute(context.path, '[^/ ]*.$', '', '')
-  call unite#redraw()
+  if context.input != ''
+    call unite#mappings#narrowing(
+          \ substitute(context.input, '[^/ ]*.$', '', ''), 0)
+  else
+    let context.path = substitute(context.path, '[^/ ]*.$', '', '')
+    call unite#redraw()
+  endif
 endfunction"}}}
 function! s:toggle_mark(map) "{{{
   call unite#helper#skip_prompt()
