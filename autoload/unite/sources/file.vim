@@ -293,11 +293,11 @@ endfunction"}}}
 function! unite#sources#file#_get_path(args, context) "{{{
   let path = unite#util#substitute_path_separator(
         \ unite#util#expand(join(a:args, ':')))
-  if path != '' && path !~ '/$'
-    let path .= '/'
-  endif
   if path == ''
     let path = a:context.path
+  endif
+  if path != '' && path !~ '/$' && isdirectory(path)
+    let path .= '/'
   endif
 
   return path
