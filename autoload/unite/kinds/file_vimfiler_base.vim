@@ -198,10 +198,6 @@ function! s:kind.action_table.vimfiler__copy.func(candidates) "{{{
     endif
   endtry
 endfunction"}}}
-function! s:check_copy_func(filename) "{{{
-  return isdirectory(a:filename) ?
-        \ 'copy_directory' : 'copy_file'
-endfunction"}}}
 
 let s:kind.action_table.copy = deepcopy(s:kind.action_table.vimfiler__copy)
 let s:kind.action_table.copy.is_listed = 1
@@ -229,10 +225,6 @@ function! s:kind.action_table.vimfiler__delete.func(candidates) "{{{
   endif
 
   call unite#kinds#file#do_action(a:candidates, '', 'delete')
-endfunction"}}}
-function! s:check_delete_func(filename) "{{{
-  return isdirectory(a:filename) ?
-        \ 'delete_directory' : 'delete_file'
 endfunction"}}}
 
 let s:kind.action_table.vimfiler__rename = {

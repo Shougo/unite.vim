@@ -298,6 +298,14 @@ function! unite#kinds#file#do_action(candidates, dest_dir, action_name) "{{{
   echo ''
   redraw
 endfunction"}}}
+function! s:check_delete_func(filename) "{{{
+  return isdirectory(a:filename) ?
+        \ 'delete_directory' : 'delete_file'
+endfunction"}}}
+function! s:check_copy_func(filename) "{{{
+  return isdirectory(a:filename) ?
+        \ 'copy_directory' : 'copy_file'
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
