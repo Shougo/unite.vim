@@ -40,6 +40,7 @@ let s:kind = {
       \ 'name' : 'cdable',
       \ 'action_table' : {},
       \ 'alias_table' : { 'edit' : 'narrow' },
+      \ 'parents' : [],
       \}
 
 " Actions "{{{

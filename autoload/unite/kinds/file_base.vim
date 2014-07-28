@@ -43,6 +43,7 @@ let s:kind = {
       \ 'name' : 'file_base',
       \ 'default_action' : 'open',
       \ 'action_table' : {},
+      \ 'parents' : [],
       \}
 
 " Actions "{{{

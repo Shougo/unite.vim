@@ -26,15 +26,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Variables  "{{{
-if !exists('g:unite_kind_file_vertical_preview')
-  let g:unite_kind_file_vertical_preview = 0
-endif
-if !exists('g:unite_kind_file_preview_max_filesize')
-  let g:unite_kind_file_preview_max_filesize = 1000000
-endif
-"}}}
-
 " Global options definition. "{{{
 call unite#util#set_default(
       \ 'g:unite_kind_file_delete_file_command',
@@ -74,7 +65,7 @@ let s:kind = {
       \ 'name' : 'file',
       \ 'default_action' : 'open',
       \ 'action_table' : {},
-      \ 'parents' : ['openable', 'file_base',
+      \ 'parents' : ['file_base', 'openable',
       \              'file_vimfiler_base', 'cdable', 'uri'],
       \}
 

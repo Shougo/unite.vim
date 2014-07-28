@@ -65,6 +65,7 @@ let s:kind = {
       \ 'name' : 'file_vimfiler_base',
       \ 'default_action' : 'open',
       \ 'action_table' : {},
+      \ 'parents' : [],
       \}
 
 " Actions "{{{

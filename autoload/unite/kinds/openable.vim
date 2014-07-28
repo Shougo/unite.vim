@@ -36,6 +36,7 @@ endfunction"}}}
 let s:kind = {
       \ 'name' : 'openable',
       \ 'action_table': {},
+      \ 'parents' : [],
       \}
 
 " Actions "{{{
