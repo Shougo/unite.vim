@@ -47,8 +47,14 @@ let s:kind.action_table.tabopen = {
       \ }
 function! s:kind.action_table.tabopen.func(candidates) "{{{
   for candidate in a:candidates
-    tabnew
-    call unite#take_action('open', candidate)
+    let hidden_save = &hidden
+    try
+      set nohidden
+      tabnew
+      call unite#take_action('open', candidate)
+    finally
+      let &hidden = hidden_save
+    endtry
   endfor
 endfunction"}}}
 
@@ -220,8 +226,15 @@ let s:kind.action_table.tabsplit = {
       \ 'is_tab' : 1,
       \ }
 function! s:kind.action_table.tabsplit.func(candidates) "{{{
-  tabnew
-  silent call unite#take_action('open', a:candidates[0])
+  let hidden_save = &hidden
+  try
+    set nohidden
+    tabnew
+    silent call unite#take_action('open', a:candidates[0])
+  finally
+    let &hidden = hidden_save
+  endtry
+
   for candidate in a:candidates[1:]
     silent call unite#take_action('vsplit', candidate)
   endfor
