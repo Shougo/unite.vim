@@ -927,7 +927,7 @@ g:unite_abbr_highlight				*g:unite_abbr_highlight*
 
 g:unite_cursor_line_time		*g:unite_cursor_line_time*
 		Specify the cursor line highlight time.
-		If you scrolls cursor quickly less than it, unite will skip
+		If you scroll cursor quickly less than it, unite will skip
 		cursor line highlight.
 		If it is "0.0", this feature will be disabled.
 		Note: It is deprecated variable.  Please use
@@ -1955,7 +1955,7 @@ the context dictionary.
 						*unite-options-cursor-line-time*
 		-cursor-line-time={icon-text}
 		Specify the cursor line highlight time.
-		If you scrolls cursor quickly less than it, unite will skip
+		If you scroll cursor quickly less than it, unite will skip
 		cursor line highlight.
 		If it is "0.0", this feature will be disabled.
 
@@ -2115,7 +2115,7 @@ output		Nominates executed Vim command as candidates.
 
 		Source arguments:
 		1. Vim command.
-		2~. command args (but you cannot use "!" by itself)
+		2. command args (but you cannot use "!" by itself)
 
 		If the last argument is "!", it prints by dummy candidates.
 		This behavior is useful for output message.
@@ -2604,7 +2604,7 @@ converter_nothing
 converter_relative_word
 		A converter which converts a candidate's word into a
 		corresponding relative path.
-		word can be used by matcher to narrow down the candidates and
+		Word can be used by matcher to narrow down the candidates and
 		must be set in precedence of the matcher.
 		If context information contains source__directory, this
 		converter uses it as the base path in relative path
@@ -2863,7 +2863,7 @@ name			String		(Required)
 			    /
 			    -    (except the first character)
 
-			    Good: "buffer" , "file_mru", "view/git"
+			    Good: "buffer", "file_mru", "view/git"
 			    Bad:  "BadOne", "!@#$%^&*()_[]{}-|", ""
 
 				*unite-source-attribute-gather_candidates*
@@ -3187,7 +3187,8 @@ NOTATION					*unite-notation*
 
 			abbr			(String)	(Optional)
 				String Displayed in unite buffer.
-				If it is omit, word attribute is used instead.
+				If it is omitted, word attribute is used
+				instead.
 				The attribute is not used for matcher.
 
 			source			(String)	(Optional)
@@ -3196,7 +3197,7 @@ NOTATION					*unite-notation*
 
 			kind			(String/List)	(Optional)
 				The candidate kind name.
-				If it is omit, "common" is used.
+				If it is omitted, "common" is used.
 				Kind name list is acceptable.
 				Ex: ["file", "directory"]
 				If you use list, you do not have to define the
@@ -3265,7 +3266,7 @@ name			String		(Required)
 			    /
 			    -    (except the first character)
 
-			    Good: "buffer" , "file_mru", "view/git"
+			    Good: "buffer", "file_mru", "view/git"
 			    Bad:  "BadOne", "!@#$%^&*()_[]{}-|", ""
 
 					*unite-kind-attribute-default_action*
@@ -3616,7 +3617,8 @@ And the default max candidates are limited. You can customize it by
 
 And you must clear previous cache in file_rec sources and wait until the cache
 is completed ("Directory traverse was completed" message is showed).
-In large files directory, making the cache is slow. So I don't recommend it.
+In a directory including large file, making the cache is slow. So I don't
+recommend it.
 To clear cache, you must execute |<Plug>(unite_redraw)| in unite
 buffer (the default is mapped to <C-l>).
 
