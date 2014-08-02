@@ -280,7 +280,7 @@ function! unite#mappings#narrowing(word, ...) "{{{
   setlocal modifiable
   let unite = unite#get_current_unite()
 
-  let unite.input .= is_escape ? escape(a:word, ' *') : a:word
+  let unite.input = is_escape ? escape(a:word, ' *') : a:word
   let unite.context.input = unite.input
 
   call unite#handlers#_on_insert_enter()
