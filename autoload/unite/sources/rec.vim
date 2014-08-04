@@ -493,8 +493,8 @@ function! s:get_files(context, files, level, max_unit) "{{{
 
     if isdirectory(file)
       if getftype(file) ==# 'link'
-        let file = s:resolve(file)
-        if file == ''
+        let real_file = s:resolve(file)
+        if real_file == ''
           continue
         endif
       endif
@@ -523,8 +523,8 @@ function! s:get_files(context, files, level, max_unit) "{{{
 
         if isdirectory(child)
           if getftype(child) ==# 'link'
-            let child = s:resolve(child)
-            if child == ''
+            let real_file = s:resolve(child)
+            if real_file == ''
               continue
             endif
           endif
