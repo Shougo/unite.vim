@@ -257,7 +257,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   let stderr = a:context.source__proc.stderr
   if !stderr.eof
     " Print error.
-    let errors = filter(stderr.read_lines(-1, 100),
+    let errors = filter(unite#util#read_lines(stderr, 100),
           \ "v:val !~ '^\\s*$'")
     if !empty(errors)
       call unite#print_source_error(errors, s:source.name)
@@ -273,7 +273,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
     call a:context.source__proc.waitpid()
   endif
 
-  let candidates = map(stdout.read_lines(-1, 1000),
+  let candidates = map(unite#util#read_lines(stdout, 1000),
           \ "unite#util#iconv(v:val, g:unite_source_grep_encoding, &encoding)")
   if variables.default_opts =~ '^-[^-]*l'
         \ || a:context.source__extra_opts =~ '^-[^-]*l'
