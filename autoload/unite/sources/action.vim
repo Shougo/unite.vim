@@ -152,7 +152,6 @@ function! s:source.action_table.do.func(candidate) "{{{
 
     if input != ''
       " Apply previous input changes
-      let unite = unite#get_current_unite()
       call unite#mappings#narrowing(input, 0)
     endif
 
