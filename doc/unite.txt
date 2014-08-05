@@ -729,7 +729,7 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		      \     'description' : 'Test menu3',
 		      \ }
 		let g:unite_source_menu_menus.test3.command_candidates = [
-		      \   ['ruby', 'VimShellInteractive ruby
+		      \   ['ruby', 'VimShellInteractive ruby'],
 		      \   ['python', 'VimShellInteractive python'],
 		      \ ]
 
