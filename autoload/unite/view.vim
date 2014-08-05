@@ -832,6 +832,9 @@ function! s:clear_previewed_buffer_list() "{{{
   let unite = unite#get_current_unite()
   for bufnr in unite.previewed_buffer_list
     if buflisted(bufnr)
+      if bufnr == bufnr('%')
+        call unite#util#alternate_buffer()
+      endif
       silent execute 'bdelete!' bufnr
     endif
   endfor
