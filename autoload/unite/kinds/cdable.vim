@@ -277,7 +277,7 @@ let s:cdable_action_rec_parent_async = {
 
 function! s:cdable_action_rec_parent_async.func(candidate)
   call unite#start_script([['file_rec/async', unite#util#substitute_path_separator(
-        \ fnamemodify(unit#helper#get_candidate_directory(a:candidate), ':h'))
+        \ fnamemodify(unite#helper#get_candidate_directory(a:candidate), ':h'))
         \ ]])
 endfunction
 

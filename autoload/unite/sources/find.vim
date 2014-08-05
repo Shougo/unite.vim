@@ -41,7 +41,7 @@ let s:action_find = {
   \ }
 function! s:action_find.func(candidate) "{{{
   call unite#start_script([['find',
-        \ unit#helper#get_candidate_directory(a:candidate)]],
+        \ unite#helper#get_candidate_directory(a:candidate)]],
         \ {'no_quit' : 1})
 endfunction "}}}
 if executable(g:unite_source_find_command) && unite#util#has_vimproc()
