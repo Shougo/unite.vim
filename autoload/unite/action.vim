@@ -373,18 +373,17 @@ function! unite#action#do(action_name, ...) "{{{
       let is_redraw = 1
     endif
 
+    let save_shortmess = &shortmess
     try
+      set shortmess+=A
       call add(_, table.action.func(table.candidates))
-    catch /^Vim\%((\a\+)\)\=:E325/
-      " Ignore catch.
-      call unite#print_error(v:exception)
-      call unite#print_error('Warning: Swap file was found while executing action!')
-      call unite#print_error('Action name is ' . table.action.name)
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
       call unite#print_error('Error occured while executing action!')
       call unite#print_error('Action name is ' . table.action.name)
+    finally
+      let &shortmess = save_shortmess
     endtry
 
     " Executes command.
