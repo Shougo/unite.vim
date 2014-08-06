@@ -1212,7 +1212,7 @@ A		|<Plug>(unite_append_end)|
 q		|<Plug>(unite_exit)|
 <C-g>		|<Plug>(unite_exit)|
 Q		|<Plug>(unite_all_exit)|
-g<C-g>		|<Plug>(unite_exit)|
+g<C-g>		|<Plug>(unite_all_exit)|
 <C-r>		|<Plug>(unite_restart)|
 <Space>		|<Plug>(unite_toggle_mark_current_candidate)|
 <S-Space>	|<Plug>(unite_toggle_mark_current_candidate_up)|
