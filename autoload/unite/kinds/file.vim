@@ -186,7 +186,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
   let directory = unite#util#substitute_path_separator(
         \ fnamemodify(old_filename, ':h'))
   let current_dir_save = getcwd()
-  lcd `=directory`
+  unite#util#lcd(directory)
 
   let hidden_save = &l:hidden
   try
@@ -218,7 +218,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
   finally
     " Restore path.
     if isdirectory(current_dir_save)
-      lcd `=current_dir_save`
+      unite#util#lcd(current_dir_save)
     endif
     let &l:hidden = hidden_save
   endtry

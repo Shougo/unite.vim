@@ -177,7 +177,7 @@ function! s:source_file_rec.vimfiler_gather_candidates(args, context) "{{{
   let old_dir = getcwd()
   if path !=# old_dir
         \ && isdirectory(path)
-    lcd `=path`
+    unite#util#lcd(path)
   endif
 
   let exts = unite#util#is_windows() ?
@@ -190,7 +190,7 @@ function! s:source_file_rec.vimfiler_gather_candidates(args, context) "{{{
 
   if path !=# old_dir
         \ && isdirectory(path)
-    lcd `=old_dir`
+    unite#util#lcd(old_dir)
   endif
 
   return deepcopy(candidates)
@@ -208,7 +208,7 @@ function! s:source_file_rec.vimfiler_dummy_candidates(args, context) "{{{
   let old_dir = getcwd()
   if path !=# old_dir
         \ && isdirectory(path)
-    lcd `=path`
+    unite#util#lcd(path)
   endif
 
   let exts = unite#util#is_windows() ?
@@ -224,7 +224,7 @@ function! s:source_file_rec.vimfiler_dummy_candidates(args, context) "{{{
 
   if path !=# old_dir
         \ && isdirectory(path)
-    lcd `=old_dir`
+    unite#util#lcd(old_dir)
   endif
 
   return deepcopy(candidates)

@@ -172,7 +172,7 @@ function! s:source.gather_candidates(args, context) "{{{
 
     if isdirectory(a:context.source__directory)
       let cwd = getcwd()
-      lcd `=a:context.source__directory`
+      unite#util#lcd(a:context.source__directory)
     endif
 
     for qf in filter(qflist,
@@ -192,7 +192,7 @@ function! s:source.gather_candidates(args, context) "{{{
     endfor
 
     if isdirectory(a:context.source__directory)
-      lcd `=cwd`
+      unite#util#lcd(cwd)
     endif
   catch /^Vim\%((\a\+)\)\?:E480/
     " Ignore.

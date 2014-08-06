@@ -129,7 +129,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
   if isdirectory(a:context.source__target)
     let cwd = getcwd()
-    lcd `=a:context.source__target`
+    call unite#util#lcd(a:context.source__target)
   endif
 
   call map(candidates, "{
@@ -139,7 +139,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
     \ }")
 
   if isdirectory(a:context.source__target)
-    lcd `=cwd`
+    unite#util#lcd(cwd)
   endif
 
   return candidates

@@ -367,6 +367,10 @@ function! unite#util#is_sudo() "{{{
         \ && $HOME ==# expand('~'.$SUDO_USER)
 endfunction"}}}
 
+function! unite#util#lcd(dir) "{{{
+  execute 'lcd' fnameescape(a:dir)
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

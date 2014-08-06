@@ -91,7 +91,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates) "{{{
   let current_dir = getcwd()
 
   try
-    lcd `=vimfiler_current_dir`
+    unite#util#lcd(vimfiler_current_dir)
 
     if g:unite_kind_file_move_command == ''
       call unite#print_error("Please install mv.exe.")
@@ -139,7 +139,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates) "{{{
     endif
   finally
     if isdirectory(current_dir)
-      lcd `=current_dir`
+      unite#util#lcd(current_dir)
     endif
   endtry
 endfunction"}}}
@@ -167,7 +167,7 @@ function! s:kind.action_table.vimfiler__copy.func(candidates) "{{{
   let current_dir = getcwd()
 
   try
-    lcd `=vimfiler_current_dir`
+    unite#util#lcd(vimfiler_current_dir)
 
     if g:unite_kind_file_copy_file_command == ''
           \ || g:unite_kind_file_copy_directory_command == ''
@@ -199,7 +199,7 @@ function! s:kind.action_table.vimfiler__copy.func(candidates) "{{{
     endif
   finally
     if isdirectory(current_dir)
-      lcd `=current_dir`
+      unite#util#lcd(current_dir)
     endif
   endtry
 endfunction"}}}
@@ -247,7 +247,7 @@ function! s:kind.action_table.vimfiler__rename.func(candidate) "{{{
   let current_dir = getcwd()
 
   try
-    lcd `=vimfiler_current_dir`
+    unite#util#lcd(vimfiler_current_dir)
 
     let context = unite#get_context()
     let filename = has_key(context, 'action__filename') ?
@@ -265,7 +265,7 @@ function! s:kind.action_table.vimfiler__rename.func(candidate) "{{{
     endif
   finally
     if isdirectory(current_dir)
-      lcd `=current_dir`
+      unite#util#lcd(current_dir)
     endif
   endtry
 endfunction"}}}
@@ -286,7 +286,7 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
   let current_dir = getcwd()
 
   try
-    lcd `=vimfiler_current_dir`
+    unite#util#lcd(vimfiler_current_dir)
 
     let filenames = input('New files name(comma separated): ',
           \               '', 'file')
@@ -297,7 +297,7 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
     endif
 
     for filename in split(filenames, ',')
-      lcd `=vimfiler_current_dir`
+      unite#util#lcd(vimfiler_current_dir)
 
       if filereadable(filename)
         redraw
@@ -325,7 +325,7 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
     endfor
   finally
     if isdirectory(current_dir)
-      lcd `=current_dir`
+      unite#util#lcd(current_dir)
     endif
   endtry
 endfunction"}}}
@@ -368,7 +368,7 @@ function! s:kind.action_table.vimfiler__shellcmd.func(candidate) "{{{
   let current_dir = getcwd()
 
   try
-    lcd `=vimfiler_current_dir`
+    unite#util#lcd(vimfiler_current_dir)
     let command = unite#get_context().vimfiler__command
     let output = split(unite#util#system(command), '\n\|\r\n')
 
@@ -377,7 +377,7 @@ function! s:kind.action_table.vimfiler__shellcmd.func(candidate) "{{{
     endif
   finally
     if isdirectory(current_dir)
-      lcd `=current_dir`
+      unite#util#lcd(current_dir)
     endif
   endtry
 endfunction"}}}
@@ -398,7 +398,7 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidates) "{{{
   let current_dir = getcwd()
 
   try
-    lcd `=vimfiler_current_dir`
+    unite#util#lcd(vimfiler_current_dir)
 
     let dirnames = split(input(
           \ 'New directory names(comma separated): ', '', 'dir'), ',')
@@ -430,7 +430,7 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidates) "{{{
     call s:search_cursor(dirname, '', {})
   finally
     if isdirectory(current_dir)
-      lcd `=current_dir`
+      unite#util#lcd(current_dir)
     endif
   endtry
 endfunction"}}}
@@ -449,7 +449,7 @@ function! s:kind.action_table.vimfiler__execute.func(candidates) "{{{
   let current_dir = getcwd()
 
   try
-    lcd `=vimfiler_current_dir`
+    unite#util#lcd(vimfiler_current_dir)
 
     for candidate in a:candidates
       let path = candidate.action__path
@@ -462,7 +462,7 @@ function! s:kind.action_table.vimfiler__execute.func(candidates) "{{{
     endfor
   finally
     if isdirectory(current_dir)
-      lcd `=current_dir`
+      unite#util#lcd(current_dir)
     endif
   endtry
 endfunction"}}}
@@ -480,7 +480,7 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
   let current_dir = getcwd()
 
   try
-    lcd `=vimfiler_current_dir`
+    unite#util#lcd(vimfiler_current_dir)
 
     let path = a:candidate.action__path
     if unite#util#is_windows()
@@ -516,7 +516,7 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
     endif
   finally
     if isdirectory(current_dir)
-      lcd `=current_dir`
+      unite#util#lcd(current_dir)
     endif
   endtry
 endfunction"}}}
