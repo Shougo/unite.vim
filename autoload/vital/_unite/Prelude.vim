@@ -215,7 +215,7 @@ function! s:_deprecated2(fname)
 endfunction
 
 function! s:smart_execute_command(action, word)
-  execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
+  execute a:action (a:word == '' ? '' : fnameescape(a:word))
 endfunction
 
 function! s:escape_file_searching(buffer_name)

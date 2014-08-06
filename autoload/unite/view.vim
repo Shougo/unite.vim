@@ -472,7 +472,7 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
     if bufname('%') == ''
       noautocmd silent enew
     endif
-    silent! noautocmd edit `=a:context.real_buffer_name`
+    silent! noautocmd edit fnameescape(a:context.real_buffer_name)
   endif
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))

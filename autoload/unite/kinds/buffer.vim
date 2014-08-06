@@ -120,7 +120,8 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate) "{{{
-  pedit `=a:candidate.action__path`
+  call unite#util#smart_execute_command(
+        \ 'pedit', a:candidate.action__path)
 
   let filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
   if filetype != ''

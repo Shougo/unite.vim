@@ -823,7 +823,6 @@ g:unite_kind_cdable_cd_command
 				*g:unite_kind_openable_cd_command*
 g:unite_kind_openable_cd_command
 		Specify the Vim command for cd action.
-		This command must interpret |`=|.
 
 		The default value is "cd".
 
@@ -832,7 +831,6 @@ g:unite_kind_cdable_lcd_command
 				*g:unite_kind_openable_lcd_command*
 g:unite_kind_openable_lcd_command
 		Specify the Vim command for lcd action.
-		This command must interpret |`=|.
 
 		The default value is "lcd".
 
@@ -1551,7 +1549,7 @@ unite#custom#action({kind}, {name}, {action})
 
 		  let dir = isdirectory(a:candidate.word) ?
 		  \    a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
-		  execute g:unite_kind_openable_lcd_command '`=dir`'
+		  execute g:unite_kind_openable_lcd_command fnameescape(dir)
 		endfunction
 		call unite#custom#action('file,buffer', 'tabopen', my_tabopen)
 		unlet my_tabopen
