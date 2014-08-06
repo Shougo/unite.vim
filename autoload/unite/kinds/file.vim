@@ -227,6 +227,7 @@ endfunction"}}}
 function! unite#kinds#file#do_action(candidates, dest_dir, action_name) "{{{
   let overwrite_method = ''
   let is_reset_method = 1
+  let dest_filename = ''
 
   let cnt = 1
   let max = len(a:candidates)
@@ -288,6 +289,12 @@ function! unite#kinds#file#do_action(candidates, dest_dir, action_name) "{{{
 
   echo ''
   redraw
+
+  if dest_filename == '' || dest_filename ==# a:dest_dir
+    let dest_filename = unite#util#substitute_path_separator(
+          \ fnamemodify(dest_filename, ':p'))
+  endif
+  return dest_filename
 endfunction"}}}
 function! s:check_delete_func(filename) "{{{
   return isdirectory(a:filename) ?

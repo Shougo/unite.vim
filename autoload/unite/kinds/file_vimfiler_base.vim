@@ -132,8 +132,10 @@ function! s:kind.action_table.vimfiler__move.func(candidates) "{{{
       call unite#sources#{protocol}#move_files(
             \ dest_dir, candidates)
     else
-      call unite#kinds#file#do_action(
+      let filename = unite#kinds#file#do_action(
             \ candidates, dest_dir, 'move')
+
+      call s:search_cursor(filename, dest_dir, a:candidates[-1])
     endif
   finally
     if isdirectory(current_dir)
@@ -191,7 +193,9 @@ function! s:kind.action_table.vimfiler__copy.func(candidates) "{{{
       let protocol = matchstr(dest_dir, '^\h\w\+')
       call unite#sources#{protocol}#copy_files(dest_dir, a:candidates)
     else
-      call unite#kinds#file#do_action(a:candidates, dest_dir, 'copy')
+      let filename = unite#kinds#file#do_action(
+            \ a:candidates, dest_dir, 'copy')
+      call s:search_cursor(filename, dest_dir, a:candidates[-1])
     endif
   finally
     if isdirectory(current_dir)
@@ -257,12 +261,7 @@ function! s:kind.action_table.vimfiler__rename.func(candidate) "{{{
 
     if filename != '' && filename !=# a:candidate.action__path
       call unite#kinds#file#do_rename(a:candidate.action__path, filename)
-    endif
-
-    if &filetype ==# 'vimfiler'
-      call vimfiler#view#_force_redraw_screen()
-      call vimfiler#mappings#search_cursor(
-            \ unite#util#substitute_path_separator(fnamemodify(filename, ':p')))
+      call s:search_cursor(filename, '', {})
     endif
   finally
     if isdirectory(current_dir)
@@ -428,11 +427,7 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidates) "{{{
       call unite#sources#file#move_files(dirname, a:candidates)
     endif
 
-    if &filetype ==# 'vimfiler'
-      call vimfiler#view#_force_redraw_screen()
-      call vimfiler#mappings#search_cursor(
-            \ unite#util#substitute_path_separator(fnamemodify(dirname, ':p')))
-    endif
+    call s:search_cursor(dirname, '', {})
   finally
     if isdirectory(current_dir)
       lcd `=current_dir`
@@ -561,6 +556,28 @@ function! s:move_to_other_drive(candidate, filename) "{{{
   if s:kind.action_table.vimfiler__delete.func([a:candidate])
     call unite#print_error('Failed file delete: ' . a:filename)
     return 1
+  endif
+endfunction"}}}
+
+function! s:search_cursor(filename, dest_dir, candidate) "{{{
+  if &filetype !=# 'vimfiler'
+    return
+  endif
+
+  if a:filename ==# a:dest_dir
+    " Search from another vimfiler
+    call vimfiler#mappings#switch_another_vimfiler()
+    call vimfiler#view#_force_redraw_screen()
+    call vimfiler#mappings#search_cursor(
+          \ unite#util#substitute_path_separator(
+          \   a:dest_dir . a:candidate.vimfiler__filename))
+    call vimfiler#mappings#switch_another_vimfiler()
+  else
+    " Search current vimfiler
+    call vimfiler#view#_force_redraw_screen()
+    call vimfiler#mappings#search_cursor(
+          \ unite#util#substitute_path_separator(
+          \   fnamemodify(a:filename, ':p')))
   endif
 endfunction"}}}
 
