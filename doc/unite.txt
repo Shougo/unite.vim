@@ -1415,7 +1415,7 @@ unite#custom#profile({profile-name}, {option-name}, {value})
 		Set {profile-name} specialized {option-name} to {value}.
 		Note: If you use single source in unite.vim commands with
 		omitting profile name and buffer name, "source/{source-name}"
-		is used.  Thus, you can define a source specific profile.
+		is used.  Thus, you can define a source-specific profile.
 
 		The options below are available:
 
@@ -1725,7 +1725,7 @@ the context dictionary.
 		Specify a profile name.  The default profile name is the same
 		as the buffer name.  However, if you use a single source and
 		omit the buffer name, "source/{source-name}" or "default" is
-		used.  This way you can define source specific profiles.
+		used.  This way you can define source-specific profiles.
 		Note: https://github.com/Shougo/unite.vim/issues/277
 
 						*unite-options-input*
