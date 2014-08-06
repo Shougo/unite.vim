@@ -75,42 +75,44 @@ function! s:kind.action_table.preview.func(candidate) "{{{
   let buflisted = buflisted(
         \ unite#util#escape_file_searching(
         \ a:candidate.action__path))
-  if filereadable(a:candidate.action__path)
-    if getfsize(a:candidate.action__path) >
-          \ g:unite_kind_file_preview_max_filesize
-      call unite#print_error(printf(
-            \ '[unite.vim] The file size of "%s" is too huge.' ,
-            \    a:candidate.action__path))
-      return
-    endif
-
-    " If execute this command, unite.vim will be affected by events.
-    if g:unite_kind_file_vertical_preview
-      let unite_winwidth = winwidth(0)
-      noautocmd silent execute 'vert pedit!'
-            \ fnameescape(a:candidate.action__path)
-      wincmd P
-      let target_winwidth = (unite_winwidth + winwidth(0)) / 2
-      execute 'wincmd p | vert resize ' . target_winwidth
-    else
-      noautocmd silent execute 'pedit!'
-            \ fnameescape(a:candidate.action__path)
-    endif
-
-    let winnr = winnr()
-    wincmd P
-    try
-      if !buflisted
-        doautocmd BufRead
-        setlocal nomodified
-        call unite#add_previewed_buffer_list(
-              \ unite#util#escape_file_searching(
-              \       a:candidate.action__path))
-      endif
-    finally
-      execute winnr.'wincmd w'
-    endtry
+  if !filereadable(a:candidate.action__path)
+    return
   endif
+
+  if getfsize(a:candidate.action__path) >
+        \ g:unite_kind_file_preview_max_filesize
+    call unite#print_error(printf(
+          \ '[unite.vim] The file size of "%s" is too huge.' ,
+          \    a:candidate.action__path))
+    return
+  endif
+
+  " If execute this command, unite.vim will be affected by events.
+  if g:unite_kind_file_vertical_preview
+    let unite_winwidth = winwidth(0)
+    noautocmd silent execute 'vertical pedit!'
+          \ fnameescape(a:candidate.action__path)
+    wincmd P
+    let target_winwidth = (unite_winwidth + winwidth(0)) / 2
+    execute 'wincmd p | vert resize ' . target_winwidth
+  else
+    noautocmd silent execute 'pedit!'
+          \ fnameescape(a:candidate.action__path)
+  endif
+
+  let winnr = winnr()
+  wincmd P
+  try
+    if !buflisted
+      doautocmd BufRead
+      setlocal nomodified
+      call unite#add_previewed_buffer_list(
+            \ unite#util#escape_file_searching(
+            \       a:candidate.action__path))
+    endif
+  finally
+    execute winnr.'wincmd w'
+  endtry
 endfunction"}}}
 
 
