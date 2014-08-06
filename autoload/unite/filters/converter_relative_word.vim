@@ -50,7 +50,7 @@ function! s:converter.filter(candidates, context) "{{{
 
       if directory !=# old_dir && isdirectory(directory)
             \ && a:context.input == ''
-        unite#util#lcd(directory)
+        call unite#util#lcd(directory)
       endif
     endif
 
@@ -67,7 +67,7 @@ function! s:converter.filter(candidates, context) "{{{
   finally
     if has_key(a:context, 'source__directory')
           \ && directory !=# old_dir
-      unite#util#lcd(old_dir)
+      call unite#util#lcd(old_dir)
     endif
   endtry
 

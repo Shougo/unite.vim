@@ -170,9 +170,9 @@ function! s:source.gather_candidates(args, context) "{{{
 
     call unite#print_source_message('Completed.', s:source.name)
 
+    let cwd = getcwd()
     if isdirectory(a:context.source__directory)
-      let cwd = getcwd()
-      unite#util#lcd(a:context.source__directory)
+      call unite#util#lcd(a:context.source__directory)
     endif
 
     for qf in filter(qflist,
@@ -192,7 +192,7 @@ function! s:source.gather_candidates(args, context) "{{{
     endfor
 
     if isdirectory(a:context.source__directory)
-      unite#util#lcd(cwd)
+      call unite#util#lcd(cwd)
     endif
   catch /^Vim\%((\a\+)\)\?:E480/
     " Ignore.

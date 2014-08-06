@@ -127,8 +127,8 @@ function! s:source.async_gather_candidates(args, context) "{{{
         \ stdout.read_lines(-1, 1000), "v:val !~ '^\\s*$'"),
         \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
 
+  let cwd = getcwd()
   if isdirectory(a:context.source__target)
-    let cwd = getcwd()
     call unite#util#lcd(a:context.source__target)
   endif
 
@@ -139,7 +139,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
     \ }")
 
   if isdirectory(a:context.source__target)
-    unite#util#lcd(cwd)
+    call unite#util#lcd(cwd)
   endif
 
   return candidates
