@@ -482,7 +482,6 @@ function! s:insert_enter2() "{{{
 endfunction"}}}
 function! s:insert_leave() "{{{
   call unite#helper#skip_prompt()
-  call unite#redraw()
 endfunction"}}}
 function! s:redraw() "{{{
   call unite#clear_message()
