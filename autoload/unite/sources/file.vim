@@ -403,6 +403,7 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) "{{{
       " New directory.
       let dict.abbr = '[new directory] ' . dict.abbr
       let dict.kind = 'directory'
+      let dict.action__directory = dict.action__path
     endif
   else
     let dict.kind = 'file'
