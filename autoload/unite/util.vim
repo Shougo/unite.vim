@@ -361,6 +361,14 @@ function! unite#util#open(path) "{{{
   return s:get_system().open(a:path)
 endfunction"}}}
 
+function! unite#util#read_lines(source, timeout) "{{{
+  let lines = []
+  for _ in range(a:timeout / 100)
+    let lines += a:source.read_lines(-1, 100)
+  endfor
+  return lines
+endfunction"}}}
+
 function! unite#util#is_sudo() "{{{
   return $SUDO_USER != '' && $USER !=# $SUDO_USER
         \ && $HOME !=# expand('~'.$USER)

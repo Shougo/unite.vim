@@ -318,7 +318,7 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
   let stderr = a:context.source__proc.stderr
   if !stderr.eof
     " Print error.
-    let errors = filter(stderr.read_lines(-1, 100),
+    let errors = filter(unite#util#read_lines(stderr, 100),
           \ "v:val !~ '^\\s*$'")
     if !empty(errors)
       call unite#print_source_error(errors, self.name)
@@ -329,7 +329,7 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
   let stdout = a:context.source__proc.stdout
 
   let paths = map(filter(
-        \   stdout.read_lines(-1, 2000), 'v:val != ""'),
+        \   unite#util#read_lines(stdout, 2000), 'v:val != ""'),
         \   "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
   if unite#util#is_windows()
     let paths = map(paths, 'unite#util#substitute_path_separator(v:val)')
