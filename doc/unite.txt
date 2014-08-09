@@ -436,6 +436,13 @@ g:unite_no_default_keymappings		*g:unite_no_default_keymappings*
 
 		This variable doesn't exist unless you define it explicitly.
 
+g:unite_redraw_hold_candidates		*g:unite_redraw_hold_candidates*
+		If the number of unite candidates is not greater than this
+		variable, all the candidates are holded for redrawing.
+
+		If lua is enabled, the default value is 20000, otherwise
+		10000.
+
 SOURCES VARIABLES 				*unite-sources-variables*
 
 					*g:unite_source_buffer_time_format*
