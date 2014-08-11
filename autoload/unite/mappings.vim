@@ -404,7 +404,12 @@ function! s:toggle_mark_candidates(start, end) "{{{
       if line('.') == unite.prompt_linenr
         call unite#helper#skip_prompt()
       else
-        call s:toggle_mark('j')
+        let context = unite#get_context()
+        if context.prompt_direction ==# 'below'
+          call s:toggle_mark('k')
+        else
+          call s:toggle_mark('j')
+        endif
       endif
     endfor
   finally
