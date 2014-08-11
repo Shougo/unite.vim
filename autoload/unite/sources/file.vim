@@ -458,7 +458,8 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts) "{{{
 endfunction"}}}
 
 function! unite#sources#file#complete_file(args, context, arglead, cmdline, cursorpos) "{{{
-  let files = unite#util#glob(a:arglead . '*')
+  let files = filter(unite#util#glob(a:arglead . '*'),
+        \ "stridx(tolower(v:val), tolower(a:arglead)) == 0")
   if a:arglead =~ '^\~'
     let home_pattern = '^'.
           \ unite#util#substitute_path_separator(expand('~')).'/'
