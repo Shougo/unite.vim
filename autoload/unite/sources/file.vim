@@ -195,7 +195,8 @@ let s:source_file_async = {
       \ 'description' : 'asynchronous candidates from file list',
       \ 'ignore_pattern' : g:unite_source_file_ignore_pattern,
       \ 'default_kind' : 'file',
-      \ 'matchers' : [ 'converter_relative_word',
+      \ 'matchers' : [
+      \     'converter_relative_word', 'converter_relative_abbr',
       \     'matcher_default', 'matcher_hide_hidden_files' ],
       \ 'hooks' : {},
       \}
@@ -244,6 +245,9 @@ function! s:source_file_async.change_candidates(args, context) "{{{
   if directory == ''
     let directory = unite#util#substitute_path_separator(getcwd())
   endif
+  if directory !~ '/$'
+    let directory .= '/'
+  endif
   let command .= ' ' . string(directory)
   let a:context.source__proc = vimproc#pgroup_open(command, 0)
   let a:context.source__directory = directory
@@ -271,7 +275,8 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
   let paths = map(filter(
         \   unite#util#read_lines(stdout, 2000),
         \   "v:val != '' && v:val !=# '.'"),
-        \   "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
+        \   "a:context.source__directory .
+        \    unite#util#iconv(v:val, 'char', &encoding)")
   if unite#util#is_windows()
     let paths = map(paths, 'unite#util#substitute_path_separator(v:val)')
   endif
