@@ -113,6 +113,9 @@ endfunction"}}}
 
 function! unite#helper#adjustments(currentwinwidth, the_max_source_name, size) "{{{
   let max_width = a:currentwinwidth - a:the_max_source_name - a:size
+  if a:the_max_source_name != 0
+    let max_width -= 1
+  endif
   if max_width < 20
     return [a:currentwinwidth - a:size, 0]
   else

@@ -340,8 +340,8 @@ endfunction"}}}
 function! unite#init#_candidates(candidates) "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
-  let [max_width, max_source_name] = unite#helper#adjustments(winwidth(0)-5,
-        \ unite.max_source_name, 2)
+  let [max_width, max_source_name] = unite#helper#adjustments(
+        \ winwidth(0), unite.max_source_name, 1)
   let is_multiline = 0
 
   let candidates = []
