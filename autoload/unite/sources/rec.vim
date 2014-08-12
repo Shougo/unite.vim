@@ -38,7 +38,8 @@ call unite#util#set_default(
 call unite#util#set_default(
       \ 'g:unite_source_rec_max_cache_files', 20000,
       \ 'g:unite_source_file_rec_max_cache_files')
-call unite#util#set_default('g:unite_source_rec_unit', 4000)
+call unite#util#set_default('g:unite_source_rec_unit',
+      \ unite#util#is_windows() ? 1000 : 2000)
 call unite#util#set_default(
       \ 'g:unite_source_rec_async_command', (
       \  !unite#util#is_windows() && executable('find') ? 'find' : ''),
