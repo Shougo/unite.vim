@@ -148,7 +148,6 @@ endfunction"}}}
 function! s:source.gather_candidates(args, context) "{{{
   if empty(a:context.source__target)
         \ || a:context.source__input == ''
-    call unite#print_source_message('Completed.', s:source.name)
     return []
   endif
 
@@ -167,8 +166,6 @@ function! s:source.gather_candidates(args, context) "{{{
   try
     execute cmdline
     let qflist = getqflist()
-
-    call unite#print_source_message('Completed.', s:source.name)
 
     let cwd = getcwd()
     if isdirectory(a:context.source__directory)
@@ -196,7 +193,6 @@ function! s:source.gather_candidates(args, context) "{{{
     endif
   catch /^Vim\%((\a\+)\)\?:E480/
     " Ignore.
-    call unite#print_source_message('Completed.', s:source.name)
     return []
   finally
     " Delete unlisted buffers.

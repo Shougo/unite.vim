@@ -86,7 +86,6 @@ endfunction "}}}
 function! s:source.gather_candidates(args, context) "{{{
   if empty(a:context.source__target)
         \ || a:context.source__input == ''
-    call unite#print_source_message('Completed.', s:source.name)
     let a:context.is_async = 0
     return []
   endif
@@ -119,7 +118,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
   let stdout = a:context.source__proc.stdout
   if stdout.eof
     " Disable async.
-    call unite#print_source_message('Completed.', s:source.name)
     let a:context.is_async = 0
   endif
 

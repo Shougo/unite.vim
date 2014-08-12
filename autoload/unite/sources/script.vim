@@ -84,7 +84,6 @@ endfunction"}}}
 function! s:source.async_gather_candidates(args, context) "{{{
   if !has_key(a:context, 'source__proc')
     let a:context.is_async = 0
-    call unite#print_source_message('Completed.', s:source.name)
     return []
   endif
 
@@ -102,8 +101,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
   if stdout.eof
     " Disable async.
     let a:context.is_async = 0
-    call unite#print_source_message('Completed.', s:source.name)
-
     call a:context.source__proc.waitpid()
   endif
 
