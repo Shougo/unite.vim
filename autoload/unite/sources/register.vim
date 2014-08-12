@@ -54,7 +54,8 @@ function! s:source.gather_candidates(args, context) "{{{
     if register != '' && register !~ '[\x00-\x09\x10-\x1a\x1c-\x1f]\{3,}'
       call add(candidates, {
             \ 'word' : register,
-            \ 'abbr' : printf('%-3s - %s', reg, register),
+            \ 'abbr' : printf('%-3s - %s', reg,
+            \     substitute(register, '\n', '^@', 'g')),
             \ 'is_multiline' : 1,
             \ 'action__register' : reg,
             \ 'action__regtype' : getregtype(reg),
