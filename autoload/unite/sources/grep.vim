@@ -67,6 +67,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     return
   endif
 
+  let target = ''
   if type(get(a:args, 0, '')) == type([])
     let args = a:args
 
@@ -115,6 +116,13 @@ function! s:source.hooks.on_init(args, context) "{{{
   let a:context.source__input = get(args, 2, a:context.input)
   if a:context.source__input == ''
     let a:context.source__input = unite#util#input('Pattern: ')
+  endif
+
+  call unite#print_source_message('Pattern: '
+        \ . a:context.source__input, s:source.name)
+
+  if target != ''
+    call unite#print_source_message('Target: ' . target, s:source.name)
   endif
 
   let a:context.source__directory =
@@ -250,7 +258,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
   if !has_key(a:context, 'source__proc')
     let a:context.is_async = 0
-    call unite#print_source_message('Completed.', s:source.name)
     return []
   endif
 
@@ -268,8 +275,6 @@ function! s:source.async_gather_candidates(args, context) "{{{
   if stdout.eof
     " Disable async.
     let a:context.is_async = 0
-    call unite#print_source_message('Completed.', s:source.name)
-
     call a:context.source__proc.waitpid()
   endif
 
