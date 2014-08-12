@@ -286,8 +286,6 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
 
   if stdout.eof
     " Disable async.
-    call unite#print_source_message(
-          \ 'Directory traverse was completed.', self.name)
     let a:context.is_async = 0
     call a:context.source__proc.waitpid()
   endif

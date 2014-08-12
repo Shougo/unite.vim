@@ -3620,7 +3620,7 @@ Also, the default max candidates are limited. You can customize it by
 	\ 'max_candidates', 0)
 
 Also, you must clear previous cache in file_rec sources and wait until the cache
-is completed ("Directory traverse was completed" message is showed).
+is completed.
 In a directory including large file, making the cache is slow. Thus, I don't
 recommend it.
 To clear cache, you must execute |<Plug>(unite_redraw)| in unite

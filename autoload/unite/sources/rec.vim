@@ -84,8 +84,6 @@ function! s:source_file_rec.gather_candidates(args, context) "{{{
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
-    call unite#print_source_message(
-          \ 'Directory traverse was completed.', self.name)
     let a:context.is_async = 0
     let continuation.end = 1
   endif
@@ -104,10 +102,7 @@ function! s:source_file_rec.async_gather_candidates(args, context) "{{{
         \  g:unite_source_rec_max_cache_files > 0 &&
         \    len(continuation.files) >
         \        g:unite_source_rec_max_cache_files)
-    if empty(continuation.rest)
-      call unite#print_source_message(
-            \ 'Directory traverse was completed.', self.name)
-    else
+    if !empty(continuation.rest)
       call unite#print_source_message(
             \ 'Too many candidates.', self.name)
     endif
@@ -272,8 +267,6 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
-    call unite#print_source_message(
-          \ 'Directory traverse was completed.', self.name)
     let a:context.is_async = 0
     let continuation.end = 1
 
@@ -342,10 +335,7 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
         \    len(continuation.files) >
         \        g:unite_source_rec_max_cache_files)
     " Disable async.
-    if stdout.eof
-      call unite#print_source_message(
-            \ 'Directory traverse was completed.', self.name)
-    else
+    if !stdout.eof
       call unite#print_source_message(
             \ 'Too many candidates.', self.name)
     endif
@@ -406,8 +396,6 @@ function! s:source_file_git.gather_candidates(args, context) "{{{
 
   if empty(continuation.rest) || continuation.end
     " Disable async.
-    call unite#print_source_message(
-          \ 'Directory traverse was completed.', self.name)
     let a:context.is_async = 0
     let continuation.end = 1
 
