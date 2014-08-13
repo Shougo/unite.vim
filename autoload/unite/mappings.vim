@@ -456,10 +456,10 @@ function! s:insert_enter(key) "{{{
 
   let unite = unite#get_current_unite()
 
-  if mode() ==# 'n'
-        \ && (line('.') != unite.prompt_linenr
-        \     || col('.') <= len(unite.prompt))
-    return unite.prompt_linenr.'Gzb0' .
+  if line('.') != unite.prompt_linenr
+        \     || col('.') <= len(unite.prompt)
+    return (line('.') != unite.prompt_linenr ?
+          \  unite.prompt_linenr.'Gzb0' : '') .
           \ repeat('l', unite#util#strchars(unite.prompt)
           \   + unite#util#strchars(unite.context.input)-1) . 'a'
   endif
