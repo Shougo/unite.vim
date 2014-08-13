@@ -456,15 +456,12 @@ function! s:insert_enter(key) "{{{
 
   let unite = unite#get_current_unite()
 
-  if line('.') != unite.prompt_linenr
-        \     || col('.') <= len(unite.prompt)
-    return (line('.') != unite.prompt_linenr ?
-          \  unite.prompt_linenr.'Gzb0' : '') .
-          \ repeat('l', unite#util#strchars(unite.prompt)
-          \   + unite#util#strchars(unite.context.input)-1) . 'a'
-  endif
-
-  return a:key
+  return (line('.') != unite.prompt_linenr) ?
+        \     unite.prompt_linenr . 'Gzb$a' :
+        \ (a:key == 'i' && col('.') <= len(unite.prompt)
+        \     || a:key == 'a' && col('.') < len(unite.prompt)) ?
+        \     'A' :
+        \     a:key
 endfunction"}}}
 function! s:insert_enter2() "{{{
   nnoremap <expr><buffer> <Plug>(unite_insert_enter)
