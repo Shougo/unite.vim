@@ -158,8 +158,6 @@ function! unite#candidates#gather(...) "{{{
   let candidates = unite#init#_candidates(
         \ unite.candidates[: unite.candidates_pos-1])
 
-  let unite.candidates_len = len(candidates) +
-        \ len(unite.candidates[unite.candidates_pos :])
   if unite.context.prompt_direction ==# 'below'
     if unite.prompt_linenr == 0
       let unite.init_prompt_linenr = unite.candidates_len + 1
@@ -184,6 +182,9 @@ function! unite#candidates#gather(...) "{{{
     let candidates = unite#helper#call_filter(
           \ filter_name, candidates, unite.context)
   endfor
+
+  let unite.candidates_len = len(candidates) +
+        \ len(unite.candidates[unite.candidates_pos :])
 
   return candidates
 endfunction"}}}
