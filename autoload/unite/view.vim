@@ -336,7 +336,6 @@ function! unite#view#_change_highlight()  "{{{
     return
   endif
 
-  let context = unite#get_context()
   call unite#view#_set_cursor_line()
 
   silent! syntax clear uniteCandidateInputKeyword
