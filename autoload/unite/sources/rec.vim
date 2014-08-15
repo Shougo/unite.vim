@@ -300,7 +300,10 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   else
     let command .= ' ' . string(directory)
   endif
-  let a:context.source__proc = vimproc#pgroup_open(command, 1)
+
+  " Note: "pt" needs pty.
+  let a:context.source__proc = vimproc#pgroup_open(command,
+        \ fnamemodify(args[0], ':t') ==# 'pt')
 
   " Close handles.
   call a:context.source__proc.stdin.close()
