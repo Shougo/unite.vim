@@ -204,6 +204,10 @@ function! unite#init#_unite_buffer() "{{{
     endif
   endif
 
+  if context.wipe
+    setlocal bufhidden=wipe
+  endif
+
   call unite#mappings#define_default_mappings()
 
   let &l:wrap = context.wrap

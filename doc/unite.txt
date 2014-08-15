@@ -1964,6 +1964,12 @@ the context dictionary.
 		cursor line highlight.
 		If it is "0.0", this feature will be disabled.
 
+						*unite-options-wipe*
+		-wipe
+		Wipeout unite buffer when quit.
+		It is useful for using jumplist.
+		Note: If it is used, you cannot use |:UniteResume| feature.
+
 ==============================================================================
 SOURCES						*unite-sources*
 
@@ -3556,16 +3562,10 @@ A: >
 	endfunction
 <
 Q: Unite adds unite buffer to jumplist automatically.
-
-A: Sorry, but it is hard to fix. You should use |unite-source-jump| instead of
-<C-i>/<C-o> mappings. It ignores unite buffer.
-
-Note: In this issue, experimental settings are suggested.
 https://github.com/Shougo/unite.vim/issues/278
-However, I don't reccomend them because:
-1. Unite buffer name may be changed in a later version.
-2. You cannot use the |:UniteResume| feature.
-3. It has side effects. I cannot guarantee it works.
+
+A: You can use |unite-options-wipe| option.  But it is used, you cannot use
+the |:UniteResume| feature.
 
 Q: unite.vim is too slow.
 
