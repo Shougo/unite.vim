@@ -462,6 +462,13 @@ function! unite#helper#get_candidate_directory(candidate) "{{{
         \ unite#util#path2directory(a:candidate.action__path)
 endfunction"}}}
 
+function! unite#helper#is_prompt(line) "{{{
+  let prompt_linenr = unite#get_current_unite().prompt_linenr
+  let context = unite#get_context()
+  return (context.prompt_direction ==# 'below' && a:line >= prompt_linenr)
+        \ || (context.prompt_direction !=# 'below' && a:line <= prompt_linenr)
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

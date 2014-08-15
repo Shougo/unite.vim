@@ -635,7 +635,7 @@ function! unite#mappings#cursor_up(is_skip_not_matched) "{{{
 
   if is_insert
     return repeat("\<Up>", cnt) .
-          \ ((line('.') - cnt) <= prompt_linenr ? "\<End>" : "\<Home>")
+        \ (unite#helper#is_prompt(line('.') - cnt) ? "\<End>" : "\<Home>")
   else
     return cnt == 1 ? 'k' : cnt.'k'
   endif
@@ -664,7 +664,7 @@ function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
 
   if is_insert
     return repeat("\<Down>", cnt) .
-          \ ((line('.') + cnt) <= prompt_linenr ? "\<End>" : "\<Home>")
+          \ (unite#helper#is_prompt(line('.') + cnt) ? "\<End>" : "\<Home>")
   else
     return cnt == 1 ? 'j' : cnt.'j'
   endif
