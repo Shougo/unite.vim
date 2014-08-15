@@ -325,6 +325,51 @@ function! unite#view#_set_syntax() "{{{
 
   let b:current_syntax = 'unite'
 endfunction"}}}
+function! unite#view#_change_highlight()  "{{{
+  if &filetype !=# 'unite'
+        \ || !exists('b:current_syntax')
+    return
+  endif
+
+  let unite = unite#get_current_unite()
+  if empty(unite)
+    return
+  endif
+
+  let context = unite#get_context()
+  call unite#view#_set_cursor_line()
+
+  silent! syntax clear uniteCandidateInputKeyword
+
+  if unite#helper#get_input() == ''
+    return
+  endif
+
+  syntax case ignore
+
+  for input_str in unite#helper#get_substitute_input(
+        \ unite#helper#get_input())
+    let input_list = map(filter(split(input_str, '\\\@<! '),
+          \ "v:val !~ '^[!:]'"),
+          \ "substitute(v:val, '\\\\ ', ' ', 'g')")
+
+    for source in filter(copy(unite.sources), "v:val.syntax != ''")
+      for matcher in filter(copy(map(filter(
+            \ copy(source.filters),
+            \ "type(v:val) == type('')"), 'unite#get_filters(v:val)')),
+            \ "has_key(v:val, 'pattern')")
+        let patterns = map(copy(input_list),
+              \ "escape(matcher.pattern(v:val), '/~')")
+
+        silent! execute 'syntax match uniteCandidateInputKeyword'
+              \ '/'.join(patterns, '\|').'/'
+              \ 'containedin='.source.syntax.' contained'
+      endfor
+    endfor
+  endfor
+
+  syntax case match
+endfunction"}}}
 
 function! unite#view#_resize_window() "{{{
   if &filetype !=# 'unite'
@@ -858,6 +903,8 @@ function! s:set_syntax() "{{{
     execute 'syntax region' source.syntax
           \ 'start=// end=/$/ keepend contained'
   endfor
+
+  call unite#view#_change_highlight()
 endfunction"}}}
 
 function! s:has_preview_window() "{{{

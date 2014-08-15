@@ -63,7 +63,7 @@ endfunction"}}}
 function! unite#handlers#_on_cursor_hold_i()  "{{{
   let unite = unite#get_current_unite()
 
-  call s:change_highlight()
+  call unite#view#_change_highlight()
 
   if unite.max_source_candidates > unite.redraw_hold_candidates
     call s:check_redraw()
@@ -128,7 +128,7 @@ function! unite#handlers#_on_cursor_hold()  "{{{
   if &filetype ==# 'unite'
     " Redraw.
     call unite#redraw()
-    call s:change_highlight()
+    call unite#view#_change_highlight()
 
     let unite = unite#get_current_unite()
     let is_async = unite.is_async
@@ -299,51 +299,6 @@ function! unite#handlers#_on_insert_char_pre()  "{{{
   call unite#handlers#_on_cursor_moved()
 endfunction"}}}
 
-function! s:change_highlight()  "{{{
-  if &filetype !=# 'unite'
-        \ || !exists('b:current_syntax')
-    return
-  endif
-
-  let unite = unite#get_current_unite()
-  if empty(unite)
-    return
-  endif
-
-  let context = unite#get_context()
-  call unite#view#_set_cursor_line()
-
-  silent! syntax clear uniteCandidateInputKeyword
-
-  if !context.is_changed || unite#helper#get_input() == ''
-    return
-  endif
-
-  syntax case ignore
-
-  for input_str in unite#helper#get_substitute_input(
-        \ unite#helper#get_input())
-    let input_list = map(filter(split(input_str, '\\\@<! '),
-          \ "v:val !~ '^[!:]'"),
-          \ "substitute(v:val, '\\\\ ', ' ', 'g')")
-
-    for source in filter(copy(unite.sources), "v:val.syntax != ''")
-      for matcher in filter(copy(map(filter(
-            \ copy(source.filters),
-            \ "type(v:val) == type('')"), 'unite#get_filters(v:val)')),
-            \ "has_key(v:val, 'pattern')")
-        let patterns = map(copy(input_list),
-              \ "escape(matcher.pattern(v:val), '/~')")
-
-        silent! execute 'syntax match uniteCandidateInputKeyword'
-              \ '/'.join(patterns, '\|').'/'
-              \ 'containedin='.source.syntax.' contained'
-      endfor
-    endfor
-  endfor
-
-  syntax case match
-endfunction"}}}
 function! unite#handlers#_save_updatetime()  "{{{
   let unite = unite#get_current_unite()
 
@@ -384,7 +339,7 @@ function! s:check_redraw() "{{{
   if line('.') == prompt_linenr || unite.context.is_redraw
     " Redraw.
     call unite#redraw()
-    call s:change_highlight()
+    call unite#view#_change_highlight()
   endif
 endfunction"}}}
 
