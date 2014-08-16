@@ -251,13 +251,6 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   endif
 
   let directory = a:context.source__directory
-  if directory == ''
-    " Not in project directory.
-    call unite#print_source_message(
-          \ 'Not in project directory.', self.name)
-    let a:context.is_async = 0
-    return []
-  endif
 
   call unite#print_source_message(
         \ 'directory: ' . directory, self.name)
