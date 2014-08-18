@@ -42,7 +42,12 @@ let s:source = {
       \ 'hooks' : {},
       \ }
 
+let s:candidates = []
+
 function! s:source.hooks.on_init(args, context) "{{{
+  if exists('s:loaded')
+      return
+  endif
   if type(get(a:args, 0, '')) == type([])
     " Use args directly.
     let a:context.source__is_dummy = 0
@@ -62,6 +67,26 @@ function! s:source.hooks.on_init(args, context) "{{{
   if !a:context.source__is_dummy
     call unite#print_source_message('command: ' . command, s:source.name)
   endif
+  if type(get(a:args, 0, '')) == type([])
+    " Use args directly.
+    let result = a:args[0]
+  else
+    redir => output
+    silent! execute a:context.source__command
+    redir END
+
+    let result = split(output, '\r\n\|\n')
+  endif
+
+  let s:candidates = map(result, "{
+        \ 'word' : v:val,
+        \ 'is_multiline' : 1,
+        \ 'is_dummy' : a:context.source__is_dummy,
+        \ }")
+  let s:loaded = 1
+endfunction"}}}
+function! s:source.hooks.on_close(args, context) " {{{
+    unlet s:loaded
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) "{{{
   let save_current_syntax = get(b:, 'current_syntax', '')
@@ -76,22 +101,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   endtry
 endfunction"}}}
 function! s:source.gather_candidates(args, context) "{{{
-  if type(get(a:args, 0, '')) == type([])
-    " Use args directly.
-    let result = a:args[0]
-  else
-    redir => output
-    silent! execute a:context.source__command
-    redir END
-
-    let result = split(output, '\r\n\|\n')
-  endif
-
-  return map(result, "{
-        \ 'word' : v:val,
-        \ 'is_multiline' : 1,
-        \ 'is_dummy' : a:context.source__is_dummy,
-        \ }")
+    return s:candidates
 endfunction"}}}
 function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   if !exists('*neocomplete#initialize')
