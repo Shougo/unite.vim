@@ -320,7 +320,7 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
 
   let paths = map(filter(
         \   unite#util#read_lines(stdout, 2000), 'v:val != ""'),
-        \   "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
+        \   "unite#util#iconv(v:val, 'char', &encoding)")
   if unite#util#is_windows()
     let paths = map(paths, 'unite#util#substitute_path_separator(v:val)')
   endif
@@ -400,7 +400,7 @@ function! s:source_file_git.gather_candidates(args, context) "{{{
   endif
 
   let command = g:unite_source_rec_git_command
-        \ . ' ls-files --full-name ' . join(a:args)
+        \ . ' ls-files ' . join(a:args)
   let args = split(command) + a:args
   if empty(args) || !executable(args[0])
     call unite#print_source_message('git command : "'.
@@ -415,6 +415,13 @@ function! s:source_file_git.gather_candidates(args, context) "{{{
   call a:context.source__proc.stdin.close()
 
   return []
+endfunction"}}}
+function! s:source_file_git.async_gather_candidates(args, context) "{{{
+  return map(s:source_file_async.async_gather_candidates(
+        \ a:args, a:context), "{
+        \   'word' : a:context.source__directory . '/' . v:val.word,
+        \   'action__path' : a:context.source__directory . '/' . v:val.word,
+        \}")
 endfunction"}}}
 
 " Source directory.
