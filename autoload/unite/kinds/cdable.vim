@@ -343,7 +343,7 @@ function! s:check_is_directory(directory)
     endif
 
     let yesno = input(printf(
-          \ 'Directory path "%s" is not exists. Create? : ', a:directory))
+          \ 'Directory path "%s" does not exist. Create? : ', a:directory))
     redraw
     if yesno !~ '^y\%[es]$'
       echo 'Canceled.'
