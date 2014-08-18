@@ -3571,7 +3571,7 @@ Q: unite.vim is too slow.
 
 A: Use Vim 7.3.885 or above with |if_lua| feature; unite.vim gets faster.
 
-Q: Support for existing vim settings like Commant-T plugin? Example,
+Q: Support for existing vim settings like Command-T plugin? Example,
 'wildignore', 'grepprg', 'suffixes'...
 
 A: No. Because it is hard to implement and it may conflict with current unite
