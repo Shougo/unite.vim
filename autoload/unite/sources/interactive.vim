@@ -53,18 +53,18 @@ endfunction"}}}
 
 function! s:source.change_candidates(args, context) "{{{
   let _ = []
-  if a:context.input !~ ':'
+  if a:context.input !~ '\s'
     let _ += map(filter(values(unite#init#_sources([], a:context.input)),
             \ 'v:val.is_listed'), "{
             \ 'word' : v:val.name,
             \ 'abbr' : unite#util#truncate(v:val.name, 25) .
             \         (v:val.description != '' ? ' -- ' . v:val.description : ''),
-            \ 'source__word' : v:val.name . ': ',
+            \ 'source__word' : v:val.name . ' ',
             \ }")
     if exists('*neobundle#get_unite_sources')
       let _ += map(neobundle#get_unite_sources(), "{
             \ 'word' : v:val,
-            \ 'source__word' : v:val . ': ',
+            \ 'source__word' : v:val . ' ',
             \ }")
     endif
     if exists('g:unite_source_menu_menus')
@@ -81,7 +81,7 @@ function! s:source.change_candidates(args, context) "{{{
     let _ += map(unite#complete#source(a:context.input,
           \ 'Unite ' . a:context.input, 0), "{
           \ 'word' : v:val,
-          \ 'source__word' : v:val . ': ',
+          \ 'source__word' : v:val,
           \ }")
   endif
 
