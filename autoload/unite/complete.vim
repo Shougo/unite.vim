@@ -105,7 +105,7 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
   let context = unite#init#_context(context,
         \ unite#helper#get_source_names(a:sources))
 
-  let save_intructive = context.unite__is_interactive
+  let save_interactive = context.unite__is_interactive
   let save_is_complete = context.unite__is_complete
   try
     let context.unite__is_interactive = 0
@@ -127,7 +127,7 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
       endif
     endfor
   finally
-    let context.unite__is_interactive = save_intructive
+    let context.unite__is_interactive = save_interactive
     let context.unite__is_complete = save_is_complete
   endtry
 

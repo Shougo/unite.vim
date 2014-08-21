@@ -340,14 +340,14 @@ function! unite#view#_change_highlight()  "{{{
 
   silent! syntax clear uniteCandidateInputKeyword
 
-  if unite#helper#get_input() == ''
-    return
-  endif
-
   syntax case ignore
 
   for input_str in unite#helper#get_substitute_input(
         \ unite#helper#get_input())
+    if input_str == ''
+      continue
+    endif
+
     let input_list = map(filter(split(input_str, '\\\@<! '),
           \ "v:val !~ '^[!:]'"),
           \ "substitute(v:val, '\\\\ ', ' ', 'g')")

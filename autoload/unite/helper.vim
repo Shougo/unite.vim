@@ -75,7 +75,8 @@ function! unite#helper#get_substitute_input(input) "{{{
     let head = ''
   endif
 
-  let inputs = unite#helper#get_substitute_input_loop(input, substitute_patterns)
+  let inputs = unite#helper#get_substitute_input_loop(
+        \ input, substitute_patterns)
 
   return map(inputs, 'head . v:val')
 endfunction"}}}
