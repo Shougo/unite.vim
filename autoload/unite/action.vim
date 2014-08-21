@@ -357,20 +357,18 @@ function! unite#action#do(action_name, ...) "{{{
   let is_redraw = 0
   let _ = []
   for table in action_tables
+    if !empty(unite#helper#get_marked_candidates())
+      call s:clear_marks(candidates)
+      call unite#force_redraw()
+      let is_redraw = 0
+    endif
+
     " Check quit flag.
     if table.action.is_quit && unite.profile_name !=# 'action'
           \ && !table.action.is_start
           \ && !(table.action.is_tab && !unite.context.quit)
       call unite#all_quit_session(0)
       let is_quit = 1
-    endif
-
-    if table.action.is_start && !empty(unite#helper#get_marked_candidates())
-      call s:clear_marks(candidates)
-      call unite#force_redraw()
-      let is_redraw = 0
-    elseif table.action.is_selectable
-      let is_redraw = 1
     endif
 
     let save_shortmess = &shortmess
