@@ -863,7 +863,7 @@ function! unite#view#_get_status_string() "{{{
   let head = (b:unite.is_async ? '[async] ' : '') .
         \ join(unite#helper#loaded_source_names_with_args(), ', ')
   let tail = b:unite.context.path != '' ? ' ['. b:unite.context.path.']' :
-        \    b:unite.is_async ? '' :
+        \    (b:unite.is_async || get(b:unite.msgs, 0, '') == '') ? '' :
         \    ' |' . substitute(get(b:unite.msgs, 0, ''), '^\[.\{-}\]', '', '')
   let tail = unite#util#strwidthpart(tail,
         \ winwidth(0) - (unite#util#wcswidth('*unite* : ' . head) + 10))
