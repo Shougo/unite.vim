@@ -275,8 +275,8 @@ function! unite#util#is_cmdwin() "{{{
 endfunction"}}}
 function! s:buflisted(bufnr) "{{{
   return exists('t:unite_buffer_dictionary') ?
-        \ has_key(t:unite_buffer_dictionary, a:bufnr) && buflisted(a:bufnr) :
-        \ buflisted(a:bufnr)
+        \ has_key(t:unite_buffer_dictionary, a:bufnr) && bufloaded(a:bufnr) :
+        \ bufloaded(a:bufnr)
 endfunction"}}}
 
 function! unite#util#glob(pattern, ...) "{{{
