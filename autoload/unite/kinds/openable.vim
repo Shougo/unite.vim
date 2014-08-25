@@ -75,22 +75,27 @@ function! s:kind.action_table.choose.func(candidates) "{{{
   endfor
 endfunction"}}}
 
+let s:kind.action_table.drop = {
+      \ 'description' : 'open in current window'
+      \   . ' or jump to existing window/tabpage',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.drop.func(candidates) "{{{
+  for candidate in s:filter_bufpath(a:candidates)
+    call unite#util#smart_open_command('drop',
+          \ candidate.action__path)
+  endfor
+endfunction"}}}
+
 let s:kind.action_table.tabdrop = {
-      \ 'description' : 'open files by ":tab drop" command',
+      \ 'description' : 'open in new tab'
+      \   . ' or jump to existing window/tabpage',
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.tabdrop.func(candidates) "{{{
-  let bufpath = unite#util#substitute_path_separator(expand('%:p'))
-
-  for candidate in a:candidates
-    if bufpath !=# candidate.action__path
-      call unite#util#smart_execute_command('tab drop',
-            \ candidate.action__path)
-
-      call unite#remove_previewed_buffer_list(
-            \ bufnr(unite#util#escape_file_searching(
-            \       candidate.action__path)))
-    endif
+  for candidate in s:filter_bufpath(a:candidates)
+    call unite#util#smart_open_command('tab drop',
+          \ candidate.action__path)
   endfor
 endfunction"}}}
 
@@ -99,18 +104,13 @@ let s:kind.action_table.switch = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.switch.func(candidates) "{{{
-  let bufpath = unite#util#substitute_path_separator(expand('%:p'))
+  for candidate in s:filter_bufpath(a:candidates)
+    let target = has_key(candidate, 'action__buffer_nr') ?
+          \ candidate.action__buffer_nr :
+          \ bufnr(unite#util#escape_file_searching(
+          \       candidate.action__path))
 
-  for candidate in a:candidates
-    if bufpath !=# candidate.action__path
-      let target = has_key(candidate, 'action__buffer_nr') ?
-            \ candidate.action__buffer_nr :
-            \ bufnr(unite#util#escape_file_searching(
-            \       candidate.action__path))
-
-      call unite#util#smart_execute_command('sbuffer', target)
-      call unite#remove_previewed_buffer_list(target)
-    endif
+    call unite#util#smart_open_command('sbuffer', target)
   endfor
 endfunction"}}}
 
@@ -243,6 +243,11 @@ function! s:kind.action_table.tabsplit.func(candidates) "{{{
   wincmd =
 endfunction"}}}
 "}}}
+
+function! s:filter_bufpath(candidates) "{{{
+  let bufpath = unite#util#substitute_path_separator(expand('%:p'))
+  return filter(copy(a:candidates), 'v:val.action__path !=# bufpath')
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

@@ -2680,7 +2680,10 @@ Defines an interface for files that can be opened.  It requires an inheriting
 kind to define "open" action.
 	tabopen		Open the file in a new tab.
 	choose		Open the file in a selected window.
-	tabdrop		Open the file by the ":tab drop" command.
+	drop		Open the file in current window or jump to existing
+			window/tabpage.
+	tabdrop		Open the file in new tab or jump to existing
+			window/tabpage.
 	split		Open the file, splitting horizontally.
 	vsplit		Open the file, splitting vertically.
 	left		Open the file in the left, splitting vertically.
@@ -2690,6 +2693,7 @@ kind to define "open" action.
 	persist_open	Open the file in alternate window.  unite window
 			isn't closed.
 	tabsplit	Open the files and vsplit in a new tab.
+	switch		Switch files by ":sbuffer" command.
 
 cdable						*unite-action-cdable*
 Defines an interface for files you can move to with cd command.
