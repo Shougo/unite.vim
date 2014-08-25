@@ -99,6 +99,38 @@ function! s:kind.action_table.tabdrop.func(candidates) "{{{
   endfor
 endfunction"}}}
 
+let s:kind.action_table.splitdrop = {
+      \ 'description' : 'horizontal split open items'
+      \   . ' or jump to existing window/tabpage',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.splitdrop.func(candidates) "{{{
+  for candidate in s:filter_bufpath(a:candidates)
+    if bufloaded(candidate.action__path)
+      call unite#util#smart_open_command('drop',
+            \ candidate.action__path)
+    else
+      call unite#take_action('split', candidate)
+    endif
+  endfor
+endfunction"}}}
+
+let s:kind.action_table.vsplitdrop = {
+      \ 'description' : 'vertical split open items'
+      \   . ' or jump to existing window/tabpage',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.vsplitdrop.func(candidates) "{{{
+  for candidate in s:filter_bufpath(a:candidates)
+    if bufloaded(candidate.action__path)
+      call unite#util#smart_open_command('drop',
+            \ candidate.action__path)
+    else
+      call unite#take_action('vsplit', candidate)
+    endif
+  endfor
+endfunction"}}}
+
 let s:kind.action_table.switch = {
       \ 'description' : 'switch files by ":sbuffer" command',
       \ 'is_selectable' : 1,
