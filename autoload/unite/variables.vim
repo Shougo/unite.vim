@@ -88,7 +88,7 @@ function! unite#variables#options() "{{{
   if !exists('s:options')
     let s:options = map(filter(items(unite#variables#default_context()),
           \ "v:val[0] !~ '^unite__'"),
-          \ "'-' . substitute(v:val[0], '_', '-', 'g') .
+          \ "'-' . tr(v:val[0], '_', '-') .
           \ (type(v:val[1]) == type(0) && (v:val[1] == 0 || v:val[1] == 1) ?
           \   '' : '=')")
 

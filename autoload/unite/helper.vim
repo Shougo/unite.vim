@@ -131,7 +131,7 @@ function! unite#helper#parse_options(args) "{{{
     let matched_list = filter(copy(unite#variables#options()),
           \  'v:val ==# arg_key')
     for option in matched_list
-      let key = substitute(substitute(option, '-', '_', 'g'), '=$', '', '')[1:]
+      let key = substitute(tr(option, '-', '_'), '=$', '', '')[1:]
       let options[key] = (option =~ '=$') ?
             \ arg[len(option) :] : 1
     endfor
