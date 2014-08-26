@@ -2690,14 +2690,13 @@ kind to define "open" action.
 	persist_open	Open the file in alternate window.  unite window
 			isn't closed.
 	tabsplit	Open the files and vsplit in a new tab.
-	switch		Switch files by ":sbuffer" command.
-	drop		Open the file in current window or jump to existing
+	switch		Open the file in current window or jump to existing
 			window/tabpage.
-	tabdrop		Open the file in new tab or jump to existing
+	tabswitch	Open the file in new tab or jump to existing
 			window/tabpage.
-	splitdrop	Open the file in split window or jump to existing
+	splitswitch	Open the file in split window or jump to existing
 			window/tabpage.
-	vsplitdrop	Open the file in vertical split window or jump to
+	vsplitswitch	Open the file in vertical split window or jump to
 			existing window/tabpage.
 
 cdable						*unite-action-cdable*

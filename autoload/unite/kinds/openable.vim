@@ -75,36 +75,36 @@ function! s:kind.action_table.choose.func(candidates) "{{{
   endfor
 endfunction"}}}
 
-let s:kind.action_table.drop = {
+let s:kind.action_table.switch = {
       \ 'description' : 'open in current window'
       \   . ' or jump to existing window/tabpage',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.drop.func(candidates) "{{{
+function! s:kind.action_table.switch.func(candidates) "{{{
   for candidate in s:filter_bufpath(a:candidates)
     call unite#util#smart_open_command('drop',
           \ candidate.action__path)
   endfor
 endfunction"}}}
 
-let s:kind.action_table.tabdrop = {
+let s:kind.action_table.tabswitch = {
       \ 'description' : 'open in new tab'
       \   . ' or jump to existing window/tabpage',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.tabdrop.func(candidates) "{{{
+function! s:kind.action_table.tabswitch.func(candidates) "{{{
   for candidate in s:filter_bufpath(a:candidates)
     call unite#util#smart_open_command('tab drop',
           \ candidate.action__path)
   endfor
 endfunction"}}}
 
-let s:kind.action_table.splitdrop = {
+let s:kind.action_table.splitswitch = {
       \ 'description' : 'horizontal split open items'
       \   . ' or jump to existing window/tabpage',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.splitdrop.func(candidates) "{{{
+function! s:kind.action_table.splitswitch.func(candidates) "{{{
   for candidate in s:filter_bufpath(a:candidates)
     if bufloaded(candidate.action__path)
       call unite#util#smart_open_command('drop',
@@ -115,12 +115,12 @@ function! s:kind.action_table.splitdrop.func(candidates) "{{{
   endfor
 endfunction"}}}
 
-let s:kind.action_table.vsplitdrop = {
+let s:kind.action_table.vsplitswitch = {
       \ 'description' : 'vertical split open items'
       \   . ' or jump to existing window/tabpage',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.vsplitdrop.func(candidates) "{{{
+function! s:kind.action_table.vsplitswitch.func(candidates) "{{{
   for candidate in s:filter_bufpath(a:candidates)
     if bufloaded(candidate.action__path)
       call unite#util#smart_open_command('drop',
@@ -130,21 +130,6 @@ function! s:kind.action_table.vsplitdrop.func(candidates) "{{{
     endif
   endfor
 endfunction"}}}
-
-let s:kind.action_table.switch = {
-      \ 'description' : 'switch files by ":sbuffer" command',
-      \ 'is_selectable' : 1,
-      \ }
-function! s:kind.action_table.switch.func(candidates) "{{{
-  for candidate in s:filter_bufpath(a:candidates)
-    let target = has_key(candidate, 'action__buffer_nr') ?
-          \ candidate.action__buffer_nr :
-          \ bufnr(candidate.action__path)
-
-    call unite#util#smart_open_command('sbuffer', target)
-  endfor
-endfunction"}}}
-
 
 let s:kind.action_table.split = {
       \ 'description' : 'horizontal split open items',
