@@ -52,12 +52,6 @@ let s:source = {
       \ 'syntax' : 'uniteSource__Grep',
       \ 'matchers' : 'matcher_regexp',
       \ 'ignore_pattern' : g:unite_source_grep_ignore_pattern,
-      \ 'variables' : {
-      \      'command' : g:unite_source_grep_command,
-      \      'default_opts' : g:unite_source_grep_default_opts,
-      \      'recursive_opt' : g:unite_source_grep_recursive_opt,
-      \      'search_word_highlight' : g:unite_source_grep_search_word_highlight,
-      \   },
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
@@ -175,7 +169,8 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   highlight default link uniteSource__GrepFile Directory
   highlight default link uniteSource__GrepLineNr LineNR
   execute 'highlight default link uniteSource__GrepPattern'
-        \ unite#get_source_variables(a:context).search_word_highlight
+        \ get(a:context.custom, 'grep_search_word_highlight',
+        \ g:unite_source_grep_search_word_highlight)
 endfunction"}}}
 function! s:source.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__proc')
@@ -192,11 +187,16 @@ function! s:source.hooks.on_post_filter(args, context) "{{{
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
-  let variables = unite#get_source_variables(a:context)
-  if !executable(variables.command)
+  let command = get(a:context.custom, 'grep_command',
+        \ g:unite_source_grep_command)
+  let default_opts = get(a:context.custom, 'grep_default_opts',
+        \ g:unite_source_grep_default_opts)
+  let recursive_opt = get(a:context.custom, 'grep_recursive_opt',
+        \ g:unite_source_grep_recursive_opt)
+
+  if !executable(command)
     call unite#print_source_message(printf(
-          \ 'command "%s" is not executable.',
-          \    variables.command), s:source.name)
+          \ 'command "%s" is not executable.', command), s:source.name)
     let a:context.is_async = 0
     return []
   endif
@@ -220,9 +220,9 @@ function! s:source.gather_candidates(args, context) "{{{
   endif
 
   let cmdline = printf('%s %s %s %s %s %s',
-    \   unite#util#substitute_path_separator(variables.command),
-    \   variables.default_opts,
-    \   variables.recursive_opt,
+    \   unite#util#substitute_path_separator(command),
+    \   default_opts,
+    \   recursive_opt,
     \   a:context.source__extra_opts,
     \   string(a:context.source__input),
     \   join(map(a:context.source__target,
@@ -254,7 +254,8 @@ function! s:source.gather_candidates(args, context) "{{{
 endfunction "}}}
 
 function! s:source.async_gather_candidates(args, context) "{{{
-  let variables = unite#get_source_variables(a:context)
+  let default_opts = get(a:context.custom, 'grep_default_opts',
+        \ g:unite_source_grep_default_opts)
 
   if !has_key(a:context, 'source__proc')
     let a:context.is_async = 0
@@ -280,7 +281,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
   let candidates = map(unite#util#read_lines(stdout, 1000),
           \ "unite#util#iconv(v:val, g:unite_source_grep_encoding, &encoding)")
-  if variables.default_opts =~ '^-[^-]*l'
+  if default_opts =~ '^-[^-]*l'
         \ || a:context.source__extra_opts =~ '^-[^-]*l'
     let candidates = map(filter(candidates,
           \ 'v:val != ""'),

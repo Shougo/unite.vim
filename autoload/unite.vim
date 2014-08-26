@@ -225,9 +225,6 @@ endfunction"}}}
 function! unite#remove_previewed_buffer_list(bufnr) "{{{
   return unite#view#_remove_previewed_buffer_list(a:bufnr)
 endfunction"}}}
-function! unite#get_source_variables(context) "{{{
-  return a:context.source.variables
-endfunction"}}}
 function! unite#get_data_directory() "{{{
   let g:unite_data_directory =
         \ substitute(substitute(fnamemodify(

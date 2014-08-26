@@ -170,24 +170,9 @@ function! unite#variables#default_context() "{{{
   return s:default_context
 endfunction"}}}
 
-function! unite#variables#get_source_variable(source, variable, default) "{{{
-  if !exists('s:source_variables')
-    let s:source_variables = {}
-  endif
-
-  if !has_key(s:source_variables, a:source)
-    let s:source_variables[a:source] = {}
-  endif
-
-  if !has_key(s:source_variables[a:source], a:variable)
-    let s:source_variables[a:source][a:variable] = a:default
-  endif
-
-  return s:source_variables[a:source][a:variable]
-endfunction"}}}
-
 function! s:initialize_default() "{{{
   let s:default_context = {
+        \ 'custom' : {},
         \ 'input' : '',
         \ 'path' : '',
         \ 'start_insert' : 0,

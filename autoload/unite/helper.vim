@@ -123,20 +123,20 @@ endfunction"}}}
 
 function! unite#helper#parse_options(args) "{{{
   let args = []
-  let options = {}
+  let options = { 'custom' : {} }
   for arg in split(a:args, '\%(\\\@<!\s\)\+')
     let arg = substitute(arg, '\\\( \)', '\1', 'g')
-
     let arg_key = substitute(arg, '=\zs.*$', '', '')
-    let matched_list = filter(copy(unite#variables#options()),
-          \  'v:val ==# arg_key')
-    for option in matched_list
-      let key = substitute(tr(option, '-', '_'), '=$', '', '')[1:]
-      let options[key] = (option =~ '=$') ?
-            \ arg[len(option) :] : 1
-    endfor
 
-    if empty(matched_list)
+    let name = substitute(tr(arg_key, '-', '_'), '=$', '', '')
+    let value = (arg_key =~ '=$') ? arg[len(arg_key) :] : 1
+
+    if arg_key =~ '^--'
+      " custom options
+      let options.custom[name[2:]] = value
+    elseif index(unite#variables#options(), arg_key) >= 0
+      let options[name[1:]] = value
+    else
       call add(args, arg)
     endif
   endfor
