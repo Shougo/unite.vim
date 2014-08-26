@@ -89,7 +89,10 @@ function! unite#handlers#_on_cursor_moved_i()  "{{{
   endif
 endfunction"}}}
 function! unite#handlers#_on_text_changed()  "{{{
-  call s:check_redraw()
+  let unite = unite#get_current_unite()
+  if unite#helper#get_input(1) !=# unite.last_input
+    call s:check_redraw()
+  endif
 endfunction"}}}
 function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
   silent! let unite = getbufvar(a:bufnr, 'unite')
