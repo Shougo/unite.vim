@@ -139,8 +139,7 @@ function! s:kind.action_table.switch.func(candidates) "{{{
   for candidate in s:filter_bufpath(a:candidates)
     let target = has_key(candidate, 'action__buffer_nr') ?
           \ candidate.action__buffer_nr :
-          \ bufnr(unite#util#escape_file_searching(
-          \       candidate.action__path))
+          \ bufnr(candidate.action__path)
 
     call unite#util#smart_open_command('sbuffer', target)
   endfor

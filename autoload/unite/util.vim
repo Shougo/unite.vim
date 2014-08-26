@@ -113,8 +113,7 @@ endfunction
 function! unite#util#smart_open_command(action, word)
   call unite#util#smart_execute_command(a:action, a:word)
 
-  call unite#remove_previewed_buffer_list(
-        \ bufnr(unite#util#escape_file_searching(a:word)))
+  call unite#remove_previewed_buffer_list(bufnr(a:word))
 endfunction
 function! unite#util#escape_file_searching(buffer_name)
   " You should not escape for buflisted() or bufnr()

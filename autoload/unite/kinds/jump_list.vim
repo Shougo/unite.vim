@@ -75,10 +75,8 @@ function! unite#kinds#jump_list#define() "{{{
         \ }
   function! kind.action_table.preview.func(candidate) "{{{
     let filename = s:get_filename(a:candidate)
-    let bufwinnr = bufwinnr(
-          \ unite#util#escape_file_searching(filename))
-    let buflisted = buflisted(
-          \ unite#util#escape_file_searching(filename))
+    let bufwinnr = bufwinnr(filename)
+    let buflisted = buflisted(filename)
     let preview_windows = filter(range(1, winnr('$')),
           \ 'getwinvar(v:val, "&previewwindow") != 0')
     if empty(preview_windows)
@@ -301,8 +299,7 @@ endfunction"}}}
 function! s:get_bufnr(candidate) "{{{
   return has_key(a:candidate, 'action__buffer_nr') ?
         \ a:candidate.action__buffer_nr :
-        \ bufnr(unite#util#escape_file_searching(
-        \     a:candidate.action__path))
+        \ bufnr(a:candidate.action__path)
 endfunction"}}}
 function! s:convert_path(path) "{{{
   return unite#util#substitute_path_separator(fnamemodify(a:path, ':p'))

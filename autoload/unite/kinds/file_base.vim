@@ -53,17 +53,13 @@ let s:kind.action_table.open = {
       \ }
 function! s:kind.action_table.open.func(candidates) "{{{
   for candidate in a:candidates
-    if buflisted(unite#util#escape_file_searching(
-          \ candidate.action__path))
-      execute 'buffer' bufnr(unite#util#escape_file_searching(
-          \ candidate.action__path))
+    if buflisted(candidate.action__path)
+      execute 'buffer' bufnr(candidate.action__path)
     else
       call s:execute_command('edit', candidate)
     endif
 
-    call unite#remove_previewed_buffer_list(
-          \ bufnr(unite#util#escape_file_searching(
-          \       candidate.action__path)))
+    call unite#remove_previewed_buffer_list(bufnr(candidate.action__path))
   endfor
 endfunction"}}}
 
@@ -72,9 +68,7 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate) "{{{
-  let buflisted = buflisted(
-        \ unite#util#escape_file_searching(
-        \ a:candidate.action__path))
+  let buflisted = buflisted(a:candidate.action__path)
   if !filereadable(a:candidate.action__path)
     return
   endif
@@ -106,9 +100,7 @@ function! s:kind.action_table.preview.func(candidate) "{{{
     if !buflisted
       doautocmd BufRead
       setlocal nomodified
-      call unite#add_previewed_buffer_list(
-            \ unite#util#escape_file_searching(
-            \       a:candidate.action__path))
+      call unite#add_previewed_buffer_list(a:candidate.action__path)
     endif
   finally
     execute winnr.'wincmd w'
@@ -188,14 +180,13 @@ function! s:kind.action_table.wunix.func(candidates) "{{{
   let current_bufnr = bufnr('%')
 
   for candidate in a:candidates
-    let is_listed = buflisted(
-          \ unite#util#escape_file_searching(candidate.action__path))
+    let is_listed = buflisted(candidate.action__path)
     call s:kind.action_table.open.func([candidate])
     write ++fileformat=mac
     if is_listed
       call s:kind.action_table.open.func([candidate])
     else
-      let bufnr = bufnr(unite#util#escape_file_searching(candidate.action__path))
+      let bufnr = bufnr(candidate.action__path)
       silent execute bufnr 'bdelete'
     endif
   endfor
