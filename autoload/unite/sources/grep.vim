@@ -169,7 +169,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   highlight default link uniteSource__GrepFile Directory
   highlight default link uniteSource__GrepLineNr LineNR
   execute 'highlight default link uniteSource__GrepPattern'
-        \ get(a:context.custom, 'grep_search_word_highlight',
+        \ get(a:context, 'custom_grep_search_word_highlight',
         \ g:unite_source_grep_search_word_highlight)
 endfunction"}}}
 function! s:source.hooks.on_close(args, context) "{{{
@@ -187,11 +187,11 @@ function! s:source.hooks.on_post_filter(args, context) "{{{
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
-  let command = get(a:context.custom, 'grep_command',
+  let command = get(a:context, 'custom_grep_command',
         \ g:unite_source_grep_command)
-  let default_opts = get(a:context.custom, 'grep_default_opts',
+  let default_opts = get(a:context, 'custom_grep_default_opts',
         \ g:unite_source_grep_default_opts)
-  let recursive_opt = get(a:context.custom, 'grep_recursive_opt',
+  let recursive_opt = get(a:context, 'custom_grep_recursive_opt',
         \ g:unite_source_grep_recursive_opt)
 
   if !executable(command)
@@ -254,7 +254,7 @@ function! s:source.gather_candidates(args, context) "{{{
 endfunction "}}}
 
 function! s:source.async_gather_candidates(args, context) "{{{
-  let default_opts = get(a:context.custom, 'grep_default_opts',
+  let default_opts = get(a:context, 'custom_grep_default_opts',
         \ g:unite_source_grep_default_opts)
 
   if !has_key(a:context, 'source__proc')

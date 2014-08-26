@@ -131,10 +131,8 @@ function! unite#helper#parse_options(args) "{{{
     let name = substitute(tr(arg_key, '-', '_'), '=$', '', '')
     let value = (arg_key =~ '=$') ? arg[len(arg_key) :] : 1
 
-    if arg_key =~ '^--'
-      " custom options
-      let options.custom[name[2:]] = value
-    elseif index(unite#variables#options(), arg_key) >= 0
+    if arg_key =~ '^-custom-'
+          \ || index(unite#variables#options(), arg_key) >= 0
       let options[name[1:]] = value
     else
       call add(args, arg)

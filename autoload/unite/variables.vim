@@ -172,7 +172,6 @@ endfunction"}}}
 
 function! s:initialize_default() "{{{
   let s:default_context = {
-        \ 'custom' : {},
         \ 'input' : '',
         \ 'path' : '',
         \ 'start_insert' : 0,

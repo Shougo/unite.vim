@@ -1694,9 +1694,9 @@ the context dictionary.
 		same unite buffer, it is undefined.
 
 						*unite-source-custom-options*
-		--{option-name}={value}
+		-custom-{option-name}={value}
 		Source custom options.
-		For example: "--grep-search-word-highlight=Error"
+		For example: "-custom-grep-search-word-highlight=Error"
 
 						*unite-options-no-quit*
 		-no-quit
@@ -2175,10 +2175,10 @@ grep		Nominates "grep" command output as candidates.
 		$buffers  : All buffer names
 
 		Source custom options:
-		--grep-command                : grep command name
-		--grep-default_opts           : default grep options
-		--grep-recursive_opt          : grep recursive options
-		--grep-search-word-highlight  : search word highlight
+		-custom-grep-command                : grep command name
+		-custom-grep-default_opts           : default grep options
+		-custom-grep-recursive_opt          : grep recursive options
+		-custom-grep-search-word-highlight  : search word highlight
 
 		Example:
 >
@@ -3148,12 +3148,6 @@ NOTATION					*unite-notation*
 			source and you can distinguish one by a key stored in
 			the dictionary.
 
-			custom			(Dictionary)
-				The source custom options.
-				Note: You can get "--grep-command" source
-				custom option value by below script. >
-				get(a:context.custom, "grep_command", "")
-<
 			input			(String)
 				The input string of unite buffer.
 
@@ -3203,6 +3197,12 @@ NOTATION					*unite-notation*
 				Note: Recommend sources save variables instead
 				of s: variables.
 
+			custom__{name}		(String)	(Optional)
+				The source custom options.
+				Note: You can get "-custom-grep-command"
+				source custom option value by below script. >
+				get(a:context, "custom_grep_command", "")
+<
 {candidate}					*unite-notation-{candidate}*
 			A dictionary for candidates.
 			The followings are the primary information.
