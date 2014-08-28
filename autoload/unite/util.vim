@@ -279,9 +279,10 @@ function! unite#util#is_cmdwin() "{{{
   return bufname('%') ==# '[Command Line]'
 endfunction"}}}
 function! s:buflisted(bufnr) "{{{
-  return exists('t:unite_buffer_dictionary') ?
-        \ has_key(t:unite_buffer_dictionary, a:bufnr) && bufloaded(a:bufnr) :
-        \ bufloaded(a:bufnr)
+  return getbufvar(a:bufnr, '&bufhidden') == '' &&
+        \ (exists('t:unite_buffer_dictionary') ?
+        \   has_key(t:unite_buffer_dictionary, a:bufnr) && bufloaded(a:bufnr) :
+        \   bufloaded(a:bufnr))
 endfunction"}}}
 
 function! unite#util#glob(pattern, ...) "{{{
