@@ -63,6 +63,9 @@ function! unite#candidates#_recache(input, is_force) "{{{
     endif
 
     if unite.sources !=# sources
+      " Finalize previous sources.
+      call unite#helper#call_hook(unite.sources, 'on_close')
+
       let unite.sources = sources
       let unite.source_names = unite#helper#get_source_names(sources)
 
