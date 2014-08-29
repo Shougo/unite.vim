@@ -62,7 +62,8 @@ function! unite#candidates#_recache(input, is_force) "{{{
       endtry
     endif
 
-    if unite.sources !=# sources
+    if get(unite.sources, 0, {'name' : ''}).name
+          \ !=# get(sources, 0, {'name' : ''}).name
       " Finalize previous sources.
       call unite#helper#call_hook(unite.sources, 'on_close')
 
