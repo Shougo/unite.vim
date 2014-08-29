@@ -132,6 +132,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
         \           'v:val.unite__context.is_async')) > 0
 
   let &ignorecase = ignorecase_save
+  call unite#handlers#_save_updatetime()
 endfunction"}}}
 
 function! unite#candidates#gather(...) "{{{
