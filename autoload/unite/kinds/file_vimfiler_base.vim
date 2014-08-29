@@ -565,6 +565,7 @@ function! s:search_cursor(filename, dest_dir, candidate) "{{{
   endif
 
   if a:filename ==# a:dest_dir
+        \ && vimfiler#exists_another_vimfiler()
     " Search from another vimfiler
     call vimfiler#mappings#switch_another_vimfiler()
     call vimfiler#view#_force_redraw_screen()
