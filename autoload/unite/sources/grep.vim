@@ -81,6 +81,11 @@ function! s:source.hooks.on_init(args, context) "{{{
           \ && a:context.input == ''
       let target = unite#util#substitute_path_separator(
             \ unite#util#input('Target: ', default, 'file'))
+      if target == ''
+        let a:context.source__target = []
+        let a:context.source__input = ''
+        return
+      endif
     else
       let target = default
     endif
