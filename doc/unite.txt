@@ -340,7 +340,7 @@ COMMANDS 					*unite-commands*
 		                ["foo", "bar"].
 		"file:foo\:bar": the parameter of source file is
 		                ["foo:bar"].
-		"file:foo::baz": the parameters of source file are
+		"file:foo::bar": the parameters of source file are
 		                ["foo", "", "bar"].
 
 		{options} are options for a unite buffer: |unite-options|
