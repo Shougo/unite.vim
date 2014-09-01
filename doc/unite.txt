@@ -1684,7 +1684,7 @@ OPTIONS						*unite-options*
 parameters for an option.  You need to escape spaces with "\".
 
 Note: In unite.vim options are converted to a context dictionary.
-The "-buffer-name" option is the same as the "buffer_name" key in 
+The "-buffer-name" option is the same as the "buffer_name" key in
 the context dictionary.
 
 						*unite-options-no-*
@@ -1789,7 +1789,7 @@ the context dictionary.
 						*unite-options-immediately*
 		-immediately
 		If the number of candidates is exactly one, it runs the
-		default action immediately.  If the candidate list is 
+		default action immediately.  If the candidate list is
 		empty, it does not open any unite buffer.
 
 						*unite-options-auto-preview*
@@ -2918,7 +2918,7 @@ change_candidates	Function	(Optional)
 			while unite is gathering candidates.
 			change_candidates() generates new candidates
 			based on the changed input string. Unite adds these
-			candidates to the candidates cached from the initial 
+			candidates to the candidates cached from the initial
 			|unite-source-attribute-gather_candidates|.
 
 			This function takes {args} and {context} parameters
@@ -3018,7 +3018,7 @@ action_table		Dictionary		(Optional)
 			value is the action table.
 			See |unite-kind-attribute-action_table| for the action
 			table structure.
-			Example: 
+			Example:
 >
 			    'action_table' : { 'buffer' : foo_action_table }
 <
