@@ -396,11 +396,12 @@ function! unite#start#complete(sources, ...) "{{{
         \ 'col' : col('.'), 'complete' : 1,
         \ 'direction' : 'rightbelow',
         \ 'buffer_name' : 'completion',
+        \ 'profile_name' : 'completion',
         \ 'here' : 1,
         \ }
   call extend(context, get(a:000, 0, {}))
 
-  return printf("\<ESC>:call unite#start(%s, %s)\<CR>",
+  return printf("\<C-o>:\<C-u>call unite#start(%s, %s)\<CR>",
         \  string(sources), string(context))
 endfunction "}}}
 
