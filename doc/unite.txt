@@ -138,9 +138,9 @@ Specify command execution after the action with a ":".
 >
 	" Jump to line 3.
 	foo :3
-	" Search to "bar".
+	" Search for "bar".
 	foo :/bar
-	" Executes :diffthis command.
+	" Execute :diffthis command.
 	foo :diffthis
 <
 See |unite_default_key_mappings| for other actions.
@@ -340,7 +340,7 @@ COMMANDS 					*unite-commands*
 		                ["foo", "bar"].
 		"file:foo\:bar": the parameter of source file is
 		                ["foo:bar"].
-		"file:foo::baz": the parameters of source file are
+		"file:foo::bar": the parameters of source file are
 		                ["foo", "", "bar"].
 
 		{options} are options for a unite buffer: |unite-options|
@@ -863,71 +863,71 @@ g:unite_update_time				*g:unite_update_time*
 		The time interval for updating the candidate list as the filter
 		text it typed in Msec.
 		If it is 0, this feature is disabled.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_prompt			                *g:unite_prompt*
 		Unite default prompt.  Can also be set with the `-prompt`
 		command line argument.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_enable_start_insert			*g:unite_enable_start_insert*
 		If this variable is 1, unite buffer will be in Insert Mode
 		immediately.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_split_rule				*g:unite_split_rule*
 		Defines split position rule.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 					*g:unite_enable_split_vertically*
 g:unite_enable_split_vertically
 		If this variable is 1, unite window is split vertically.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_winheight				*g:unite_winheight*
 		The height of unite window when split horizontally. Ignored
 		when splitting vertically.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_winwidth				*g:unite_winwidth*
 		The width of unite window when split vertically. Ignored
 		when splitting horizontally.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_cursor_line_highlight		*g:unite_cursor_line_highlight*
 		Specify the cursor line highlight group.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 				*g:unite_enable_short_source_names*
 g:unite_enable_short_source_names
 		If this variable is 1, unite buffer will show short source
 		names.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_marked_icon				*g:unite_marked_icon*
 		It controls unite marked candidates icon.
-		Note: This must be one character.
-		Note: It is deprecated variable.  Please use
+		Note: Must be only one character.
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_candidate_icon				*g:unite_candidate_icon*
 		It controls unite normal candidates icon.
-		Note: It must be one character.
-		Note: It is deprecated variable.  Please use
+		Note: Must be only one character.
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_abbr_highlight				*g:unite_abbr_highlight*
 		Specify abbreviated candidates highlight.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 g:unite_cursor_line_time		*g:unite_cursor_line_time*
@@ -935,7 +935,7 @@ g:unite_cursor_line_time		*g:unite_cursor_line_time*
 		If you scroll cursor quickly less than it, unite will skip
 		cursor line highlight.
 		If it is "0.0", this feature will be disabled.
-		Note: It is deprecated variable.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
 ------------------------------------------------------------------------------
@@ -945,12 +945,12 @@ Normal mode mappings.
 
 <Plug>(unite_exit)				*<Plug>(unite_exit)*
 		Exits unite.  The previous unite buffer menu will be restored.
-		Note: You cannot close unite buffer using |:close| or
+		Note: You cannot close unite buffer using the |:close|,
 		|:bdelete| or |:quit| command.  This mapping restores windows.
 
 <Plug>(unite_all_exit)				*<Plug>(unite_all_exit)*
 		Exits unite with previous unite buffer menu.
-		Note: You cannot close unite buffer using |:close| or
+		Note: You cannot close unite buffer using the |:close|,
 		|:bdelete| or |:quit| command.  This mapping restores windows.
 
 <Plug>(unite_restart)				*<Plug>(unite_restart)*
@@ -1371,8 +1371,7 @@ unite#do_action({action-name})			*unite#do_action()*
 		the marked candidates.  This function works only when Unite
 		has been already activated.  This causes a runtime error if
 		{action-name} doesn't exist or the action is invalid.
-		Note: If you do the action, Vim's mode will be returned to
-		Normal mode.
+		Note: This action will return Vim to Normal mode.
 
 		This is handy for defining a key mapping to run an action.
 
@@ -1433,8 +1432,8 @@ unite#custom#profile({profile-name}, {option-name}, {value})
 		"" to "subst".  "priority" prioritizes how this replaces.  If
 		you skipped giving "priority" it is 0.  Give a bigger number for
 		a "pattern" which must be done earlier.
-		Note: that the initial text of Unite buffer is not replaced
-		with these values.
+		Note: The initial text of Unite buffers is not replaced with
+		these values.
 
 		You may mimic ambiguous matching with using this function.
 >
@@ -1684,7 +1683,7 @@ OPTIONS						*unite-options*
 parameters for an option.  You need to escape spaces with "\".
 
 Note: In unite.vim options are converted to a context dictionary.
-The "-buffer-name" option is the same as the "buffer_name" key in 
+The "-buffer-name" option is the same as the "buffer_name" key in
 the context dictionary.
 
 						*unite-options-no-*
@@ -1789,7 +1788,7 @@ the context dictionary.
 						*unite-options-immediately*
 		-immediately
 		If the number of candidates is exactly one, it runs the
-		default action immediately.  If the candidate list is 
+		default action immediately.  If the candidate list is
 		empty, it does not open any unite buffer.
 
 						*unite-options-auto-preview*
@@ -1858,7 +1857,7 @@ the context dictionary.
 		Change 'updatetime' option.  If this option is omitted,
 		"200" is used.  This option is useful for
 		animation source.
-		Note: It must be smaller than 'updatetime' value.
+		Note: Must be smaller than 'updatetime'.
 
 					*unite-options-cursor-line-highlight*
 		-cursor-line-highlight={highlight-name}
@@ -1912,7 +1911,7 @@ the context dictionary.
 		-resume
 		Reuse any previous buffer.  If none exist, a new unite
 		buffer gets created.  Cf: |:UniteResume|
-		Note: It uses |unite-options-buffer-name| to search for
+		Note: Uses |unite-options-buffer-name| to search for
 		previous buffers, which must be set.
 
 						*unite-options-wrap*
@@ -1952,12 +1951,12 @@ the context dictionary.
 						*unite-options-candidate-icon*
 		-candidate-icon={icon-text}
 		Specify the candidate icon text.  The default value is ' '.
-		Note: It must be one character.
+		Note: Must be only one character.
 
 						*unite-options-marked-icon*
 		-marked-icon={icon-text}
 		Specify the marked icon text.  The default value is '*'.
-		Note: It must be one character.
+		Note: Must be only one character.
 
 						*unite-options-cursor-line-time*
 		-cursor-line-time={icon-text}
@@ -2012,8 +2011,8 @@ file_rec	Gather files recursive and nominates all directory or file
 
 						*unite-source-file_rec/async*
 file_rec/async	Similar to |unite-source-file_rec|, but get files asynchronously.
-		Note: It requires vimproc.
-		Note: It requires the "ag" or "find" command.
+		Note: Requires vimproc.
+		Note: Requires the "ag" or "find" command.
 		Note: Windows "find" command is not supported.
 		Note: If you edit one of the files in Vim, the
 		file_rec/async source will update its cache.
@@ -2027,9 +2026,9 @@ file_rec/async	Similar to |unite-source-file_rec|, but get files asynchronously.
 						*unite-source-file_rec/git*
 file_rec/git	Similar to |unite-source-file_rec|, but get files by "git
 		ls-files" command.  It is faster than file_rec/async source.
-		Note: It requires vimproc.
-		Note: It requires "git" command.
-		Note: It searches from current directory only.
+		Note: Requires vimproc.
+		Note: Requires git.
+		Note: Searches from current directory only.
 
 		Source arguments:
 		1. "git ls-files" arguments
@@ -2289,7 +2288,7 @@ menu		Nominates menus.
 
 						*unite-source-history/yank*
 history/yank	Nominates yanked words.
-		Note: It ignores yanked words which are too long.
+		Note: Ignores yanked words which are too long.
 		To use this source, set
 		|g:unite_source_history_yank_enable| is 1.
 		Note: This source is disabled when
@@ -2554,12 +2553,12 @@ matcher_hide_hidden_files
 matcher_context	A matcher which filters the candidates with user given glob
 		pattern or regexp pattern.  In default, use glob pattern.  If
 		the pattern starts "^", will use regexp pattern (head match).
-		Note: It is created by hrsh7th.
+		Note: Created by hrsh7th.
 
 					*unite-filter-matcher_project_files*
 matcher_project_files
 		Project files filter.  It removes non project files.
-		Note: It requires "action__path" in candidates.
+		Note: Requires "action__path" in candidates.
 
 						*unite-filter-sorter_default*
 sorter_default	The default sorter used by |unite-filter-default|.
@@ -2918,7 +2917,7 @@ change_candidates	Function	(Optional)
 			while unite is gathering candidates.
 			change_candidates() generates new candidates
 			based on the changed input string. Unite adds these
-			candidates to the candidates cached from the initial 
+			candidates to the candidates cached from the initial
 			|unite-source-attribute-gather_candidates|.
 
 			This function takes {args} and {context} parameters
@@ -3018,7 +3017,7 @@ action_table		Dictionary		(Optional)
 			value is the action table.
 			See |unite-kind-attribute-action_table| for the action
 			table structure.
-			Example: 
+			Example:
 >
 			    'action_table' : { 'buffer' : foo_action_table }
 <
@@ -3238,7 +3237,7 @@ NOTATION					*unite-notation*
 			group			(String)	(Optional)
 				The candidate group name.
 				It is inserted in candidates automatically.
-				Note: It is required and used when
+				Note: Required and used when
 				|unite-source-attribute-is_grouped| is non
 				zero.
 
@@ -3441,7 +3440,7 @@ description		String		(Optional)
 						*unite-filter-attribute-pattern*
 pattern			Function		(Optional)
 			Returns highlight pattern for input.
-			Note: It is only available for matchers.
+			Note: Only available for matchers.
 
 ==============================================================================
 EXTERNAL SOURCES				*unite-external-sources*
@@ -3565,7 +3564,7 @@ Q: I want to narrow automatically when other candidates are selected in insert
 mode like ctrlp.vim.
 
 A: This feature is already implemented.
-Note: It requires Vim 7.3.418 or above.
+Note: Requires Vim 7.3.418 or above.
 
 Q: I want to run "split" action in insert mode by "<C-s>".
 
