@@ -193,6 +193,9 @@ function! unite#set_context(context) "{{{
 
   return old_context
 endfunction"}}}
+function! unite#get_unite_winnr(buffer_name) "{{{
+  return unite#helper#get_unite_winnr(a:buffer_name)
+endfunction"}}}
 
 function! unite#force_redraw(...) "{{{
   call unite#view#_redraw(1, get(a:000, 0, 0), get(a:000, 1, 0))
