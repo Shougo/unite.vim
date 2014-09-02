@@ -155,6 +155,7 @@ function! unite#candidates#gather(...) "{{{
   endif
 
   if is_gather_all || unite.context.prompt_direction ==# 'below'
+        \ || unite.context.quick_match
     let unite.candidates_pos = len(unite.candidates)
   elseif unite.context.is_redraw || unite.candidates_pos == 0
     let unite.candidates_pos = line('.') + winheight(0)
