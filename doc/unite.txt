@@ -2622,9 +2622,8 @@ converter_relative_word
 		converter uses it as the base path in relative path
 		conversion.
 >
-		call unite#custom#source('file_rec', 'filters',
-		\ ['converter_relative_word', 'matcher_default',
-		\  'sorter_default', 'converter_relative_abbr'])
+		call unite#custom#source('file_rec', 'matchers',
+		\ ['converter_relative_word', 'matcher_default']),
 <
 					*unite-filter-converter_relative_abbr*
 converter_relative_abbr

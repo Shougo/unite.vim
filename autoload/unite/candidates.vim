@@ -265,12 +265,12 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     call unite#helper#call_hook([source], 'on_pre_filter')
 
     " Set filters.
-    let matchers = []
-    let sorters = []
+    let matchers = source.matchers
+    let sorters = source.sorters
     let prev_filters = []
-    let post_filters = []
+    let post_filters = source.converters
     for Filter in (context.unite__is_vimfiler ?
-          \ [] : get(custom_source, 'filters', source.filters))
+          \ [] : source.filters)
       if type(Filter) != type('')
         call add((empty(matchers) ?
               \ prev_filters : post_filters), Filter)

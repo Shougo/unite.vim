@@ -75,11 +75,6 @@ Context Source.run()
           \ ['grep', 'unite.vim/plugin', '', 'vim']])
     call unite#action#do_candidates('replace', g:candidates)
   End
-
-  It check custom variables.
-    call unite#custom_source('hoge', 'variables', { 'foo' : 'bar' })
-    call unite#get_candidates([['hoge']])
-  End
 End
 
 Fin
