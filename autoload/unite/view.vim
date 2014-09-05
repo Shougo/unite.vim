@@ -354,7 +354,7 @@ function! unite#view#_change_highlight()  "{{{
 
     for source in filter(copy(unite.sources), "v:val.syntax != ''")
       for matcher in filter(copy(map(filter(
-            \ copy(source.filters),
+            \ copy(source.matchers),
             \ "type(v:val) == type('')"), 'unite#get_filters(v:val)')),
             \ "has_key(v:val, 'pattern')")
         let patterns = map(copy(input_list),

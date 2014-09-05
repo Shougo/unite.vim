@@ -2496,13 +2496,6 @@ guicmd		GUI executable commands.
 ==============================================================================
 FILTERS						*unite-filters*
 
-						*unite-filter-default*
-default		This default filter is used unless specified explicitly.
-		This filter is a dummy with ["matcher_context",
-		"sorter_nothing", "converter_nothing"] registered initially.
-		This filter can be changed by calling
-		|unite#filters#default#use()|.
-
 						*unite-filter-matcher_default*
 matcher_default	The default matcher used by |unite-filter-default| with
 		["matcher_context"] set initially.
@@ -3108,14 +3101,6 @@ syntax			String		(Optional)
 			The above naming convention is recommended to avoid
 			conflicts. Highlighting must be performed in this
 			hook: |unite-source-attribute-hooks-on_syntax|.
-
-					*unite-source-attribute-filters*
-filters			List		(Optional)
-			List of filters used by the source. Each element
-			is a filter name or function reference (accepted
-			dictionary function in current source).  Refer
-			to |unite-filter-attributes| for the filter structure.
-			If omitted, unite uses |unite-filter-default|.
 
 					*unite-source-attribute-matchers*
 matchers		List/String	(Optional)

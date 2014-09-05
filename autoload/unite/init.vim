@@ -643,7 +643,6 @@ function! unite#init#_sources(...) "{{{
         \ 'default_kind' : 'common',
         \ 'alias_table' : {},
         \ 'parents' : [],
-        \ 'filters' : [],
         \ 'description' : '',
         \ 'syntax' : '',
         \ }
@@ -722,7 +721,9 @@ function! unite#init#_sources(...) "{{{
 
       " Set filters.
       if has_key(custom_source, 'filters')
-        let source.filters = custom_source.filters
+        call unite#print_error(
+              \ '[unite.vim] Custom filters feature is removed.'.
+              \ '  You must use matchers/sorters/converters feature.')
       endif
 
       let source.matchers = unite#util#convert2list(

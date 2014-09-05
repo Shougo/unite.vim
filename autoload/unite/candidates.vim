@@ -265,40 +265,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     call unite#helper#call_hook([source], 'on_pre_filter')
 
     " Set filters.
-    let matchers = source.matchers
     let sorters = source.sorters
-    let prev_filters = []
-    let post_filters = source.converters
-    for Filter in (context.unite__is_vimfiler ?
-          \ [] : source.filters)
-      if type(Filter) != type('')
-        call add((empty(matchers) ?
-              \ prev_filters : post_filters), Filter)
-
-        unlet Filter
-        continue
-      endif
-
-      let name = get(unite#get_filters(Filter),
-            \              'name', '')
-      if name == ''
-        call unite#print_error(printf(
-              \ 'Invalid filter name "%s" is detected.', Filter))
-      elseif name =~# '\%(^\|_\)matcher_'
-        call add(matchers, Filter)
-      elseif name =~# '\%(^\|_\)sorter_'
-        if name ==# 'sorter_default'
-          let sorters += unite#filters#sorter_default#get()
-        else
-          call add(sorters, Filter)
-        endif
-      else
-        call add((empty(matchers) ?
-              \ prev_filters : post_filters), Filter)
-      endif
-      unlet Filter
-    endfor
-
     if sorters ==# ['sorter_nothing']
           \ || unite.context.unite__is_vimfiler
       let sorters = []
@@ -313,7 +280,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
           \ source.max_candidates : source.unite__orig_len_candidates
 
     " Call filters.
-    for Filter in prev_filters + matchers + sorters + post_filters
+    for Filter in source.matchers + source.sorters + source.converters
       if type(Filter) == type('')
         let source_candidates = unite#helper#call_filter(
               \ Filter, source_candidates, context)
