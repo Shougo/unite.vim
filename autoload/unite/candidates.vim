@@ -311,8 +311,11 @@ endfunction"}}}
 function! s:get_source_candidates(source) "{{{
   let context = a:source.unite__context
   let custom_source = get(unite#custom#get().sources, a:source.name, {})
-  let ignore_pattern = get(custom_source,
-        \ 'ignore_pattern', a:source.ignore_pattern)
+  let context_ignore = {
+        \ 'path' : context.path,
+        \ 'ignore_pattern' : get(custom_source,
+        \    'ignore_pattern', a:source.ignore_pattern),
+        \ }
 
   let funcname = 's:get_source_candidates()'
   try
@@ -339,8 +342,7 @@ function! s:get_source_candidates(source) "{{{
         let a:source.unite__cached_candidates +=
               \ s:ignore_candidates(copy(
               \  a:source.gather_candidates(a:source.args,
-              \  a:source.unite__context)),
-              \ ignore_pattern, context.path)
+              \  a:source.unite__context)), context_ignore)
       endif
     endif
 
@@ -351,8 +353,7 @@ function! s:get_source_candidates(source) "{{{
       let funcname = 'change_candidates'
       let a:source.unite__cached_change_candidates =
             \ s:ignore_candidates(a:source.change_candidates(
-            \     a:source.args, a:source.unite__context),
-            \   ignore_pattern, context.path)
+            \     a:source.args, a:source.unite__context), context_ignore)
     endif
 
     if a:source.unite__context.is_async
@@ -362,7 +363,7 @@ function! s:get_source_candidates(source) "{{{
         let a:source.unite__cached_candidates +=
               \ s:ignore_candidates(
               \  a:source.async_gather_candidates(a:source.args, context),
-              \  ignore_pattern, context.path)
+              \  context_ignore)
 
         if (!context.sync && context.unite__is_interactive)
               \ || !a:source.unite__context.is_async
@@ -385,17 +386,18 @@ function! s:get_source_candidates(source) "{{{
         \ + a:source.unite__cached_change_candidates
 endfunction"}}}
 
-function! s:ignore_candidates(candidates, pattern, path) "{{{
+function! s:ignore_candidates(candidates, context) "{{{
   let candidates = copy(a:candidates)
 
-  if a:pattern != ''
+  if a:context.ignore_pattern != ''
     let candidates = filter(candidates,
-        \ "get(v:val, 'action__path', v:val.word) !~# a:pattern")
+        \ "get(v:val, 'action__path', v:val.word)
+        \    !~# a:context.ignore_pattern")
   endif
 
-  if a:path != ''
+  if a:context.path != ''
     let candidates = unite#filters#{unite#util#has_lua()? 'lua' : 'vim'}
-          \_filter_head(candidates, a:path)
+          \_filter_head(candidates, a:context.path)
   endif
 
   return candidates
