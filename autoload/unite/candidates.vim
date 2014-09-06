@@ -276,18 +276,20 @@ function! s:recache_candidates_loop(context, is_force) "{{{
           \    && context.unite__max_candidates > 0) ?
           \ source.max_candidates : source.unite__orig_len_candidates
 
-    " Call filters.
-    for Filter in source.matchers + source.sorters + source.converters
-      if type(Filter) == type('')
-        let source_candidates = unite#helper#call_filter(
-              \ Filter, source_candidates, context)
-      else
-        let source_candidates = call(Filter,
-              \ [source_candidates, context], source)
-      endif
+    if !unite.context.unite__is_vimfiler
+      " Call filters.
+      for Filter in source.matchers + source.sorters + source.converters
+        if type(Filter) == type('')
+          let source_candidates = unite#helper#call_filter(
+                \ Filter, source_candidates, context)
+        else
+          let source_candidates = call(Filter,
+                \ [source_candidates, context], source)
+        endif
 
-      unlet Filter
-    endfor
+        unlet Filter
+      endfor
+    endif
 
     " Get execute_command.
     let a:context.execute_command = context.execute_command
