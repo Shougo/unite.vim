@@ -742,6 +742,9 @@ function! unite#init#_sources(...) "{{{
       let source.ignore_pattern =
             \ get(custom_source, 'ignore_pattern',
             \    get(source, 'ignore_pattern', ''))
+      let source.ignore_globs = unite#util#convert2list(
+            \ get(custom_source, 'ignore_globs',
+            \    get(source, 'ignore_globs', [])))
 
       let source.unite__len_candidates = 0
       let source.unite__orig_len_candidates = 0

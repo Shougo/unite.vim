@@ -29,8 +29,6 @@ set cpo&vim
 let s:is_windows = unite#util#is_windows()
 
 " Variables  "{{{
-call unite#util#set_default('g:unite_source_file_ignore_pattern',
-      \'\%(^\|/\)\.\.\?$\|\~$\|\.\%(o|exe|dll|bak|DS_Store|pyc|zwc|sw[po]\)$')
 call unite#util#set_default(
       \ 'g:unite_source_file_async_command', 'ls -a')
 
@@ -48,7 +46,11 @@ endfunction"}}}
 let s:source_file = {
       \ 'name' : 'file',
       \ 'description' : 'candidates from file list',
-      \ 'ignore_pattern' : g:unite_source_file_ignore_pattern,
+      \ 'ignore_globs' : [
+      \         '.', '..', '*~', '*.o', '*.exe', '*.bak',
+      \         'DS_Store', '*.zwc', '*.pyc', '*.sw[po]', '*.class',
+      \         '.hg/*', '.git/*', '.bzr/*', '.svn/*',
+      \ ],
       \ 'default_kind' : 'file',
       \ 'matchers' : [ 'matcher_default', 'matcher_hide_hidden_files' ],
       \ 'hooks' : {},
@@ -190,18 +192,9 @@ function! s:source_file_new.change_candidates(args, context) "{{{
   return [unite#sources#file#create_file_dict(input, 0, 1)]
 endfunction"}}}
 
-let s:source_file_async = {
-      \ 'name' : 'file/async',
-      \ 'description' : 'asynchronous candidates from file list',
-      \ 'ignore_pattern' : g:unite_source_file_ignore_pattern,
-      \ 'default_kind' : 'file',
-      \ 'matchers' : [
-      \     'converter_relative_word', 'converter_relative_abbr',
-      \     'matcher_default', 'matcher_hide_hidden_files' ],
-      \ 'hooks' : {},
-      \}
-
-let s:source_file_async.complete = s:source_file.complete
+let s:source_file_async = deepcopy(s:source_file)
+let s:source_file_async.name = 'file/async'
+let s:source_file_async.description = 'asynchronous candidates from file list'
 
 function! s:source_file_async.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__proc')

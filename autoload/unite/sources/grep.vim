@@ -34,10 +34,6 @@ call unite#util#set_default(
 call unite#util#set_default('g:unite_source_grep_recursive_opt', '-r')
 call unite#util#set_default('g:unite_source_grep_max_candidates', 100)
 call unite#util#set_default('g:unite_source_grep_search_word_highlight', 'Search')
-call unite#util#set_default('g:unite_source_grep_ignore_pattern',
-      \'\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$\|'.
-      \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|'.
-      \'\%(^\|/\)tags\%(-\a*\)\?$')
 call unite#util#set_default('g:unite_source_grep_encoding', 'char')
 "}}}
 
@@ -51,7 +47,11 @@ let s:source = {
       \ 'hooks' : {},
       \ 'syntax' : 'uniteSource__Grep',
       \ 'matchers' : 'matcher_regexp',
-      \ 'ignore_pattern' : g:unite_source_grep_ignore_pattern,
+      \ 'ignore_globs' : [
+      \         '*~', '*.o', '*.exe', '*.bak',
+      \         'DS_Store', '*.zwc', '*.pyc', '*.sw[po]', '*.class',
+      \         '.hg/*', '.git/*', '.bzr/*', '.svn/*',
+      \ ],
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{

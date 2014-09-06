@@ -177,6 +177,15 @@ function! unite#filters#vim_filter_head(candidates, input) "{{{
         \      v:val.word)), input) == 0")
 endfunction"}}}
 
+function! unite#filters#glob2pattern(glob) "{{{
+  let glob = escape(a:glob, '~.^$')
+  let glob = substitute(glob, '\\\@<!\*\*', '.*', 'g')
+  let glob = substitute(glob, '\\\@<!\*', '[^/]*', 'g')
+  let glob = substitute(glob, '\\\@<!?', '[^/]', 'g')
+  return (a:glob != '' && a:glob[0] != '/' ? '\%(^\|/\)' : '')
+        \ . glob . '$'
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

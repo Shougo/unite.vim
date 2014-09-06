@@ -26,10 +26,6 @@
 " Variables  "{{{
 call unite#util#set_default(
       \ 'g:unite_source_vimgrep_search_word_highlight', 'Search')
-call unite#util#set_default('g:unite_source_vimgrep_ignore_pattern',
-      \'\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$\|'.
-      \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|'.
-      \'\%(^\|/\)tags\%(-\a*\)\?$')
 "}}}
 
 " Actions "{{{
@@ -72,7 +68,11 @@ let s:source = {
       \ 'hooks' : {},
       \ 'syntax' : 'uniteSource__Vimgrep',
       \ 'matchers' : 'matcher_regexp',
-      \ 'ignore_pattern' : g:unite_source_vimgrep_ignore_pattern,
+      \ 'ignore_globs' : [
+      \         '*~', '*.o', '*.exe', '*.bak',
+      \         'DS_Store', '*.zwc', '*.pyc', '*.sw[po]', '*.class',
+      \         '.hg/*', '.git/*', '.bzr/*', '.svn/*',
+      \ ],
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{

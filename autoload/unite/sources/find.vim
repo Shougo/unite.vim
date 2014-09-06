@@ -27,9 +27,6 @@
 call unite#util#set_default('g:unite_source_find_command', 'find')
 call unite#util#set_default('g:unite_source_find_default_opts', '')
 call unite#util#set_default('g:unite_source_find_max_candidates', 100)
-call unite#util#set_default('g:unite_source_find_ignore_pattern',
-      \'\~$\|\.\%(bak\|sw[po]\)$\|'.
-      \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)')
 "}}}
 
 " Actions "{{{
@@ -59,7 +56,11 @@ let s:source = {
       \ 'max_candidates': g:unite_source_find_max_candidates,
       \ 'hooks' : {},
       \ 'matchers' : ['matcher_regexp'],
-      \ 'ignore_pattern' : g:unite_source_find_ignore_pattern,
+      \ 'ignore_globs' : [
+      \         '*~', '*.o', '*.exe', '*.bak',
+      \         'DS_Store', '*.zwc', '*.pyc', '*.sw[po]', '*.class',
+      \         '.hg/*', '.git/*', '.bzr/*', '.svn/*',
+      \ ],
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{

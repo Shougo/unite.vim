@@ -32,11 +32,6 @@ function! g:source.gather_candidates(args, context) "{{{
         \ "kind" : "hoge",
         \}')
 
-  if g:unite_source_file_ignore_pattern != ''
-    call filter(g:candidates, 'v:val.word !~ ' .
-          \ string(g:unite_source_file_ignore_pattern))
-  endif
-
   return g:candidates
 endfunction"}}}
 

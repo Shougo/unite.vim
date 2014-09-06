@@ -254,6 +254,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     if context.unite__is_vimfiler
       " Disable ignore feature.
       let source.ignore_pattern = ''
+      let source.ignore_globs = []
     endif
 
     let source_candidates = s:get_source_candidates(source)
@@ -315,6 +316,8 @@ function! s:get_source_candidates(source) "{{{
         \ 'path' : context.path,
         \ 'ignore_pattern' : get(custom_source,
         \    'ignore_pattern', a:source.ignore_pattern),
+        \ 'ignore_globs' : get(custom_source,
+        \    'ignore_globs', a:source.ignore_globs),
         \ }
 
   let funcname = 's:get_source_candidates()'
@@ -393,6 +396,15 @@ function! s:ignore_candidates(candidates, context) "{{{
     let candidates = filter(candidates,
         \ "get(v:val, 'action__path', v:val.word)
         \    !~# a:context.ignore_pattern")
+  endif
+
+  if !empty(a:context.ignore_globs)
+    let ignore_pattern = join(
+          \ map(copy(a:context.ignore_globs),
+          \   'unite#filters#glob2pattern(v:val)'), '\|')
+    let candidates = filter(candidates,
+        \ "get(v:val, 'action__path', v:val.word)
+        \    !~# ignore_pattern")
   endif
 
   if a:context.path != ''
