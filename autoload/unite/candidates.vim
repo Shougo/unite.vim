@@ -395,7 +395,7 @@ function! s:ignore_candidates(candidates, context) "{{{
   if a:context.ignore_pattern != ''
     let candidates = filter(candidates,
         \ "get(v:val, 'action__path', v:val.word)
-        \    !~# a:context.ignore_pattern")
+        \    !~? a:context.ignore_pattern")
   endif
 
   if !empty(a:context.ignore_globs)
@@ -405,7 +405,7 @@ function! s:ignore_candidates(candidates, context) "{{{
           \   candidates, a:context.ignore_globs) :
           \ filter(candidates,
           \ "get(v:val, 'action__path', v:val.word)
-          \    !~# ignore_pattern")
+          \    !~? ignore_pattern")
   endif
 
   if a:context.path != ''

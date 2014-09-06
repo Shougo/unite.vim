@@ -1557,8 +1557,7 @@ unite#custom#source({source-name}, {option-name}, {value})
 		ignore_pattern			(String)
 		Specify the regexp pattern to ignore candidates of the source.
 		This applies on the path or word attribute of candidates.
-		Regardless of |g:unite_enable_ignore_case| value, it's case
-		sensitive.
+		Note: It is not case sensitive.
 
 		ignore_globs			(List) or (String)
 		Specify the glob pattern list to ignore candidates of the
@@ -1566,8 +1565,7 @@ unite#custom#source({source-name}, {option-name}, {value})
 		You can use 'wildignore' globs easily.  But you must split it
 		by ",".
 		This applies on the path or word attribute of candidates.
-		Regardless of |g:unite_enable_ignore_case| value, it's case
-		sensitive.
+		Note: It is not case sensitive.
 
 						*unite#take_action()*
 unite#take_action({action-name}, {candidate})
