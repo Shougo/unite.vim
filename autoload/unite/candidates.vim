@@ -399,12 +399,13 @@ function! s:ignore_candidates(candidates, context) "{{{
   endif
 
   if !empty(a:context.ignore_globs)
-    let ignore_pattern = join(
-          \ map(copy(a:context.ignore_globs),
-          \   'unite#filters#glob2pattern(v:val)'), '\|')
-    let candidates = filter(candidates,
-        \ "get(v:val, 'action__path', v:val.word)
-        \    !~# ignore_pattern")
+    let ignore_pattern = unite#filters#globs2pattern(a:context.ignore_globs)
+    let candidates = unite#util#has_lua()?
+          \ unite#filters#lua_filter_globs(
+          \   candidates, a:context.ignore_globs) :
+          \ filter(candidates,
+          \ "get(v:val, 'action__path', v:val.word)
+          \    !~# ignore_pattern")
   endif
 
   if a:context.path != ''

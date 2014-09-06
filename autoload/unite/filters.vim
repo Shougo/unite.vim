@@ -177,13 +177,50 @@ function! unite#filters#vim_filter_head(candidates, input) "{{{
         \      v:val.word)), input) == 0")
 endfunction"}}}
 
-function! unite#filters#glob2pattern(glob) "{{{
-  let glob = escape(a:glob, '~.^$')
-  let glob = substitute(glob, '\\\@<!\*\*', '.*', 'g')
-  let glob = substitute(glob, '\\\@<!\*', '[^/]*', 'g')
-  let glob = substitute(glob, '\\\@<!?', '[^/]', 'g')
-  return (a:glob != '' && a:glob[0] != '/' ? '\%(^\|/\)' : '')
-        \ . glob . '$'
+function! unite#filters#lua_filter_globs(candidates, globs) "{{{
+lua << EOF
+do
+  local pattern = vim.eval('unite#filters#globs2lua_pattern(a:globs)')
+  local candidates = vim.eval('a:candidates')
+  for i = #candidates-1, 0, -1 do
+    local word = candidates[i].action__path
+        or candidates[i].word
+    if string.find(string.lower(word), pattern) then
+      candidates[i] = nil
+    end
+  end
+end
+EOF
+
+  return a:candidates
+endfunction"}}}
+
+function! unite#filters#globs2pattern(globs) "{{{
+  let patterns = []
+  for glob in a:globs
+    let glob = escape(glob, '~.^$')
+    let glob = substitute(glob, '\\\@<!\*\*', '.*', 'g')
+    let glob = substitute(glob, '\\\@<!\*', '[^/]*', 'g')
+    let glob = substitute(glob, '\\\@<!?', '[^/]', 'g')
+    call add(patterns, (glob != '' && glob[0] != '/' ?
+          \ '\%(^\|/\)' : '') . glob . '$')
+  endfor
+
+  return join(patterns, '\|')
+endfunction"}}}
+function! unite#filters#globs2lua_pattern(globs) "{{{
+  let patterns = []
+  for glob in a:globs
+    let glob = tolower(glob)
+    let glob = substitute(glob, '[%().+^$-]', '%\0', 'g')
+    let glob = substitute(glob, '\*\*\+', '.*', 'g')
+    let glob = substitute(glob, '\*\@<!\*\*\@!', '[^/]*', 'g')
+    let glob = substitute(glob, '\\\@<!?', '[^/]', 'g')
+    call add(patterns, (glob != '' && glob[0] != '/' ?
+          \ '(^|/)' : '') . glob . '$')
+  endfor
+
+  return join(patterns, '|')
 endfunction"}}}
 
 let &cpo = s:save_cpo
