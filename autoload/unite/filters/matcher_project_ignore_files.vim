@@ -43,8 +43,9 @@ function! s:matcher.filter(candidates, context) "{{{
   if !has_key(a:context, 'filter__project_ignore_path')
         \ || a:context.filter__project_ignore_path !=# project
     let a:context.filter__project_ignore_path = project
-    let a:context.filter__project_ignore_patterns =
-          \ unite#filters#globs2patterns(s:get_ignore_globs(project))
+    let [a:context.filter__project_ignore_patterns,
+          \ a:context.filter__project_ignore_whites] =
+          \ s:get_ignore_results(project)
   endif
 
   if empty(a:context.filter__project_ignore_patterns)
@@ -52,29 +53,43 @@ function! s:matcher.filter(candidates, context) "{{{
   endif
 
   return unite#filters#filter_patterns(a:candidates,
-        \ a:context.filter__project_ignore_patterns)
+        \ a:context.filter__project_ignore_patterns,
+        \ a:context.filter__project_ignore_whites)
 endfunction"}}}
 
-function! s:get_ignore_globs(path) "{{{
+function! s:get_ignore_results(path) "{{{
   let globs = []
+  let whites = []
   for d in [
         \ '.gitignore', '.hgignore', '.agignore', '.uniteignore',
         \ ]
     let f = findfile(d, a:path . ';')
     if f != ''
       let f = fnamemodify(f, ':p')
-      let globs += s:parse_ignore_file(f)
+      let _ = s:parse_ignore_file(f)
+      let globs += _[0]
+      let whites += _[1]
     endif
   endfor
 
-  return globs
+  return [unite#filters#globs2patterns(globs),
+        \ unite#filters#globs2patterns(whites)]
 endfunction"}}}
 
 function! s:parse_ignore_file(file) "{{{
   " Note: whitelist "!glob" and "syntax: regexp" in .hgignore features is not
   " supported.
-  return filter(readfile(a:file),
-        \ "v:val !~ '^\\s*$\\|\\s*syntax:\\|\\s*[!#]'")
+  let patterns = []
+  let whites = []
+  for line in filter(readfile(a:file),
+        \ "v:val !~ '^\\s*$\\|\\s*syntax:\\|\\s*#'")
+    if line[0] == '!'
+      call add(whites, line[1:])
+    else
+      call add(patterns, line)
+    endif
+  endfor
+  return [patterns, whites]
 endfunction"}}}
 
 let &cpo = s:save_cpo

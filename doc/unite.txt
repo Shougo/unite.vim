@@ -2513,8 +2513,7 @@ matcher_project_ignore_files
 		Project ignore files filter.  It removes project ignore files.
 		It searches project ignore files from ".gitignore",
 		".hgignore", ".agignore" and ".uniteignore".
-		Note: It does not support whitelist feature(Ex: "!glob"
-		pattern).
+		It does support whitelist feature(Ex: "!glob" pattern).
 		Note: It does not support non glob ignore files in .hgignore.
 
 						*unite-filter-sorter_default*

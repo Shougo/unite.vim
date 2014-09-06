@@ -182,24 +182,36 @@ function! unite#filters#vim_filter_pattern(candidates, pattern) "{{{
         \ "get(v:val, 'action__path', v:val.word) !~? a:pattern")
 endfunction"}}}
 
-function! unite#filters#filter_patterns(candidates, patterns) "{{{
+function! unite#filters#filter_patterns(candidates, patterns, whites) "{{{
   return unite#util#has_lua()?
           \ unite#filters#lua_filter_patterns(
-          \   a:candidates, a:patterns) :
+          \   a:candidates, a:patterns, a:whites) :
           \ unite#filters#vim_filter_patterns(
-          \   a:candidates, a:patterns)
+          \   a:candidates, a:patterns, a:whites)
 endfunction"}}}
-function! unite#filters#lua_filter_patterns(candidates, patterns) "{{{
+function! unite#filters#lua_filter_patterns(candidates, patterns, whites) "{{{
 lua << EOF
 do
   local patterns = vim.eval('a:patterns')
+  local whites = vim.eval('a:whites')
   local candidates = vim.eval('a:candidates')
   for i = #candidates-1, 0, -1 do
-    local word = candidates[i].action__path
-        or candidates[i].word
+    local word = string.lower(candidates[i].action__path
+        or candidates[i].word)
     for j = #patterns-1, 0, -1 do
-      if string.find(string.lower(word), patterns[j]) then
-        candidates[i] = nil
+      if string.find(word, patterns[j]) then
+        local match = nil
+        -- Search from whites
+        for k = #whites-1, 0, -1 do
+          if string.find(word, whites[k]) then
+            match = k
+            break
+          end
+        end
+
+        if match == nil then
+          candidates[i] = nil
+        end
       end
     end
   end
@@ -208,9 +220,12 @@ EOF
 
   return a:candidates
 endfunction"}}}
-function! unite#filters#vim_filter_patterns(candidates, patterns) "{{{
-  return unite#filters#vim_filter_pattern(
-        \ a:candidates, join(a:patterns, '\|'))
+function! unite#filters#vim_filter_patterns(candidates, patterns, whites) "{{{
+  let pattern = join(a:patterns, '\|')
+  let white = join(a:whites, '\|')
+  return filter(a:candidates,
+        \ "get(v:val, 'action__path', v:val.word) !~? pattern
+        \  || get(v:val, 'action__path', v:val.word) =~? white")
 endfunction"}}}
 
 function! unite#filters#globs2patterns(globs) "{{{
