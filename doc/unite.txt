@@ -1566,6 +1566,9 @@ unite#custom#source({source-name}, {option-name}, {value})
 		by ",".
 		This applies on the path or word attribute of candidates.
 		Note: It is not case sensitive.
+		Example: >
+		call unite#custom#source('file_rec', 'ignore_globs',
+		\ split(&wildignore, ','))
 
 						*unite#take_action()*
 unite#take_action({action-name}, {candidate})
@@ -3522,7 +3525,7 @@ Q: unite.vim is too slow.
 A: Use Vim 7.3.885 or above with |if_lua| feature; unite.vim gets faster.
 
 Q: Support for existing vim settings like Command-T plugin? Example,
-'wildignore', 'grepprg', 'suffixes'...
+'grepprg', 'suffixes'...
 
 A: No. Because it is hard to implement and it may conflict with current unite
 settings.
