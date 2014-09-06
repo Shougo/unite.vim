@@ -394,8 +394,8 @@ function! s:ignore_candidates(candidates, context) "{{{
   endif
 
   if !empty(a:context.ignore_globs)
-    let candidates = unite#filters#filter_pattern(candidates,
-          \ unite#filters#globs2pattern(a:context.ignore_globs))
+    let candidates = unite#filters#filter_patterns(candidates,
+          \ unite#filters#globs2patterns(a:context.ignore_globs))
   endif
 
   if a:context.path != ''

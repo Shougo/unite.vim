@@ -43,16 +43,16 @@ function! s:matcher.filter(candidates, context) "{{{
   if !has_key(a:context, 'filter__project_ignore_path')
         \ || a:context.filter__project_ignore_path !=# project
     let a:context.filter__project_ignore_path = project
-    let a:context.filter__project_ignore_pattern =
-          \ unite#filters#globs2pattern(s:get_ignore_globs(project))
+    let a:context.filter__project_ignore_patterns =
+          \ unite#filters#globs2patterns(s:get_ignore_globs(project))
   endif
 
-  if a:context.filter__project_ignore_pattern == ''
+  if empty(a:context.filter__project_ignore_patterns)
     return a:candidates
   endif
 
-  return unite#filters#filter_pattern(a:candidates,
-        \ a:context.filter__project_ignore_pattern)
+  return unite#filters#filter_patterns(a:candidates,
+        \ a:context.filter__project_ignore_patterns)
 endfunction"}}}
 
 function! s:get_ignore_globs(path) "{{{
@@ -74,7 +74,7 @@ function! s:parse_ignore_file(file) "{{{
   " Note: whitelist "!glob" and "syntax: regexp" in .hgignore features is not
   " supported.
   return filter(readfile(a:file),
-        \ "v:val !~ '\\<syntax:' && v:val !~ '\\<!'")
+        \ "v:val !~ '^\\s*$\\|\\s*syntax:\\|\\s*[!#]'")
 endfunction"}}}
 
 let &cpo = s:save_cpo
