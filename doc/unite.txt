@@ -2508,6 +2508,15 @@ matcher_project_files
 		Project files filter.  It removes non project files.
 		Note: Requires "action__path" in candidates.
 
+				*unite-filter-matcher_project_ignore_files*
+matcher_project_ignore_files
+		Project ignore files filter.  It removes project ignore files.
+		It searches project ignore files from ".gitignore",
+		".hgignore", ".agignore" and ".uniteignore".
+		Note: It does not support whitelist feature(Ex: "!glob"
+		pattern).
+		Note: It does not support non glob ignore files in .hgignore.
+
 						*unite-filter-sorter_default*
 sorter_default	The default sorter used by |unite-filter-default|.
 		["sorter_nothing"] is set initially.

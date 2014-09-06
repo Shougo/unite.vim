@@ -176,11 +176,17 @@ function! unite#filters#vim_filter_head(candidates, input) "{{{
         \ "stridx(tolower(get(v:val, 'action__path',
         \      v:val.word)), input) == 0")
 endfunction"}}}
-
-function! unite#filters#lua_filter_globs(candidates, globs) "{{{
+function! unite#filters#filter_pattern(candidates, pattern) "{{{
+  return unite#util#has_lua()?
+          \ unite#filters#lua_filter_pattern(
+          \   a:candidates, a:pattern) :
+          \ unite#filters#vim_filter_pattern(
+          \   a:candidates, a:pattern)
+endfunction"}}}
+function! unite#filters#lua_filter_pattern(candidates, pattern) "{{{
 lua << EOF
 do
-  local pattern = vim.eval('unite#filters#globs2lua_pattern(a:globs)')
+  local pattern = vim.eval('a:pattern')
   local candidates = vim.eval('a:candidates')
   for i = #candidates-1, 0, -1 do
     local word = candidates[i].action__path
@@ -195,7 +201,16 @@ EOF
   return a:candidates
 endfunction"}}}
 
+function! unite#filters#vim_filter_pattern(candidates, pattern) "{{{
+  return filter(a:candidates,
+        \ "get(v:val, 'action__path', v:val.word) !~? a:pattern")
+endfunction"}}}
 function! unite#filters#globs2pattern(globs) "{{{
+  return unite#util#has_lua() ?
+          \ unite#filters#globs2lua_pattern(a:globs) :
+          \ unite#filters#globs2vim_pattern(a:globs)
+endfunction"}}}
+function! unite#filters#globs2vim_pattern(globs) "{{{
   let patterns = []
   for glob in a:globs
     let glob = escape(glob, '~.^$')

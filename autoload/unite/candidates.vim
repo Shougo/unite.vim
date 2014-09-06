@@ -389,19 +389,13 @@ function! s:ignore_candidates(candidates, context) "{{{
   let candidates = copy(a:candidates)
 
   if a:context.ignore_pattern != ''
-    let candidates = filter(candidates,
-        \ "get(v:val, 'action__path', v:val.word)
-        \    !~? a:context.ignore_pattern")
+    let candidates = unite#filters#vim_filter_pattern(
+          \   candidates, a:context.ignore_pattern)
   endif
 
   if !empty(a:context.ignore_globs)
-    let ignore_pattern = unite#filters#globs2pattern(a:context.ignore_globs)
-    let candidates = unite#util#has_lua()?
-          \ unite#filters#lua_filter_globs(
-          \   candidates, a:context.ignore_globs) :
-          \ filter(candidates,
-          \ "get(v:val, 'action__path', v:val.word)
-          \    !~? ignore_pattern")
+    let candidates = unite#filters#filter_pattern(candidates,
+          \ unite#filters#globs2pattern(a:context.ignore_globs))
   endif
 
   if a:context.path != ''
