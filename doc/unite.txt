@@ -1569,6 +1569,10 @@ unite#custom#source({source-name}, {option-name}, {value})
 		Example: >
 		call unite#custom#source('file_rec', 'ignore_globs',
 		\ split(&wildignore, ','))
+<
+		white_globs			(List) or (String)
+		Specify the whitelist glob pattern list not to ignore
+		candidates of the source.
 
 						*unite#take_action()*
 unite#take_action({action-name}, {candidate})

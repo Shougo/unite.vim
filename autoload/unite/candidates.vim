@@ -314,6 +314,8 @@ function! s:get_source_candidates(source) "{{{
         \    'ignore_pattern', a:source.ignore_pattern),
         \ 'ignore_globs' : get(custom_source,
         \    'ignore_globs', a:source.ignore_globs),
+        \ 'white_globs' : get(custom_source,
+        \    'white_globs', a:source.white_globs),
         \ }
 
   let funcname = 's:get_source_candidates()'
@@ -395,7 +397,8 @@ function! s:ignore_candidates(candidates, context) "{{{
 
   if !empty(a:context.ignore_globs)
     let candidates = unite#filters#filter_patterns(candidates,
-          \ unite#filters#globs2patterns(a:context.ignore_globs), [])
+          \ unite#filters#globs2patterns(a:context.ignore_globs),
+          \ unite#filters#globs2patterns(a:context.white_globs))
   endif
 
   if a:context.path != ''
