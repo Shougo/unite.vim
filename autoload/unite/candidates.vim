@@ -221,8 +221,6 @@ function! s:recache_candidates_loop(context, is_force) "{{{
 
   let input_len = unite#util#strchars(a:context.input)
 
-  let custom = unite#custom#get()
-
   let candidate_sources = []
   let unite.max_source_candidates = 0
   for source in unite.sources
