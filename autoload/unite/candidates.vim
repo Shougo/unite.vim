@@ -259,8 +259,6 @@ function! s:recache_candidates_loop(context, is_force) "{{{
 
     let source_candidates = s:get_source_candidates(source)
 
-    let custom_source = get(custom.sources, source.name, {})
-
     " Call pre_filter hook.
     let context.candidates = source_candidates
     call unite#helper#call_hook([source], 'on_pre_filter')
