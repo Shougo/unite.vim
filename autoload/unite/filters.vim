@@ -240,8 +240,8 @@ function! unite#filters#globs2vim_patterns(globs) "{{{
       let glob = '/' . glob
     endif
     let glob = escape(glob, '~.^$')
-    let glob = substitute(glob, '\\\@<!\*\*', '.*', 'g')
-    let glob = substitute(glob, '\\\@<!\*', '[^/]*', 'g')
+    let glob = substitute(glob, '\*\@<!\*\*\@!', '[^/]*', 'g')
+    let glob = substitute(glob, '\\\@<!\*\*\+', '.*', 'g')
     let glob = substitute(glob, '\\\@<!?', '[^/]', 'g')
     let glob .= '$'
     call add(patterns, glob)
@@ -257,8 +257,8 @@ function! unite#filters#globs2lua_patterns(globs) "{{{
     endif
     let glob = tolower(glob)
     let glob = substitute(glob, '[%().+^$-]', '%\0', 'g')
-    let glob = substitute(glob, '\*\*\+', '.*', 'g')
     let glob = substitute(glob, '\*\@<!\*\*\@!', '[^/]*', 'g')
+    let glob = substitute(glob, '\\\@<!\*\*\+', '.*', 'g')
     let glob = substitute(glob, '\\\@<!?', '[^/]', 'g')
     let glob .= '$'
     call add(patterns, glob)
