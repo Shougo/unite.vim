@@ -56,8 +56,8 @@ let s:source_file_rec = {
       \ 'max_candidates' : 50,
       \ 'ignore_globs' : [
       \         '.', '*~', '*.o', '*.exe', '*.bak',
-      \         'DS_Store', '*.zwc', '*.pyc', '*.sw[po]', '*.class',
-      \         '.hg/*', '.git/*', '.bzr/*', '.svn/*',
+      \         'DS_Store', '*.pyc', '*.sw[po]', '*.class',
+      \         '.hg/**', '.git/**', '.bzr/**', '.svn/**',
       \         'tags', 'tags-*'
       \ ],
       \ 'matchers' : [ 'converter_relative_word',

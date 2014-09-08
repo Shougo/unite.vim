@@ -49,8 +49,8 @@ let s:source = {
       \ 'matchers' : 'matcher_regexp',
       \ 'ignore_globs' : [
       \         '*~', '*.o', '*.exe', '*.bak',
-      \         'DS_Store', '*.zwc', '*.pyc', '*.sw[po]', '*.class',
-      \         '.hg/*', '.git/*', '.bzr/*', '.svn/*',
+      \         'DS_Store', '*.pyc', '*.sw[po]', '*.class',
+      \         '.hg/**', '.git/**', '.bzr/**', '.svn/**',
       \ ],
       \ }
 

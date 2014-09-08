@@ -48,8 +48,8 @@ let s:source_file = {
       \ 'description' : 'candidates from file list',
       \ 'ignore_globs' : [
       \         '.', '..', '*~', '*.o', '*.exe', '*.bak',
-      \         'DS_Store', '*.zwc', '*.pyc', '*.sw[po]', '*.class',
-      \         '.hg/*', '.git/*', '.bzr/*', '.svn/*',
+      \         'DS_Store', '*.pyc', '*.sw[po]', '*.class',
+      \         '.hg/**', '.git/**', '.bzr/**', '.svn/**',
       \ ],
       \ 'default_kind' : 'file',
       \ 'matchers' : [ 'matcher_default', 'matcher_hide_hidden_files' ],
