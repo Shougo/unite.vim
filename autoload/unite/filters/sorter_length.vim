@@ -36,7 +36,8 @@ let s:sorter = {
       \}
 
 function! s:sorter.filter(candidates, context) "{{{
-  return unite#util#sort_by(a:candidates, 'len(v:val.word)')
+  return unite#util#sort_by(a:candidates,
+        \ "len(v:val.word) + 100*len(substitute(v:val.word, '[^/]', '', 'g'))")
 endfunction"}}}
 
 let &cpo = s:save_cpo
