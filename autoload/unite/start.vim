@@ -408,14 +408,15 @@ function! unite#start#_pos(buffer_name, direction) "{{{
 
   let unite.candidate_cursor = next
 
-  " Immediately action.
-  silent call unite#action#do(unite.context.default_action,
-        \ [unite.candidates[next]])
+  let candidate = unite.candidates[next]
 
-  redraw
-  echo printf('[%d/%d] %s',
+  " Immediately action.
+  silent call unite#action#do(
+        \ unite.context.default_action, [candidate])
+
+  call unite#view#_redraw_echo(printf('[%d/%d] %s',
         \ unite.candidate_cursor, len(unite.candidates)-1,
-        \ unite.candidates[next].abbr)
+        \ get(candidate, 'abbr', candidate.word)))
 endfunction"}}}
 
 function! s:get_candidates(sources, context) "{{{
