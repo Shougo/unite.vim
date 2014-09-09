@@ -79,14 +79,16 @@ function! unite#start#standard(sources, ...) "{{{
   call unite#candidates#_recache(context.input, context.is_redraw)
 
   if !current_unite.is_async &&
-        \ (context.immediately || !context.empty) "{{{
+        \ (context.force_immediately
+        \ || context.immediately || !context.empty) "{{{
     let candidates = unite#candidates#gather()
 
     if empty(candidates)
       " Ignore.
       call unite#variables#disable_current_unite()
       return
-    elseif context.immediately && len(candidates) == 1
+    elseif (context.immediately && len(candidates) == 1)
+          \ || context.force_immediately
       " Immediately action.
       call unite#action#do(
             \ context.default_action, [candidates[0]])

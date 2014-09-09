@@ -1742,6 +1742,12 @@ the context dictionary.
 		default action immediately.  If the candidate list is
 		empty, it does not open any unite buffer.
 
+					*unite-options-force-immediately*
+		-force-immediately
+		If candidates are exists, it runs the default action
+		immediately.  If the candidate list is empty, it does not open
+		any unite buffer.
+
 						*unite-options-auto-preview*
 		-auto-preview
 		When you select a candidate, it runs the "preview" action

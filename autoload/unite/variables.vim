@@ -186,6 +186,7 @@ function! s:initialize_default() "{{{
         \ 'winwidth' : 90,
         \ 'winheight' : 20,
         \ 'immediately' : 0,
+        \ 'force_immediately' : 0,
         \ 'empty' : 1,
         \ 'auto_preview' : 0,
         \ 'auto_highlight' : 0,
