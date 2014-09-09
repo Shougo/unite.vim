@@ -409,9 +409,9 @@ function! unite#start#_next_prev(buffer_name, is_next) "{{{
         \ [unite.candidates[unite.candidate_cursor]])
 
   redraw
-  echo printf('[%d/%d] %s candidates',
+  echo printf('[%d/%d] %s',
         \ unite.candidate_cursor, len(unite.candidates),
-        \ unite.context.buffer_name)
+        \ unite.candidates[unite.candidate_cursor].abbr)
 endfunction"}}}
 
 function! s:get_candidates(sources, context) "{{{
