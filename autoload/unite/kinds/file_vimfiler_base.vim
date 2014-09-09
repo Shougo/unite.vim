@@ -318,7 +318,8 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
       call writefile([], filename)
 
       call unite#action#do(
-            \ (vimfiler_current_dir == '' ? 'open' : g:vimfiler_edit_action),
+            \ (vimfiler_current_dir == '' ?
+            \   'open' : vimfiler#get_context().edit_action),
             \ [file], { 'no_quit' : 1 })
 
       execute 'doautocmd BufNewFile' fnameescape(filename)
