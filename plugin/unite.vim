@@ -148,6 +148,12 @@ endfunction"}}}
 command! -nargs=? -complete=customlist,unite#complete#buffer_name
       \ UniteClose call unite#view#_close(<q-args>)
 
+command! -nargs=? -complete=customlist,unite#complete#buffer_name
+      \ UniteNext call unite#start#_next_prev(<q-args>, 1)
+
+command! -nargs=? -complete=customlist,unite#complete#buffer_name
+      \ UnitePrevious call unite#start#_next_prev(<q-args>, 0)
+
 let g:loaded_unite = 1
 
 let &cpo = s:save_cpo

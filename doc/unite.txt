@@ -384,6 +384,16 @@ COMMANDS 					*unite-commands*
 		Note: Closes the last unite buffer you used in current tab if
 		you skip specifying {buffer-name}.
 
+:UniteNext [{buffer-name}]			*:UniteNext*
+		Do the default action with next candidates in the unite buffer
+		with {buffer-name}.
+		You can use it like |:cnext|.
+
+:UnitePrevious [{buffer-name}]			*:UnitePrevious*
+		Do the default action with previous candidates in the unite
+		buffer with {buffer-name}.
+		You can use it like |:cprevious|.
+
 The commands of source				*:unite-sources-commands*
 
 :UniteBookmarkAdd [{file}]			*:UniteBookmarkAdd*
