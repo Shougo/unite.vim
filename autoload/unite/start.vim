@@ -415,7 +415,7 @@ function! unite#start#_pos(buffer_name, direction) "{{{
         \ unite.context.default_action, [candidate])
 
   call unite#view#_redraw_echo(printf('[%d/%d] %s',
-        \ unite.candidate_cursor, len(unite.candidates)-1,
+        \ unite.candidate_cursor+1, len(unite.candidates),
         \ get(candidate, 'abbr', candidate.word)))
 endfunction"}}}
 
