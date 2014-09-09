@@ -149,10 +149,13 @@ command! -nargs=? -complete=customlist,unite#complete#buffer_name
       \ UniteClose call unite#view#_close(<q-args>)
 
 command! -nargs=? -complete=customlist,unite#complete#buffer_name
-      \ UniteNext call unite#start#_next_prev(<q-args>, 1)
-
+      \ UniteNext call unite#start#_pos(<q-args>, 'next')
 command! -nargs=? -complete=customlist,unite#complete#buffer_name
-      \ UnitePrevious call unite#start#_next_prev(<q-args>, 0)
+      \ UnitePrevious call unite#start#_pos(<q-args>, 'previous')
+command! -nargs=? -complete=customlist,unite#complete#buffer_name
+      \ UniteFirst call unite#start#_pos(<q-args>, 'first')
+command! -nargs=? -complete=customlist,unite#complete#buffer_name
+      \ UniteLast call unite#start#_pos(<q-args>, 'last')
 
 let g:loaded_unite = 1
 

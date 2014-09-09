@@ -385,14 +385,24 @@ COMMANDS 					*unite-commands*
 		you skip specifying {buffer-name}.
 
 :UniteNext [{buffer-name}]			*:UniteNext*
-		Do the default action with next candidates in the unite buffer
-		with {buffer-name}.
+		Do the default action with the next candidate in the unite
+		buffer with {buffer-name}.
 		You can use it like |:cnext|.
 
 :UnitePrevious [{buffer-name}]			*:UnitePrevious*
-		Do the default action with previous candidates in the unite
-		buffer with {buffer-name}.
+		Do the default action with the previous candidates in the
+		unite buffer with {buffer-name}.
 		You can use it like |:cprevious|.
+
+:UniteFirst [{buffer-name}]			*:UniteFirst*
+		Do the default action with the first candidate in the unite
+		buffer with {buffer-name}.
+		You can use it like |:cfirst|.
+
+:UniteLast [{buffer-name}]			*:UniteLast*
+		Do the default action with the last candidate in the unite
+		buffer with {buffer-name}.
+		You can use it like |:clast|.
 
 The commands of source				*:unite-sources-commands*
 

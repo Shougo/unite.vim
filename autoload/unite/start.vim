@@ -388,30 +388,34 @@ function! unite#start#complete(sources, ...) "{{{
         \  string(sources), string(context))
 endfunction "}}}
 
-function! unite#start#_next_prev(buffer_name, is_next) "{{{
+function! unite#start#_pos(buffer_name, direction) "{{{
   let bufnr = s:get_unite_buffer(a:buffer_name)
   if bufnr < 0
     return
   endif
 
   let unite = getbufvar(bufnr, 'unite')
-  if empty(unite.candidates)
-        \ || (!a:is_next && unite.candidate_cursor <= 0)
-        \ || (a:is_next && unite.candidate_cursor+1 >= len(unite.candidates))
+
+  let next =
+        \ (a:direction ==# 'first') ? 0 :
+        \ (a:direction ==# 'last') ? len(unite.candidates)-1 :
+        \ (a:direction ==# 'next') ? unite.candidate_cursor+1 :
+        \ unite.candidate_cursor-1
+  if next < 0 || next >= len(unite.candidates)
     " Ignore.
     return
   endif
 
-  let unite.candidate_cursor += (a:is_next ? 1 : -1)
+  let unite.candidate_cursor = next
 
   " Immediately action.
   silent call unite#action#do(unite.context.default_action,
-        \ [unite.candidates[unite.candidate_cursor]])
+        \ [unite.candidates[next]])
 
   redraw
   echo printf('[%d/%d] %s',
-        \ unite.candidate_cursor, len(unite.candidates),
-        \ unite.candidates[unite.candidate_cursor].abbr)
+        \ unite.candidate_cursor, len(unite.candidates)-1,
+        \ unite.candidates[next].abbr)
 endfunction"}}}
 
 function! s:get_candidates(sources, context) "{{{
