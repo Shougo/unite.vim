@@ -474,18 +474,12 @@ g:unite_source_rec_min_cache_files
 
 		The default value is 100.
 
-				*g:unite_source_file_rec_min_cache_files*
-		Note: This variable is obsolete.
-
 					*g:unite_source_rec_max_cache_files*
 g:unite_source_rec_max_cache_files
 		Specify the maximum number of files that
 		|unite-source-file_rec| saves the caches.
 
 		The default value is 20000.
-
-				*g:unite_source_file_rec_max_cache_files*
-		Note: This variable is obsolete.
 
 					*g:unite_source_rec_unit*
 g:unite_source_rec_unit
@@ -516,8 +510,6 @@ g:unite_source_rec_async_command
 		The default value is "find" and the args.
 		Because, "find" command is fastest.
 
-					*g:unite_source_file_rec_async_command*
-		Note: This variable is obsolete.
 
 					*g:unite_source_rec_git_command*
 g:unite_source_rec_git_command
@@ -1967,6 +1959,12 @@ file_rec	Gather files recursive and nominates all directory or file
 
 		Source arguments:
 		1. the search directory.
+
+		Source custom options:
+		-custom-rec-ignore-directory-pattern: ignore directory pattern
+		-custom-grep-default_opts           : default grep options
+		-custom-grep-recursive_opt          : grep recursive options
+		-custom-grep-search-word-highlight  : search word highlight
 
 						*unite-source-file_rec/async*
 file_rec/async	Similar to |unite-source-file_rec|, but get files asynchronously.
