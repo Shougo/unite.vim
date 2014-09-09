@@ -62,7 +62,6 @@ let s:source_file_rec = {
       \ ],
       \ 'matchers' : [ 'converter_relative_word',
       \                'matcher_default', 'matcher_hide_hidden_files' ],
-      \ 'source__ignore_directory_pattern' : '/\.\+$\|/\%(\.hg\|\.git\|\.bzr\|\.svn\)/',
       \ }
 
 function! s:source_file_rec.gather_candidates(args, context) "{{{
@@ -96,9 +95,8 @@ endfunction"}}}
 function! s:source_file_rec.async_gather_candidates(args, context) "{{{
   let continuation = a:context.source__continuation
 
-  let custom_source = get(unite#custom#get().sources, a:context.source_name, {})
-  let ignore_dir = get(custom_source, 'source__ignore_directory_pattern',
-              \ s:source_file_rec.source__ignore_directory_pattern)
+  let ignore_dir = get(a:context, 'custom_rec_ignore_directory_pattern',
+              \ '/\.\+$\|/\%(\.hg\|\.git\|\.bzr\|\.svn\)/')
 
   let [continuation.rest, files] =
         \ s:get_files(a:context, continuation.rest,
