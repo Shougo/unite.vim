@@ -401,11 +401,9 @@ function! unite#start#_pos(buffer_name, direction, count) "{{{
         \ (a:direction ==# 'last') ? len(unite.candidates)-1 :
         \ (a:direction ==# 'next') ? unite.candidate_cursor+a:count :
         \ unite.candidate_cursor-a:count
-  if next < 0
-    let next = 0
-  endif
-  if next >= len(unite.candidates)
+  if next < 0 || next >= len(unite.candidates)
     " Ignore.
+    call unite#view#_print_error('No more items')
     return
   endif
 
