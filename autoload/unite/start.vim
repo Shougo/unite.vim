@@ -414,8 +414,8 @@ function! unite#start#_pos(buffer_name, direction, count) "{{{
   let candidate = unite.candidates[next]
 
   " Immediately action.
-  silent call unite#action#do(
-        \ unite.context.default_action, [candidate])
+  silent call unite#action#do_candidates(
+        \ unite.context.default_action, [candidate], unite.context)
 
   call unite#view#_redraw_echo(printf('[%d/%d] %s',
         \ unite.candidate_cursor+1, len(unite.candidates),
