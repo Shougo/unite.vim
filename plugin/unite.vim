@@ -148,14 +148,14 @@ endfunction"}}}
 command! -nargs=? -complete=customlist,unite#complete#buffer_name
       \ UniteClose call unite#view#_close(<q-args>)
 
+command! -count=1 -nargs=? -complete=customlist,unite#complete#buffer_name
+      \ UniteNext call unite#start#_pos(<q-args>, 'next', expand('<count>'))
+command! -count=1 -nargs=? -complete=customlist,unite#complete#buffer_name
+      \ UnitePrevious call unite#start#_pos(<q-args>, 'previous', expand('<count>'))
 command! -nargs=? -complete=customlist,unite#complete#buffer_name
-      \ UniteNext call unite#start#_pos(<q-args>, 'next')
+      \ UniteFirst call unite#start#_pos(<q-args>, 'first', 1)
 command! -nargs=? -complete=customlist,unite#complete#buffer_name
-      \ UnitePrevious call unite#start#_pos(<q-args>, 'previous')
-command! -nargs=? -complete=customlist,unite#complete#buffer_name
-      \ UniteFirst call unite#start#_pos(<q-args>, 'first')
-command! -nargs=? -complete=customlist,unite#complete#buffer_name
-      \ UniteLast call unite#start#_pos(<q-args>, 'last')
+      \ UniteLast call unite#start#_pos(<q-args>, 'last', 1)
 
 let g:loaded_unite = 1
 

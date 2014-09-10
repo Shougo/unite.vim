@@ -388,7 +388,7 @@ function! unite#start#complete(sources, ...) "{{{
         \  string(sources), string(context))
 endfunction "}}}
 
-function! unite#start#_pos(buffer_name, direction) "{{{
+function! unite#start#_pos(buffer_name, direction, count) "{{{
   let bufnr = s:get_unite_buffer(a:buffer_name)
   if bufnr < 0
     return
@@ -399,9 +399,12 @@ function! unite#start#_pos(buffer_name, direction) "{{{
   let next =
         \ (a:direction ==# 'first') ? 0 :
         \ (a:direction ==# 'last') ? len(unite.candidates)-1 :
-        \ (a:direction ==# 'next') ? unite.candidate_cursor+1 :
-        \ unite.candidate_cursor-1
-  if next < 0 || next >= len(unite.candidates)
+        \ (a:direction ==# 'next') ? unite.candidate_cursor+a:count :
+        \ unite.candidate_cursor-a:count
+  if next < 0
+    let next = 0
+  endif
+  if next >= len(unite.candidates)
     " Ignore.
     return
   endif

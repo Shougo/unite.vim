@@ -384,12 +384,12 @@ COMMANDS 					*unite-commands*
 		Note: Closes the last unite buffer you used in current tab if
 		you skip specifying {buffer-name}.
 
-:UniteNext [{buffer-name}]			*:UniteNext*
+:[count]UniteNext [{buffer-name}]		*:UniteNext*
 		Do the default action with the next candidate in the unite
 		buffer with {buffer-name}.
 		You can use it like |:cnext|.
 
-:UnitePrevious [{buffer-name}]			*:UnitePrevious*
+:[count]UnitePrevious [{buffer-name}]		*:UnitePrevious*
 		Do the default action with the previous candidates in the
 		unite buffer with {buffer-name}.
 		You can use it like |:cprevious|.
