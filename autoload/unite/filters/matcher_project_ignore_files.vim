@@ -60,23 +60,22 @@ endfunction"}}}
 function! s:get_ignore_results(path) "{{{
   let globs = []
   let whites = []
-  for d in [
+  for ignore in [
         \ '.gitignore', '.hgignore', '.agignore', '.uniteignore',
         \ ]
-    let f = findfile(d, a:path . ';')
-    if f != ''
-      let f = fnamemodify(f, ':p')
-      let _ = s:parse_ignore_file(f)
+    for f in split(globpath(a:path, '**/' . ignore), '\n')
+      let _ = s:parse_ignore_file(
+            \ fnamemodify(f, ':p'), fnamemodify(f, ':h'))
       let globs += _[0]
       let whites += _[1]
-    endif
+    endfor
   endfor
 
   return [unite#filters#globs2patterns(globs),
         \ unite#filters#globs2patterns(whites)]
 endfunction"}}}
 
-function! s:parse_ignore_file(file) "{{{
+function! s:parse_ignore_file(file, prefix) "{{{
   " Note: whitelist "!glob" and "syntax: regexp" in .hgignore features is not
   " supported.
   let patterns = []
@@ -89,7 +88,10 @@ function! s:parse_ignore_file(file) "{{{
       call add(patterns, line)
     endif
   endfor
-  return [patterns, whites]
+
+  let prefix = a:prefix . '/'
+  let func = "prefix . (stridx(v:val, '/') >= 0 ? '' : '**/') . v:val"
+  return [map(patterns, func), map(whites, func)]
 endfunction"}}}
 
 let &cpo = s:save_cpo
