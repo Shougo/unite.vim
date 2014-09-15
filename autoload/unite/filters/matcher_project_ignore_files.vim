@@ -89,8 +89,7 @@ function! s:parse_ignore_file(file, prefix) "{{{
     endif
   endfor
 
-  let prefix = a:prefix . '/'
-  let func = "prefix . (stridx(v:val, '/') >= 0 ? '' : '**/') . v:val"
+  let func = "a:prefix.'/' . (stridx(v:val, '/') >= 0 ? '' : '**/') . v:val"
   return [map(patterns, func), map(whites, func)]
 endfunction"}}}
 
