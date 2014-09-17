@@ -66,6 +66,15 @@ function! unite#custom#action(kind, name, action) "{{{
 endfunction"}}}
 
 function! unite#custom#profile(profile_name, option_name, value) "{{{
+  if a:option_name ==# 'smartcase'
+        \ || a:option_name ==# 'ignorecase'
+    call unite#print_error(
+          \ printf('[unite.vim] You cannot set "%s". '
+          \ .'Please set "context.%s" by unite#custom#profile() instead.',
+          \ a:option_name, a:option_name))
+    return
+  endif
+
   let profile_name =
         \ (a:profile_name == '' ? 'default' : a:profile_name)
   let custom = unite#custom#get()
@@ -76,8 +85,6 @@ function! unite#custom#profile(profile_name, option_name, value) "{{{
             \ 'substitute_patterns' : {},
             \ 'filters' : [],
             \ 'context' : {},
-            \ 'ignorecase' : &ignorecase,
-            \ 'smartcase' : &smartcase,
             \ 'unite__save_pos' : {},
             \ 'unite__inputs' : {},
             \ }
@@ -111,8 +118,6 @@ function! unite#custom#get_profile(profile_name, option_name) "{{{
           \ 'substitute_patterns' : {},
           \ 'filters' : [],
           \ 'context' : {},
-          \ 'ignorecase' : &ignorecase,
-          \ 'smartcase' : &smartcase,
           \ 'unite__save_pos' : {},
           \ 'unite__inputs' : {},
           \ }
@@ -154,8 +159,6 @@ call unite#custom#profile('files', 'substitute_patterns', {
       \ 'subst' : "\\=repeat('../', len(submatch(0))-1)",
       \ 'priority' : 10000,
       \ })
-call unite#custom#profile('files', 'smartcase', 0)
-call unite#custom#profile('files', 'ignorecase', 1)
 "}}}
 
 let &cpo = s:save_cpo

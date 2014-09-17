@@ -32,107 +32,109 @@ function! unite#candidates#_recache(input, is_force) "{{{
   " Save options.
   let ignorecase_save = &ignorecase
 
-  if unite#custom#get_profile(unite.profile_name, 'smartcase')
-        \ && get(split(a:input, '\W'), -1, '') =~ '\u'
-    let &ignorecase = 0
-  else
-    let &ignorecase =
-          \ unite#custom#get_profile(unite.profile_name, 'ignorecase')
-  endif
-
   let context = unite.context
-  let context.is_redraw = a:is_force
-  let context.is_changed = a:input !=# unite.last_input
-        \ || context.path !=# unite.last_path
 
-  if empty(unite.args)
-    if a:input == ''
-      let sources = []
-    elseif a:input !~ '^.\{-}\%(\\\@<!\s\)\+'
-      " Use interactive source.
-      let sources = unite#init#_loaded_sources(['interactive'], context)
+  try
+    if context.smartcase
+      let &ignorecase = get(split(a:input, '\W'), -1, '') !~ '\u'
     else
-      " Use specified source.
-      let args = unite#helper#parse_options_args(
-            \ matchstr(a:input, '^.\{-}\%(\\\@<!\s\)\+'))[0]
-      try
-        let sources = unite#init#_loaded_sources(args, context)
-      catch
+      let &ignorecase = context.ignorecase
+    endif
+
+    let context.is_redraw = a:is_force
+    let context.is_changed = a:input !=# unite.last_input
+          \ || context.path !=# unite.last_path
+
+    if empty(unite.args)
+      if a:input == ''
         let sources = []
-      endtry
-    endif
+      elseif a:input !~ '^.\{-}\%(\\\@<!\s\)\+'
+        " Use interactive source.
+        let sources = unite#init#_loaded_sources(['interactive'], context)
+      else
+        " Use specified source.
+        let args = unite#helper#parse_options_args(
+              \ matchstr(a:input, '^.\{-}\%(\\\@<!\s\)\+'))[0]
+        try
+          let sources = unite#init#_loaded_sources(args, context)
+        catch
+          let sources = []
+        endtry
+      endif
 
-    if get(unite.sources, 0, {'name' : ''}).name
-          \ !=# get(sources, 0, {'name' : ''}).name
-      " Finalize previous sources.
-      call unite#helper#call_hook(unite.sources, 'on_close')
+      if get(unite.sources, 0, {'name' : ''}).name
+            \ !=# get(sources, 0, {'name' : ''}).name
+        " Finalize previous sources.
+        call unite#helper#call_hook(unite.sources, 'on_close')
 
-      let unite.sources = sources
-      let unite.source_names = unite#helper#get_source_names(sources)
+        let unite.sources = sources
+        let unite.source_names = unite#helper#get_source_names(sources)
 
-      " Initialize.
-      call unite#helper#call_hook(sources, 'on_init')
-      call unite#view#_set_syntax()
-    endif
-  endif
-
-  for source in unite.sources
-    let source.unite__candidates = []
-  endfor
-
-  let inputs = unite#helper#get_substitute_input(a:input)
-  let context.is_list_input = len(inputs) > 1
-  for input in inputs
-    let context.input = input
-    call s:recache_candidates_loop(context, a:is_force)
-  endfor
-
-  " Restore prompt input
-  let context.input = a:input
-
-  let filtered_count = 0
-
-  for source in unite.sources
-    let source.unite__is_invalidate = 0
-
-    if !context.unite__not_buffer && source.max_candidates != 0
-          \ && context.unite__is_interactive
-          \ && !unite.disabled_max_candidates
-          \ && len(source.unite__candidates) > source.max_candidates
-      " Filtering too many candidates.
-      let source.unite__candidates =
-            \ source.unite__candidates[: source.max_candidates - 1]
-
-      if context.verbose && filtered_count < &cmdheight
-        echohl WarningMsg | echomsg printf(
-              \ '[%s] Filtering too many candidates.', source.name)
-              \ | echohl None
-        let filtered_count += 1
+        " Initialize.
+        call unite#helper#call_hook(sources, 'on_init')
+        call unite#view#_set_syntax()
       endif
     endif
 
-    if source.is_grouped
+    for source in unite.sources
+      let source.unite__candidates = []
+    endfor
+
+    let inputs = unite#helper#get_substitute_input(a:input)
+    let context.is_list_input = len(inputs) > 1
+    for input in inputs
+      let context.input = input
+      call s:recache_candidates_loop(context, a:is_force)
+    endfor
+
+    " Restore prompt input
+    let context.input = a:input
+
+    let filtered_count = 0
+
+    for source in unite.sources
+      let source.unite__is_invalidate = 0
+
+      if !context.unite__not_buffer && source.max_candidates != 0
+            \ && context.unite__is_interactive
+            \ && !unite.disabled_max_candidates
+            \ && len(source.unite__candidates) > source.max_candidates
+        " Filtering too many candidates.
+        let source.unite__candidates =
+              \ source.unite__candidates[: source.max_candidates - 1]
+
+        if context.verbose && filtered_count < &cmdheight
+          echohl WarningMsg | echomsg printf(
+                \ '[%s] Filtering too many candidates.', source.name)
+                \ | echohl None
+          let filtered_count += 1
+        endif
+      endif
+
+      if source.is_grouped
+        let source.unite__candidates =
+              \ unite#candidates#_group_post_filters(source.unite__candidates)
+      endif
+
+      " Call post_filter hook.
+      let source.unite__context.candidates =
+            \ source.unite__candidates
+      call unite#helper#call_hook([source], 'on_post_filter')
+
       let source.unite__candidates =
-            \ unite#candidates#_group_post_filters(source.unite__candidates)
-    endif
+            \ unite#init#_candidates_source(
+            \   source.unite__context.candidates, source.name)
+      let source.unite__len_candidates = len(source.unite__candidates)
+    endfor
 
-    " Call post_filter hook.
-    let source.unite__context.candidates =
-          \ source.unite__candidates
-    call unite#helper#call_hook([source], 'on_post_filter')
+    " Update async state.
+    let unite.is_async =
+          \ len(filter(copy(unite.sources),
+          \           'v:val.unite__context.is_async')) > 0
+  finally
+    let &ignorecase = ignorecase_save
+  endtry
 
-    let source.unite__candidates =
-          \ unite#init#_candidates_source(
-          \   source.unite__context.candidates, source.name)
-    let source.unite__len_candidates = len(source.unite__candidates)
-  endfor
-
-  " Update async state.
-  let unite.is_async =
-        \ len(filter(copy(unite.sources),
-        \           'v:val.unite__context.is_async')) > 0
-
-  let &ignorecase = ignorecase_save
   call unite#handlers#_save_updatetime()
 endfunction"}}}
 

@@ -1442,18 +1442,6 @@ unite#custom#profile({profile-name}, {option-name}, {value})
 		combining all candidates.  If you change filters dynamically,
 		use |unite#mappings#set_current_filters()| instead.
 
-		ignorecase			(Number)
-		Specify 'ignorecase' value in unite buffer.  If it is
-		omitted, global 'ignorecase' value is used.
-		Note: If profile_name is "files", the default value "1" is
-		used.
-
-		smartcase			(Number)
-		Specify 'smartcase' value in unite buffer.  If it is omitted,
-		global 'smartcase' value is used.
-		Note: If profile_name is "files", the default value "0" is
-		used.
-
 		context				(Dictionary)
 		Specify default {context} value in unite buffer.
 		You can customize the context in the unite buffer.
@@ -1947,6 +1935,16 @@ the context dictionary.
 		Wipeout unite buffer when quit.
 		It is useful for using jumplist.
 		Note: If it is used, you cannot use |:UniteResume| feature.
+
+						*unite-options-ignorecase*
+		-ignorecase
+		Specify 'ignorecase' value in unite buffer.  If it is
+		omitted, global 'ignorecase' value is used.
+
+						*unite-options-smartcase*
+		-smartcase
+		Specify 'smartcase' value in unite buffer.  If it is omitted,
+		global 'smartcase' value is used.
 
 ==============================================================================
 SOURCES						*unite-sources*

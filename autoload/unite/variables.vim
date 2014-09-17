@@ -230,6 +230,8 @@ function! s:initialize_default() "{{{
         \ 'cursor_line_time' : '0.10',
         \ 'is_redraw' : 0,
         \ 'wipe' : 0,
+        \ 'ignorecase' : &ignorecase,
+        \ 'smartcase' : &smartcase,
         \ 'unite__old_buffer_info' : [],
         \ 'unite__direct_switch' : 0,
         \ 'unite__is_interactive' : 1,
