@@ -40,14 +40,18 @@ function! unite#init#_context(context, ...) "{{{
   let default_context = extend(copy(unite#variables#default_context()),
         \ unite#custom#get_profile('default', 'context'))
 
+  if len(source_names) == 1
+    " Overwrite source context by profile.
+    call extend(default_context, unite#custom#get_profile(
+          \ 'source/' . source_names[0], 'context'))
+  endif
+
   let profile_name = get(a:context, 'profile_name',
-        \ ((len(source_names) == 1 && !has_key(a:context, 'buffer_name')) ?
-        \    'source/' . source_names[0] :
-        \    get(a:context, 'buffer_name', 'default')))
+        \    get(a:context, 'buffer_name', 'default'))
   if profile_name !=# 'default'
-    " Overwrite default_context by profile context.
-    call extend(default_context,
-          \ unite#custom#get_profile(profile_name, 'context'))
+    " Overwrite context by profile.
+    call extend(default_context, unite#custom#get_profile(
+          \ profile_name, 'context'))
   endif
 
   let context = extend(default_context, a:context)
@@ -268,7 +272,6 @@ function! unite#init#_current_unite(sources, context) "{{{
         \ 'default' : context.buffer_name
   let unite.profile_name =
         \ (context.profile_name != '') ? context.profile_name :
-        \ (len(sources) == 1) ? 'source/' . sources[0].name :
         \ unite.buffer_name
   let unite.prev_bufnr = bufnr('%')
   let unite.prev_winnr = winnr()
