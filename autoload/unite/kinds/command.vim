@@ -44,6 +44,12 @@ let s:kind.action_table.execute = {
       \ }
 function! s:kind.action_table.execute.func(candidates) "{{{
   for candidate in a:candidates
+    if get(candidate, 'action__command_args', "") !=# '0'
+      " Use edit action
+      call s:kind.action_table.edit.func(candidate)
+      continue
+    endif
+
     let command = candidate.action__command
     let type = get(candidate, 'action__type', ':')
     if get(candidate, 'action__histadd', 0)
