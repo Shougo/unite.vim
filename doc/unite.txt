@@ -1946,6 +1946,11 @@ the context dictionary.
 		Specify 'smartcase' value in unite buffer.  If it is omitted,
 		global 'smartcase' value is used.
 
+						*unite-options-restore*
+		-restore
+		Restore the cursor in unite buffer.
+		Note: It is default behavior.
+
 ==============================================================================
 SOURCES						*unite-sources*
 
