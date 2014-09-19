@@ -311,6 +311,7 @@ function! unite#start#resume(buffer_name, ...) "{{{
   endif
 
   let context = getbufvar(bufnr, 'unite').context
+  let context.resume = 1
 
   let winnr = winnr()
   let win_rest_cmd = context.unite__direct_switch ||
@@ -337,7 +338,6 @@ function! unite#start#resume(buffer_name, ...) "{{{
   let unite.access_time = localtime()
   let unite.context = context
   let unite.is_finalized = 0
-  let unite.is_resume = 1
   let unite.preview_candidate = {}
   let unite.highlight_candidate = {}
 

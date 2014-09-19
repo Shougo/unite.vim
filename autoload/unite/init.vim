@@ -320,7 +320,6 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.disabled_max_candidates = 0
   let unite.cursor_line_time = reltime()
   let unite.match_id = 11
-  let unite.is_resume = 0
 
   if context.here
     let context.winheight = winheight(0) - winline() + 1
