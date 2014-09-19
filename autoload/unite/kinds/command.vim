@@ -44,7 +44,7 @@ let s:kind.action_table.execute = {
       \ }
 function! s:kind.action_table.execute.func(candidates) "{{{
   for candidate in a:candidates
-    if get(candidate, 'action__command_args', "") !=# '0'
+    if get(candidate, 'action__command_args', '0') !=# '0'
       " Use edit action
       call s:kind.action_table.edit.func(candidate)
       continue

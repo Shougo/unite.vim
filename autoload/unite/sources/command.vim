@@ -106,9 +106,9 @@ function! s:source.gather_candidates(args, context) "{{{
     let dict = {
           \ 'word' : word,
           \ 'abbr' : printf('%-16s %s', word, prototype),
-          \ 'action__command' : word . ' ',
           \ 'source__command' : ':'.word,
-          \ 'source__command_args' : args,
+          \ 'action__command' : word . ' ',
+          \ 'action__command_args' : args,
           \ 'action__histadd' : 1,
           \ }
     let dict.action__description = dict.abbr
