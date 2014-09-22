@@ -204,7 +204,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
           \ (context.prompt_direction == 'below'
           \   && line('.') == line('$') || line('.') == 1))
           \ || line('.') == prompt_linenr
-    if is_prompt || mode('.') == 'i'
+    if is_prompt || mode('.') == 'i' || unite.is_async
           \ || abs(line('.') - unite.prev_line) != 1
           \ || split(reltimestr(reltime(unite.cursor_line_time)))[0]
           \    > context.cursor_line_time
