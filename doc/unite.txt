@@ -1206,7 +1206,7 @@ e		In case when you selected a candidate, runs narrow action
 t		In case when you selected a candidate, runs tabopen action
 yy		In case when you selected a candidate, runs yank action
 o		In case when you selected a candidate, runs open action
-p		runs preview action
+p		In case when you selected a candidate, runs preview action
 x		In case when you selected a candidate, runs
 		|<Plug>(unite_quick_match_default_action)|
 
@@ -3626,17 +3626,6 @@ buffer (the default is mapped to <C-l>).
 
 Note: |unite-options-sync| may be useful. It blocks Vim until the cache is
 completed.
-
-Q: I want to toggle the preview window when I press the "p" key.
-
-A: >
-	autocmd FileType unite call s:unite_my_settings()
-	function! s:unite_my_settings()
-	    nnoremap <silent><buffer><expr> p
-	          \ empty(filter(range(1, winnr('$')),
-	          \ 'getwinvar(v:val, "&previewwindow") != 0')) ?
-	          \ unite#do_action('preview') : ":\<C-u>pclose!\<CR>"
-	endfunction
 
 Q: file_rec/async source does not look .gitignore using ag.
 https://github.com/Shougo/unite.vim/issues/398
