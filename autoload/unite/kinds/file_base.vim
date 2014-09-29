@@ -27,9 +27,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Variables  "{{{
-if !exists('g:unite_kind_file_vertical_preview')
-  let g:unite_kind_file_vertical_preview = 0
-endif
 if !exists('g:unite_kind_file_preview_max_filesize')
   let g:unite_kind_file_preview_max_filesize = 1000000
 endif
@@ -82,17 +79,7 @@ function! s:kind.action_table.preview.func(candidate) "{{{
   endif
 
   " If execute this command, unite.vim will be affected by events.
-  if g:unite_kind_file_vertical_preview
-    let unite_winwidth = winwidth(0)
-    noautocmd silent execute 'vertical pedit!'
-          \ fnameescape(a:candidate.action__path)
-    wincmd P
-    let target_winwidth = (unite_winwidth + winwidth(0)) / 2
-    execute 'wincmd p | vert resize ' . target_winwidth
-  else
-    noautocmd silent execute 'pedit!'
-          \ fnameescape(a:candidate.action__path)
-  endif
+  call unite#view#_preview_file(a:candidate.action__path)
 
   let winnr = winnr()
   wincmd P

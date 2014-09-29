@@ -880,6 +880,21 @@ function! unite#view#_remove_previewed_buffer_list(bufnr) "{{{
   call filter(unite.previewed_buffer_list, 'v:val != a:bufnr')
 endfunction"}}}
 
+function! unite#view#_preview_file(filename) "{{{
+  let context = unite#get_context()
+  if context.vertical_preview
+    let unite_winwidth = winwidth(0)
+    noautocmd silent execute 'vertical pedit!'
+          \ fnameescape(a:filename)
+    wincmd P
+    let target_winwidth = (unite_winwidth + winwidth(0)) / 2
+    execute 'wincmd p | vert resize ' . target_winwidth
+  else
+    noautocmd silent execute 'pedit!'
+          \ fnameescape(a:filename)
+  endif
+endfunction"}}}
+
 function! s:clear_previewed_buffer_list() "{{{
   let unite = unite#get_current_unite()
   for bufnr in unite.previewed_buffer_list

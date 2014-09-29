@@ -761,14 +761,6 @@ g:unite_kind_jump_list_after_jump_scroll
 
 		The default value is 25.
 
-g:unite_kind_file_vertical_preview		*g:unite_kind_file_vertical_preview*
-		If this variable is 1, Unite will open the preview window
-		(when executing the file preview action) vertically rather than
-		horizontally. It will take up half the width of the current
-		Unite buffer.
-
-		The default value is 0.
-
 					*g:unite_kind_file_preview_max_filesize*
 g:unite_kind_file_preview_max_filesize
 		It is max file size of preview action in file kind.
@@ -892,6 +884,13 @@ g:unite_cursor_line_time		*g:unite_cursor_line_time*
 		If you scroll cursor quickly less than it, unite will skip
 		cursor line highlight.
 		If it is "0.0", this feature will be disabled.
+		Note: This variable is deprecated.  Please use
+		|unite#custom#profile()| instead.
+
+					*g:unite_kind_file_vertical_preview*
+g:unite_kind_file_vertical_preview
+		If this variable is 1, Unite will open the preview window
+		vertically rather than horizontally.
 		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
@@ -1950,6 +1949,13 @@ the context dictionary.
 		-restore
 		Restore the cursor in unite buffer.
 		Note: It is default behavior.
+
+						*unite-options-vertical-preview*
+		-vertical-preview
+		If it is on, Unite will open the preview window
+		(when executing the file preview action) vertically rather than
+		horizontally. It will take up half the width of the current
+		Unite buffer.
 
 ==============================================================================
 SOURCES						*unite-sources*

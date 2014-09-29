@@ -80,7 +80,7 @@ function! unite#kinds#jump_list#define() "{{{
     let preview_windows = filter(range(1, winnr('$')),
           \ 'getwinvar(v:val, "&previewwindow") != 0')
     if empty(preview_windows)
-      noautocmd silent! execute 'pedit!' fnameescape(filename)
+      call unite#view#_preview_file(filename)
     endif
 
     let winnr = winnr()
