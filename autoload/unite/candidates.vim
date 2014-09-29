@@ -36,7 +36,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
 
   try
     if context.smartcase
-      let &ignorecase = get(split(a:input, '\W'), -1, '') !~ '\u'
+      let &ignorecase = a:input !~ '\u'
     else
       let &ignorecase = context.ignorecase
     endif
