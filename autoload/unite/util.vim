@@ -280,8 +280,8 @@ function! unite#util#is_cmdwin() "{{{
 endfunction"}}}
 function! s:buflisted(bufnr) "{{{
   return (getbufvar(a:bufnr, '&bufhidden') == '' || buflisted(a:bufnr)) &&
-        \ (exists('t:unite_buffer_dictionary') ?
-        \   has_key(t:unite_buffer_dictionary, a:bufnr) && bufloaded(a:bufnr) :
+        \ (exists('t:tabpagebuffer') ?
+        \   has_key(t:tabpagebuffer, a:bufnr) && bufloaded(a:bufnr) :
         \   bufloaded(a:bufnr))
 endfunction"}}}
 

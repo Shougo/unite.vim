@@ -24,9 +24,6 @@
 "=============================================================================
 
 if exists('g:loaded_unite_source_buffer')
-      \ || ($SUDO_USER != '' && $USER !=# $SUDO_USER
-      \     && $HOME !=# expand('~'.$USER)
-      \     && $HOME ==# expand('~'.$SUDO_USER))
   finish
 endif
 
@@ -46,28 +43,9 @@ function! s:append(path) "{{{
     return
   endif
 
-  if !exists('t:unite_buffer_dictionary')
-    let t:unite_buffer_dictionary = {}
+  if !has('vim_starting') || bufname(bufnr('%')) != ''
+    call unite#sources#buffer#variables#append(bufnr('%'))
   endif
-
-  " Append the current buffer.
-  let bufnr = bufnr('%')
-  if exists('*gettabvar') && bufnr == bufnr('%')
-    " Delete same buffer in other tab pages.
-    for tabnr in range(1, tabpagenr('$'))
-      let buffer_dict = gettabvar(tabnr, 'unite_buffer_dictionary')
-      if type(buffer_dict) == type({}) && has_key(buffer_dict, bufnr)
-        call remove(buffer_dict, bufnr)
-      endif
-      unlet buffer_dict
-    endfor
-  endif
-
-  if !has('vim_starting') || bufname(bufnr) != ''
-    call unite#sources#buffer#variables#append(bufnr)
-  endif
-
-  let t:unite_buffer_dictionary[bufnr] = 1
 endfunction"}}}
 
 let &cpo = s:save_cpo
