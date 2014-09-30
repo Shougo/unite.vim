@@ -642,8 +642,6 @@ function! unite#view#_quit(is_force, ...)  "{{{
   let unite = b:unite
   let context = unite.context
 
-  let key = unite#loaded_source_names_string()
-
   " Clear mark.
   for source in unite#loaded_sources_list()
     for candidate in source.unite__cached_candidates
@@ -651,26 +649,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
     endfor
   endfor
 
-  " Save position.
-  let positions = unite#custom#get_profile(
-        \ unite.profile_name, 'unite__save_pos')
-  if key != ''
-    let positions[key] = {
-          \ 'pos' : getpos('.'),
-          \ 'candidate' : unite#helper#get_current_candidate(),
-          \ }
-
-    if context.input != ''
-      " Save input.
-      let inputs = unite#custom#get_profile(
-            \ unite.profile_name, 'unite__inputs')
-      if !has_key(inputs, key)
-        let inputs[key] = []
-      endif
-      call insert(filter(inputs[key],
-            \ 'v:val !=# unite.context.input'), context.input)
-    endif
-  endif
+  call unite#view#_save_position()
 
   if a:is_force || context.quit
     let bufname = bufname('%')
@@ -782,6 +761,38 @@ function! unite#view#_clear_match() "{{{
   if unite.match_id > 0
     silent! call matchdelete(unite.match_id)
   endif
+endfunction"}}}
+
+function! unite#view#_save_position() "{{{
+  let unite = b:unite
+  let context = unite.context
+
+  let key = unite#loaded_source_names_string()
+  if key == ''
+    return
+  endif
+
+  " Save position.
+  let positions = unite#custom#get_profile(
+        \ unite.profile_name, 'unite__save_pos')
+
+  let positions[key] = {
+        \ 'pos' : getpos('.'),
+        \ 'candidate' : unite#helper#get_current_candidate(),
+        \ }
+
+  if context.input == ''
+    return
+  endif
+
+  " Save input.
+  let inputs = unite#custom#get_profile(
+        \ unite.profile_name, 'unite__inputs')
+  if !has_key(inputs, key)
+    let inputs[key] = []
+  endif
+  call insert(filter(inputs[key],
+        \ 'v:val !=# unite.context.input'), context.input)
 endfunction"}}}
 
 " Message output.
