@@ -38,10 +38,13 @@ let s:matcher = {
       \}
 
 function! s:matcher.pattern(input) "{{{
-  let [head, input] = unite#filters#matcher_fuzzy#get_fuzzy_input(
-        \ unite#util#escape_match(a:input))
-  return substitute(head . substitute(input,
-        \ '\([[:alnum:]_/-]\|\\\.\)\ze.', '\0.\\{-}', 'g'), '\*\*', '*', 'g')
+  let chars = map(split(a:input, '\zs'), "escape(v:val, '\\[]^$.*')")
+    let pattern =
+    \   '\v' .
+    \   join(map(chars[0:-2], "
+    \       printf('%s[^%s]{-}', v:val, v:val)
+    \   "), '') . chars[-1]
+    return pattern
 endfunction"}}}
 
 function! s:matcher.filter(candidates, context) "{{{
