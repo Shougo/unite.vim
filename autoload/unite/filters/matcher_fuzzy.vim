@@ -39,12 +39,11 @@ let s:matcher = {
 
 function! s:matcher.pattern(input) "{{{
   let chars = map(split(a:input, '\zs'), "escape(v:val, '\\[]^$.*')")
-    let pattern =
-    \   '\v' .
-    \   join(map(chars[0:-2], "
-    \       printf('%s[^%s]{-}', v:val, v:val)
-    \   "), '') . chars[-1]
-    return pattern
+  let pattern =
+        \   substitute(join(map(chars[:-2], "
+        \       printf('%s[^%s]\\{-}', v:val, v:val)
+        \   "), '') . chars[-1], '\*\*', '*', 'g')
+  return pattern
 endfunction"}}}
 
 function! s:matcher.filter(candidates, context) "{{{
