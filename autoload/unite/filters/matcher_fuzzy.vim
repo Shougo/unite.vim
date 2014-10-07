@@ -64,7 +64,7 @@ function! s:matcher.filter(candidates, context) "{{{
   let candidates = a:candidates
   for input_orig in a:context.input_list
     let input = substitute(unite#util#expand(input_orig), '\\ ', ' ', 'g')
-    if input == '!'
+    if input == '!' || input == ''
       continue
     elseif input =~ '^:'
       " Executes command.
