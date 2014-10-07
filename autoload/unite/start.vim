@@ -313,6 +313,7 @@ function! unite#start#resume(buffer_name, ...) "{{{
   let context = getbufvar(bufnr, 'unite').context
   let context.resume = 1
 
+  let prev_bufnr = bufnr('%')
   let winnr = winnr()
   let win_rest_cmd = context.unite__direct_switch ||
         \ unite#helper#get_unite_winnr(context.buffer_name) > 0 ?
@@ -331,6 +332,8 @@ function! unite#start#resume(buffer_name, ...) "{{{
   " Set parameters.
   let unite = b:unite
   let unite.winnr = winnr
+  let unite.prev_bufnr = prev_bufnr
+  let unite.prev_winnr = winnr
   if !context.unite__direct_switch
     let unite.win_rest_cmd = win_rest_cmd
   endif
