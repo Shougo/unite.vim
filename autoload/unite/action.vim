@@ -357,7 +357,8 @@ function! unite#action#do(action_name, ...) "{{{
   let is_redraw = 0
   let _ = []
   for table in action_tables
-    if !empty(unite#helper#get_marked_candidates())
+    if a:action_name !=# 'preview'
+          \ && !empty(unite#helper#get_marked_candidates())
       call s:clear_marks(candidates)
       call unite#force_redraw()
       let is_redraw = 0
