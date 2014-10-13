@@ -39,6 +39,10 @@ let s:matcher = {
 
 function! s:matcher.pattern(input) "{{{
   let chars = map(split(a:input, '\zs'), "escape(v:val, '\\[]^$.*')")
+  if empty(chars)
+    return ''
+  endif
+
   let pattern =
         \   substitute(join(map(chars[:-2], "
         \       printf('%s[^%s]\\{-}', v:val, v:val)
