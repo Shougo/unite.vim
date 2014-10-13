@@ -163,6 +163,13 @@ unite menu source with customization
 	    \]
 	nnoremap <silent>[menu]g :Unite -silent -start-insert menu:git<CR>
 
+## Video
+
+https://www.youtube.com/v/Ey6Gs_QApzk&hd=1
+
+It is a good introduction about the possibilities of Unite by ReneFroger.
+
+
 ## Special Thanks
 
 * Dragon Image was originally from [Stanislav](http://All-Silhouettes.com)
