@@ -382,7 +382,9 @@ function! unite#util#is_sudo() "{{{
 endfunction"}}}
 
 function! unite#util#lcd(dir) "{{{
-  execute 'lcd' fnameescape(a:dir)
+  if isdirectory(a:dir)
+    execute 'lcd' fnameescape(a:dir)
+  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo
