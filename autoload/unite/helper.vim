@@ -193,8 +193,7 @@ function! unite#helper#get_input(...) "{{{
     setlocal modifiable
 
     " Restore prompt.
-    call setline(unite.prompt_linenr, unite.prompt
-          \ . getline(unite.prompt_linenr))
+    call setline(unite.prompt_linenr, unite.prompt)
 
     let &l:modifiable = modifiable_save
   endif
