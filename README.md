@@ -165,7 +165,7 @@ unite menu source with customization
 
 ## Video
 
-https://www.youtube.com/v/Ey6Gs_QApzk&hd=1
+https://www.youtube.com/watch?v=fwqhBSxhGU0&hd=1
 
 It is a good introduction about the possibilities of Unite by ReneFroger.
 
