@@ -160,6 +160,7 @@ function! unite#start#temporary(sources, ...) "{{{
   let context.unite__is_resize = 0
   let context.unite__is_restart = 0
   let context.quick_match = 0
+  let context.resume = 0
 
   if context.script
     " Set buffer-name automatically.
