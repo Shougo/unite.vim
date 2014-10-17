@@ -204,7 +204,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nmap <buffer> <C-r>     <Plug>(unite_restart)
   nmap <buffer> *         <Plug>(unite_toggle_mark_all_candidates)
   nmap <buffer> M         <Plug>(unite_disable_max_candidates)
-  nmap <buffer> ?         <Plug>(unite_quick_help)
+  nmap <buffer> g?        <Plug>(unite_quick_help)
   nmap <buffer> N         <Plug>(unite_new_candidate)
   nmap <buffer> .         <Plug>(unite_narrowing_dot)
   nmap <buffer> <2-LeftMouse>   <Plug>(unite_do_default_action)

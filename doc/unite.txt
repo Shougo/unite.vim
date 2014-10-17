@@ -1194,7 +1194,7 @@ k		|<Plug>(unite_loop_cursor_up)|
 <Up>		|<Plug>(unite_loop_cursor_up)|
 J		|<Plug>(unite_skip_cursor_down)|
 K		|<Plug>(unite_skip_cursor_up)|
-?		|<Plug>(unite_quick_help)|
+g?		|<Plug>(unite_quick_help)|
 N		|<Plug>(unite_new_candidate)|
 .		|<Plug>(unite_narrowing_dot)|
 <2-LeftMouse>	|<Plug>(unite_do_default_action)|
