@@ -57,7 +57,7 @@ endfunction"}}}
 " @vimlint(EVL102, 1, l:sources)
 function! s:source.gather_candidates(args, context) "{{{
   if empty(a:args)
-    return
+    return []
   endif
 
   let candidates = copy(a:args[0])
