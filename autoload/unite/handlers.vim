@@ -131,7 +131,6 @@ function! unite#handlers#_on_cursor_hold()  "{{{
   if &filetype ==# 'unite'
     " Redraw.
     call unite#redraw()
-    call unite#view#_change_highlight()
 
     let unite = unite#get_current_unite()
     let is_async = unite.is_async
@@ -342,7 +341,6 @@ function! s:check_redraw() "{{{
   if line('.') == prompt_linenr || unite.context.is_redraw
     " Redraw.
     call unite#redraw()
-    call unite#view#_change_highlight()
   endif
 endfunction"}}}
 

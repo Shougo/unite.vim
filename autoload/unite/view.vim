@@ -230,6 +230,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
 
     " Redraw.
     call unite#view#_redraw_candidates(is_gather_all)
+    call unite#view#_change_highlight()
     let unite.context.is_redraw = 0
   finally
     if empty(unite.args) && getpos('.') !=# pos
