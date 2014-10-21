@@ -347,6 +347,11 @@ function! unite#start#resume(buffer_name, ...) "{{{
 
   call unite#set_current_unite(unite)
 
+  if has_key(new_context, 'input')
+    call unite#mappings#narrowing(new_context.input)
+    call unite#redraw()
+  endif
+
   call unite#view#_resize_window()
   call unite#view#_init_cursor()
   call unite#view#_bottom_cursor()
