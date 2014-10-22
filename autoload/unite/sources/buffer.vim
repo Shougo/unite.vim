@@ -101,8 +101,6 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
 
   let candidates = map(a:context.source__buffer_list, "{
         \ 'word' : unite#util#substitute_path_separator(
-        \       filereadable(s:make_word(v:val.action__buffer_nr)) ?
-        \         fnamemodify(s:make_word(v:val.action__buffer_nr), ':p') :
         \         s:make_word(v:val.action__buffer_nr)),
         \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
         \        . s:format_time(v:val.source__time),
