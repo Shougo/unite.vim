@@ -874,7 +874,7 @@ function! unite#view#_get_status_string() "{{{
   endif
 
   let head = (b:unite.is_async ? '[async] ' : '') .
-        \ join(unite#helper#loaded_source_names_with_args(), ', ')
+        \ join(unite#helper#loaded_source_names_with_args())
   let tail = b:unite.context.path != '' ? ' ['. b:unite.context.path.']' :
         \    (b:unite.is_async || get(b:unite.msgs, 0, '') == '') ? '' :
         \    ' |' . substitute(get(b:unite.msgs, 0, ''), '^\[.\{-}\]', '', '')
