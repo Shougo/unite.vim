@@ -2534,6 +2534,15 @@ matcher_hide_hidden_files
 		Hide hidden files filter.  If your input contains ".", hidden
 		files will be appeared.
 
+				*unite-filter-matcher_hide_current_file*
+matcher_hide_current_file
+		Hide current editing file. >
+
+	call unite#custom#source(
+	      \ 'file', 'matchers',
+	      \ ['matcher_default', 'matcher_hide_hidden_files',
+	      \  'matcher_hide_current_file'])
+
 						*unite-filter-matcher_context*
 matcher_context	A matcher which filters the candidates with user given glob
 		pattern or regexp pattern.  In default, use glob pattern.  If
