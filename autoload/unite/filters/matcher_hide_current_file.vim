@@ -36,6 +36,10 @@ let s:matcher = {
       \}
 
 function! s:matcher.filter(candidates, context) "{{{
+  if bufname(unite#get_current_unite().prev_bufnr) == ''
+    return a:candidates
+  endif
+
   let file = unite#util#substitute_path_separator(
         \ fnamemodify(bufname(unite#get_current_unite().prev_bufnr), ':p'))
   return filter(a:candidates, "
