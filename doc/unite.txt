@@ -858,7 +858,7 @@ g:unite_cursor_line_highlight		*g:unite_cursor_line_highlight*
 				*g:unite_enable_short_source_names*
 g:unite_enable_short_source_names
 		If this variable is 1, unite buffer will show short source
-		names.
+		names when multiple sources.
 		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
@@ -1861,7 +1861,7 @@ the context dictionary.
 
 					*unite-options-short-source-names*
 		-short-source-names
-		Use short source names.
+		Use short source names if multiple sources.
 
 						*unite-options-multi-line*
 		-multi-line

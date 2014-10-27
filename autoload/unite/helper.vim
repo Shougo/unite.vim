@@ -220,8 +220,9 @@ function! unite#helper#get_postfix(prefix, is_create, ...) "{{{
 endfunction"}}}
 
 function! unite#helper#convert_source_name(source_name) "{{{
-  let context = unite#get_context()
-  return !context.short_source_names ? a:source_name :
+  let unite = unite#get_current_unite()
+  return (len(unite.sources) == 1 ||
+        \  !unite.context.short_source_names) ? a:source_name :
         \ a:source_name !~ '\A'  ? a:source_name[:1] :
         \ substitute(a:source_name, '\a\zs\a\+', '', 'g')
 endfunction"}}}
