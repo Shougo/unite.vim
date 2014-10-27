@@ -228,11 +228,14 @@ function! unite#helper#convert_source_name(source_name) "{{{
 endfunction"}}}
 
 function! unite#helper#loaded_source_names_with_args() "{{{
+  let len_source = len(unite#loaded_sources_list())
   return map(copy(unite#loaded_sources_list()), "
+        \ (len_source == 0) ? ['interactive'] :
+        \ (len_source > 1 && v:val.unite__len_candidates == 0) ? '_' :
         \ join(insert(filter(copy(v:val.args),
         \  'type(v:val) <= 1'),
         \   unite#helper#convert_source_name(v:val.name)), ':')
-        \ . (v:val.unite__orig_len_candidates == 0 ? '' :
+        \ . (v:val.unite__len_candidates == 0 ? '' :
         \      v:val.unite__orig_len_candidates ==
         \            v:val.unite__len_candidates ?
         \            '(' .  v:val.unite__len_candidates . ')' :
