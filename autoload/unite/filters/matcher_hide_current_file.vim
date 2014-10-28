@@ -43,7 +43,7 @@ function! s:matcher.filter(candidates, context) "{{{
   let file = unite#util#substitute_path_separator(
         \ fnamemodify(bufname(unite#get_current_unite().prev_bufnr), ':p'))
   return filter(a:candidates, "
-        \ get(v:val, 'action__path', v:val.word) !~# file")
+        \ get(v:val, 'action__path', v:val.word) !=# file")
 endfunction"}}}
 
 let &cpo = s:save_cpo
