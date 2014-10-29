@@ -27,7 +27,7 @@
 " original verion is http://d.hatena.ne.jp/thinca/20101105/1288896674
 
 call unite#util#set_default(
-      \ 'g:unite_source_line_enable_highlight', 1)
+      \ 'g:unite_source_line_enable_highlight', 0)
 
 let s:supported_search_direction = ['forward', 'backward', 'all']
 
@@ -47,43 +47,6 @@ let s:source_line = {
       \ }
 
 function! s:source_line.hooks.on_init(args, context) "{{{
-  call s:on_init(a:args, a:context)
-endfunction"}}}
-function! s:source_line.hooks.on_syntax(args, context) "{{{
-  call s:hl_refresh(a:context)
-  call s:on_syntax(a:args, a:context)
-endfunction"}}}
-
-function! s:source_line.gather_candidates(args, context) "{{{
-  call s:hl_refresh(a:context)
-
-  let direction = a:context.source__direction
-  let start = a:context.source__linenr
-
-  let _ = s:get_context_lines(a:context, direction, start)
-
-  let a:context.source__format = '%' . strlen(len(_)) . 'd: %s'
-
-  return direction ==# 'backward' ? reverse(_) : _
-endfunction"}}}
-
-function! s:source_line.hooks.on_post_filter(args, context) "{{{
-  call s:post_filter(a:args, a:context)
-endfunction"}}}
-
-function! s:source_line.complete(args, context, arglead, cmdline, cursorpos) "{{{
-  return s:supported_search_direction
-endfunction"}}}
-
-function! s:source_line.source__converter(candidates, context) "{{{
-  return s:converter(a:candidates, a:context)
-endfunction"}}}
-
-let s:source_line.converters = [s:source_line.source__converter]
-"}}}
-
-" Misc. "{{{
-function! s:on_init(args, context) "{{{
   let a:context.source__path = unite#util#substitute_path_separator(
         \ (&buftype =~ 'nofile') ? expand('%:p') : bufname('%'))
   let a:context.source__bufnr = bufnr('%')
@@ -91,7 +54,7 @@ function! s:on_init(args, context) "{{{
   let a:context.source__linemax = line('$')
   let a:context.source__is_bang =
         \ (get(a:args, 0, '') ==# '!')
-  let a:context.source__syntax = &syntax
+  let a:context.source__syntax = &l:syntax
 
   let options = filter(copy(a:args), "v:val != '!'")
   let direction = get(options, 0, '')
@@ -130,11 +93,18 @@ function! s:on_init(args, context) "{{{
 
   let a:context.source__direction = direction
 endfunction"}}}
-function! s:on_syntax(args, context) "{{{
+function! s:source_line.hooks.on_syntax(args, context) "{{{
+  let highlight = get(a:context, 'custom_line_enable_highlight',
+        \ g:unite_source_line_enable_highlight)
+
   syntax match uniteSource__Line_LineNr
         \ '\(^- *+\? *\)\@<=\<\d\+\>'
         \ contained containedin=uniteSource__Line
   highlight default link uniteSource__Line_LineNr LineNr
+
+  if !highlight
+    return
+  endif
 
   let save_current_syntax = get(b:, 'current_syntax', '')
   unlet! b:current_syntax
@@ -150,6 +120,34 @@ function! s:on_syntax(args, context) "{{{
     let b:current_syntax = save_current_syntax
   endtry
 endfunction"}}}
+
+function! s:source_line.gather_candidates(args, context) "{{{
+  let direction = a:context.source__direction
+  let start = a:context.source__linenr
+
+  let _ = s:get_context_lines(a:context, direction, start)
+
+  let a:context.source__format = '%' . strlen(len(_)) . 'd: %s'
+
+  return direction ==# 'backward' ? reverse(_) : _
+endfunction"}}}
+
+function! s:source_line.hooks.on_post_filter(args, context) "{{{
+  call s:post_filter(a:args, a:context)
+endfunction"}}}
+
+function! s:source_line.complete(args, context, arglead, cmdline, cursorpos) "{{{
+  return s:supported_search_direction
+endfunction"}}}
+
+function! s:source_line.source__converter(candidates, context) "{{{
+  return s:converter(a:candidates, a:context)
+endfunction"}}}
+
+let s:source_line.converters = [s:source_line.source__converter]
+"}}}
+
+" Misc. "{{{
 function! s:on_gather_candidates(direction, context, start, max) "{{{
   return map(s:get_lines(a:context, a:direction, a:start, a:max), "{
         \ 'word' : v:val[1],
@@ -180,12 +178,6 @@ function! s:get_lines(context, direction, start, max) "{{{
   endfor
 
   return _
-endfunction"}}}
-
-function! s:hl_refresh(context) "{{{
-  if a:context.input == '' || !g:unite_source_line_enable_highlight
-    return
-  endif
 endfunction"}}}
 
 function! s:converter(candidates, context) "{{{
