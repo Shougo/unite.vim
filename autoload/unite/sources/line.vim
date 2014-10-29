@@ -28,8 +28,6 @@
 
 call unite#util#set_default(
       \ 'g:unite_source_line_enable_highlight', 1)
-call unite#util#set_default(
-      \ 'g:unite_source_line_search_word_highlight', 'Search')
 
 let s:supported_search_direction = ['forward', 'backward', 'all']
 
@@ -86,9 +84,6 @@ let s:source_line.converters = [s:source_line.source__converter]
 
 " Misc. "{{{
 function! s:on_init(args, context) "{{{
-  execute 'highlight default link uniteSource__Line_target '
-        \ . g:unite_source_line_search_word_highlight
-  syntax case ignore
   let a:context.source__path = unite#util#substitute_path_separator(
         \ (&buftype =~ 'nofile') ? expand('%:p') : bufname('%'))
   let a:context.source__bufnr = bufnr('%')
@@ -188,17 +183,9 @@ function! s:get_lines(context, direction, start, max) "{{{
 endfunction"}}}
 
 function! s:hl_refresh(context) "{{{
-  silent! syntax clear uniteSource__Line_target
-  syntax case ignore
   if a:context.input == '' || !g:unite_source_line_enable_highlight
     return
   endif
-
-  for word in split(a:context.input, '\\\@<! ')
-    execute "syntax match uniteSource__Line_target "
-          \ . string(unite#util#escape_match(word))
-          \ . " contained containedin=uniteSource__Line"
-  endfor
 endfunction"}}}
 
 function! s:converter(candidates, context) "{{{

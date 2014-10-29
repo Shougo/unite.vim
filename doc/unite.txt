@@ -606,13 +606,6 @@ g:unite_source_line_enable_highlight
 
 		The default value is 1.
 
-				*g:unite_source_line_search_word_highlight*
-g:unite_source_line_search_word_highlight
-		Highlight group applied to search keyword when
-		|g:unite_source_enable_highlight| is true.
-
-		The default value is "Search".
-
 g:unite_source_alias_aliases			*g:unite_source_alias_aliases*
 		Set |unite-source-alias| settings.  This variable is a
 		dictionary.  The key is an alias source name, and
