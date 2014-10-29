@@ -96,6 +96,7 @@ function! s:on_init(args, context) "{{{
   let a:context.source__linemax = line('$')
   let a:context.source__is_bang =
         \ (get(a:args, 0, '') ==# '!')
+  let a:context.source__syntax = &syntax
 
   let options = filter(copy(a:args), "v:val != '!'")
   let direction = get(options, 0, '')
@@ -139,6 +140,20 @@ function! s:on_syntax(args, context) "{{{
         \ '\(^- *+\? *\)\@<=\<\d\+\>'
         \ contained containedin=uniteSource__Line
   highlight default link uniteSource__Line_LineNr LineNr
+
+  let save_current_syntax = get(b:, 'current_syntax', '')
+  unlet! b:current_syntax
+
+  try
+    execute 'silent! syntax include @LineSyntax' 'syntax/'
+          \ . a:context.source__syntax . '.vim'
+    syntax region uniteSource__Line_LineSyntax
+          \ start='' end='$'
+          \ contains=@LineSyntax
+          \ containedin=uniteSource__Line contained
+  finally
+    let b:current_syntax = save_current_syntax
+  endtry
 endfunction"}}}
 function! s:on_gather_candidates(direction, context, start, max) "{{{
   return map(s:get_lines(a:context, a:direction, a:start, a:max), "{
