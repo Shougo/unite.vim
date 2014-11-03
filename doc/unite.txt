@@ -529,6 +529,8 @@ g:unite_source_rec_async_command
 <
 		The default value is "find" and the args.
 		Because, "find" command is fastest.
+		Note: In windows environment, you must install file list
+		command and specify the variable.
 
 
 					*g:unite_source_rec_git_command*

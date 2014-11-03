@@ -278,8 +278,14 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
 
   let args = split(command)
   if empty(args) || !executable(args[0])
-    call unite#print_source_message('async command : "'.
-          \ command.'" is not executable.', self.name)
+    if empty(args)
+      call unite#print_source_message(
+            \ 'You must install file list command and specify '
+            \  . 'g:unite_source_rec_async_command variable.', self.name)
+    else
+      call unite#print_source_message('async command : "'.
+            \ command.'" is not executable.', self.name)
+    endif
     let a:context.is_async = 0
     return []
   endif
