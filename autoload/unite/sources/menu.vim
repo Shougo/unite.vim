@@ -80,7 +80,9 @@ function! s:source.gather_candidates(args, context) "{{{
             \     }")
     endif
   elseif has_key(menu, 'candidates')
-    if type(menu.candidates) == type([])
+    if !has_key(menu, 'map')
+      let candidates = menu.candidates
+    elseif type(menu.candidates) == type([])
       let candidates = []
       let key = 1
       for value in menu.candidates
@@ -92,7 +94,7 @@ function! s:source.gather_candidates(args, context) "{{{
             \ "menu.map(v:key, v:val)")
     endif
   else
-    let candidates = copy(get(menu, 'candidates', []))
+    let candidates = []
   endif
 
   if type(candidates) == type({})
