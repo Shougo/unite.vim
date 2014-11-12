@@ -61,6 +61,7 @@ function! unite#filters#sorter_rank#_sort(candidates, input, has_lua) "{{{
   let candidates = a:has_lua ?
         \ s:sort_lua(a:candidates, inputs) :
         \ s:sort_vim(a:candidates, inputs)
+  " let candidates = s:sort_vim(a:candidates, inputs)
 
   " echomsg a:input
   " echomsg string(map(copy(candidates),
@@ -71,8 +72,13 @@ endfunction"}}}
 
 function! s:sort_vim(candidates, inputs) "{{{
   for input in a:inputs
+    let pattern = unite#filters#matcher_fuzzy#define().pattern(input)
     for candidate in a:candidates
-      let index = stridx(candidate.filter__word, input)
+      let word = tolower(candidate.filter__word)
+      let index = stridx(word, input)
+      if index < 0
+        let index = match(word, pattern)
+      endif
       let candidate.filter__rank += len(candidate.filter__word)
             \ - (index >= 0 ? ((200 - len(candidate.filter__word))
             \      / (index+1)) : 0)
@@ -90,9 +96,12 @@ do
   -- Calc rank
   local inputs = vim.eval('a:inputs')
   for i = 0, #inputs-1 do
+    local pattern = vim.eval(
+       'unite#filters#fuzzy_escape(a:inputs['.. i ..'])')
     for j = 0, #candidates-1 do
-      local word = candidates[j].filter__word
-      local index = string.find(string.lower(word), inputs[i], 1, true)
+      local word = string.lower(candidates[j].filter__word)
+      local index = string.find(word, inputs[i], 1, true)
+         or string.find(word, pattern, 1)
 
       candidates[j].filter__rank = candidates[j].filter__rank
         + string.len(word) - (index ~= nil
