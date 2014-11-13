@@ -51,6 +51,7 @@ let s:source = {
       \         '*~', '*.o', '*.exe', '*.bak',
       \         'DS_Store', '*.pyc', '*.sw[po]', '*.class',
       \         '.hg/**', '.git/**', '.bzr/**', '.svn/**',
+      \         'tags', 'tags-*'
       \ ],
       \ }
 
