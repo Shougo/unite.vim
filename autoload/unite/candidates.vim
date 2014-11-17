@@ -153,7 +153,8 @@ function! unite#candidates#gather(...) "{{{
 
   if unite.context.unique
     " Uniq filter.
-    let unite.candidates = unite#util#uniq_by(unite.candidates, 'v:val.word')
+    let unite.candidates = unite#util#uniq_by(unite.candidates,
+          \ "v:val.kind . ' ' . v:val.word")
   endif
 
   if is_gather_all || unite.context.prompt_direction ==# 'below'
