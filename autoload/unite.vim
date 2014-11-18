@@ -232,8 +232,8 @@ function! unite#get_data_directory() "{{{
   let g:unite_data_directory =
         \ substitute(substitute(fnamemodify(
         \ get(g:, 'unite_data_directory',
-        \  ($XDG_CACHE_DIR != '' ?
-        \   $XDG_CACHE_DIR . '/unite' : expand('~/.cache/unite'))),
+        \  ($XDG_CACHE_HOME != '' ?
+        \   $XDG_CACHE_HOME . '/unite' : expand('~/.cache/unite'))),
         \  ':p'), '\\', '/', 'g'), '/$', '', '')
 
   if !isdirectory(g:unite_data_directory)
