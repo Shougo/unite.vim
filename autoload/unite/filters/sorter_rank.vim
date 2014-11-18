@@ -72,7 +72,6 @@ endfunction"}}}
 
 function! s:sort_vim(candidates, inputs) "{{{
   for input in a:inputs
-    let pattern = unite#filters#matcher_fuzzy#define().pattern(input)
     for candidate in a:candidates
       let word = tolower(candidate.filter__word)
       let index = stridx(word, input)
@@ -93,8 +92,6 @@ do
   -- Calc rank
   local inputs = vim.eval('a:inputs')
   for i = 0, #inputs-1 do
-    local pattern = vim.eval(
-       'unite#filters#fuzzy_escape(a:inputs['.. i ..'])')
     for j = 0, #candidates-1 do
       local word = string.lower(candidates[j].filter__word)
       local index = string.find(word, inputs[i], 1, true)
