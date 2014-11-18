@@ -446,7 +446,7 @@ g:unite_data_directory				*g:unite_data_directory*
 		source of file_mru saves the information of the most recent
 		used files into this directory.
 
-		Default value is "$XDG_CACHE_DIR/unite" or
+		Default value is "$XDG_CACHE_HOME/unite" or
 		expand("~/.cache/unite"); the absolute path of it.
 
 g:unite_no_default_keymappings		*g:unite_no_default_keymappings*
