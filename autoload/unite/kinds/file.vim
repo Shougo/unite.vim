@@ -30,14 +30,14 @@ set cpo&vim
 call unite#util#set_default(
       \ 'g:unite_kind_file_delete_file_command',
       \ unite#util#is_windows() && !executable('rm') ? '' :
-      \ executable('trash-put') ? 'trash-put $srcs' :
       \ executable('rmtrash') ? 'rmtrash $srcs' :
+      \ executable('trash-put') ? 'trash-put $srcs' :
       \ 'rm $srcs')
 call unite#util#set_default(
       \ 'g:unite_kind_file_delete_directory_command',
       \ unite#util#is_windows() && !executable('rm') ? '' :
-      \ executable('trash-put') ? 'trash-put $srcs' :
       \ executable('rmtrash') ? 'rmtrash $srcs' :
+      \ executable('trash-put') ? 'trash-put $srcs' :
       \ 'rm -r $srcs')
 call unite#util#set_default(
       \ 'g:unite_kind_file_copy_file_command',
