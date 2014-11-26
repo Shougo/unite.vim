@@ -46,9 +46,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
           \ || context.path !=# unite.last_path
 
     if empty(unite.args)
-      if a:input == ''
-        let sources = []
-      elseif a:input !~ '^.\{-}\%(\\\@<!\s\)\+'
+      if a:input !~ '^.\{-}\%(\\\@<!\s\)\+'
         " Use interactive source.
         let sources = unite#init#_loaded_sources(['interactive'], context)
       else
