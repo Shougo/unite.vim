@@ -54,23 +54,40 @@ function! unite#candidates#_recache(input, is_force) "{{{
         let args = unite#helper#parse_options_args(
               \ matchstr(a:input, '^.\{-}\%(\\\@<!\s\)\+'))[0]
         try
+          " Ignore source name
+          let context.input = matchstr(context.input,
+                \ '^.\{-}\%(\\\@<!\s\)\+\zs.*')
+
           let sources = unite#init#_loaded_sources(args, context)
         catch
           let sources = []
+        finally
+          let context.input = a:input
         endtry
       endif
 
       if get(unite.sources, 0, {'name' : ''}).name
-            \ !=# get(sources, 0, {'name' : ''}).name
+            \   !=# get(sources, 0, {'name' : ''}).name
         " Finalize previous sources.
         call unite#helper#call_hook(unite.sources, 'on_close')
 
         let unite.sources = sources
         let unite.source_names = unite#helper#get_source_names(sources)
 
-        " Initialize.
-        call unite#helper#call_hook(sources, 'on_init')
-        call unite#view#_set_syntax()
+        try
+          execute bufwinnr(unite.prev_bufnr).'wincmd w'
+
+          " Initialize.
+          call unite#helper#call_hook(sources, 'on_init')
+        finally
+          if unite.winnr != winnr()
+            execute unite.winnr . 'wincmd w'
+          endif
+        endtry
+
+        if a:input != ''
+          call unite#view#_set_syntax()
+        endif
       endif
     endif
 
