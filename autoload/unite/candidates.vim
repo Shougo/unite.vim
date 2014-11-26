@@ -85,7 +85,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
           endif
         endtry
 
-        if a:input != ''
+        if &filetype ==# 'unite'
           call unite#view#_set_syntax()
         endif
       endif
