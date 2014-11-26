@@ -167,7 +167,6 @@ function! s:get_lines(context, direction, start, max) "{{{
   let linenr = start
   let input = tolower(a:context.source__input)
   let is_expr = input =~ '[~\\.^$\[\]*]'
-  echomsg input
   for line in getbufline(a:context.source__bufnr, start, end)
     if input == ''
           \ || (!is_expr && stridx(tolower(line), input) >= 0)
