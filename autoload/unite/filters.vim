@@ -112,7 +112,7 @@ do
   local pattern = vim.eval('unite#filters#fuzzy_escape(a:context.input)')
   local input = vim.eval('a:context.input')
   local candidates = vim.eval('a:candidates')
-  if vim.eval('&ignorecase') ~= 0 then
+  if vim.eval('a:ignorecase') ~= 0 then
     pattern = string.lower(pattern)
     input = string.lower(input)
     for i = #candidates-1, 0, -1 do
