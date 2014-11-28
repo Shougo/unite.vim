@@ -74,14 +74,15 @@ function! unite#candidates#_recache(input, is_force) "{{{
         let unite.sources = sources
         let unite.source_names = unite#helper#get_source_names(sources)
 
+        let prev_winnr = winnr()
         try
           execute bufwinnr(unite.prev_bufnr).'wincmd w'
 
           " Initialize.
           call unite#helper#call_hook(sources, 'on_init')
         finally
-          if unite.winnr != winnr()
-            execute unite.winnr . 'wincmd w'
+          if winnr() != prev_winnr
+            execute prev_winnr . 'wincmd w'
           endif
         endtry
 
