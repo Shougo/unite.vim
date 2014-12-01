@@ -129,27 +129,6 @@ function! s:source.hooks.on_init(args, context) "{{{
         \ (len(targets) == 1) ?
         \ unite#util#substitute_path_separator(
         \  unite#util#expand(targets[0])) : ''
-
-  let a:context.source__ssh_path = ''
-  if exists('b:vimfiler') &&
-        \ exists('*vimfiler#get_current_vimfiler')
-    if !empty(b:vimfiler)
-      let vimfiler = b:vimfiler
-    else
-      let vimfiler = vimfiler#get_current_vimfiler()
-    endif
-
-    if get(vimfiler, 'source', '') ==# 'ssh'
-      let [hostname, port] =
-            \ unite#sources#ssh#parse_path(
-            \  vimfiler.source.':'.vimfiler.current_dir)[:1]
-      let a:context.source__ssh_path =
-            \ printf('%s://%s:%s/', vimfiler.source, hostname, port)
-
-      call map(a:context.source__target,
-            \ "substitute(v:val, 'ssh://', '', '')")
-    endif
-  endif
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) "{{{
   if !unite#util#has_vimproc()
@@ -185,8 +164,7 @@ function! s:source.hooks.on_close(args, context) "{{{
 endfunction "}}}
 function! s:source.hooks.on_post_filter(args, context) "{{{
   for candidate in a:context.candidates
-    let candidate.kind = [((a:context.source__ssh_path != '') ?
-          \ 'file/ssh' : 'file'), 'jump_list']
+    let candidate.kind = ['file', 'jump_list']
     let candidate.action__col_pattern = a:context.source__input
     let candidate.is_multiline = 1
   endfor
@@ -234,14 +212,6 @@ function! s:source.gather_candidates(args, context) "{{{
     \   join(map(a:context.source__target,
     \           "substitute(v:val, '/$', '', '')")),
     \)
-  if a:context.source__ssh_path != ''
-    " Use ssh command.
-    let [hostname, port] =
-          \ unite#sources#ssh#parse_path(a:context.source__ssh_path)[:1]
-    let cmdline = substitute(substitute(
-          \ g:unite_kind_file_ssh_command . ' ' . cmdline,
-          \   '\<HOSTNAME\>', hostname, 'g'), '\<PORT\>', port, 'g')
-  endif
 
   call unite#print_source_message('Command-line: ' . cmdline, s:source.name)
 
@@ -313,19 +283,11 @@ function! s:source.async_gather_candidates(args, context) "{{{
       endif
     else
       let dict = {
-            \   'action__path' : candidate[0][:1].candidate[1][0],
+            \   'action__path' : unite#util#substitute_path_separator(
+            \   fnamemodify(candidate[0][:1].candidate[1][0], ':p')),
             \   'action__line' : candidate[1][1],
             \   'action__text' : join(candidate[1][2:], ':'),
             \ }
-    endif
-
-    if a:context.source__ssh_path != ''
-      let dict.action__path =
-            \ a:context.source__ssh_path . dict.action__path
-    else
-      let dict.action__path =
-            \ unite#util#substitute_path_separator(
-            \   fnamemodify(dict.action__path, ':p'))
     endif
 
     let dict.word = printf('%s:%s:%s',
