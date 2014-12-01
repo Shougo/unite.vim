@@ -277,8 +277,8 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.prev_winnr = winnr()
   let unite.prev_line = 0
   let unite.update_time_save = &updatetime
-  let unite.statusline = "*unite* : %{unite#get_status_string()} "
-        \."%=%{line('.')}/%{(b:unite.candidates_len+b:unite.prompt_linenr)}"
+  let unite.statusline = "%{unite#get_status_string()} "
+        \."%=%#LineNR#%{printf('%4d/%d',line('.'),b:unite.candidates_len+b:unite.prompt_linenr)}%*"
 
   " Create new buffer name.
   let postfix = unite#helper#get_postfix(

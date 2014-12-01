@@ -52,6 +52,9 @@ highlight default link uniteInputPrompt  Identifier
 highlight default link uniteInputPromptError  Error
 highlight default link uniteInputCommand  Statement
 
+highlight default link uniteStatusSourceNames  Constant
+highlight default link uniteStatusMessage  Comment
+
 let b:current_syntax = 'unite'
 
 call unite#view#_set_syntax()

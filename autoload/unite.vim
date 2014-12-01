@@ -204,7 +204,12 @@ function! unite#redraw(...) "{{{
   call unite#view#_redraw(0, get(a:000, 0, 0), get(a:000, 1, 0))
 endfunction"}}}
 function! unite#get_status_string() "{{{
-  return unite#view#_get_status_string()
+  if !exists('b:unite')
+    return ''
+  endif
+
+  return unite#view#_get_status_head_string()
+        \ . unite#view#_get_status_tail_string()
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{
   return unite#helper#get_marked_candidates()

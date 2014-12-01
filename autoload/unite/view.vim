@@ -868,19 +868,22 @@ function! unite#view#_match_line(highlight, line, id) "{{{
         \ matchadd(a:highlight, '^\%'.a:line.'l.*', 10, a:id)
 endfunction"}}}
 
-function! unite#view#_get_status_string() "{{{
+function! unite#view#_get_status_head_string() "{{{
   if !exists('b:unite')
     return ''
   endif
 
-  let head = (b:unite.is_async ? '[async] ' : '') .
+  return (b:unite.is_async ? '[async] ' : '') .
         \ join(unite#helper#loaded_source_names_with_args())
-  let tail = b:unite.context.path != '' ? ' ['. b:unite.context.path.']' :
+endfunction"}}}
+function! unite#view#_get_status_tail_string() "{{{
+  if !exists('b:unite')
+    return ''
+  endif
+
+  return b:unite.context.path != '' ? ' ['. b:unite.context.path.']' :
         \    (b:unite.is_async || get(b:unite.msgs, 0, '') == '') ? '' :
         \    ' |' . substitute(get(b:unite.msgs, 0, ''), '^\[.\{-}\]', '', '')
-  let tail = unite#util#strwidthpart(tail,
-        \ winwidth(0) - (unite#util#wcswidth('*unite* : ' . head) + 10))
-  return head . tail
 endfunction"}}}
 
 function! unite#view#_add_previewed_buffer_list(bufnr) "{{{
