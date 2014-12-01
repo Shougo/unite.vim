@@ -32,7 +32,7 @@ augroup plugin-unite
 augroup END
 
 function! unite#version() "{{{
-  return str2nr(printf('%02d%02d', 6, 1))
+  return str2nr(printf('%02d%02d', 6, 2))
 endfunction"}}}
 
 " User functions. "{{{
