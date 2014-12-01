@@ -208,9 +208,10 @@ function! unite#helper#get_source_names(sources) "{{{
 endfunction"}}}
 
 function! unite#helper#get_postfix(prefix, is_create, ...) "{{{
+  let prefix = substitute(a:prefix, '@\d\+$', '', '')
   let buffers = get(a:000, 0, range(1, bufnr('$')))
   let buflist = sort(filter(map(buffers,
-        \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'))
+        \ 'bufname(v:val)'), 'stridx(v:val, prefix) >= 0'))
   if empty(buflist)
     return ''
   endif
