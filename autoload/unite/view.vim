@@ -881,9 +881,9 @@ function! unite#view#_get_status_tail_string() "{{{
     return ''
   endif
 
-  return b:unite.context.path != '' ? ' ['. b:unite.context.path.']' :
+  return b:unite.context.path != '' ? '['. b:unite.context.path.']' :
         \    (b:unite.is_async || get(b:unite.msgs, 0, '') == '') ? '' :
-        \    ' |' . substitute(get(b:unite.msgs, 0, ''), '^\[.\{-}\]', '', '')
+        \    substitute(get(b:unite.msgs, 0, ''), '^\[.\{-}\]\s*', '', '')
 endfunction"}}}
 
 function! unite#view#_add_previewed_buffer_list(bufnr) "{{{
