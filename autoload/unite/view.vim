@@ -873,8 +873,21 @@ function! unite#view#_get_status_head_string() "{{{
     return ''
   endif
 
+  let len_source = len(unite#loaded_sources_list())
   return (b:unite.is_async ? '[async] ' : '') .
-        \ join(unite#helper#loaded_source_names_with_args())
+        \ join(map(copy(unite#loaded_sources_list()), "
+        \ (len_source == 0) ? ['interactive'] :
+        \ (len_source > 1 && v:val.unite__len_candidates == 0) ? '_' :
+        \ join(insert(filter(copy(v:val.args),
+        \  'type(v:val) <= 1'),
+        \   unite#helper#convert_source_name(v:val.name)), ':')
+        \ . (v:val.unite__len_candidates == 0 ? '' :
+        \      v:val.unite__orig_len_candidates ==
+        \            v:val.unite__len_candidates ?
+        \            '(' .  v:val.unite__len_candidates . ')' :
+        \      printf('(%s/%s)', v:val.unite__len_candidates,
+        \      v:val.unite__orig_len_candidates))
+        \ "))
 endfunction"}}}
 function! unite#view#_get_status_tail_string() "{{{
   if !exists('b:unite')
