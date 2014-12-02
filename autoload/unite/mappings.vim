@@ -176,62 +176,62 @@ function! unite#mappings#define_default_mappings() "{{{
   endif
 
   " Normal mode key-mappings.
-  nmap <buffer> i         <Plug>(unite_insert_enter)
-  nmap <buffer> I         <Plug>(unite_insert_head)
-  nmap <buffer> A         <Plug>(unite_append_end)
-  nmap <buffer> q         <Plug>(unite_exit)
-  nmap <buffer> <C-g>     <Plug>(unite_exit)
-  nmap <buffer> Q         <Plug>(unite_all_exit)
-  nmap <buffer> g<C-g>    <Plug>(unite_all_exit)
-  nmap <buffer> <CR>      <Plug>(unite_do_default_action)
-  nmap <buffer> <Space>   <Plug>(unite_toggle_mark_current_candidate)
-  nmap <buffer> <S-Space> <Plug>(unite_toggle_mark_current_candidate_up)
-  nmap <buffer> <Tab>     <Plug>(unite_choose_action)
-  nmap <buffer> <C-n>     <Plug>(unite_rotate_next_source)
-  nmap <buffer> <C-p>     <Plug>(unite_rotate_previous_source)
-  nmap <buffer> <C-a>     <Plug>(unite_print_message_log)
-  nmap <buffer> <C-k>     <Plug>(unite_print_candidate)
-  nmap <buffer> <C-l>     <Plug>(unite_redraw)
-  nmap <buffer> gg        <Plug>(unite_cursor_top)
-  nmap <buffer> G         <Plug>(unite_cursor_bottom)
-  nmap <buffer> j         <Plug>(unite_loop_cursor_down)
-  nmap <buffer> <Down>    <Plug>(unite_loop_cursor_down)
-  nmap <buffer> k         <Plug>(unite_loop_cursor_up)
-  nmap <buffer> <Up>      <Plug>(unite_loop_cursor_up)
-  nmap <buffer> J         <Plug>(unite_skip_cursor_down)
-  nmap <buffer> K         <Plug>(unite_skip_cursor_up)
-  nmap <buffer> <C-h>     <Plug>(unite_delete_backward_path)
-  nmap <buffer> <C-r>     <Plug>(unite_restart)
-  nmap <buffer> *         <Plug>(unite_toggle_mark_all_candidates)
-  nmap <buffer> M         <Plug>(unite_disable_max_candidates)
-  nmap <buffer> g?        <Plug>(unite_quick_help)
-  nmap <buffer> N         <Plug>(unite_new_candidate)
-  nmap <buffer> .         <Plug>(unite_narrowing_dot)
+  nmap <buffer><nowait> i         <Plug>(unite_insert_enter)
+  nmap <buffer><nowait> I         <Plug>(unite_insert_head)
+  nmap <buffer><nowait> A         <Plug>(unite_append_end)
+  nmap <buffer><nowait> q         <Plug>(unite_exit)
+  nmap <buffer><nowait> <C-g>     <Plug>(unite_exit)
+  nmap <buffer><nowait> Q         <Plug>(unite_all_exit)
+  nmap <buffer><nowait> g<C-g>    <Plug>(unite_all_exit)
+  nmap <buffer><nowait> <CR>      <Plug>(unite_do_default_action)
+  nmap <buffer><nowait> <Space>   <Plug>(unite_toggle_mark_current_candidate)
+  nmap <buffer><nowait> <S-Space> <Plug>(unite_toggle_mark_current_candidate_up)
+  nmap <buffer><nowait> <Tab>     <Plug>(unite_choose_action)
+  nmap <buffer><nowait> <C-n>     <Plug>(unite_rotate_next_source)
+  nmap <buffer><nowait> <C-p>     <Plug>(unite_rotate_previous_source)
+  nmap <buffer><nowait> <C-a>     <Plug>(unite_print_message_log)
+  nmap <buffer><nowait> <C-k>     <Plug>(unite_print_candidate)
+  nmap <buffer><nowait> <C-l>     <Plug>(unite_redraw)
+  nmap <buffer><nowait> gg        <Plug>(unite_cursor_top)
+  nmap <buffer><nowait> G         <Plug>(unite_cursor_bottom)
+  nmap <buffer><nowait> j         <Plug>(unite_loop_cursor_down)
+  nmap <buffer><nowait> <Down>    <Plug>(unite_loop_cursor_down)
+  nmap <buffer><nowait> k         <Plug>(unite_loop_cursor_up)
+  nmap <buffer><nowait> <Up>      <Plug>(unite_loop_cursor_up)
+  nmap <buffer><nowait> J         <Plug>(unite_skip_cursor_down)
+  nmap <buffer><nowait> K         <Plug>(unite_skip_cursor_up)
+  nmap <buffer><nowait> <C-h>     <Plug>(unite_delete_backward_path)
+  nmap <buffer><nowait> <C-r>     <Plug>(unite_restart)
+  nmap <buffer><nowait> *         <Plug>(unite_toggle_mark_all_candidates)
+  nmap <buffer><nowait> M         <Plug>(unite_disable_max_candidates)
+  nmap <buffer><nowait> g?        <Plug>(unite_quick_help)
+  nmap <buffer><nowait> N         <Plug>(unite_new_candidate)
+  nmap <buffer><nowait> .         <Plug>(unite_narrowing_dot)
   nmap <buffer> <2-LeftMouse>   <Plug>(unite_do_default_action)
   nmap <buffer> <RightMouse>    <Plug>(unite_exit)
 
-  nmap <silent><buffer><expr> a
+  nmap <silent><buffer><expr><nowait> a
         \ unite#smart_map("\<Plug>(unite_append_enter)",
         \                 "\<Plug>(unite_choose_action)")
-  nnoremap <silent><buffer><expr> d
+  nnoremap <silent><buffer><expr><nowait> d
         \ unite#smart_map('d', unite#do_action('delete'))
-  nnoremap <silent><buffer><expr> b
+  nnoremap <silent><buffer><expr><nowait> b
         \ unite#smart_map('b', unite#do_action('bookmark'))
-  nnoremap <silent><buffer><expr> e
+  nnoremap <silent><buffer><expr><nowait> e
         \ unite#smart_map('e', unite#do_action('edit'))
-  nnoremap <silent><buffer><expr> p
+  nnoremap <silent><buffer><expr><nowait> p
         \ unite#smart_map('p', unite#mappings#smart_preview())
-  nmap <silent><buffer><expr> x
+  nmap <silent><buffer><expr><nowait> x
         \ unite#smart_map('x', "\<Plug>(unite_quick_match_default_action)")
-  nnoremap <silent><buffer><expr> t
+  nnoremap <silent><buffer><expr><nowait> t
         \ unite#smart_map('t', unite#do_action('tabopen'))
-  nnoremap <silent><buffer><expr> yy
+  nnoremap <silent><buffer><expr><nowait> yy
         \ unite#smart_map('yy', unite#do_action('yank'))
-  nnoremap <silent><buffer><expr> o
+  nnoremap <silent><buffer><expr><nowait> o
         \ unite#smart_map('o', unite#do_action('open'))
 
   " Visual mode key-mappings.
-  xmap <buffer> <Space>
+  xmap <buffer><nowait> <Space>
         \ <Plug>(unite_toggle_mark_selected_candidates)
 
   " Insert mode key-mappings.
