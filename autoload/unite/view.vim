@@ -899,6 +899,15 @@ function! unite#view#_get_status_tail_string() "{{{
         \    substitute(get(b:unite.msgs, 0, ''), '^\[.\{-}\]\s*', '', '')
 endfunction"}}}
 
+function! unite#view#_get_status_string() "{{{
+  return
+        \"%#uniteStatusSourceNames# %{unite#view#_get_status_head_string()} %*"
+        \."%=%#uniteStatusMessage# %{unite#view#_get_status_tail_string()} %*"
+        \."%#LineNR#%{printf('%'.
+        \len(b:unite.candidates_len+b:unite.prompt_linenr).'d/%d',line('.'),"
+        \."b:unite.candidates_len+b:unite.prompt_linenr)}%*"
+endfunction"}}}
+
 function! unite#view#_add_previewed_buffer_list(bufnr) "{{{
   let unite = unite#get_current_unite()
   call add(unite.previewed_buffer_list, a:bufnr)

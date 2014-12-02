@@ -505,6 +505,9 @@ function! s:rotate_source(is_next) "{{{
     endif
   endfor
 
+  let unite.statusline = unite#view#_get_status_string()
+  setlocal &l:statusline = unite.statusline
+
   call unite#view#_redraw_candidates()
 endfunction"}}}
 function! s:print_candidate() "{{{
