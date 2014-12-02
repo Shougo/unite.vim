@@ -208,7 +208,7 @@ function! unite#get_status_string() "{{{
     return ''
   endif
 
-  return unite#view#_get_status_head_string()
+  return unite#view#_get_status_plane_string()
         \ . ' | '. unite#view#_get_status_tail_string()
 endfunction"}}}
 function! unite#get_marked_candidates() "{{{

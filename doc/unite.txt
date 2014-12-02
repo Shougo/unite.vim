@@ -3701,7 +3701,9 @@ https://github.com/Shougo/unite.vim/issues/412
 Q: I want to change statusline highlights.
 
 A: You can change below highlights by |:highlight|.
-"uniteStatusSourceName", "uniteStatusMessage"
+"uniteStatusNormal", "uniteStatusHead"
+"uniteStatusSourceName", "uniteStatusSourceCandidates"
+"uniteStatusMessage", "uniteStatusLineNR"
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:

@@ -52,8 +52,12 @@ highlight default link uniteInputPrompt  Identifier
 highlight default link uniteInputPromptError  Error
 highlight default link uniteInputCommand  Statement
 
-highlight default link uniteStatusSourceNames  Constant
+highlight default link uniteStatusNormal  StatusLine
+highlight default link uniteStatusHead  Statement
+highlight default link uniteStatusSourceNames  Identifier
+highlight default link uniteStatusSourceCandidates  Constant
 highlight default link uniteStatusMessage  Comment
+highlight default link uniteStatusLineNR  LineNR
 
 let b:current_syntax = 'unite'
 
