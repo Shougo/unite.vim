@@ -839,7 +839,6 @@ function! unite#view#_match_line(highlight, line, id) "{{{
 endfunction"}}}
 
 function! unite#view#_get_status_plane_string() "{{{
-  let len_source = len(unite#loaded_sources_list())
   return (b:unite.is_async ? '[async] ' : '') .
         \ join(map(copy(unite#loaded_sources_list()), "
         \ (v:val.unite__len_candidates == 0) ? '_' :
@@ -891,12 +890,15 @@ function! unite#view#_get_status_string(unite) "{{{
   let statusline = "%#uniteStatusHead# %{unite#view#_get_status_head_string()}%*"
   let cnt = 0
   if empty(a:unite.sources)
-    let statusline .= "%#uniteStatusSourceNames#interactive %*"
+    let statusline .= "%#uniteStatusSourceNames#interactive%*"
+    let statusline .= "%#uniteStatusSourceCandidates#%{"
+    let statusline .= "unite#view#_get_source_candidates_string("
+    let statusline .= "unite#loaded_sources_list()[0])} %*"
   else
     for source in a:unite.sources
       let statusline .= "%#uniteStatusSourceNames#%{"
       let statusline .= "unite#view#_get_source_name_string("
-      let statusline .= "b:unite.sources[".cnt."])}%*"
+      let statusline .= "b:unite.sources[".cnt."])}"
       let statusline .= "%#uniteStatusSourceCandidates#%{"
       let statusline .= "unite#view#_get_source_candidates_string("
       let statusline .= "b:unite.sources[".cnt."])} %*"
