@@ -3698,5 +3698,10 @@ Q: I want to change buffer source output format.
 A: The option is nothing.  You should use converter feature.
 https://github.com/Shougo/unite.vim/issues/412
 
+Q: I want to change statusline highlights.
+
+A: You can change below highlights by |:highlight|.
+"uniteStatusSourceName", "uniteStatusMessage"
+
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
