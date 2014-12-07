@@ -44,7 +44,7 @@ function! unite#helper#call_hook(sources, hook_name) "{{{
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
       call unite#print_error(
-            \ '[unite.vim] Error occured in calling hook "' . a:hook_name . '"!')
+            \ '[unite.vim] Error occurred in calling hook "' . a:hook_name . '"!')
       call unite#print_error(
             \ '[unite.vim] Source name is ' . source.name)
     endtry

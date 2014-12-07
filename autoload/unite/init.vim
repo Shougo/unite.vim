@@ -758,7 +758,7 @@ function! unite#init#_sources(...) "{{{
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
       call unite#print_error(
-            \ '[unite.vim] Error occured in source initialization!')
+            \ '[unite.vim] Error occurred in source initialization!')
       call unite#print_error(
             \ '[unite.vim] Source name is ' . source.name)
     endtry
