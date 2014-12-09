@@ -164,7 +164,8 @@ function! unite#start#temporary(sources, ...) "{{{
 
   if context.script
     " Set buffer-name automatically.
-    let context.buffer_name = unite#helper#get_source_names(a:sources)
+    let context.buffer_name =
+          \ join(unite#helper#get_source_names(a:sources))
   endif
 
   let buffer_name = get(a:000, 1,
