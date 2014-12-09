@@ -895,14 +895,13 @@ function! unite#view#_get_status_string(unite) "{{{
     let statusline .= "unite#view#_get_source_candidates_string("
     let statusline .= "unite#loaded_sources_list()[0])} %*"
   else
-    for source in a:unite.sources
+    for cnt in range(0, len(a:unite.sources)-1)
       let statusline .= "%#uniteStatusSourceNames#%{"
       let statusline .= "unite#view#_get_source_name_string("
       let statusline .= "b:unite.sources[".cnt."])}"
       let statusline .= "%#uniteStatusSourceCandidates#%{"
       let statusline .= "unite#view#_get_source_candidates_string("
       let statusline .= "b:unite.sources[".cnt."])} %*"
-      let cnt += 1
     endfor
   endif
 
