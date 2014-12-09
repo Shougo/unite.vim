@@ -88,11 +88,8 @@ endfunction
 function! unite#util#strwidthpart_reverse(...)
   return call(s:get_prelude().strwidthpart_reverse, a:000)
 endfunction
-function! unite#util#wcswidth(...)
-  return call(s:get_prelude().wcswidth, a:000)
-endfunction
-function! unite#util#wcswidth(...)
-  return call(s:get_prelude().wcswidth, a:000)
+function! unite#util#wcswidth(string)
+  return strwidth(a:string)
 endfunction
 function! unite#util#is_win(...)
   echoerr 'unite#util#is_win() is deprecated. use unite#util#is_windows() instead.'
@@ -339,14 +336,14 @@ function! unite#util#convert2list(expr) "{{{
 endfunction"}}}
 
 function! unite#util#truncate_wrap(str, max, footer_width, separator) "{{{
-  let width = unite#util#wcswidth(a:str)
+  let width = strwidth(a:str)
   if width <= a:max
     return unite#util#truncate(a:str, a:max)
   elseif &l:wrap
     return a:str
   endif
 
-  let header_width = a:max - unite#util#wcswidth(a:separator) - a:footer_width
+  let header_width = a:max - strwidth(a:separator) - a:footer_width
   return unite#util#strwidthpart(a:str, header_width) . a:separator
         \ . unite#util#strwidthpart_reverse(a:str, a:footer_width)
 endfunction"}}}

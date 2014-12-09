@@ -40,7 +40,7 @@ function! s:converter.filter(candidates, context)
   let candidates = copy(a:candidates)
 
   let max = min([max(map(copy(candidates), "
-        \ unite#util#wcswidth(s:convert_to_abbr(
+        \ strwidth(s:convert_to_abbr(
         \  get(v:val, 'action__path', v:val.word)))"))+2,
         \ get(g:, 'unite_converter_file_directory_width', 45)])
 

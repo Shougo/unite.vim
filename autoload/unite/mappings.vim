@@ -353,7 +353,7 @@ endfunction"}}}
 function! s:smart_imap(lhs, rhs) "{{{
   call s:clear_complete()
   return line('.') != unite#get_current_unite().prompt_linenr ||
-        \ col('.') <= (unite#util#wcswidth(unite#get_current_unite().prompt)) ?
+        \ col('.') <= (strwidth(unite#get_current_unite().prompt)) ?
         \ a:lhs : a:rhs
 endfunction"}}}
 function! s:smart_imap2(lhs, rhs) "{{{
