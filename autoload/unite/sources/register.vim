@@ -51,7 +51,7 @@ function! s:source.gather_candidates(args, context) "{{{
 
   for reg in registers
     let register = getreg(reg, 1)
-    if register != '' && register !~ '[\x00-\x09\x10-\x1a\x1c-\x1f]\{3,}'
+    if register != '' && register !~ '[\x01-\x08\x10-\x1a\x1c-\x1f]\{3,}'
       call add(candidates, {
             \ 'word' : register,
             \ 'abbr' : printf('%-3s - %s', reg,
