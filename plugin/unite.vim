@@ -25,7 +25,7 @@
 
 if exists('g:loaded_unite')
   finish
-elseif v:version < 702
+elseif v:version < 703
   echoerr 'unite.vim does not work this version of Vim "' . v:version . '".'
   finish
 endif
