@@ -290,7 +290,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
             \ }
     endif
 
-    let dict.word = printf('%s:%s:%s',
+    let dict.word = printf('%s:%4s: %s',
           \  unite#util#substitute_path_separator(
           \     fnamemodify(dict.action__path, ':.')),
           \ dict.action__line, dict.action__text)
