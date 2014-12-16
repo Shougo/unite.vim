@@ -289,16 +289,26 @@ function! s:source.async_gather_candidates(args, context) "{{{
             \ }
     endif
 
-    let dict.word = printf('%s:%4s: %s',
-          \  unite#util#substitute_path_separator(
-          \     fnamemodify(dict.action__path, ':.')),
-          \ dict.action__line, dict.action__text)
+    let dict.word = dict.action__text
 
     call add(_, dict)
   endfor
 
   return _
 endfunction "}}}
+
+function! s:source.source__converter(candidates, context) "{{{
+  for candidate in a:candidates
+    let candidate.abbr = printf('%s:%4s: %s',
+          \  unite#util#substitute_path_separator(
+          \     fnamemodify(candidate.action__path, ':.')),
+          \ candidate.action__line, candidate.action__text)
+  endfor
+
+  return a:candidates
+endfunction"}}}
+
+let s:source.converters = [s:source.source__converter]
 
 function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return ['%', '#', '$buffers'] + unite#sources#file#complete_directory(
