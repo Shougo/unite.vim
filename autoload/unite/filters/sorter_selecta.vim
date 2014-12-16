@@ -3,7 +3,7 @@
 " AUTHOR:  David Lee
 " DESCRIPTION: Scoring code by Gary Bernhardt
 "     https://github.com/garybernhardt/selecta
-" License: MIT license  
+" License: MIT license
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
 "     "Software"), to deal in the Software without restriction, including
@@ -28,7 +28,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#sorter_selecta#define() 
+function! unite#filters#sorter_selecta#define()
   if has('ruby')
     return s:sorter
   else
@@ -41,7 +41,7 @@ let s:sorter = {
       \ 'description' : 'sort by selecta algorithm',
       \}
 
-function! s:sorter.filter(candidates, context) 
+function! s:sorter.filter(candidates, context)
   if a:context.input == '' || !has('float') || empty(a:candidates)
     return a:candidates
   endif
@@ -76,7 +76,7 @@ function! s:sort_ruby(candidates, inputs)
     for candidate in a:candidates
 ruby << RUBYEOF
         score = Score.score(VIM::evaluate('candidate.word'), VIM::evaluate('input'))
-        VIM::command("let candidate.filter__rank += #{1.0 / score}")
+        VIM::command("let candidate.filter__rank += #{1.0 / score}") if score != 0
 RUBYEOF
     endfor
   endfor
