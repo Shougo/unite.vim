@@ -109,18 +109,16 @@ function! s:source_line.hooks.on_syntax(args, context) "{{{
         \ start=' ' end='$'
         \ containedin=uniteSource__Line
   if len(a:context.source__bufnrs) > 1
-    syntax match uniteSource__LineFile /^[^:]*/ contained
+    syntax match uniteSource__LineFile /^[^:]*:/ contained
           \ containedin=uniteSource__LineLine
           \ nextgroup=uniteSource__LineSeparator
     highlight default link uniteSource__LineFile Comment
   endif
+  syntax match uniteSource__LineLineNR /\d\+:/ contained
+        \ containedin=uniteSource__LineLine
   syntax match uniteSource__LineSeparator /:/ contained conceal
-        \ containedin=uniteSource__LineLine
-        \ nextgroup=uniteSource__LineLineNr
-  syntax match uniteSource__LineLineNr /\d\+\ze:/ contained
-        \ containedin=uniteSource__LineLine
-        \ nextgroup=uniteSource__LinePattern
-  highlight default link uniteSource__LineLineNr LineNR
+        \ containedin=uniteSource__LineFile,uniteSource__LineLineNR
+  highlight default link uniteSource__LineLineNR LineNR
 
   if !highlight || len(a:context.source__bufnrs) > 1
     return

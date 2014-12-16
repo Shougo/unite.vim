@@ -139,18 +139,17 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   syntax region uniteSource__GrepLine
         \ start=' ' end='$'
         \ containedin=uniteSource__Grep
-  syntax match uniteSource__GrepFile /^[^:]*/ contained
+  syntax match uniteSource__GrepFile /^[^:]*:/ contained
         \ containedin=uniteSource__GrepLine
-        \ nextgroup=uniteSource__GrepSeparator
-  syntax match uniteSource__GrepSeparator /:/ contained conceal
-        \ containedin=uniteSource__GrepLine
-        \ nextgroup=uniteSource__GrepLineNr
-  syntax match uniteSource__GrepLineNr /\d\+\ze:/ contained
+        \ nextgroup=uniteSource__GrepLineNR
+  syntax match uniteSource__GrepLineNR /\d\+:/ contained
         \ containedin=uniteSource__GrepLine
         \ nextgroup=uniteSource__GrepPattern
   execute 'syntax match uniteSource__GrepPattern /'
         \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
         \ . '/ contained containedin=uniteSource__GrepLine'
+  syntax match uniteSource__GrepSeparator /:/ contained conceal
+        \ containedin=uniteSource__GrepFile,uniteSource__GrepLineNR
   highlight default link uniteSource__GrepFile Comment
   highlight default link uniteSource__GrepLineNr LineNR
   execute 'highlight default link uniteSource__GrepPattern'
