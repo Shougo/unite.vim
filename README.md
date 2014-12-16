@@ -103,10 +103,6 @@ https://github.com/Shougo/neomru.vim
 
 ## Screen shots
 
-unite file source
------------------
-![Unite file source.](http://gyazo.com/7379f1041084632c66faef9caf3e1f09.png)
-
 unite action source
 -------------------
 ![Unite action source.](http://gyazo.com/c5c000170f28926aaf83d0c47bc5fcbb.png)
