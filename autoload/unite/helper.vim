@@ -320,6 +320,21 @@ function! unite#helper#call_filter(filter_name, candidates, context) "{{{
 
   return filter.filter(a:candidates, a:context)
 endfunction"}}}
+function! unite#helper#call_source_filters(filters, candidates, context, source) "{{{
+  let candidates = a:candidates
+  for Filter in a:filters
+    if type(Filter) == type('')
+      let candidates = unite#helper#call_filter(
+            \ Filter, candidates, a:context)
+    else
+      let candidates = call(Filter, [candidates, a:context], a:source)
+    endif
+
+    unlet Filter
+  endfor
+
+  return candidates
+endfunction"}}}
 
 function! unite#helper#get_source_args(sources) "{{{
   return map(copy(a:sources),

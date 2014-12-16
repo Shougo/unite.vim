@@ -28,9 +28,10 @@ set cpo&vim
 
 " filter() for matchers.
 function! unite#filters#filter_matcher(list, expr, context) "{{{
-  if a:context.unite__max_candidates <= 0 ||
-        \ !a:context.unite__is_interactive ||
-        \ len(a:context.input_list) > 1
+  if a:context.unite__max_candidates <= 0
+        \ || a:expr == ''
+        \ || !a:context.unite__is_interactive
+        \ || len(a:context.input_list) > 1
 
     return a:expr == '' ? a:list :
           \ (a:expr ==# 'if_lua') ?
@@ -40,10 +41,6 @@ function! unite#filters#filter_matcher(list, expr, context) "{{{
           \   unite#filters#lua_fuzzy_matcher(
           \      a:list, a:context, &ignorecase) :
           \ filter(a:list, a:expr)
-  endif
-
-  if a:expr == ''
-    return a:list[: a:context.unite__max_candidates - 1]
   endif
 
   let _ = []
