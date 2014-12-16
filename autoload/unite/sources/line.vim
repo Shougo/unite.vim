@@ -143,6 +143,9 @@ function! s:source_line.hooks.on_post_filter(args, context) "{{{
   for candidate in a:context.candidates
     let candidate.is_multiline = 1
     let candidate.action__col_pattern = a:context.source__input
+    let candidate.action__buffer_nr = candidate.source__info[0]
+    let candidate.action__line = candidate.source__info[1][0]
+    let candidate.action__text = candidate.source__info[1][1]
   endfor
 endfunction"}}}
 
@@ -169,13 +172,15 @@ function! s:source_line.source__converter(candidates, context) "{{{
     for candidate in a:candidates
       let candidate.abbr = printf(a:context.source__format,
             \  unite#util#substitute_path_separator(
-            \     fnamemodify(bufname(candidate.action__buffer_nr), ':.')),
-            \ candidate.action__line, candidate.action__text)
+            \     fnamemodify(bufname(candidate.source__info[0]), ':.')),
+            \ candidate.source__info[1][0],
+            \ candidate.source__info[1][1])
     endfor
   else
     for candidate in a:candidates
       let candidate.abbr = printf(a:context.source__format,
-            \ candidate.action__line, candidate.action__text)
+            \ candidate.source__info[1][0],
+            \ candidate.source__info[1][1])
     endfor
   endif
 
@@ -189,12 +194,11 @@ let s:source_line.converters = [s:source_line.source__converter]
 function! s:on_gather_candidates(direction, context, start, max) "{{{
   let candidates = []
   for bufnr in a:context.source__bufnrs
+    " source__info = [bufnr, [line, text]]
     let candidates += map(s:get_lines(a:context, a:direction,
           \ bufnr, a:start, a:max), "{
           \ 'word' : v:val[1],
-          \ 'action__buffer_nr' : bufnr,
-          \ 'action__line' : v:val[0],
-          \ 'action__text' : v:val[1],
+          \ 'source__info' : [bufnr, v:val],
           \ }")
   endfor
 
