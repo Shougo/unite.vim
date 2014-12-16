@@ -142,7 +142,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__GrepFile /^[^:]*/ contained
         \ containedin=uniteSource__GrepLine
         \ nextgroup=uniteSource__GrepSeparator
-  syntax match uniteSource__GrepSeparator /:/ contained
+  syntax match uniteSource__GrepSeparator /:/ contained conceal
         \ containedin=uniteSource__GrepLine
         \ nextgroup=uniteSource__GrepLineNr
   syntax match uniteSource__GrepLineNr /\d\+\ze:/ contained
@@ -151,7 +151,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   execute 'syntax match uniteSource__GrepPattern /'
         \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
         \ . '/ contained containedin=uniteSource__GrepLine'
-  highlight default link uniteSource__GrepFile Directory
+  highlight default link uniteSource__GrepFile Comment
   highlight default link uniteSource__GrepLineNr LineNR
   execute 'highlight default link uniteSource__GrepPattern'
         \ get(a:context, 'custom_grep_search_word_highlight',

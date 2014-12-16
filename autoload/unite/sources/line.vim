@@ -52,7 +52,6 @@ function! s:source_line.hooks.on_init(args, context) "{{{
   let a:context.source__linemax = line('$')
   let a:context.source__is_bang =
         \ (get(a:args, 0, '') ==# '!')
-  let a:context.source__syntax = &l:syntax
 
   let options = filter(copy(a:args), "v:val != '!'")
   let direction = get(options, 0, '')
@@ -72,6 +71,10 @@ function! s:source_line.hooks.on_init(args, context) "{{{
         \ (direction ==# 'args') ?
         \    filter(map(argv(), "bufnr(v:val)"), 'v:val > 0') :
         \ [bufnr('%')]
+  if len(a:context.source__bufnrs) == 1
+    let a:context.source__syntax =
+          \ getbufvar(a:context.source__bufnrs[0], '&l:syntax')
+  endif
 
   let a:context.source__input = a:context.input
   if a:context.source__linemax > 10000 && a:context.source__input == ''
@@ -102,10 +105,22 @@ function! s:source_line.hooks.on_syntax(args, context) "{{{
   let highlight = get(a:context, 'custom_line_enable_highlight',
         \ g:unite_source_line_enable_highlight)
 
-  syntax match uniteSource__Line_LineNr
-        \ '\(^- *+\? *\)\@<=\<\d\+\>'
-        \ contained containedin=uniteSource__Line
-  highlight default link uniteSource__Line_LineNr LineNr
+  syntax region uniteSource__LineLine
+        \ start=' ' end='$'
+        \ containedin=uniteSource__Line
+  if len(a:context.source__bufnrs) > 1
+    syntax match uniteSource__LineFile /^[^:]*/ contained
+          \ containedin=uniteSource__LineLine
+          \ nextgroup=uniteSource__LineSeparator
+    highlight default link uniteSource__LineFile Comment
+  endif
+  syntax match uniteSource__LineSeparator /:/ contained conceal
+        \ containedin=uniteSource__LineLine
+        \ nextgroup=uniteSource__LineLineNr
+  syntax match uniteSource__LineLineNr /\d\+\ze:/ contained
+        \ containedin=uniteSource__LineLine
+        \ nextgroup=uniteSource__LinePattern
+  highlight default link uniteSource__LineLineNr LineNR
 
   if !highlight || len(a:context.source__bufnrs) > 1
     return
@@ -120,7 +135,7 @@ function! s:source_line.hooks.on_syntax(args, context) "{{{
     syntax region uniteSource__Line_LineSyntax
           \ start='' end='$'
           \ contains=@LineSyntax
-          \ containedin=uniteSource__Line contained
+          \ containedin=uniteSource__LineLine contained
   finally
     let b:current_syntax = save_current_syntax
   endtry
