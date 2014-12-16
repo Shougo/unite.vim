@@ -166,6 +166,11 @@ function! s:source.hooks.on_post_filter(args, context) "{{{
     let candidate.kind = ['file', 'jump_list']
     let candidate.action__col_pattern = a:context.source__input
     let candidate.is_multiline = 1
+    let candidate.action__path =
+          \ unite#util#substitute_path_separator(
+          \   fnamemodify(candidate.source__info[0], ':p'))
+    let candidate.action__line = candidate.source__info[1]
+    let candidate.action__text = candidate.source__info[2]
   endfor
 endfunction"}}}
 
@@ -270,28 +275,21 @@ function! s:source.async_gather_candidates(args, context) "{{{
   let _ = []
   for candidate in candidates
     if len(candidate[1]) <= 1 || candidate[1][1] !~ '^\d\+$'
-      let dict = {
-            \   'action__path' : a:context.source__target[0],
-            \ }
+      let path = a:context.source__target[0]
       if len(candidate[1]) <= 1
-        let dict.action__line = candidate[0][:1][0]
-        let dict.action__text = candidate[1][0]
+        let line = candidate[0][:1][0]
+        let text = candidate[1][0]
       else
-        let dict.action__line = candidate[0][:1].candidate[1][0]
-        let dict.action__text = join(candidate[1][1:], ':')
+        let line = candidate[0][:1].candidate[1][0]
+        let text = join(candidate[1][1:], ':')
       endif
     else
-      let dict = {
-            \   'action__path' : unite#util#substitute_path_separator(
-            \   fnamemodify(candidate[0][:1].candidate[1][0], ':p')),
-            \   'action__line' : candidate[1][1],
-            \   'action__text' : join(candidate[1][2:], ':'),
-            \ }
+      let path = candidate[0][:1].candidate[1][0]
+      let line = candidate[1][1]
+      let text = join(candidate[1][2:], ':')
     endif
 
-    let dict.word = dict.action__text
-
-    call add(_, dict)
+    call add(_, { 'word' : text, 'source__info' : [path, line, text]})
   endfor
 
   return _
@@ -301,8 +299,8 @@ function! s:source.source__converter(candidates, context) "{{{
   for candidate in a:candidates
     let candidate.abbr = printf('%s:%4s: %s',
           \  unite#util#substitute_path_separator(
-          \     fnamemodify(candidate.action__path, ':.')),
-          \ candidate.action__line, candidate.action__text)
+          \     fnamemodify(candidate.source__info[0], ':.')),
+          \ candidate.source__info[1], candidate.source__info[2])
   endfor
 
   return a:candidates
