@@ -167,7 +167,21 @@ function! s:source_line.complete(args, context, arglead, cmdline, cursorpos) "{{
 endfunction"}}}
 
 function! s:source_line.source__converter(candidates, context) "{{{
-  return s:converter(a:candidates, a:context)
+  if len(a:context.source__bufnrs) > 1
+    for candidate in a:candidates
+      let candidate.abbr = printf(a:context.source__format,
+            \  unite#util#substitute_path_separator(
+            \     fnamemodify(bufname(candidate.action__buffer_nr), ':.')),
+            \ candidate.action__line, candidate.action__text)
+    endfor
+  else
+    for candidate in a:candidates
+      let candidate.abbr = printf(a:context.source__format,
+            \ candidate.action__line, candidate.action__text)
+    endfor
+  endif
+
+  return a:candidates
 endfunction"}}}
 
 let s:source_line.converters = [s:source_line.source__converter]
@@ -212,23 +226,6 @@ function! s:get_lines(context, direction, bufnr, start, max) "{{{
   return _
 endfunction"}}}
 
-function! s:converter(candidates, context) "{{{
-  if len(a:context.source__bufnrs) > 1
-    for candidate in a:candidates
-      let candidate.abbr = printf(a:context.source__format,
-            \  unite#util#substitute_path_separator(
-            \     fnamemodify(bufname(candidate.action__buffer_nr), ':.')),
-            \ candidate.action__line, candidate.action__text)
-    endfor
-  else
-    for candidate in a:candidates
-      let candidate.abbr = printf(a:context.source__format,
-            \ candidate.action__line, candidate.action__text)
-    endfor
-  endif
-
-  return a:candidates
-endfunction"}}}
 function! s:get_context_lines(context, direction, start) "{{{
   if a:direction !=# 'forward' && a:direction !=# 'backward'
     let lines = s:on_gather_candidates('forward', a:context, 1, 0)
