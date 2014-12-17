@@ -261,6 +261,8 @@ function! unite#view#_set_syntax() "{{{
   syntax clear
 
   syntax match uniteQuickMatchMarker /^.|/ contained
+        \ contains=uniteQuickMatchSeparator
+  syntax match uniteQuickMatchSeparator /|/ contained
   syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 
   let unite = unite#get_current_unite()
@@ -277,7 +279,7 @@ function! unite#view#_set_syntax() "{{{
         \ ' contains=uniteCandidateMarker,'.
         \ 'uniteCandidateSourceName'
   execute 'syntax match uniteCandidateMarker /^'.
-        \ candidate_icon.' / contained'
+        \ candidate_icon.'/ contained conceal'
 
   let marked_icon = unite#util#escape_pattern(
         \ unite.context.marked_icon)
@@ -290,7 +292,7 @@ function! unite#view#_set_syntax() "{{{
           \ /\%3c[[:alnum:]_\/-]\+/ contained
   else
     execute 'syntax match uniteCandidateSourceName /^'.
-          \ candidate_icon.' / contained'
+          \ candidate_icon.'/ contained conceal'
   endif
 
   " Set syntax.
