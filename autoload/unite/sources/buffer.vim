@@ -193,11 +193,12 @@ function! s:make_abbr(bufnr, flags) "{{{
           \ simplify(fnamemodify(bufname(a:bufnr), ':~:.'))
     if a:flags != ''
       " Format flags so that buffer numbers are aligned on the left.
-      " example: '42 a% +' => ' 42 a%+ '
-      "          '3 h +'   => '  3 h+  '
+      " example: '42 a% +' => '42 a%+ '
+      "          '3 h +'   => ' 3 h+  '
       let nowhitespace = substitute(a:flags, '\s*', '', 'g')
-      let path = substitute(nowhitespace, '\v(\d+)(.*)',
-            \ '\=printf("%*s %-*s", 3, submatch(1), 4, submatch(2))', 'g') . path
+      let path = substitute(nowhitespace, '\(\d\+\)\(.*\)',
+            \ '\=printf("%*s %-*s", len(bufnr("$")),
+            \    submatch(1), 4, submatch(2))', 'g') . path
     endif
 
     if filetype != ''
