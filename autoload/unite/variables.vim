@@ -201,7 +201,7 @@ function! s:initialize_default() "{{{
         \ 'toggle' : 0,
         \ 'quick_match' : 0,
         \ 'create' : 0,
-        \ 'cursor_line_highlight' : 'PmenuSel',
+        \ 'cursor_line_highlight' : 'CursorLine',
         \ 'abbr_highlight' : 'Normal',
         \ 'cursor_line' : 1,
         \ 'update_time' : 200,

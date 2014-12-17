@@ -1819,7 +1819,7 @@ the context dictionary.
 					*unite-options-cursor-line-highlight*
 		-cursor-line-highlight={highlight-name}
 		Change cursor line highlight.  If this option is omitted,
-		"PmenuSel" is used.
+		"CursorLine" is used.
 
 					*unite-options-abbr-highlight*
 		-abbr-highlight={highlight-name}
