@@ -262,7 +262,7 @@ function! unite#view#_set_syntax() "{{{
 
   syntax match uniteQuickMatchMarker /^.|/ contained
         \ contains=uniteQuickMatchSeparator
-  syntax match uniteQuickMatchSeparator /|/ contained
+  syntax match uniteQuickMatchSeparator /|/ contained conceal
   syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 
   let unite = unite#get_current_unite()
