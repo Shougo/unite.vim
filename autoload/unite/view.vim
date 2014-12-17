@@ -285,14 +285,14 @@ function! unite#view#_set_syntax() "{{{
         \ unite.context.marked_icon)
   execute 'syntax region uniteMarkedLine start=/^'.
         \ marked_icon.'/ end=''$'' keepend'
+        \ ' contains=uniteMarkedMarker'
+  execute 'syntax match uniteMarkedMarker /^'.
+        \ marked_icon.'/ contained conceal'
 
   silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0
     syntax match uniteCandidateSourceName
           \ /\%3c[[:alnum:]_\/-]\+/ contained
-  else
-    execute 'syntax match uniteCandidateSourceName /^'.
-          \ candidate_icon.'/ contained conceal'
   endif
 
   " Set syntax.

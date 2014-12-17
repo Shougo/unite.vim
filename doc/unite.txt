@@ -858,18 +858,6 @@ g:unite_enable_short_source_names
 		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
-g:unite_marked_icon				*g:unite_marked_icon*
-		It controls unite marked candidates icon.
-		Note: Must be only one character.
-		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
-
-g:unite_candidate_icon				*g:unite_candidate_icon*
-		It controls unite normal candidates icon.
-		Note: Must be only one character.
-		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
-
 g:unite_abbr_highlight				*g:unite_abbr_highlight*
 		Specify abbreviated candidates highlight.
 		Note: This variable is deprecated.  Please use
@@ -1904,16 +1892,6 @@ the context dictionary.
 						*unite-options-unique*
 		-unique
 		Unique candidates by word attribute.
-
-						*unite-options-candidate-icon*
-		-candidate-icon={icon-text}
-		Specify the candidate icon text.  The default value is ' '.
-		Note: Must be only one character.
-
-						*unite-options-marked-icon*
-		-marked-icon={icon-text}
-		Specify the marked icon text.  The default value is '*'.
-		Note: Must be only one character.
 
 						*unite-options-cursor-line-time*
 		-cursor-line-time={icon-text}
