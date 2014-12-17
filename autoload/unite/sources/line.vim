@@ -105,17 +105,14 @@ function! s:source_line.hooks.on_syntax(args, context) "{{{
   let highlight = get(a:context, 'custom_line_enable_highlight',
         \ g:unite_source_line_enable_highlight)
 
-  syntax region uniteSource__LineLine
-        \ start=' ' end='$'
-        \ containedin=uniteSource__Line
   if len(a:context.source__bufnrs) > 1
     syntax match uniteSource__LineFile /^[^:]*:/ contained
-          \ containedin=uniteSource__LineLine
+          \ containedin=uniteSource__Line
           \ nextgroup=uniteSource__LineSeparator
     highlight default link uniteSource__LineFile Comment
   endif
   syntax match uniteSource__LineLineNR /\d\+:/ contained
-        \ containedin=uniteSource__LineLine
+        \ containedin=uniteSource__Line
   syntax match uniteSource__LineSeparator /:/ contained conceal
         \ containedin=uniteSource__LineFile,uniteSource__LineLineNR
   highlight default link uniteSource__LineLineNR LineNR
@@ -133,7 +130,7 @@ function! s:source_line.hooks.on_syntax(args, context) "{{{
     syntax region uniteSource__Line_LineSyntax
           \ start='' end='$'
           \ contains=@LineSyntax
-          \ containedin=uniteSource__LineLine contained
+          \ containedin=uniteSource__Line contained
   finally
     let b:current_syntax = save_current_syntax
   endtry
