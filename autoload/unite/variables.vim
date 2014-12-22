@@ -234,6 +234,7 @@ function! s:initialize_default() "{{{
         \ 'smartcase' : &smartcase,
         \ 'restore' : 1,
         \ 'vertical_preview' : 0,
+        \ 'force_redraw' : 0,
         \ 'unite__old_buffer_info' : [],
         \ 'unite__direct_switch' : 0,
         \ 'unite__is_interactive' : 1,

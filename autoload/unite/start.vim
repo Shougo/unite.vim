@@ -103,7 +103,11 @@ function! unite#start#standard(sources, ...) "{{{
 
   setlocal modifiable
 
-  call unite#view#_redraw_candidates()
+  if context.force_redraw
+    call unite#force_redraw()
+  else
+    call unite#view#_redraw_candidates()
+  endif
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
 
@@ -161,6 +165,7 @@ function! unite#start#temporary(sources, ...) "{{{
   let context.unite__is_restart = 0
   let context.quick_match = 0
   let context.resume = 0
+  let context.force_redraw = 0
 
   if context.script
     " Set buffer-name automatically.
@@ -351,6 +356,8 @@ function! unite#start#resume(buffer_name, ...) "{{{
   if has_key(new_context, 'input')
     call unite#mappings#narrowing(new_context.input)
     call unite#redraw()
+  elseif context.force_redraw
+    call unite#force_redraw()
   endif
 
   call unite#view#_resize_window()

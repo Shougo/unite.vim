@@ -1928,6 +1928,11 @@ the context dictionary.
 		horizontally. It will take up half the width of the current
 		Unite buffer.
 
+						*unite-options-force-redraw*
+		-force-redraw
+		It it is on, Unite will redraw the candidates like
+		|<Plug>(unite_redraw)|.
+
 ==============================================================================
 SOURCES						*unite-sources*
 

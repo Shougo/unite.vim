@@ -539,8 +539,8 @@ function! unite#view#_init_cursor() "{{{
   let key = unite#loaded_source_names_string()
   let is_restore = context.restore
         \ && has_key(positions, key) && context.select <= 0
-        \ && positions[key].candidate ==#
-        \     unite#helper#get_current_candidate(positions[key].pos[1])
+        \ && (context.resume || positions[key].candidate ==#
+        \       unite#helper#get_current_candidate(positions[key].pos[1]))
 
   if context.start_insert && !context.auto_quit
     let unite.is_insert = 1
