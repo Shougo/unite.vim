@@ -286,24 +286,14 @@ function! s:source.async_gather_candidates(args, context) "{{{
       let text = join(candidate[1][2:], ':')
     endif
 
-    call add(_, { 'word' : text, 'source__info' : [path, line, text]})
+    call add(_, {
+          \ 'word' : printf('%s:%4s: %s', path, line, text),
+          \ 'source__info' : [path, line, text]
+          \ })
   endfor
 
   return _
 endfunction "}}}
-
-function! s:source.source__converter(candidates, context) "{{{
-  for candidate in a:candidates
-    let candidate.abbr = printf('%s:%4s: %s',
-          \  unite#util#substitute_path_separator(
-          \     fnamemodify(candidate.source__info[0], ':.')),
-          \ candidate.source__info[1], candidate.source__info[2])
-  endfor
-
-  return a:candidates
-endfunction"}}}
-
-let s:source.converters = [s:source.source__converter]
 
 function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   return ['%', '#', '$buffers'] + unite#sources#file#complete_directory(
