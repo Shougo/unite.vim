@@ -41,6 +41,7 @@ function! s:source.gather_candidates(args, context) "{{{
         \ getbufvar(v:val, '&filetype') ==# 'unite'
         \  && getbufvar(v:val, 'unite').sources[0].name != 'resume'"),
         \ "getbufvar(v:val, 'unite')")
+  let unite = unite#get_current_unite()
 
   let max_width = max(map(copy(a:context.source__unite_list),
         \ 'len(v:val.buffer_name)'))
@@ -53,7 +54,9 @@ function! s:source.gather_candidates(args, context) "{{{
         \            v:val[0].'':''.join(filter(copy(v:val[1]),
         \            ''type(v:val) == 1''), '':'')')),
         \            v:val.buffer_name),
-        \ 'action__command' : 'UniteResume ' . v:val.buffer_name,
+        \ 'action__command' : printf('call unite#resume(%s, %s)',
+        \              string(v:val.buffer_name),
+        \              string(unite.original_context)),
         \ 'source__time' : v:val.access_time,
         \}")
 

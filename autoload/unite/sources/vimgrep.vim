@@ -96,6 +96,11 @@ function! s:source.hooks.on_init(args, context) "{{{
       let target = default
     endif
 
+    if target == '%'
+      let target = unite#util#substitute_path_separator(
+            \ bufname(unite#get_current_unite().prev_bufnr))
+    endif
+
     " Escape filename.
     let target = escape(target, ' ')
 

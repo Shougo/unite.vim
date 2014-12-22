@@ -278,6 +278,7 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.prev_line = 0
   let unite.update_time_save = &updatetime
   let unite.statusline = unite#view#_get_status_string(unite)
+  let unite.original_context = deepcopy(a:context)
 
   " Create new buffer name.
   let postfix = unite#helper#get_postfix(

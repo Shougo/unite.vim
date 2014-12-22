@@ -318,7 +318,6 @@ function! unite#start#resume(buffer_name, ...) "{{{
   endif
 
   let context = getbufvar(bufnr, 'unite').context
-  let context.resume = 1
 
   let prev_bufnr = bufnr('%')
   let winnr = winnr()
@@ -350,14 +349,17 @@ function! unite#start#resume(buffer_name, ...) "{{{
   let unite.is_finalized = 0
   let unite.preview_candidate = {}
   let unite.highlight_candidate = {}
+  let unite.context.resume = 1
 
   call unite#set_current_unite(unite)
 
-  if has_key(new_context, 'input')
+  if context.force_redraw
+    call unite#force_redraw()
+  endif
+
+  if has_key(new_context, 'input') && new_context.input != ''
     call unite#mappings#narrowing(new_context.input)
     call unite#redraw()
-  elseif context.force_redraw
-    call unite#force_redraw()
   endif
 
   call unite#view#_resize_window()
