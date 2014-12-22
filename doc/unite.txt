@@ -2731,6 +2731,7 @@ Opens a file into a new buffer.  This kind extends |unite-action-openable| and
 	mkdir		Make the directory.  If it already exists, this action
 			does nothing.
 	rename		Change the file name.
+	exrename	Batch rename selected files.
 	grep		Grep the files.
 	grep_directory	Grep the files in the directories.
 	wunix		Write by unix fileformat.
