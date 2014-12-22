@@ -43,7 +43,6 @@ function! s:source.hooks.on_init(args, context) "{{{
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
-  let candidates = []
   if a:context.source__line == ''
     return []
   endif
