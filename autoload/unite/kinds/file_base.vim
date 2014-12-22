@@ -302,6 +302,24 @@ function! s:execute_command(command, candidate) "{{{
         \   fnamemodify(a:candidate.action__path, ':~:.')))
 endfunction"}}}
 
+" For exrename
+let s:kind.action_table.exrename = {
+      \   'description': 'bulk rename files',
+      \   'is_quit': 1,
+      \   'is_invalidate_cache': 1,
+      \   'is_selectable': 1,
+      \ }
+function! s:kind.action_table.exrename.func(candidates)
+  let context = unite#get_context()
+  let buffer_name = context.buffer_name
+  if buffer_name ==# 'default'
+    let buffer_name = 'unite'
+  endif
+  call unite#exrename#create_buffer(a:candidates, {
+        \ 'buffer_name': buffer_name,
+        \})
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
