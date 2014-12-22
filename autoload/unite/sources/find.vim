@@ -74,7 +74,8 @@ function! s:source.hooks.on_init(args, context) "{{{
     redraw
     echo "Please input command-line(quote is needed) Ex: -name '*.vim'"
     let a:context.source__input = unite#util#input(
-          \ printf('%s %s %s ', g:unite_source_find_command, g:unite_source_find_default_opts,
+          \ printf('"%s" %s %s ',
+          \   g:unite_source_find_command, g:unite_source_find_default_opts,
           \   a:context.source__target), '-name ')
   endif
 endfunction"}}}
