@@ -25,12 +25,16 @@
 " }}}
 "=============================================================================
 let s:PREFIX = unite#util#is_windows() ? '[exrename]' : '*exrename*'
+function! s:void(exrename)
+endfunction
+let s:VOID = function('s:void')
 
 function! unite#exrename#create_buffer(candidates, ...) "{{{
   let options = extend({
         \ 'cwd': getcwd(),
         \ 'bufnr': bufnr('%'),
         \ 'buffer_name': '',
+        \ 'post_rename_callback': s:VOID,
         \}, get(a:000, 0, {}))
   if options.cwd !~# '/$'
     " current working directory MUST end with a trailing slash
@@ -149,6 +153,10 @@ function! s:do_rename() "{{{
   echo 'Rename done!'
 
   setlocal nomodified
+
+  if b:exrename.post_rename_callback != s:VOID
+    call b:exrename.post_rename_callback(b:exrename)
+  endif
 endfunction"}}}
 
 function! s:exit() "{{{
