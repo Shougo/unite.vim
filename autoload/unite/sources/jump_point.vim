@@ -38,49 +38,50 @@ let s:source = {
       \}
 function! s:source.hooks.on_init(args, context) "{{{
   let line = substitute(getline('.'), '^!!!\|!!!$', '', 'g')
-  let a:context.source__lines =
-        \ (line =~ '^\f\+:') ?  [line] : []
+  let a:context.source__line =
+        \ (line =~ '^\f\+:') ?  line : ''
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
   let candidates = []
+  if a:context.source__line == ''
+    return []
+  endif
 
-  for [word, list] in map(a:context.source__lines,
-        \ "[v:val, split(v:val[2:], ':')]")
-    let candidate = {
+  let [word, list] = [a:context.source__line,
+        \ split(a:context.source__line[2:], ':')]
+
+  let candidate = {
         \   'word': word,
         \ }
-    if len(word) == 1 && unite#util#is_windows()
-      let candidate.word = word . list[0]
-      let list = list[1:]
-    endif
-
-    let candidate.action__path = unite#util#substitute_path_separator(
-          \ fnamemodify(word[:1].list[0], ':p'))
-    if !filereadable(candidate.action__path)
-      " Skip.
-      continue
-    endif
-
-    " Drop filename field.
+  if len(word) == 1 && unite#util#is_windows()
+    let candidate.word = word . list[0]
     let list = list[1:]
+  endif
 
-    " Check line:col.
-    if len(list) >= 0 && list[0] =~ '^\d\+$'
-      let candidate.action__line = list[0]
-      if len(list) >= 1 && list[1] =~ '^\d\+$'
-        let candidate.action__col = list[1]
-      endif
-    else
-      let candidate.action__text = join(list, ':')
-      let candidate.action__pattern =
-            \ unite#util#escape_match(candidate.action__text)
+  let candidate.action__path = unite#util#substitute_path_separator(
+        \ fnamemodify(word[:1].list[0], ':p'))
+  if !filereadable(candidate.action__path)
+    " Skip.
+    return []
+  endif
+
+  " Drop filename field.
+  let list = list[1:]
+
+  " Check line:col.
+  if len(list) >= 0 && list[0] =~ '^\d\+$'
+    let candidate.action__line = list[0]
+    if len(list) >= 1 && list[1] =~ '^\d\+$'
+      let candidate.action__col = list[1]
     endif
+  else
+    let candidate.action__text = join(list, ':')
+    let candidate.action__pattern =
+          \ unite#util#escape_match(candidate.action__text)
+  endif
 
-    call add(candidates, candidate)
-  endfor
-
-  return candidates
+  return [candidate]
 endfunction"}}}
 
 let &cpo = s:save_cpo
