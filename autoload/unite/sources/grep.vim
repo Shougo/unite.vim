@@ -47,6 +47,7 @@ let s:source = {
       \ 'hooks' : {},
       \ 'syntax' : 'uniteSource__Grep',
       \ 'matchers' : 'matcher_regexp',
+      \ 'sorters' : 'sorter_nothing',
       \ 'ignore_globs' : [
       \         '*~', '*.o', '*.exe', '*.bak',
       \         'DS_Store', '*.pyc', '*.sw[po]', '*.class',
