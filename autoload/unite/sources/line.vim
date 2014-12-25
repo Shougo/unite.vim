@@ -171,13 +171,13 @@ function! s:source_line.source__converter(candidates, context) "{{{
             \  unite#util#substitute_path_separator(
             \     fnamemodify(bufname(candidate.source__info[0]), ':.')),
             \ candidate.source__info[1][0],
-            \ candidate.source__info[1][1])
+            \ substitute(candidate.source__info[1][1], '\s\+$', '', ''))
     endfor
   else
     for candidate in a:candidates
       let candidate.abbr = printf(a:context.source__format,
             \ candidate.source__info[1][0],
-            \ candidate.source__info[1][1])
+            \ substitute(candidate.source__info[1][1], '\s\+$', '', ''))
     endfor
   endif
 
