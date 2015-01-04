@@ -908,7 +908,7 @@ function! unite#view#_get_status_string(unite) "{{{
   endif
 
   let statusline .= "%=%#uniteStatusMessage# %{unite#view#_get_status_tail_string()} %*"
-  let statusline .= "%#LineNR#%{printf('%'.len(b:unite.candidates_len"
+  let statusline .= "%#uniteStatusLineNR#%{printf('%'.len(b:unite.candidates_len"
   let statusline .= "+b:unite.prompt_linenr).'d/%d',line('.'),"
   let statusline .= "b:unite.candidates_len+b:unite.prompt_linenr)}%*"
   return statusline

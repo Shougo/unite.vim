@@ -3691,7 +3691,7 @@ Q: I want to change statusline highlights.
 
 A: You can change below highlights by |:highlight|.
 "uniteStatusNormal", "uniteStatusHead"
-"uniteStatusSourceName", "uniteStatusSourceCandidates"
+"uniteStatusSourceNames", "uniteStatusSourceCandidates"
 "uniteStatusMessage", "uniteStatusLineNR"
 
 ==============================================================================
