@@ -286,7 +286,6 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.buffer_name .= postfix
 
   let unite.real_buffer_name = buffer_name . postfix
-  let unite.prompt = context.prompt
   let unite.input = context.input
   let unite.last_input = context.input
   let unite.last_path = context.path

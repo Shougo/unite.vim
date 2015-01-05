@@ -181,7 +181,6 @@ function! s:initialize_default() "{{{
         \ 'quit' : 1,
         \ 'buffer_name' : 'default',
         \ 'profile_name' : '',
-        \ 'prompt' : '> ',
         \ 'default_action' : 'default',
         \ 'winwidth' : 90,
         \ 'winheight' : 20,
@@ -252,7 +251,6 @@ function! s:initialize_default() "{{{
   " For compatibility(deprecated variables)
   for [context, var] in filter([
         \ ['start_insert', 'g:unite_enable_start_insert'],
-        \ ['prompt', 'g:unite_prompt'],
         \ ['winwidth', 'g:unite_winwidth'],
         \ ['winheight', 'g:unite_winheight'],
         \ ['vertical', 'g:unite_enable_split_vertically'],

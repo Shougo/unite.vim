@@ -48,13 +48,12 @@ highlight default link uniteChooseMessage  NONE
 highlight default link uniteChoosePrompt  uniteSourcePrompt
 highlight default link uniteChooseSource  uniteSourceNames
 
-highlight default link uniteInputPrompt  Identifier
-highlight default link uniteInputPromptError  Error
+highlight default link uniteInputLine  Identifier
 highlight default link uniteInputCommand  Statement
 
 highlight default link uniteStatusNormal  StatusLine
 highlight default link uniteStatusHead  Statement
-highlight default link uniteStatusSourceNames  Identifier
+highlight default link uniteStatusSourceNames  PreProc
 highlight default link uniteStatusSourceCandidates  Constant
 highlight default link uniteStatusMessage  Comment
 highlight default link uniteStatusLineNR  LineNR

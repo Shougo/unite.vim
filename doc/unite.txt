@@ -101,7 +101,7 @@ invoked with <Tab>.  See also |unite-action| to read on about different
 actions.
 
 You can also narrow down the list of candidates with a keyword.  By entering
-insert mode in a unite window, the cursor will jump to the unite prompt (">")
+insert mode in a unite window, the cursor will jump to the unite prompt (" ")
 at the top of the window. Typing at the unite prompt will filter the candidate
 list.
 
@@ -214,7 +214,7 @@ More advanced configuration example:
 	nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir
 	        \ -buffer-name=files buffer bookmark file<CR>
 	nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
-	        \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
+	        \ -buffer-name=files buffer bookmark file<CR>
 	nnoremap <silent> [unite]r  :<C-u>Unite
 	        \ -buffer-name=register register<CR>
 	nnoremap <silent> [unite]o  :<C-u>Unite outline<CR>
@@ -241,11 +241,6 @@ More advanced configuration example:
 	"\   'start_insert': 1,
 	"\   'winheight': 10,
 	"\   'direction': 'botright',
-	"\ })
-
-	" Prompt choices.
-	"call unite#custom#profile('default', 'context', {
-	"\   'prompt': '» ',
 	"\ })
 
 	autocmd FileType unite call s:unite_my_settings()
@@ -808,12 +803,6 @@ g:unite_update_time				*g:unite_update_time*
 		The time interval for updating the candidate list as the filter
 		text it typed in Msec.
 		If it is 0, this feature is disabled.
-		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
-
-g:unite_prompt			                *g:unite_prompt*
-		Unite default prompt.  Can also be set with the `-prompt`
-		command line argument.
 		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| instead.
 
@@ -1679,10 +1668,6 @@ the context dictionary.
 						*unite-options-path*
 		-path={input-text}
 		Specify an initial narrowing path.  The default value is ''.
-
-						*unite-options-prompt*
-		-prompt={prompt-text}
-		Specify the prompt.  The default value is '> '.
 
 						*unite-options-prompt-visible*
 		-prompt-visible
@@ -3137,9 +3122,6 @@ NOTATION					*unite-notation*
 
 			profile_name		(String)
 				The profile name of unite buffer.
-
-			prompt			(String)
-				The prompt string of unite buffer.
 
 			is_insert		(Number)
 				If unite buffer is loaded from

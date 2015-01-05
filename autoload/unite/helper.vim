@@ -188,17 +188,17 @@ function! unite#helper#get_input(...) "{{{
   endif
 
   " Prompt check.
-  if stridx(getline(unite.prompt_linenr), unite.prompt) != 0
+  if getline(unite.prompt_linenr)[:0] != ' '
     let modifiable_save = &l:modifiable
     setlocal modifiable
 
     " Restore prompt.
-    call setline(unite.prompt_linenr, unite.prompt)
+    call setline(unite.prompt_linenr, ' ')
 
     let &l:modifiable = modifiable_save
   endif
 
-  return getline(unite.prompt_linenr)[len(unite.prompt):]
+  return getline(unite.prompt_linenr)[1:]
 endfunction"}}}
 
 function! unite#helper#get_source_names(sources) "{{{

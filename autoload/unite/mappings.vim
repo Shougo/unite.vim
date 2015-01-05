@@ -123,7 +123,7 @@ function! unite#mappings#define_default_mappings() "{{{
         \ "\<ESC>:\<C-u>call \<SID>all_exit()\<CR>" : "\<C-h>"))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_line)
         \ <SID>smart_imap('', repeat("\<C-h>",
-        \     col('.')-(len(unite#get_current_unite().prompt)+1)))
+        \     col('.')-(1+1)))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_word)
         \ <SID>smart_imap('', "\<C-w>")
   inoremap <silent><buffer> <Plug>(unite_delete_backward_path)
@@ -352,14 +352,12 @@ endfunction"}}}
 
 function! s:smart_imap(lhs, rhs) "{{{
   call s:clear_complete()
-  return line('.') != unite#get_current_unite().prompt_linenr ||
-        \ col('.') <= (strwidth(unite#get_current_unite().prompt)) ?
-        \ a:lhs : a:rhs
+  return (line('.') != unite#get_current_unite().prompt_linenr ||
+        \ col('.') <= 1) ? a:lhs : a:rhs
 endfunction"}}}
 function! s:smart_imap2(lhs, rhs) "{{{
   call s:clear_complete()
-  return line('.') <= (len(unite#get_current_unite().prompt)+1) ?
-       \ a:lhs : a:rhs
+  return line('.') <= (1+1) ? a:lhs : a:rhs
 endfunction"}}}
 
 function! s:do_new_candidate_action() "{{{
@@ -503,8 +501,8 @@ function! s:insert_enter(key) "{{{
 
   return (line('.') != unite.prompt_linenr) ?
         \     unite.prompt_linenr . 'Gzb$a' :
-        \ (a:key == 'i' && col('.') <= len(unite.prompt)
-        \     || a:key == 'a' && col('.') < len(unite.prompt)) ?
+        \ (a:key == 'i' && col('.') <= 1
+        \     || a:key == 'a' && col('.') < 1) ?
         \     'A' :
         \     a:key
 endfunction"}}}

@@ -35,8 +35,7 @@ function! unite#view#_redraw_prompt() "{{{
   let modifiable_save = &l:modifiable
   try
     setlocal modifiable
-    call setline(unite.prompt_linenr,
-          \ unite.prompt . unite.context.input)
+    call setline(unite.prompt_linenr, ' ' . unite.context.input)
 
     silent! syntax clear uniteInputLine
     execute 'syntax match uniteInputLine'
@@ -266,11 +265,6 @@ function! unite#view#_set_syntax() "{{{
   syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 
   let unite = unite#get_current_unite()
-
-  " Set highlight.
-  let match_prompt = escape(unite.prompt, '\/*~.^$[]')
-  execute 'syntax match uniteInputPrompt'
-        \ '/^'.match_prompt.'/ contained'
 
   let candidate_icon = unite#util#escape_pattern(
         \ unite.context.candidate_icon)

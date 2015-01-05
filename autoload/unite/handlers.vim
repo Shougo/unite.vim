@@ -84,7 +84,7 @@ function! unite#handlers#_on_cursor_moved_i()  "{{{
   endif
 
   " Prompt check.
-  if line('.') == prompt_linenr && col('.') <= len(unite.prompt)
+  if line('.') == prompt_linenr && col('.') <= 1
     startinsert!
   endif
 endfunction"}}}
@@ -166,8 +166,8 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
 
-  let &l:modifiable = line('.') == prompt_linenr
-        \ && col('.') >= len(context.prompt)
+  let &l:modifiable =
+        \ line('.') == prompt_linenr && col('.') >= 1
 
   if line('.') == 1
     nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
