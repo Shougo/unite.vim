@@ -137,7 +137,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   endif
 
   syntax case ignore
-  syntax match uniteSource__GrepFile /^[^:]*:/ contained
+  syntax match uniteSource__GrepFile /[^:]*: / contained
         \ containedin=uniteSource__Grep
         \ nextgroup=uniteSource__GrepLineNR
   syntax match uniteSource__GrepLineNR /\d\+:/ contained
@@ -288,7 +288,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
     endif
 
     call add(_, {
-          \ 'word' : printf('%s:%4s: %s', path, line, text),
+          \ 'word' : printf('%s: %s: %s', path, line, text),
           \ 'source__info' : [path, line, text]
           \ })
   endfor
