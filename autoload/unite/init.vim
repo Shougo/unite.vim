@@ -163,7 +163,7 @@ function! unite#init#_unite_buffer() "{{{
     match
     if has('conceal')
       setlocal conceallevel=3
-      setlocal concealcursor=n
+      setlocal concealcursor=niv
     endif
     if exists('+cursorcolumn')
       setlocal nocursorcolumn
