@@ -651,7 +651,17 @@ function! unite#view#_quit(is_force, ...)  "{{{
     else
       execute winnr 'wincmd w'
     endif
+
     let unite.prev_winnr = winnr()
+
+    " Resize window.
+    try
+      execute bufwinnr(unite.bufnr) 'wincmd w'
+
+      call unite#view#_resize_window()
+    finally
+      execute unite.prev_winnr 'wincmd w'
+    endtry
   endif
 
   if context.complete
