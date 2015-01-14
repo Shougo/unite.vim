@@ -39,10 +39,11 @@ function! unite#view#_redraw_prompt() "{{{
           \ unite.context.prompt . unite.context.input)
 
     silent! syntax clear uniteInputLine
+    silent! syntax clear uniteInputPrompt
     execute 'syntax match uniteInputLine'
           \ '/\%'.unite.prompt_linenr.'l.*/'
-          \ 'contains=uniteInputCommand,unitePrompt'
-    execute 'syntax match unitePrompt'
+          \ 'contains=uniteInputCommand,uniteInputPrompt'
+    execute 'syntax match uniteInputPrompt'
           \ '/\%'.unite.prompt_linenr.'l.*\%'.len(unite.context.prompt).'c/'
   finally
     let &l:modifiable = modifiable_save
@@ -275,7 +276,7 @@ function! unite#view#_set_syntax() "{{{
   silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0
     execute 'syntax match uniteCandidateSourceName
-          \ /\%'.(2+len(unite.context.prompt)).'c[[:alnum:]_\/-]\+/ contained'
+          \ /\%'.(2+strwidth(unite.context.prompt)).'c[[:alnum:]_\/-]\+/ contained'
   endif
 
   " Set syntax.
@@ -955,7 +956,7 @@ function! unite#view#_convert_lines(candidates) "{{{
   let [max_width, max_source_name] = unite#helper#adjustments(
         \ winwidth(0), unite.max_source_name, 3)
 
-  let padding = repeat(' ', len(context.prompt))
+  let padding = repeat(' ', strwidth(context.prompt))
 
   return map(copy(a:candidates),
         \ "(v:val.is_dummy ? ' ' :
