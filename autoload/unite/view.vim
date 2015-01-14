@@ -35,22 +35,15 @@ function! unite#view#_redraw_prompt() "{{{
   let modifiable_save = &l:modifiable
   try
     setlocal modifiable
-    call setline(unite.prompt_linenr, unite.context.input)
-
-    if unite.context.prompt != ''
-      execute printf(
-            \ 'silent! sign place %d name=unite_prompt line=%d buffer=%d',
-            \ 1000 + !unite.sign_offset,
-            \ unite.prompt_linenr, bufnr('%'))
-      let unite.sign_offset = !unite.sign_offset
-      execute printf('sign unplace %d buffer=%s',
-            \ 1000 + !unite.sign_offset, bufnr('%'))
-    endif
+    call setline(unite.prompt_linenr,
+          \ unite.context.prompt . unite.context.input)
 
     silent! syntax clear uniteInputLine
     execute 'syntax match uniteInputLine'
           \ '/\%'.unite.prompt_linenr.'l.*/'
-          \ 'contains=uniteInputCommand'
+          \ 'contains=uniteInputCommand,unitePrompt'
+    execute 'syntax match unitePrompt'
+          \ '/\%'.unite.prompt_linenr.'l.*\%'.len(unite.context.prompt).'c/'
   finally
     let &l:modifiable = modifiable_save
   endtry
@@ -281,8 +274,8 @@ function! unite#view#_set_syntax() "{{{
 
   silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0
-    syntax match uniteCandidateSourceName
-          \ /\%2c[[:alnum:]_\/-]\+/ contained
+    execute 'syntax match uniteCandidateSourceName
+          \ /\%'.(2+len(unite.context.prompt)).'c[[:alnum:]_\/-]\+/ contained'
   endif
 
   " Set syntax.
@@ -956,20 +949,18 @@ endfunction"}}}
 
 " @vimlint(EVL102, 1, l:max_source_name)
 " @vimlint(EVL102, 1, l:context)
-function! unite#view#_convert_lines(candidates, ...) "{{{
+function! unite#view#_convert_lines(candidates) "{{{
   let unite = unite#get_current_unite()
   let context = unite#get_context()
   let [max_width, max_source_name] = unite#helper#adjustments(
-        \ winwidth(0), unite.max_source_name, 2)
-  if unite.context.prompt != ''
-    " width for prompt
-    let max_width -= 2
-  endif
+        \ winwidth(0), unite.max_source_name, 3)
+
+  let padding = repeat(' ', len(context.prompt))
 
   return map(copy(a:candidates),
         \ "(v:val.is_dummy ? ' ' :
         \   v:val.unite__is_marked ? context.marked_icon :
-        \   context.candidate_icon)
+        \   context.candidate_icon) . padding
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(unite#helper#convert_source_name(
         \     (v:val.is_dummy ? '' : v:val.source)), max_source_name))

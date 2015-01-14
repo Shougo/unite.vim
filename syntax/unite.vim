@@ -48,6 +48,7 @@ highlight default link uniteChooseMessage  NONE
 highlight default link uniteChoosePrompt  uniteSourcePrompt
 highlight default link uniteChooseSource  uniteSourceNames
 
+highlight default link uniteInputPrompt  Normal
 highlight default link uniteInputLine  Identifier
 highlight default link uniteInputCommand  Statement
 

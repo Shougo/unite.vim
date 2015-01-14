@@ -589,30 +589,22 @@ function! unite#mappings#_quick_match(is_choose) "{{{
   let unite = unite#get_current_unite()
 
   let quick_match_table = s:get_quick_match_table()
-  let save_prompt = unite.context.prompt
-  try
-    let unite.context.prompt = ' '
-    call unite#view#_redraw_candidates()
-    call unite#view#_quick_match_redraw(quick_match_table, 1)
+  call unite#view#_quick_match_redraw(quick_match_table, 1)
 
-    if mode() !~# '^c'
-      echo 'Input quick match key: '
-    endif
-    let char = ''
+  if mode() !~# '^c'
+    echo 'Input quick match key: '
+  endif
+  let char = ''
 
-    while char == ''
-      let char = nr2char(getchar())
-    endwhile
+  while char == ''
+    let char = nr2char(getchar())
+  endwhile
 
-    redraw
-    echo ''
+  redraw
+  echo ''
 
-    stopinsert
-  finally
-    let unite.context.prompt = save_prompt
-    call unite#view#_quick_match_redraw(quick_match_table, 0)
-    call unite#view#_redraw_candidates()
-  endtry
+  stopinsert
+  call unite#view#_quick_match_redraw(quick_match_table, 0)
 
   if !has_key(quick_match_table, char)
         \ || quick_match_table[char] >= len(unite.current_candidates)

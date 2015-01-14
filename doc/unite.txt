@@ -1672,8 +1672,7 @@ the context dictionary.
 						*unite-options-prompt*
 		-prompt={prompt-text}
 		Specify the prompt. The default value is ''.
-		Note: It must be 1 or 2 width string.
-		Note: "unitePrompt" highlight is used.
+		Note: "uniteInputPrompt" highlight is used.
 
 						*unite-options-prompt-visible*
 		-prompt-visible
