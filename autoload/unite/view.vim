@@ -955,7 +955,7 @@ function! unite#view#_convert_lines(candidates) "{{{
   let unite = unite#get_current_unite()
   let context = unite#get_context()
   let [max_width, max_source_name] = unite#helper#adjustments(
-        \ winwidth(0), unite.max_source_name, 3)
+        \ winwidth(0), unite.max_source_name, 4)
 
   let padding = repeat(' ', strwidth(context.prompt))
 
