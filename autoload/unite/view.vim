@@ -950,6 +950,7 @@ endfunction"}}}
 
 " @vimlint(EVL102, 1, l:max_source_name)
 " @vimlint(EVL102, 1, l:context)
+" @vimlint(EVL102, 1, l:padding)
 function! unite#view#_convert_lines(candidates) "{{{
   let unite = unite#get_current_unite()
   let context = unite#get_context()
@@ -970,6 +971,7 @@ function! unite#view#_convert_lines(candidates) "{{{
 endfunction"}}}
 " @vimlint(EVL102, 0, l:max_source_name)
 " @vimlint(EVL102, 0, l:context)
+" @vimlint(EVL102, 0, l:padding)
 
 function! s:set_syntax() "{{{
   let unite = unite#get_current_unite()
