@@ -40,8 +40,7 @@ function! unite#view#_redraw_prompt() "{{{
     silent! syntax clear uniteInputLine
     execute 'syntax match uniteInputLine'
           \ '/\%'.unite.prompt_linenr.'l.*/'
-          \ 'contains=uniteInputPrompt,uniteInputPromptError,'.
-          \ 'uniteInputCommand'
+          \ 'contains=uniteInputCommand'
   finally
     let &l:modifiable = modifiable_save
   endtry
