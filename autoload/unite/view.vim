@@ -131,12 +131,21 @@ function! unite#view#_redraw_line(...) "{{{
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! unite#view#_quick_match_redraw(quick_match_table) "{{{
-  call unite#view#_set_candidates_lines(
-        \ unite#view#_convert_lines(
-        \   unite#get_current_unite().current_candidates,
-        \   a:quick_match_table))
-  redraw
+function! unite#view#_quick_match_redraw(quick_match_table, is_define) "{{{
+  for [key, number] in items(a:quick_match_table)
+    if a:is_define
+      execute printf(
+            \ 'silent! sign define unite_quick_match_%d text=%s texthl=uniteQuickMatchMarker',
+            \ number, key)
+      execute printf(
+            \ 'silent! sign place %d name=unite_quick_match_%d line=%d buffer=%d',
+            \ 2000 + number, number, number, bufnr('%'))
+    else
+      execute printf(
+            \ 'silent! sign unplace %d buffer=%d',
+            \ 2000 + number, bufnr('%'))
+    endif
+  endfor
 endfunction"}}}
 function! unite#view#_set_candidates_lines(lines) "{{{
   let unite = unite#get_current_unite()
@@ -249,9 +258,6 @@ endfunction"}}}
 function! unite#view#_set_syntax() "{{{
   syntax clear
 
-  syntax match uniteQuickMatchMarker /^.|/ contained
-        \ contains=uniteQuickMatchSeparator
-  syntax match uniteQuickMatchSeparator /|/ contained conceal
   syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 
   let unite = unite#get_current_unite()
@@ -297,7 +303,7 @@ function! unite#view#_set_syntax() "{{{
     execute printf('syntax match %s "^\%(['.
           \ unite.context.candidate_icon.' ] \|.|\)%s" '.
           \ 'nextgroup='.source.syntax. ' keepend
-          \ contains=uniteCandidateMarker,uniteQuickMatchMarker,%s',
+          \ contains=uniteCandidateMarker,%s',
           \ 'uniteSourceLine__'.source.syntax,
           \ (name == '' ? '' : name . '\>'),
           \ (name == '' ? '' : 'uniteCandidateSourceName')
@@ -951,8 +957,6 @@ endfunction"}}}
 " @vimlint(EVL102, 1, l:max_source_name)
 " @vimlint(EVL102, 1, l:context)
 function! unite#view#_convert_lines(candidates, ...) "{{{
-  let quick_match_table = get(a:000, 0, {})
-
   let unite = unite#get_current_unite()
   let context = unite#get_context()
   let [max_width, max_source_name] = unite#helper#adjustments(
@@ -962,17 +966,10 @@ function! unite#view#_convert_lines(candidates, ...) "{{{
     let max_width -= 2
   endif
 
-  " Create key table.
-  let keys = {}
-  for [key, number] in items(quick_match_table)
-    let keys[number] = key . '|'
-  endfor
-
   return map(copy(a:candidates),
         \ "(v:val.is_dummy ? '  ' :
         \   v:val.unite__is_marked ? context.marked_icon . ' ' :
-        \   empty(quick_match_table) ? context.candidate_icon . ' ' :
-        \   get(keys, v:key, '  '))
+        \   context.candidate_icon . ' ')
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(unite#helper#convert_source_name(
         \     (v:val.is_dummy ? '' : v:val.source)), max_source_name))
