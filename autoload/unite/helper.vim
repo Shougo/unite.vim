@@ -187,18 +187,7 @@ function! unite#helper#get_input(...) "{{{
     return ''
   endif
 
-  " Prompt check.
-  if getline(unite.prompt_linenr)[:0] != ' '
-    let modifiable_save = &l:modifiable
-    setlocal modifiable
-
-    " Restore prompt.
-    call setline(unite.prompt_linenr, ' ')
-
-    let &l:modifiable = modifiable_save
-  endif
-
-  return getline(unite.prompt_linenr)[1:]
+  return getline(unite.prompt_linenr)
 endfunction"}}}
 
 function! unite#helper#get_source_names(sources) "{{{

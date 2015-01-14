@@ -35,7 +35,7 @@ function! unite#view#_redraw_prompt() "{{{
   let modifiable_save = &l:modifiable
   try
     setlocal modifiable
-    call setline(unite.prompt_linenr, ' ' . unite.context.input)
+    call setline(unite.prompt_linenr, unite.context.input)
 
     if unite.context.prompt != ''
       execute printf(
@@ -265,7 +265,7 @@ function! unite#view#_set_syntax() "{{{
   let candidate_icon = unite#util#escape_pattern(
         \ unite.context.candidate_icon)
   execute 'syntax region uniteNonMarkedLine start=/^'.
-        \ candidate_icon.' / end=''$'' keepend'.
+        \ candidate_icon.'/ end=''$'' keepend'.
         \ ' contains=uniteCandidateMarker,'.
         \ 'uniteCandidateSourceName'
   execute 'syntax match uniteCandidateMarker /^'.
@@ -282,7 +282,7 @@ function! unite#view#_set_syntax() "{{{
   silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0
     syntax match uniteCandidateSourceName
-          \ /\%3c[[:alnum:]_\/-]\+/ contained
+          \ /\%2c[[:alnum:]_\/-]\+/ contained
   endif
 
   " Set syntax.
@@ -967,9 +967,9 @@ function! unite#view#_convert_lines(candidates, ...) "{{{
   endif
 
   return map(copy(a:candidates),
-        \ "(v:val.is_dummy ? '  ' :
-        \   v:val.unite__is_marked ? context.marked_icon . ' ' :
-        \   context.candidate_icon . ' ')
+        \ "(v:val.is_dummy ? ' ' :
+        \   v:val.unite__is_marked ? context.marked_icon :
+        \   context.candidate_icon)
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(unite#helper#convert_source_name(
         \     (v:val.is_dummy ? '' : v:val.source)), max_source_name))
