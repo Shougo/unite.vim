@@ -37,6 +37,16 @@ function! unite#view#_redraw_prompt() "{{{
     setlocal modifiable
     call setline(unite.prompt_linenr, ' ' . unite.context.input)
 
+    if unite.context.prompt != ''
+      execute printf(
+            \ 'silent! sign place %d name=unite_prompt line=%d buffer=%d',
+            \ 1000 + !unite.sign_offset,
+            \ unite.prompt_linenr, bufnr('%'))
+      let unite.sign_offset = !unite.sign_offset
+      execute printf('sign unplace %d buffer=%s',
+            \ 1000 + !unite.sign_offset, bufnr('%'))
+    endif
+
     silent! syntax clear uniteInputLine
     execute 'syntax match uniteInputLine'
           \ '/\%'.unite.prompt_linenr.'l.*/'
@@ -44,25 +54,6 @@ function! unite#view#_redraw_prompt() "{{{
   finally
     let &l:modifiable = modifiable_save
   endtry
-endfunction"}}}
-function! unite#view#_remove_prompt() "{{{
-  let unite = unite#get_current_unite()
-  if unite.prompt_linenr == 0
-    return
-  endif
-
-  let modifiable_save = &l:modifiable
-  try
-    setlocal modifiable
-
-    silent! execute (unite.prompt_linenr).'delete _'
-    silent! syntax clear uniteInputLine
-  finally
-    let &l:modifiable = modifiable_save
-  endtry
-
-  call cursor(unite.init_prompt_linenr, 0)
-  let unite.prompt_linenr = 0
 endfunction"}}}
 function! unite#view#_redraw_candidates(...) "{{{
   let is_gather_all = get(a:000, 0, 0)
@@ -966,6 +957,10 @@ function! unite#view#_convert_lines(candidates, ...) "{{{
   let context = unite#get_context()
   let [max_width, max_source_name] = unite#helper#adjustments(
         \ winwidth(0), unite.max_source_name, 2)
+  if unite.context.prompt != ''
+    " width for prompt
+    let max_width -= 2
+  endif
 
   " Create key table.
   let keys = {}

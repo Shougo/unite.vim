@@ -174,6 +174,7 @@ function! s:initialize_default() "{{{
   let s:default_context = {
         \ 'input' : '',
         \ 'path' : '',
+        \ 'prompt' : '',
         \ 'start_insert' : 0,
         \ 'complete' : 0,
         \ 'script' : 0,

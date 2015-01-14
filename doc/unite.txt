@@ -1669,6 +1669,12 @@ the context dictionary.
 		-path={input-text}
 		Specify an initial narrowing path.  The default value is ''.
 
+						*unite-options-prompt*
+		-prompt={prompt-text}
+		Specify the prompt. The default value is ''.
+		Note: It must be 1 or 2 width string.
+		Note: "unitePrompt" highlight is used.
+
 						*unite-options-prompt-visible*
 		-prompt-visible
 		Visible prompt if narrowing text is empty.
