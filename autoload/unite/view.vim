@@ -129,7 +129,7 @@ function! unite#view#_quick_match_redraw(quick_match_table, is_define) "{{{
   for [key, number] in items(a:quick_match_table)
     if a:is_define
       execute printf(
-            \ 'silent! sign define unite_quick_match_%d text=%s texthl=uniteQuickMatchMarker',
+            \ 'silent! sign define unite_quick_match_%d text=%s texthl=uniteQuickMatchText',
             \ number, key)
       execute printf(
             \ 'silent! sign place %d name=unite_quick_match_%d line=%d buffer=%d',
@@ -255,23 +255,26 @@ function! unite#view#_set_syntax() "{{{
   syntax match uniteInputCommand /\\\@<! :\S\+/ contained
 
   let unite = unite#get_current_unite()
+  let context = unite.context
 
   let candidate_icon = unite#util#escape_pattern(
-        \ unite.context.candidate_icon)
+        \ context.candidate_icon)
   execute 'syntax region uniteNonMarkedLine start=/^'.
         \ candidate_icon.'/ end=''$'' keepend'.
-        \ ' contains=uniteCandidateMarker,'.
+        \ ' contains=uniteCandidateIcon,'.
         \ 'uniteCandidateSourceName'
-  execute 'syntax match uniteCandidateMarker /^'.
-        \ candidate_icon.'/ contained conceal'
+  execute 'syntax match uniteCandidateIcon /^'.
+        \ candidate_icon.'/ contained '
+        \ . (context.hide_icon ? 'conceal' : '')
 
   let marked_icon = unite#util#escape_pattern(
-        \ unite.context.marked_icon)
+        \ context.marked_icon)
   execute 'syntax region uniteMarkedLine start=/^'.
         \ marked_icon.'/ end=''$'' keepend'
-        \ ' contains=uniteMarkedMarker'
-  execute 'syntax match uniteMarkedMarker /^'.
-        \ marked_icon.'/ contained conceal'
+        \ ' contains=uniteMarkedIcon'
+  execute 'syntax match uniteMarkedIcon /^'.
+        \ marked_icon.'/ contained '
+        \ . (context.hide_icon ? 'conceal' : '')
 
   silent! syntax clear uniteCandidateSourceName
   if unite.max_source_name > 0
@@ -297,7 +300,7 @@ function! unite#view#_set_syntax() "{{{
     execute printf('syntax match %s "^\%(['.
           \ unite.context.candidate_icon.' ] \|.|\)%s" '.
           \ 'nextgroup='.source.syntax. ' keepend
-          \ contains=uniteCandidateMarker,%s',
+          \ contains=uniteCandidateIcon,%s',
           \ 'uniteSourceLine__'.source.syntax,
           \ (name == '' ? '' : name . '\>'),
           \ (name == '' ? '' : 'uniteCandidateSourceName')
@@ -957,7 +960,11 @@ function! unite#view#_convert_lines(candidates) "{{{
   let [max_width, max_source_name] = unite#helper#adjustments(
         \ winwidth(0), unite.max_source_name, 4)
 
-  let padding = repeat(' ', strwidth(context.prompt))
+  let padding_width = strwidth(context.prompt)
+  if !unite.context.hide_icon
+    let padding_width -= strwidth(context.candidate_icon)
+  endif
+  let padding = repeat(' ', padding_width)
 
   return map(copy(a:candidates),
         \ "(v:val.is_dummy ? ' ' :

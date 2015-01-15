@@ -1686,6 +1686,18 @@ the context dictionary.
 		Note: If it is "below", |unite-options-auto-resize| is used
 		automatically.  To disable it, you must set "-no-auto-resize"
 		option.
+						*unite-options-candidate-icon*
+		 -candidate-icon={icon-text}
+		 Specify the candidate icon text. The default value is ' '.
+
+						*unite-options-marked-icon*
+		 -marked-icon={icon-text}
+		 Specify the marked icon text. The default value is '*'.
+
+						*unite-options-hide-icon*
+		 -hide-icon
+		 Hide candidates icons.
+		 Note: It is default behavior.
 
 						*unite-options-default-action*
 		-default-action={default-action}

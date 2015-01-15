@@ -36,8 +36,9 @@ highlight default link uniteError  Error
 
 highlight default link uniteMarkedLine  Statement
 highlight default link uniteCandidateSourceName  Type
-highlight default link uniteQuickMatchMarker  Special
-highlight default link uniteCandidateMarker  Special
+highlight default link uniteQuickMatchText  Special
+highlight default link uniteCandidateIcon  Special
+highlight default link uniteMarkedIcon  Statement
 highlight default link uniteCandidateInputKeyword  Function
 
 " The following definitions are for <Plug>(unite-choose-action).
