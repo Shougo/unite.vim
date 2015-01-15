@@ -1414,6 +1414,9 @@ unite#custom#profile({profile-name}, {option-name}, {value})
 		context				(Dictionary)
 		Specify default {context} value in unite buffer.
 		You can customize the context in the unite buffer.
+		Valid key context is in |unite-options|.  However, "-" is
+		substituted to "_", and "-" prefix is removed.
+
 		Note: In temporary unite buffers and script created unite
 		buffers, the context overwrites current context instead of
 		default context.
@@ -1422,8 +1425,6 @@ unite#custom#profile({profile-name}, {option-name}, {value})
 		Note: If you use single source in unite.vim commands with
 		omitting profile name and buffer name, "source/{source-name}"
 		is used.  Thus, you can define a source-specific profile.
-		Valid key context is in |unite-options|.  However, "-" is
-		substituted to "_", and "-" prefix is removed.
 
 		Example:
 >
@@ -1633,79 +1634,96 @@ the context dictionary.
 		Doesn't close unite buffer after firing an action.  Unless you
 		specify it, a unite buffer gets closed when you selected an
 		action which is "is_quit".
+		Default: quit (close unite buffer after firing an action)
 
 						*unite-options-no-empty*
 		-no-empty
 		If candidate is empty, it doesn't open any unite buffer.
+		Default: empty (open unite buffer if candidate is empty)
 
 						*unite-options-no-split*
 		-no-split
 		Open the unite buffer in the current window.
+		Default: split (open unite buffer in split window)
 
 						*unite-options-no-cursor-line*
 		-no-cursor-line
 		Disable cursor line highlight.  This option is useful for
 		animation source.
+		Default: cursor-line (enable cursor line highlight)
 
 						*unite-options-no-focus*
 		-no-focus
 		Do not focus the unite buffer after opening it.
+		Default: focus (focus the unite buffer after opening it)
 
 						*unite-options-buffer-name*
 		-buffer-name={buffer-name}
-		Specify a buffer name. The default buffer name is "default".
+		Specify a buffer name.
 		Note: Buffer name must not contain any spaces.
+		Default: "default"
 
 						*unite-options-profile-name*
 		-profile-name={profile-name}		(String)
-		Specify a profile name.  The default profile name is the same
-		as the buffer name.
+		Specify a profile name.
+		Default: the same as the buffer name
 
 						*unite-options-input*
 		-input={input-text}
-		Specify an initial narrowing text.  The default value is ''.
+		Specify an initial narrowing text.
+		Default: ""
 
 						*unite-options-path*
 		-path={input-text}
-		Specify an initial narrowing path.  The default value is ''.
+		Specify an initial narrowing path.
+		Default: ""
 
 						*unite-options-prompt*
 		-prompt={prompt-text}
-		Specify the prompt. The default value is ''.
+		Specify the prompt.
 		Note: "uniteInputPrompt" highlight is used.
+		Default: ""
 
 						*unite-options-prompt-visible*
 		-prompt-visible
 		Visible prompt if narrowing text is empty.
 		Note: It is old prompt behavior.
+		Default: no-prompt-visible (not visible prompt if narrowing
+		         text is empty)
 
 						*unite-options-prompt-direction*
 		-prompt-direction="top" or "below"
-		Specify the prompt direction.  The default value is "below" if
-		|unite-options-direction| contains "below".
+		Specify the prompt direction.
 		Note: If it is "below", |unite-options-auto-resize| is used
 		automatically.  To disable it, you must set "-no-auto-resize"
 		option.
+		Default: "below" (if |unite-options-direction| contains "below")
+
 						*unite-options-candidate-icon*
-		 -candidate-icon={icon-text}
-		 Specify the candidate icon text. The default value is ' '.
+		-candidate-icon={icon-text}
+		Specify the candidate icon text.
+		Default: " "
 
 						*unite-options-marked-icon*
-		 -marked-icon={icon-text}
-		 Specify the marked icon text. The default value is '*'.
+		-marked-icon={icon-text}
+		Specify the marked icon text.
+		Default: " "
 
-						*unite-options-hide-icon*
-		 -hide-icon
-		 Hide candidates icons.
-		 Note: It is default behavior.
+						*unite-options-no-hide-icon*
+		-no-hide-icon
+		Don't hide candidates icons.
+		Default: hide-icon (hide candidates icons)
 
 						*unite-options-default-action*
 		-default-action={default-action}
-		Specify a default action.  The default value is 'default'.
+		Specify a default action.
+		Default: 'default'
 
 					*unite-options-start-insert*
 		-start-insert
 		Opens a unite buffer in the narrowing mode.
+		Default: no-start-insert (opens a unite buffer in the normal
+		         mode)
 
 		When both options are undefined, it depends on
 		|g:unite_enable_start_insert| option.
@@ -1715,55 +1733,65 @@ the context dictionary.
 		-keep-focus
 		Keep the focus on a unite buffer after firing an action.
 		Note: This option is used with "-no-quit" option.
+		Default: no-keep-focus (don't keep the focus on a unite
+		         buffer)
 
 						*unite-options-winwidth*
 		-winwidth={window-width}
-		Specify the width of a unite buffer.  Unless you specify
-		it, "90" is used.
+		Specify the width of a unite buffer.
+		Default: "90"
 
 						*unite-options-winheight*
 		-winheight={window-height}
-		Specify the height of a unite buffer.  Unless you specify
-		it, "20" is used.
+		Specify the height of a unite buffer.
+		Default: "20"
 
 						*unite-options-immediately*
 		-immediately
 		If the number of candidates is exactly one, it runs the
 		default action immediately.  If the candidate list is
 		empty, it does not open any unite buffer.
+		Default: no-immediately
 
 					*unite-options-force-immediately*
 		-force-immediately
 		If candidates are exists, it runs the default action
 		immediately.  If the candidate list is empty, it does not open
 		any unite buffer.
+		Default: no-force-immediately
 
 						*unite-options-auto-preview*
 		-auto-preview
 		When you select a candidate, it runs the "preview" action
 		automatically.
+		Default: no-auto-preview
 						*unite-options-auto-highlight*
 		-auto-highlight
 		When you select a candidate, it runs the "highlight" action
 		automatically.
+		Default: no-auto-highlight
 
 						*unite-options-complete*
 		-complete
 		Uses unite completion interface. |unite-options-col| is also
 		required.
+		Default: no-complete
 
 						*unite-options-col*
 		-col={column-number}
 		Specify the called unite buffer position.
+		Default: "-1"
 
 						*unite-options-vertical*
 		-vertical
 		Splits unite window vertically. |unite-options-winwidth| is
 		used.
+		Default: no-vertical
 
 						*unite-options-horizontal*
 		-horizontal
 		Splits unite window horizontally.
+		Default: horizontal
 
 		When both options are undefined, "-horizontal" is used by
 		default.
@@ -1771,45 +1799,51 @@ the context dictionary.
 
 						*unite-options-direction*
 		-direction={direction}
-		Defines split position rule.  The default value is
-		"topleft".
+		Defines split position rule.
+		Default: "topleft"
 
 						*unite-options-verbose*
 		-verbose
 		Print verbose warning messages.
+		Default: no-verbose
 
 						*unite-options-auto-resize*
 		-auto-resize
 		Auto resize unite buffer height by candidates number.
+		Default: no-auto-resize
 
 						*unite-options-no-resize*
 		-no-resize
 		Do not resize the unite buffer after opening it.
+		Default: resize
 
 						*unite-options-toggle*
 		-toggle
 		Close unite buffer window if one of the same buffer name
 		exists.
+		Default: no-toggle
 
 						*unite-options-quick-match*
 		-quick-match
 		Start in the quick match mode.
+		Default: no-quick-match
 
 						*unite-options-create*
 		-create
 		Create a new unite buffer.
+		Default: no-create (reuse same buffer named unite buffer)
 
 						*unite-options-update-time*
 		-update-time={new-update-time}
-		Change 'updatetime' option.  If this option is omitted,
-		"200" is used.  This option is useful for
+		Change 'updatetime' option.  This option is useful for
 		animation source.
 		Note: Must be smaller than 'updatetime'.
+		Default: "200"
 
 					*unite-options-cursor-line-highlight*
 		-cursor-line-highlight={highlight-name}
-		Change cursor line highlight.  If this option is omitted,
-		"CursorLine" is used.
+		Change cursor line highlight.
+		Default: "CursorLine"
 
 					*unite-options-abbr-highlight*
 		-abbr-highlight={highlight-name}
@@ -1918,10 +1952,10 @@ the context dictionary.
 		Specify 'smartcase' value in unite buffer.  If it is omitted,
 		global 'smartcase' value is used.
 
-						*unite-options-restore*
-		-restore
-		Restore the cursor in unite buffer.
-		Note: It is default behavior.
+						*unite-options-no-restore*
+		-no-restore
+		Don't restore the cursor in unite buffer.
+		Default: restore
 
 						*unite-options-vertical-preview*
 		-vertical-preview
@@ -1934,6 +1968,7 @@ the context dictionary.
 		-force-redraw
 		It it is on, Unite will redraw the candidates like
 		|<Plug>(unite_redraw)|.
+		Default: no-force-redraw
 
 ==============================================================================
 SOURCES						*unite-sources*
