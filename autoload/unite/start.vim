@@ -357,7 +357,7 @@ function! unite#start#resume(buffer_name, ...) "{{{
     call unite#force_redraw()
   endif
 
-  if has_key(new_context, 'input') && new_context.input != ''
+  if has_key(new_context, 'input')
     call unite#mappings#narrowing(new_context.input)
     call unite#redraw()
   endif
