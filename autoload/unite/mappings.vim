@@ -775,14 +775,13 @@ function! s:get_quick_match_table() "{{{
   let unite = unite#get_current_unite()
   let offset = unite.context.prompt_direction ==# 'below' ?
         \ (unite.prompt_linenr == 0 ?
-        \  line('$') - line('.') + 1 :
-        \  unite.prompt_linenr - line('.')) :
-        \ (line('.') - unite.prompt_linenr - 1)
+        \  line('$') - line('.') :
+        \  unite.prompt_linenr - line('.') - 1) :
+        \ line('.')
   if line('.') == unite.prompt_linenr
-    let offset = unite.context.prompt_direction
-          \ ==# 'below' ? 1 : 0
-  endif
-  if unite.context.prompt_direction ==# 'below'
+    let offset = (unite.context.prompt_direction ==# 'below' ?
+          \  0 : 2)
+  elseif unite.context.prompt_direction ==# 'below'
     let offset = offset * -1
   endif
 
