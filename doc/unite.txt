@@ -804,53 +804,59 @@ g:unite_update_time				*g:unite_update_time*
 		text it typed in Msec.
 		If it is 0, this feature is disabled.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and |unite-options-update-time|
+		instead.
 
 g:unite_enable_start_insert			*g:unite_enable_start_insert*
 		If this variable is 1, unite buffer will be in Insert Mode
 		immediately.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and |unite-options-start-insert|
+		instead.
 
 g:unite_split_rule				*g:unite_split_rule*
 		Defines split position rule.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and |unite-options-direction|
+		instead.
 
 					*g:unite_enable_split_vertically*
 g:unite_enable_split_vertically
 		If this variable is 1, unite window is split vertically.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and |unite-options-vertical| instead.
 
 g:unite_winheight				*g:unite_winheight*
 		The height of unite window when split horizontally. Ignored
 		when splitting vertically.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and |unite-options-winheight| instead.
 
 g:unite_winwidth				*g:unite_winwidth*
 		The width of unite window when split vertically. Ignored
 		when splitting horizontally.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and |unite-options-winwidth| instead.
 
 g:unite_cursor_line_highlight		*g:unite_cursor_line_highlight*
 		Specify the cursor line highlight group.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and
+		|unite-options-cursor-line-highlight| instead.
 
 				*g:unite_enable_short_source_names*
 g:unite_enable_short_source_names
 		If this variable is 1, unite buffer will show short source
 		names when multiple sources.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and
+		|unite-options-short-source-names| instead.
 
 g:unite_abbr_highlight				*g:unite_abbr_highlight*
 		Specify abbreviated candidates highlight.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and |unite-options-abbr-highlight|
+		instead.
 
 g:unite_cursor_line_time		*g:unite_cursor_line_time*
 		Specify the cursor line highlight time.
@@ -858,14 +864,16 @@ g:unite_cursor_line_time		*g:unite_cursor_line_time*
 		cursor line highlight.
 		If it is "0.0", this feature will be disabled.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and |unite-options-cursor-line-time|
+		instead.
 
 					*g:unite_kind_file_vertical_preview*
 g:unite_kind_file_vertical_preview
 		If this variable is 1, Unite will open the preview window
 		vertically rather than horizontally.
 		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| instead.
+		|unite#custom#profile()| and |unite-options-vertical-preview|
+		instead.
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*unite-key-mappings*
@@ -1848,45 +1856,47 @@ the context dictionary.
 					*unite-options-abbr-highlight*
 		-abbr-highlight={highlight-name}
 		Specify abbreviated candidates highlight.
+		Default: "Normal"
 
 					*unite-options-hide-source-names*
 		-hide-source-names
 		Hides source names.
 		Note: Source highlight will be overwritten by other sources.
-
-					*unite-options-hide-status-line*
-		-hide-status-line
-		Nothing.
-		Note: This option is obsolete.
+		Default: no-hide-source-names
 
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}
-		Specify the lines max in multiline candidates.  If this option
-		is omitted, "5" is used.
+		Specify the lines max in multiline candidates.
+		Default: "5"
 
 						*unite-options-here*
 		-here
 		Open unite buffer at the cursor position.
 		Note: This option is disabled if "-vertical" or "-no-split"
 		option is on.
+		Default: no-here
 
 						*unite-options-silent*
 		-silent
 		Shuts messages up in unite buffer.
+		Default: no-silent
 
 						*unite-options-auto-quit*
 		-auto-quit
 		Closes unite buffer automatically when all candidates are
 		shown.
+		Default: no-auto-quit
 
 					*unite-options-short-source-names*
 		-short-source-names
 		Use short source names if multiple sources.
+		Default: no-short-source-names
 
 						*unite-options-multi-line*
 		-multi-line
 		Force use multi line.  If candidate abbr is too long, unite.vim
 		will fold automatically.
+		Default: no-multi-line
 
 						*unite-options-resume*
 		-resume
@@ -1894,6 +1904,7 @@ the context dictionary.
 		buffer gets created.  Cf: |:UniteResume|
 		Note: Uses |unite-options-buffer-name| to search for
 		previous buffers, which must be set.
+		Default: no-resume
 
 						*unite-options-wrap*
 		-wrap
@@ -1901,33 +1912,40 @@ the context dictionary.
 		wrap and displaying continues on the next line.
 		Note: This option will set 'wrap' option and disable
 		|unite-options-multi-line| option.
+		Default: no-wrap
 
 						*unite-options-select*
 		-select={select-candidate-index}
 		If it is set, unite will select the specified candidate.
 		Note: The candidate index is 0-based.
+		Default: "-1"
 
 						*unite-options-log*
 		-log
 		Enable log mode.  In log mode, the cursor is placed at the
 		bottom automatically.
+		Default: no-log
 
 						*unite-options-truncate*
 		-truncate
 		Truncate lines longer than the window's width.
+		Default: no-truncate
 
 						*unite-options-tab*
 		-tab
 		Open a new unite buffer in a new tabpage.
+		Default: no-tab
 
 						*unite-options-sync*
 		-sync
 		Disable asynchronous mode like |ctrlp| plugin.
 		It is useful if you don't want to get input lag.
+		Default: no-sync
 
 						*unite-options-unique*
 		-unique
 		Unique candidates by word attribute.
+		Default: no-unique
 
 						*unite-options-cursor-line-time*
 		-cursor-line-time={icon-text}
@@ -1935,22 +1953,24 @@ the context dictionary.
 		If you scroll cursor quickly less than it, unite will skip
 		cursor line highlight.
 		If it is "0.0", this feature will be disabled.
+		Default: "0.10"
 
 						*unite-options-wipe*
 		-wipe
 		Wipeout unite buffer when quit.
 		It is useful for using jumplist.
 		Note: If it is used, you cannot use |:UniteResume| feature.
+		Default: no-wipe
 
 						*unite-options-ignorecase*
 		-ignorecase
-		Specify 'ignorecase' value in unite buffer.  If it is
-		omitted, global 'ignorecase' value is used.
+		Specify 'ignorecase' value in unite buffer.
+		Default: 'ignorecase' value
 
 						*unite-options-smartcase*
 		-smartcase
-		Specify 'smartcase' value in unite buffer.  If it is omitted,
-		global 'smartcase' value is used.
+		Specify 'smartcase' value in unite buffer.
+		Default: 'smartcase' value
 
 						*unite-options-no-restore*
 		-no-restore
@@ -1963,6 +1983,7 @@ the context dictionary.
 		(when executing the file preview action) vertically rather than
 		horizontally. It will take up half the width of the current
 		Unite buffer.
+		Default: no-vertical-preview
 
 						*unite-options-force-redraw*
 		-force-redraw
