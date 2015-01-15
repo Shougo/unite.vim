@@ -1642,28 +1642,28 @@ the context dictionary.
 		Doesn't close unite buffer after firing an action.  Unless you
 		specify it, a unite buffer gets closed when you selected an
 		action which is "is_quit".
-		Default: quit (close unite buffer after firing an action)
+		Default: quit
 
 						*unite-options-no-empty*
 		-no-empty
 		If candidate is empty, it doesn't open any unite buffer.
-		Default: empty (open unite buffer if candidate is empty)
+		Default: empty
 
 						*unite-options-no-split*
 		-no-split
 		Open the unite buffer in the current window.
-		Default: split (open unite buffer in split window)
+		Default: split
 
 						*unite-options-no-cursor-line*
 		-no-cursor-line
 		Disable cursor line highlight.  This option is useful for
 		animation source.
-		Default: cursor-line (enable cursor line highlight)
+		Default: cursor-line
 
 						*unite-options-no-focus*
 		-no-focus
 		Do not focus the unite buffer after opening it.
-		Default: focus (focus the unite buffer after opening it)
+		Default: focus
 
 						*unite-options-buffer-name*
 		-buffer-name={buffer-name}
@@ -1696,8 +1696,7 @@ the context dictionary.
 		-prompt-visible
 		Visible prompt if narrowing text is empty.
 		Note: It is old prompt behavior.
-		Default: no-prompt-visible (not visible prompt if narrowing
-		         text is empty)
+		Default: no-prompt-visible
 
 						*unite-options-prompt-direction*
 		-prompt-direction="top" or "below"
@@ -1730,8 +1729,7 @@ the context dictionary.
 					*unite-options-start-insert*
 		-start-insert
 		Opens a unite buffer in the narrowing mode.
-		Default: no-start-insert (opens a unite buffer in the normal
-		         mode)
+		Default: no-start-insert
 
 		When both options are undefined, it depends on
 		|g:unite_enable_start_insert| option.
@@ -1741,8 +1739,7 @@ the context dictionary.
 		-keep-focus
 		Keep the focus on a unite buffer after firing an action.
 		Note: This option is used with "-no-quit" option.
-		Default: no-keep-focus (don't keep the focus on a unite
-		         buffer)
+		Default: no-keep-focus
 
 						*unite-options-winwidth*
 		-winwidth={window-width}
