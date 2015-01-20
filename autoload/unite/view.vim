@@ -298,7 +298,7 @@ function! unite#view#_set_syntax() "{{{
           \ source.syntax unite.context.abbr_highlight
 
     execute printf('syntax match %s "^\%(['.
-          \ unite.context.candidate_icon.' ] \|.|\)%s" '.
+          \ unite.context.candidate_icon.' ]\|.|\)%s" '.
           \ 'nextgroup='.source.syntax. ' keepend
           \ contains=uniteCandidateIcon,%s',
           \ 'uniteSourceLine__'.source.syntax,
