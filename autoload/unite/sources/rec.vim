@@ -466,11 +466,6 @@ function! s:get_path(args, context) "{{{
           \ a:context.path : getcwd()
   endif
 
-  if a:context.unite__is_restart
-    let directory = unite#util#input('Target: ',
-          \ directory, 'dir', a:context.source_name)
-  endif
-
   let directory = unite#util#substitute_path_separator(
         \ fnamemodify(unite#util#expand(directory), ':p'))
 
