@@ -297,8 +297,8 @@ function! unite#view#_set_syntax() "{{{
     execute 'highlight default link'
           \ source.syntax unite.context.abbr_highlight
 
-    execute printf('syntax match %s "^\%(['.
-          \ unite.context.candidate_icon.' ]\|.|\)%s" '.
+    execute printf('syntax match %s "^['.
+          \ unite.context.candidate_icon.' ]\+%s" '.
           \ 'nextgroup='.source.syntax. ' keepend
           \ contains=uniteCandidateIcon,%s',
           \ 'uniteSourceLine__'.source.syntax,
