@@ -222,7 +222,7 @@ function! unite#filters#vim_filter_patterns(candidates, patterns, whites) "{{{
   let white = join(a:whites, '\|')
   return filter(a:candidates,
         \ "get(v:val, 'action__path', v:val.word) !~? pattern
-        \  || get(v:val, 'action__path', v:val.word) =~? white")
+        \  || (white != '' && get(v:val, 'action__path', v:val.word) =~? white)")
 endfunction"}}}
 
 function! unite#filters#globs2patterns(globs) "{{{
