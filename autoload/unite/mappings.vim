@@ -123,7 +123,7 @@ function! unite#mappings#define_default_mappings() "{{{
         \ "\<ESC>:\<C-u>call \<SID>all_exit()\<CR>" : "\<C-h>"))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_line)
         \ <SID>smart_imap('', repeat("\<C-h>",
-        \     col('.')-(1+1)))
+        \     unite#util#strchars(unite#helper#get_input())))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_word)
         \ <SID>smart_imap('', "\<C-w>")
   inoremap <silent><buffer> <Plug>(unite_delete_backward_path)
