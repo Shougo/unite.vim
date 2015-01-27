@@ -247,6 +247,7 @@ function! s:initialize_default() "{{{
         \ 'unite__disable_max_candidates' : 0,
         \ 'unite__not_buffer' : 0,
         \ 'unite__is_resize' : 0,
+        \ 'unite__is_restart' : 0,
         \ }
 
   " For compatibility(deprecated variables)
