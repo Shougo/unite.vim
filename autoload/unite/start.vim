@@ -496,7 +496,7 @@ function! s:get_unite_buffer(buffer_name) "{{{
     let bufnr = s:get_resume_buffer(a:buffer_name)
   endif
 
-  if type(getbufvar(bufnr, 'unite')) != type({})
+  if bufnr > 0 && type(getbufvar(bufnr, 'unite')) != type({})
     " Unite buffer is released.
     call unite#util#print_error(
           \ printf('Invalid unite buffer(%d) is detected.', bufnr))
