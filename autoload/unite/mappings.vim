@@ -616,7 +616,7 @@ function! unite#mappings#_quick_match(is_choose) "{{{
     return
   endif
 
-  let candidate = unite.current_candidates[quick_match_table[char]]
+  let candidate = unite.current_candidates[quick_match_table[char] - 1]
   if candidate.is_dummy
     call unite#util#print_error('Canceled.')
     return
