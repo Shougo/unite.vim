@@ -84,7 +84,8 @@ function! unite#handlers#_on_cursor_moved_i()  "{{{
   endif
 
   " Prompt check.
-  if line('.') == prompt_linenr && col('.') <= 1
+  if line('.') == prompt_linenr
+        \ && col('.') <= len(unite#get_context().prompt)
     startinsert!
   endif
 endfunction"}}}
