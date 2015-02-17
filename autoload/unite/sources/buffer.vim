@@ -229,7 +229,6 @@ function! s:get_buffer_list(is_bang, is_question, is_plus, is_minus) "{{{
   let buffer_list = unite#sources#buffer#variables#get_buffer_list()
   while bufnr <= bufnr('$')
     if s:is_listed(a:is_bang, a:is_question, a:is_plus, a:is_minus, bufnr)
-          \ && bufnr != bufnr('%')
       let dict = get(buffer_list, bufnr, {
             \ 'action__buffer_nr' : bufnr,
             \ 'source__time' : 0,
@@ -242,18 +241,6 @@ function! s:get_buffer_list(is_bang, is_question, is_plus, is_minus) "{{{
   endwhile
 
   call sort(list, 's:compare')
-
-  if s:is_listed(a:is_bang, a:is_question, a:is_plus, a:is_minus, bufnr('%'))
-    " Add current buffer.
-    let dict = get(unite#sources#buffer#variables#get_buffer_list(),
-          \ bufnr('%'), {
-          \ 'action__buffer_nr' : bufnr('%'),
-          \ 'source__time' : 0,
-          \ })
-    let dict.source__flags = get(flag_dict, bufnr('%'), '')
-
-    call add(list, dict)
-  endif
 
   return list
 endfunction"}}}
