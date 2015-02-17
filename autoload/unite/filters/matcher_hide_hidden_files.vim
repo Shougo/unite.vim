@@ -37,13 +37,15 @@ let s:matcher = {
 
 function! s:matcher.filter(candidates, context) "{{{
   if stridx(a:context.input, '.') >= 0
-    return unite#filters#filter_matcher(
-          \ a:candidates, '', a:context)
+    return a:candidates
   endif
 
-  return filter(a:candidates, "
-        \ get(v:val, 'action__path', v:val.word) !~
-        \    '\\%(^\\|/\\)\\.[^/]*/\\?$'")
+  return unite#util#has_lua() ?
+        \ unite#filters#lua_filter_patterns(a:candidates,
+        \   ['^%.[^/]*/?$', '/%.[^/]*/?$'], []) :
+        \ filter(a:candidates, "
+        \   has_key(v:val, 'action__path')
+        \    && v:val.action__path !~ '\\%(^\\|/\\)\\.[^/]*/\\?$'")
 endfunction"}}}
 
 let &cpo = s:save_cpo
