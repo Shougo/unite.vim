@@ -65,7 +65,8 @@ function! unite#handlers#_on_cursor_hold_i()  "{{{
 
   call unite#view#_change_highlight()
 
-  if unite.max_source_candidates > unite.redraw_hold_candidates
+  if unite.redraw_hold_candidates > 0
+        \ && unite.max_source_candidates > unite.redraw_hold_candidates
     call s:check_redraw()
   endif
 
@@ -79,7 +80,8 @@ function! unite#handlers#_on_cursor_moved_i()  "{{{
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
 
-  if unite.max_source_candidates <= unite.redraw_hold_candidates
+  if unite.redraw_hold_candidates <= 0
+        \ || unite.max_source_candidates <= unite.redraw_hold_candidates
     call s:check_redraw()
   endif
 
