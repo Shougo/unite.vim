@@ -88,7 +88,8 @@ function! unite#init#_context(context, ...) "{{{
     let context.horizontal = 1
     let context.direction = 'belowright'
   endif
-  if &l:modified && !&l:hidden
+  if (!&l:hidden && &l:modified)
+        \ || (&l:hidden && &l:bufhidden =~# 'unload\|delete\|wipe')
     " Split automatically.
     let context.split = 1
   endif

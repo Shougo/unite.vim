@@ -1659,7 +1659,9 @@ the context dictionary.
 
 						*unite-options-no-split*
 		-no-split
-		Open the unite buffer in the current window.
+		Open the unite buffer in the current window instead of a new
+		window. This is ignored if the current buffer has set
+		'bufhidden' to unload/delete/wipe.
 		Default: split
 
 						*unite-options-no-cursor-line*
