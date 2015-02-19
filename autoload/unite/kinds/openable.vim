@@ -222,7 +222,7 @@ let s:kind.action_table.tabswitch = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.tabswitch.func(candidates) "{{{
-  for candidate in s:filter_bufpath(a:candidates)
+  for candidate in a:candidates
     if s:switch(candidate)
       call unite#take_action('tabopen', candidate)
     endif
