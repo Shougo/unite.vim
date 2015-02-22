@@ -210,9 +210,14 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
       noautocmd silent execute 'buffer' bufnr_save
     endif
 
-    if rename(old_filename, new_filename)
+    " create if the destination directory does not exist
+    if !isdirectory(fnamemodify(new_filename, ':h'))
+      call mkdir(fnamemodify(new_filename, ':h'), 'p')
+    endif
+
+    if unite#util#move(old_filename, new_filename)
       call unite#print_error(
-            \ printf('Failed file rename: "%s" to "%s".',
+            \ printf('Failed rename: "%s" to "%s".',
             \   a:old_filename, a:new_filename))
     endif
   finally
