@@ -209,7 +209,7 @@ let s:kind.action_table.switch = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.switch.func(candidates) "{{{
-  for candidate in s:filter_bufpath(a:candidates)
+  for candidate in a:candidates
     if s:switch(candidate)
       call unite#take_action('open', candidate)
     endif
@@ -222,7 +222,7 @@ let s:kind.action_table.tabswitch = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.tabswitch.func(candidates) "{{{
-  for candidate in s:filter_bufpath(a:candidates)
+  for candidate in a:candidates
     if s:switch(candidate)
       call unite#take_action('tabopen', candidate)
     endif
@@ -235,7 +235,7 @@ let s:kind.action_table.splitswitch = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.splitswitch.func(candidates) "{{{
-  for candidate in s:filter_bufpath(a:candidates)
+  for candidate in a:candidates
     if s:switch(candidate)
       call unite#take_action('split', candidate)
     endif
@@ -248,7 +248,7 @@ let s:kind.action_table.vsplitswitch = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.vsplitswitch.func(candidates) "{{{
-  for candidate in s:filter_bufpath(a:candidates)
+  for candidate in a:candidates
     if s:switch(candidate)
       call unite#take_action('vsplit', candidate)
     endif
@@ -256,11 +256,6 @@ function! s:kind.action_table.vsplitswitch.func(candidates) "{{{
 endfunction"}}}
 
 "}}}
-
-function! s:filter_bufpath(candidates) "{{{
-  let bufpath = unite#util#substitute_path_separator(expand('%:p'))
-  return filter(copy(a:candidates), 'v:val.action__path !=# bufpath')
-endfunction"}}}
 
 function! s:search_buffer(candidate) "{{{
   let bufnr = bufnr(a:candidate.action__path)
