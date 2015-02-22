@@ -210,9 +210,7 @@ let s:kind.action_table.switch = {
       \ }
 function! s:kind.action_table.switch.func(candidates) "{{{
   for candidate in a:candidates
-    if s:switch(candidate)
-      call unite#take_action('open', candidate)
-    endif
+    call s:switch(candidate)
   endfor
 endfunction"}}}
 
