@@ -210,7 +210,9 @@ function! s:make_abbr(bufnr, flags) "{{{
          \ unite#util#substitute_path_separator(path) . ' '
 endfunction"}}}
 function! s:compare(candidate_a, candidate_b) "{{{
-  return a:candidate_b.source__time - a:candidate_a.source__time
+  return a:candidate_a.action__buffer_nr == unite#get_current_unite().prev_bufnr ?  1 :
+      \ (a:candidate_b.action__buffer_nr == unite#get_current_unite().prev_bufnr ? -1 :
+      \ a:candidate_b.source__time - a:candidate_a.source__time)
 endfunction"}}}
 function! s:get_buffer_list(is_bang, is_question, is_plus, is_minus) "{{{
   " Get :ls flags.
