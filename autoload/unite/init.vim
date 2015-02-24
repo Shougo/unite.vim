@@ -753,6 +753,8 @@ function! unite#init#_sources(...) "{{{
       let source.white_globs = unite#util#convert2list(
             \ get(custom_source, 'white_globs',
             \    get(source, 'white_globs', [])))
+      let source.syntax = get(custom_source, 'syntax',
+            \    get(source, 'syntax', ''))
 
       let source.unite__len_candidates = 0
       let source.unite__orig_len_candidates = 0

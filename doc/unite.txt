@@ -1563,6 +1563,12 @@ unite#custom#source({source-name}, {option-name}, {value})
 		Specify the whitelist glob pattern list not to ignore
 		candidates of the source.
 
+		syntax				(String)
+		You can change source syntax name.
+		If it is empty string, the source syntax feature is disabled.
+		Example: >
+		call unite#custom#source('output', 'syntax', '')
+
 						*unite#take_action()*
 unite#take_action({action-name}, {candidate})
 		Runs an action {action-name} against {candidate}.  This will
