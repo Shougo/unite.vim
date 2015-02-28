@@ -1553,6 +1553,7 @@ unite#custom#source({source-name}, {option-name}, {value})
 		source.
 		You can use 'wildignore' globs easily.  But you must split it
 		by ",".
+		If it starts with "./", it is current directory pattern.
 		This applies on the path or word attribute of candidates.
 		Note: It is not case sensitive.
 		Example: >
@@ -2619,6 +2620,7 @@ matcher_project_ignore_files
 		It searches project ignore files from ".gitignore",
 		".hgignore", ".agignore" and ".uniteignore".
 		It does support whitelist feature(Ex: "!glob" pattern).
+		It uses same pattern as "ignore_globs".
 		Note: It does not support non glob ignore files in .hgignore.
 
 						*unite-filter-sorter_default*
