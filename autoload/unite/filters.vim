@@ -217,6 +217,7 @@ EOF
 
   return a:candidates
 endfunction"}}}
+" @vimlint(EVL102, 1, l:pattern)
 function! unite#filters#vim_filter_patterns(candidates, patterns, whites) "{{{
   let pattern = join(a:patterns, '\|')
   let white = join(a:whites, '\|')
@@ -224,6 +225,7 @@ function! unite#filters#vim_filter_patterns(candidates, patterns, whites) "{{{
         \ "get(v:val, 'action__path', v:val.word) !~? pattern
         \  || (white != '' && get(v:val, 'action__path', v:val.word) =~? white)")
 endfunction"}}}
+" @vimlint(EVL102, 0, l:pattern)
 
 function! unite#filters#globs2patterns(globs) "{{{
   return unite#util#has_lua() ?
