@@ -161,12 +161,13 @@ if filereadable(expand('<sfile>:r') . '.VIM')
     " Note: On windows, vim can't expand path names from 8.3 formats.
     " So if getting full path via <sfile> and $HOME was set as 8.3 format,
     " vital load duplicated scripts. Below's :~ avoid this issue.
+
     return tolower(fnamemodify(resolve(fnamemodify(
-    \              a:path, ':p')), ':~:gs?[\\/]\+?/?'))
+    \              a:path, ':p')), ':~:gs?[\\/]?/?'))
   endfunction
 else
   function! s:_unify_path(path)
-    return resolve(fnamemodify(a:path, ':p:gs?[\\/]\+?/?'))
+    return resolve(fnamemodify(a:path, ':p:gs?[\\/]?/?'))
   endfunction
 endif
 
