@@ -3,17 +3,17 @@ set cpo&vim
 
 if v:version ># 703 ||
 \  (v:version is 703 && has('patch465'))
-  function! s:glob(expr)
+  function! s:glob(expr) abort
     return glob(a:expr, 1, 1)
   endfunction
 else
-  function! s:glob(expr)
+  function! s:glob(expr) abort
     let R = glob(a:expr, 1)
     return split(R, '\n')
   endfunction
 endif
 
-function! s:globpath(path, expr)
+function! s:globpath(path, expr) abort
   let R = globpath(a:path, a:expr, 1)
   return split(R, '\n')
 endfunction
@@ -36,44 +36,44 @@ let [
 " This doesn't match to anything.
 
 " Number or Float
-function! s:is_numeric(Value)
+function! s:is_numeric(Value) abort
   let _ = type(a:Value)
   return _ ==# s:__TYPE_NUMBER
   \   || _ ==# s:__TYPE_FLOAT
 endfunction
 
 " Number
-function! s:is_number(Value)
+function! s:is_number(Value) abort
   return type(a:Value) ==# s:__TYPE_NUMBER
 endfunction
 
 " Float
-function! s:is_float(Value)
+function! s:is_float(Value) abort
   return type(a:Value) ==# s:__TYPE_FLOAT
 endfunction
 " String
-function! s:is_string(Value)
+function! s:is_string(Value) abort
   return type(a:Value) ==# s:__TYPE_STRING
 endfunction
 " Funcref
-function! s:is_funcref(Value)
+function! s:is_funcref(Value) abort
   return type(a:Value) ==# s:__TYPE_FUNCREF
 endfunction
 " List
-function! s:is_list(Value)
+function! s:is_list(Value) abort
   return type(a:Value) ==# s:__TYPE_LIST
 endfunction
 " Dictionary
-function! s:is_dict(Value)
+function! s:is_dict(Value) abort
   return type(a:Value) ==# s:__TYPE_DICT
 endfunction
 
-function! s:truncate_smart(str, max, footer_width, separator)
+function! s:truncate_smart(str, max, footer_width, separator) abort
   echoerr 'Prelude.truncate_smart() is obsolete. Use its truncate_skipping() instead; they are equivalent.'
   return s:truncate_skipping(a:str, a:max, a:footer_width, a:separator)
 endfunction
 
-function! s:truncate_skipping(str, max, footer_width, separator)
+function! s:truncate_skipping(str, max, footer_width, separator) abort
   let width = s:wcswidth(a:str)
   if width <= a:max
     let ret = a:str
@@ -86,7 +86,7 @@ function! s:truncate_skipping(str, max, footer_width, separator)
   return s:truncate(ret, a:max)
 endfunction
 
-function! s:truncate(str, width)
+function! s:truncate(str, width) abort
   " Original function is from mattn.
   " http://github.com/mattn/googlereader-vim/tree/master
 
@@ -109,7 +109,7 @@ function! s:truncate(str, width)
   return ret
 endfunction
 
-function! s:strwidthpart(str, width)
+function! s:strwidthpart(str, width) abort
   if a:width <= 0
     return ''
   endif
@@ -123,7 +123,7 @@ function! s:strwidthpart(str, width)
 
   return ret
 endfunction
-function! s:strwidthpart_reverse(str, width)
+function! s:strwidthpart_reverse(str, width) abort
   if a:width <= 0
     return ''
   endif
@@ -140,11 +140,11 @@ endfunction
 
 if v:version >= 703
   " Use builtin function.
-  function! s:wcswidth(str)
+  function! s:wcswidth(str) abort
     return strwidth(a:str)
   endfunction
 else
-  function! s:wcswidth(str)
+  function! s:wcswidth(str) abort
     if a:str =~# '^[\x00-\x7f]*$'
       return strlen(a:str)
     end
@@ -164,7 +164,7 @@ else
   endfunction
 
   " UTF-8 only.
-  function! s:_wcwidth(ucs)
+  function! s:_wcwidth(ucs) abort
     let ucs = a:ucs
     if (ucs >= 0x1100
           \  && (ucs <= 0x115f
@@ -193,54 +193,54 @@ let s:is_mac = !s:is_windows && !s:is_cygwin
       \   (!isdirectory('/proc') && executable('sw_vers')))
 let s:is_unix = has('unix')
 
-function! s:is_windows()
+function! s:is_windows() abort
   return s:is_windows
 endfunction
 
-function! s:is_cygwin()
+function! s:is_cygwin() abort
   return s:is_cygwin
 endfunction
 
-function! s:is_mac()
+function! s:is_mac() abort
   return s:is_mac
 endfunction
 
-function! s:is_unix()
+function! s:is_unix() abort
   return s:is_unix
 endfunction
 
-function! s:_deprecated2(fname)
+function! s:_deprecated2(fname) abort
   echomsg printf("Vital.Prelude.%s is deprecated!",
         \ a:fname)
 endfunction
 
-function! s:smart_execute_command(action, word)
-  execute a:action (a:word == '' ? '' : fnameescape(a:word))
+function! s:smart_execute_command(action, word) abort
+  execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
 endfunction
 
-function! s:escape_file_searching(buffer_name)
+function! s:escape_file_searching(buffer_name) abort
   return escape(a:buffer_name, '*[]?{}, ')
 endfunction
 
-function! s:escape_pattern(str)
+function! s:escape_pattern(str) abort
   return escape(a:str, '~"\.^$[]*')
 endfunction
 
-function! s:getchar(...)
+function! s:getchar(...) abort
   let c = call('getchar', a:000)
   return type(c) == type(0) ? nr2char(c) : c
 endfunction
 
-function! s:getchar_safe(...)
+function! s:getchar_safe(...) abort
   let c = s:input_helper('getchar', a:000)
   return type(c) == type("") ? c : nr2char(c)
 endfunction
 
-function! s:input_safe(...)
+function! s:input_safe(...) abort
   return s:input_helper('input', a:000)
 endfunction
 
-function! s:input_helper(funcname, args)
+function! s:input_helper(funcname, args) abort
   let success = 0
   if inputsave() !=# success
     throw 'inputsave() failed'
@@ -254,13 +254,13 @@ function! s:input_helper(funcname, args)
   endtry
 endfunction
 
-function! s:set_default(var, val)
+function! s:set_default(var, val) abort
   if !exists(a:var) || type({a:var}) != type(a:val)
     let {a:var} = a:val
   endif
 endfunction
 
-function! s:set_dictionary_helper(variable, keys, pattern)
+function! s:set_dictionary_helper(variable, keys, pattern) abort
   call s:_deprecated2('set_dictionary_helper')
 
   for key in split(a:keys, '\s*,\s*')
@@ -270,15 +270,15 @@ function! s:set_dictionary_helper(variable, keys, pattern)
   endfor
 endfunction
 
-function! s:substitute_path_separator(path)
+function! s:substitute_path_separator(path) abort
   return s:is_windows ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction
 
-function! s:path2directory(path)
+function! s:path2directory(path) abort
   return s:substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
 endfunction
 
-function! s:_path2project_directory_git(path)
+function! s:_path2project_directory_git(path) abort
   let parent = a:path
 
   while 1
@@ -294,7 +294,7 @@ function! s:_path2project_directory_git(path)
   endwhile
 endfunction
 
-function! s:_path2project_directory_svn(path)
+function! s:_path2project_directory_svn(path) abort
   let search_directory = a:path
   let directory = ''
 
@@ -319,7 +319,7 @@ function! s:_path2project_directory_svn(path)
   return directory
 endfunction
 
-function! s:_path2project_directory_others(vcs, path)
+function! s:_path2project_directory_others(vcs, path) abort
   let vcs = a:vcs
   let search_directory = a:path
 
@@ -331,7 +331,7 @@ function! s:_path2project_directory_others(vcs, path)
   return fnamemodify(d, ':p:h:h')
 endfunction
 
-function! s:path2project_directory(path, ...)
+function! s:path2project_directory(path, ...) abort
   let is_allow_empty = get(a:000, 0, 0)
   let search_directory = s:path2directory(a:path)
   let directory = ''
