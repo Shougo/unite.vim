@@ -73,9 +73,6 @@ handy in case you select files with unite.
 
 See also `unite_default_key_mappings` for other actions.
 
-There is also a screencast available which shows unite in action. Thanks to
-ujihisa! http://www.ustream.tv/recorded/11240673
-
 ## Install
 
 Install the distributed files into your Vim script directory which is usually
