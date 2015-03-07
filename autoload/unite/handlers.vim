@@ -73,7 +73,6 @@ function! unite#handlers#_on_cursor_hold_i()  "{{{
   if unite.is_async && &l:modifiable
     " Ignore key sequences.
     call feedkeys("a\<BS>", 'n')
-    " call feedkeys("\<C-r>\<ESC>", 'n')
   endif
 endfunction"}}}
 function! unite#handlers#_on_cursor_moved_i()  "{{{
@@ -157,7 +156,7 @@ function! unite#handlers#_on_cursor_hold()  "{{{
 
   if is_async
     " Ignore key sequences.
-    call feedkeys("g\<ESC>", 'n')
+    call feedkeys("g\<ESC>" . (v:count > 0 ? v:count . ''), 'n')
   endif
 endfunction"}}}
 function! unite#handlers#_on_cursor_moved()  "{{{
