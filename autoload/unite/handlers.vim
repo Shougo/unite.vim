@@ -156,7 +156,7 @@ function! unite#handlers#_on_cursor_hold()  "{{{
 
   if is_async
     " Ignore key sequences.
-    call feedkeys("g\<ESC>" . (v:count > 0 ? v:count . ''), 'n')
+    call feedkeys("g\<ESC>" . (v:count > 0 ? v:count : ''), 'n')
   endif
 endfunction"}}}
 function! unite#handlers#_on_cursor_moved()  "{{{
