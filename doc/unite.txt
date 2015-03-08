@@ -2027,7 +2027,8 @@ file/new	Nominates a new input file as a candidate.
 file/async	Similar to |unite-source-file|, but get files asynchronously.
 
 						*unite-source-file_rec*
-file_rec	Gather files recursive and nominates all file names under the
+						*unite-source-rec*
+file_rec, rec	Gather files recursive and nominates all file names under the
 		search directory (argument 1) or the current directory (if
 		argument is omitted) as candidates.  This may freeze Vim when
 		there are too many candidates.  The candidates are cached by
@@ -2050,8 +2051,9 @@ file_rec	Gather files recursive and nominates all file names under the
 		-custom-grep-search-word-highlight  : search word highlight
 
 						*unite-source-file_rec/async*
+						*unite-source-rec/async*
 file_rec/async	Similar to |unite-source-file_rec|, but get files asynchronously.
-		Note: Requires vimproc.
+rec/async	Note: Requires vimproc.
 		Note: Requires the "ag" or "find" command.
 		Note: Windows "find" command is not supported.
 		Note: If you edit one of the files in Vim, the
