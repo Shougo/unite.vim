@@ -292,7 +292,7 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
 
   " Note: If find command and args used, uses whole command line.
   if args[0] ==# 'find'
-    let command .= ' ' . string(directory)
+    let command .= ' ' . unite#util#escape_shell(directory)
 
     if g:unite_source_rec_async_command ==# 'find'
       " Default option.
@@ -300,7 +300,7 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
             \ . (a:context.source__is_directory ? 'd' : 'f') . ' -print'
     endif
   else
-    let command .= ' ' . string(directory)
+    let command .= ' ' . unite#util#escape_shell(directory)
   endif
 
   " Note: "pt" needs pty.
