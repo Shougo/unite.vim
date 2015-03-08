@@ -1876,7 +1876,8 @@ the context dictionary.
 		-hide-source-names
 		Hides source names.
 		Note: Source highlight will be overwritten by other sources.
-		Default: no-hide-source-names
+		Default: no-hide-source-names (single source)
+		         hide-source-names (multiple sources)
 
 					*unite-options-max-multi-lines*
 		-max-multi-lines={max-lines}

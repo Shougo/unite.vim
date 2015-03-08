@@ -112,6 +112,10 @@ function! unite#init#_context(context, ...) "{{{
   if context.path != '' && context.path !~ '/$'
     let context.path .= '/'
   endif
+  if len(source_names) == 1
+        \ && !get(context, 'no_hide_source_names', 0)
+    let context.hide_source_names = 1
+  endif
 
   let context.is_changed = 0
 
