@@ -360,6 +360,10 @@ function! unite#util#escape_match(str) "{{{
         \ '\*\@<!\*\*\@!', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 
+function! unite#util#escape_shell(str) "{{{
+  return '"' . a:str . '"'
+endfunction"}}}
+
 function! unite#util#open(path) "{{{
   return s:get_system().open(a:path)
 endfunction"}}}
