@@ -193,7 +193,7 @@ do
   local whites = vim.eval('a:whites')
   local candidates = vim.eval('a:candidates')
   for i = #candidates-1, 0, -1 do
-    local word = string.lower(candidates[i].action__path
+    local word = './' .. string.lower(candidates[i].action__path
         or candidates[i].word)
     for j = #patterns-1, 0, -1 do
       if string.find(word, patterns[j]) then
@@ -222,8 +222,8 @@ function! unite#filters#vim_filter_patterns(candidates, patterns, whites) "{{{
   let pattern = join(a:patterns, '\|')
   let white = join(a:whites, '\|')
   return filter(a:candidates,
-        \ "get(v:val, 'action__path', v:val.word) !~? pattern
-        \  || (white != '' && get(v:val, 'action__path', v:val.word) =~? white)")
+        \ "'./'.get(v:val, 'action__path', v:val.word) !~? pattern"
+        \ .(white == "" ? "" : "|| './'.get(v:val, 'action__path', v:val.word) =~? white"))
 endfunction"}}}
 " @vimlint(EVL102, 0, l:pattern)
 
