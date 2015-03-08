@@ -42,7 +42,7 @@ function! unite#sources#history_unite#add(unite)"{{{
   let s:unite_histories = filter(s:unite_histories,
         \ 'v:val.sources !=# a:unite.sources
         \  && v:val.context.input !=# a:unite.context.input')
-        \[ : g:unite_source_history_yank_limit - 1]
+        \[ : g:unite_source_history_unite_limit - 1]
 
   let context = deepcopy(a:unite.original_context)
   let context.input = a:unite.context.input
