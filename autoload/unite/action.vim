@@ -429,6 +429,10 @@ function! unite#action#do(action_name, ...) "{{{
     call unite#force_redraw()
   endif
 
+  if unite.context.unite__is_manual
+    call unite#sources#history_unite#add(unite)
+  endif
+
   return _
 endfunction"}}}
 

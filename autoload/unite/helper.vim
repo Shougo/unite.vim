@@ -156,6 +156,12 @@ function! unite#helper#parse_options_args(args) "{{{
 
   return [_, options]
 endfunction"}}}
+function! unite#helper#parse_options_user(args) "{{{
+  " Add for history/unite.
+  let [args, options] = unite#helper#parse_options_args(a:args)
+  let options.unite__is_manual = 1
+  return [args, options]
+endfunction"}}}
 
 function! unite#helper#parse_project_bang(args) "{{{
   let args = filter(copy(a:args), "v:val != '!'")

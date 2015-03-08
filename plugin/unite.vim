@@ -57,7 +57,7 @@ command! -nargs=* -complete=customlist,unite#complete#source
       \ Unite
       \ call s:call_unite_empty(<q-args>)
 function! s:call_unite_empty(args) "{{{
-  let [args, options] = unite#helper#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_user(a:args)
   call unite#start(args, options)
 endfunction"}}}
 
@@ -65,7 +65,7 @@ command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithCurrentDir
       \ call s:call_unite_current_dir(<q-args>)
 function! s:call_unite_current_dir(args) "{{{
-  let [args, options] = unite#helper#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_user(a:args)
   if !has_key(options, 'path')
     let path = &filetype ==# 'vimfiler' ?
           \ b:vimfiler.current_dir :
@@ -80,7 +80,7 @@ command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithBufferDir
       \ call s:call_unite_buffer_dir(<q-args>)
 function! s:call_unite_buffer_dir(args) "{{{
-  let [args, options] = unite#helper#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_user(a:args)
   if !has_key(options, 'path')
     let options.path = unite#helper#get_buffer_directory(bufnr('%'))
   endif
@@ -92,7 +92,7 @@ command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithProjectDir
       \ call s:call_unite_project_dir(<q-args>)
 function! s:call_unite_project_dir(args) "{{{
-  let [args, options] = unite#helper#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_user(a:args)
   if !has_key(options, 'path')
     let path = &filetype ==# 'vimfiler' ?
           \ b:vimfiler.current_dir :
@@ -106,7 +106,7 @@ endfunction"}}}
 command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithInputDirectory call s:call_unite_input_directory(<q-args>)
 function! s:call_unite_input_directory(args) "{{{
-  let [args, options] = unite#helper#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_user(a:args)
   if !has_key(options, 'path')
     let options.path = unite#util#substitute_path_separator(
           \ input('Input narrowing directory: ', '', 'dir'))
@@ -118,7 +118,7 @@ endfunction"}}}
 command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithCursorWord call s:call_unite_cursor_word(<q-args>)
 function! s:call_unite_cursor_word(args) "{{{
-  let [args, options] = unite#helper#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_user(a:args)
   if !has_key(options, 'input')
     let options.input = expand('<cword>')
   endif
@@ -129,7 +129,7 @@ endfunction"}}}
 command! -nargs=+ -complete=customlist,unite#complete#source
       \ UniteWithInput call s:call_unite_input(<q-args>)
 function! s:call_unite_input(args) "{{{
-  let [args, options] = unite#helper#parse_options_args(a:args)
+  let [args, options] = unite#helper#parse_options_user(a:args)
   if !has_key(options, 'input')
     let options.input = input('Input narrowing text: ', '')
   endif

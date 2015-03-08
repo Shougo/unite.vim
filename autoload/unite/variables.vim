@@ -248,6 +248,7 @@ function! s:initialize_default() "{{{
         \ 'unite__not_buffer' : 0,
         \ 'unite__is_resize' : 0,
         \ 'unite__is_restart' : 0,
+        \ 'unite__is_manual' : 0,
         \ }
 
   " For compatibility(deprecated variables)
