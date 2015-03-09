@@ -268,8 +268,7 @@ let s:kind.action_table.grep = {
       \ }
 function! s:kind.action_table.grep.func(candidates) "{{{
   call unite#start_script([
-        \ ['grep', map(copy(a:candidates),
-        \ 'string(substitute(v:val.action__path, "/$", "", "g"))'),
+        \ ['grep', map(copy(a:candidates), 'v:val.action__path'),
         \ ]], { 'no_quit' : 1, 'no_empty' : 1 })
 endfunction "}}}
 
@@ -282,8 +281,7 @@ let s:kind.action_table.grep_directory = {
       \ }
 function! s:kind.action_table.grep_directory.func(candidates) "{{{
   call unite#start_script([
-        \ ['grep', map(copy(a:candidates),
-        \  'string(unite#helper#get_candidate_directory(v:val))'),
+        \ ['grep', map(copy(a:candidates), 'v:val.action__path'),
         \ ]], { 'no_quit' : 1, 'no_empty' : 1 })
 endfunction "}}}
 "}}}
