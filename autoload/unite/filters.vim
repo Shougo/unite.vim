@@ -241,13 +241,13 @@ endfunction"}}}
 function! s:glob2_pattern(glob, is_lua) abort "{{{
   let glob = a:glob
 
-  if glob !~ '^/'
-    let glob = '/' . glob
-  endif
   let glob = tolower(glob)
   let glob = substitute(glob, '^\.\ze/',
         \ unite#util#substitute_path_separator(getcwd()), '')
   let glob = substitute(glob, '/$', '/**', '')
+  if glob !~ '^/\|^\a\+:'
+    let glob = '/' . glob
+  endif
 
   if a:is_lua
     let glob = substitute(glob, '//', '/', 'g')
