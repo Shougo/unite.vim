@@ -84,7 +84,7 @@ function! s:source.action_table.start.func(candidate) "{{{
   let history = a:candidate.source__history
   let history.context.split = unite#get_context().split
   let history.context.no_split = 0
-  call unite#start_temporary(history.sources, history.context)
+  call unite#start(history.sources, history.context)
 endfunction"}}}
 "}}}
 

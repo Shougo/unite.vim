@@ -601,6 +601,10 @@ function! unite#view#_quit(is_force, ...)  "{{{
     endfor
   endfor
 
+  if unite.context.unite__is_manual
+    call unite#sources#history_unite#add(unite)
+  endif
+
   call unite#view#_save_position()
 
   if a:is_force || context.quit
