@@ -101,9 +101,6 @@ function! s:source.hooks.on_init(args, context) "{{{
             \ bufname(unite#get_current_unite().prev_bufnr))
     endif
 
-    " Escape filename.
-    let target = escape(target, ' ')
-
     let a:context.source__target = [target]
 
     let targets = map(filter(split(target), 'v:val !~ "^-"'),
@@ -111,8 +108,9 @@ function! s:source.hooks.on_init(args, context) "{{{
   endif
 
   let a:context.source__input = get(args, 1, '')
-  if a:context.source__input == ''
-    let a:context.source__input = unite#util#input('Pattern: ')
+  if a:context.source__input == '' || a:context.unite__is_restart
+    let a:context.source__input = unite#util#input('Pattern: ',
+          \ a:context.source__input)
   endif
 
   let a:context.source__directory =
@@ -158,9 +156,8 @@ function! s:source.gather_candidates(args, context) "{{{
 
   let cmdline = printf('vimgrep /%s/j %s',
     \   escape(a:context.source__input, '/'),
-    \   join(map(a:context.source__target,
-    \           "substitute(v:val, '/$', '', '')")),
-    \)
+    \   join(map(copy(a:context.source__target),
+    \           "escape(substitute(v:val, '/$', '', ''), ' ')")))
 
   call unite#print_source_message(
         \ 'Command-line: ' . cmdline, s:source.name)
