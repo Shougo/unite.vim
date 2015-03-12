@@ -112,8 +112,9 @@ function! s:source.hooks.on_init(args, context) "{{{
   let a:context.source__extra_opts = get(args, 1, '')
 
   let a:context.source__input = get(args, 2, a:context.input)
-  if a:context.source__input == ''
-    let a:context.source__input = unite#util#input('Pattern: ')
+  if a:context.source__input == '' || a:context.unite__is_restart
+    let a:context.source__input = unite#util#input('Pattern: ',
+          \ a:context.source__input)
   endif
 
   call unite#print_source_message('Pattern: '
