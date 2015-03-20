@@ -85,7 +85,15 @@ let s:kind.action_table.insert = {
       \ 'description' : 'insert word or text',
       \ }
 function! s:kind.action_table.insert.func(candidate) "{{{
-  call unite#kinds#common#insert_word(s:get_candidate_text(a:candidate),
+  call s:paste(s:get_candidate_text(a:candidate), 'p',
+        \ { 'regtype' : get(a:candidate, 'action__regtype', 'v')})
+endfunction"}}}
+
+let s:kind.action_table.append = {
+      \ 'description' : 'append word or text',
+      \ }
+function! s:kind.action_table.append.func(candidate) "{{{
+  call s:paste(s:get_candidate_text(a:candidate), 'P',
         \ { 'regtype' : get(a:candidate, 'action__regtype', 'v')})
 endfunction"}}}
 
@@ -103,7 +111,7 @@ function! s:kind.action_table.insert_directory.func(candidate) "{{{
       return
   endif
 
-  call unite#kinds#common#insert_word(directory)
+  call s:paste(directory, 'p', {})
 endfunction"}}}
 
 let s:kind.action_table.preview = {
@@ -129,25 +137,6 @@ function! unite#kinds#common#insert_word(word, ...) "{{{
   let context = unite.context
   let opt = get(a:000, 0, {})
   let col = get(opt, 'col', context.col)
-  let regtype = get(opt, 'regtype', 'v')
-
-  if !context.complete
-    " Paste.
-    let old_reg = [getreg('"'), getregtype('"')]
-
-    call setreg('"', a:word, regtype)
-    try
-      execute 'normal! ""'.(
-            \ regtype !=# 'v' || (col('$') - col('.') <= 1) ? 'p' : 'P')
-    finally
-      call setreg('"', old_reg[0], old_reg[1])
-    endtry
-
-    " Open folds.
-    normal! zv
-
-    return
-  endif
 
   let cur_text = col < 0 ? '' :
         \ matchstr(getline('.'), '^.*\%' . col . 'c.')
@@ -164,6 +153,22 @@ function! unite#kinds#common#insert_word(word, ...) "{{{
   else
     startinsert!
   endif
+endfunction"}}}
+function! s:paste(word, command, opt) "{{{
+  let regtype = get(a:opt, 'regtype', 'v')
+
+  " Paste.
+  let old_reg = [getreg('"'), getregtype('"')]
+
+  call setreg('"', a:word, regtype)
+  try
+    execute 'normal! ""' . a:command
+  finally
+    call setreg('"', old_reg[0], old_reg[1])
+  endtry
+
+  " Open folds.
+  normal! zv
 endfunction"}}}
 function! s:get_candidate_text(candidate) "{{{
   return get(a:candidate, 'action__text', a:candidate.word)

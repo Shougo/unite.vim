@@ -2746,6 +2746,8 @@ internally.
 			buffer.
 	insert_directory
 			Input the candidate directory into the current buffer.
+	append		Append the candidate word or text into the current
+			buffer.
 	preview		Preview the candidate text.
 	echo		Echo candidates for debug.
 
