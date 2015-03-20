@@ -52,7 +52,7 @@ function! unite#start#standard(sources, ...) "{{{
     if resume_bufnr > 0 &&
           \ getbufvar(resume_bufnr, 'unite').source_names ==#
           \    unite#helper#get_source_names(a:sources)
-      return unite#start#resume(context.buffer_name, context)
+      return unite#start#resume(context.buffer_name, get(a:000, 0, {}))
     endif
   endif
 
