@@ -41,7 +41,7 @@ function! unite#kinds#jump_list#define() "{{{
         \ 'default_action' : 'open',
         \ 'action_table': {},
         \ 'alias_table' : { 'rename' : 'replace' },
-        \ 'parents': ['openable'],
+        \ 'parents': ['common', 'openable'],
         \}
 
   " Actions "{{{
