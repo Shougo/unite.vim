@@ -2386,19 +2386,23 @@ KINDS						*unite-kinds*
 						*unite-kind-common*
 common		A kind for common actions.  Almost all kinds inherit this
 		common implicitly.  This only requires word key.
+		Note: Interface kinds does not extend "common" kind.
 
 						*unite-kind-openable*
 openable	An interface that can open.  This doesn't require any keys,
 		but a kind that inherits this requires open action.
+		Note: It doesn't extends "common" kind.
 
 						*unite-kind-cdable*
 cdable		An interface that can change the working directory.
+		Note: It doesn't extends "common" kind.
 
 			action__directory	(String)	(Optional)
 				The target directory.
 
 						*unite-kind-file_base*
 file_base	An interface for file operations.
+		Note: It doesn't extends "common" kind.
 
 			action__path		(String)	(Required)
 				The path of the target directory.
@@ -2406,6 +2410,7 @@ file_base	An interface for file operations.
 						*unite-kind-file_vimfiler_base*
 file_vimfiler_base
 		An interface for vimfiler file operations.
+		Note: It doesn't extends "common" kind.
 
 			action__path		(String)	(Required)
 				The path of the target directory.
