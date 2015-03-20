@@ -53,7 +53,9 @@ function! s:kind.action_table.yank.func(candidates) "{{{
   let text = join(map(copy(a:candidates),
         \ 's:get_candidate_text(v:val)'), "\n")
   let @" = text
-  echo 'Yanked: ' . text
+
+  echohl Question | echo 'Yanked:' | echohl Normal
+  echo text
 
   if has('clipboard')
     call setreg(v:register, text)
