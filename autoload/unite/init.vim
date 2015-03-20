@@ -86,7 +86,7 @@ function! unite#init#_context(context, ...) "{{{
   if context.here
     " Set direction.
     let context.horizontal = 1
-    let context.direction = 'belowright'
+    let context.direction = 'botright'
   endif
   if (!&l:hidden && &l:modified)
         \ || (&l:hidden && &l:bufhidden =~# 'unload\|delete\|wipe')
