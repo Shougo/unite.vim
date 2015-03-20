@@ -383,9 +383,6 @@ function! s:source_file_git.gather_candidates(args, context) "{{{
     return []
   endif
 
-  let a:context.source__directory =
-        \ unite#util#substitute_path_separator(getcwd())
-  let directory = a:context.source__directory
   if finddir('.git', ';') == ''
     " Not in git directory.
     call unite#print_source_message(
@@ -393,6 +390,11 @@ function! s:source_file_git.gather_candidates(args, context) "{{{
     let a:context.is_async = 0
     return []
   endif
+
+  let a:context.source__directory =
+        \ unite#util#substitute_path_separator(
+        \   fnamemodify(finddir('.git', ';'), ':p:h:h'))
+  let directory = a:context.source__directory
 
   call unite#print_source_message(
         \ 'directory: ' . directory, self.name)
