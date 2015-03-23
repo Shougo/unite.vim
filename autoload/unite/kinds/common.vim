@@ -85,7 +85,7 @@ let s:kind.action_table.insert = {
       \ 'description' : 'insert word or text',
       \ }
 function! s:kind.action_table.insert.func(candidate) "{{{
-  call s:paste(s:get_candidate_text(a:candidate), 'p',
+  call s:paste(s:get_candidate_text(a:candidate), 'P',
         \ { 'regtype' : get(a:candidate, 'action__regtype', 'v')})
 endfunction"}}}
 
@@ -93,7 +93,7 @@ let s:kind.action_table.append = {
       \ 'description' : 'append word or text',
       \ }
 function! s:kind.action_table.append.func(candidate) "{{{
-  call s:paste(s:get_candidate_text(a:candidate), 'P',
+  call s:paste(s:get_candidate_text(a:candidate), 'p',
         \ { 'regtype' : get(a:candidate, 'action__regtype', 'v')})
 endfunction"}}}
 
@@ -111,7 +111,7 @@ function! s:kind.action_table.insert_directory.func(candidate) "{{{
       return
   endif
 
-  call s:paste(directory, 'p', {})
+  call s:paste(directory, 'P', {})
 endfunction"}}}
 
 let s:kind.action_table.preview = {
