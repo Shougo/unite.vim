@@ -284,7 +284,8 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.profile_name =
         \ (context.profile_name != '') ? context.profile_name :
         \ unite.buffer_name
-  let unite.prev_bufnr = exists('b:unite') ?
+  let unite.prev_bufnr =
+        \ (exists('b:unite') && !b:unite.context.split) ?
         \ b:unite.prev_bufnr : bufnr('%')
   let unite.prev_winnr = winnr()
   let unite.prev_line = 0
@@ -342,6 +343,8 @@ function! unite#init#_current_unite(sources, context) "{{{
 
   " Preview windows check.
   let unite.has_preview_window =
+        \ exists('b:unite') ?
+        \ b:unite.has_preview_window :
         \ len(filter(range(1, winnr('$')),
         \  'getwinvar(v:val, "&previewwindow")')) > 0
 
