@@ -372,9 +372,14 @@ function! unite#util#move(src, dest) "{{{
   return s:get_system().move(a:src, a:dest)
 endfunction"}}}
 
-function! unite#util#read_lines(source, timeout) "{{{
+function! unite#util#read_lines(source, ...) "{{{
+  let timeout = get(a:000, 0, -1)
+  if timeout < 0
+    return a:source.read_lines(-1, timeout)
+  endif
+
   let lines = []
-  for _ in range(a:timeout / 100)
+  for _ in range(timeout / 100)
     let lines += a:source.read_lines(-1, 100)
   endfor
   return lines
