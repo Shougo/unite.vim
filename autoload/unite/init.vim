@@ -284,7 +284,8 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.profile_name =
         \ (context.profile_name != '') ? context.profile_name :
         \ unite.buffer_name
-  let unite.prev_bufnr = bufnr('%')
+  let unite.prev_bufnr = exists('b:unite') ?
+        \ b:unite.prev_bufnr : bufnr('%')
   let unite.prev_winnr = winnr()
   let unite.prev_line = 0
   let unite.update_time_save = &updatetime
