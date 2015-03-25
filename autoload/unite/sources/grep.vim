@@ -102,7 +102,7 @@ function! s:source.hooks.on_init(args, context) "{{{
       let targets = ['.']
     endif
 
-    if target != ''
+    if target != '' && target != '.'
       call unite#print_source_message('Target: ' . target, s:source.name)
     endif
 
@@ -160,9 +160,6 @@ function! s:source.hooks.on_post_filter(args, context) "{{{
     let candidate.kind = ['file', 'jump_list']
     let candidate.action__col_pattern = a:context.source__input
     let candidate.is_multiline = 1
-    let candidate.action__path =
-          \ unite#util#substitute_path_separator(
-          \   fnamemodify(candidate.source__info[0], ':p'))
     let candidate.action__line = candidate.source__info[1]
     let candidate.action__text = candidate.source__info[2]
   endfor
@@ -285,6 +282,9 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
     call add(_, {
           \ 'word' : printf('%s: %s: %s', path, line, text),
+          \ 'action__path' :
+          \ unite#util#substitute_path_separator(
+          \   fnamemodify(path, ':p')),
           \ 'source__info' : [path, line, text]
           \ })
   endfor
