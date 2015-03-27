@@ -447,6 +447,12 @@ function! s:source_directory_rec.hooks.on_init(args, context) "{{{
   let a:context.source__is_directory = 1
   call s:on_init(a:args, a:context)
 endfunction"}}}
+function! s:source_directory_rec.hooks.on_post_filter(args, context) "{{{
+  for candidate in filter(copy(a:context.candidates),
+        \ "v:val.word[-1:] != '/'")
+    let candidate.abbr = candidate.word . '/'
+  endfor
+endfunction"}}}
 
 " Source directory/async.
 let s:source_directory_async = deepcopy(s:source_file_async)
@@ -458,6 +464,12 @@ let s:source_directory_async.default_kind = 'directory'
 function! s:source_directory_async.hooks.on_init(args, context) "{{{
   let a:context.source__is_directory = 1
   call s:on_init(a:args, a:context)
+endfunction"}}}
+function! s:source_directory_async.hooks.on_post_filter(args, context) "{{{
+  for candidate in filter(copy(a:context.candidates),
+        \ "v:val.word[-1:] != '/'")
+    let candidate.abbr = candidate.word . '/'
+  endfor
 endfunction"}}}
 
 " Misc.
