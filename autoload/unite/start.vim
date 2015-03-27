@@ -349,6 +349,8 @@ function! unite#start#resume(buffer_name, ...) "{{{
   let unite.preview_candidate = {}
   let unite.highlight_candidate = {}
   let unite.context.resume = 1
+  let unite.context.unite__old_winwidth = 0
+  let unite.context.unite__old_winheight = 0
 
   call unite#set_current_unite(unite)
 
