@@ -435,6 +435,9 @@ function! s:source_file_git.async_gather_candidates(args, context) "{{{
         \   'action__path' : a:context.source__directory . '/' . v:val.word,
         \}")
 endfunction"}}}
+function! s:source_file_git.complete(args, context, arglead, cmdline, cursorpos) "{{{
+  return []
+endfunction"}}}
 
 " Source directory.
 let s:source_directory_rec = deepcopy(s:source_file_rec)
