@@ -23,15 +23,15 @@
 " }}}
 "=============================================================================
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 if exists('g:loaded_unite_source_bookmark')
       \ || ($SUDO_USER != '' && $USER !=# $SUDO_USER
       \     && $HOME !=# expand('~'.$USER)
       \     && $HOME ==# expand('~'.$SUDO_USER))
   finish
 endif
-
-let s:save_cpo = &cpo
-set cpo&vim
 
 command! -nargs=? -complete=file UniteBookmarkAdd
       \ call unite#sources#bookmark#_append(<q-args>)
