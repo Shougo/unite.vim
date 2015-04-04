@@ -1459,6 +1459,15 @@ unite#custom#profile({profile-name}, {option-name}, {value})
 		\   'start_insert' : 1
 		\ })
 <
+		Note: In action(script) executed source,
+		"script/{source-name1}[:{{source-name2}:...}]" is used.  Thus,
+		you can define a source-specific profile.
+>
+		" Do not use log.
+		call unite#custom#profile('script/neobundle/update', 'context', {
+		\   'log' : 0
+		\ })
+<
 					*unite#custom#substitute()*
 unite#custom#substitute({profile-name}, {pattern}, {subst} [, {priority}])
 		Specify a replace pattern of narrowing text for a Unite buffer

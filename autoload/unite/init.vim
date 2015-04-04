@@ -46,6 +46,10 @@ function! unite#init#_context(context, ...) "{{{
           \ 'source/' . source_names[0], 'context'))
   endif
 
+  if get(a:context, 'script', 0)
+    " Set profile-name automatically.
+    let a:context.profile_name = 'srcipt/' . join(source_names, ':')
+  endif
   let profile_name = get(a:context, 'profile_name',
         \    get(a:context, 'buffer_name', 'default'))
   if profile_name !=# 'default'
@@ -92,10 +96,6 @@ function! unite#init#_context(context, ...) "{{{
         \ || (&l:hidden && &l:bufhidden =~# 'unload\|delete\|wipe')
     " Split automatically.
     let context.split = 1
-  endif
-  if !has_key(a:context, 'buffer_name') && context.script
-    " Set buffer-name automatically.
-    let context.buffer_name = join(source_names)
   endif
   if context.auto_preview && !context.unite__is_restart
     let context.winheight -= &previewheight
