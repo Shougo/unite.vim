@@ -138,6 +138,10 @@ function! unite#start#temporary(sources, ...) "{{{
           \ 'pos' : getpos('.'),
           \ 'profile_name' : unite.profile_name,
           \ })
+
+    if unite.context.unite__is_manual
+      call unite#sources#history_unite#add(unite)
+    endif
   else
     let context = {}
     let context = unite#init#_context(context,

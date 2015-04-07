@@ -44,6 +44,12 @@ function! unite#sources#history_unite#add(unite)"{{{
         \  && v:val.context.input !=# a:unite.context.input')
         \[ : g:unite_source_history_unite_limit - 1]
 
+  if !empty(filter(copy(a:unite.sources),
+        \ "v:val.name ==# 'history/unite' || !v:val.is_listed"))
+    " Don't save non listed source or history/unite
+    return
+  endif
+
   let context = deepcopy(a:unite.original_context)
   let context.input = a:unite.context.input
   call insert(s:unite_histories, {
