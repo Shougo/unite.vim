@@ -48,7 +48,7 @@ function! unite#init#_context(context, ...) "{{{
 
   if get(a:context, 'script', 0)
     " Set profile-name automatically.
-    let a:context.profile_name = 'srcipt/' . join(source_names, ':')
+    let a:context.profile_name = 'script/' . join(source_names, ':')
   endif
   let profile_name = get(a:context, 'profile_name',
         \    get(a:context, 'buffer_name', 'default'))
