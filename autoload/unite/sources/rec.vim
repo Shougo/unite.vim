@@ -388,20 +388,34 @@ function! s:job_handler(job_id, data, event) abort "{{{
 
   let job = s:job_info[a:job_id]
 
-  if a:event ==# 'stdout'
-    let job.candidates += map(filter(a:data, 'v:val != ""'),
-          \   "unite#util#iconv(v:val, 'char', &encoding)")
-    if unite#util#is_windows()
-      call map(job.candidates,
-            \ 'unite#util#substitute_path_separator(v:val)')
-    endif
-    echomsg string(a:data[0])
-    echomsg string(a:data[-1])
-  elseif a:event ==# 'stderr'
-    let job.errors += map(filter(a:data, 'v:val != ""'),
-          \   "unite#util#iconv(v:val, 'char', &encoding)")
-  else
+  if a:event ==# 'exit'
     let job.eof = 1
+    return
+  endif
+
+  let lines = a:data
+
+  let candidates = (a:event ==# 'stdout') ? job.candidates : job.errors
+  if !empty(lines) && lines[0] != "\n" && !empty(job.candidates)
+    " Join to the previous line
+    let candidates[-1] .= lines[0]
+    call remove(lines, 0)
+  endif
+
+  call map(filter(lines, 'v:val != ""'),
+          \ "unite#util#iconv(v:val, 'char', &encoding)")
+
+  if unite#util#is_windows()
+    call map(lines,
+          \ 'unite#util#substitute_path_separator(v:val)')
+  endif
+
+  let candidates += lines
+
+  if a:event ==# 'stdout'
+    let job.candidates += candidates
+  elseif a:event ==# 'stderr'
+    let job.errors += candidates
   endif
 endfunction"}}}
 
@@ -481,13 +495,13 @@ function! s:source_file_neovim.async_gather_candidates(args, context) "{{{
 
   if !empty(job.errors)
     " Print error.
-    call unite#print_source_error(job.errors, self.name)
-    let job.errors = []
+    call unite#print_source_error(job.errors[: -2], self.name)
+    let job.errors = job.errors[-1:]
   endif
 
   let continuation = a:context.source__continuation
-  let candidates = unite#helper#paths2candidates(job.candidates)
-  let job.candidates = []
+  let candidates = unite#helper#paths2candidates(job.candidates[: -2])
+  let job.candidates = job.candidates[-1:]
 
   if job.eof
     " Disable async.
@@ -511,6 +525,8 @@ function! s:source_file_neovim.hooks.on_init(args, context) "{{{
 endfunction"}}}
 function! s:source_file_neovim.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__job')
+        \ && has_key(s:job_info, a:context.source__job)
+        \ && !s:job_info[a:context.source__job].eof
     call jobstop(a:context.source__job)
     call remove(s:job_info, a:context.source__job)
   endif
