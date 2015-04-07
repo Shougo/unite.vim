@@ -2642,6 +2642,8 @@ matcher_project_ignore_files
 		It does support whitelist feature(Ex: "!glob" pattern).
 		It uses same pattern as "ignore_globs".
 		Note: It does not support non glob ignore files in .hgignore.
+		Note: This feature is very slow.  You should not use it in
+		large projects.
 
 						*unite-filter-sorter_default*
 sorter_default	The default sorter used by |unite-filter-default|.
