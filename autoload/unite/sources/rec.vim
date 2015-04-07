@@ -481,7 +481,7 @@ function! s:source_file_neovim.async_gather_candidates(args, context) "{{{
 
   if !empty(job.errors)
     " Print error.
-    call unite#print_source_error(errors, self.name)
+    call unite#print_source_error(job.errors, self.name)
     let job.errors = []
   endif
 
