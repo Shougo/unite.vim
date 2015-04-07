@@ -54,6 +54,12 @@ function! s:kind.action_table.open.func(candidates) "{{{
       execute 'buffer' bufnr(candidate.action__path)
     else
       call s:execute_command('edit', candidate)
+
+      if isdirectory(candidate.action__path)
+            \ && exists('g:loaded_vimfiler')
+            \ && get(g:, 'vimfiler_as_default_explorer', 0)
+        call vimfiler#handler#_event_handler('BufReadCmd')
+      endif
     endif
 
     call unite#remove_previewed_buffer_list(bufnr(candidate.action__path))
