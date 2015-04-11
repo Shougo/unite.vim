@@ -65,7 +65,8 @@ let s:source_file_rec = {
       \ }
 
 function! s:source_file_rec.gather_candidates(args, context) "{{{
-  let a:context.source__directory = s:get_path(a:args, a:context)
+  let a:context.source__directory =
+        \ get(s:get_paths(a:args, a:context), 0, '')
 
   let directory = a:context.source__directory
   if directory == ''
@@ -149,7 +150,8 @@ function! s:source_file_rec.vimfiler_check_filetype(args, context) "{{{
   return [type, lines, dict]
 endfunction"}}}
 function! s:source_file_rec.vimfiler_gather_candidates(args, context) "{{{
-  let path = s:get_path(a:args, a:context)
+  let a:context.source__directory =
+        \ get(s:get_paths(a:args, a:context), 0, '')
 
   if !isdirectory(path)
     let a:context.source__directory = path
@@ -244,7 +246,8 @@ let s:source_file_async.description =
       \ 'asynchronous candidates from directory by recursive'
 
 function! s:source_file_async.gather_candidates(args, context) "{{{
-  let a:context.source__directory = s:get_path(a:args, a:context)
+  let paths = s:get_paths(a:args, a:context)
+  let a:context.source__directory = join(paths, "\n")
 
   if !unite#util#has_vimproc()
     call unite#print_source_message(
@@ -291,21 +294,15 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   endif
 
   " Note: If find command and args used, uses whole command line.
+  let commands = [command] + paths
   if args[0] ==# 'find'
-    let command .= ' ' . unite#util#escape_shell(directory)
-
-    if g:unite_source_rec_async_command ==# 'find'
-      " Default option.
-      let command .= ' -path ''*/\.git/*'' -prune -o -type l -print -o -type '
-            \ . (a:context.source__is_directory ? 'd' : 'f') . ' -print'
-    endif
-  else
-    let command .= ' ' . unite#util#escape_shell(directory)
+    " Default option.
+    let commands += ['-path', '*/\.git/*', '-prune',
+          \ '-o', '-type', 'l', '-print', '-o', '-type',
+          \ (a:context.source__is_directory ? 'd' : 'f'), '-print']
   endif
 
-  " Note: "pt" needs pty.
-  let a:context.source__proc = vimproc#pgroup_open(command,
-        \ fnamemodify(args[0], ':t') ==# 'pt')
+  let a:context.source__proc = vimproc#popen3(commands)
 
   " Close handles.
   call a:context.source__proc.stdin.close()
@@ -420,7 +417,8 @@ function! s:job_handler(job_id, data, event) abort "{{{
 endfunction"}}}
 
 function! s:source_file_neovim.gather_candidates(args, context) "{{{
-  let a:context.source__directory = s:get_path(a:args, a:context)
+  let paths = s:get_paths(a:args, a:context)
+  let a:context.source__directory = join(paths, "\n")
 
   if !has('nvim')
     call unite#print_source_message(
@@ -467,7 +465,7 @@ function! s:source_file_neovim.gather_candidates(args, context) "{{{
   endif
 
   " Note: If find command and args used, uses whole command line.
-  let commands = [command, directory]
+  let commands = [command] + paths
   if args[0] ==# 'find'
     " Default option.
     let commands += ['-path', '*/\.git/*', '-prune',
@@ -638,7 +636,7 @@ function! s:source_directory_async.hooks.on_post_filter(args, context) "{{{
 endfunction"}}}
 
 " Misc.
-function! s:get_path(args, context) "{{{
+function! s:get_paths(args, context) "{{{
   let args = unite#helper#parse_project_bang(a:args)
   let directory = get(args, 0, '')
   if directory == ''
@@ -646,14 +644,19 @@ function! s:get_path(args, context) "{{{
           \ a:context.path : getcwd()
   endif
 
-  let directory = unite#util#substitute_path_separator(
-        \ fnamemodify(unite#util#expand(directory), ':p'))
+  let paths = []
+  for path in split(directory, "\n")
+    let path = unite#util#substitute_path_separator(
+          \ fnamemodify(unite#util#expand(path), ':p'))
 
-  if directory != '/' && directory =~ '/$'
-    let directory = directory[: -2]
-  endif
+    if path != '/' && path =~ '/$'
+      let path = path[: -2]
+    endif
 
-  return directory
+    call add(paths, path)
+  endfor
+
+  return paths
 endfunction"}}}
 function! s:get_files(context, files, level, max_unit, ignore_dir) "{{{
   let continuation_files = []
@@ -796,6 +799,7 @@ function! s:write_cache(context, directory, files) "{{{
         \ && !unite#util#is_sudo()
         \ && len(a:files) >
         \ g:unite_source_rec_min_cache_files
+        \ && stridx(directory, "\n") < 0
     call s:Cache.writefile(cache_dir, a:directory,
           \ map(copy(a:files), 'v:val.action__path'))
   elseif s:Cache.filereadable(cache_dir, a:directory)
