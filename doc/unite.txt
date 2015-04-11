@@ -85,7 +85,13 @@ USAGE						*unite-usage*
 >
 	:Unite -input=foo file
 <
-
+	You don't have to use |:execute| for dynamic arguments.
+	You can use evaluation cmdline by ``.
+	Note: In the evaluation, The special characters(spaces,  "\" and ":")
+	are escaped automatically.
+>
+        :Unite -buffer-name=search%`bufnr('%')` line:forward:wrap<CR>
+<
 Invoking unite will create a horizontal split buffer by default.
 >
 	:Unite file
