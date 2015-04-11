@@ -2846,7 +2846,6 @@ Opens a file into a new buffer.  This kind extends |unite-action-openable| and
 	rename		Change the file name.
 	exrename	Batch rename selected files.
 	grep		Grep the files.
-	grep_directory	Grep the files in the directories.
 	wunix		Write by unix fileformat.
 	read		|:read| files. It is useful to insert template files.
 	diff		diff with the other candidate or current buffer.

@@ -63,53 +63,45 @@ function! s:source.hooks.on_init(args, context) "{{{
     return
   endif
 
-  if type(get(a:args, 0, '')) == type([])
-    let args = a:args
+  let args = unite#helper#parse_project_bang(a:args)
 
-    let a:context.source__target = args[0]
-  else
-    let args = unite#helper#parse_project_bang(a:args)
+  let default = get(args, 0, '')
 
-    let default = get(args, 0, '')
-
-    if default == ''
-      let default = '.'
-    endif
-
-    if type(get(args, 0, '')) == type('')
-          \ && get(args, 0, '') == ''
-          \ && a:context.input == ''
-      let target = unite#util#substitute_path_separator(
-            \ unite#util#input('Target: ', default, 'file'))
-      if target == ''
-        let a:context.source__target = []
-        let a:context.source__input = ''
-        return
-      endif
-    else
-      let target = default
-    endif
-
-    let targets = [target]
-    if target == '%' || target == '#'
-      let targets = [bufname(target)]
-    elseif target ==# '$buffers'
-      let targets = map(filter(range(1, bufnr('$')),
-            \ 'buflisted(v:val) && filereadable(bufname(v:val))'),
-            \ 'bufname(v:val)')
-    elseif target == '**'
-      " Optimized.
-      let targets = ['.']
-    endif
-
-    if target != '' && target != '.'
-      call unite#print_source_message('Target: ' . target, s:source.name)
-    endif
-
-    let a:context.source__target =
-          \ map(filter(targets, 'v:val !~ "^-"'),
-          \   'substitute(v:val, "\\*\\+$", "", "")')
+  if default == ''
+    let default = '.'
   endif
+
+  if get(args, 0, '') == '' && a:context.input == ''
+    let target = unite#util#substitute_path_separator(
+          \ unite#util#input('Target: ', default, 'file'))
+    if target == ''
+      let a:context.source__target = []
+      let a:context.source__input = ''
+      return
+    endif
+  else
+    let target = default
+  endif
+
+  let targets = split(target, "\n")
+  if target == '%' || target == '#'
+    let targets = [bufname(target)]
+  elseif target ==# '$buffers'
+    let targets = map(filter(range(1, bufnr('$')),
+          \ 'buflisted(v:val) && filereadable(bufname(v:val))'),
+          \ 'bufname(v:val)')
+  elseif target == '**'
+    " Optimized.
+    let targets = ['.']
+  endif
+
+  if target != '' && target != '.'
+    call unite#print_source_message('Target: ' . target, s:source.name)
+  endif
+
+  let a:context.source__target =
+        \ map(filter(targets, 'v:val !~ "^-"'),
+        \   'substitute(v:val, "\\*\\+$", "", "")')
 
   let a:context.source__extra_opts = get(args, 1, '')
 
