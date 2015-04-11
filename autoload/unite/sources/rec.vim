@@ -150,8 +150,7 @@ function! s:source_file_rec.vimfiler_check_filetype(args, context) "{{{
   return [type, lines, dict]
 endfunction"}}}
 function! s:source_file_rec.vimfiler_gather_candidates(args, context) "{{{
-  let a:context.source__directory =
-        \ get(s:get_paths(a:args, a:context), 0, '')
+  let path = get(s:get_paths(a:args, a:context), 0, '')
 
   if !isdirectory(path)
     let a:context.source__directory = path
@@ -799,7 +798,7 @@ function! s:write_cache(context, directory, files) "{{{
         \ && !unite#util#is_sudo()
         \ && len(a:files) >
         \ g:unite_source_rec_min_cache_files
-        \ && stridx(directory, "\n") < 0
+        \ && stridx(a:directory, "\n") < 0
     call s:Cache.writefile(cache_dir, a:directory,
           \ map(copy(a:files), 'v:val.action__path'))
   elseif s:Cache.filereadable(cache_dir, a:directory)
