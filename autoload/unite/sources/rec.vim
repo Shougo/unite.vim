@@ -293,7 +293,7 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   endif
 
   " Note: If find command and args used, uses whole command line.
-  let commands = [command] + paths
+  let commands = vimproc#parser#split_args(command) + paths
   if args[0] ==# 'find'
     " Default option.
     let commands += ['-path', '*/\.git/*', '-prune',
@@ -572,7 +572,7 @@ function! s:source_file_git.gather_candidates(args, context) "{{{
 
   let command = g:unite_source_rec_git_command
         \ . ' ls-files ' . join(a:args)
-  let args = split(command) + a:args
+  let args = vimproc#parser#split_args(command) + a:args
   if empty(args) || !executable(args[0])
     call unite#print_source_message('git command : "'.
           \ command.'" is not executable.', self.name)
@@ -580,7 +580,7 @@ function! s:source_file_git.gather_candidates(args, context) "{{{
     return []
   endif
 
-  let a:context.source__proc = vimproc#pgroup_open(command)
+  let a:context.source__proc = vimproc#popen3(command)
 
   " Close handles.
   call a:context.source__proc.stdin.close()
