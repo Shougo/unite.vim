@@ -407,12 +407,6 @@ function! s:job_handler(job_id, data, event) abort "{{{
   endif
 
   let candidates += lines
-
-  if a:event ==# 'stdout'
-    let job.candidates += candidates
-  elseif a:event ==# 'stderr'
-    let job.errors += candidates
-  endif
 endfunction"}}}
 
 function! s:source_file_neovim.gather_candidates(args, context) "{{{
