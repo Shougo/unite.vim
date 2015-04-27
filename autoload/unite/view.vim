@@ -690,16 +690,6 @@ function! unite#view#_set_cursor_line() "{{{
   if line('.') != prompt_linenr
     call unite#view#_match_line(context.cursor_line_highlight,
           \ line('.'), unite.match_id)
-  elseif (context.prompt_direction !=# 'below'
-          \   && line('$') == prompt_linenr)
-          \ || (context.prompt_direction ==# 'below'
-          \   && prompt_linenr == 1)
-    call unite#view#_match_line('uniteError',
-          \ prompt_linenr, unite.match_id)
-  else
-    call unite#view#_match_line(context.cursor_line_highlight,
-          \ prompt_linenr+(context.prompt_direction ==#
-          \                   'below' ? -1 : 1), unite.match_id)
   endif
   let unite.cursor_line_time = reltime()
 endfunction"}}}
@@ -713,10 +703,7 @@ function! unite#view#_bottom_cursor() "{{{
   endtry
 endfunction"}}}
 function! unite#view#_clear_match() "{{{
-  let unite = unite#get_current_unite()
-  if unite.match_id > 0
-    silent! call matchdelete(unite.match_id)
-  endif
+  setlocal nocursorline
 endfunction"}}}
 
 function! unite#view#_save_position() "{{{
@@ -818,6 +805,12 @@ function! unite#view#_redraw_echo(expr) "{{{
 endfunction"}}}
 
 function! unite#view#_match_line(highlight, line, id) "{{{
+  if &filetype ==# 'unite'
+    setlocal cursorline
+    return
+  endif
+
+  " For compatibility
   return exists('*matchaddpos') ?
         \ matchaddpos(a:highlight, [a:line], 10, a:id) :
         \ matchadd(a:highlight, '^\%'.a:line.'l.*', 10, a:id)
@@ -969,8 +962,10 @@ function! unite#view#_convert_lines(candidates) "{{{
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(unite#helper#convert_source_name(
         \     (v:val.is_dummy ? '' : v:val.source)), max_source_name))
-        \ . unite#util#truncate_wrap(v:val.unite__abbr, " . max_width
-        \    .  ", (context.truncate ? 0 : max_width/2), '..')")
+        \ . (strwidth(v:val.unite__abbr) < max_width ?
+        \     v:val.unite__abbr
+        \   : unite#util#truncate_wrap(v:val.unite__abbr, max_width
+        \    , (context.truncate ? 0 : max_width/2), '..'))")
 endfunction"}}}
 " @vimlint(EVL102, 0, l:max_source_name)
 " @vimlint(EVL102, 0, l:context)

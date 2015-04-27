@@ -207,8 +207,8 @@ function! unite#handlers#_on_cursor_moved()  "{{{
           \ || line('.') == prompt_linenr
     if is_prompt || mode('.') == 'i' || unite.is_async
           \ || abs(line('.') - unite.prev_line) != 1
-          \ || split(reltimestr(reltime(unite.cursor_line_time)))[0]
-          \    > string(context.cursor_line_time)
+          \ || str2float(split(reltimestr(reltime(unite.cursor_line_time)))[0])
+          \    > str2float(context.cursor_line_time)
       call unite#view#_set_cursor_line()
     endif
 
