@@ -616,9 +616,9 @@ function! unite#mappings#_quick_match(is_choose) "{{{
   stopinsert
   call unite#view#_quick_match_redraw(quick_match_table, 0)
 
-  let candidate = unite#helper#get_current_candidate(
-        \ get(quick_match_table, char, -1))
-  if empty(candidate)
+  let num = get(quick_match_table, char, -1)
+  let candidate = unite#helper#get_current_candidate(num)
+  if num < 0 || empty(candidate)
     call unite#util#print_error('Canceled.')
 
     if unite.context.quick_match && char == "\<ESC>"

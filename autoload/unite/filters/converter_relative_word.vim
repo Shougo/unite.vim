@@ -76,7 +76,7 @@ endfunction"}}}
 
 function! unite#filters#converter_relative_word#lua(candidates, cwd) "{{{
   let cwd = a:cwd
-  if cwd != '/' && cwd[-1] != '/'
+  if cwd != '/' && cwd[-1:] != '/'
     let cwd .= '/'
   endif
 

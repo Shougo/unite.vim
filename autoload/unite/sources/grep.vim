@@ -100,8 +100,7 @@ function! s:source.hooks.on_init(args, context) "{{{
   endif
 
   let a:context.source__target =
-        \ map(filter(targets, 'v:val !~ "^-"'),
-        \   'substitute(v:val, "\\*\\+$", "", "")')
+        \ map(targets, 'substitute(v:val, "\\*\\+$", "", "")')
 
   let a:context.source__extra_opts = get(args, 1, '')
 
