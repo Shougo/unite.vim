@@ -5,6 +5,12 @@ let s:self_file = expand('<sfile>')
 let s:globpath_third_arg = v:version > 702 || v:version == 702 && has('patch51')
 
 let s:loaded = {}
+let s:cache_module_path = {}
+let s:cache_sid = {}
+
+let s:_vital_files_cache_runtimepath = ''
+let s:_vital_files_cache = []
+let s:_unify_path_cache = {}
 
 function! s:import(name, ...) abort
   let target = {}
@@ -35,12 +41,15 @@ function! s:load(...) dict abort
     let [name; as] = type(arg) == type([]) ? arg[: 1] : [arg, arg]
     let target = split(join(as, ''), '\W\+')
     let dict = self
-    while 1 <= len(target)
+    let len_target = len(target)
+    let dict_type = type({})
+    while 1 <= len_target
       let ns = remove(target, 0)
+      let len_target -= 1
       if !has_key(dict, ns)
         let dict[ns] = {}
       endif
-      if type(dict[ns]) == type({})
+      if type(dict[ns]) == dict_type
         let dict = dict[ns]
       else
         unlet dict
@@ -59,7 +68,6 @@ endfunction
 function! s:unload() abort
   let s:loaded = {}
   let s:cache_sid = {}
-  let s:cache_import = {}
   let s:cache_module_path = {}
 endfunction
 
@@ -97,15 +105,9 @@ function! s:expand_modules(entry, all) abort
   return modules
 endfunction
 
-let s:cache_import = {}
 function! s:_import(name) abort
-  let key = a:name . '_'
-  if has_key(s:cache_import, key)
-    return s:cache_import[key]
-  endif
   if type(a:name) == type(0)
-    let s:cache_import[key] = s:_build_module(a:name)
-    return s:cache_import[key]
+    return s:_build_module(a:name)
   endif
   let path = s:_get_module_path(a:name)
   if path ==# ''
@@ -123,11 +125,9 @@ function! s:_import(name) abort
 
     let sid = s:_get_sid_by_script(path)
   endif
-  let s:cache_import[key] = s:_build_module(sid)
-  return s:cache_import[key]
+  return s:_build_module(sid)
 endfunction
 
-let s:cache_module_path = {}
 function! s:_get_module_path(name) abort
   let key = a:name . '_'
   if has_key(s:cache_module_path, key)
@@ -146,11 +146,10 @@ function! s:_get_module_path(name) abort
 
   call filter(paths, 'filereadable(expand(v:val, 1))')
   let path = get(paths, 0, '')
-  let s:cache_module_path[key] = path !=# '' ? path : ''
-  return s:cache_module_path[key]
+  let s:cache_module_path[key] = path
+  return path
 endfunction
 
-let s:cache_sid = {}
 function! s:_get_sid_by_script(path) abort
   if has_key(s:cache_sid, a:path)
     return s:cache_sid[a:path]
@@ -176,7 +175,6 @@ endfunction
 
 if filereadable(expand('<sfile>:r') . '.VIM')
   " resolve() is slow, so we cache results.
-  let s:_unify_path_cache = {}
   " Note: On windows, vim can't expand path names from 8.3 formats.
   " So if getting full path via <sfile> and $HOME was set as 8.3 format,
   " vital load duplicated scripts. Below's :~ avoid this issue.
@@ -205,8 +203,6 @@ else
   endfunction
 endif
 
-let s:_vital_files_cache_runtimepath = ''
-let s:_vital_files_cache = []
 function! s:_vital_files(pattern) abort
   if s:_vital_files_cache_runtimepath !=# &runtimepath
     let path = printf('autoload/vital/%s/**/*.vim', s:self_version)
