@@ -754,15 +754,16 @@ function! unite#view#_print_source_error(message, source_name) "{{{
         \ map(copy(s:msg2list(a:message)),
         \   "printf('[%s] %s', a:source_name, v:val)"))
 endfunction"}}}
-function! unite#view#_print_message(message) "{{{
+function! unite#view#_print_message(message, ...) "{{{
   let context = unite#get_context()
   let unite = unite#get_current_unite()
   let message = s:msg2list(a:message)
+  let is_silent = get(a:000, 0, get(context, 'silent', 0))
   if !empty(unite)
     let unite.msgs += message
   endif
 
-  if !get(context, 'silent', 0)
+  if !is_silent
     echohl Comment | call unite#view#_redraw_echo(message[: &cmdheight-1]) | echohl None
   endif
 endfunction"}}}
@@ -770,6 +771,11 @@ function! unite#view#_print_source_message(message, source_name) "{{{
   call unite#view#_print_message(
         \ map(copy(s:msg2list(a:message)),
         \    "printf('[%s] %s', a:source_name, v:val)"))
+endfunction"}}}
+function! unite#view#_add_source_message(message, source_name) "{{{
+  call unite#view#_print_message(
+        \ map(copy(s:msg2list(a:message)),
+        \    "printf('[%s] %s', a:source_name, v:val)"), 1)
 endfunction"}}}
 function! unite#view#_clear_message() "{{{
   let unite = unite#get_current_unite()

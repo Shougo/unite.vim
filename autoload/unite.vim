@@ -262,6 +262,9 @@ endfunction"}}}
 function! unite#print_source_message(message, source_name) "{{{
   return unite#view#_print_source_message(a:message, a:source_name)
 endfunction"}}}
+function! unite#add_source_message(message, source_name) "{{{
+  return unite#view#_add_source_message(a:message, a:source_name)
+endfunction"}}}
 function! unite#clear_message() "{{{
   return unite#view#_clear_message()
 endfunction"}}}

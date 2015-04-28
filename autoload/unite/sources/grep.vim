@@ -95,10 +95,6 @@ function! s:source.hooks.on_init(args, context) "{{{
     let targets = ['.']
   endif
 
-  if target != '' && target != '.'
-    call unite#print_source_message('Target: ' . target, s:source.name)
-  endif
-
   let a:context.source__target =
         \ map(targets, 'substitute(v:val, "\\*\\+$", "", "")')
 
@@ -199,7 +195,7 @@ function! s:source.gather_candidates(args, context) "{{{
     \           "unite#util#escape_shell(substitute(v:val, '/$', '', ''))"))
     \)
 
-  call unite#print_source_message('Command-line: ' . cmdline, s:source.name)
+  call unite#add_source_message('Command-line: ' . cmdline, s:source.name)
 
   let save_term = $TERM
   try
