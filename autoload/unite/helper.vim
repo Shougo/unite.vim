@@ -360,15 +360,15 @@ function! unite#helper#call_filter(filter_name, candidates, context) "{{{
 endfunction"}}}
 function! unite#helper#call_source_filters(filters, candidates, context, source) "{{{
   let candidates = a:candidates
-  for s:Filter in a:filters
-    if type(s:Filter) == type('')
+  for l:Filter in a:filters
+    if type(l:Filter) == type('')
       let candidates = unite#helper#call_filter(
-            \ s:Filter, candidates, a:context)
+            \ l:Filter, candidates, a:context)
     else
-      let candidates = call(s:Filter, [candidates, a:context], a:source)
+      let candidates = call(l:Filter, [candidates, a:context], a:source)
     endif
 
-    unlet s:Filter
+    unlet l:Filter
   endfor
 
   return candidates
