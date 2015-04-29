@@ -243,17 +243,17 @@ function! s:recache_candidates_loop(context, is_force) "{{{
   let candidate_sources = []
   let unite.max_source_candidates = 0
   for source in unite.sources
-    " Check required pattern length.
-    if input_len < source.required_pattern_length
-          \ && !context.unite__is_vimfiler
-      continue
-    endif
-
     " Set context.
     let context = source.unite__context
     let context.input = a:context.input
     let context.path = a:context.path
     let context.source_name = source.name
+
+    " Check required pattern length.
+    if input_len < source.required_pattern_length
+          \ && !context.unite__is_vimfiler
+      continue
+    endif
 
     if source.required_pattern_length > 0
           \ && !source.is_forced
