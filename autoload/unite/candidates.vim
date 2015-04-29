@@ -245,6 +245,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
   for source in unite.sources
     " Check required pattern length.
     if input_len < source.required_pattern_length
+          \ && !context.unite__is_vimfiler
       continue
     endif
 
