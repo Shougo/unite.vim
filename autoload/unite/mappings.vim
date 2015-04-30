@@ -746,13 +746,17 @@ function! s:toggle_transpose_window() "{{{
   let context.vertical = !context.vertical
 endfunction"}}}
 function! s:toggle_auto_preview() "{{{
+  let unite = unite#get_current_unite()
   let context = unite#get_context()
   let context.auto_preview = !context.auto_preview
+  let unite.preview_candidate = {}
 
-  if !context.auto_preview
+  if context.auto_preview
+    call unite#view#_do_auto_preview()
+  elseif !context.auto_preview
         \ && !unite#get_current_unite().has_preview_window
     " Close preview window.
-    noautocmd pclose!
+    call unite#view#_close_preview_window()
   endif
 endfunction"}}}
 function! s:toggle_auto_highlight() "{{{

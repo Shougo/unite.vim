@@ -622,7 +622,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
 
     call unite#handlers#_on_buf_unload(bufname)
 
-    call s:close_preview_window()
+    call unite#view#_close_preview_window()
 
     if winnr('$') != 1 && !unite.context.temporary
           \ && winnr('$') == unite.winmax
@@ -630,7 +630,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
       execute unite.prev_winnr 'wincmd w'
     endif
   else
-    call s:close_preview_window()
+    call unite#view#_close_preview_window()
 
     let winnr = get(filter(range(1, winnr('$')),
           \ "winbufnr(v:val) == unite.prev_bufnr"), 0, unite.prev_winnr)
@@ -922,7 +922,7 @@ function! unite#view#_preview_file(filename) "{{{
   endif
 endfunction"}}}
 
-function! s:close_preview_window() "{{{
+function! unite#view#_close_preview_window() "{{{
   let unite = unite#get_current_unite()
 
   if !unite.has_preview_window
