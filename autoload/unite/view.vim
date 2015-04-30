@@ -897,6 +897,8 @@ function! unite#view#_get_status_string(unite) "{{{
 endfunction"}}}
 
 function! unite#view#_add_previewed_buffer_list(bufnr) "{{{
+  call s:clear_previewed_buffer_list()
+
   let unite = unite#get_current_unite()
   call add(unite.previewed_buffer_list, a:bufnr)
 endfunction"}}}
@@ -932,6 +934,11 @@ function! s:close_preview_window() "{{{
 
     endif
   endif
+
+  call s:clear_previewed_buffer_list()
+endfunction"}}}
+function! s:clear_previewed_buffer_list() "{{{
+  let unite = unite#get_current_unite()
 
   " Clear previewed buffer list
   for bufnr in unite.previewed_buffer_list
