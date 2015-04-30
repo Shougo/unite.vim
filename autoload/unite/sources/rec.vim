@@ -301,7 +301,10 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
           \ (a:context.source__is_directory ? 'd' : 'f'), '-print']
   endif
 
-  let a:context.source__proc = vimproc#popen3(commands)
+  " Note: "pt" needs pty.
+  let a:context.source__proc =
+        \ (fnamemodify(args[0], ':t') ==# 'pt') ?
+        \ vimproc#popen3(commands, 1) : vimproc#popen3(commands)
 
   " Close handles.
   call a:context.source__proc.stdin.close()
