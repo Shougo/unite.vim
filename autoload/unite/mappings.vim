@@ -108,6 +108,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>quick_help()<CR>
   nnoremap <buffer><silent> <Plug>(unite_new_candidate)
         \ :<C-u>call <SID>do_new_candidate_action()<CR>
+  nnoremap <buffer><silent> <Plug>(unite_smart_preview)
+        \ :<C-u>call <SID>smart_preview()<CR>
 
   vnoremap <buffer><silent> <Plug>(unite_toggle_mark_selected_candidates)
         \ :<C-u>call <SID>toggle_mark_candidates(
@@ -242,6 +244,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ '<Plug>(unite_new_candidate)'
   execute s:nowait_map('n') '.'
         \ '<Plug>(unite_narrowing_dot)'
+  execute s:nowait_map('n') 'p'
+        \ '<Plug>(unite_smart_preview)'
   execute s:nowait_map('n') '<2-LeftMouse>'
         \ '<Plug>(unite_do_default_action)'
   execute s:nowait_map('n') '<RightMouse>'
@@ -256,8 +260,6 @@ function! unite#mappings#define_default_mappings() "{{{
         \ 'unite#smart_map(''b'', unite#do_action(''bookmark''))'
   execute s:nowait_expr('nnoremap') 'e'
         \ 'unite#smart_map(''e'', unite#do_action(''edit''))'
-  execute s:nowait_expr('nnoremap') 'p'
-        \ 'unite#smart_map(''p'', unite#mappings#smart_preview())'
   execute s:nowait_expr('nmap') 'x'
         \ 'unite#smart_map(''x'', "\<Plug>(unite_quick_match_default_action)")'
   execute s:nowait_expr('nnoremap') 't'
@@ -724,14 +726,12 @@ function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
     return cnt == 1 ? 'j' : cnt.'j'
   endif
 endfunction"}}}
-function! unite#mappings#smart_preview() "{{{
+function! s:smart_preview() "{{{
   if b:unite.preview_candidate !=#
-        \           unite#helper#get_current_candidate()
-    let b:unite.preview_candidate = unite#helper#get_current_candidate()
-    return unite#do_action('preview')
+        \ unite#helper#get_current_candidate()
+    call unite#view#_do_auto_preview()
   else
-    let b:unite.preview_candidate = {}
-    return ":\<C-u>pclose!\<CR>"
+    call unite#view#_close_preview_window()
   endif
 endfunction"}}}
 function! s:toggle_transpose_window() "{{{

@@ -936,6 +936,8 @@ function! unite#view#_close_preview_window() "{{{
   endif
 
   call s:clear_previewed_buffer_list()
+
+  let unite.preview_candidate = {}
 endfunction"}}}
 function! s:clear_previewed_buffer_list() "{{{
   let unite = unite#get_current_unite()
