@@ -97,9 +97,6 @@ function! unite#init#_context(context, ...) "{{{
     " Split automatically.
     let context.split = 1
   endif
-  if context.auto_preview && !context.unite__is_restart
-    let context.winheight -= context.previewheight + 1
-  endif
   if context.prompt_direction == ''
     let context.prompt_direction =
           \ (context.direction =~# 'bel\|bot')

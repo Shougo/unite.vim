@@ -754,12 +754,10 @@ function! s:toggle_auto_preview() "{{{
   let unite.preview_candidate = {}
 
   if context.auto_preview
-    let context.winheight -= context.previewheight + 1
     call unite#view#_do_auto_preview()
   elseif !context.auto_preview
         \ && !unite#get_current_unite().has_preview_window
     " Close preview window.
-    let unite.context.winheight += context.previewheight + 1
     call unite#view#_close_preview_window()
   endif
 
