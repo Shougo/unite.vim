@@ -278,6 +278,21 @@ function! s:kind.action_table.grep.func(candidates) "{{{
         \ ]], { 'no_quit' : 1, 'no_empty' : 1 })
 endfunction "}}}
 
+" For vimgrep
+let s:kind.action_table.vimgrep = {
+  \   'description': 'vimgrep this files',
+  \   'is_quit': 1,
+  \   'is_invalidate_cache': 1,
+  \   'is_selectable': 1,
+  \   'is_start' : 1,
+  \ }
+function! s:kind.action_table.vimgrep.func(candidates) "{{{
+  call unite#start_script([
+        \ ['vimgrep', map(copy(a:candidates),
+        \ 'string(substitute(v:val.action__path, "/$", "", "g"))'),
+        \ ]], { 'no_quit' : 1 })
+endfunction "}}}
+
 " For find.
 let s:kind.action_table.find = {
       \   'description': 'find this directory',

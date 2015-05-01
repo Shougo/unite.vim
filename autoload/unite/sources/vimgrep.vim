@@ -28,36 +28,6 @@ call unite#util#set_default(
       \ 'g:unite_source_vimgrep_search_word_highlight', 'Search')
 "}}}
 
-" Actions "{{{
-let s:action_vimgrep_file = {
-  \   'description': 'vimgrep this files',
-  \   'is_quit': 1,
-  \   'is_invalidate_cache': 1,
-  \   'is_selectable': 1,
-  \   'is_start' : 1,
-  \ }
-function! s:action_vimgrep_file.func(candidates) "{{{
-  call unite#start_script([
-        \ ['vimgrep', map(copy(a:candidates),
-        \ 'string(substitute(v:val.action__path, "/$", "", "g"))'),
-        \ ]], { 'no_quit' : 1 })
-endfunction "}}}
-
-let s:action_vimgrep_directory = {
-  \   'description': 'vimgrep this directories',
-  \   'is_quit': 1,
-  \   'is_invalidate_cache': 1,
-  \   'is_selectable': 1,
-  \   'is_start' : 1,
-  \ }
-function! s:action_vimgrep_directory.func(candidates) "{{{
-  call unite#start_script([
-        \ ['vimgrep', map(copy(a:candidates),
-        \ 'string(unite#helper#get_candidate_directory(v:val))'),
-        \ ]], { 'no_quit' : 1 })
-endfunction "}}}
-" }}}
-
 function! unite#sources#vimgrep#define() "{{{
   return s:source
 endfunction "}}}
@@ -78,34 +48,26 @@ let s:source = {
 function! s:source.hooks.on_init(args, context) "{{{
   let args = unite#helper#parse_project_bang(a:args)
 
-  if type(get(args, 0, '')) == type([])
-    let a:context.source__target = args[0]
-    let targets = a:context.source__target
-  else
-    let default = get(args, 0, '')
+  let default = get(args, 0, '')
 
-    if default == ''
-      let default = '**'
-    endif
-
-    if type(get(args, 0, '')) == type('')
-          \ && get(args, 0, '') == ''
-      let target = unite#util#substitute_path_separator(
-            \ unite#util#input('Target: ', default, 'file'))
-    else
-      let target = default
-    endif
-
-    if target == '%'
-      let target = unite#util#substitute_path_separator(
-            \ bufname(unite#get_current_unite().prev_bufnr))
-    endif
-
-    let a:context.source__target = [target]
-
-    let targets = map(filter(split(target), 'v:val !~ "^-"'),
-          \ 'substitute(v:val, "\\*\\+$", "", "")')
+  if default == ''
+    let default = '**'
   endif
+
+  if type(get(args, 0, '')) == type('')
+        \ && get(args, 0, '') == ''
+    let target = unite#util#substitute_path_separator(
+          \ unite#util#input('Target: ', default, 'file'))
+  else
+    let target = default
+  endif
+
+  if target == '%'
+    let target = unite#util#substitute_path_separator(
+          \ bufname(unite#get_current_unite().prev_bufnr))
+  endif
+
+  let a:context.source__targets = split(target, "\n")
 
   let a:context.source__input = get(args, 1, '')
   if a:context.source__input == '' || a:context.unite__is_restart
@@ -114,9 +76,9 @@ function! s:source.hooks.on_init(args, context) "{{{
   endif
 
   let a:context.source__directory =
-        \ (len(targets) == 1) ?
+        \ (len(a:context.source__targets) == 1) ?
         \ unite#util#substitute_path_separator(
-        \  unite#util#expand(targets[0])) : ''
+        \  unite#util#expand(a:context.source__targets[0])) : ''
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) "{{{
   syntax case ignore
@@ -149,15 +111,14 @@ function! s:source.hooks.on_post_filter(args, context) "{{{
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
-  if empty(a:context.source__target)
+  if empty(a:context.source__targets)
         \ || a:context.source__input == ''
     return []
   endif
 
   let cmdline = printf('vimgrep /%s/j %s',
     \   escape(a:context.source__input, '/'),
-    \   join(map(copy(a:context.source__target),
-    \           "escape(substitute(v:val, '/$', '', ''), ' ')")))
+    \   join(a:context.source__targets))
 
   call unite#print_source_message(
         \ 'Command-line: ' . cmdline, s:source.name)
