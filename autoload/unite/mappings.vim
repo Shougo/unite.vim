@@ -120,14 +120,13 @@ function! unite#mappings#define_default_mappings() "{{{
   inoremap <silent><buffer> <Plug>(unite_insert_leave)
         \ <ESC>:<C-u>call <SID>insert_leave()<CR>
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_char)
-        \ <SID>smart_imap("\<ESC>:\<C-u>call \<SID>all_exit()\<CR>",
-        \ (unite#helper#get_input() == '' ?
+        \ <SID>smart_imap((unite#helper#get_input() == '' ?
         \ "\<ESC>:\<C-u>call \<SID>all_exit()\<CR>" : "\<C-h>"))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_line)
-        \ <SID>smart_imap('', repeat("\<C-h>",
+        \ <SID>smart_imap(repeat("\<C-h>",
         \     unite#util#strchars(unite#helper#get_input())))
   inoremap <silent><expr><buffer> <Plug>(unite_delete_backward_word)
-        \ <SID>smart_imap('', "\<C-w>")
+        \ <SID>smart_imap("\<C-w>")
   inoremap <silent><buffer> <Plug>(unite_delete_backward_path)
         \ <C-o>:<C-u>call <SID>delete_backward_path()<CR>
   inoremap <expr><buffer> <Plug>(unite_select_next_page)
@@ -141,13 +140,12 @@ function! unite#mappings#define_default_mappings() "{{{
   inoremap <silent><buffer> <Plug>(unite_choose_action)
         \ <C-o>:<C-u>call <SID>choose_action()<CR>
   inoremap <expr><buffer> <Plug>(unite_move_head)
-        \ <SID>smart_imap("\<ESC>".<SID>insert_enter('A'),
-        \   repeat("\<Left>", len(substitute(
+        \ <SID>smart_imap(repeat("\<Left>", len(substitute(
         \     unite#helper#get_input(), '.', 'x', 'g'))))
   inoremap <expr><buffer> <Plug>(unite_move_left)
-        \ <SID>smart_imap('', "\<Left>")
+        \ <SID>smart_imap("\<Left>")
   inoremap <expr><buffer> <Plug>(unite_move_right)
-        \ <SID>smart_imap2('', "\<Right>")
+        \ <SID>smart_imap2("\<Right>")
   inoremap <silent><buffer> <Plug>(unite_quick_match_default_action)
         \ <C-o>:<C-u>call unite#mappings#_quick_match(0)<CR>
   inoremap <silent><buffer> <Plug>(unite_quick_match_jump)
@@ -359,17 +357,25 @@ function! unite#mappings#set_current_filters(filters) "{{{
   return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
 endfunction"}}}
 
-function! s:smart_imap(lhs, rhs) "{{{
+function! s:smart_imap(map) "{{{
   call s:clear_complete()
-  return (line('.') != unite#get_current_unite().prompt_linenr ||
-        \ col('.') <= len(unite#get_context().prompt)) ?
-        \ a:lhs : a:rhs
+  if line('.') == b:unite.prompt_linenr
+        \ && col('.') <= len(b:unite.context.prompt)
+    return ''
+  else
+    return (line('.') != b:unite.prompt_linenr ?
+          \     "\<ESC>" . b:unite.prompt_linenr . 'Gzb$a' : '') . a:map
+  endif
 endfunction"}}}
-function! s:smart_imap2(lhs, rhs) "{{{
+function! s:smart_imap2(map) "{{{
   call s:clear_complete()
-  return (line('.') != unite#get_current_unite().prompt_linenr ||
-        \ col('.') >= col('$')) ?
-        \ a:lhs : a:rhs
+  if line('.') == b:unite.prompt_linenr
+        \ && col('.') >= col('$')
+    return ''
+  else
+    return (line('.') != b:unite.prompt_linenr ?
+          \     "\<ESC>" . b:unite.prompt_linenr . 'Gzb$a' : '') . a:map
+  endif
 endfunction"}}}
 
 function! s:do_new_candidate_action() "{{{
