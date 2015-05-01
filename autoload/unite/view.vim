@@ -248,6 +248,12 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     call unite#view#_do_auto_highlight()
   endif
 endfunction"}}}
+function! unite#view#_redraw_all_candidates() "{{{
+  let unite = unite#get_current_unite()
+  if len(unite.candidates) != len(unite.current_candidates)
+    call unite#redraw(0, 1)
+  endif
+endfunction"}}}
 
 function! unite#view#_set_syntax() "{{{
   syntax clear
@@ -991,6 +997,29 @@ endfunction"}}}
 " @vimlint(EVL102, 0, l:max_source_name)
 " @vimlint(EVL102, 0, l:context)
 " @vimlint(EVL102, 0, l:padding)
+
+function! unite#view#_search_cursor(candidate) "{{{
+  " Optimized
+  if unite#helper#get_current_candidate() ==# a:candidate
+    return
+  endif
+
+  call unite#view#_redraw_all_candidates()
+
+  let max = line('$')
+  let cnt = 1
+  while cnt <= max
+    let candidate = unite#helper#get_current_candidate(cnt)
+
+    if candidate ==# a:candidate
+      " Move cursor.
+      call cursor(cnt, 0)
+      return
+    endif
+
+    let cnt += 1
+  endwhile
+endfunction"}}}
 
 function! s:set_syntax() "{{{
   let unite = unite#get_current_unite()

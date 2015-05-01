@@ -262,8 +262,8 @@ More advanced configuration example:
 	  imap <buffer> '     <Plug>(unite_quick_match_default_action)
 	  nmap <buffer> '     <Plug>(unite_quick_match_default_action)
 	  imap <buffer><expr> x
-	          \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
-	  nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
+	          \ unite#smart_map('x', "\<Plug>(unite_quick_match_jump)")
+	  nmap <buffer> x     <Plug>(unite_quick_match_jump)
 	  nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
 	  imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
 	  imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
@@ -987,10 +987,10 @@ Normal mode mappings.
 		quick match.  This doesn't work when there are marked
 		candidates.
 
-				*<Plug>(unite_quick_match_choose_action)*
-<Plug>(unite_quick_match_choose_action)
-		Chooses an action of the selected candidate with using quick
-		match.  This doesn't work when there are marked candidates.
+				*<Plug>(unite_quick_match_jump)*
+<Plug>(unite_quick_match_jump)
+		Jump to the selected candidate with using quick
+		match.
 
 <Plug>(unite_input_directory)		*<Plug>(unite_input_directory)*
 		Narrows with inputting directory name.
@@ -1104,9 +1104,9 @@ Insert mode mappings.
 <Plug>(unite_quick_match_default_action)
 		The same as |<Plug>(unite_quick_match_default_action)|.
 
-				*i_<Plug>(unite_quick_match_choose_action)*
-<Plug>(unite_quick_match_choose_action)
-		The same as |<Plug>(unite_quick_match_choose_action)|.
+				*i_<Plug>(unite_quick_match_jump)*
+<Plug>(unite_quick_match_jump)
+		The same as |<Plug>(unite_quick_match_jump)|.
 
 <Plug>(unite_input_directory)		*i_<Plug>(unite_input_directory)*
 		The same as |<Plug>(unite_input_directory)|.

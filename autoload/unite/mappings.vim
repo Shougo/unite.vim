@@ -80,7 +80,7 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>move_half_screen(1)<CR>
   nnoremap <silent><buffer> <Plug>(unite_quick_match_default_action)
         \ :<C-u>call unite#mappings#_quick_match(0)<CR>
-  nnoremap <silent><buffer> <Plug>(unite_quick_match_choose_action)
+  nnoremap <silent><buffer> <Plug>(unite_quick_match_jump)
         \ :<C-u>call unite#mappings#_quick_match(1)<CR>
   nnoremap <silent><buffer> <Plug>(unite_input_directory)
         \ :<C-u>call <SID>input_directory()<CR>
@@ -150,7 +150,7 @@ function! unite#mappings#define_default_mappings() "{{{
         \ <SID>smart_imap2('', "\<Right>")
   inoremap <silent><buffer> <Plug>(unite_quick_match_default_action)
         \ <C-o>:<C-u>call unite#mappings#_quick_match(0)<CR>
-  inoremap <silent><buffer> <Plug>(unite_quick_match_choose_action)
+  inoremap <silent><buffer> <Plug>(unite_quick_match_jump)
         \ <C-o>:<C-u>call unite#mappings#_quick_match(1)<CR>
   inoremap <silent><buffer> <Plug>(unite_input_directory)
         \ <C-o>:<C-u>call <SID>input_directory()<CR>
@@ -441,7 +441,7 @@ function! s:toggle_mark(map) "{{{
         \ unite#mappings#cursor_down(1) : unite#mappings#cursor_up(1)
 endfunction"}}}
 function! s:toggle_mark_all_candidates() "{{{
-  call s:redraw_all_candidates()
+  call unite#view#_redraw_all_candidates()
   call s:toggle_mark_candidates(1, line('$'))
 endfunction"}}}
 function! s:toggle_mark_candidates(start, end) "{{{
@@ -592,7 +592,7 @@ function! s:insert_selected_candidate() "{{{
 
   call unite#mappings#narrowing(candidate.word)
 endfunction"}}}
-function! unite#mappings#_quick_match(is_choose) "{{{
+function! unite#mappings#_quick_match(is_jump) "{{{
   if !empty(unite#helper#get_marked_candidates())
     call unite#util#print_error('Marked candidates is detected.')
     return
@@ -634,8 +634,8 @@ function! unite#mappings#_quick_match(is_choose) "{{{
     return
   endif
 
-  if a:is_choose
-    call unite#mappings#_choose_action([candidate])
+  if a:is_jump
+    call unite#view#_search_cursor(candidate)
   else
     call unite#action#do(
           \ unite.context.default_action, [candidate])
@@ -650,7 +650,7 @@ function! s:input_directory() "{{{
 endfunction"}}}
 function! unite#mappings#loop_cursor_up(mode) "{{{
   " Loop.
-  call s:redraw_all_candidates()
+  call unite#view#_redraw_all_candidates()
 
   if a:mode ==# 'i'
     noautocmd startinsert
@@ -660,7 +660,7 @@ function! unite#mappings#loop_cursor_up(mode) "{{{
 endfunction"}}}
 function! unite#mappings#loop_cursor_down(mode) "{{{
   " Loop.
-  call s:redraw_all_candidates()
+  call unite#view#_redraw_all_candidates()
 
   if a:mode ==# 'i'
     noautocmd startinsert
@@ -772,19 +772,13 @@ function! s:disable_max_candidates() "{{{
   let unite.disabled_max_candidates = 1
 
   call unite#force_redraw()
-  call s:redraw_all_candidates()
+  call unite#view#_redraw_all_candidates()
 endfunction"}}}
 function! s:narrowing_input_history() "{{{
   call unite#start_temporary(
         \ [unite#sources#history_input#define()],
         \ { 'old_source_names_string' : unite#loaded_source_names_string() },
         \ 'history/input')
-endfunction"}}}
-function! s:redraw_all_candidates() "{{{
-  let unite = unite#get_current_unite()
-  if len(unite.candidates) != len(unite.current_candidates)
-    call unite#redraw(0, 1)
-  endif
 endfunction"}}}
 function! s:narrowing_dot() "{{{
   call unite#mappings#narrowing(unite#helper#get_input().'.')
