@@ -518,7 +518,7 @@ function! s:insert_enter(key) "{{{
   let unite = unite#get_current_unite()
 
   return (line('.') != unite.prompt_linenr) ?
-        \     unite.prompt_linenr . 'Gzb$a' :
+        \     '0i' :
         \ (a:key == 'i' && col('.') <= 1
         \     || a:key == 'a' && col('.') < 1) ?
         \     'A' :
