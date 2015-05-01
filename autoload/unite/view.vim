@@ -182,7 +182,8 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
   let pos = getpos('.')
   let unite = unite#get_current_unite()
   let context = unite.context
-  let current_candidate = unite#helper#get_current_candidate()
+  let current_candidate = (line('.') == unite.prompt_linenr) ?
+        \ {} : unite#helper#get_current_candidate()
 
   try
     if &filetype !=# 'unite'
