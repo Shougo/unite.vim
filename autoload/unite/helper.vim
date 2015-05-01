@@ -192,13 +192,16 @@ endfunction"}}}
 function! unite#helper#parse_project_bang(args) "{{{
   let args = filter(copy(a:args), "v:val != '!'")
   if empty(args)
-    let args = ['']
+    return []
   endif
 
-  if get(a:args, 0, '') == '!'
+  if a:args[0] == '!'
     " Use project directory.
     let args[0] = unite#util#path2project_directory(args[0], 1)
   endif
+
+  let args[0] = unite#util#substitute_path_separator(
+        \ fnamemodify(unite#util#expand(args[0]), ':p'))
 
   return args
 endfunction"}}}
