@@ -917,8 +917,14 @@ function! unite#view#_preview_file(filename) "{{{
     let target_winwidth = (unite_winwidth + winwidth(0)) / 2
     execute 'wincmd p | vert resize ' . target_winwidth
   else
-    noautocmd silent execute 'pedit!'
-          \ fnameescape(a:filename)
+    let previewheight_save = &previewheight
+    try
+      let &previewheight = context.previewheight
+      noautocmd silent execute 'pedit!'
+            \ fnameescape(a:filename)
+    finally
+      let &previewheight = previewheight_save
+    endtry
   endif
 endfunction"}}}
 
