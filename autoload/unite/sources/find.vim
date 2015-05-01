@@ -29,23 +29,6 @@ call unite#util#set_default('g:unite_source_find_default_opts', '')
 call unite#util#set_default('g:unite_source_find_max_candidates', 100)
 "}}}
 
-" Actions "{{{
-let s:action_find = {
-  \   'description': 'find this directory',
-  \   'is_quit': 1,
-  \   'is_invalidate_cache': 1,
-  \   'is_start' : 1,
-  \ }
-function! s:action_find.func(candidate) "{{{
-  call unite#start_script([['find',
-        \ unite#helper#get_candidate_directory(a:candidate)]],
-        \ {'no_quit' : 1})
-endfunction "}}}
-if executable(g:unite_source_find_command) && unite#util#has_vimproc()
-  call unite#custom_action('file,buffer', 'find', s:action_find)
-endif
-" }}}
-
 function! unite#sources#find#define() "{{{
   return executable(g:unite_source_find_command) && unite#util#has_vimproc() ?
         \ s:source : []
@@ -109,7 +92,7 @@ function! s:source.gather_candidates(args, context) "{{{
         \ g:unite_source_find_command, g:unite_source_find_default_opts,
         \   string(a:context.source__target), a:context.source__input)
   call unite#print_source_message('Command-line: ' . cmdline, s:source.name)
-  let a:context.source__proc = vimproc#pgroup_open(
+  let a:context.source__proc = vimproc#popen3(
         \ vimproc#util#iconv(cmdline, &encoding, 'char'))
 
   " Close handles.

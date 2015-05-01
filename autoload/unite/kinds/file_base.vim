@@ -277,6 +277,19 @@ function! s:kind.action_table.grep.func(candidates) "{{{
         \ ['grep', join(map(copy(a:candidates), 'v:val.action__path'), "\n"),
         \ ]], { 'no_quit' : 1, 'no_empty' : 1 })
 endfunction "}}}
+
+" For find.
+let s:kind.action_table.find = {
+      \   'description': 'find this directory',
+      \   'is_quit': 1,
+      \   'is_invalidate_cache': 1,
+      \   'is_start' : 1,
+      \ }
+function! s:kind.action_table.find.func(candidate) "{{{
+  call unite#start_script([['find',
+        \ unite#helper#get_candidate_directory(a:candidate)]],
+        \ {'no_quit' : 1})
+endfunction "}}}
 "}}}
 
 function! s:execute_command(command, candidate) "{{{
