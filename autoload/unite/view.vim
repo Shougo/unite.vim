@@ -387,8 +387,8 @@ function! unite#view#_resize_window() "{{{
 
   if context.unite__old_winwidth != 0
         \ && context.unite__old_winheight != 0
-        \ && winheight(0) != context.unite__old_winheight
         \ && winwidth(0) != context.unite__old_winwidth
+        \ && winheight(0) != context.unite__old_winheight
     " Disabled resize.
     let context.winwidth = 0
     let context.winheight = 0
@@ -414,7 +414,7 @@ function! unite#view#_resize_window() "{{{
 
     let context.unite__is_resize = winheight != winheight(0)
   elseif context.vertical
-        \ && context.unite__old_winwidth  == 0
+        \ && context.unite__old_winwidth == 0
     execute 'vertical resize' context.winwidth
 
     let context.unite__is_resize = 1
