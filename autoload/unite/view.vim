@@ -182,6 +182,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
   let pos = getpos('.')
   let unite = unite#get_current_unite()
   let context = unite.context
+  let current_candidate = unite#helper#get_current_candidate()
 
   try
     if &filetype !=# 'unite'
@@ -232,6 +233,8 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
         call cursor(line('$'), 0)
         call unite#view#_bottom_cursor()
       endif
+    else
+      call unite#view#_search_cursor(current_candidate)
     endif
 
     if a:winnr > 0
@@ -1000,7 +1003,8 @@ endfunction"}}}
 
 function! unite#view#_search_cursor(candidate) "{{{
   " Optimized
-  if unite#helper#get_current_candidate() ==# a:candidate
+  if empty(a:candidate) ||
+        \ unite#helper#get_current_candidate() ==# a:candidate
     return
   endif
 
