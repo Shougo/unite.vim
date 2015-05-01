@@ -733,6 +733,8 @@ function! s:smart_preview() "{{{
   else
     call unite#view#_close_preview_window()
   endif
+
+  call unite#view#_resize_window()
 endfunction"}}}
 function! s:toggle_transpose_window() "{{{
   " Toggle vertical/horizontal view.
@@ -752,14 +754,16 @@ function! s:toggle_auto_preview() "{{{
   let unite.preview_candidate = {}
 
   if context.auto_preview
-    let context.winheight -= context.previewheight
+    let context.winheight -= context.previewheight + 1
     call unite#view#_do_auto_preview()
   elseif !context.auto_preview
         \ && !unite#get_current_unite().has_preview_window
     " Close preview window.
-    let unite.context.winheight += context.previewheight
+    let unite.context.winheight += context.previewheight + 1
     call unite#view#_close_preview_window()
   endif
+
+  call unite#view#_resize_window()
 endfunction"}}}
 function! s:toggle_auto_highlight() "{{{
   let context = unite#get_context()
