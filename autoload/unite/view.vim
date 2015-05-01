@@ -542,8 +542,14 @@ function! unite#view#_init_cursor() "{{{
   if context.start_insert && !context.auto_quit
     let unite.is_insert = 1
 
-    call unite#helper#cursor_prompt()
-    startinsert!
+    if is_restore
+      " Restore position.
+      call setpos('.', positions[key].pos)
+      startinsert
+    else
+      call unite#helper#cursor_prompt()
+      startinsert!
+    endif
   else
     let unite.is_insert = 0
 
