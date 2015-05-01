@@ -513,6 +513,12 @@ function! unite#helper#is_prompt(line) "{{{
         \ || (context.prompt_direction !=# 'below' && a:line <= prompt_linenr)
 endfunction"}}}
 
+function! unite#helper#join_targets(targets) "{{{
+  return join(map(copy(a:targets),
+        \    "unite#util#escape_shell(
+        \               substitute(v:val, '/$', '', ''))"))
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

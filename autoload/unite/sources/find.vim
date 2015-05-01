@@ -47,19 +47,21 @@ let s:source = {
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
-  let a:context.source__target = get(a:args, 0, '')
-  if a:context.source__target == ''
-    let a:context.source__target = unite#util#input('Target: ', '.', 'dir')
+  let target = get(a:args, 0, '')
+  if target == ''
+    let target = unite#util#input('Target: ', '.', 'dir')
   endif
 
+  let a:context.source__targets = split(target, "\n")
   let a:context.source__input = get(a:args, 1, '')
   if a:context.source__input == ''
     redraw
     echo "Please input command-line(quote is needed) Ex: -name '*.vim'"
     let a:context.source__input = unite#util#input(
           \ printf('"%s" %s %s ',
-          \   g:unite_source_find_command, g:unite_source_find_default_opts,
-          \   a:context.source__target), '-name ')
+          \   g:unite_source_find_command,
+          \   g:unite_source_find_default_opts,
+          \   unite#helper#join_targets(a:context.source__targets)), '-name ')
   endif
 endfunction"}}}
 function! s:source.hooks.on_close(args, context) "{{{
@@ -69,7 +71,7 @@ function! s:source.hooks.on_close(args, context) "{{{
 endfunction "}}}
 
 function! s:source.gather_candidates(args, context) "{{{
-  if empty(a:context.source__target)
+  if empty(a:context.source__targets)
         \ || a:context.source__input == ''
     let a:context.is_async = 0
     return []
@@ -90,7 +92,8 @@ function! s:source.gather_candidates(args, context) "{{{
 
   let cmdline = printf('"%s" %s %s %s',
         \ g:unite_source_find_command, g:unite_source_find_default_opts,
-        \   string(a:context.source__target), a:context.source__input)
+        \ unite#helper#join_targets(a:context.source__targets),
+        \ a:context.source__input)
   call unite#print_source_message('Command-line: ' . cmdline, s:source.name)
   let a:context.source__proc = vimproc#popen3(
         \ vimproc#util#iconv(cmdline, &encoding, 'char'))
@@ -114,8 +117,8 @@ function! s:source.async_gather_candidates(args, context) "{{{
         \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
 
   let cwd = getcwd()
-  if isdirectory(a:context.source__target)
-    call unite#util#lcd(a:context.source__target)
+  if isdirectory(a:context.source__targets[0])
+    call unite#util#lcd(a:context.source__targets[0])
   endif
 
   call map(candidates, "{
@@ -124,9 +127,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
     \   'action__path' : unite#util#substitute_path_separator(v:val),
     \ }")
 
-  if isdirectory(a:context.source__target)
-    call unite#util#lcd(cwd)
-  endif
+  call unite#util#lcd(cwd)
 
   return candidates
 endfunction "}}}

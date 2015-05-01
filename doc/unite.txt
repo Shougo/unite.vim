@@ -2304,7 +2304,7 @@ find		Nominates "find" command output as candidates.
 		Please install UNIX Tools find for Windows.
 
 		Source arguments:
-		1. the target directory.
+		1. the target directories splitted by newlines.
 		2. "find" options.
 		Max candidates: |g:unite_source_find_max_candidates|
 
