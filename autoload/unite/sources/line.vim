@@ -82,20 +82,15 @@ function! s:source_line.hooks.on_init(args, context) "{{{
     let a:context.source__input = unite#util#input('Narrowing text: ', '')
   endif
 
-  if direction !=# 'all'
+  if a:context.source__input != ''
     call unite#print_source_message(
-          \ 'Direction: ' . direction, s:source_line.name)
+          \ 'Narrowing text: ' . a:context.source__input,
+          \ s:source_line.name)
   endif
 
   if len(a:context.source__bufnrs) == 1
     call unite#print_source_message(
           \ 'Target: ' . bufname(a:context.source__bufnrs[0]),
-          \ s:source_line.name)
-  endif
-
-  if a:context.source__input != ''
-    call unite#print_source_message(
-          \ 'Narrowing text: ' . a:context.source__input,
           \ s:source_line.name)
   endif
 
