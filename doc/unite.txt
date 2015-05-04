@@ -839,12 +839,6 @@ g:unite_winwidth				*g:unite_winwidth*
 		Note: This variable is deprecated.  Please use
 		|unite#custom#profile()| and |unite-options-winwidth| instead.
 
-g:unite_cursor_line_highlight		*g:unite_cursor_line_highlight*
-		Specify the cursor line highlight group.
-		Note: This variable is deprecated.  Please use
-		|unite#custom#profile()| and
-		|unite-options-cursor-line-highlight| instead.
-
 				*g:unite_enable_short_source_names*
 g:unite_enable_short_source_names
 		If this variable is 1, unite buffer will show short source
@@ -1875,11 +1869,6 @@ the context dictionary.
 		animation source.
 		Note: Must be smaller than 'updatetime'.
 		Default: "200"
-
-					*unite-options-cursor-line-highlight*
-		-cursor-line-highlight={highlight-name}
-		Change cursor line highlight.
-		Default: "CursorLine"
 
 					*unite-options-abbr-highlight*
 		-abbr-highlight={highlight-name}
