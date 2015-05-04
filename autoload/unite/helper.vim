@@ -200,8 +200,11 @@ function! unite#helper#parse_project_bang(args) "{{{
     let args[0] = unite#util#path2project_directory(args[0], 1)
   endif
 
-  let args[0] = unite#util#substitute_path_separator(
-        \ fnamemodify(unite#util#expand(args[0]), ':p'))
+
+  if args[0] !~ '^%$\|^\$\h\w*$'
+    let args[0] = unite#util#substitute_path_separator(
+          \ fnamemodify(unite#util#expand(args[0]), ':p'))
+  endif
 
   return args
 endfunction"}}}
