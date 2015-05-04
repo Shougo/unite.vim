@@ -710,9 +710,6 @@ function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
   let num = line('.') - 1
   let cnt = 1
   let offset = prompt_linenr == 1 ? 1 : 0
-  if line('.') == prompt_linenr
-    let cnt += 1
-  endif
 
   while 1
     let candidate = get(unite#get_unite_candidates(), num - offset + cnt, {})
