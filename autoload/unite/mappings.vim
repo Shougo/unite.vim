@@ -73,7 +73,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
         \ 'gg0z.'
   nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
-        \ :<C-u>call <SID>redraw_all_candidates()<CR>G
+        \ :<C-u>call unite#view#_redraw_all_candidates()<CR>G
   nnoremap <buffer><silent> <Plug>(unite_next_screen)
         \ :<C-u>call <SID>move_screen(1)<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_half_screen)
