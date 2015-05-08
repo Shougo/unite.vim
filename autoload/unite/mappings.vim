@@ -681,7 +681,7 @@ function! unite#mappings#cursor_up(is_skip_not_matched) "{{{
   let num = line('.') - 1
   let cnt = 1
   let offset = prompt_linenr == 1 ? 1 : 0
-  if line('.') == prompt_linenr
+  if line('.') == prompt_linenr && g:unite_enable_auto_select
     let cnt += 1
   endif
 
@@ -710,7 +710,7 @@ function! unite#mappings#cursor_down(is_skip_not_matched) "{{{
   let num = line('.') - 1
   let cnt = 1
   let offset = prompt_linenr == 1 ? 1 : 0
-  if line('.') == prompt_linenr
+  if line('.') == prompt_linenr && g:unite_enable_auto_select
     let cnt += 1
   endif
 

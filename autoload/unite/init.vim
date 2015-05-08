@@ -32,6 +32,8 @@ let g:unite_ignore_source_files =
 let g:unite_redraw_hold_candidates =
       \ get(g:, 'unite_redraw_hold_candidates',
       \     (unite#util#has_lua() ? 20000 : 10000))
+let g:unite_enable_auto_select =
+      \ get(g:, 'unite_enable_auto_select', 1)
 "}}}
 
 function! unite#init#_context(context, ...) "{{{

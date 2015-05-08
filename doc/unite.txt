@@ -464,6 +464,12 @@ g:unite_redraw_hold_candidates		*g:unite_redraw_hold_candidates*
 		If lua is enabled, the default value is 20000, otherwise
 		10000.
 
+g:unite_enable_auto_select		*g:unite_enable_auto_select*
+		If it is 1, unite skip first candidate when cursor is on the
+		prompt line.
+
+		The default value is 1.
+
 SOURCES VARIABLES 				*unite-sources-variables*
 
 					*g:unite_source_buffer_time_format*
