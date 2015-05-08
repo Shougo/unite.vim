@@ -33,25 +33,6 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Obsolete options check. "{{{
-if exists('g:unite_cd_command')
-  echoerr 'g:unite_cd_command option does not work this version of unite.vim.'
-endif
-if exists('g:unite_lcd_command')
-  echoerr 'g:unite_lcd_command option does not work this version of unite.vim.'
-endif
-"}}}
-" Global options definition. "{{{
-let g:unite_quick_match_table =
-      \ get(g:, 'unite_quick_match_table', {
-      \     'a' : 0, 's' : 1, 'd' : 2, 'f' : 3, 'g' : 4, 'h' : 5, 'j' : 6, 'k' : 7, 'l' : 8, ';' : 9,
-      \     'q' : 10, 'w' : 11, 'e' : 12, 'r' : 13, 't' : 14, 'y' : 15, 'u' : 16, 'i' : 17, 'o' : 18, 'p' : 19,
-      \     '1' : 20, '2' : 21, '3' : 22, '4' : 23, '5' : 24, '6' : 25, '7' : 26, '8' : 27, '9' : 28, '0' : 29,
-      \ })
-let g:unite_force_overwrite_statusline =
-      \ get(g:, 'unite_force_overwrite_statusline', 1)
-"}}}
-
 " Wrapper command.
 command! -nargs=* -complete=customlist,unite#complete#source
       \ Unite

@@ -27,8 +27,16 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Global options definition. "{{{
+let g:unite_force_overwrite_statusline =
+      \ get(g:, 'unite_force_overwrite_statusline', 1)
 let g:unite_ignore_source_files =
       \ get(g:, 'unite_ignore_source_files', [])
+let g:unite_quick_match_table =
+      \ get(g:, 'unite_quick_match_table', {
+      \     'a' : 0, 's' : 1, 'd' : 2, 'f' : 3, 'g' : 4, 'h' : 5, 'j' : 6, 'k' : 7, 'l' : 8, ';' : 9,
+      \     'q' : 10, 'w' : 11, 'e' : 12, 'r' : 13, 't' : 14, 'y' : 15, 'u' : 16, 'i' : 17, 'o' : 18, 'p' : 19,
+      \     '1' : 20, '2' : 21, '3' : 22, '4' : 23, '5' : 24, '6' : 25, '7' : 26, '8' : 27, '9' : 28, '0' : 29,
+      \ })
 let g:unite_redraw_hold_candidates =
       \ get(g:, 'unite_redraw_hold_candidates',
       \     (unite#util#has_lua() ? 20000 : 10000))
