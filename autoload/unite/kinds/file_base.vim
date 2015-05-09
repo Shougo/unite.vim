@@ -317,7 +317,7 @@ function! s:execute_command(command, candidate) "{{{
   endif
 
   call unite#util#smart_execute_command(
-        \ a:command, unite#util#substitute_path_separator(
+        \ a:command, unite#util#expand(
         \   fnamemodify(a:candidate.action__path, ':~:.')))
 endfunction"}}}
 

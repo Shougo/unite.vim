@@ -283,7 +283,7 @@ function! s:open(candidate) "{{{
       silent execute 'keepjumps buffer' bufnr
     else
       call unite#util#smart_execute_command(
-            \ 'keepjumps edit!', unite#util#substitute_path_separator(
+            \ 'keepjumps edit!', unite#util#expand(
             \   fnamemodify(a:candidate.action__path, ':~:.')))
       let bufnr = bufnr('%')
     endif
