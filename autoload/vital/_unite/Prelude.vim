@@ -275,7 +275,7 @@ function! s:substitute_path_separator(path) abort
 endfunction
 
 function! s:path2directory(path) abort
-  return s:substitute_path_separator(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':p:h'))
+  return s:substitute_path_separator(fnamemodify(a:path, ':p:h'))
 endfunction
 
 function! s:_path2project_directory_git(path) abort
