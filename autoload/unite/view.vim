@@ -719,7 +719,9 @@ function! unite#view#_bottom_cursor() "{{{
   endtry
 endfunction"}}}
 function! unite#view#_clear_match() "{{{
-  setlocal nocursorline
+  if &filetype ==# 'unite'
+    setlocal nocursorline
+  endif
 endfunction"}}}
 
 function! unite#view#_save_position() "{{{
