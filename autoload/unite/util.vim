@@ -138,6 +138,11 @@ else
   endfunction
 endif
 
+" Always convert path to absolute directory, unlike path2directory
+" which might not convert if path is already a directory.
+function! unite#util#path2absolute_directory(path)
+  return s:get_prelude().path2directory(fnamemodify(a:path, ':p:h'))
+endfunction
 function! unite#util#path2directory(...)
   return call(s:get_prelude().path2directory, a:000)
 endfunction
