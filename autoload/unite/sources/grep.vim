@@ -72,7 +72,7 @@ function! s:source.hooks.on_init(args, context) "{{{
   endif
 
   if get(args, 0, '') == '' && a:context.input == ''
-    let target = unite#util#path2directory(
+    let target = unite#util#substitute_path_separator(
           \ unite#util#input('Target: ', default, 'file'))
     if target == ''
       let a:context.source__targets = []

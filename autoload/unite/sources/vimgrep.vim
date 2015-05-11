@@ -56,7 +56,7 @@ function! s:source.hooks.on_init(args, context) "{{{
 
   if type(get(args, 0, '')) == type('')
         \ && get(args, 0, '') == ''
-    let target = unite#util#path2directory(
+    let target = unite#util#substitute_path_separator(
           \ unite#util#input('Target: ', default, 'file'))
   else
     let target = default
