@@ -293,7 +293,8 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   endif
 
   " Note: If find command and args used, uses whole command line.
-  let commands = vimproc#parser#split_args(command) + paths
+  " -L follows symbolic links to have the same behaviour as file_rec
+  let commands = vimproc#parser#split_args(command) + ['-L'] + paths
   if args[0] ==# 'find'
     " Default option.
     let commands += ['-path', '*/\.git/*', '-prune',
