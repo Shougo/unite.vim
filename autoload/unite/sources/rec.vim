@@ -634,7 +634,7 @@ endfunction"}}}
 
 " Misc.
 function! s:get_paths(args, context) "{{{
-  let args = unite#helper#parse_project_bang(a:args)
+  let args = unite#helper#parse_source_args(a:args)
   let directory = get(args, 0, '')
   if directory == ''
     let directory = isdirectory(a:context.path) ?

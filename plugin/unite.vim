@@ -89,19 +89,9 @@ command! -nargs=+ -complete=customlist,unite#complete#source
 function! s:call_unite_input_directory(args) "{{{
   let [args, options] = unite#helper#parse_options_user(a:args)
   if !has_key(options, 'path')
-    let path = input('Input narrowing directory: ', '', 'dir')
-    if path == "!"
-      " Allow input of project path as !
-      let path = &filetype ==# 'vimfiler' ?
-        \ b:vimfiler.current_dir :
-        \ unite#util#substitute_path_separator(getcwd())
-      let options.path = unite#util#path2project_directory(path)
-    else
-      " if path is specified, it has to be an absolute path
-      " That is, resolve ~ and . and .. etc
-      let options.path = unite#util#path2absolute_directory(path)
-    endif
-  endif
+    let options.path = unite#helper#parse_source_path(
+          \ input('Input narrowing directory: ', '', 'dir'))
+endif
 
   call unite#start(args, options)
 endfunction"}}}
