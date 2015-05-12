@@ -91,7 +91,7 @@ function! s:call_unite_input_directory(args) "{{{
   if !has_key(options, 'path')
     let options.path = unite#helper#parse_source_path(
           \ input('Input narrowing directory: ', '', 'dir'))
-endif
+  endif
 
   call unite#start(args, options)
 endfunction"}}}
