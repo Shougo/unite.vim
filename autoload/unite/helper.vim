@@ -213,7 +213,7 @@ function! unite#helper#parse_source_path(path) "{{{
           \ unite#util#substitute_path_separator(getcwd())
     let path = unite#util#substitute_path_separator(
       \ unite#util#path2project_directory(path) . a:path[1:])
-  elseif a:path == '^?'
+  elseif a:path =~ '^?'
     " Use buffer directory
     let path = unite#util#substitute_path_separator(
       \ unite#helper#get_buffer_directory(bufnr('%')) . a:path[1:])
