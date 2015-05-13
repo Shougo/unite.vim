@@ -89,7 +89,7 @@ command! -nargs=+ -complete=customlist,unite#complete#source
 function! s:call_unite_input_directory(args) "{{{
   let [args, options] = unite#helper#parse_options_user(a:args)
   if !has_key(options, 'path')
-    let options.path = unite#util#substitute_path_separator(
+    let options.path = unite#helper#parse_source_path(
           \ input('Input narrowing directory: ', '', 'dir'))
   endif
 

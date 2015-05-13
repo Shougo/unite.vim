@@ -2410,6 +2410,17 @@ file_list	Nominates files in the filelist.
 		If argument 1 is "!", use the project directory instead of
 		the current directory.  The project directory has ".git",
 		".svn", ".hg".
+		Further directories can be specified, eg: !/foo/bar
+
+						*unite-source-arg-?*
+		If argument 1 is "?", use the buffer directory instead of
+		the current directory.
+		Further directories can be specified, eg: ?/foo/bar
+
+						*unite-source-arg-?!*
+		If argument 1 is "?!", use the project directory searching
+		from the buffer directory instead of the current directory.
+		Further directories can be specified, eg: ?!/foo/bar
 
 ==============================================================================
 KINDS						*unite-kinds*
