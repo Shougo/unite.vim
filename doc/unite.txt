@@ -531,10 +531,18 @@ g:unite_source_rec_async_command
                 \ 'ag --follow --nocolor --nogroup --hidden -g ""'
 <
 		The default value is "find -L" which follows symbolic links
-		to have the same behaviour as file_rec.
+		to have the same behaviour as file_rec, and the
+		args(|g:unite_source_rec_find_args|).
 		Because, "find" command is fastest.
 		Note: In windows environment, you must install file list
 		command and specify the variable.
+
+					*g:unite_source_rec_find_args*
+g:unite_source_rec_find_args
+		Specify the find arguments in file_rec/async source.
+
+		The default value is ['-path', '*/.git/*', '-prune', '-o',
+		'-type', 'l', '-print'].
 
 					*g:unite_source_rec_git_command*
 g:unite_source_rec_git_command
@@ -1837,6 +1845,15 @@ the context dictionary.
 						*unite-options-direction*
 		-direction={direction}
 		Defines split position rule.
+
+		When it is "dynamictop", if each item's length is less than
+		the current window's width, the direction becomes "aboveleft",
+		otherwise - "topleft".
+		Similarly for "dynamicbottom", the direction becomes
+		"belowright" or "botright".
+		It is useful to always make best effort to show all items
+		without shortening.
+
 		Default: "topleft"
 
 						*unite-options-verbose*
@@ -1954,7 +1971,12 @@ the context dictionary.
 						*unite-options-truncate*
 		-truncate
 		Truncate lines longer than the window's width.
-		Default: no-truncate
+		Default: truncate
+
+						*unite-options-truncate-width*
+		-truncate-width
+		Truncate percentage of lines.
+		Default: 50(%)
 
 						*unite-options-tab*
 		-tab

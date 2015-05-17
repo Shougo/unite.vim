@@ -472,7 +472,7 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
 
   if a:context.split && !a:context.unite__direct_switch
     " Split window.
-    noautocmd execute a:context.direction ((bufnr > 0) ?
+    noautocmd execute s:get_buffer_direction(a:context) ((bufnr > 0) ?
           \ ((a:context.vertical) ? 'vsplit' : 'split') :
           \ ((a:context.vertical) ? 'vnew' : 'new'))
   endif
@@ -719,7 +719,9 @@ function! unite#view#_bottom_cursor() "{{{
   endtry
 endfunction"}}}
 function! unite#view#_clear_match() "{{{
-  setlocal nocursorline
+  if &filetype ==# 'unite'
+    setlocal nocursorline
+  endif
 endfunction"}}}
 
 function! unite#view#_save_position() "{{{
@@ -992,6 +994,8 @@ function! unite#view#_convert_lines(candidates) "{{{
   endif
   let padding = repeat(' ', padding_width)
 
+  let truncate_width = (max_width*context.truncate_width) / 100
+
   return map(copy(a:candidates),
         \ "(v:val.is_dummy ? ' ' :
         \   v:val.unite__is_marked ? context.marked_icon :
@@ -999,10 +1003,10 @@ function! unite#view#_convert_lines(candidates) "{{{
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(unite#helper#convert_source_name(
         \     (v:val.is_dummy ? '' : v:val.source)), max_source_name))
-        \ . (strwidth(v:val.unite__abbr) < max_width ?
+        \ . ((strwidth(v:val.unite__abbr) < max_width || !context.truncate) ?
         \     v:val.unite__abbr
         \   : unite#util#truncate_wrap(v:val.unite__abbr, max_width
-        \    , (context.truncate ? 0 : max_width/2), '..'))")
+        \    , truncate_width, '..'))")
 endfunction"}}}
 " @vimlint(EVL102, 0, l:max_source_name)
 " @vimlint(EVL102, 0, l:context)
@@ -1052,6 +1056,25 @@ endfunction"}}}
 
 function! s:msg2list(expr) "{{{
   return type(a:expr) ==# type([]) ? a:expr : split(a:expr, '\n')
+endfunction"}}}
+
+function! s:get_buffer_direction(context) "{{{
+  let direction = a:context.direction
+  if direction ==# 'dynamictop' || direction ==# 'dynamicbottom'
+    " Use dynamic direction calculation
+    let unite = unite#get_current_unite()
+    let [max_width, _] = unite#helper#adjustments(
+          \ winwidth(0), unite.max_source_name, 4)
+    let is_fit = empty(filter(copy(unite#candidates#gather()),
+          \ 'strwidth(v:val.unite__abbr) > max_width'))
+
+    if direction ==# 'dynamictop'
+      let direction = is_fit ? 'aboveleft' : 'topleft'
+    else
+      let direction = is_fit ? 'belowright' : 'botright'
+    endif
+  endif
+  return direction
 endfunction"}}}
 
 let &cpo = s:save_cpo

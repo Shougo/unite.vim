@@ -88,9 +88,13 @@ function! s:source.action_table.edit.func(candidate) "{{{
   let register = getreg(a:candidate.action__register, 1)
   let register = substitute(register, '\r\?\n', '\\n', 'g')
   let new_value = substitute(input('', register), '\\n', '\n', 'g')
-  silent! call setreg(a:candidate.action__register,
-        \ new_value, a:candidate.action__regtype)
-endfunction"}}}
+  " If the user cancels input, new_value is empty, so assume no change on empty.
+  " User can delete explicity via the `delete` action.
+  if new_value != ''
+      silent! call setreg(a:candidate.action__register,
+            \ new_value, a:candidate.action__regtype)
+  endif
+  endfunction"}}}
 "}}}
 
 let &cpo = s:save_cpo
