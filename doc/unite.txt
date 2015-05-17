@@ -530,7 +530,8 @@ g:unite_source_rec_async_command
 		let g:unite_source_rec_async_command =
                 \ 'ag --follow --nocolor --nogroup --hidden -g ""'
 <
-		The default value is "find" and the args.
+		The default value is "find -L" which follows symbolic links
+		to have the same behaviour as file_rec.
 		Because, "find" command is fastest.
 		Note: In windows environment, you must install file list
 		command and specify the variable.
