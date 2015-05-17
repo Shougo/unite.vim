@@ -46,20 +46,13 @@ let s:source = {
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
-  let args = unite#helper#parse_project_bang(a:args)
+  let args = unite#helper#parse_project_args(a:args)
 
-  let default = get(args, 0, '')
-
-  if default == ''
-    let default = '**'
-  endif
-
-  if type(get(args, 0, '')) == type('')
-        \ && get(args, 0, '') == ''
-    let target = unite#util#substitute_path_separator(
-          \ unite#util#input('Target: ', default, 'file'))
-  else
-    let target = default
+  let target = get(args, 0, '')
+  if target == ''
+    let target = unite#helper#parse_source_path(
+      \ unite#util#substitute_path_separator(
+        \ unite#util#input('Target: ', '**', 'file')))
   endif
 
   if target == '%'

@@ -189,24 +189,47 @@ function! s:eval_cmdline(cmdline) abort "{{{
   return cmdline
 endfunction"}}}
 
-function! unite#helper#parse_project_bang(args) "{{{
-  let args = filter(copy(a:args), "v:val != '!'")
+function! unite#helper#parse_source_args(args) "{{{
+  let args = copy(a:args)
   if empty(args)
     return []
   endif
 
-  if a:args[0] == '!'
-    " Use project directory.
-    let args[0] = unite#util#path2project_directory(args[0], 1)
-  endif
-
-
-  if args[0] !~ '^%$\|^\$\h\w*$'
-    let args[0] = unite#util#substitute_path_separator(
-          \ fnamemodify(unite#util#expand(args[0]), ':p'))
-  endif
-
+  let args[0] = unite#helper#parse_source_path(args[0])
   return args
+endfunction"}}}
+
+function! unite#helper#parse_source_path(path) "{{{
+  " Expand ?!/buffer_project_subdir, !/project_subdir and ?/buffer_subdir
+  if a:path =~ '^?!'
+    " Use project directory from buffer directory
+    let path = unite#helper#get_buffer_directory(bufnr('%'))
+    let path = unite#util#substitute_path_separator(
+      \ unite#util#path2project_directory(path) . a:path[2:])
+  elseif a:path =~ '^!'
+    " Use project directory from cwd
+    let path = &filetype ==# 'vimfiler' ?
+          \ b:vimfiler.current_dir :
+          \ unite#util#substitute_path_separator(getcwd())
+    let path = unite#util#substitute_path_separator(
+      \ unite#util#path2project_directory(path) . a:path[1:])
+  elseif a:path =~ '^?'
+    " Use buffer directory
+    let path = unite#util#substitute_path_separator(
+      \ unite#helper#get_buffer_directory(bufnr('%')) . a:path[1:])
+  else
+    let path = a:path
+  endif
+
+  " Don't assume empty path means current directory.
+  " Let the sources customize default rules.
+  if path != ''
+    let path = unite#util#substitute_path_separator(
+          \ fnamemodify(unite#util#expand(path), ':p'))
+  endif
+
+  " resolve .. in the paths
+  return resolve(path)
 endfunction"}}}
 
 function! unite#helper#get_marked_candidates() "{{{
