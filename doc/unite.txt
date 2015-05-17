@@ -1961,7 +1961,12 @@ the context dictionary.
 						*unite-options-truncate*
 		-truncate
 		Truncate lines longer than the window's width.
-		Default: no-truncate
+		Default: truncate
+
+						*unite-options-truncate-width*
+		-truncate-width
+		Truncate percentage of lines.
+		Default: 50(%)
 
 						*unite-options-tab*
 		-tab

@@ -994,6 +994,8 @@ function! unite#view#_convert_lines(candidates) "{{{
   endif
   let padding = repeat(' ', padding_width)
 
+  let truncate_width = (max_width*context.truncate_width) / 100
+
   return map(copy(a:candidates),
         \ "(v:val.is_dummy ? ' ' :
         \   v:val.unite__is_marked ? context.marked_icon :
@@ -1001,10 +1003,10 @@ function! unite#view#_convert_lines(candidates) "{{{
         \ . (unite.max_source_name == 0 ? ''
         \   : unite#util#truncate(unite#helper#convert_source_name(
         \     (v:val.is_dummy ? '' : v:val.source)), max_source_name))
-        \ . (strwidth(v:val.unite__abbr) < max_width ?
+        \ . ((strwidth(v:val.unite__abbr) < max_width || !context.truncate) ?
         \     v:val.unite__abbr
         \   : unite#util#truncate_wrap(v:val.unite__abbr, max_width
-        \    , (context.truncate ? 0 : max_width/2), '..'))")
+        \    , truncate_width, '..'))")
 endfunction"}}}
 " @vimlint(EVL102, 0, l:max_source_name)
 " @vimlint(EVL102, 0, l:context)
