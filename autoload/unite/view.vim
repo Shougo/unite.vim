@@ -472,7 +472,7 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
 
   if a:context.split && !a:context.unite__direct_switch
     " Split window.
-    noautocmd execute a:context.direction ((bufnr > 0) ?
+    noautocmd execute s:get_buffer_direction(a:context) ((bufnr > 0) ?
           \ ((a:context.vertical) ? 'vsplit' : 'split') :
           \ ((a:context.vertical) ? 'vnew' : 'new'))
   endif
@@ -1056,6 +1056,25 @@ endfunction"}}}
 
 function! s:msg2list(expr) "{{{
   return type(a:expr) ==# type([]) ? a:expr : split(a:expr, '\n')
+endfunction"}}}
+
+function! s:get_buffer_direction(context) "{{{
+  let direction = a:context.direction
+  if direction ==# 'dynamictop' || direction ==# 'dynamicbottom'
+    " Use dynamic direction calculation
+    let unite = unite#get_current_unite()
+    let [max_width, _] = unite#helper#adjustments(
+          \ winwidth(0), unite.max_source_name, 4)
+    let is_fit = empty(filter(copy(unite#candidates#gather()),
+          \ 'strwidth(v:val.unite__abbr) > max_width'))
+
+    if direction ==# 'dynamictop'
+      let direction = is_fit ? 'aboveleft' : 'topleft'
+    else
+      let direction = is_fit ? 'belowright' : 'botright'
+    endif
+  endif
+  return direction
 endfunction"}}}
 
 let &cpo = s:save_cpo
