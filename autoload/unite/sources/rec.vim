@@ -40,6 +40,9 @@ call unite#util#set_default(
       \  !unite#util#is_windows() && executable('find') ? 'find' : ''),
       \ 'g:unite_source_file_rec_async_command')
 call unite#util#set_default(
+      \ 'g:unite_source_rec_find_args',
+      \ ['-path', '*/.git/*', '-prune', '-o', '-type', 'l', '-print'])
+call unite#util#set_default(
       \ 'g:unite_source_rec_git_command', 'git')
 "}}}
 
@@ -296,8 +299,9 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   let commands = vimproc#parser#split_args(command) + paths
   if args[0] ==# 'find'
     " Default option.
-    let commands += ['-path', '*/\.git/*', '-prune',
-          \ '-o', '-type', 'l', '-print', '-o', '-type',
+    let commands += g:unite_source_rec_find_args
+    let commands +=
+          \ ['-o', '-type',
           \ (a:context.source__is_directory ? 'd' : 'f'), '-print']
   endif
 
@@ -464,8 +468,9 @@ function! s:source_file_neovim.gather_candidates(args, context) "{{{
   let commands = [command] + paths
   if args[0] ==# 'find'
     " Default option.
-    let commands += ['-path', '*/\.git/*', '-prune',
-          \ '-o', '-type', 'l', '-print', '-o', '-type',
+    let commands += g:unite_source_rec_find_args
+    let commands +=
+          \ ['-o', '-type',
           \ (a:context.source__is_directory ? 'd' : 'f'), '-print']
   endif
 
