@@ -275,6 +275,11 @@ function! s:source_file_async.async_gather_candidates(args, context) "{{{
   endif
 
   let candidates = unite#helper#paths2candidates(paths)
+  for candidate in filter(copy(candidates),
+        \ 'isdirectory(v:val.action__path)')
+    let candidate.abbr = candidate.action__path .  '/'
+    let candidate.kind = 'directory'
+  endfor
   let a:context.source__candidates += candidates
 
   if stdout.eof
