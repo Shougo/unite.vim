@@ -199,7 +199,8 @@ function! s:source.gather_candidates(args, context) "{{{
     let $TERM = 'dumb'
 
     let a:context.source__proc = vimproc#plineopen3(
-          \ vimproc#util#iconv(cmdline, &encoding, 'char'), 1)
+          \ vimproc#util#iconv(cmdline, &encoding,
+          \ g:unite_source_grep_encoding), 1)
   finally
     let $TERM = save_term
   endtry
