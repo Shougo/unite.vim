@@ -45,7 +45,7 @@ function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{
-  let args = unite#helper#parse_project_bang(a:args)
+  let args = unite#helper#parse_source_args(a:args)
 
   if empty(args)
     call unite#print_source_error(
