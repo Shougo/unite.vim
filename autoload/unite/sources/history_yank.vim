@@ -76,6 +76,7 @@ function! s:source.gather_candidates(args, context) "{{{
 
   return map(copy(s:yank_histories), "{
         \ 'word' : v:val[0],
+        \ 'abbr' : printf('%-2d - %s', v:key, v:val[0]),
         \ 'is_multiline' : 1,
         \ 'action__regtype' : v:val[1],
         \ }")
