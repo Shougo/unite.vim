@@ -546,10 +546,18 @@ function! unite#helper#is_prompt(line) "{{{
         \ || (context.prompt_direction !=# 'below' && a:line <= prompt_linenr)
 endfunction"}}}
 
+function! unite#helper#relative_target(target) "{{{
+  let target = fnamemodify(a:target, ':.')
+  if target == getcwd()
+    return '.'
+  endif
+  return target
+endfunction"}}}
+
 function! unite#helper#join_targets(targets) "{{{
   return join(map(copy(a:targets),
-        \    "unite#util#escape_shell(
-        \               substitute(v:val, '/$', '', ''))"))
+        \    "unite#util#escape_shell(substitute(
+        \               unite#helper#relative_target(v:val), '/$', '', ''))"))
 endfunction"}}}
 
 let &cpo = s:save_cpo
