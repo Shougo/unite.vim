@@ -547,8 +547,9 @@ function! unite#helper#is_prompt(line) "{{{
 endfunction"}}}
 
 function! unite#helper#relative_target(target) "{{{
-  let target = fnamemodify(a:target, ':.')
-  if target == getcwd()
+  let target = unite#util#substitute_path_separator(substitute(fnamemodify(
+        \ a:target, ':.'), '[^:]zs/$', '', ''))
+  if target == unite#util#substitute_path_separator(getcwd())
     return '.'
   endif
   return target
@@ -556,8 +557,7 @@ endfunction"}}}
 
 function! unite#helper#join_targets(targets) "{{{
   return join(map(copy(a:targets),
-        \    "unite#util#escape_shell(substitute(
-        \               unite#helper#relative_target(v:val), '/$', '', ''))"))
+        \    "unite#util#escape_shell(unite#helper#relative_target(v:val))"))
 endfunction"}}}
 
 let &cpo = s:save_cpo
