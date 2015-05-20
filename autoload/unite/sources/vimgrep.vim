@@ -109,7 +109,7 @@ function! s:source.gather_candidates(args, context) "{{{
     return []
   endif
 
-  let cmdline = printf('vimgrep /%s/j %s',
+  let cmdline = printf('silent vimgrep /%s/j %s',
     \   escape(a:context.source__input, '/'),
     \   join(a:context.source__targets))
 
