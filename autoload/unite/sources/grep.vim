@@ -63,41 +63,39 @@ function! s:source.hooks.on_init(args, context) "{{{
     return
   endif
 
-  let args = unite#helper#parse_source_args(a:args)
+  let target = get(a:args, 0, '')
 
-  let target = get(args, 0, '')
-
-  if target == ''
+  if target ==# ''
     let target = isdirectory(a:context.path) ?
       \ a:context.path :
-      \ unite#helper#parse_source_path(
-        \ unite#util#input('Target: ', '.', 'file'))
-   endif
+      \ unite#util#input('Target: ', '.', 'file')
+  endif
 
-  if target == ''
+  if target ==# ''
     let a:context.source__targets = []
     let a:context.source__input = ''
     return
   endif
 
   let targets = split(target, "\n")
-  if target == '%' || target == '#'
+  if target ==# '%' || target ==# '#'
     let targets = [bufname(target)]
   elseif target ==# '$buffers'
     let targets = map(filter(range(1, bufnr('$')),
           \ 'buflisted(v:val) && filereadable(bufname(v:val))'),
           \ 'bufname(v:val)')
-  elseif target == '**'
+  elseif target ==# '**'
     " Optimized.
     let targets = ['.']
   endif
 
+  let targets = map(targets, 'substitute(v:val, "\\*\\+$", "", "")')
   let a:context.source__targets =
-        \ map(targets, 'substitute(v:val, "\\*\\+$", "", "")')
+        \ map(targets, 'unite#helper#parse_source_path(v:val)')
 
-  let a:context.source__extra_opts = get(args, 1, '')
+  let a:context.source__extra_opts = get(a:args, 1, '')
 
-  let a:context.source__input = get(args, 2, a:context.input)
+  let a:context.source__input = get(a:args, 2, a:context.input)
   if a:context.source__input == '' || a:context.unite__is_restart
     let a:context.source__input = unite#util#input('Pattern: ',
           \ a:context.source__input)
