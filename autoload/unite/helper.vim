@@ -547,8 +547,8 @@ function! unite#helper#is_prompt(line) "{{{
 endfunction"}}}
 
 function! unite#helper#relative_target(target) "{{{
-  let target = unite#util#substitute_path_separator(substitute(fnamemodify(
-        \ substitute(a:target, '/$', '', ''), ':.'), '[^:]zs/$', '', ''))
+  let target = unite#util#substitute_path_separator(fnamemodify(
+        \ substitute(a:target, '[^:]\zs/$', '', ''), ':.'))
   if target == unite#util#substitute_path_separator(getcwd())
     return '.'
   endif
