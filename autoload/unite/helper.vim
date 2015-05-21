@@ -548,7 +548,7 @@ endfunction"}}}
 
 function! unite#helper#relative_target(target) "{{{
   let target = unite#util#substitute_path_separator(substitute(fnamemodify(
-        \ a:target, ':.'), '[^:]zs/$', '', ''))
+        \ substitute(a:target, '/$', '', ''), ':.'), '[^:]zs/$', '', ''))
   if target == unite#util#substitute_path_separator(getcwd())
     return '.'
   endif
