@@ -95,7 +95,7 @@ https://github.com/Shougo/neomru.vim
 * [Replacing All The Things with Unite.vim — Codeography](http://www.codeography.com/2013/06/17/replacing-all-the-things-with-unite-vim.html)
 * [Beginner's Guide to Unite](http://usevim.com/2013/06/19/unite/)
 * [Standards: How to make a Unite plugin](http://ujihisa.blogspot.jp/2010/11/how-to-make-unite-plugin.html)
-* [FAQ (`:h unite-faq`)](https://github.com/Shougo/unite.vim/blob/master/doc/unite.txt#L3325)
+* [FAQ (`:h unite-faq`)](https://github.com/Shougo/unite.vim/blob/master/doc/unite.txt#L3608)
 
 
 ## Screen shots
