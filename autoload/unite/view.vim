@@ -578,9 +578,10 @@ function! unite#view#_init_cursor() "{{{
     call unite#mappings#_quick_match(0)
   endif
 
-  if line('.') <= winheight(0)
+  if !is_restore &&
+        \ (line('.') <= winheight(0)
         \ || (context.prompt_direction ==# 'below'
-        \     && (line('$') - line('.')) <= winheight(0))
+        \     && (line('$') - line('.')) <= winheight(0)))
     call unite#view#_bottom_cursor()
   endif
 
