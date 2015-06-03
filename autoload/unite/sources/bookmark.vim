@@ -72,7 +72,7 @@ function! unite#sources#bookmark#_append(filename) "{{{
 
   let path = unite#util#substitute_path_separator(
         \ path =~ '^[^:]\+://' ? path :
-        \ simplify(fnamemodify(unite#util#expand(path), ':p:~')))
+        \ simplify(unite#util#expand(path)))
 
   redraw
   echo 'Path: ' . path
