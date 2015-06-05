@@ -552,6 +552,11 @@ function! unite#helper#relative_target(target) "{{{
   if target == unite#util#substitute_path_separator(getcwd())
     return '.'
   endif
+  if unite#util#is_windows()
+    let drive_letter = matchstr(a:target, '^\a:')
+    let target = strpart(target, 0, 1) ==# '/' && drive_letter !=# '' ?
+          \ drive_letter . target : target
+  endif
   return target
 endfunction"}}}
 
