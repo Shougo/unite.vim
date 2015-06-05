@@ -373,7 +373,6 @@ function! unite#start#resume(buffer_name, ...) "{{{
 
   call unite#view#_resize_window()
   call unite#view#_init_cursor()
-  call unite#view#_bottom_cursor()
 endfunction"}}}
 
 function! unite#start#resume_from_temporary(context)  "{{{
