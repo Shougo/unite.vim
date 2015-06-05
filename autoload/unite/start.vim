@@ -78,6 +78,11 @@ function! unite#start#standard(sources, ...) "{{{
   let current_unite.last_path = context.path
   call unite#candidates#_recache(context.input, context.is_redraw)
 
+  if !context.buffer
+    call unite#variables#disable_current_unite()
+    return
+  endif
+
   if !current_unite.is_async &&
         \ (context.force_immediately
         \ || context.immediately || !context.empty) "{{{

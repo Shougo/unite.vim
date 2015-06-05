@@ -2043,6 +2043,11 @@ the context dictionary.
 		Change preview window height in unite buffer.
 		Default: 'previewheight'
 
+						*unite-options-no-buffer*
+		-no-buffer
+		Don't create unite buffer.
+		Default: buffer
+
 ==============================================================================
 SOURCES						*unite-sources*
 
