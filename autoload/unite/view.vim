@@ -533,18 +533,17 @@ function! unite#view#_init_cursor() "{{{
 
   let positions = unite#custom#get_profile(
         \ unite.profile_name, 'unite__save_pos')
-  let key = unite#loaded_source_names_string()
+  let position = get(positions, unite#loaded_source_names_string(), {})
   let is_restore = context.restore
-        \ && has_key(positions, key) && context.select <= 0
-        \ && (context.resume || positions[key].candidate ==#
-        \       unite#helper#get_current_candidate(positions[key].pos[1]))
+        \ && !empty(position) && context.select <= 0
+        \ && (context.resume || position.candidate ==#
+        \       unite#helper#get_current_candidate(position.pos[1]))
 
   if context.start_insert && !context.auto_quit
     let unite.is_insert = 1
 
-    if is_restore && positions[key].pos[1] != unite.prompt_linenr
-      " Restore position.
-      call setpos('.', positions[key].pos)
+    if is_restore && position.pos[1] != unite.prompt_linenr
+      call s:restore_position(position)
       startinsert
     else
       call unite#helper#cursor_prompt()
@@ -554,8 +553,7 @@ function! unite#view#_init_cursor() "{{{
     let unite.is_insert = 0
 
     if is_restore
-      " Restore position.
-      call setpos('.', positions[key].pos)
+      call s:restore_position(position)
     else
       call unite#helper#cursor_prompt()
     endif
@@ -740,6 +738,7 @@ function! unite#view#_save_position() "{{{
 
   let positions[key] = {
         \ 'pos' : getpos('.'),
+        \ 'winline' : winline(),
         \ 'candidate' : unite#helper#get_current_candidate(),
         \ }
 
@@ -1076,6 +1075,15 @@ function! s:get_buffer_direction(context) "{{{
     endif
   endif
   return direction
+endfunction"}}}
+
+function! s:restore_position(position) "{{{
+  call setpos('.', a:position.pos)
+  if winline() < a:position.winline
+    execute 'normal!' (a:position.winline - winline())."\<C-y>"
+  elseif winline() > a:position.winline
+    execute 'normal!' (winline() - a:position.winline)."\<C-e>"
+  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo
