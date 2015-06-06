@@ -288,8 +288,8 @@ let s:kind.action_table.vimgrep = {
   \ }
 function! s:kind.action_table.vimgrep.func(candidates) "{{{
   call unite#start_script([
-        \ ['vimgrep', map(copy(a:candidates),
-        \ 'string(substitute(v:val.action__path, "/$", "", "g"))'),
+        \ ['vimgrep', join(map(copy(a:candidates),
+        \ 'substitute(v:val.action__path, "/$", "", "g")'), "\n"),
         \ ]], { 'no_quit' : 1 })
 endfunction "}}}
 
