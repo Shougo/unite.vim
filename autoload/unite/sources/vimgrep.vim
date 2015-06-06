@@ -111,7 +111,7 @@ function! s:source.gather_candidates(args, context) "{{{
 
   let cmdline = printf('silent vimgrep /%s/j %s',
     \   escape(a:context.source__input, '/'),
-    \   join(a:context.source__targets))
+    \   join(map(copy(a:context.source__targets), 'escape(v:val, " ")')))
 
   call unite#print_source_message(
         \ 'Command-line: ' . cmdline, s:source.name)
