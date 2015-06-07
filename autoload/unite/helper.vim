@@ -225,7 +225,7 @@ function! unite#helper#parse_source_path(path) "{{{
   " Let the sources customize default rules.
   if path != ''
     let pathlist = path =~ "\n" ? split(path, "\n") : [path]
-    for pathitem in pathlist 
+    for pathitem in pathlist
       " resolve .. in the paths
       let pathitem = resolve(unite#util#substitute_path_separator(
             \ fnamemodify(unite#util#expand(pathitem), ':p')))
