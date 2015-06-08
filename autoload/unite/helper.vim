@@ -224,12 +224,16 @@ function! unite#helper#parse_source_path(path) "{{{
   " Don't assume empty path means current directory.
   " Let the sources customize default rules.
   if path != ''
-    let path = unite#util#substitute_path_separator(
-          \ fnamemodify(unite#util#expand(path), ':p'))
+    let pathlist = path =~ "\n" ? split(path, "\n") : [path]
+    for pathitem in pathlist
+      " resolve .. in the paths
+      let pathitem = resolve(unite#util#substitute_path_separator(
+            \ fnamemodify(unite#util#expand(pathitem), ':p')))
+    endfor
+    let path = join(pathlist, "\n")
   endif
 
-  " resolve .. in the paths
-  return resolve(path)
+  return path
 endfunction"}}}
 
 function! unite#helper#get_marked_candidates() "{{{
