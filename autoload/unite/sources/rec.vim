@@ -279,10 +279,10 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   let command = g:unite_source_rec_async_command
   if a:context.source__is_directory
     " Use find command.
-    let command = 'find'
+    let command = 'find -L'
   endif
 
-  let args = split(command)
+  let args = vimproc#parser#split_args(command)
   if empty(args) || !executable(args[0])
     if empty(args)
       call unite#print_source_message(
@@ -297,7 +297,7 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   endif
 
   " Note: If find command and args used, uses whole command line.
-  let commands = vimproc#parser#split_args(command) + paths
+  let commands = args + paths
   if args[0] ==# 'find'
     " Default option.
     let commands += g:unite_source_rec_find_args
@@ -448,7 +448,7 @@ function! s:source_file_neovim.gather_candidates(args, context) "{{{
   let command = g:unite_source_rec_async_command
   if a:context.source__is_directory
     " Use find command.
-    let command = 'find'
+    let command = 'find -L'
   endif
 
   let args = split(command)
@@ -466,7 +466,7 @@ function! s:source_file_neovim.gather_candidates(args, context) "{{{
   endif
 
   " Note: If find command and args used, uses whole command line.
-  let commands = [command] + paths
+  let commands = args + paths
   if args[0] ==# 'find'
     " Default option.
     let commands += g:unite_source_rec_find_args
