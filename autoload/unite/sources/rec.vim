@@ -526,8 +526,7 @@ endfunction"}}}
 function! s:source_file_neovim.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__job')
         \ && has_key(s:job_info, a:context.source__job)
-        \ && !s:job_info[a:context.source__job].eof
-    call jobstop(a:context.source__job)
+    silent! call jobstop(a:context.source__job)
     call remove(s:job_info, a:context.source__job)
   endif
 endfunction "}}}
