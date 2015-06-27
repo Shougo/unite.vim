@@ -32,7 +32,6 @@ call unite#util#set_default(
       \ 'g:unite_source_grep_default_opts', '-inH')
 
 call unite#util#set_default('g:unite_source_grep_recursive_opt', '-r')
-call unite#util#set_default('g:unite_source_grep_max_candidates', 100)
 call unite#util#set_default('g:unite_source_grep_search_word_highlight', 'Search')
 call unite#util#set_default('g:unite_source_grep_encoding', 'char')
 "}}}
@@ -43,7 +42,7 @@ endfunction "}}}
 
 let s:source = {
       \ 'name': 'grep',
-      \ 'max_candidates': g:unite_source_grep_max_candidates,
+      \ 'max_candidates': 100,
       \ 'hooks' : {},
       \ 'syntax' : 'uniteSource__Grep',
       \ 'matchers' : 'matcher_regexp',

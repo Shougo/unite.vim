@@ -570,12 +570,6 @@ g:unite_source_grep_default_opts
 <
 		The default value is "-inH".
 
-					*g:unite_source_grep_max_candidates*
-g:unite_source_grep_max_candidates
-		Set the max number of |unite-source-grep| candidates.
-
-		The default value is 100.
-
 				*g:unite_source_grep_search_word_highlight*
 g:unite_source_grep_search_word_highlight
 		Specify the search word highlight.
@@ -612,12 +606,6 @@ g:unite_source_find_default_expr
 		Set the default expression for find.
 
 		The default value is "-name ".
-
-					*g:unite_source_find_max_candidates*
-g:unite_source_find_max_candidates
-		Set the max number of |unite-source-find| candidates.
-
-		The default value is 100.
 
 					*g:unite_source_line_enable_highlight*
 g:unite_source_line_enable_highlight
