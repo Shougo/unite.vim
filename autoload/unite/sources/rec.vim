@@ -290,7 +290,7 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
             \  . 'g:unite_source_rec_async_command variable.', self.name)
     else
       call unite#print_source_message('async command : "'.
-            \ command.'" is not executable.', self.name)
+            \ args[0].'" is not executable.', self.name)
     endif
     let a:context.is_async = 0
     return []
@@ -459,7 +459,7 @@ function! s:source_file_neovim.gather_candidates(args, context) "{{{
             \  . 'g:unite_source_rec_async_command variable.', self.name)
     else
       call unite#print_source_message('async command : "'.
-            \ command.'" is not executable.', self.name)
+            \ args[0].'" is not executable.', self.name)
     endif
     let a:context.is_async = 0
     return []
@@ -577,7 +577,7 @@ function! s:source_file_git.gather_candidates(args, context) "{{{
   let args = vimproc#parser#split_args(command) + a:args
   if empty(args) || !executable(args[0])
     call unite#print_source_message('git command : "'.
-          \ command.'" is not executable.', self.name)
+          \ args[0].'" is not executable.', self.name)
     let a:context.is_async = 0
     return []
   endif
