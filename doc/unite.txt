@@ -607,6 +607,12 @@ g:unite_source_find_default_opts
 
 		The default value is "".
 
+					*g:unite_source_find_default_expr*
+g:unite_source_find_default_expr
+		Set the default expression for find.
+
+		The default value is "-name ".
+
 					*g:unite_source_find_max_candidates*
 g:unite_source_find_max_candidates
 		Set the max number of |unite-source-find| candidates.
