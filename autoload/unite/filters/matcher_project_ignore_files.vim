@@ -40,6 +40,11 @@ let s:cache_ignore_files = {}
 function! s:matcher.filter(candidates, context) "{{{
   let path = a:context.path != '' ? a:context.path : getcwd()
   let project = unite#util#path2project_directory(path) . '/'
+
+  if project ==# unite#util#substitute_path_separator($HOME . '/')
+    return a:candidates
+  endif
+
   if !has_key(a:context, 'filter__project_ignore_path')
         \ || a:context.filter__project_ignore_path !=# project
     let a:context.filter__project_ignore_path = project
