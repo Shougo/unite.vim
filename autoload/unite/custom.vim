@@ -118,7 +118,9 @@ function! unite#custom#get_profile(profile_name, option_name) "{{{
   if !has_key(custom.profiles, profile_name)
     let custom.profiles[profile_name] = {
           \ 'substitute_patterns' : {},
-          \ 'filters' : [],
+          \ 'matchers' : [],
+          \ 'sorters' : [],
+          \ 'converters' : [],
           \ 'context' : {},
           \ 'unite__save_pos' : {},
           \ 'unite__inputs' : {},
