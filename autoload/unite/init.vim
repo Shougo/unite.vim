@@ -321,8 +321,12 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.access_time = localtime()
   let unite.is_finalized = 0
   let unite.previewed_buffer_list = []
-  let unite.post_filters = unite#util#convert2list(
-        \ unite#custom#get_profile(unite.profile_name, 'filters'))
+  let unite.current_matchers = unite#util#convert2list(
+        \ unite#custom#get_profile(unite.profile_name, 'matchers'))
+  let unite.current_sorters = unite#util#convert2list(
+        \ unite#custom#get_profile(unite.profile_name, 'converters'))
+  let unite.current_converters = unite#util#convert2list(
+        \ unite#custom#get_profile(unite.profile_name, 'converters'))
   let unite.preview_candidate = {}
   let unite.highlight_candidate = {}
   let unite.max_source_name = 0

@@ -346,15 +346,32 @@ function! unite#mappings#do_action(...) "{{{
   return call('unite#action#do', a:000)
 endfunction"}}}
 
-function! unite#mappings#get_current_filters() "{{{
+function! unite#mappings#set_current_matchers(matchers) "{{{
   let unite = unite#get_current_unite()
-  return unite.post_filters
-endfunction"}}}
-function! unite#mappings#set_current_filters(filters) "{{{
-  let unite = unite#get_current_unite()
-  let unite.post_filters = a:filters
+  let unite.current_matchers = a:matchers
   let unite.context.is_redraw = 1
   return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
+endfunction"}}}
+function! unite#mappings#set_current_sorters(sorters) "{{{
+  let unite = unite#get_current_unite()
+  let unite.current_sorters = a:sorters
+  let unite.context.is_redraw = 1
+  return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
+endfunction"}}}
+function! unite#mappings#set_current_converters(converters) "{{{
+  let unite = unite#get_current_unite()
+  let unite.current_converters = a:converters
+  let unite.context.is_redraw = 1
+  return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
+endfunction"}}}
+function! unite#mappings#get_current_matchers() "{{{
+  return unite#get_current_unite().current_matchers
+endfunction"}}}
+function! unite#mappings#get_current_sorters() "{{{
+  return unite#get_current_unite().current_sorters
+endfunction"}}}
+function! unite#mappings#get_current_converters() "{{{
+  return unite#get_current_unite().current_converters
 endfunction"}}}
 
 function! s:smart_imap(map) "{{{

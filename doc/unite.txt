@@ -1354,17 +1354,39 @@ unite#get_status_string()			 *unite#get_status_string()*
 		Returns unite status string.  It is useful to customize the
 		statusline.
 
-					*unite#mappings#set_current_filters()*
-unite#mappings#set_current_filters({filters})
-		Changes current unite buffer filters.
+					*unite#mappings#set_current_matchers()*
+unite#mappings#set_current_matchers({matchers})
+		Changes current unite buffer matchers.
 		Example:
 >
-  nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
-        \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
+  nnoremap <buffer><expr> M      unite#mappings#set_current_matchers(
+        \ empty(unite#mappings#get_current_matchers()) ?
+	\ ['matcher_migemo'] : [])
 <
-					*unite#mappings#get_current_filters()*
-unite#mappings#get_current_filters()
-		Gets current unite buffer filters.
+					*unite#mappings#set_current_sorters()*
+unite#mappings#set_current_sorters({sorters})
+		Changes current unite buffer sorters.
+		Example:
+>
+  nnoremap <buffer><expr> S      unite#mappings#set_current_sorters(
+        \ empty(unite#mappings#get_current_matchers()) ?
+	\ ['sorter_reverse'] : [])
+<
+				*unite#mappings#set_current_converters()*
+unite#mappings#set_current_converters({matchers})
+		Changes current unite buffer matchers.
+
+				*unite#mappings#get_current_matchers()*
+unite#mappings#get_current_matchers()
+		Gets current unite buffer matchers.
+
+				*unite#mappings#get_current_sorters()*
+unite#mappings#get_current_sorters()
+		Gets current unite buffer sorters.
+
+				*unite#mappings#get_current_converters()*
+unite#mappings#get_current_converters()
+		Gets current unite buffer converters.
 
 						*unite#custom#profile()*
 						*unite#set_profile()*
@@ -1429,11 +1451,23 @@ unite#custom#profile({profile-name}, {option-name}, {value})
 		      \ 'priority' : 1000,
 		      \ })
 <
+		matchers			(List)
+		Specify a list of matcher names.  The filters are called
+		instead of the source filters.  If you change filters
+		dynamically,
+		use |unite#mappings#set_current_matchers()| instead.
 
-		filters				(List)
-		Specify a list of filter names.  The filters are called after
-		combining all candidates.  If you change filters dynamically,
-		use |unite#mappings#set_current_filters()| instead.
+		sorters				(List)
+		Specify a list of sorter names.  The filters are called
+		instead of the source sorters.  If you change filters
+		dynamically,
+		use |unite#mappings#set_current_sorters()| instead.
+
+		converters			(List)
+		Specify a list of converter names.  The filters are called
+		instead of the source converters.  If you change filters
+		dynamically,
+		use |unite#mappings#set_current_converters()| instead.
 
 		context				(Dictionary)
 		Specify default {context} value in unite buffer.
