@@ -57,10 +57,10 @@ function! unite#exrename#create_buffer(candidates, ...) "{{{
 
   call unite#util#lcd(b:exrename.cwd)
 
-  nnoremap <buffer><silent> q :<C-u>call <SID>exit()<CR>
+  nnoremap <buffer><silent> q :<C-u>call <SID>exit(bufnr('%'))<CR>
   augroup unite-exrename
     autocmd! * <buffer>
-    autocmd BufHidden <buffer> call s:exit()
+    autocmd BufHidden <buffer> call s:exit(expand('<abuf>'))
     autocmd BufWriteCmd <buffer> call s:do_rename()
     autocmd CursorMoved,CursorMovedI <buffer> call s:check_lines()
   augroup END
@@ -159,15 +159,18 @@ function! s:do_rename() "{{{
   endif
 endfunction"}}}
 
-function! s:exit() "{{{
-  let exrename_buf = bufnr('%')
+function! s:exit(bufnr) "{{{
+  if !bufexists(a:bufnr)
+    return
+  endif
+
   " Switch buffer.
   if winnr('$') != 1
     close
   else
     call s:custom_alternate_buffer()
   endif
-  silent execute 'bdelete!' exrename_buf
+  silent execute 'bdelete!' a:bufnr
 endfunction "}}}
 
 function! s:check_lines() "{{{
