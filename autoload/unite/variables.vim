@@ -239,6 +239,7 @@ function! s:initialize_default() "{{{
         \ 'force_redraw' : 0,
         \ 'previewheight' : &previewheight,
         \ 'buffer' : 1,
+        \ 'match_input' : 1,
         \ 'unite__old_buffer_info' : [],
         \ 'unite__direct_switch' : 0,
         \ 'unite__is_interactive' : 1,

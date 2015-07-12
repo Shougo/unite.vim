@@ -338,6 +338,11 @@ function! unite#view#_change_highlight()  "{{{
 
   call unite#view#_set_cursor_line()
 
+  let context = unite.context
+  if !context.match_input
+    return
+  endif
+
   silent! syntax clear uniteCandidateInputKeyword
 
   syntax case ignore

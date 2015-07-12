@@ -2076,6 +2076,11 @@ the context dictionary.
 		Don't create unite buffer.
 		Default: buffer
 
+						*unite-options-match-input*
+		-match-input
+		Enable input keyword match highlight.
+		Default: match-input
+
 ==============================================================================
 SOURCES						*unite-sources*
 
