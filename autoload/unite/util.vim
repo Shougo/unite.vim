@@ -278,8 +278,8 @@ endfunction"}}}
 function! s:buflisted(bufnr) "{{{
   return (getbufvar(a:bufnr, '&bufhidden') == '' || buflisted(a:bufnr)) &&
         \ (exists('t:tabpagebuffer') ?
-        \   has_key(t:tabpagebuffer, a:bufnr) && bufloaded(a:bufnr) :
-        \   bufloaded(a:bufnr))
+        \   has_key(t:tabpagebuffer, a:bufnr) && buflisted(a:bufnr) :
+        \   buflisted(a:bufnr))
 endfunction"}}}
 
 function! unite#util#glob(pattern, ...) "{{{
