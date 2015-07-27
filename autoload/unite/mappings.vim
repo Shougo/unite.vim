@@ -73,7 +73,7 @@ function! unite#mappings#define_default_mappings() "{{{
   nnoremap <buffer><expr> <Plug>(unite_cursor_top)
         \ 'gg0z.'
   nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
-        \ :<C-u>call unite#view#_redraw_all_candidates()<CR>G
+        \ :<C-u>call <SID>cursor_bottom()<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_screen)
         \ :<C-u>call <SID>move_screen(1)<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_half_screen)
@@ -605,6 +605,18 @@ function! s:print_message_log() "{{{
   for msg in unite#get_current_unite().err_msgs
     echohl WarningMsg | echo msg | echohl None
   endfor
+endfunction"}}}
+function! s:cursor_bottom() "{{{
+  if v:count == 0
+    call unite#view#_redraw_all_candidates()
+    normal! G
+  else
+    let unite = unite#get_current_unite()
+    if v:count > len(unite.current_candidates) + (unite.prompt_linenr == 1)
+      call unite#view#_redraw_all_candidates()
+    endif
+    execute 'normal!' v:count . 'G'
+  endif
 endfunction"}}}
 function! s:insert_selected_candidate() "{{{
   let candidate = unite#helper#get_current_candidate()
