@@ -70,8 +70,8 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>print_candidate()<CR>
   nnoremap <silent><buffer> <Plug>(unite_print_message_log)
         \ :<C-u>call <SID>print_message_log()<CR>
-  nnoremap <buffer><expr> <Plug>(unite_cursor_top)
-        \ 'gg0z.'
+  nnoremap <silent><buffer> <Plug>(unite_cursor_top)
+        \ :<C-u>call <SID>cursor_top()<CR>
   nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
         \ :<C-u>call <SID>cursor_bottom()<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_screen)
@@ -605,6 +605,17 @@ function! s:print_message_log() "{{{
   for msg in unite#get_current_unite().err_msgs
     echohl WarningMsg | echo msg | echohl None
   endfor
+endfunction"}}}
+function! s:cursor_top() "{{{
+  let unite = unite#get_current_unite()
+  if v:count == 0
+    execute 'normal!' (unite.prompt_linenr == 1 ? '2' : '') . 'gg0z.'
+  else
+    if v:count > len(unite.current_candidates) + (unite.prompt_linenr == 1)
+      call unite#view#_redraw_all_candidates()
+    endif
+    execute 'normal!' v:count . 'gg0z.'
+  endif
 endfunction"}}}
 function! s:cursor_bottom() "{{{
   if v:count == 0
