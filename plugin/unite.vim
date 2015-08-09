@@ -34,97 +34,37 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Wrapper command.
-command! -nargs=* -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ Unite
-      \ call s:call_unite_empty(<q-args>)
-function! s:call_unite_empty(args) "{{{
-  let [args, options] = unite#helper#parse_options_user(a:args)
-  call unite#start(args, options)
-endfunction"}}}
+      \ call s:call_unite('Unite', <q-args>, <line1>, <line2>)
 
-command! -nargs=+ -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ UniteWithCurrentDir
-      \ call s:call_unite_current_dir(<q-args>)
-function! s:call_unite_current_dir(args) "{{{
-  let [args, options] = unite#helper#parse_options_user(a:args)
-  if !has_key(options, 'path')
-    let path = &filetype ==# 'vimfiler' ?
-          \ b:vimfiler.current_dir :
-          \ unite#util#substitute_path_separator(fnamemodify(getcwd(), ':p'))
-    let options.path = path
-  endif
+      \ call s:call_unite('UniteWithCurrentDir', <q-args>, <line1>, <line2>)
 
-  call unite#start(args, options)
-endfunction"}}}
-
-command! -nargs=+ -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ UniteWithBufferDir
-      \ call s:call_unite_buffer_dir(<q-args>)
-function! s:call_unite_buffer_dir(args) "{{{
-  let [args, options] = unite#helper#parse_options_user(a:args)
-  if !has_key(options, 'path')
-    let options.path = unite#helper#get_buffer_directory(bufnr('%'))
-  endif
+      \ call s:call_unite('UniteWithBufferDir', <q-args>, <line1>, <line2>)
 
-  call unite#start(args, options)
-endfunction"}}}
-
-command! -nargs=+ -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ UniteWithProjectDir
-      \ call s:call_unite_project_dir(<q-args>)
-function! s:call_unite_project_dir(args) "{{{
-  let [args, options] = unite#helper#parse_options_user(a:args)
-  if !has_key(options, 'path')
-    let path = &filetype ==# 'vimfiler' ?
-          \ b:vimfiler.current_dir :
-          \ unite#util#substitute_path_separator(getcwd())
-    let options.path = unite#util#path2project_directory(path)
-  endif
+      \ call s:call_unite('UniteWithProjectDir', <q-args>, <line1>, <line2>)
 
-  call unite#start(args, options)
-endfunction"}}}
+command! -nargs=* -range -complete=customlist,unite#complete#source
+      \ UniteWithInputDirectory
+      \ call s:call_unite('UniteWithInputDirectory', <q-args>, <line1>, <line2>)
 
-command! -nargs=+ -complete=customlist,unite#complete#source
-      \ UniteWithInputDirectory call s:call_unite_input_directory(<q-args>)
-function! s:call_unite_input_directory(args) "{{{
-  let [args, options] = unite#helper#parse_options_user(a:args)
-  if !has_key(options, 'path')
-    let options.path = unite#helper#parse_source_path(
-          \ input('Input narrowing directory: ', '', 'dir'))
-  endif
+command! -nargs=* -range -complete=customlist,unite#complete#source
+      \ UniteWithCursorWord
+      \ call s:call_unite('UniteWithCursorWord', <q-args>, <line1>, <line2>)
 
-  call unite#start(args, options)
-endfunction"}}}
+command! -nargs=* -range -complete=customlist,unite#complete#source
+      \ UniteWithInput
+      \ call s:call_unite('UniteWithInput', <q-args>, <line1>, <line2>)
 
-command! -nargs=+ -complete=customlist,unite#complete#source
-      \ UniteWithCursorWord call s:call_unite_cursor_word(<q-args>)
-function! s:call_unite_cursor_word(args) "{{{
-  let [args, options] = unite#helper#parse_options_user(a:args)
-  if !has_key(options, 'input')
-    let options.input = expand('<cword>')
-  endif
-
-  call unite#start(args, options)
-endfunction"}}}
-
-command! -nargs=+ -complete=customlist,unite#complete#source
-      \ UniteWithInput call s:call_unite_input(<q-args>)
-function! s:call_unite_input(args) "{{{
-  let [args, options] = unite#helper#parse_options_user(a:args)
-  if !has_key(options, 'input')
-    let options.input = input('Input narrowing text: ', '')
-  endif
-
-  call unite#start(args, options)
-endfunction"}}}
-
-command! -nargs=? -complete=customlist,unite#complete#buffer_name
-      \ UniteResume call s:call_unite_resume(<q-args>)
-function! s:call_unite_resume(args) "{{{
-  let [args, options] = unite#helper#parse_options(a:args)
-
-  call unite#resume(join(args), options)
-endfunction"}}}
+command! -nargs=* -complete=customlist,unite#complete#buffer_name
+      \ UniteResume
+      \ call s:call_unite_resume(<q-args>)
 
 command! -nargs=? -complete=customlist,unite#complete#buffer_name
       \ UniteClose call unite#view#_close(<q-args>)
@@ -137,6 +77,47 @@ command! -nargs=? -complete=customlist,unite#complete#buffer_name
       \ UniteFirst call unite#start#_pos(<q-args>, 'first', 1)
 command! -nargs=? -complete=customlist,unite#complete#buffer_name
       \ UniteLast call unite#start#_pos(<q-args>, 'last', 1)
+
+function! s:call_unite(command, args, line1, line2) abort "{{{
+  let [args, context] = unite#helper#parse_options_user(a:args)
+  if a:command ==# 'UniteWithCurrentDir'
+        \ && !has_key(context, 'path')
+    let path = &filetype ==# 'vimfiler' ?
+          \ b:vimfiler.current_dir :
+          \ unite#util#substitute_path_separator(fnamemodify(getcwd(), ':p'))
+    let context.path = path
+  elseif a:command ==# 'UniteWithBufferDir'
+        \ && !has_key(context, 'path')
+    let context.path = unite#helper#get_buffer_directory(bufnr('%'))
+  elseif a:command ==# 'UniteWithProjectDir'
+        \ && !has_key(context, 'path')
+    let path = &filetype ==# 'vimfiler' ?
+          \ b:vimfiler.current_dir :
+          \ unite#util#substitute_path_separator(getcwd())
+    let context.path = unite#util#path2project_directory(path)
+  elseif a:command ==# 'UniteWithInputDirectory'
+        \ && !has_key(context, 'path')
+    let context.path = unite#helper#parse_source_path(
+          \ input('Input narrowing directory: ', '', 'dir'))
+  elseif a:command ==# 'UniteWithCursorWord'
+        \ && !has_key(context, 'input')
+    let context.input = expand('<cword>')
+  elseif a:command ==# 'UniteWithInput'
+        \ && !has_key(context, 'input')
+    let context.input = input('Input narrowing text: ', '')
+  endif
+
+  let context.firstline = a:line1
+  let context.lastline = a:line2
+  let context.bufnr = bufnr('%')
+
+  call unite#start(args, context)
+endfunction"}}}
+function! s:call_unite_resume(args) "{{{
+  let [args, context] = unite#helper#parse_options(a:args)
+
+  call unite#resume(join(args), context)
+endfunction"}}}
 
 let g:loaded_unite = 1
 
