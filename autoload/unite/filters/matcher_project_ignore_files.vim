@@ -47,6 +47,7 @@ function! s:matcher.filter(candidates, context) "{{{
 
   if !has_key(a:context, 'filter__project_ignore_path')
         \ || a:context.filter__project_ignore_path !=# project
+        \ || a:context.is_redraw
     let a:context.filter__project_ignore_path = project
     let [a:context.filter__project_ignore_patterns,
           \ a:context.filter__project_ignore_whites] =
