@@ -475,6 +475,9 @@ function! s:source_file_neovim.gather_candidates(args, context) "{{{
           \ (a:context.source__is_directory ? 'd' : 'f'), '-print']
   endif
 
+  " Use &shell and &cmdflags
+  let commands = [&shell, &cmdflags] + commands
+
   " Note: "pt" needs pty.
   let a:context.source__job = jobstart(commands, {
         \ 'on_stdout' : function('s:job_handler'),
