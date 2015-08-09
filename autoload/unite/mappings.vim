@@ -70,10 +70,10 @@ function! unite#mappings#define_default_mappings() "{{{
         \ :<C-u>call <SID>print_candidate()<CR>
   nnoremap <silent><buffer> <Plug>(unite_print_message_log)
         \ :<C-u>call <SID>print_message_log()<CR>
-  nnoremap <buffer><expr> <Plug>(unite_cursor_top)
-        \ 'gg0z.'
+  nnoremap <silent><buffer> <Plug>(unite_cursor_top)
+        \ :<C-u>call <SID>cursor_top()<CR>
   nnoremap <silent><buffer> <Plug>(unite_cursor_bottom)
-        \ :<C-u>call unite#view#_redraw_all_candidates()<CR>G
+        \ :<C-u>call <SID>cursor_bottom()<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_screen)
         \ :<C-u>call <SID>move_screen(1)<CR>
   nnoremap <buffer><silent> <Plug>(unite_next_half_screen)
@@ -214,8 +214,12 @@ function! unite#mappings#define_default_mappings() "{{{
         \ '<Plug>(unite_redraw)'
   execute s:nowait_map('n') 'gg'
         \ '<Plug>(unite_cursor_top)'
+  execute s:nowait_map('n') '<C-Home>'
+        \ '<Plug>(unite_cursor_top)'
   execute s:nowait_map('n') 'G'
         \ '<Plug>(unite_cursor_bottom)'
+  execute s:nowait_map('n') '<C-End>'
+        \ '<Plug>(unite_cursor_bottom)$'
   execute s:nowait_map('n') 'j'
         \ '<Plug>(unite_loop_cursor_down)'
   execute s:nowait_map('n') '<Down>'
@@ -605,6 +609,29 @@ function! s:print_message_log() "{{{
   for msg in unite#get_current_unite().err_msgs
     echohl WarningMsg | echo msg | echohl None
   endfor
+endfunction"}}}
+function! s:cursor_top() "{{{
+  let unite = unite#get_current_unite()
+  if v:count == 0
+    execute 'normal!' (unite.prompt_linenr == 1 ? '2' : '') . 'gg0z.'
+  else
+    if v:count > len(unite.current_candidates) + (unite.prompt_linenr == 1)
+      call unite#view#_redraw_all_candidates()
+    endif
+    execute 'normal!' v:count . 'gg0z.'
+  endif
+endfunction"}}}
+function! s:cursor_bottom() "{{{
+  if v:count == 0
+    call unite#view#_redraw_all_candidates()
+    normal! G
+  else
+    let unite = unite#get_current_unite()
+    if v:count > len(unite.current_candidates) + (unite.prompt_linenr == 1)
+      call unite#view#_redraw_all_candidates()
+    endif
+    execute 'normal!' v:count . 'G'
+  endif
 endfunction"}}}
 function! s:insert_selected_candidate() "{{{
   let candidate = unite#helper#get_current_candidate()

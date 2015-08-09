@@ -1182,7 +1182,9 @@ M		|<Plug>(unite_disable_max_candidates)|
 <C-l>		|<Plug>(unite_redraw)|
 <C-h>		|<Plug>(unite_delete_backward_path)|
 gg		|<Plug>(unite_cursor_top)|
+<C-Home>	|<Plug>(unite_cursor_top)|
 G		|<Plug>(unite_cursor_bottom)|
+<C-End>		|<Plug>(unite_cursor_bottom)|$
 j		|<Plug>(unite_loop_cursor_down)|
 <Down>		|<Plug>(unite_loop_cursor_down)|
 k		|<Plug>(unite_loop_cursor_up)|
