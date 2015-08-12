@@ -2145,8 +2145,6 @@ file_rec/async	Similar to |unite-source-file_rec|, but get files asynchronously.
 file_rec/neovim	Similar to |unite-source-file_rec|, but get files
 		asynchronously by neovim job APIs.
 		Note: Requires neovim and the "find" command.
-		Note: Does not work "ag" command.
-		https://github.com/Shougo/unite.vim/issues/961
 		Note: Windows "find" command is not supported.
 		Note: If you edit one of the files in Vim, the source will
 		update its cache.
