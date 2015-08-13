@@ -521,17 +521,19 @@ g:unite_source_rec_unit
 					*g:unite_source_rec_async_command*
 g:unite_source_rec_async_command
 		Specify the filelist command and arguments in file_rec/async
-		source.
+		source.  It is arguments List or String.
 >
 		" Using ack-grep as recursive command.
-		let g:unite_source_rec_async_command = 'ack -f --nofilter'
+		let g:unite_source_rec_async_command =
+		\ ['ack', '-f', '--nofilter']
 
 		" Using ag as recursive command.
 		let g:unite_source_rec_async_command =
-                \ 'ag --follow --nocolor --nogroup --hidden -g ""'
+                \ ['ag', '--follow', '--nocolor', '--nogroup',
+		\  '--hidden', '-g', '']
 <
-		The default value is "find -L" which follows symbolic links
-		to have the same behaviour as file_rec, and the
+		The default value is ["find", "-L"] which follows symbolic
+		links to have the same behaviour as file_rec, and the
 		args(|g:unite_source_rec_find_args|).
 		Because, "find" command is fastest.
 		Note: In windows environment, you must install file list
