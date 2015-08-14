@@ -101,8 +101,9 @@ endfunction
 function! unite#util#is_mac(...)
   return call(s:get_prelude().is_mac, a:000)
 endfunction
-function! unite#util#print_error(...)
-  return call(s:get_message().error, a:000)
+function! unite#util#print_error(msg)
+  let msg = '[unite] ' . a:msg
+  return call(s:get_message().error, msg)
 endfunction
 function! unite#util#smart_execute_command(action, word)
   execute a:action . ' ' . fnameescape(a:word)

@@ -69,7 +69,7 @@ function! unite#custom#profile(profile_name, option_name, value) "{{{
   if a:option_name ==# 'smartcase'
         \ || a:option_name ==# 'ignorecase'
     call unite#print_error(
-          \ printf('[unite.vim] You cannot set "%s". '
+          \ printf('You cannot set "%s". '
           \ .'Please set "context.%s" by unite#custom#profile() instead.',
           \ a:option_name, a:option_name))
     return

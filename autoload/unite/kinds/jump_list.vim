@@ -176,7 +176,7 @@ function! s:jump(candidate, is_highlight) "{{{
     let line = 1
   endif
   if line !~ '^\d\+$'
-    call unite#print_error('unite: jump_list: Invalid action__line format.')
+    call unite#print_error('jump_list: Invalid action__line format.')
     return
   endif
 
@@ -233,7 +233,7 @@ function! s:jump(candidate, is_highlight) "{{{
       if lnum == start_lnum
         " Not found.
         call unite#print_error(
-              \ "unite: jump_list: Target position is not found.")
+              \ 'jump_list: Target position is not found.')
         call cursor(1, 1)
         return
       endif

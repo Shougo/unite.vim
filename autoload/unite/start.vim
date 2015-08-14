@@ -30,7 +30,7 @@ function! unite#start#standard(sources, ...) "{{{
   " Check command line window.
   if unite#util#is_cmdwin()
     call unite#print_error(
-          \ '[unite.vim] Command line buffer is detected! '.
+          \ 'Command line buffer is detected! '.
           \ 'Please close command line buffer.')
     return
   endif
@@ -67,7 +67,7 @@ function! unite#start#standard(sources, ...) "{{{
   try
     call unite#init#_current_unite(a:sources, context)
   catch /^unite.vim: Invalid /
-    call unite#print_error('[unite.vim] ' . v:exception)
+    call unite#print_error(v:exception)
     return
   endtry
 
@@ -237,10 +237,10 @@ function! unite#start#vimfiler_check_filetype(sources, ...) "{{{
     elseif type ==# 'directory'
       " nop
     elseif type ==# 'error'
-      call unite#print_error('[unite.vim] ' . info)
+      call unite#print_error(info)
       return []
     else
-      call unite#print_error('[unite.vim] Invalid filetype : ' . type)
+      call unite#print_error('Invalid filetype : ' . type)
     endif
 
     return [type, info]
@@ -315,7 +315,7 @@ function! unite#start#resume(buffer_name, ...) "{{{
   " Check command line window.
   if unite#util#is_cmdwin()
     call unite#print_error(
-          \ '[unite.vim] Command line buffer is detected! '.
+          \ 'Command line buffer is detected! '.
           \ 'Please close command line buffer.')
     return
   endif

@@ -389,9 +389,9 @@ function! s:get_source_candidates(source) "{{{
     call unite#print_error(v:throwpoint)
     call unite#print_error(v:exception)
     call unite#print_error(
-          \ '[unite.vim] Error occurred in ' . funcname . '!')
+          \ 'Error occurred in ' . funcname . '!')
     call unite#print_error(
-          \ '[unite.vim] Source name is ' . a:source.name)
+          \ 'Source name is ' . a:source.name)
 
     return []
   endtry

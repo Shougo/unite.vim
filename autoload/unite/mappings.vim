@@ -403,7 +403,7 @@ function! s:do_new_candidate_action() "{{{
   if empty(unite#helper#get_current_candidate())
     " Get source name.
     if len(unite#get_sources()) != 1
-      call unite#print_error('[unite] No candidates and multiple sources.')
+      call unite#print_error('No candidates and multiple sources.')
       return
     endif
 

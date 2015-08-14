@@ -79,7 +79,7 @@ function! s:kind.action_table.preview.func(candidate) "{{{
   if getfsize(a:candidate.action__path) >
         \ g:unite_kind_file_preview_max_filesize
     call unite#print_error(printf(
-          \ '[unite.vim] The file size of "%s" is too huge.' ,
+          \ 'The file size of "%s" is too huge.' ,
           \    a:candidate.action__path))
     return
   endif
