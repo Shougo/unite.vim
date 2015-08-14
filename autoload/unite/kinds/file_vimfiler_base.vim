@@ -513,7 +513,7 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
       let output = unite#util#system(filer . "'" . path . "' &")
     endif
     if output != ''
-      call unite#util#print_error('[unite] ' . output)
+      call unite#util#print_error(output)
     endif
   finally
     if isdirectory(current_dir)

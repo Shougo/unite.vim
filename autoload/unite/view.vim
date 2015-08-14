@@ -763,7 +763,7 @@ endfunction"}}}
 
 " Message output.
 function! unite#view#_print_error(message) "{{{
-  let message = map(s:msg2list(a:message), '"[unite] " . v:val')
+  let message = map(s:msg2list(a:message), '"unite.vim: " . v:val')
   let unite = unite#get_current_unite()
   if !empty(unite)
     let unite.err_msgs += message

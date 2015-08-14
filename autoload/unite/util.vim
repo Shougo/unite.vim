@@ -102,7 +102,7 @@ function! unite#util#is_mac(...)
   return call(s:get_prelude().is_mac, a:000)
 endfunction
 function! unite#util#print_error(msg)
-  let msg = '[unite] ' . a:msg
+  let msg = 'unite.vim: ' . a:msg
   return call(s:get_message().error, msg)
 endfunction
 function! unite#util#smart_execute_command(action, word)

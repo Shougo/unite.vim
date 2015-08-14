@@ -599,12 +599,12 @@ function! unite#init#_loaded_sources(sources, context) "{{{
 
         if source_name =~ '^-'
           call unite#util#print_error(
-                \ 'unite.vim: Invalid option "' .
+                \ 'Invalid option "' .
                 \ source_name . '" is detected.')
           throw 'unite.vim: Invalid option'
         else
           call unite#util#print_error(
-                \ 'unite.vim: Invalid source name "' .
+                \ 'Invalid source name "' .
                 \ source_name . '" is detected.')
           if source_name ==# 'file_mru' || source_name ==# 'directory_mru'
             call unite#util#print_error(
