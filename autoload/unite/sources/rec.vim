@@ -26,6 +26,12 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+if exists('g:unite_source_rec_async_command') &&
+      \ type(g:unite_source_rec_async_command) == type('')
+  call unite#print_error(
+        \ 'g:unite_source_rec_async_command must be list type.')
+endif
+
 " Variables  "{{{
 call unite#util#set_default(
       \ 'g:unite_source_rec_min_cache_files', 100,
@@ -277,9 +283,15 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
     return deepcopy(continuation.files)
   endif
 
-  let args = type(g:unite_source_rec_async_command) == type('') ?
-        \ vimproc#parser#split_args(g:unite_source_rec_async_command) :
-        \ g:unite_source_rec_async_command
+  if type(g:unite_source_rec_async_command) == type('')
+    " You must specify list type.
+    call unite#print_source_message(
+          \ 'g:unite_source_rec_async_command must be list type.', self.name)
+    let a:context.is_async = 0
+    return []
+  endif
+
+  let args = g:unite_source_rec_async_command
   if a:context.source__is_directory
     " Use find command.
     let args = ['find', '-L']
@@ -447,9 +459,15 @@ function! s:source_file_neovim.gather_candidates(args, context) "{{{
     return deepcopy(continuation.files)
   endif
 
-  let args = type(g:unite_source_rec_async_command) == type('') ?
-        \ vimproc#parser#split_args(g:unite_source_rec_async_command) :
-        \ g:unite_source_rec_async_command
+  if type(g:unite_source_rec_async_command) == type('')
+    " You must specify list type.
+    call unite#print_source_message(
+          \ 'g:unite_source_rec_async_command must be list type.', self.name)
+    let a:context.is_async = 0
+    return []
+  endif
+
+  let args = g:unite_source_rec_async_command
   if a:context.source__is_directory
     " Use find command.
     let args = ['find', '-L']

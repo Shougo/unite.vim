@@ -521,7 +521,7 @@ g:unite_source_rec_unit
 					*g:unite_source_rec_async_command*
 g:unite_source_rec_async_command
 		Specify the filelist command and arguments in file_rec/async
-		source.  It is arguments List or String.
+		source.  It is arguments List.
 >
 		" Using ack-grep as recursive command.
 		let g:unite_source_rec_async_command =
