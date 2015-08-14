@@ -122,6 +122,7 @@ endfunction
 function! unite#util#set_default(var, val, ...)  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
     let alternate_var = get(a:000, 0, '')
+    unlet! {a:var}
 
     let {a:var} = exists(alternate_var) ?
           \ {alternate_var} : a:val
