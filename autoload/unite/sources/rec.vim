@@ -321,9 +321,8 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
   endif
 
   " Note: "pt" needs pty.
-  let a:context.source__proc =
-        \ (fnamemodify(args[0], ':t') ==# 'pt') ?
-        \ vimproc#popen3(commands, 1) : vimproc#popen3(commands)
+  let a:context.source__proc = vimproc#popen3(commands,
+        \ (fnamemodify(args[0], ':t:r') ==# 'pt'))
 
   " Close handles.
   call a:context.source__proc.stdin.close()
