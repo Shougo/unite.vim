@@ -267,6 +267,12 @@ function! s:source.async_gather_candidates(args, context) "{{{
       endif
     endif
 
+    if path ==# '.'
+      call unite#print_source_error(
+            \ 'grep output format is wrong.', s:source.name)
+      break
+    endif
+
     call add(candidates, {
           \ 'word' : printf('%s: %s: %s', path,
           \                 linenr . (col != 0 ? ': '.col : ''), text),
