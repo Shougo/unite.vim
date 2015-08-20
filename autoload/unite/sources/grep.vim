@@ -117,7 +117,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__GrepFile /[^:]*: / contained
         \ containedin=uniteSource__Grep
         \ nextgroup=uniteSource__GrepLineNR
-  syntax match uniteSource__GrepLineNR /\d\+:/ contained
+  syntax match uniteSource__GrepLineNR /\d\+: / contained
         \ containedin=uniteSource__Grep
         \ nextgroup=uniteSource__GrepPattern
   execute 'syntax match uniteSource__GrepPattern /'
@@ -246,6 +246,8 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
   let candidates = []
   for [line, fields] in lines
+    let col = 0
+
     if len(fields) <= 1 || fields[1] !~ '^\d\+$'
       let path = a:context.source__targets[0]
       if len(fields) <= 1
@@ -259,13 +261,19 @@ function! s:source.async_gather_candidates(args, context) "{{{
       let path = line[:1] . fields[0]
       let linenr = fields[1]
       let text = join(fields[2:], ':')
+      if text =~ '^\d\+:'
+        let col = matchstr(text, '^\d\+')
+        let text = text[len(col)+1 :]
+      endif
     endif
 
     call add(candidates, {
-          \ 'word' : printf('%s: %s: %s', path, linenr, text),
+          \ 'word' : printf('%s: %s: %s', path,
+          \                 linenr . (col != 0 ? ': '.col : ''), text),
           \ 'action__path' :
           \ unite#util#substitute_path_separator(
           \   fnamemodify(path, ':p')),
+          \ 'action__col' : col,
           \ 'source__info' : [path, linenr, text]
           \ })
   endfor

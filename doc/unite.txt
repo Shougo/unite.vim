@@ -289,20 +289,6 @@ More advanced configuration example:
 	  " Runs "split" action by <C-s>.
 	  imap <silent><buffer><expr> <C-s>     unite#do_action('split')
 	endfunction"}}}
-
-	if executable('jvgrep')
-	  " For jvgrep.
-	  let g:unite_source_grep_command = 'jvgrep'
-	  let g:unite_source_grep_default_opts = '-i --exclude ''\.(git|svn|hg|bzr)'''
-	  let g:unite_source_grep_recursive_opt = '-R'
-	endif
-
-	" For ack.
-	if executable('ack-grep')
-	  " let g:unite_source_grep_command = 'ack-grep'
-	  " let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
-	  " let g:unite_source_grep_recursive_opt = ''
-	endif
 <
 ==============================================================================
 INTERFACE					*unite-interface*
@@ -2327,8 +2313,8 @@ grep		Nominates "grep" command output as candidates.
 	  " Use ag in unite grep source.
 	  let g:unite_source_grep_command = 'ag'
 	  let g:unite_source_grep_default_opts =
-	  \ '-i --line-numbers --nocolor --nogroup --hidden --ignore ' .
-	  \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+	  \ '-i --vimgrep --hidden --ignore ' .
+	  \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
 	  let g:unite_source_grep_recursive_opt = ''
 	elseif executable('pt')
 	  " Use pt in unite grep source.
@@ -2342,6 +2328,12 @@ grep		Nominates "grep" command output as candidates.
 	  let g:unite_source_grep_default_opts =
 	  \ '-i --no-heading --no-color -k -H'
 	  let g:unite_source_grep_recursive_opt = ''
+	elseif executable('jvgrep')
+	  " For jvgrep.
+	  let g:unite_source_grep_command = 'jvgrep'
+	  let g:unite_source_grep_default_opts =
+	  \ '-i --exclude ''\.(git|svn|hg|bzr)'''
+	  let g:unite_source_grep_recursive_opt = '-R'
 	endif
 <
 						*unite-source-vimgrep*
@@ -3890,6 +3882,10 @@ A: You can change below highlights by |:highlight|.
 "uniteStatusNormal", "uniteStatusHead"
 "uniteStatusSourceNames", "uniteStatusSourceCandidates"
 "uniteStatusMessage", "uniteStatusLineNR"
+
+Q: "ag" does not work in grep source.
+
+A: Please check |unite-source-grep| example.
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
