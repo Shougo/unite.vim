@@ -71,8 +71,7 @@ let s:source_file_rec = {
       \         '.hg/**', '.git/**', '.bzr/**', '.svn/**',
       \         'tags', 'tags-*'
       \ ],
-      \ 'matchers' : [ 'converter_relative_word',
-      \                'matcher_default', 'matcher_hide_hidden_files' ],
+      \ 'matchers' : [ 'converter_relative_word', 'matcher_default' ],
       \ }
 
 function! s:source_file_rec.gather_candidates(args, context) "{{{
