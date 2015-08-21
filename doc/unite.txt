@@ -2188,8 +2188,12 @@ buffer_tab	Nominates opened buffers only in the current tab as
 		candidates, ordering by time series.
 		Arguments are the same as for |unite-source-buffer|.
 
-		Note: This source requires |tabpagebuffer|.  Please install.
+		Note: This source requires |tabpagebuffer| or |ctrlspace|.
+
+		Please install:
 		http://github.com/Shougo/tabpagebuffer.vim
+		or
+		http://github.com/szw/vim-ctrlspace
 
 		Source arguments:
 		1. "!", "?", "+" or "-".
