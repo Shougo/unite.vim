@@ -128,18 +128,22 @@ function! s:source_buffer_tab.gather_candidates(args, context) "{{{
           \                   a:context.source__is_minus)
   endif
 
-  if !exists('g:loaded_tabpagebuffer')
+  if !exists('g:loaded_tabpagebuffer') && !exists('g:CtrlSpaceLoaded')
     call unite#print_source_message(
-          \ 'tabpagebuffer plugin is not installed.', self.name)
+          \ 'tabpagebuffer or ctrlspace plugin is not installed.', self.name)
     return []
   endif
 
-  if !exists('t:tabpagebuffer')
+  if exists('t:tabpagebuffer')
+    let bufferlist = t:tabpagebuffer
+  elseif exists('t:CtrlSpaceList')
+    let bufferlist = t:CtrlSpaceList
+  else
     return []
   endif
 
   let list = filter(copy(a:context.source__buffer_list),
-        \ 'has_key(t:tabpagebuffer, v:val.action__buffer_nr)')
+        \ 'has_key(bufferlist, v:val.action__buffer_nr)')
 
   let candidates = map(list, "{
         \ 'word' : unite#util#substitute_path_separator(
