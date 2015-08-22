@@ -129,6 +129,14 @@ function! unite#custom#get_profile(profile_name, option_name) "{{{
 
   return custom.profiles[profile_name][a:option_name]
 endfunction"}}}
+function! unite#custom#get_context(profile_name) "{{{
+  let context = copy(unite#custom#get_profile(a:profile_name, 'context'))
+  for option in map(filter(items(context),
+        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]"), 'v:val[0]')
+    let context[option[3:]] = 0
+  endfor
+  return context
+endfunction"}}}
 
 function! unite#custom#substitute(profile, pattern, subst, ...) "{{{
   let priority = get(a:000, 0, 0)

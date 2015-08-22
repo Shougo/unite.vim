@@ -48,12 +48,12 @@ function! unite#init#_context(context, ...) "{{{
   let source_names = get(a:000, 0, [])
 
   let default_context = extend(copy(unite#variables#default_context()),
-        \ unite#custom#get_profile('default', 'context'))
+        \ unite#custom#get_context('default'))
 
   if len(source_names) == 1
     " Overwrite source context by profile.
-    call extend(default_context, unite#custom#get_profile(
-          \ 'source/' . source_names[0], 'context'))
+    call extend(default_context, unite#custom#get_context(
+          \ 'source/' . source_names[0]))
   endif
 
   if get(a:context, 'script', 0)
@@ -64,23 +64,21 @@ function! unite#init#_context(context, ...) "{{{
         \    get(a:context, 'buffer_name', 'default'))
   if profile_name !=# 'default'
     " Overwrite context by profile.
-    call extend(default_context, unite#custom#get_profile(
-          \ profile_name, 'context'))
+    call extend(default_context, unite#custom#get_context(profile_name))
   endif
+
+  " Generic no.
+  for option in map(filter(items(a:context),
+        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]"), 'v:val[0]')
+    let a:context[option[3:]] = 0
+  endfor
 
   let context = extend(default_context, a:context)
 
   if context.temporary || context.script
     " User can overwrite context by profile context.
-    let context = extend(context,
-          \ unite#custom#get_profile(profile_name, 'context'))
+    let context = extend(context, unite#custom#get_context(profile_name))
   endif
-
-  " Generic no.
-  for option in map(filter(items(context),
-        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]"), 'v:val[0]')
-    let context[option[3:]] = 0
-  endfor
 
   " Complex initializer.
   if context.complete
