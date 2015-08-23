@@ -819,7 +819,6 @@ function! s:write_cache(context, directory, files) "{{{
         \ && !unite#util#is_sudo()
         \ && len(a:files) >
         \ g:unite_source_rec_min_cache_files
-        \ && stridx(a:directory, "\n") < 0
     call s:Cache.writefile(cache_dir, a:directory,
           \ map(copy(a:files), 'v:val.action__path'))
   elseif s:Cache.filereadable(cache_dir, a:directory)
