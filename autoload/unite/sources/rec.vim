@@ -783,8 +783,12 @@ function! s:init_continuation(context, directory) "{{{
   let continuation = (a:context.source__is_directory) ?
         \ s:continuation.directory : s:continuation.file
 
-  if !has_key(continuation, a:directory)
-        \ && s:Cache.filereadable(cache_dir, a:directory)
+  if a:context.is_redraw
+    " Delete old cache files.
+    call s:Cache.deletefile(cache_dir, a:directory)
+  endif
+
+  if s:Cache.filereadable(cache_dir, a:directory)
     " Use cache file.
 
     let files = unite#helper#paths2candidates(
