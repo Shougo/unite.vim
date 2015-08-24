@@ -269,7 +269,9 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
     if path ==# '.'
       call unite#print_source_error(
-            \ 'grep output format is wrong.', s:source.name)
+            \ 'Your grep configuration is wrong.'
+            \ . ' Please check ":help unite-source-grep" example.',
+            \ s:source.name)
       break
     endif
 
