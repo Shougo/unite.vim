@@ -195,11 +195,10 @@ function! s:source.gather_candidates(args, context) "{{{
     " Disable colors.
     let $TERM = 'dumb'
 
-    " Note: "pt" needs pty.
     let a:context.source__proc = vimproc#plineopen3(
           \ vimproc#util#iconv(cmdline, &encoding,
           \ g:unite_source_grep_encoding),
-          \ (fnamemodify(command, ':t:r') ==# 'pt'))
+          \ unite#helper#is_pty(command))
   finally
     let $TERM = save_term
   endtry

@@ -569,6 +569,11 @@ function! unite#helper#join_targets(targets) "{{{
         \    "unite#util#escape_shell(unite#helper#relative_target(v:val))"))
 endfunction"}}}
 
+function! unite#helper#is_pty(command) "{{{
+  " Note: "pt" and "ack" needs pty.
+  return fnamemodify(a:command, ':t:r') =~# '^pt$\|^ack\%(-grep\)\?$'
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

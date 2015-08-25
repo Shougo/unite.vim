@@ -319,9 +319,8 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
           \ (a:context.source__is_directory ? 'd' : 'f'), '-print']
   endif
 
-  " Note: "pt" needs pty.
   let a:context.source__proc = vimproc#popen3(commands,
-        \ (fnamemodify(args[0], ':t:r') ==# 'pt'))
+        \ unite#helper#is_pty(args[0]))
 
   " Close handles.
   call a:context.source__proc.stdin.close()
@@ -494,12 +493,11 @@ function! s:source_file_neovim.gather_candidates(args, context) "{{{
           \ (a:context.source__is_directory ? 'd' : 'f'), '-print']
   endif
 
-  " Note: "pt" needs pty.
   let a:context.source__job = jobstart(commands, {
         \ 'on_stdout' : function('s:job_handler'),
         \ 'on_stderr' : function('s:job_handler'),
         \ 'on_exit' : function('s:job_handler'),
-        \ 'pty' : fnamemodify(args[0], ':t') ==# 'pt'
+        \ 'pty' : unite#helper#is_pty(args[0]),
         \ })
 
   return []
