@@ -2179,9 +2179,10 @@ buffer		Nominates opened buffers as candidates, ordering by time
 		If argument 1 is "?", non-listed buffers are displayed.
 		If argument 1 is "+", only modified buffers are displayed.
 		If argument 1 is "-", only file buffers are displayed.
+		If argument 1 is "t", only terminal buffers are displayed.
 
 		Source arguments:
-		1. "!", "?", "+" or "-".
+		1. "!", "?", "+", "-", or "t"
 
 						*unite-source-buffer_tab*
 buffer_tab	Nominates opened buffers only in the current tab as
