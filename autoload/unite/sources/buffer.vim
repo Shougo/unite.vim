@@ -252,11 +252,14 @@ function! s:get_buffer_list(is_bang, is_question, is_plus, is_minus) "{{{
 endfunction"}}}
 
 function! s:is_listed(is_bang, is_question, is_plus, is_minus, bufnr) "{{{
+  let bufname = bufname(a:bufnr)
   return bufexists(a:bufnr) &&
         \ (a:is_question ? !buflisted(a:bufnr) :
         \    (a:is_bang || buflisted(a:bufnr)))
         \ && (!a:is_plus || getbufvar(a:bufnr, '&mod'))
-        \ && (!a:is_minus || getbufvar(a:bufnr, '&buftype') !~# 'nofile')
+        \ && (!a:is_minus || (getbufvar(a:bufnr, '&buftype') == ''
+        \                     && bufname != ''
+        \                     && !isdirectory(bufname)))
         \ && (getbufvar(a:bufnr, '&filetype') !=# 'unite'
         \      || getbufvar(a:bufnr, 'unite').buffer_name !=#
         \         unite#get_current_unite().buffer_name)
