@@ -38,7 +38,8 @@ let s:converter = {
 
 function! s:converter.filter(candidates, context) "{{{
   for candidate in a:candidates
-    let candidate.abbr = fnamemodify(get(candidate, 'action__path', candidate.word), ':t')
+    let candidate.abbr = fnamemodify(get(candidate,
+          \ 'action__path', candidate.word), ':t')
   endfor
   return a:candidates
 endfunction"}}}
