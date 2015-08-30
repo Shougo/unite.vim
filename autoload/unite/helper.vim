@@ -574,6 +574,17 @@ function! unite#helper#is_pty(command) "{{{
   return fnamemodify(a:command, ':t:r') =~# '^pt$\|^ack\%(-grep\)\?$'
 endfunction"}}}
 
+function! unite#helper#complete_search_history(arglead, cmdline, cursorpos) "{{{
+  return filter(unite#util#uniq(s:histget('search') + s:histget('input')),
+        \ "stridx(tolower(v:val), tolower(a:arglead)) == 0")
+endfunction"}}}
+
+function! s:histget(type) abort "{{{
+  return filter(map(reverse(range(1, histnr(a:type))),
+        \           'histget(a:type, v:val)'),
+        \       'v:val != ""')
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

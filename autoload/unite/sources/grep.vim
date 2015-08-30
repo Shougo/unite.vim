@@ -97,7 +97,8 @@ function! s:source.hooks.on_init(args, context) "{{{
   let a:context.source__input = get(a:args, 2, a:context.input)
   if a:context.source__input == '' || a:context.unite__is_restart
     let a:context.source__input = unite#util#input('Pattern: ',
-          \ a:context.source__input)
+          \ a:context.source__input,
+          \ 'customlist,unite#helper#complete_search_history')
   endif
 
   call unite#print_source_message('Pattern: '
