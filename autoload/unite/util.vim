@@ -103,7 +103,7 @@ function! unite#util#is_mac(...)
 endfunction
 function! unite#util#print_error(msg)
   let msg = '[unite.vim] ' . a:msg
-  return call(s:get_message().error, msg)
+  return call(s:get_message().error, [msg])
 endfunction
 function! unite#util#smart_execute_command(action, word)
   execute a:action . ' ' . fnameescape(a:word)
