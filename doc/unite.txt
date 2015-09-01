@@ -2812,6 +2812,10 @@ converter_relative_abbr
 		Specification of this term is similar to
 		|unite-filter-converter_relative_word|.
 
+					*unite-filter-converter_abbr_word*
+converter_abbr_word
+		A converter which converts a candidate's abbr into a word.
+
 					*unite-filter-converter_tail*
 converter_tail
 		A converter which converts a candidate's word into the
