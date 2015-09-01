@@ -53,14 +53,14 @@ function! s:source_buffer_all.hooks.on_init(args, context) "{{{
         \ (get(a:args, 0, '') ==# '+')
   let a:context.source__is_minus =
         \ (get(a:args, 0, '') ==# '-')
-  let a:context.source__is_t =
+  let a:context.source__is_terminal =
         \ (get(a:args, 0, '') ==# 't')
   let a:context.source__buffer_list =
         \ s:get_buffer_list(a:context.source__is_bang,
         \                   a:context.source__is_question,
         \                   a:context.source__is_plus,
         \                   a:context.source__is_minus,
-        \                   a:context.source__is_t)
+        \                   a:context.source__is_terminal)
 endfunction"}}}
 function! s:source_buffer_all.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__Buffer_Name /[^/ \[\]]\+\s/
@@ -100,7 +100,7 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
           \                   a:context.source__is_question,
           \                   a:context.source__is_plus,
           \                   a:context.source__is_minus,
-          \                   a:context.source__is_t)
+          \                   a:context.source__is_terminal)
   endif
 
   let candidates = map(a:context.source__buffer_list, "{
@@ -130,7 +130,7 @@ function! s:source_buffer_tab.gather_candidates(args, context) "{{{
           \                   a:context.source__is_question,
           \                   a:context.source__is_plus,
           \                   a:context.source__is_minus,
-          \                   a:context.source__is_t)
+          \                   a:context.source__is_terminal)
   endif
 
   if !exists('g:loaded_tabpagebuffer') && !exists('g:CtrlSpaceLoaded')
@@ -223,7 +223,7 @@ function! s:compare(candidate_a, candidate_b) "{{{
       \ (a:candidate_b.action__buffer_nr == unite#get_current_unite().prev_bufnr ? -1 :
       \ a:candidate_b.source__time - a:candidate_a.source__time)
 endfunction"}}}
-function! s:get_buffer_list(is_bang, is_question, is_plus, is_minus, is_t) "{{{
+function! s:get_buffer_list(is_bang, is_question, is_plus, is_minus, is_terminal) "{{{
   " Get :ls flags.
   redir => output
   silent! ls
@@ -239,7 +239,7 @@ function! s:get_buffer_list(is_bang, is_question, is_plus, is_minus, is_t) "{{{
   let bufnr = 1
   let buffer_list = unite#sources#buffer#variables#get_buffer_list()
   while bufnr <= bufnr('$')
-    if s:is_listed(a:is_bang, a:is_question, a:is_plus, a:is_minus, a:is_t, bufnr)
+    if s:is_listed(a:is_bang, a:is_question, a:is_plus, a:is_minus, a:is_terminal, bufnr)
       let dict = get(buffer_list, bufnr, {
             \ 'action__buffer_nr' : bufnr,
             \ 'source__time' : 0,
@@ -256,7 +256,7 @@ function! s:get_buffer_list(is_bang, is_question, is_plus, is_minus, is_t) "{{{
   return list
 endfunction"}}}
 
-function! s:is_listed(is_bang, is_question, is_plus, is_minus, is_t, bufnr) "{{{
+function! s:is_listed(is_bang, is_question, is_plus, is_minus, is_terminal, bufnr) "{{{
   let bufname = bufname(a:bufnr)
   let buftype = getbufvar(a:bufnr, '&buftype')
   return bufexists(a:bufnr) &&
@@ -266,7 +266,7 @@ function! s:is_listed(is_bang, is_question, is_plus, is_minus, is_t, bufnr) "{{{
         \ && (!a:is_minus || buftype == ''
         \                     && bufname != ''
         \                     && !isdirectory(bufname))
-        \ && (!a:is_t || buftype == 'terminal' )
+        \ && (!a:is_terminal || buftype ==# 'terminal' )
         \ && (getbufvar(a:bufnr, '&filetype') !=# 'unite'
         \      || getbufvar(a:bufnr, 'unite').buffer_name !=#
         \         unite#get_current_unite().buffer_name)
