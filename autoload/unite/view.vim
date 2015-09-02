@@ -62,6 +62,14 @@ function! unite#view#_redraw_candidates(...) "{{{
     let unite.init_prompt_linenr = len(candidates) + 1
   endif
 
+  if context.immediately && len(candidates) == 1
+    " Immediately action.
+    call unite#action#do(
+          \ context.default_action, [candidates[0]])
+    call unite#variables#disable_current_unite()
+    return
+  endif
+
   let pos = getpos('.')
   let modifiable_save = &l:modifiable
   try
