@@ -137,6 +137,12 @@ def find_end_of_match(string, chars, first_index):
             if last_type != 'boundary':
                 last_type = 'boundary'
                 score += 1
+        # Same for camel case
+        elif char in string.ascii_uppercase and \
+                string[index - 1] in string.ascii_lowercase:
+            if last_type != 'camelcase':
+                last_type = 'camelcase'
+                score += 1
         else:
             last_type = 'normal'
             score += index - last_index
