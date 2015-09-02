@@ -114,7 +114,7 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
   return candidates
 endfunction"}}}
 function! s:source_buffer_all.complete(args, context, arglead, cmdline, cursorpos) "{{{
-  return ['!', '?', '+', '-']
+  return ['!', '?', '+', '-', 't']
 endfunction"}}}
 
 let s:source_buffer_tab = deepcopy(s:source_buffer_all)
