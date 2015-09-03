@@ -127,11 +127,6 @@ function! unite#candidates#_recache(input, is_force) "{{{
         endif
       endif
 
-      if source.is_grouped
-        let source.unite__candidates =
-              \ unite#candidates#_group_post_filters(source.unite__candidates)
-      endif
-
       " Call post_filter hook.
       let source.unite__context.candidates =
             \ source.unite__candidates

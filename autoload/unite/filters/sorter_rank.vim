@@ -41,10 +41,10 @@ function! s:sorter.filter(candidates, context) "{{{
   endif
 
   return unite#filters#sorter_rank#_sort(
-        \ a:candidates, a:context.input, unite#util#has_lua())
+        \ a:candidates, a:context.input_list, unite#util#has_lua())
 endfunction"}}}
 
-function! unite#filters#sorter_rank#_sort(candidates, input, has_lua) "{{{
+function! unite#filters#sorter_rank#_sort(candidates, input_list, has_lua) "{{{
   " Initialize.
   let is_path = has_key(a:candidates[0], 'action__path')
   for candidate in a:candidates
@@ -54,9 +54,8 @@ function! unite#filters#sorter_rank#_sort(candidates, input, has_lua) "{{{
   endfor
 
 
-  let inputs = map(split(a:input, '\\\@<! '), "
-        \ tolower(substitute(substitute(v:val, '\\\\ ', ' ', 'g'),
-        \ '\\*', '', 'g'))")
+  let inputs = map(a:input_list, "
+        \ tolower(substitute(v:val, '\\*', '', 'g'))")
 
   let candidates = a:has_lua ?
         \ s:sort_lua(a:candidates, inputs) :

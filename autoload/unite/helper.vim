@@ -579,6 +579,11 @@ function! unite#helper#complete_search_history(arglead, cmdline, cursorpos) "{{{
         \ "stridx(tolower(v:val), tolower(a:arglead)) == 0")
 endfunction"}}}
 
+function! unite#helper#get_input_list(input) abort "{{{
+  return map(split(a:input, '\\\@<! ', 1), "
+        \ substitute(unite#util#expand(v:val), '\\\\ ', ' ', 'g')")
+endfunction"}}}
+
 function! s:histget(type) abort "{{{
   return filter(map(reverse(range(1, histnr(a:type))),
         \           'histget(a:type, v:val)'),
