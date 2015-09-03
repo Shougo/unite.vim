@@ -658,7 +658,6 @@ function! unite#init#_sources(...) "{{{
         \ 'is_volatile' : 0,
         \ 'is_listed' : 1,
         \ 'is_forced' : 0,
-        \ 'is_grouped' : 0,
         \ 'action_table' : {},
         \ 'default_action' : {},
         \ 'default_kind' : 'common',
