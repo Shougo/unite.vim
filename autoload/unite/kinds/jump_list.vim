@@ -69,10 +69,10 @@ function! unite#kinds#jump_list#define() "{{{
     endfor
 
     " Add search history
-    let input_list = unite#get_context().input_list
-    if len(input_list) == 1
-          \ && input_list[0] != ''
-      call histadd("search", input_list[0])
+    let context = unite#get_context()
+    if len(context.input_list) == 1
+          \ && context.input != ''
+      call histadd("search", context.input)
     endif
   endfunction"}}}
 
