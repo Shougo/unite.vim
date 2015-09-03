@@ -249,7 +249,8 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     let context.is_changed = a:context.is_changed
     let context.is_invalidate = source.unite__is_invalidate
     let context.is_list_input = a:context.is_list_input
-    let context.input_list = split(context.input, '\\\@<! ', 1)
+    let context.input_list =
+          \ unite#helper#get_input_list(context.input)
     let context.unite__max_candidates =
           \ (unite.disabled_max_candidates ? 0 : source.max_candidates)
     if context.unite__is_vimfiler

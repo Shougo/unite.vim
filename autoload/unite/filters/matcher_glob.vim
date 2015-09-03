@@ -56,7 +56,7 @@ function! s:matcher.filter(candidates, context) "{{{
 endfunction"}}}
 
 function! unite#filters#matcher_glob#glob_matcher(candidates, input, context) "{{{
-  let input = substitute(unite#util#expand(a:input), '\\ ', ' ', 'g')
+  let input = a:input
 
   if input =~ '^!'
     if input == '!'

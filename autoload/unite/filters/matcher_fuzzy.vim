@@ -82,7 +82,6 @@ function! s:matcher.filter(candidates, context) "{{{
           \ 'v:val.word =~ ' . string(input)
     if input !~ '^!' && unite#util#has_lua()
       let expr = 'if_lua_fuzzy'
-      let a:context.input = input_orig
     endif
 
     let candidates = unite#filters#filter_matcher(

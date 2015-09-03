@@ -580,8 +580,9 @@ function! unite#helper#complete_search_history(arglead, cmdline, cursorpos) "{{{
 endfunction"}}}
 
 function! unite#helper#get_input_list(input) abort "{{{
-  return map(split(a:input, '\\\@<! ', 1), "
-        \ substitute(unite#util#expand(v:val), '\\\\ ', ' ', 'g')")
+  return filter(map(split(a:input, '\\\@<! ', 1), "
+        \ substitute(unite#util#expand(v:val), '\\\\ ', ' ', 'g')"),
+        \ "v:val !~ '^[!:]'")
 endfunction"}}}
 
 function! s:histget(type) abort "{{{

@@ -361,9 +361,7 @@ function! unite#view#_change_highlight()  "{{{
       continue
     endif
 
-    let input_list = map(filter(split(input_str, '\\\@<! '),
-          \ "v:val !~ '^[!:]'"),
-          \ "substitute(v:val, '\\\\ ', ' ', 'g')")
+    let input_list = unite#helper#get_input_list(input_str)
 
     for source in filter(copy(unite.sources), "v:val.syntax != ''")
       for matcher in filter(copy(map(filter(
