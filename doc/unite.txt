@@ -2773,19 +2773,10 @@ sorter_selecta	Another matched rank order sorter. Uses the scoring algorithm
 		from selecta: https://github.com/garybernhardt/selecta.
 		If the matched length is shorter, the rank is higher.
 		This sorter is useful for file candidate source.
-		Note: This sorter requires |if_ruby| support.
->
-		call unite#custom#source('buffer,file,file_rec',
-		\ 'sorters', 'sorter_selecta')
-<
-						*unite-filter-sorter_selecty*
-sorter_selecty	A python port of the previous sorter selecta, which uses an
-		updated version from selecta.
-		This sorter is useful for file candidate source.
 		Note: This sorter requires |if_python| support.
 >
 		call unite#custom#source('buffer,file,file_rec',
-		\ 'sorters', 'sorter_selecty')
+		\ 'sorters', 'sorter_selecta')
 <
 						*unite-filter-sorter_reverse*
 sorter_reverse	Reverse order sorter.

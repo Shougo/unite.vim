@@ -1,6 +1,7 @@
 "=============================================================================
 " FILE: sorter_selecta.vim
 " AUTHOR:  David Lee
+" CONTRIBUTOR:  Jean Cavallo
 " DESCRIPTION: Scoring code by Gary Bernhardt
 "     https://github.com/garybernhardt/selecta
 " License: MIT license
@@ -29,7 +30,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#filters#sorter_selecta#define()
-  if has('ruby')
+  if has('python')
     return s:sorter
   else
     return {}
@@ -64,20 +65,22 @@ function! unite#filters#sorter_selecta#_sort(candidates, input)
         \ tolower(substitute(substitute(v:val, '\\\\ ', ' ', 'g'),
         \ '\\*', '', 'g'))")
 
-  let candidates = s:sort_ruby(a:candidates, inputs)
+  let candidates = s:sort_python(a:candidates, inputs)
 
   return candidates
 endfunction
 
 " @vimlint(EVL102, 1, l:input)
 " @vimlint(EVL102, 1, l:candidate)
-function! s:sort_ruby(candidates, inputs)
+function! s:sort_python(candidates, inputs)
   for input in a:inputs
     for candidate in a:candidates
-ruby << RUBYEOF
-        score = Score.score(VIM::evaluate('candidate.word'), VIM::evaluate('input'))
-        VIM::command("let candidate.filter__rank += #{1.0 / score}") if score != 0
-RUBYEOF
+python << PYTHONEOF
+import vim
+score = get_score(vim.eval('candidate.word'), vim.eval('input'))
+if score:
+    vim.command('let candidate.filter__rank += %s' % score)
+PYTHONEOF
     endfor
   endfor
 
@@ -86,72 +89,69 @@ endfunction"}}}
 " @vimlint(EVL102, 0, l:input)
 " @vimlint(EVL102, 0, l:candidate)
 
-function! s:def_ruby()
-  ruby << RUBYEOF
-  class Score
-    class << self
-      def score(choice, query)
-        return 1.0 if query.length == 0
-        return 0.0 if choice.length == 0
+function! s:def_python()
+python << PYTHONEOF
+import string
 
-        choice = choice.downcase
-        query = query.downcase
+BOUNDARY_CHARS = string.punctuation + string.whitespace
 
-        match_length = compute_match_length(choice, query.each_char.to_a)
-        return 0.0 unless match_length
+def get_score(string, query_chars):
+    # Highest possible score is the string length
+    best_score, best_range = len(string), None
+    head, tail = query_chars[0], query_chars[1:]
 
-        # Penalize longer matches.
-        score = query.length.to_f / match_length.to_f
+    # For each occurence of the first character of the query in the string
+    for first_index in (idx for idx, val in enumerate(string)
+            if val == head):
+        # Get the score for the rest
+        score, last_index = find_end_of_match(string, tail, first_index)
 
-        # Normalize vs. the length of the choice, penalizing longer strings.
-        score / choice.length
-      end
+        if last_index and score < best_score:
+            best_score = score
+            best_range = (first_index, last_index)
 
-      # Find the length of the shortest substring matching the given characters.
-      def compute_match_length(string, chars)
-        first_char, *rest = chars
-        first_indexes = find_char_in_string(string, first_char)
+    # Solve equal scores by sorting on the string length. The ** 0.5 part makes
+    # it less and less important for big strings
+    best_score = best_score * (len(string) ** 0.5)
+    return best_score
 
-        first_indexes.map do |first_index|
-          last_index = find_end_of_match(string, rest, first_index)
-          if last_index
-            last_index - first_index + 1
-          else
-            nil
-          end
-        end.compact.min
-      end
 
-      # Find all occurrences of the character in the string, returning their indexes.
-      def find_char_in_string(string, char)
-        index = 0
-        indexes = []
-        while index
-          index = string.index(char, index)
-          if index
-            indexes << index
-            index += 1
-          end
-        end
-        indexes
-      end
+def find_end_of_match(to_match, chars, first_index):
+    score, last_index, last_type = 1.0, first_index, None
 
-      # Find each of the characters in the string, moving strictly left to right.
-      def find_end_of_match(string, chars, first_index)
-        last_index = first_index
-        chars.each do |this_char|
-          index = string.index(this_char, last_index + 1)
-          return nil unless index
-          last_index = index
-        end
-        last_index
-      end
-    end
-  end
-RUBYEOF
+    for char in chars:
+        try:
+            index = to_match.index(char, last_index + 1)
+        except ValueError:
+            return None, None
+        if not index:
+            return None, None
+
+        # Do not count sequential characters more than once
+        if index == last_index + 1:
+            if last_type != 'sequential':
+                last_type = 'sequential'
+                score += 1
+        # Same for first characters of words
+        elif to_match[index - 1] in BOUNDARY_CHARS:
+            if last_type != 'boundary':
+                last_type = 'boundary'
+                score += 1
+        # Same for camel case
+        elif char in string.ascii_uppercase and \
+                to_match[index - 1] in string.ascii_lowercase:
+            if last_type != 'camelcase':
+                last_type = 'camelcase'
+                score += 1
+        else:
+            last_type = 'normal'
+            score += index - last_index
+        last_index = index
+    return (score, last_index)
+PYTHONEOF
 endfunction
 
-call s:def_ruby()
+call s:def_python()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
