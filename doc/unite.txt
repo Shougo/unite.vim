@@ -2768,12 +2768,12 @@ sorter_rank	Matched rank order sorter.  The higher the matched word is or
 		call unite#custom#source('buffer,file,file_rec',
 		\ 'sorters', 'sorter_rank')
 <
-						*unite-filter-sorter_selecta
+						*unite-filter-sorter_selecta*
 sorter_selecta	Another matched rank order sorter. Uses the scoring algorithm
 		from selecta: https://github.com/garybernhardt/selecta.
 		If the matched length is shorter, the rank is higher.
 		This sorter is useful for file candidate source.
-		Note: This sorter requires |if_ruby| support.
+		Note: This sorter requires |if_python| support.
 >
 		call unite#custom#source('buffer,file,file_rec',
 		\ 'sorters', 'sorter_selecta')
