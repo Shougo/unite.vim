@@ -575,7 +575,9 @@ function! unite#helper#is_pty(command) "{{{
 endfunction"}}}
 
 function! unite#helper#complete_search_history(arglead, cmdline, cursorpos) "{{{
-  return filter(unite#util#uniq(s:histget('search') + s:histget('input')),
+  return filter(map(unite#util#uniq(s:histget('search')
+        \                           + s:histget('input')),
+        \           "substitute(v:val, '^\\\\<\\|\\\\>$', '', 'g')"),
         \ "stridx(tolower(v:val), tolower(a:arglead)) == 0")
 endfunction"}}}
 
