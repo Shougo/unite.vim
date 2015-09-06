@@ -265,6 +265,20 @@ function! s:recache_candidates_loop(context, is_force) "{{{
     let context.candidates = source_candidates
     call unite#helper#call_hook([source], 'on_pre_filter')
 
+    " Restore current filters.
+    if empty(unite.current_matchers)
+      let unite.current_matchers = unite#util#convert2list(
+            \ unite#custom#get_profile(unite.profile_name, 'matchers'))
+    endif
+    if empty(unite.current_sorters)
+      let unite.current_sorters = unite#util#convert2list(
+            \ unite#custom#get_profile(unite.profile_name, 'sorters'))
+    endif
+    if empty(unite.current_converters)
+      let unite.current_converters = unite#util#convert2list(
+            \ unite#custom#get_profile(unite.profile_name, 'converters'))
+    endif
+
     " Set filters.
     let matchers = !empty(unite.current_matchers) ?
           \ unite.current_matchers : source.matchers
