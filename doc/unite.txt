@@ -2213,6 +2213,13 @@ tab		Nominates opened tabs as candidates, regarding t:cwd as the
 						*unite-source-register*
 register	Nominates the strings stored in registers as candidates.
 
+		Source arguments:
+		1. register names
+
+		Example: >
+	nnoremap <silent> ,ur  :<C-u>Unite
+	\ register:abcdef<CR>
+
 						*unite-source-bookmark*
 bookmark	Nominates files or directories you bookmarked as candidates.
 		If source arguments are omitted, "default" bookmark file name

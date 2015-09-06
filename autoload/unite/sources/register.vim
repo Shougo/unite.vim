@@ -40,7 +40,9 @@ let s:source = {
 function! s:source.gather_candidates(args, context) "{{{
   let candidates = []
 
-  let registers = [
+  let registers = split(get(a:args, 0, ''), '\zs')
+
+  for reg in [
         \ '"', '+', '*',
         \ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
         \ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
@@ -48,10 +50,10 @@ function! s:source.gather_candidates(args, context) "{{{
         \ 'u', 'v', 'w', 'x', 'y', 'z',
         \ '-', '.', ':', '#', '%', '/', '=',
         \ ]
-
-  for reg in registers
     let register = getreg(reg, 1)
-    if register != '' && register !~ '[\x01-\x08\x10-\x1a\x1c-\x1f]\{3,}'
+    if (empty(registers) && register != ''
+          \ && register !~ '[\x01-\x08\x10-\x1a\x1c-\x1f]\{3,}')
+          \ || index(registers, reg) >= 0
       call add(candidates, {
             \ 'word' : register,
             \ 'abbr' : printf('%-3s - %s', reg,
