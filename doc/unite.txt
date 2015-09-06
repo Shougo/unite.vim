@@ -718,12 +718,12 @@ g:unite_source_history_yank_file
 		Example:
 >
 		let g:unite_source_history_yank_file=$HOME.'/.vim/yankring.txt'
+<
+					*g:unite_source_history_save_registers*
+g:unite_source_history_yank_save_registers
+		Specify the save registers to yank history.
 
-					*g:unite_source_history_save_clipboard*
-g:unite_source_history_yank_save_clipboard
-		If defined and not 0, unite saves the clipboard register value.
-
-		The default value is 0.
+		The default value is ['"'].
 
 					*g:unite_source_process_enable_confirm*
 g:unite_source_process_enable_confirm
@@ -2441,6 +2441,9 @@ history/yank	Nominates yanked words.
 		|g:unite_source_history_yank_enable| is 1.
 		Note: This source is disabled when
 		|g:unite_source_history_yank_enable| is 0 or not defined.
+
+		Source arguments:
+		1. register names
 
 						*unite-source-process*
 process		Nominates processes.

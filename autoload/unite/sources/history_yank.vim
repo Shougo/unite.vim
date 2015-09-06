@@ -27,7 +27,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Variables  "{{{
-let s:yank_histories = []
+let s:VERSION = '1.0'
+
+let s:yank_histories = {}
 
 " the last modified time of the yank histories file.
 let s:yank_histories_file_mtime = 0
@@ -40,7 +42,7 @@ call unite#util#set_default('g:unite_source_history_yank_file',
 call unite#util#set_default('g:unite_source_history_yank_limit', 100)
 
 call unite#util#set_default(
-      \ 'g:unite_source_history_yank_save_clipboard', 0)
+      \ 'g:unite_source_history_yank_save_registers', ['"'])
 "}}}
 
 function! unite#sources#history_yank#define() "{{{
@@ -49,14 +51,9 @@ endfunction"}}}
 function! unite#sources#history_yank#_append() "{{{
   let prev_histories = copy(s:yank_histories)
 
-  call s:add_register('"')
-
-  if g:unite_source_history_yank_save_clipboard
-    " Skip if registers are identical.
-    if @" !=# @+
-      call s:add_register('+')
-    endif
-  endif
+  for register in g:unite_source_history_yank_save_registers
+    call s:add_register(register)
+  endfor
 
   if prev_histories !=# s:yank_histories
     " Updated.
@@ -72,14 +69,21 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context) "{{{
+  let registers = split(get(a:args, 0, '"'), '\zs')
+
   call s:load()
 
-  return map(copy(s:yank_histories), "{
+  let candidates = []
+  for register in registers
+    let candidates += map(copy(get(s:yank_histories, register, [])), "{
         \ 'word' : v:val[0],
         \ 'abbr' : printf('%-2d - %s', v:key, v:val[0]),
         \ 'is_multiline' : 1,
         \ 'action__regtype' : v:val[1],
         \ }")
+  endfor
+
+  return candidates
 endfunction"}}}
 
 " Actions "{{{
@@ -106,14 +110,7 @@ function! s:save()  "{{{
 
   call s:load()
 
-  let s:yank_histories = unite#util#uniq(s:yank_histories)
-
-  if g:unite_source_history_yank_limit < len(s:yank_histories)
-    let s:yank_histories =
-          \ s:yank_histories[ : g:unite_source_history_yank_limit - 1]
-  endif
-
-  call writefile([string(s:yank_histories)],
+  call writefile([s:VERSION, string(s:yank_histories)],
         \              g:unite_source_history_yank_file)
   let s:yank_histories_file_mtime = getftime(g:unite_source_history_yank_file)
 endfunction"}}}
@@ -124,34 +121,33 @@ function! s:load()  "{{{
   endif
 
   let file = readfile(g:unite_source_history_yank_file)
-  if empty(file)
+
+  " Version check.
+  if empty(file) || len(file) != 2 || file[0] !=# s:VERSION
     return
   endif
 
   try
-    sandbox let yank_histories = eval(file[0])
-
-    " Type check.
-    let history = yank_histories[0]
-    let history[0] = history[0]
+    sandbox let yank_histories = eval(file[1])
   catch
     let yank_histories = []
   endtry
 
-  let s:yank_histories += yank_histories
-  let s:yank_histories = unite#util#uniq(s:yank_histories)
+  for register in g:unite_source_history_yank_save_registers
+    if !has_key(s:yank_histories, register)
+      let s:yank_histories[register] = []
+    endif
+    let s:yank_histories[register] += get(yank_histories, register, [])
+    call s:uniq(register)
+  endfor
 
-  if g:unite_source_history_yank_limit < len(s:yank_histories)
-    let s:yank_histories =
-          \ s:yank_histories[ : g:unite_source_history_yank_limit - 1]
-  endif
-
-  let s:yank_histories_file_mtime = getftime(g:unite_source_history_yank_file)
+  let s:yank_histories_file_mtime =
+        \ getftime(g:unite_source_history_yank_file)
 endfunction"}}}
 
 function! s:add_register(name) "{{{
   let reg = [getreg(a:name), getregtype(a:name)]
-  if get(s:prev_registers, a:name, []) ==# reg
+  if get(s:yank_histories, 0, []) ==# reg
     " Skip same register value.
     return
   endif
@@ -166,7 +162,20 @@ function! s:add_register(name) "{{{
   let s:prev_registers[a:name] = reg
 
   " Append register value.
-  call insert(s:yank_histories, reg)
+  if !has_key(s:yank_histories, a:name)
+    let s:yank_histories[a:name] = []
+  endif
+
+  call insert(s:yank_histories[a:name], reg)
+  call s:uniq(a:name)
+endfunction"}}}
+
+function! s:uniq(name) "{{{
+  let history = unite#util#uniq(s:yank_histories[a:name])
+  if g:unite_source_history_yank_limit < len(history)
+    let history = history[ : g:unite_source_history_yank_limit - 1]
+  endif
+  let s:yank_histories[a:name] = history
 endfunction"}}}
 
 let &cpo = s:save_cpo
