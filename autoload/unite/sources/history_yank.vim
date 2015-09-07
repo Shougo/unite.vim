@@ -130,6 +130,7 @@ function! s:load()  "{{{
   try
     sandbox let yank_histories = eval(file[1])
   catch
+    unlet! yank_histories
     let yank_histories = []
   endtry
 
