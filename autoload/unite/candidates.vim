@@ -41,7 +41,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
       let &ignorecase = context.ignorecase
     endif
 
-    let context.is_redraw = a:is_force
+    let context.is_redraw = a:is_force || context.is_redraw
     let context.is_changed = a:input !=# unite.last_input
           \ || context.path !=# unite.last_path
 
@@ -144,6 +144,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
           \           'v:val.unite__context.is_async')) > 0
   finally
     let &ignorecase = ignorecase_save
+    let context.is_redraw = 0
   endtry
 
   call unite#handlers#_save_updatetime()
