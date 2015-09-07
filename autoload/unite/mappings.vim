@@ -354,19 +354,19 @@ function! unite#mappings#set_current_matchers(matchers) "{{{
   let unite = unite#get_current_unite()
   let unite.current_matchers = a:matchers
   let unite.context.is_redraw = 1
-  return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
+  return mode() ==# 'i' ? "a\<BS>" : "g\<ESC>"
 endfunction"}}}
 function! unite#mappings#set_current_sorters(sorters) "{{{
   let unite = unite#get_current_unite()
   let unite.current_sorters = a:sorters
   let unite.context.is_redraw = 1
-  return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
+  return mode() ==# 'i' ? "a\<BS>" : "g\<ESC>"
 endfunction"}}}
 function! unite#mappings#set_current_converters(converters) "{{{
   let unite = unite#get_current_unite()
   let unite.current_converters = a:converters
   let unite.context.is_redraw = 1
-  return mode() ==# 'i' ? "\<C-r>\<ESC>" : "g\<ESC>"
+  return mode() ==# 'i' ? "a\<BS>" : "g\<ESC>"
 endfunction"}}}
 function! unite#mappings#get_current_matchers() "{{{
   return unite#get_current_unite().current_matchers
