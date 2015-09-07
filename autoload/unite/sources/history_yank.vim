@@ -131,7 +131,7 @@ function! s:load()  "{{{
     sandbox let yank_histories = eval(file[1])
   catch
     unlet! yank_histories
-    let yank_histories = []
+    let yank_histories = {}
   endtry
 
   for register in g:unite_source_history_yank_save_registers
