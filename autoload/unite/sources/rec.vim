@@ -140,7 +140,7 @@ endfunction"}}}
 
 function! s:source_file_rec.hooks.on_init(args, context) "{{{
   let a:context.source__is_directory = 0
-  call s:on_init(a:args, a:context)
+  call s:on_init(a:args, a:context, s:source_file_rec.name)
 endfunction"}}}
 
 function! s:source_file_rec.vimfiler_check_filetype(args, context) "{{{
@@ -377,7 +377,7 @@ endfunction"}}}
 
 function! s:source_file_async.hooks.on_init(args, context) "{{{
   let a:context.source__is_directory = 0
-  call s:on_init(a:args, a:context)
+  call s:on_init(a:args, a:context, s:source_file_async.name)
 endfunction"}}}
 function! s:source_file_async.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__proc')
@@ -538,7 +538,7 @@ endfunction"}}}
 
 function! s:source_file_neovim.hooks.on_init(args, context) "{{{
   let a:context.source__is_directory = 0
-  call s:on_init(a:args, a:context)
+  call s:on_init(a:args, a:context, s:source_file_neovim.name)
 endfunction"}}}
 function! s:source_file_neovim.hooks.on_close(args, context) "{{{
   if has_key(a:context, 'source__job')
@@ -626,7 +626,7 @@ let s:source_directory_rec.default_kind = 'directory'
 
 function! s:source_directory_rec.hooks.on_init(args, context) "{{{
   let a:context.source__is_directory = 1
-  call s:on_init(a:args, a:context)
+  call s:on_init(a:args, a:context, s:source_directory_rec.name)
 endfunction"}}}
 function! s:source_directory_rec.hooks.on_post_filter(args, context) "{{{
   for candidate in filter(copy(a:context.candidates),
@@ -644,7 +644,7 @@ let s:source_directory_async.default_kind = 'directory'
 
 function! s:source_directory_async.hooks.on_init(args, context) "{{{
   let a:context.source__is_directory = 1
-  call s:on_init(a:args, a:context)
+  call s:on_init(a:args, a:context, s:source_directory_async.name)
 endfunction"}}}
 function! s:source_directory_async.hooks.on_post_filter(args, context) "{{{
   for candidate in filter(copy(a:context.candidates),
@@ -768,16 +768,20 @@ function! s:get_files(context, files, level, max_unit, ignore_dir) "{{{
   return [continuation_files, map(ret_files,
         \ "unite#util#substitute_path_separator(fnamemodify(v:val, ':p'))")]
 endfunction"}}}
-function! s:on_init(args, context) "{{{
+function! s:on_init(args, context, name) "{{{
   augroup plugin-unite-source-file_rec
     autocmd!
     autocmd BufEnter,BufWinEnter,BufFilePost,BufWritePost *
           \ call unite#sources#rec#_append()
   augroup END
+
+  let a:context.source__name = a:name
 endfunction"}}}
 function! s:init_continuation(context, directory) "{{{
-  let cache_dir = unite#get_data_directory() . '/rec/' .
-        \ (a:context.source__is_directory ? 'directory' : 'file')
+  let cache_dir = printf('%s/%s/%s',
+        \ unite#get_data_directory(),
+        \ a:context.source__name,
+        \ (a:context.source__is_directory ? 'directory' : 'file'))
   let continuation = (a:context.source__is_directory) ?
         \ s:continuation.directory : s:continuation.file
 
@@ -814,8 +818,10 @@ function! s:init_continuation(context, directory) "{{{
         \   'filereadable(v:val.action__path)')
 endfunction"}}}
 function! s:write_cache(context, directory, files) "{{{
-  let cache_dir = unite#get_data_directory() . '/rec/' .
-        \ (a:context.source__is_directory ? 'directory' : 'file')
+  let cache_dir = printf('%s/%s/%s',
+        \ unite#get_data_directory(),
+        \ a:context.source__name,
+        \ (a:context.source__is_directory ? 'directory' : 'file'))
 
   if g:unite_source_rec_min_cache_files >= 0
         \ && !unite#util#is_sudo()
