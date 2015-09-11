@@ -114,8 +114,13 @@ function! unite#init#_context(context, ...) "{{{
         \ && !get(context, 'no_auto_resize', 0)
     let context.auto_resize = 1
   endif
-  if context.path != '' && context.path !~ '/$'
-    let context.path .= '/'
+  if context.path != ''
+    " Expand "~".
+    let context.path = unite#util#expand(context.path)
+
+    if context.path !~ '/$'
+      let context.path .= '/'
+    endif
   endif
   if len(source_names) == 1
         \ && !get(context, 'no_hide_source_names', 0)
