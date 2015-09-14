@@ -242,6 +242,7 @@ endfunction
 function! unite#util#alternate_buffer() "{{{
   let unite = unite#get_current_unite()
   if s:buflisted(unite.prev_bufnr)
+        \ && getbufvar(unite.prev_bufnr, '&filetype') !=# "unite"
     execute 'buffer' unite.prev_bufnr
     return
   endif
