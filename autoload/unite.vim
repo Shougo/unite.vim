@@ -324,6 +324,9 @@ function! unite#force_quit_session()  "{{{
   let context = unite#get_context()
   if context.temporary && !empty(context.unite__old_buffer_info)
     call unite#start#resume_from_temporary(context)
+    if context.script
+      call unite#force_redraw()
+    endif
   endif
 endfunction"}}}
 function! unite#quit_session()  "{{{
