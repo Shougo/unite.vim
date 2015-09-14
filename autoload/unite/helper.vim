@@ -570,8 +570,10 @@ function! unite#helper#join_targets(targets) "{{{
 endfunction"}}}
 
 function! unite#helper#is_pty(command) "{{{
-  " Note: "pt" and "ack" needs pty.
-  return fnamemodify(a:command, ':t:r') =~# '^pt$\|^ack\%(-grep\)\?$'
+  " Note: "pt" and "ack" and "ag" needs pty.
+  " It is too bad.
+  return fnamemodify(a:command, ':t:r') =~#
+        \ '^pt$\|^ack\%(-grep\)\?$\|^ag$'
 endfunction"}}}
 
 function! unite#helper#complete_search_history(arglead, cmdline, cursorpos) "{{{
