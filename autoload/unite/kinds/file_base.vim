@@ -267,8 +267,6 @@ endfunction
 " For grep.
 let s:kind.action_table.grep = {
       \   'description': 'grep this file',
-      \   'is_quit': 1,
-      \   'is_invalidate_cache': 1,
       \   'is_selectable': 1,
       \   'is_start' : 1,
       \ }
@@ -281,8 +279,6 @@ endfunction "}}}
 " For vimgrep
 let s:kind.action_table.vimgrep = {
   \   'description': 'vimgrep this files',
-  \   'is_quit': 1,
-  \   'is_invalidate_cache': 1,
   \   'is_selectable': 1,
   \   'is_start' : 1,
   \ }
@@ -296,8 +292,6 @@ endfunction "}}}
 " For find.
 let s:kind.action_table.find = {
       \   'description': 'find this directory',
-      \   'is_quit': 1,
-      \   'is_invalidate_cache': 1,
       \   'is_start' : 1,
       \ }
 function! s:kind.action_table.find.func(candidate) "{{{
