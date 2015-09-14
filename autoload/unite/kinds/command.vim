@@ -91,7 +91,8 @@ function! s:kind.action_table.edit.func(candidate) "{{{
 endfunction"}}}
 let s:kind.action_table.grep = {
       \ 'description' : 'grep this command',
-      \ 'is_quit': 1,
+      \ 'is_quit' : 1,
+      \ 'is_invalidate_cache' : 1,
       \ 'is_start' : 1,
       \ }
 function! s:kind.action_table.grep.func(candidate) "{{{
