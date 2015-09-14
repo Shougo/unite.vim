@@ -89,6 +89,16 @@ function! s:kind.action_table.edit.func(candidate) "{{{
     call s:execute_command(command)
   endif
 endfunction"}}}
+let s:kind.action_table.grep = {
+      \ 'description' : 'grep this command',
+      \ 'is_quit': 1,
+      \ 'is_start' : 1,
+      \ }
+function! s:kind.action_table.grep.func(candidate) "{{{
+  call unite#start_script([
+        \ ['grep', '', '', a:candidate.action__command]],
+        \ { 'no_quit' : 1, 'no_empty' : 1 })
+endfunction"}}}
 "}}}
 function! s:add_history(type, command) "{{{
   call histadd(a:type, a:command)

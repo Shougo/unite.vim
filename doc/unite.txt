@@ -2987,6 +2987,7 @@ additional actions.
 command						*unite-action-command*
 	execute		Execute the command.
 	edit		Input the command into the command line.
+	grep		Grep the command.
 
 window						*unite-action-window*
 This kind extends actions of |unite-action-cdable|.
