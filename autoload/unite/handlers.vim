@@ -117,6 +117,7 @@ function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
   endif
 
   setlocal nomodified
+  setlocal buflisted
 
   if exists('winnr')
     execute winnr.'wincmd w'
