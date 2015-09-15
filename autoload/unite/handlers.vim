@@ -153,6 +153,8 @@ function! unite#handlers#_on_cursor_hold()  "{{{
         let is_async = unite.is_async
       endif
     endfor
+
+    call unite#handlers#_restore_updatetime()
   endif
 
   if is_async

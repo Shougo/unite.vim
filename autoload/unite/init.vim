@@ -207,8 +207,6 @@ function! unite#init#_unite_buffer() "{{{
             \ call unite#handlers#_on_buf_unload(expand('<afile>'))
       autocmd WinEnter,BufWinEnter <buffer>
             \ call unite#handlers#_on_bufwin_enter(bufnr(expand('<abuf>')))
-      autocmd WinLeave,BufWinLeave <buffer>
-            \ call unite#handlers#_restore_updatetime()
     augroup END
 
     if v:version > 703 || v:version == 703 && has('patch867')
