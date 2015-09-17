@@ -279,7 +279,7 @@ function! unite#handlers#_on_buf_unload(bufname)  "{{{
   endif
 
   " No buflisted
-  call setbufvar(a:bufname, '&buflisted', 0)
+  call setbufvar(bufnr(a:bufname), '&buflisted', 0)
 
   if unite.is_finalized
     return
