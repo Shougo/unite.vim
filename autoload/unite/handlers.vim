@@ -273,13 +273,13 @@ function! unite#handlers#_on_buf_unload(bufname)  "{{{
     return
   endif
 
-  if &l:statusline == unite#get_current_unite().statusline
+  if &l:statusline == unite.statusline
     " Restore statusline.
     let &l:statusline = &g:statusline
   endif
 
   " No buflisted
-  call setbufvar(bufnr(a:bufname), '&buflisted', 0)
+  call setbufvar(unite.bufnr, '&buflisted', 0)
 
   if unite.is_finalized
     return

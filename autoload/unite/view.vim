@@ -636,8 +636,6 @@ function! unite#view#_quit(is_force, ...)  "{{{
   call unite#view#_save_position()
 
   if a:is_force || context.quit
-    setlocal nobuflisted
-
     let bufname = bufname('%')
 
     if winnr('$') == 1 || !context.split
