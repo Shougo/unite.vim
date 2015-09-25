@@ -3622,23 +3622,41 @@ pattern			Function		(Optional)
 ==============================================================================
 EXTERNAL SOURCES				*unite-external-sources*
 
-tag source :
+MRU sources:
+
+https://github.com/Shougo/neomru.vim
+
+tag source:
 
 https://github.com/tsukkee/unite-tag
 
-Quick Fix source :
+Quick Fix source:
 
 https://github.com/osyo-manga/unite-quickfix
 
-Outline source :
+Outline source:
 
 https://github.com/Shougo/unite-outline (newer)
 https://github.com/h1mesuke/unite-outline (original)
 
-Help source :
+Help source:
 
 https://github.com/Shougo/unite-help (newer/vimproc required)
-https://github.com/tsukkee/unite-help (original)
+https://github.com/tsukkee/unite-help (original) >
+
+	" Execute help.
+	nnoremap <C-h>  :<C-u>Unite -start-insert help<CR>
+	" Execute help by cursor keyword.
+	nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord help<CR>
+
+BibBTex source:
+
+https://github.com/termoshtt/unite-bibtex (faster, configurable)
+https://github.com/msprev/unite-bibtex
+
+Vim history sources:
+
+https://github.com/thinca/vim-unite-history
 
 And so on...
 
