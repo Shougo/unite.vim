@@ -159,7 +159,7 @@ function! unite#init#_unite_buffer() "{{{
     setlocal bufhidden=hide
     setlocal buftype=nofile
     setlocal nolist
-    setlocal buflisted
+    setlocal nobuflisted
     if has('cursorbind')
       setlocal nocursorbind
     endif

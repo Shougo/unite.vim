@@ -117,7 +117,6 @@ function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
   endif
 
   setlocal nomodified
-  setlocal buflisted
 
   if exists('winnr')
     execute winnr.'wincmd w'
@@ -277,9 +276,6 @@ function! unite#handlers#_on_buf_unload(bufname)  "{{{
     " Restore statusline.
     let &l:statusline = &g:statusline
   endif
-
-  " No buflisted
-  call setbufvar(unite.bufnr, '&buflisted', 0)
 
   if unite.is_finalized
     return
