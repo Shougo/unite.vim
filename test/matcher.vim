@@ -16,41 +16,41 @@ function! s:suite.lua()
 
   let g:unite_matcher_fuzzy_max_input_length = 20
   call s:assert.equals(unite#filters#lua_matcher(
-        \ [{'word' : 'foo'}], { 'input' : 'foo' }, 0), [{'word' : 'foo'}])
+        \ [{'word' : 'foo'}], 'foo', 0), [{'word' : 'foo'}])
   call s:assert.equals(unite#filters#lua_matcher(
-        \ [{'word' : 'foo'}], { 'input' : 'bar' }, 0), [])
+        \ [{'word' : 'foo'}], 'bar', 0), [])
   call s:assert.equals(unite#filters#lua_matcher(
-        \ [{'word' : 'Foo'}], { 'input' : 'foo'}, 0), [])
+        \ [{'word' : 'Foo'}], 'foo', 0), [])
   call s:assert.equals(unite#filters#lua_matcher(
-        \ [{'word' : 'Foo'}], { 'input' : 'foo'}, 1), [{'word' : 'Foo'}])
+        \ [{'word' : 'Foo'}], 'foo', 1), [{'word' : 'Foo'}])
   call s:assert.equals(unite#filters#lua_matcher(
         \ [{'word' : 'Foo'}, {'word' : 'Bar'}],
-        \  {'input' : 'foo'}, 1), [{'word' : 'Foo'}])
+        \  'foo', 1), [{'word' : 'Foo'}])
   call s:assert.equals(unite#filters#lua_matcher(
         \ [{'word' : 'foo'}, {'word' : 'bar'},
         \  {'word' : 'foobar'}, {'word' : 'baz'}],
-        \ {'input' : 'foo'}, 0), [{'word' : 'foo'}, {'word' : 'foobar'}])
+        \ 'foo', 0), [{'word' : 'foo'}, {'word' : 'foobar'}])
   call s:assert.equals(unite#filters#lua_fuzzy_matcher(
         \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}],
-        \ { 'input' : 'cl' }, 0), [{'word' : '/Users/core.cljs'}])
+        \ 'cl', 0), [{'word' : '/Users/core.cljs'}])
   call s:assert.equals(unite#filters#lua_fuzzy_matcher(
         \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}],
-        \ { 'input' : 'co' }, 0),
+        \ 'co', 0),
         \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}])
   call s:assert.equals(unite#filters#lua_fuzzy_matcher(
         \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}],
-        \ { 'input' : '/U' }, 0),
+        \ '/U', 0),
         \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}])
   call s:assert.equals(unite#filters#lua_fuzzy_matcher(
         \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}],
-        \ { 'input' : '/Us' }, 0),
+        \ '/Us', 0),
         \ [{'word' : '/Users/core.cljs'}, {'word' : '/Users/core.js'}])
   call s:assert.equals(unite#filters#lua_fuzzy_matcher(
         \ [{'word' : '/unite/sources/find.vim'}],
-        \ { 'input' : '/u/s/f' }, 0), [{'word' : '/unite/sources/find.vim'}])
+        \ '/u/s/f', 0), [{'word' : '/unite/sources/find.vim'}])
   call s:assert.equals(unite#filters#lua_fuzzy_matcher(
         \ [{'word' : 'app/code/local/Tbuy/Utils/Block/LocalCurrency.php'}],
-        \ { 'input' : 'apcoltbuyutilsblockl' }, 1),
+        \ 'apcoltbuyutilsblockl', 1),
         \ [{'word' : 'app/code/local/Tbuy/Utils/Block/LocalCurrency.php'}])
 
   call s:assert.equals(unite#filters#matcher_fuzzy#get_fuzzy_input(

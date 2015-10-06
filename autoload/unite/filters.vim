@@ -36,10 +36,10 @@ function! unite#filters#filter_matcher(list, expr, context) "{{{
     return a:expr == '' ? a:list :
           \ (a:expr ==# 'if_lua') ?
           \   unite#filters#lua_matcher(
-          \      a:list, a:context, &ignorecase) :
+          \      a:list, a:context.input_lua, &ignorecase) :
           \ (a:expr ==# 'if_lua_fuzzy') ?
           \   unite#filters#lua_fuzzy_matcher(
-          \      a:list, a:context, &ignorecase) :
+          \      a:list, a:context.input_lua, &ignorecase) :
           \ filter(a:list, a:expr)
   endif
 
@@ -52,9 +52,11 @@ function! unite#filters#filter_matcher(list, expr, context) "{{{
     let list = a:list[cnt*offset : cnt*offset + offset]
     let list =
           \ (a:expr ==# 'if_lua') ?
-          \   unite#filters#lua_matcher(list, a:context, &ignorecase) :
+          \   unite#filters#lua_matcher(
+          \     list, a:context.input_lua, &ignorecase) :
           \ (a:expr ==# 'if_lua_fuzzy') ?
-          \   unite#filters#lua_fuzzy_matcher(list, a:context, &ignorecase) :
+          \   unite#filters#lua_fuzzy_matcher(
+          \     list, a:context.input_lua, &ignorecase) :
           \ filter(list, a:expr)
     let len += len(list)
     let _ += list
@@ -66,16 +68,12 @@ function! unite#filters#filter_matcher(list, expr, context) "{{{
 
   return _[: max]
 endfunction"}}}
-function! unite#filters#lua_matcher(candidates, context, ignorecase) "{{{
+function! unite#filters#lua_matcher(candidates, input, ignorecase) "{{{
   if !has('lua')
     return []
   endif
 
-  let input = substitute(a:context.input, '\\ ', ' ', 'g')
-  let input = substitute(input, '\\\(.\)', '\1', 'g')
-  if a:ignorecase
-    let input = tolower(input)
-  endif
+  let input = a:ignorecase ? tolower(a:input) : a:input
 
   lua << EOF
 do
@@ -99,15 +97,17 @@ EOF
 
   return a:candidates
 endfunction"}}}
-function! unite#filters#lua_fuzzy_matcher(candidates, context, ignorecase) "{{{
+function! unite#filters#lua_fuzzy_matcher(candidates, input, ignorecase) "{{{
   if !has('lua')
     return []
   endif
 
+  let input = a:ignorecase ? tolower(a:input) : a:input
+
   lua << EOF
 do
-  local pattern = vim.eval('unite#filters#fuzzy_escape(a:context.input)')
-  local input = vim.eval('a:context.input')
+  local pattern = vim.eval('unite#filters#fuzzy_escape(input)')
+  local input = vim.eval('input')
   local candidates = vim.eval('a:candidates')
   if vim.eval('a:ignorecase') ~= 0 then
     pattern = string.lower(pattern)

@@ -77,7 +77,7 @@ function! unite#filters#matcher_glob#glob_matcher(candidates, input, context) "{
     let expr = 'v:val.word =~ ' . string(input)
   elseif unite#util#has_lua()
     let expr = 'if_lua'
-    let a:context.input = input
+    let a:context.input_lua = input
   else
     let input = substitute(input, '\\\(.\)', '\1', 'g')
     let expr = &ignorecase ?
