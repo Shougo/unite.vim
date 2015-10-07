@@ -81,6 +81,7 @@ function! unite#filters#matcher_regexp#get_expr(input, context) "{{{
   elseif input !~ '[~\\.^$\[\]*]'
     if unite#util#has_lua()
       let expr = 'if_lua'
+      let a:context.input_lua = input
     else
       " Optimized filter.
       let input = substitute(input, '\\\(.\)', '\1', 'g')
