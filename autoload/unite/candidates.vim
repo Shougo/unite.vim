@@ -358,8 +358,13 @@ function! s:get_source_candidates(source) "{{{
       endif
     endif
 
-    if context.is_redraw || a:source.unite__is_invalidate
-      " Recaching.
+    " Recaching.
+    if (context.is_redraw || a:source.unite__is_invalidate)
+          \ && (!has_key(a:source, 'async_gather_candidates')
+          \     || has_key(a:source, 'gather_candidates'))
+      " Note: If the source has not gather_candidates, the recaching is
+      " disabled.
+
       let a:source.unite__cached_candidates = []
 
       let funcname = 'gather_candidates'
