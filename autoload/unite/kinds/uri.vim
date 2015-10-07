@@ -42,7 +42,7 @@ let s:kind = {
 let s:kind.action_table.start = {
       \ 'description' : 'open uri by browser',
       \ 'is_selectable' : 1,
-      \ 'is_start' : 0,
+      \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.start.func(candidates) "{{{
   for candidate in a:candidates
