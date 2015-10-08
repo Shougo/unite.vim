@@ -115,11 +115,13 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   endif
 
   syntax case ignore
-  syntax match uniteSource__GrepFile /[^:]*: / contained
+  syntax match uniteSource__GrepHeader /[^:]*: \d\+: \(\d\+: \)\?/ contained
         \ containedin=uniteSource__Grep
+  syntax match uniteSource__GrepFile /[^:]*: / contained
+        \ containedin=uniteSource__GrepHeader
         \ nextgroup=uniteSource__GrepLineNR
   syntax match uniteSource__GrepLineNR /\d\+: / contained
-        \ containedin=uniteSource__Grep
+        \ containedin=uniteSource__GrepHeader
         \ nextgroup=uniteSource__GrepPattern
   execute 'syntax match uniteSource__GrepPattern /'
         \ . substitute(a:context.source__input, '\([/\\]\)', '\\\1', 'g')
