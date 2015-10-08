@@ -68,6 +68,8 @@ function! unite#filters#filter_matcher(list, expr, context) "{{{
 
   return _[: max]
 endfunction"}}}
+
+" @vimlint(EVL102, 1, l:input)
 function! unite#filters#lua_matcher(candidates, input, ignorecase) "{{{
   if !has('lua')
     return []
@@ -97,6 +99,9 @@ EOF
 
   return a:candidates
 endfunction"}}}
+" @vimlint(EVL102, 0, l:input)
+
+" @vimlint(EVL102, 1, l:input)
 function! unite#filters#lua_fuzzy_matcher(candidates, input, ignorecase) "{{{
   if !has('lua')
     return []
@@ -131,6 +136,7 @@ EOF
 
   return a:candidates
 endfunction"}}}
+" @vimlint(EVL102, 0, l:input)
 
 function! unite#filters#fuzzy_escape(string) "{{{
   " Escape string for lua regexp.
