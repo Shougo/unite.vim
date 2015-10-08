@@ -319,6 +319,9 @@ function! s:source_file_async.gather_candidates(args, context) "{{{
           \ (a:context.source__is_directory ? 'd' : 'f'), '-print']
   endif
 
+  call unite#add_source_message(
+        \ 'Command-line: ' . string(commands), self.name)
+
   let a:context.source__proc = vimproc#popen3(commands,
         \ unite#helper#is_pty(args[0]))
 
@@ -493,6 +496,9 @@ function! s:source_file_neovim.gather_candidates(args, context) "{{{
           \ (a:context.source__is_directory ? 'd' : 'f'), '-print']
   endif
 
+  call unite#add_source_message(
+        \ 'Command-line: ' . string(commands), self.name)
+
   let a:context.source__job = jobstart(commands, {
         \ 'on_stdout' : function('s:job_handler'),
         \ 'on_stderr' : function('s:job_handler'),
@@ -598,6 +604,9 @@ function! s:source_file_git.gather_candidates(args, context) "{{{
     let a:context.is_async = 0
     return []
   endif
+
+  call unite#add_source_message(
+        \ 'Command-line: ' . command, self.name)
 
   let a:context.source__proc = vimproc#popen3(command)
 
