@@ -122,6 +122,11 @@ function! unite#util#escape_pattern(...)
 endfunction
 function! unite#util#set_default(var, val, ...)  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
+    if exists(a:var) && type({a:var}) != type(a:val)
+      call unite#print_error(printf(
+            \ 'Current %s is wrong type.  Ignored your config.', a:var))
+    endif
+
     let alternate_var = get(a:000, 0, '')
     unlet! {a:var}
 
