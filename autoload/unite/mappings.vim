@@ -539,7 +539,8 @@ function! s:insert_enter(key) "{{{
   let unite = unite#get_current_unite()
 
   return (line('.') != unite.prompt_linenr) ?
-        \     '0i' :
+        \ (unite.context.prompt_focus ?
+        \     unite.prompt_linenr.'GA' : '0i') :
         \ (a:key == 'i' && col('.') <= 1
         \     || a:key == 'a' && col('.') < 1) ?
         \     'A' :

@@ -225,6 +225,7 @@ function! s:initialize_default() "{{{
         \ 'execute_command' : '',
         \ 'prompt_direction' : '',
         \ 'prompt_visible' : 0,
+        \ 'prompt_focus' : 0,
         \ 'short_source_names' : 0,
         \ 'candidate_icon' : ' ',
         \ 'marked_icon' : '*',
