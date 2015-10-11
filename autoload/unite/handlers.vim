@@ -31,8 +31,6 @@ function! unite#handlers#_on_insert_enter()  "{{{
     return
   endif
 
-  setlocal modifiable
-
   let unite = unite#get_current_unite()
   let unite.is_insert = 1
 
