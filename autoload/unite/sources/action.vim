@@ -64,7 +64,9 @@ function! s:source.gather_candidates(args, context) "{{{
 
   " Print candidates.
   call unite#print_source_message(map(copy(candidates),
-        \ "'candidates: '.v:val.unite__abbr.'('.v:val.source.')'"), self.name)
+        \ "'candidates: '.get(v:val, 'unite__abbr',
+        \                     get(v:val, 'abbr', v:val.word))
+        \  .'('.v:val.source.')'"), self.name)
 
   " Print default action.
   let default_actions = []

@@ -521,15 +521,15 @@ function! unite#mappings#_choose_action(candidates, ...) "{{{
     return
   endif
 
-  let unite = unite#get_current_unite()
   let context = deepcopy(get(a:000, 0, {}))
-  let context.source__sources = unite.sources
+  let context.source__sources = []
   let context.buffer_name = 'action'
   let context.profile_name = 'action'
   let context.start_insert = 1
   let context.truncate = 1
 
-  call call((has_key(context, 'vimfiler__current_directory') ?
+  call call((has_key(context, 'vimfiler__current_directory')
+        \    || &filetype !=# 'unite' ?
         \ 'unite#start' : 'unite#start_temporary'),
         \ [[[unite#sources#action#define(), a:candidates]], context])
 endfunction"}}}
