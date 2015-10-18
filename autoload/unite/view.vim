@@ -852,6 +852,9 @@ function! unite#view#_match_line(highlight, line, id) "{{{
         \ matchaddpos(a:highlight, [a:line], 10, a:id) :
         \ matchadd(a:highlight, '^\%'.a:line.'l.*', 10, a:id)
 endfunction"}}}
+function! unite#view#_clear_match_highlight() "{{{
+  silent! call matchdelete(10)
+endfunction"}}}
 
 function! unite#view#_get_status_plane_string() "{{{
   return (b:unite.is_async ? '[async] ' : '') .

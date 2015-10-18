@@ -262,6 +262,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
 endfunction"}}}
 function! unite#handlers#_on_buf_unload(bufname)  "{{{
   call unite#view#_clear_match()
+  call unite#view#_clear_match_highlight()
 
   " Save unite value.
   silent! let unite = getbufvar(a:bufname, 'unite')
