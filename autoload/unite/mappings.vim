@@ -522,7 +522,9 @@ function! unite#mappings#_choose_action(candidates, ...) "{{{
   endif
 
   let context = deepcopy(get(a:000, 0, {}))
-  let context.source__sources = []
+  let context.source__sources = unite#init#_loaded_sources(
+        \ unite#util#uniq(map(copy(a:candidates),
+        \                 'v:val.source')), context)
   let context.buffer_name = 'action'
   let context.profile_name = 'action'
   let context.start_insert = 1
