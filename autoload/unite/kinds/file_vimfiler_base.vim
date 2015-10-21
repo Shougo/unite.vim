@@ -311,11 +311,13 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
         call mkdir(dir, 'p')
       endif
 
-      let file = unite#sources#file#create_file_dict(
-            \ filename, filename !~ '^\%(/\|\a\+:/\)')
-      let file.source = 'file'
+      if filename !~ '/$'
+        let file = unite#sources#file#create_file_dict(
+              \ filename, filename !~ '^\%(/\|\a\+:/\)')
+        let file.source = 'file'
 
-      call writefile([], filename)
+        call writefile([], filename)
+      endif
 
       call s:search_cursor(filename, '', {})
     endfor
