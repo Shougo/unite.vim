@@ -266,8 +266,6 @@ More advanced configuration example:
 	  nmap <buffer> x     <Plug>(unite_quick_match_jump)
 	  nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
 	  imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-	  imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
-	  nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
 	  nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
 	  nmap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
 	  imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
@@ -1105,9 +1103,6 @@ Insert mode mappings.
 				*i_<Plug>(unite_toggle_transpose_window)*
 <Plug>(unite_toggle_selected_candidates)
 		The same as |<Plug>(unite_toggle_transpose_window)|.
-
-<Plug>(unite_narrowing_path)		*i_<Plug>(unite_narrowing_path)*
-		The same as |<Plug>(unite_narrowing_path)|.
 
 				*i_<Plug>(unite_narrowing_input_history)*
 <Plug>(unite_narrowing_input_history)
