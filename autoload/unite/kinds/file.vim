@@ -93,7 +93,7 @@ function! s:external(command, dest_dir, src_files) "{{{
 endfunction"}}}
 function! s:input_overwrite_method(dest, src) "{{{
   redraw
-  echo 'File is already exists!'
+  echo 'File already exists!'
   echo printf('dest: %s %d bytes %s', a:dest, getfsize(a:dest),
         \ strftime('%y/%m/%d %H:%M', getftime(a:dest)))
   echo printf('src:  %s %d bytes %s', a:src, getfsize(a:src),
