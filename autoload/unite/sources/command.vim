@@ -138,31 +138,6 @@ function! s:source.change_candidates(args, context) "{{{
   return []
 endfunction"}}}
 
-function! s:caching_from_neocomplcache_dict() "{{{
-  let dict_files = split(globpath(&runtimepath,
-        \ 'autoload/neocomplcache/sources/vim_complete/commands.dict'), '\n')
-  if empty(dict_files)
-    return []
-  endif
-
-  let keyword_pattern =
-        \'^\%(-\h\w*\%(=\%(\h\w*\|[01*?+%]\)\?\)\?\|'
-        \'<\h[[:alnum:]_-]*>\?\|\h[[:alnum:]_:#\[]*\%([!\]]\+\|()\?\)\?\)'
-  let keyword_list = []
-  for line in readfile(dict_files[0])
-    let word = substitute(
-          \ matchstr(line, keyword_pattern), '[\[\]]', '', 'g')
-    call add(keyword_list, {
-          \ 'word' : line,
-          \ 'action__command' : word . ' ',
-          \ 'action__description' : line,
-          \ 'source__command' : ':'.word,
-          \ 'action__histadd' : 1,
-          \})
-  endfor
-
-  return keyword_list
-endfunction"}}}
 function! s:make_cache_commands() "{{{
   let helpfile = expand(findfile('doc/index.txt', &runtimepath))
   if !filereadable(helpfile)

@@ -687,11 +687,6 @@ function! unite#view#_quit(is_force, ...)  "{{{
     else
       startinsert!
     endif
-
-    " Skip next auto completion.
-    if exists('*neocomplcache#skip_next_complete')
-      call neocomplcache#skip_next_complete()
-    endif
   else
     redraw
   endif

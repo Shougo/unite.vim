@@ -72,34 +72,11 @@ function! s:source.gather_candidates(args, context) "{{{
 
     call add(s:cached_result, dict)
   endfor
-  let s:cached_result += s:caching_from_neocomplcache_dict()
 
   let s:cached_result = unite#util#sort_by(
         \ s:cached_result, 'tolower(v:val.word)')
 
   return s:cached_result
-endfunction"}}}
-
-function! s:caching_from_neocomplcache_dict() "{{{
-  let dict_files = split(globpath(&runtimepath,
-        \ 'autoload/neocomplcache/sources/vim_complete/functions.dict'), '\n')
-  if empty(dict_files)
-    return []
-  endif
-
-  let keyword_pattern = '^[[:alnum:]_]\+'
-  let keyword_list = []
-  for line in readfile(dict_files[0])
-    let word = matchstr(line, keyword_pattern)
-    call add(keyword_list, {
-          \ 'word' : line,
-          \ 'action__description' : line,
-          \ 'action__function' : word,
-          \ 'action__text' : word . '(',
-          \})
-  endfor
-
-  return keyword_list
 endfunction"}}}
 
 " Actions "{{{
