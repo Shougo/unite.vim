@@ -37,8 +37,8 @@ if exists('g:unite_source_history_yank_enable')
       \ && g:unite_source_history_yank_enable
   augroup plugin-unite-history-yank
     autocmd!
-    autocmd CursorMoved,FocusGained * silent
-     \ call unite#sources#history_yank#_append()
+    autocmd WinEnter,BufWinEnter,CursorMoved,FocusGained,FocusLost *
+          \ silent call unite#sources#history_yank#_append()
   augroup END
 
   if v:version > 703 || v:version == 703 && has('patch867')

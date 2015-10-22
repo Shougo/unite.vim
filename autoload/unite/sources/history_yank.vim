@@ -30,6 +30,7 @@ set cpo&vim
 let s:VERSION = '1.0'
 
 let s:yank_histories = {}
+let s:yank_histories_old = {}
 
 " the last modified time of the yank histories file.
 let s:yank_histories_file_mtime = 0
@@ -105,6 +106,7 @@ endfunction"}}}
 function! s:save()  "{{{
   if g:unite_source_history_yank_file == ''
         \ || unite#util#is_sudo()
+        \ || s:yank_histories ==# s:yank_histories_old
     return
   endif
 
@@ -113,6 +115,7 @@ function! s:save()  "{{{
   call writefile([s:VERSION, string(s:yank_histories)],
         \              g:unite_source_history_yank_file)
   let s:yank_histories_file_mtime = getftime(g:unite_source_history_yank_file)
+  let s:yank_histories_old = copy(s:yank_histories)
 endfunction"}}}
 function! s:load()  "{{{
   if !filereadable(g:unite_source_history_yank_file)
@@ -138,7 +141,8 @@ function! s:load()  "{{{
     if !has_key(s:yank_histories, register)
       let s:yank_histories[register] = []
     endif
-    let s:yank_histories[register] += get(yank_histories, register, [])
+    let s:yank_histories[register] =
+          \ get(yank_histories, register, []) + s:yank_histories[register]
     call s:uniq(register)
   endfor
 
@@ -147,8 +151,13 @@ function! s:load()  "{{{
 endfunction"}}}
 
 function! s:add_register(name) "{{{
+  " Append register value.
+  if !has_key(s:yank_histories, a:name)
+    let s:yank_histories[a:name] = []
+  endif
+
   let reg = [getreg(a:name), getregtype(a:name)]
-  if get(s:yank_histories, 0, []) ==# reg
+  if get(s:yank_histories[a:name], 0, []) ==# reg
     " Skip same register value.
     return
   endif
@@ -161,11 +170,6 @@ function! s:add_register(name) "{{{
   endif
 
   let s:prev_registers[a:name] = reg
-
-  " Append register value.
-  if !has_key(s:yank_histories, a:name)
-    let s:yank_histories[a:name] = []
-  endif
 
   call insert(s:yank_histories[a:name], reg)
   call s:uniq(a:name)
