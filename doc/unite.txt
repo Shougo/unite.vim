@@ -196,12 +196,6 @@ it is recommended to use |unite-source-file_rec/async| source, which requires
 >
 	nnoremap <leader>r :<C-u>Unite -start-insert file_rec/async:!<CR>
 <
-Search through yank history. First, this must be enabled to track yank
-history, then the mapping set.
->
-	let g:unite_source_history_yank_enable = 1
-	nnoremap <leader>y :<C-u>Unite history/yank<CR>
-<
 Since you can pass in multiple sources into unite you can easily create a
 mapping that will open up a unite pane with the sources you frequently use.
 To see buffers, recent files then bookmarks:
@@ -687,41 +681,6 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		nnoremap <silent> sm  :<C-u>Unite menu:test<CR>
 <
 		The default value is "{}".
-
-					*g:unite_source_history_yank_enable*
-g:unite_source_history_yank_enable
-		If defined and not 0, unite enables
-		|unite-source-history/yank|.
-
-		Note: This value has to be set in .vimrc.
-
-		This variable is not defined by default.
-
-					*g:unite_source_history_yank_limit*
-g:unite_source_history_yank_limit
-		The maximum number of |unite-source-history/yank| to save.
-
-		The default value is 100.
-
-					*g:unite_source_history_yank_file*
-g:unite_source_history_yank_file
-		Specify the file to write the information of yank history.
-		If this variable is empty, saving history is disabled.
-
-
-		The default value is |g:unite_data_directory|; '/history_yank'
-		If you want to use another value than what's defined in
-		|g:unite_data_directory| you have to specify the full path.
-
-		Example:
->
-		let g:unite_source_history_yank_file=$HOME.'/.vim/yankring.txt'
-<
-					*g:unite_source_history_save_registers*
-g:unite_source_history_yank_save_registers
-		Specify the save registers to yank history.
-
-		The default value is ['"'].
 
 					*g:unite_source_process_enable_confirm*
 g:unite_source_process_enable_confirm
@@ -2435,17 +2394,6 @@ menu		Nominates menus.
 		Source arguments:
 		1. menu name.
 
-						*unite-source-history/yank*
-history/yank	Nominates yanked words.
-		Note: Ignores yanked words which are too long.
-		To use this source, set
-		|g:unite_source_history_yank_enable| is 1.
-		Note: This source is disabled when
-		|g:unite_source_history_yank_enable| is 0 or not defined.
-
-		Source arguments:
-		1. register names
-
 						*unite-source-process*
 process		Nominates processes.
 		Note: This source is required "ps" command or "tasklist"
@@ -3622,6 +3570,9 @@ pattern			Function		(Optional)
 
 ==============================================================================
 EXTERNAL SOURCES				*unite-external-sources*
+
+history/yank source:
+https://github.com/Shougo/neoyank.vim
 
 MRU sources:
 
