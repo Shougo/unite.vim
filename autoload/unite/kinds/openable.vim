@@ -165,10 +165,15 @@ function! s:kind.action_table.persist_open.func(candidate) "{{{
   let unite.prev_bufnr = bufnr('%')
 
   if g:unite_kind_openable_persist_open_blink_time != ''
+    let left = getpos("'<")
+    let right = getpos("'>")
+    let vimode = visualmode()
     normal! V
     redraw!
     execute 'sleep ' . g:unite_kind_openable_persist_open_blink_time
-    execute "normal! \<ESC>"
+    execute "normal! \<ESC>" . vimode . "\<ESC>"
+    call setpos("'<", left)
+    call setpos("'>", right)
   endif
 
   let unite_winnr = bufwinnr(unite.bufnr)
