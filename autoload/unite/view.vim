@@ -823,7 +823,8 @@ function! unite#view#_redraw_echo(expr) "{{{
     set noruler
 
     let msg = map(s:msg2list(a:expr), "unite#util#truncate_smart(
-          \ v:val, &columns-1, &columns/2, '...')")
+          \ v:val, &columns - 1 + len(v:val) - strdisplaywidth(v:val),
+          \ &columns/2, '...')")
     let height = max([1, &cmdheight])
     for i in range(0, len(msg)-1, height)
       redraw
