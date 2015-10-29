@@ -249,6 +249,7 @@ function! unite#util#alternate_buffer() "{{{
   if s:buflisted(unite.prev_bufnr)
         \ && getbufvar(unite.prev_bufnr, '&filetype') !=# "unite"
     execute 'buffer' unite.prev_bufnr
+    keepjumps call winrestview(unite.prev_win_saved_view)
     return
   endif
 

@@ -296,6 +296,7 @@ function! unite#init#_current_unite(sources, context) "{{{
         \ (exists('b:unite') && !context.split) ?
         \ b:unite.prev_bufnr : bufnr('%')
   let unite.prev_winnr = winnr()
+  let unite.prev_winsaveview = winsaveview()
   let unite.prev_line = 0
   let unite.update_time_save = &updatetime
   let unite.statusline = unite#view#_get_status_string(unite)
