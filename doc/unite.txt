@@ -2820,12 +2820,10 @@ internally.
 	yank		Yank the candidate "word" or "action__text".
 	yank_escape	Yank the escaped candidate "word" or "action__text".
 	ex		Input the escaped candidate text into command line.
-	insert		Input the candidate word or text into the current
-			buffer.
+	insert		Insert the candidate word or text before the cursor.
 	insert_directory
-			Input the candidate directory into the current buffer.
-	append		Append the candidate word or text into the current
-			buffer.
+			Insert the candidate directory before the cursor.
+	append		Insert the candidate word or text after the cursor.
 	preview		Preview the candidate text.
 	echo		Echo candidates for debug.
 
