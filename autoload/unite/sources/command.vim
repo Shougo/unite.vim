@@ -44,6 +44,12 @@ let s:source = {
       \ 'syntax' : 'uniteSource__Command',
       \ }
 
+function! s:source.hooks.on_init(args, context) "{{{
+  " Get command list.
+  redir => a:context.source__command
+  silent! command
+  redir END
+endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__Command_DescriptionLine
         \ / -- .*$/
@@ -61,16 +67,11 @@ endfunction"}}}
 
 let s:cached_result = []
 function! s:source.gather_candidates(args, context) "{{{
-  if !a:context.is_redraw && !empty(s:cached_result)
-    return s:cached_result
+  if a:context.is_redraw || empty(s:cached_result)
+    let s:cached_result = s:make_cache_commands()
   endif
 
-  " Get command list.
-  redir => result
-  silent! command
-  redir END
-
-  let s:cached_result = []
+  let result = copy(s:cached_result)
   let completions = [ 'augroup', 'buffer', 'behave',
         \ 'color', 'command', 'compiler', 'cscope',
         \ 'dir', 'environment', 'event', 'expression',
@@ -79,7 +80,7 @@ function! s:source.gather_candidates(args, context) "{{{
         \ 'mapping', 'menu', 'option', 'shellcmd', 'sign',
         \ 'syntax', 'tag', 'tag_listfiles',
         \ 'var', 'custom', 'customlist' ]
-  for line in split(result, '\n')[1:]
+  for line in split(a:context.source__command, '\n')[1:]
     let word = matchstr(line, '\a\w*')
 
     " Analyze prototype.
@@ -113,14 +114,10 @@ function! s:source.gather_candidates(args, context) "{{{
           \ }
     let dict.action__description = dict.abbr
 
-    call add(s:cached_result, dict)
+    call add(result, dict)
   endfor
-  let s:cached_result += s:make_cache_commands()
 
-  let s:cached_result = unite#util#sort_by(
-        \ s:cached_result, 'tolower(v:val.word)')
-
-  return s:cached_result
+  return unite#util#sort_by(result, 'tolower(v:val.word)')
 endfunction"}}}
 function! s:source.change_candidates(args, context) "{{{
   let dummy = substitute(a:context.input, '[*\\]', '', 'g')
