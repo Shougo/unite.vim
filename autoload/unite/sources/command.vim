@@ -81,13 +81,13 @@ function! s:source.gather_candidates(args, context) "{{{
         \ 'syntax', 'tag', 'tag_listfiles',
         \ 'var', 'custom', 'customlist' ]
   for line in split(a:context.source__command, '\n')[1:]
-    let word = matchstr(line, '\a\w*')
+    let word = matchstr(line, '\u\w*')
 
     " Analyze prototype.
-    let end = matchend(line, '\a\w*')
+    let end = matchend(line, '\u\w*')
     let args = matchstr(line, '[[:digit:]?+*]', end)
     if args != '0'
-      let prototype = matchstr(line, '\a\w*', end)
+      let prototype = matchstr(line, '\u\w*', end)
 
       if index(completions, prototype) < 0
         let prototype = 'arg'
