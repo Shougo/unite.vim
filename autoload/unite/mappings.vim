@@ -482,7 +482,12 @@ function! s:toggle_mark_candidates(start, end) "{{{
   let pos = getpos('.')
   try
     call cursor(a:start, 1)
+    let prev = -1
     for _ in range(a:start, a:end)
+      if line('.') == prev || line('.') < a:start || line('.') > a:end
+        break
+      endif
+      let prev = line('.')
       if line('.') == unite.prompt_linenr
         call unite#helper#skip_prompt()
       else
