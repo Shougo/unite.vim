@@ -39,7 +39,9 @@ function! unite#sources#grep_git#repository_root() abort "{{{
     return ''
   endif
   let stdout = unite#util#system('git rev-parse --show-toplevel')
-  return (unite#util#get_last_status() == 0) ? stdout : ''
+  return (unite#util#get_last_status() == 0)
+        \ ? substitute(stdout, '\v\r?\n$', '', '')
+        \ : ''
 endfunction "}}}
 
 " Inherit from 'grep' source
@@ -47,14 +49,6 @@ let s:origin = unite#sources#grep#define()
 let s:source = deepcopy(s:origin)
 let s:source['name'] = 'grep/git'
 let s:source['description'] = 'candidates from git grep'
-
-function! s:source.hooks.on_init(args, context) abort "{{{
-  if get(a:args, 0, '') ==# '/'
-    let a:args[0] = unite#sources#grep_git#repository_root()
-  endif
-  return s:origin.hooks.on_init(a:args, a:context)
-endfunction " }}}
-
 
 function! s:source.gather_candidates(args, context) abort "{{{
   "
@@ -86,6 +80,11 @@ function! s:source.gather_candidates(args, context) abort "{{{
     let a:context.is_async = 0
     return []
   endif
+
+  " replace ^/ into the repository root
+  let root = unite#sources#grep_git#repository_root()
+  call map(a:context.source__targets, 'substitute(v:val, "^/", root . "/", "")')
+  echomsg string(a:context.source__targets)
 
   if a:context.is_redraw
     let a:context.is_async = 1

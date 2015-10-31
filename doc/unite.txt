@@ -2326,8 +2326,9 @@ grep/git	Nominates "git grep" command output at the current
 		http://github.com/Shougo/vimproc
 
 		Source arguments:
-		1. the target directories n the git repository splitted by
-		   newlines.
+		1. the target directories in the git repository splitted by
+		   newlines. If the directory starts from "/", the "/" will
+		   be substituted to the repository root path.
 		2. "git grep" options.
 		3. the narrowing pattern (if you omit it, |unite-options-input|
 		or input prompt is used).
