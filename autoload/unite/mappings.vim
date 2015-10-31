@@ -542,7 +542,7 @@ function! s:insert_enter(key) "{{{
 
   return (line('.') != unite.prompt_linenr) ?
         \ (unite.context.prompt_focus ?
-        \     unite.prompt_linenr.'GA' : '0i') :
+        \     unite.prompt_linenr.'GA' : 'gI') :
         \ (a:key == 'i' && col('.') <= 1
         \     || a:key == 'a' && col('.') < 1) ?
         \     'A' :
