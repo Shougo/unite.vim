@@ -2345,7 +2345,6 @@ grep/git	Nominates "git grep" command output at the current
 	:Unite grep/git:/:--cached:file
 <
 
-						*unite-source-find*
 						*unite-source-vimgrep*
 vimgrep		Nominates |vimgrep| command output as candidates.
 		This source is slower than |unite-source-grep|, but it can
