@@ -2221,7 +2221,7 @@ window/gui	Nominates opened GUI windows as candidates.
 		Note: "wmctrl" command is needed.  For Linux only.
 
 						*unite-source-output*
-output		Nominates executed Vim command as candidates.
+output		Nominates executed Vim command output as candidates.
 
 		Source arguments:
 		1. Vim command.
@@ -2235,6 +2235,20 @@ output		Nominates executed Vim command as candidates.
 		:Unite output:echo\ "foo\ bar"
 		" It outputs "foo bar" by dummy.
 		:Unite output:echo:"foo:bar":!
+<
+						*unite-source-output/shellcmd*
+output/shellcmd
+		Nominates executed shell command output as candidates.
+
+		Source arguments:
+		1. Shell command.
+		2. command args (but you cannot use "!" by itself)
+
+		If the last argument is "!", it prints by dummy candidates.
+		This behavior is useful for output message.
+>
+		" It outputs "ls".
+		:Unite output/shellcmd:ls
 <
 						*unite-source-command*
 command		Nominates Vim Ex commands as candidates.
