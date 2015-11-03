@@ -26,6 +26,16 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Variables  "{{{
+let g:unite_source_output_shellcmd_colors =
+      \ get(g:, 'unite_source_output_shellcmd_colors', [
+        \ '#6c6c6c', '#ff6666', '#66ff66', '#ffd30a',
+        \ '#1e95fd', '#ff13ff', '#1bc8c8', '#c0c0c0',
+        \ '#383838', '#ff4444', '#44ff44', '#ffb30a',
+        \ '#6699ff', '#f820ff', '#4ae2e2', '#ffffff',
+        \])
+"}}}
+
 function! unite#sources#output_shellcmd#define() "{{{
   return s:source
 endfunction"}}}
@@ -35,6 +45,7 @@ let s:source = {
       \ 'description' : 'candidates from shell command output',
       \ 'default_action' : 'yank',
       \ 'default_kind' : 'word',
+      \ 'syntax' : 'uniteSource__Output_Shellcmd',
       \ 'hooks' : {},
       \ }
 
@@ -60,6 +71,56 @@ function! s:source.hooks.on_init(args, context) "{{{
           \ 'command: ' . command, s:source.name)
   endif
 endfunction"}}}
+function! s:source.hooks.on_syntax(args, context) "{{{
+  let highlight_table = {
+        \ '0' : ' cterm=NONE ctermfg=NONE ctermbg=NONE gui=NONE guifg=NONE guibg=NONE',
+        \ '1' : ' cterm=BOLD gui=BOLD',
+        \ '3' : ' cterm=ITALIC gui=ITALIC',
+        \ '4' : ' cterm=UNDERLINE gui=UNDERLINE',
+        \ '7' : ' cterm=REVERSE gui=REVERSE',
+        \ '8' : ' ctermfg=0 ctermbg=0 guifg=#000000 guibg=#000000',
+        \ '9' : ' gui=UNDERCURL',
+        \ '21' : ' cterm=UNDERLINE gui=UNDERLINE',
+        \ '22' : ' gui=NONE',
+        \ '23' : ' gui=NONE',
+        \ '24' : ' gui=NONE',
+        \ '25' : ' gui=NONE',
+        \ '27' : ' gui=NONE',
+        \ '28' : ' ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE',
+        \ '29' : ' gui=NONE',
+        \ '39' : ' ctermfg=NONE guifg=NONE',
+        \ '49' : ' ctermbg=NONE guibg=NONE',
+        \}
+  for color in range(30, 37)
+    " Foreground color.
+    let highlight_table[color] = printf(' ctermfg=%d guifg=%s',
+          \ color - 30, g:unite_source_output_shellcmd_colors[color - 30])
+    for color2 in [1, 3, 4, 7]
+      let highlight_table[color2 . ';' . color] =
+            \ highlight_table[color2] . highlight_table[color]
+    endfor
+  endfor
+  for color in range(40, 47)
+    " Background color.
+    let highlight_table[color] = printf(' ctermbg=%d guibg=%s',
+          \ color - 40, g:unite_source_output_shellcmd_colors[color - 40])
+  endfor
+
+  syntax match uniteSource__Output_Shellcmd_Conceal
+        \ contained conceal    '\e\[[0-9;]*m'
+        \ containedin=uniteSource__Output_Shellcmd
+
+  for [key, highlight] in items(highlight_table)
+    let syntax_name = 'uniteSource__Output_Shellcmd_Color'
+          \ . substitute(key, ';', '_', 'g')
+    let syntax_command = printf('start=+\e\[0\?%sm+ end=+\ze\e[\[0*m]\|$+ ' .
+          \ 'contains=uniteSource__Output_Shellcmd_Conceal ' .
+          \ 'containedin=uniteSource__Output_Shellcmd oneline', key)
+
+    execute 'syntax region' syntax_name syntax_command
+    execute 'highlight' syntax_name highlight
+  endfor
+endfunction"}}}
 function! s:source.gather_candidates(args, context) "{{{
   if !unite#util#has_vimproc()
     call unite#print_source_message(
@@ -72,11 +133,7 @@ function! s:source.gather_candidates(args, context) "{{{
     let a:context.is_async = 1
   endif
 
-  let save_term = $TERM
   try
-    " Disable colors.
-    let $TERM = 'dumb'
-
     let a:context.source__proc = vimproc#plineopen2(
           \ vimproc#util#iconv(
           \   a:context.source__command, &encoding, 'char'), 1)
@@ -84,8 +141,6 @@ function! s:source.gather_candidates(args, context) "{{{
     call unite#print_error(v:exception)
     let a:context.is_async = 0
     return []
-  finally
-    let $TERM = save_term
   endtry
 
   return self.async_gather_candidates(a:args, a:context)
@@ -100,10 +155,11 @@ function! s:source.async_gather_candidates(args, context) "{{{
 
   let lines = map(unite#util#read_lines(stdout, 1000),
           \ "unite#util#iconv(v:val, 'char', &encoding)")
+  " echomsg string(lines)
 
   return map(lines, "{
-        \ 'word' : v:val,
-        \ 'is_multiline' : 1,
+        \ 'word' : substitute(v:val, '\\e\\[[0-9;]*m', '', 'g'),
+        \ 'abbr' : v:val,
         \ 'is_dummy' : a:context.source__is_dummy,
         \ }")
 endfunction"}}}
