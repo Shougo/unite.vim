@@ -93,17 +93,6 @@ function! s:source.gather_candidates(args, context) "{{{
         \ 'is_dummy' : a:context.source__is_dummy,
         \ }")
 endfunction"}}}
-function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
-  if !exists('*neocomplete#initialize')
-    return []
-  endif
-
-  let pattern = '\.\%(\h\w*\)\?$\|' .
-        \ neocomplete#get_keyword_pattern_end('vim')
-  let cur_keyword_str = neocomplete#match_word(a:arglead, pattern)[1]
-  return map(neocomplete#sources#vim#helper#command(
-        \ a:arglead, cur_keyword_str), 'v:val.word')
-endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

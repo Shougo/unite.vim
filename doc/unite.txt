@@ -2247,7 +2247,7 @@ output/shellcmd
 		If the last argument is "!", it prints by dummy candidates.
 		This behavior is useful for output message.
 >
-		" It outputs "ls".
+		" It outputs "ls" output.
 		:Unite output/shellcmd:ls
 <
 						*unite-source-command*
