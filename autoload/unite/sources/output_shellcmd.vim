@@ -50,13 +50,7 @@ let s:source = {
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
-  if type(get(a:args, 0, '')) == type([])
-    " Use args directly.
-    let a:context.source__is_dummy = 0
-    return
-  endif
-
-  let command = join(copy(a:args), "v:val !=# '!'")
+  let command = join(filter(copy(a:args), "v:val !=# '!'"))
   if command == ''
     let command = unite#util#input(
           \ 'Please input shell command: ', '', 'shellcmd')
@@ -92,18 +86,24 @@ function! s:source.hooks.on_syntax(args, context) "{{{
         \ '49' : ' ctermbg=NONE guibg=NONE',
         \}
   for color in range(30, 37)
-    " Foreground color.
+    " Foreground color pattern.
     let highlight_table[color] = printf(' ctermfg=%d guifg=%s',
           \ color - 30, g:unite_source_output_shellcmd_colors[color - 30])
     for color2 in [1, 3, 4, 7]
+      " Type;Foreground color pattern
       let highlight_table[color2 . ';' . color] =
             \ highlight_table[color2] . highlight_table[color]
     endfor
   endfor
   for color in range(40, 47)
-    " Background color.
+    " Background color pattern.
     let highlight_table[color] = printf(' ctermbg=%d guibg=%s',
           \ color - 40, g:unite_source_output_shellcmd_colors[color - 40])
+    for color2 in range(30, 37)
+      " Foreground;Background color pattern.
+      let highlight_table[color2 . ';' . color] =
+            \ highlight_table[color2] . highlight_table[color]
+    endfor
   endfor
 
   syntax match uniteSource__Output_Shellcmd_Conceal
@@ -154,7 +154,8 @@ function! s:source.async_gather_candidates(args, context) "{{{
   endif
 
   let lines = map(unite#util#read_lines(stdout, 1000),
-          \ "unite#util#iconv(v:val, 'char', &encoding)")
+          \ "substitute(unite#util#iconv(v:val, 'char', &encoding),
+          \   '\\e\\[\\u', '', 'g')")
   " echomsg string(lines)
 
   return map(lines, "{

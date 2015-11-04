@@ -2253,7 +2253,7 @@ output/shellcmd
 		This behavior is useful for output message.
 >
 		" It outputs "ls" output.
-		:Unite output/shellcmd:ls
+		:Unite -log -wrap output/shellcmd:ls
 <
 						*unite-source-command*
 command		Nominates Vim Ex commands as candidates.
