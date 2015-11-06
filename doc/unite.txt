@@ -1,7 +1,7 @@
 *unite.txt*	Unite and create user interfaces.
 
 Version: 6.2
-Author : Shougo <Shougo.Matsu@gmail.com>
+Author:  Shougo <Shougo.Matsu@gmail.com>
 Documentation Author: ujihisa <ujihisa at gmail com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -2301,13 +2301,13 @@ grep		Nominates "grep" command output as candidates.
 	let g:unite_source_grep_max_candidates = 200
 
 	if executable('hw')
-	  " Use hw(highway)
+	  " Use hw (highway)
 	  " https://github.com/tkengo/highway
 	  let g:unite_source_grep_command = 'hw'
 	  let g:unite_source_grep_default_opts = '--no-group --no-color'
 	  let g:unite_source_grep_recursive_opt = ''
 	elseif executable('ag')
-	  " Use ag(the silver searcher)
+	  " Use ag (the silver searcher)
 	  " https://github.com/ggreer/the_silver_searcher
 	  let g:unite_source_grep_command = 'ag'
 	  let g:unite_source_grep_default_opts =
@@ -2315,7 +2315,7 @@ grep		Nominates "grep" command output as candidates.
 	  \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
 	  let g:unite_source_grep_recursive_opt = ''
 	elseif executable('pt')
-	  " Use pt(the platinum searcher)
+	  " Use pt (the platinum searcher)
 	  " https://github.com/monochromegane/the_platinum_searcher
 	  let g:unite_source_grep_command = 'pt'
 	  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
@@ -2397,11 +2397,11 @@ line		Nominates current buffer lines as candidates.
 		Max candidates: 100
 		Source arguments:
 		1. the search direction:
-		"all"      : Search from buffer top
-		"forward"  : Search from the current to the buffer top
-		"backward" : Search from the current to the buffer bottom
-		"buffers"  : Search from all buffers
-		"args"     : Search from argument buffers
+		"all":       Search from buffer top
+		"forward":   Search from the current to the buffer top
+		"backward":  Search from the current to the buffer bottom
+		"buffers":   Search from all buffers
+		"args":      Search from argument buffers
 		Note: If the direction is "all" or omitted, it searches from
 		buffer top.
 		2. the wrap option. "wrap" or "nowrap". This is used when the
@@ -2409,7 +2409,7 @@ line		Nominates current buffer lines as candidates.
 		'wrapscan' option will be used.
 
 		Source custom options:
-		-custom-line-enable-highlight : enable buffer highlight
+		-custom-line-enable-highlight: enable buffer highlight
 
 		Example: >
 	nnoremap <silent> /  :<C-u>Unite -buffer-name=search
