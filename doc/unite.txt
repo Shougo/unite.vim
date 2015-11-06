@@ -3930,7 +3930,7 @@ A: You can use |unite-options-prompt-focus| option for it.
 
 Q: I want to specify file pattern in grep source.
 
-A: It cannot.  Because, original grep does not support the feature.
+A: You cannot.  Because original grep does not support the feature.
 But if you use "ag" command, you can use it like below. >
 	Unite grep::-G\ \\.txt$
 
