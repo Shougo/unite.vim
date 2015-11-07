@@ -414,7 +414,7 @@ function! s:job_handler(job_id, data, event) abort "{{{
   let lines = a:data
 
   let candidates = (a:event ==# 'stdout') ? job.candidates : job.errors
-  if !empty(lines) && lines[0] != "\n" && !empty(job.candidates)
+  if !empty(lines) && lines[0] != "\n" && !empty(candidates)
     " Join to the previous line
     let candidates[-1] .= lines[0]
     call remove(lines, 0)
