@@ -51,4 +51,5 @@ class UniteHandlers(object):
                  self.error(self.vim, line)
             self.error(self.vim,
                   'An error has occurred. Please execute :messages command.')
+            self.vim.call('unite#sources#rec#_remote_append', [], 1)
 
