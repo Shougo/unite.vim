@@ -260,7 +260,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
       let source.ignore_globs = []
     endif
 
-    let start = reltime()
+    " let start = reltime()
     let source_candidates = s:get_source_candidates(source)
     " echomsg string(reltimestr(reltime(start)))
 
