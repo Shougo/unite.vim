@@ -26,13 +26,14 @@
 import neovim
 import traceback
 import subprocess
+# import time
 
 @neovim.plugin
 class UniteHandlers(object):
     def __init__(self, vim):
         self.vim = vim
 
-    def error(self, vim, msg):
+    def error(self, msg):
         self.vim.call('unite#util#print_error', msg)
 
     @neovim.command('UniteInitializePython', sync=True, nargs=0)
@@ -42,14 +43,17 @@ class UniteHandlers(object):
     @neovim.rpc_export('unite_rec')
     def unite_rec(self, context, commands):
         try:
+            # start = time.time()
             candidates = [{ 'word': x, 'action__path': x }
                           for x in subprocess.check_output(commands).decode(
                                   'utf-8').split('\n')]
+            # self.error(str(time.time() - start))
+            # start = time.time()
             self.vim.call('unite#sources#rec#_remote_append', candidates, 1)
+            # self.error(str(time.time() - start))
         except Exception:
             for line in traceback.format_exc().splitlines():
-                 self.error(self.vim, line)
-            self.error(self.vim,
-                  'An error has occurred. Please execute :messages command.')
+                 self.error(line)
+            self.error('An error has occurred. Please execute :messages command.')
             self.vim.call('unite#sources#rec#_remote_append', [], 1)
 
