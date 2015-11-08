@@ -344,6 +344,10 @@ function! unite#init#_current_unite(sources, context) "{{{
   let unite.match_id = 11
   let unite.sign_offset = 0
 
+  if has('nvim') && exists(':UniteInitializePython')
+    UniteInitializePython
+  endif
+
   if context.here
     let context.winheight = winheight(0) - winline() + 1
     if context.winheight < 5
