@@ -72,53 +72,43 @@ function! s:compare(candidate_a, candidate_b) "{{{
 endfunction"}}}
 
 function! s:get_windows(args, tabnr) abort "{{{
-  let current = tabpagenr()
-  if a:tabnr != tabpagenr()
-    execute 'tabnext' a:tabnr
-  endif
-
-  let list = range(1, winnr('$'))
+  let list = range(1, tabpagewinnr(a:tabnr, '$'))
   for i in list
     " Set default value.
-    if type(getwinvar(i, 'unite_window')) == type('')
-      call setwinvar(i, 'unite_window', {
+    if type(gettabwinvar(a:tabnr, i, 'unite_window')) == type('')
+      call settabwinvar(a:tabnr, i, 'unite_window', {
             \ 'time' : 0,
-            \ 'cwd' : getcwd(),
             \ })
     endif
   endfor
 
-  unlet list[winnr()-1]
+  unlet list[tabpagewinnr(a:tabnr)-1]
   call sort(list, 's:compare')
-  if index(a:args, 'no-current') < 0 || current != tabpagenr()
+  if index(a:args, 'no-current') < 0
     " Add current window.
-    call add(list, winnr())
+    call add(list, tabpagewinnr(a:tabnr))
   endif
 
+  let buffers = tabpagebuflist(a:tabnr)
   let candidates = []
   for i in list
-    let window = getwinvar(i, 'unite_window')
-    let bufname = bufname(winbufnr(i))
+    let window = gettabwinvar(a:tabnr, i, 'unite_window')
+    let bufname = bufname(buffers[i-1])
     if empty(bufname)
       let bufname = '[No Name]'
     endif
 
     call add(candidates, {
           \ 'word' : bufname,
-          \ 'abbr' : printf('%d: [%d/%d] %s %s(%s)',
-          \      a:tabnr, i, winnr('$'),
-          \      (i == winnr() ? '%' : i == winnr('#') ? '#' : ' '),
-          \      bufname, window.cwd),
+          \ 'abbr' : printf('%d: [%d/%d] %s %s',
+          \      a:tabnr, i, tabpagewinnr(a:tabnr, '$'),
+          \      (i == tabpagewinnr(a:tabnr) ? '%' :
+          \       i == tabpagewinnr(a:tabnr, '#') ? '#' : ' '),
+          \      bufname),
           \ 'action__tab_nr' : a:tabnr,
           \ 'action__window_nr' : i,
-          \ 'action__buffer_nr' : winbufnr(i),
-          \ 'action__directory' : window.cwd,
           \ })
   endfor
-
-  if current != tabpagenr()
-    execute 'tabnext' current
-  endif
 
   return candidates
 endfunction"}}}

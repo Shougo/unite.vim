@@ -91,12 +91,19 @@ function! s:kind.action_table.preview.func(candidate) "{{{
   endif
 
   if !has_key(a:candidate, 'action__buffer_nr')
+        \ && !has_key(a:candidate, 'action__window_nr')
     return
   endif
 
   let winnr = winnr()
   try
-    execute bufwinnr(a:candidate.action__buffer_nr).'wincmd w'
+    let unite_winnr = unite#get_current_unite().winnr
+    let prevwinnr = has_key(a:candidate, 'action__window_nr') ?
+          \ (a:candidate.action__window_nr >= unite_winnr ?
+          \  a:candidate.action__window_nr + 1 :
+          \  a:candidate.action__window_nr) :
+          \ bufwinnr(a:candidate.action__buffer_nr)
+    execute prevwinnr.'wincmd w'
     execute 'match Search /\%'.line('.').'l/'
     redraw
     sleep 500m
