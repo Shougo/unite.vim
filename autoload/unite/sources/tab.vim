@@ -97,13 +97,10 @@ function! s:source.gather_candidates(args, context) "{{{
 
     if len(tabpagebuflist(i)) > 1
       " Get tab windows list.
-      let tabnr = tabpagenr()
-      execute 'tabnext' i
-      let abbr .= "\n" . join(map(range(1, winnr('$')),
-            \ "printf('%s %d: %s', repeat(' ', 1), v:val,
-            \ (bufname(winbufnr(v:val)) == '' ?
-            \ '[No Name]' : bufname(winbufnr(v:val))))"), "\n")
-      execute 'tabnext' tabnr
+      for [winnr, bufnr] in map(tabpagebuflist(i), "[v:key, v:val]")
+        let abbr .= "\n" . printf('%s %d: %s', repeat(' ', 1), (winnr+1),
+              \ (bufname(bufnr) == '' ? '[No Name]' : bufname(bufnr)))
+      endfor
     endif
 
     call add(candidates, {
