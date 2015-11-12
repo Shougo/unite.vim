@@ -92,7 +92,6 @@ function! s:get_windows(args, tabnr) abort "{{{
   let buffers = tabpagebuflist(a:tabnr)
   let candidates = []
   for i in list
-    let window = gettabwinvar(a:tabnr, i, 'unite_window')
     let bufname = bufname(buffers[i-1])
     if empty(bufname)
       let bufname = '[No Name]'
