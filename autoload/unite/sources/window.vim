@@ -67,23 +67,9 @@ function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
 endfunction"}}}
 
 " Misc
-function! s:compare(candidate_a, candidate_b) "{{{
-  return getwinvar(a:candidate_b, 'unite_window').time - getwinvar(a:candidate_a, 'unite_window').time
-endfunction"}}}
-
 function! s:get_windows(args, tabnr) abort "{{{
   let list = range(1, tabpagewinnr(a:tabnr, '$'))
-  for i in list
-    " Set default value.
-    if type(gettabwinvar(a:tabnr, i, 'unite_window')) == type('')
-      call settabwinvar(a:tabnr, i, 'unite_window', {
-            \ 'time' : 0,
-            \ })
-    endif
-  endfor
-
   unlet list[tabpagewinnr(a:tabnr)-1]
-  call sort(list, 's:compare')
   if index(a:args, 'no-current') < 0
     " Add current window.
     call add(list, tabpagewinnr(a:tabnr))
