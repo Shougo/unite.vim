@@ -30,7 +30,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#filters#sorter_selecta#define()
-  if has('python')
+  if has('python') || has('python3')
     return s:sorter
   else
     return {}
@@ -41,6 +41,14 @@ let s:sorter = {
       \ 'name' : 'sorter_selecta',
       \ 'description' : 'sort by selecta algorithm',
       \}
+
+if exists(':Python2or3') != 2
+  if has('python3') && get(g:, 'pymode_python', '') !=# 'python'
+    command! -nargs=1 Python2or3 python3 <args>
+  else
+    command! -nargs=1 Python2or3 python <args>
+  endif
+endif
 
 function! s:sorter.filter(candidates, context)
   if a:context.input == '' || !has('float') || empty(a:candidates)
@@ -73,14 +81,16 @@ endfunction
 " @vimlint(EVL102, 1, l:input)
 " @vimlint(EVL102, 1, l:candidate)
 function! s:sort_python(candidates, inputs)
+Python2or3 << PYTHONEOF
+import vim
+def score():
+    score = get_score(vim.eval('candidate.word'), vim.eval('input'))
+    if score:
+        vim.command('let candidate.filter__rank += %s' % score)
+PYTHONEOF
   for input in a:inputs
     for candidate in a:candidates
-python << PYTHONEOF
-import vim
-score = get_score(vim.eval('candidate.word'), vim.eval('input'))
-if score:
-    vim.command('let candidate.filter__rank += %s' % score)
-PYTHONEOF
+      Python2or3 score()
     endfor
   endfor
 
@@ -90,7 +100,10 @@ endfunction"}}}
 " @vimlint(EVL102, 0, l:candidate)
 
 function! s:def_python()
-python << PYTHONEOF
+  if !(has('python') || has('python3'))
+    return
+  endif
+Python2or3 << PYTHONEOF
 import string
 
 BOUNDARY_CHARS = string.punctuation + string.whitespace
