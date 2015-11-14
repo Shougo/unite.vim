@@ -100,6 +100,7 @@ function! s:def_python()
   endif
   let root = s:root
   Python2or3 import sys
+  Python2or3 import vim
   Python2or3 sys.path.insert(0, vim.eval('root'))
   Python2or3 from sorter_selecta import score
 endfunction
