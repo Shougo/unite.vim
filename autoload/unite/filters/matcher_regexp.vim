@@ -47,6 +47,9 @@ function! s:matcher.filter(candidates, context) "{{{
 
   let candidates = a:candidates
   for input in a:context.input_list
+    if input == '!' || input == ''
+      continue
+    endif
     let a:context.input = input
     let candidates = unite#filters#matcher_regexp#regexp_matcher(
           \ candidates, input, a:context)
