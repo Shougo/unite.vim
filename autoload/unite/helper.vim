@@ -385,6 +385,8 @@ function! unite#helper#get_current_candidate_linenr(num) "{{{
     if unite.prompt_linenr == 0
       let num += line('$') + 1
     endif
+  else
+    let num += 1
   endif
 
   return unite.prompt_linenr + num
