@@ -402,7 +402,7 @@ endfunction"}}}
 
 function! unite#util#lcd(dir) "{{{
   if isdirectory(a:dir)
-    execute 'lcd' fnameescape(a:dir)
+    execute (haslocaldir() ? 'lcd' : 'cd') fnameescape(a:dir)
   endif
 endfunction"}}}
 
