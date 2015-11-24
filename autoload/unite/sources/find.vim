@@ -121,9 +121,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
         \ "fnamemodify(unite#util#iconv(v:val, 'char', &encoding), ':p')")
 
   let cwd = getcwd()
-  if isdirectory(a:context.source__targets[0])
-    call unite#util#lcd(a:context.source__targets[0])
-  endif
+  call unite#util#lcd(a:context.source__targets[0])
 
   call map(candidates, "{
     \   'word' : unite#util#substitute_path_separator(v:val),

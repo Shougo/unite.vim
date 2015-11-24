@@ -125,9 +125,7 @@ function! s:source.gather_candidates(args, context) "{{{
     let qflist = getqflist()
 
     let cwd = getcwd()
-    if isdirectory(a:context.source__directory)
-      call unite#util#lcd(a:context.source__directory)
-    endif
+    call unite#util#lcd(a:context.source__directory)
 
     for qf in filter(qflist,
           \ "v:val.bufnr != '' && bufname(v:val.bufnr) != ''")

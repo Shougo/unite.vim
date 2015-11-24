@@ -138,9 +138,7 @@ function! s:kind.action_table.vimfiler__move.func(candidates) "{{{
       call s:search_cursor(filename, dest_dir, a:candidates[-1])
     endif
   finally
-    if isdirectory(current_dir)
-      call unite#util#lcd(current_dir)
-    endif
+    call unite#util#lcd(current_dir)
   endtry
 endfunction"}}}
 
@@ -198,9 +196,7 @@ function! s:kind.action_table.vimfiler__copy.func(candidates) "{{{
       call s:search_cursor(filename, dest_dir, a:candidates[-1])
     endif
   finally
-    if isdirectory(current_dir)
-      call unite#util#lcd(current_dir)
-    endif
+    call unite#util#lcd(current_dir)
   endtry
 endfunction"}}}
 
@@ -264,9 +260,7 @@ function! s:kind.action_table.vimfiler__rename.func(candidate) "{{{
       call s:search_cursor(filename, '', {})
     endif
   finally
-    if isdirectory(current_dir)
-      call unite#util#lcd(current_dir)
-    endif
+    call unite#util#lcd(current_dir)
   endtry
 endfunction"}}}
 
@@ -322,9 +316,7 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
       call s:search_cursor(filename, '', {})
     endfor
   finally
-    if isdirectory(current_dir)
-      call unite#util#lcd(current_dir)
-    endif
+    call unite#util#lcd(current_dir)
   endtry
 endfunction"}}}
 
@@ -374,9 +366,7 @@ function! s:kind.action_table.vimfiler__shellcmd.func(candidate) "{{{
       call unite#start_script([['output', output]])
     endif
   finally
-    if isdirectory(current_dir)
-      call unite#util#lcd(current_dir)
-    endif
+    call unite#util#lcd(current_dir)
   endtry
 endfunction"}}}
 
@@ -427,9 +417,7 @@ function! s:kind.action_table.vimfiler__mkdir.func(candidates) "{{{
 
     call s:search_cursor(dirname, '', {})
   finally
-    if isdirectory(current_dir)
-      call unite#util#lcd(current_dir)
-    endif
+    call unite#util#lcd(current_dir)
   endtry
 endfunction"}}}
 
@@ -459,9 +447,7 @@ function! s:kind.action_table.vimfiler__execute.func(candidates) "{{{
       call s:System.open(path)
     endfor
   finally
-    if isdirectory(current_dir)
-      call unite#util#lcd(current_dir)
-    endif
+    call unite#util#lcd(current_dir)
   endtry
 endfunction"}}}
 
@@ -513,9 +499,7 @@ function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
       call unite#util#print_error(output)
     endif
   finally
-    if isdirectory(current_dir)
-      call unite#util#lcd(current_dir)
-    endif
+    call unite#util#lcd(current_dir)
   endtry
 endfunction"}}}
 let s:kind.action_table.vimfiler__write = {

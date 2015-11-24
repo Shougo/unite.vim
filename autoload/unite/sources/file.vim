@@ -109,7 +109,6 @@ function! s:source_file.vimfiler_gather_candidates(args, context) "{{{
 
   let old_dir = getcwd()
   if path !=# old_dir
-        \ && isdirectory(path)
     try
       call unite#util#lcd(path)
     catch
@@ -124,7 +123,6 @@ function! s:source_file.vimfiler_gather_candidates(args, context) "{{{
   endfor
 
   if path !=# old_dir
-        \ && isdirectory(path)
     call unite#util#lcd(old_dir)
   endif
 
@@ -139,7 +137,6 @@ function! s:source_file.vimfiler_dummy_candidates(args, context) "{{{
 
   let old_dir = getcwd()
   if path !=# old_dir
-        \ && isdirectory(path)
     call unite#util#lcd(path)
   endif
 
@@ -155,7 +152,6 @@ function! s:source_file.vimfiler_dummy_candidates(args, context) "{{{
   endfor
 
   if path !=# old_dir
-        \ && isdirectory(path)
     call unite#util#lcd(old_dir)
   endif
 

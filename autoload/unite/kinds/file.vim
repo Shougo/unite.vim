@@ -223,9 +223,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) "{{{
     endif
   finally
     " Restore path.
-    if isdirectory(current_dir_save)
-      call unite#util#lcd(current_dir_save)
-    endif
+    call unite#util#lcd(current_dir_save)
     let &l:hidden = hidden_save
   endtry
 
