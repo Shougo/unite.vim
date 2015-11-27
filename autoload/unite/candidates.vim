@@ -332,10 +332,9 @@ function! s:recache_candidates_loop(context, is_force) "{{{
 endfunction"}}}
 
 function! s:get_source_candidates(source) "{{{
-  let context = a:source.unite__context
   let custom_source = get(unite#custom#get().sources, a:source.name, {})
   let context_ignore = {
-        \ 'path' : context.path,
+        \ 'path' : a:source.unite__context.path,
         \ 'ignore_pattern' : get(custom_source,
         \    'ignore_pattern', a:source.ignore_pattern),
         \ 'ignore_globs' : get(custom_source,
@@ -343,6 +342,7 @@ function! s:get_source_candidates(source) "{{{
         \ 'white_globs' : get(custom_source,
         \    'white_globs', a:source.white_globs),
         \ }
+  let context = extend(a:source.unite__context, context_ignore)
 
   let funcname = 's:get_source_candidates()'
   try
@@ -372,7 +372,7 @@ function! s:get_source_candidates(source) "{{{
       let funcname = 'gather_candidates'
       if has_key(a:source, 'gather_candidates')
         let a:source.unite__cached_candidates +=
-              \ s:ignore_candidates(copy(
+              \ unite#helper#ignore_candidates(copy(
               \  a:source.gather_candidates(a:source.args,
               \  a:source.unite__context)), context_ignore)
       endif
@@ -384,7 +384,7 @@ function! s:get_source_candidates(source) "{{{
       " Recaching.
       let funcname = 'change_candidates'
       let a:source.unite__cached_change_candidates =
-            \ s:ignore_candidates(a:source.change_candidates(
+            \ unite#helper#ignore_candidates(a:source.change_candidates(
             \     a:source.args, a:source.unite__context), context_ignore)
     endif
 
@@ -393,7 +393,7 @@ function! s:get_source_candidates(source) "{{{
       let funcname = 'async_gather_candidates'
       while 1
         let a:source.unite__cached_candidates +=
-              \ s:ignore_candidates(
+              \ unite#helper#ignore_candidates(
               \  a:source.async_gather_candidates(a:source.args, context),
               \  context_ignore)
 
@@ -416,28 +416,6 @@ function! s:get_source_candidates(source) "{{{
 
   return a:source.unite__cached_candidates
         \ + a:source.unite__cached_change_candidates
-endfunction"}}}
-
-function! s:ignore_candidates(candidates, context) "{{{
-  let candidates = copy(a:candidates)
-
-  if a:context.ignore_pattern != ''
-    let candidates = unite#filters#vim_filter_pattern(
-          \   candidates, a:context.ignore_pattern)
-  endif
-
-  if !empty(a:context.ignore_globs)
-    let candidates = unite#filters#filter_patterns(candidates,
-          \ unite#filters#globs2patterns(a:context.ignore_globs),
-          \ unite#filters#globs2patterns(a:context.white_globs))
-  endif
-
-  if a:context.path != ''
-    let candidates = unite#filters#{unite#util#has_lua()? 'lua' : 'vim'}
-          \_filter_head(candidates, a:context.path)
-  endif
-
-  return candidates
 endfunction"}}}
 
 let &cpo = s:save_cpo

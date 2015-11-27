@@ -596,6 +596,28 @@ function! s:histget(type) abort "{{{
         \       'v:val != ""')
 endfunction"}}}
 
+function! unite#helper#ignore_candidates(candidates, context) "{{{
+  let candidates = copy(a:candidates)
+
+  if a:context.ignore_pattern != ''
+    let candidates = unite#filters#vim_filter_pattern(
+          \   candidates, a:context.ignore_pattern)
+  endif
+
+  if !empty(a:context.ignore_globs)
+    let candidates = unite#filters#filter_patterns(candidates,
+          \ unite#filters#globs2patterns(a:context.ignore_globs),
+          \ unite#filters#globs2patterns(a:context.white_globs))
+  endif
+
+  if a:context.path != ''
+    let candidates = unite#filters#{unite#util#has_lua()? 'lua' : 'vim'}
+          \_filter_head(candidates, a:context.path)
+  endif
+
+  return candidates
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
