@@ -457,7 +457,8 @@ function! s:toggle_mark(map) "{{{
   let candidate = unite#helper#get_current_candidate()
   if !get(candidate, 'is_dummy', 0)
     let candidate.unite__is_marked = !candidate.unite__is_marked
-    let candidate.unite__marked_time = localtime()
+    let candidate.unite__marked_time = has('reltime') && has('float') ?
+          \ str2float(reltimestr(reltime())) : localtime()
 
     call unite#view#_redraw_line()
   endif
