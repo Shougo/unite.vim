@@ -412,14 +412,16 @@ function! s:job_handler(job_id, data, event) abort "{{{
   let lines = a:data
 
   let candidates = (a:event ==# 'stdout') ? job.candidates : job.errors
-  if !empty(lines) && lines[0] != "\n" && !empty(candidates)
+  if !empty(lines) && !empty(candidates)
+        \ && !filereadable(candidates[-1]) && candidates[-1] !~ '\r$'
     " Join to the previous line
     let candidates[-1] .= lines[0]
     call remove(lines, 0)
   endif
 
   call map(filter(lines, 'v:val != ""'),
-          \ "unite#util#iconv(v:val, 'char', &encoding)")
+          \ "substitute(unite#util#iconv(
+          \    v:val, 'char', &encoding), '\\r$', '', '')")
 
   if unite#util#is_windows()
     call map(lines,
