@@ -523,9 +523,10 @@ function! s:source_file_neovim.async_gather_candidates(args, context) "{{{
   endif
 
   let continuation = a:context.source__continuation
+  let candidates = job.eof ? job.candidates : job.candidates[: -2]
   let candidates = unite#helper#ignore_candidates(
-        \ unite#helper#paths2candidates(job.candidates[: -2]), a:context)
-  let job.candidates = job.candidates[-1:]
+        \ unite#helper#paths2candidates(candidates), a:context)
+  let job.candidates = job.eof ? [] : job.candidates[-1:]
 
   if job.eof
     " Disable async.
