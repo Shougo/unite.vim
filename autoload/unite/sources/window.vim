@@ -39,13 +39,16 @@ let s:source = {
       \}
 
 function! s:source.hooks.on_init(args, context) "{{{
+  let no_current = index(a:args, 'no-current') >= 0
   if index(a:args, 'all') >= 0
     let a:context.source__candidates = []
+    let cur_tabnr = tabpagenr()
     for tabnr in range(1, tabpagenr('$'))
-      let a:context.source__candidates += s:get_windows(a:args, tabnr)
+      let a:context.source__candidates +=
+            \ s:get_windows(tabnr == cur_tabnr && no_current, tabnr)
     endfor
   else
-    let a:context.source__candidates = s:get_windows(a:args, tabpagenr())
+    let a:context.source__candidates = s:get_windows(no_current, tabpagenr())
   endif
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) "{{{
@@ -67,10 +70,10 @@ function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
 endfunction"}}}
 
 " Misc
-function! s:get_windows(args, tabnr) abort "{{{
+function! s:get_windows(no_current, tabnr) abort "{{{
   let list = range(1, tabpagewinnr(a:tabnr, '$'))
   unlet list[tabpagewinnr(a:tabnr)-1]
-  if index(a:args, 'no-current') < 0
+  if !a:no_current
     " Add current window.
     call add(list, tabpagewinnr(a:tabnr))
   endif
