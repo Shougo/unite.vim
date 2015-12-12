@@ -299,6 +299,17 @@ function! s:kind.action_table.find.func(candidate) "{{{
         \ unite#helper#get_candidate_directory(a:candidate)]],
         \ {'no_quit' : 1})
 endfunction "}}}
+
+let s:kind.action_table.argadd = {
+      \ 'description' : 'add candidates into the argument list',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.argadd.func(candidates) "{{{
+  for candidate in a:candidates
+    execute 'argadd' fnameescape(candidate.action__path)
+  endfor
+endfunction"}}}
+
 "}}}
 
 function! s:execute_command(command, candidate) "{{{

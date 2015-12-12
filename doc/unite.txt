@@ -2948,6 +2948,7 @@ Opens a file into a new buffer.  This kind extends |unite-action-openable| and
 	dirdiff		|:DirDiff| with the other candidate.
 			(|DirDiff.vim| plugin is needed.)
 	backup		Simple backup files.
+	argadd		Add to the argument list.
 
 buffer						*unite-action-buffer*
 This kind extends |unite-action-file|.
