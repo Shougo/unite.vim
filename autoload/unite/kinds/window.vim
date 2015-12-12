@@ -32,16 +32,30 @@ endfunction"}}}
 
 let s:kind = {
       \ 'name' : 'window',
-      \ 'default_action' : 'open',
+      \ 'default_action' : 'jump',
       \ 'action_table': {},
-      \ 'parents' : ['cdable'],
+      \ 'parents' : ['common', 'openable', 'cdable'],
       \}
 
 " Actions "{{{
 let s:kind.action_table.open = {
+      \ 'description' : 'open this window buffer',
+      \ 'is_selectable' : 1,
+      \ }
+function! s:kind.action_table.open.func(candidates) "{{{
+  for candidate in a:candidates
+    execute 'buffer' (has_key(candidate, 'action__tab_nr') ?
+          \ tabpagebuflist(candidate.action__tab_nr)[
+          \   candidate.action__window_nr] :
+          \ winbufnr(candidate.action__window_nr))
+    doautocmd BufRead
+  endfor
+endfunction"}}}
+
+let s:kind.action_table.jump = {
       \ 'description' : 'move to this window',
       \ }
-function! s:kind.action_table.open.func(candidate) "{{{
+function! s:kind.action_table.jump.func(candidate) "{{{
   if has_key(a:candidate, 'action__tab_nr')
     execute 'tabnext' a:candidate.action__tab_nr
   endif

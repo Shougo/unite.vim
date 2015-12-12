@@ -2994,11 +2994,12 @@ command						*unite-action-command*
 	grep		Grep the command.
 
 window						*unite-action-window*
-This kind extends actions of |unite-action-cdable|.
-	open		Move to the window.
+This kind extends actions of |unite-action-cdable| and |unite-action-openable|.
+	jump		Move to the window.
 	delete		Close the window.
 	only		Close all windows except the window.
 	preview		Preview the window.
+	open		Open the window buffer.
 
 completion					*unite-action-completion*
 	insert		Insert the candidate.
