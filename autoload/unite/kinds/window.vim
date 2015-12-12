@@ -46,7 +46,7 @@ function! s:kind.action_table.open.func(candidates) "{{{
   for candidate in a:candidates
     execute 'buffer' (has_key(candidate, 'action__tab_nr') ?
           \ tabpagebuflist(candidate.action__tab_nr)[
-          \   candidate.action__window_nr] :
+          \   candidate.action__window_nr - 1] :
           \ winbufnr(candidate.action__window_nr))
     doautocmd BufRead
   endfor
