@@ -191,7 +191,7 @@ let s:kind.action_table.diff = {
       \ 'description' : 'diff with the other candidate or current buffer',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.diff.func(candidates)
+function! s:kind.action_table.diff.func(candidates) "{{{
   if !empty(filter(copy(a:candidates), 'isdirectory(v:val.action__path)'))
     echo 'Invalid files.'
     return
@@ -241,13 +241,13 @@ function! s:kind.action_table.diff.func(candidates)
   else
     echo 'Too many candidates!'
   endif
-endfunction
+endfunction"}}}
 
 let s:kind.action_table.dirdiff = {
       \ 'description' : ':DirDiff with the other candidate',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.dirdiff.func(candidates)
+function! s:kind.action_table.dirdiff.func(candidates) "{{{
   if !exists(':DirDiff')
     echo 'DirDiff.vim is not installed.'
     return
@@ -262,7 +262,7 @@ function! s:kind.action_table.dirdiff.func(candidates)
     execute 'DirDiff' unite#helper#get_candidate_directory(a:candidates[0])
           \ unite#helper#get_candidate_directory(a:candidates[1])
   endif
-endfunction
+endfunction"}}}
 
 " For grep.
 let s:kind.action_table.grep = {
@@ -323,7 +323,7 @@ let s:kind.action_table.exrename = {
       \   'is_invalidate_cache': 1,
       \   'is_selectable': 1,
       \ }
-function! s:kind.action_table.exrename.func(candidates)
+function! s:kind.action_table.exrename.func(candidates) "{{{
   let context = unite#get_context()
   let buffer_name = context.buffer_name
   if buffer_name ==# 'default'
@@ -332,7 +332,7 @@ function! s:kind.action_table.exrename.func(candidates)
   call unite#exrename#create_buffer(a:candidates, {
         \ 'buffer_name': buffer_name,
         \})
-endfunction
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
