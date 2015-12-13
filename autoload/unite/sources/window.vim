@@ -30,12 +30,23 @@ function! unite#sources#window#define() "{{{
   return s:source
 endfunction"}}}
 
+function! unite#sources#window#sorter(candidates, context) abort "{{{
+  return unite#util#sort_by(a:candidates, '
+  \   -get(
+  \     gettabwinvar(
+  \       v:val.action__tab_nr, v:val.action__window_nr,
+  \       "unite_window", {}),
+  \     "time", 0)
+  \ ')
+endfunction"}}}
+
 let s:source = {
       \ 'name' : 'window',
       \ 'description' : 'candidates from window list',
       \ 'syntax' : 'uniteSource__Window',
       \ 'hooks' : {},
       \ 'default_kind' : 'window',
+      \ 'sorters': function('unite#sources#window#sorter'),
       \}
 
 function! s:source.hooks.on_init(args, context) "{{{
