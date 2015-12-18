@@ -34,48 +34,48 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Wrapper command.
-command! -nargs=* -range -complete=customlist,unite#complete#source
+command! -nargs=* -bar -range -complete=customlist,unite#complete#source
       \ Unite
       \ call s:call_unite('Unite', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -range -complete=customlist,unite#complete#source
+command! -nargs=* -bar -range -complete=customlist,unite#complete#source
       \ UniteWithCurrentDir
       \ call s:call_unite('UniteWithCurrentDir', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -range -complete=customlist,unite#complete#source
+command! -nargs=* -bar -range -complete=customlist,unite#complete#source
       \ UniteWithBufferDir
       \ call s:call_unite('UniteWithBufferDir', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -range -complete=customlist,unite#complete#source
+command! -nargs=* -bar -range -complete=customlist,unite#complete#source
       \ UniteWithProjectDir
       \ call s:call_unite('UniteWithProjectDir', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -range -complete=customlist,unite#complete#source
+command! -nargs=* -bar -range -complete=customlist,unite#complete#source
       \ UniteWithInputDirectory
       \ call s:call_unite('UniteWithInputDirectory', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -range -complete=customlist,unite#complete#source
+command! -nargs=* -bar -range -complete=customlist,unite#complete#source
       \ UniteWithCursorWord
       \ call s:call_unite('UniteWithCursorWord', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -range -complete=customlist,unite#complete#source
+command! -nargs=* -bar -range -complete=customlist,unite#complete#source
       \ UniteWithInput
       \ call s:call_unite('UniteWithInput', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -complete=customlist,unite#complete#buffer_name
+command! -nargs=* -bar -complete=customlist,unite#complete#buffer_name
       \ UniteResume
       \ call s:call_unite_resume(<q-args>)
 
-command! -nargs=? -complete=customlist,unite#complete#buffer_name
+command! -nargs=? -bar -complete=customlist,unite#complete#buffer_name
       \ UniteClose call unite#view#_close(<q-args>)
 
-command! -count=1 -nargs=? -complete=customlist,unite#complete#buffer_name
+command! -count=1 -bar -nargs=? -complete=customlist,unite#complete#buffer_name
       \ UniteNext call unite#start#_pos(<q-args>, 'next', expand('<count>'))
-command! -count=1 -nargs=? -complete=customlist,unite#complete#buffer_name
+command! -count=1 -bar -nargs=? -complete=customlist,unite#complete#buffer_name
       \ UnitePrevious call unite#start#_pos(<q-args>, 'previous', expand('<count>'))
-command! -nargs=? -complete=customlist,unite#complete#buffer_name
+command! -nargs=? -bar -complete=customlist,unite#complete#buffer_name
       \ UniteFirst call unite#start#_pos(<q-args>, 'first', 1)
-command! -nargs=? -complete=customlist,unite#complete#buffer_name
+command! -nargs=? -bar -complete=customlist,unite#complete#buffer_name
       \ UniteLast call unite#start#_pos(<q-args>, 'last', 1)
 
 function! s:call_unite(command, args, line1, line2) abort "{{{
