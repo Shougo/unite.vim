@@ -40,8 +40,14 @@ function! unite#handlers#_on_insert_enter()  "{{{
 
   " Restore prompt
   let unite.prompt_linenr = unite.init_prompt_linenr
-  call append((unite.context.prompt_direction ==# 'below' ?
-        \ '$' : 0), '')
+  let modifiable_save = &l:modifiable
+  try
+    setlocal modifiable
+    call append((unite.context.prompt_direction ==# 'below' ?
+                \ '$' : 0), '')
+  finally
+    let &l:modifiable = modifiable_save
+  endtry
   call unite#view#_redraw_prompt()
 endfunction"}}}
 function! unite#handlers#_on_insert_leave()  "{{{
