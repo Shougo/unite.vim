@@ -372,11 +372,11 @@ function! unite#helper#get_current_candidate_linenr(num) "{{{
       let candidate_num += 1
     endif
 
-    let num += 1
-
-    if candidate_num >= a:num
+    if candidate_num > a:num
       break
     endif
+
+    let num += 1
   endfor
 
   let unite = unite#get_current_unite()
