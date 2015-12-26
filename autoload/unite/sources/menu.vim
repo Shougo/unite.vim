@@ -68,17 +68,13 @@ function! s:source.gather_candidates(args, context) "{{{
 
   if has_key(menu, 'command_candidates')
     " Use default map().
-    if type(menu.command_candidates) == type([])
-      let candidates = map(copy(menu.command_candidates), "{
-            \       'word' : v:val[0], 'kind' : 'command',
-            \       'action__command' : v:val[1],
-            \     }")
-    else
-      let candidates = map(copy(menu.command_candidates), "{
-            \       'word' : v:key, 'kind' : 'command',
-            \       'action__command' : v:val,
-            \     }")
-    endif
+    let command_candidates = type(menu.command_candidates) == type({}) ?
+          \ map(copy(menu.command_candidates), '[v:key, v:val]') :
+          \ copy(menu.command_candidates)
+    let candidates = map(command_candidates, "{
+          \       'word' : v:val[0], 'kind' : 'command',
+          \       'action__command' : v:val[1],
+          \     }")
   elseif has_key(menu, 'candidates')
     if !has_key(menu, 'map')
       let candidates = menu.candidates
