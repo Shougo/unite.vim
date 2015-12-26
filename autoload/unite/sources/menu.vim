@@ -66,7 +66,14 @@ function! s:source.gather_candidates(args, context) "{{{
           \ menu.description, s:source.name)
   endif
 
-  if has_key(menu, 'command_candidates')
+  if has_key(menu, 'file_candidates')
+    let candidates = map(copy(menu.file_candidates), "{
+          \       'word' : v:val[0],
+          \       'kind' : (isdirectory(unite#util#expand(v:val[1])) ?
+          \                'directory' : 'file'),
+          \       'action__path' : unite#util#expand(v:val[1]),
+          \     }")
+  elseif has_key(menu, 'command_candidates')
     " Use default map().
     let command_candidates = type(menu.command_candidates) == type({}) ?
           \ map(copy(menu.command_candidates), '[v:key, v:val]') :

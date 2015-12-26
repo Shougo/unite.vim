@@ -632,6 +632,12 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		Menu candidates.  If candidates type is a dictionary, keys are
 		ignored, but you can refer to the map attribute described below.
 
+		file_candidates
+				(List)			(Optional)
+		Menu candidates for files.
+		The first item is used for word.  The second item is file
+		path.
+
 		command_candidates
 				(List or Dictionary)	(Optional)
 		Menu candidates for commands.
@@ -676,6 +682,15 @@ g:unite_source_menu_menus			*g:unite_source_menu_menus*
 		let g:unite_source_menu_menus.test3.command_candidates = [
 		      \   ['ruby', 'VimShellInteractive ruby'],
 		      \   ['python', 'VimShellInteractive python'],
+		      \ ]
+
+		let g:unite_source_menu_menus.zsh = {
+		      \     'description' : 'zsh files',
+		      \ }
+		let g:unite_source_menu_menus.zsh.file_candidates = [
+		      \       ['zshenv'    , '~/.zshenv'],
+		      \       ['zshrc'     , '~/.zshrc'],
+		      \       ['zplug'     , '~/.zplug'],
 		      \ ]
 
 		nnoremap <silent> sm  :<C-u>Unite menu:test<CR>
