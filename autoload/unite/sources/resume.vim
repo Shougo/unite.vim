@@ -43,6 +43,10 @@ function! s:source.gather_candidates(args, context) "{{{
         \ "getbufvar(v:val, 'unite')")
   let unite = unite#get_current_unite()
 
+  let new_context = copy(unite.original_context)
+  " Disable the input
+  call remove(new_context, 'input')
+
   let max_width = max(map(copy(a:context.source__unite_list),
         \ 'len(v:val.buffer_name)'))
   let candidates = map(copy(a:context.source__unite_list), "{
@@ -56,7 +60,7 @@ function! s:source.gather_candidates(args, context) "{{{
         \            v:val.buffer_name),
         \ 'action__command' : printf('call unite#resume(%s, %s)',
         \              string(v:val.buffer_name),
-        \              string(unite.original_context)),
+        \              string(new_context)),
         \ 'source__time' : v:val.access_time,
         \}")
 
