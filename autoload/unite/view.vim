@@ -881,7 +881,7 @@ function! unite#view#_get_status_tail_string() "{{{
   endif
 
   return b:unite.context.path != '' ? '['. b:unite.context.path.']' :
-        \    (b:unite.is_async || get(b:unite.msgs, 0, '') == '') ? '' :
+        \    (get(b:unite.msgs, 0, '') == '') ? '' :
         \    substitute(get(b:unite.msgs, 0, ''), '^\[.\{-}\]\s*', '', '')
 endfunction"}}}
 
