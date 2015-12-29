@@ -150,8 +150,7 @@ function! s:make_cache_commands() "{{{
     let _ = matchlist(desc, '^|:\(.\{-}\)|\s\+:\S\+\s\+\(.*\)')
     if !empty(_)
       call add(commands, {
-            \ 'word' : _[1],
-            \ 'abbr' : printf('%-16s -- %s', _[1], _[2]),
+            \ 'word' : printf('%-16s -- %s', _[1], _[2]),
             \ 'action__command' : _[1] . ' ',
             \ 'source__command' : ':'._[1],
             \ 'action__histadd' : 1,
