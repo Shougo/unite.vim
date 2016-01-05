@@ -775,6 +775,12 @@ function! unite#view#_print_error(message) "{{{
     echohl WarningMsg | echomsg mes | echohl None
   endfor
 endfunction"}}}
+function! unite#view#_print_warning(message) "{{{
+  let message = map(s:msg2list(a:message), '"[unite.vim] " . v:val')
+  for mes in message
+    echohl WarningMsg | echon mes | echohl None
+  endfor
+endfunction"}}}
 function! unite#view#_print_source_error(message, source_name) "{{{
   call unite#view#_print_error(
         \ map(copy(s:msg2list(a:message)),

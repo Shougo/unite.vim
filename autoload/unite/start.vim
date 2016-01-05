@@ -90,6 +90,9 @@ function! unite#start#standard(sources, ...) "{{{
 
     if empty(candidates)
       " Ignore.
+      call unite#view#_print_warning(
+            \ 'unite buffer "'
+            \ . current_unite.buffer_name.'" candidates are empty')
       call unite#variables#disable_current_unite()
       return
     elseif (context.immediately && len(candidates) == 1)
