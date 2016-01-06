@@ -2294,7 +2294,7 @@ grep		Nominates "grep" command output as candidates.
 		2. "grep" options.
 		3. the narrowing pattern (if you omit it, |unite-options-input|
 		or input prompt is used).
-		Max candidates: |g:unite_source_grep_max_candidates|
+		Max candidates: 100
 
 		Special Target:
 		%         : Current buffer name
@@ -2313,8 +2313,6 @@ grep		Nominates "grep" command output as candidates.
 <
 		Settings Example:
 >
-	let g:unite_source_grep_max_candidates = 200
-
 	if executable('hw')
 	  " Use hw (highway)
 	  " https://github.com/tkengo/highway
@@ -2366,7 +2364,7 @@ grep/git	Nominates "git grep" command output at the current
 		2. "git grep" options.
 		3. the narrowing pattern (if you omit it, |unite-options-input|
 		or input prompt is used).
-		Max candidates: |g:unite_source_grep_max_candidates|
+		Max candidates: 100
 
 		Special Target:
 		%         : Current buffer name
