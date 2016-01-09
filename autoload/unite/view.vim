@@ -394,6 +394,7 @@ function! unite#view#_resize_window() "{{{
   if (winheight(0) + &cmdheight + 2 >= &lines
         \ && !context.vertical)
         \ || !context.resize
+        \ || !context.split
     " Cannot resize.
     let context.unite__is_resize = 0
     return
