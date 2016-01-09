@@ -34,35 +34,35 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Wrapper command.
-command! -nargs=* -bar -range -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ Unite
       \ call s:call_unite('Unite', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -bar -range -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ UniteWithCurrentDir
       \ call s:call_unite('UniteWithCurrentDir', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -bar -range -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ UniteWithBufferDir
       \ call s:call_unite('UniteWithBufferDir', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -bar -range -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ UniteWithProjectDir
       \ call s:call_unite('UniteWithProjectDir', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -bar -range -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ UniteWithInputDirectory
       \ call s:call_unite('UniteWithInputDirectory', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -bar -range -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ UniteWithCursorWord
       \ call s:call_unite('UniteWithCursorWord', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -bar -range -complete=customlist,unite#complete#source
+command! -nargs=* -range -complete=customlist,unite#complete#source
       \ UniteWithInput
       \ call s:call_unite('UniteWithInput', <q-args>, <line1>, <line2>)
 
-command! -nargs=* -bar -complete=customlist,unite#complete#buffer_name
+command! -nargs=* -complete=customlist,unite#complete#buffer_name
       \ UniteResume
       \ call s:call_unite_resume(<q-args>)
 
