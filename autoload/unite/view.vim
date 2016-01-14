@@ -251,8 +251,6 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
           \ context.default_action, [unite.current_candidates[0]])
 
     " Note: It is workaround
-    " Change updatetime to leave insertmode
-    set updatetime=10
     stopinsert
   endif
   if context.auto_preview
