@@ -3949,12 +3949,5 @@ A: You cannot.  Because original grep does not support the feature.
 But if you use "ag" command, you can use it like below. >
 	Unite grep::-G\ \\.txt$
 
-
-Q: If I use ag from unite grep source, the .gitignore is not respected.
-https://github.com/Shougo/unite.vim/issues/1106
-
-A: If you want to ignore .gitignore candidates, you should remove "--hidden"
-argument from |g:unite_source_grep_default_opts|.
-
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:
