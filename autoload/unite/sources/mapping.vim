@@ -53,7 +53,8 @@ function! s:source.hooks.on_init(args, context) "{{{
 
   " Get mapping list.
   redir => redir
-  silent! nmap
+  silent! map
+  silent! map!
   redir END
 
   if oldnr != bufnr('%')
