@@ -42,13 +42,13 @@ function! s:source.gather_candidates(args, context) "{{{
 
   let registers = split(get(a:args, 0, ''), '\zs')
 
-  for reg in [
-        \ '"', '+', '*',
-        \ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        \ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-        \ 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-        \ 'u', 'v', 'w', 'x', 'y', 'z',
-        \ '-', '.', ':', '#', '%', '/', '=',
+  for reg in (has('clipboard') ? ['+', '*'] : []) + [
+        \   '"',
+        \   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        \   'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+        \   'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+        \   'u', 'v', 'w', 'x', 'y', 'z',
+        \   '-', '.', ':', '#', '%', '/', '=',
         \ ]
     let register = getreg(reg, 1)
     if (empty(registers) && register != ''
