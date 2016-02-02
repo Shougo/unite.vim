@@ -45,7 +45,7 @@ let s:kind.action_table.open = {
 function! s:kind.action_table.open.func(candidates) "{{{
   for candidate in a:candidates
     execute 'buffer' candidate.action__buffer_nr
-    doautocmd BufRead
+    silent doautocmd BufRead
   endfor
 endfunction"}}}
 

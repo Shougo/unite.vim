@@ -48,7 +48,7 @@ function! s:kind.action_table.open.func(candidates) "{{{
           \ tabpagebuflist(candidate.action__tab_nr)[
           \   candidate.action__window_nr - 1] :
           \ winbufnr(candidate.action__window_nr))
-    doautocmd BufRead
+    silent doautocmd BufRead
   endfor
 endfunction"}}}
 

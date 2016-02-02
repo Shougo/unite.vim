@@ -95,7 +95,7 @@ function! unite#kinds#jump_list#define() "{{{
     try
       let bufnr = s:open(a:candidate)
       if bufwinnr < 0
-        doautocmd BufRead
+        silent doautocmd BufRead
         setlocal nomodified
         if !buflisted
           call unite#add_previewed_buffer_list(bufnr)
