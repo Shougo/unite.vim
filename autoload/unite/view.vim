@@ -687,6 +687,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
     endif
   else
     redraw
+    stopinsert
   endif
 
   " Restore unite.
