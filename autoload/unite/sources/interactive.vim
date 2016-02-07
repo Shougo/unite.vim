@@ -61,12 +61,6 @@ function! s:source.change_candidates(args, context) "{{{
             \         (v:val.description != '' ? ' -- ' . v:val.description : ''),
             \ 'source__word' : v:val.name . ' ',
             \ }")
-    if exists('*neobundle#get_unite_sources')
-      let _ += map(neobundle#get_unite_sources(), "{
-            \ 'word' : v:val,
-            \ 'source__word' : v:val . ' ',
-            \ }")
-    endif
     if exists('g:unite_source_menu_menus')
       " Add menu sources
       let _ += values(map(copy(g:unite_source_menu_menus), "{

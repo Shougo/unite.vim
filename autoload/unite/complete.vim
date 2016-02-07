@@ -42,9 +42,6 @@ function! unite#complete#source(arglead, cmdline, cursorpos) "{{{
       let _ += keys(filter(unite#init#_sources([], a:arglead),
             \ 'v:val.is_listed'))
     endif
-    if exists('*neobundle#get_unite_sources')
-      let _ += neobundle#get_unite_sources()
-    endif
   else
     " Add "{source-name}:".
     let _  = map(_, 'source_name.":".v:val')
