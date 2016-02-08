@@ -32,16 +32,16 @@ let s:source = {
       \ 'default_kind' : 'command',
       \ }
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   let a:context.source__path = expand('%')
 endfunction"}}}
-function! s:source.hooks.on_close(args, context) "{{{
+function! s:source.hooks.on_close(args, context) abort "{{{
   if has_key(a:context, 'source__proc')
     call a:context.source__proc.kill()
   endif
 endfunction "}}}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if len(a:args) < 2
     call unite#print_source_error(
           \ ':Unite script:command:path', s:source.name)
@@ -81,7 +81,7 @@ function! s:source.gather_candidates(args, context) "{{{
   return []
 endfunction"}}}
 
-function! s:source.async_gather_candidates(args, context) "{{{
+function! s:source.async_gather_candidates(args, context) abort "{{{
   if !has_key(a:context, 'source__proc')
     let a:context.is_async = 0
     return []
@@ -109,7 +109,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
           \    v:val, 'char', &encoding))")
 endfunction"}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   if len(a:args) < 1
     let path = substitute($PATH,
           \ (unite#util#is_windows() ? ';' : ':'), ',', 'g')
@@ -123,7 +123,7 @@ function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
   endif
 endfunction"}}}
 
-function! s:create_candidate(val) "{{{
+function! s:create_candidate(val) abort "{{{
   let matches = matchlist(a:val, '^\(.*\)\t\(.*\)$')
 
   if empty(matches)
@@ -136,7 +136,7 @@ function! s:create_candidate(val) "{{{
         \ }
 endfunction"}}}
 
-function! unite#sources#script#define()
+function! unite#sources#script#define() abort
   return s:source
 endfunction
 

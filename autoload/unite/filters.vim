@@ -27,7 +27,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " filter() for matchers.
-function! unite#filters#filter_matcher(list, expr, context) "{{{
+function! unite#filters#filter_matcher(list, expr, context) abort "{{{
   if a:context.unite__max_candidates <= 0
         \ || a:expr == ''
         \ || !a:context.unite__is_interactive
@@ -70,7 +70,7 @@ function! unite#filters#filter_matcher(list, expr, context) "{{{
 endfunction"}}}
 
 " @vimlint(EVL102, 1, l:input)
-function! unite#filters#lua_matcher(candidates, input, ignorecase) "{{{
+function! unite#filters#lua_matcher(candidates, input, ignorecase) abort "{{{
   if !has('lua')
     return []
   endif
@@ -102,7 +102,7 @@ endfunction"}}}
 " @vimlint(EVL102, 0, l:input)
 
 " @vimlint(EVL102, 1, l:input)
-function! unite#filters#lua_fuzzy_matcher(candidates, input, ignorecase) "{{{
+function! unite#filters#lua_fuzzy_matcher(candidates, input, ignorecase) abort "{{{
   if !has('lua')
     return []
   endif
@@ -138,7 +138,7 @@ EOF
 endfunction"}}}
 " @vimlint(EVL102, 0, l:input)
 
-function! unite#filters#fuzzy_escape(string) "{{{
+function! unite#filters#fuzzy_escape(string) abort "{{{
   " Escape string for lua regexp.
   let [head, input] = unite#filters#matcher_fuzzy#get_fuzzy_input(
         \ unite#filters#escape(a:string))
@@ -146,7 +146,7 @@ function! unite#filters#fuzzy_escape(string) "{{{
         \ '\%([[:alnum:]_/-]\|%.\)\ze.', '\0.-', 'g')
 endfunction"}}}
 
-function! unite#filters#escape(string) "{{{
+function! unite#filters#escape(string) abort "{{{
   " Escape string for lua regexp.
   return substitute(substitute(substitute(substitute(a:string,
         \ '\\ ', ' ', 'g'),
@@ -155,7 +155,7 @@ function! unite#filters#escape(string) "{{{
         \ '\*\*\+', '.*', 'g')
 endfunction"}}}
 
-function! unite#filters#lua_filter_head(candidates, input) "{{{
+function! unite#filters#lua_filter_head(candidates, input) abort "{{{
 lua << EOF
 do
   local input = vim.eval('tolower(a:input)')
@@ -173,26 +173,26 @@ EOF
   return a:candidates
 endfunction"}}}
 
-function! unite#filters#vim_filter_head(candidates, input) "{{{
+function! unite#filters#vim_filter_head(candidates, input) abort "{{{
   let input = tolower(a:input)
   return filter(a:candidates,
         \ "stridx(tolower(get(v:val, 'action__path',
         \      v:val.word)), input) == 0")
 endfunction"}}}
 
-function! unite#filters#vim_filter_pattern(candidates, pattern) "{{{
+function! unite#filters#vim_filter_pattern(candidates, pattern) abort "{{{
   return filter(a:candidates,
         \ "get(v:val, 'action__path', v:val.word) !~? a:pattern")
 endfunction"}}}
 
-function! unite#filters#filter_patterns(candidates, patterns, whites) "{{{
+function! unite#filters#filter_patterns(candidates, patterns, whites) abort "{{{
   return unite#util#has_lua()?
           \ unite#filters#lua_filter_patterns(
           \   a:candidates, a:patterns, a:whites) :
           \ unite#filters#vim_filter_patterns(
           \   a:candidates, a:patterns, a:whites)
 endfunction"}}}
-function! unite#filters#lua_filter_patterns(candidates, patterns, whites) "{{{
+function! unite#filters#lua_filter_patterns(candidates, patterns, whites) abort "{{{
 lua << EOF
 do
   local patterns = vim.eval('a:patterns')
@@ -224,7 +224,7 @@ EOF
   return a:candidates
 endfunction"}}}
 " @vimlint(EVL102, 1, l:pattern)
-function! unite#filters#vim_filter_patterns(candidates, patterns, whites) "{{{
+function! unite#filters#vim_filter_patterns(candidates, patterns, whites) abort "{{{
   let pattern = join(a:patterns, '\|')
   let white = join(a:whites, '\|')
   return filter(a:candidates,
@@ -233,15 +233,15 @@ function! unite#filters#vim_filter_patterns(candidates, patterns, whites) "{{{
 endfunction"}}}
 " @vimlint(EVL102, 0, l:pattern)
 
-function! unite#filters#globs2patterns(globs) "{{{
+function! unite#filters#globs2patterns(globs) abort "{{{
   return unite#util#has_lua() ?
           \ unite#filters#globs2lua_patterns(a:globs) :
           \ unite#filters#globs2vim_patterns(a:globs)
 endfunction"}}}
-function! unite#filters#globs2vim_patterns(globs) "{{{
+function! unite#filters#globs2vim_patterns(globs) abort "{{{
   return map(copy(a:globs), 's:glob2_pattern(v:val, 0)')
 endfunction"}}}
-function! unite#filters#globs2lua_patterns(globs) "{{{
+function! unite#filters#globs2lua_patterns(globs) abort "{{{
   return map(copy(a:globs), 's:glob2_pattern(v:val, 1)')
 endfunction"}}}
 function! s:glob2_pattern(glob, is_lua) abort "{{{

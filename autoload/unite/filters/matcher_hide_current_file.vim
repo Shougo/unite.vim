@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_hide_current_file#define() "{{{
+function! unite#filters#matcher_hide_current_file#define() abort "{{{
   return s:matcher
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:matcher = {
       \ 'description' : 'hide current file matcher',
       \}
 
-function! s:matcher.filter(candidates, context) "{{{
+function! s:matcher.filter(candidates, context) abort "{{{
   if bufname(unite#get_current_unite().prev_bufnr) == ''
     return a:candidates
   endif

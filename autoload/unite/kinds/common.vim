@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#common#define() "{{{
+function! unite#kinds#common#define() abort "{{{
   return s:kind
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:kind = {
 let s:kind.action_table.nop = {
       \ 'description' : 'no operation',
       \ }
-function! s:kind.action_table.nop.func(candidate) "{{{
+function! s:kind.action_table.nop.func(candidate) abort "{{{
 endfunction"}}}
 
 let s:kind.action_table.yank = {
@@ -49,7 +49,7 @@ let s:kind.action_table.yank = {
       \ 'is_selectable' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.yank.func(candidates) "{{{
+function! s:kind.action_table.yank.func(candidates) abort "{{{
   let text = join(map(copy(a:candidates),
         \ 's:get_candidate_text(v:val)'), "\n")
   let @" = text
@@ -65,7 +65,7 @@ endfunction"}}}
 let s:kind.action_table.yank_escape = {
       \ 'description' : 'yank escaped word or text',
       \ }
-function! s:kind.action_table.yank_escape.func(candidate) "{{{
+function! s:kind.action_table.yank_escape.func(candidate) abort "{{{
   let @" = escape(s:get_candidate_text(a:candidate), " *?[{`$\\%#\"|!<>")
 endfunction"}}}
 
@@ -73,7 +73,7 @@ let s:kind.action_table.ex = {
       \ 'description' : 'insert candidates into command line',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.ex.func(candidates) "{{{
+function! s:kind.action_table.ex.func(candidates) abort "{{{
   " Result is ':| {candidate}', here '|' means the cursor position.
   call feedkeys(printf(": %s\<C-b>",
         \ join(map(map(copy(a:candidates),
@@ -84,7 +84,7 @@ endfunction"}}}
 let s:kind.action_table.insert = {
       \ 'description' : 'insert word or text',
       \ }
-function! s:kind.action_table.insert.func(candidate) "{{{
+function! s:kind.action_table.insert.func(candidate) abort "{{{
   call s:paste(s:get_candidate_text(a:candidate), 'P',
         \ { 'regtype' : get(a:candidate, 'action__regtype', 'v')})
 endfunction"}}}
@@ -92,7 +92,7 @@ endfunction"}}}
 let s:kind.action_table.append = {
       \ 'description' : 'append word or text',
       \ }
-function! s:kind.action_table.append.func(candidate) "{{{
+function! s:kind.action_table.append.func(candidate) abort "{{{
   call s:paste(s:get_candidate_text(a:candidate), 'p',
         \ { 'regtype' : get(a:candidate, 'action__regtype', 'v')})
 endfunction"}}}
@@ -100,7 +100,7 @@ endfunction"}}}
 let s:kind.action_table.insert_directory = {
       \ 'description' : 'insert directory',
       \ }
-function! s:kind.action_table.insert_directory.func(candidate) "{{{
+function! s:kind.action_table.insert_directory.func(candidate) abort "{{{
   if has_key(a:candidate,'action__directory')
       let directory = a:candidate.action__directory
   elseif has_key(a:candidate, 'action__path')
@@ -118,7 +118,7 @@ let s:kind.action_table.preview = {
       \ 'description' : 'preview word',
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.preview.func(candidate) "{{{
+function! s:kind.action_table.preview.func(candidate) abort "{{{
   redraw
   echo s:get_candidate_text(a:candidate)
 endfunction"}}}
@@ -127,12 +127,12 @@ let s:kind.action_table.echo = {
       \ 'description' : 'echo candidates for debug',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.echo.func(candidates) "{{{
+function! s:kind.action_table.echo.func(candidates) abort "{{{
   echomsg string(a:candidates)
 endfunction"}}}
 "}}}
 
-function! unite#kinds#common#insert_word(word, ...) "{{{
+function! unite#kinds#common#insert_word(word, ...) abort "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
   let opt = get(a:000, 0, {})
@@ -154,7 +154,7 @@ function! unite#kinds#common#insert_word(word, ...) "{{{
     startinsert!
   endif
 endfunction"}}}
-function! s:paste(word, command, opt) "{{{
+function! s:paste(word, command, opt) abort "{{{
   let regtype = get(a:opt, 'regtype', 'v')
 
   " Paste.
@@ -170,7 +170,7 @@ function! s:paste(word, command, opt) "{{{
   " Open folds.
   normal! zv
 endfunction"}}}
-function! s:get_candidate_text(candidate) "{{{
+function! s:get_candidate_text(candidate) abort "{{{
   return get(a:candidate, 'action__text', a:candidate.word)
 endfunction"}}}
 

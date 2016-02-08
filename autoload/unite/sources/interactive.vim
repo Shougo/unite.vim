@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#interactive#define()
+function! unite#sources#interactive#define() abort
   return s:source
 endfunction
 
@@ -40,7 +40,7 @@ let s:source = {
       \ 'syntax' : 'uniteSource__Interactive',
       \}
 
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__InteractiveDescriptionLine / -- .*$/
         \ contained containedin=uniteSource__Interactive
   syntax match uniteSource__InteractiveDescription /.*$/
@@ -51,7 +51,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   highlight default link uniteSource__InteractiveDescription Comment
 endfunction"}}}
 
-function! s:source.change_candidates(args, context) "{{{
+function! s:source.change_candidates(args, context) abort "{{{
   let _ = []
   if a:context.input !~ '\s'
     let _ += map(filter(values(unite#init#_sources([], a:context.input)),
@@ -87,7 +87,7 @@ let s:source.action_table.narrow = {
       \ 'description' : 'narrow source',
       \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.narrow.func(candidate) "{{{
+function! s:source.action_table.narrow.func(candidate) abort "{{{
   call unite#mappings#narrowing(a:candidate.source__word, 0)
 endfunction"}}}
 "}}}

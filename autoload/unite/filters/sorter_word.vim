@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#sorter_word#define() "{{{
+function! unite#filters#sorter_word#define() abort "{{{
   return s:sorter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:sorter = {
       \ 'description' : 'sort by word order',
       \}
 
-function! s:sorter.filter(candidates, context) "{{{
+function! s:sorter.filter(candidates, context) abort "{{{
   return unite#util#sort_by(a:candidates, (&ignorecase ?
         \ 'tolower(v:val.word)' : 'v:val.word'))
 endfunction"}}}

@@ -38,7 +38,7 @@ augroup END
 
 let g:loaded_unite_source_buffer = 1
 
-function! s:append(path) "{{{
+function! s:append(path) abort "{{{
   if bufnr('%') != expand('<abuf>')
     return
   endif

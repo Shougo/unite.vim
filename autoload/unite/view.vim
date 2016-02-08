@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#view#_redraw_prompt() "{{{
+function! unite#view#_redraw_prompt() abort "{{{
   let unite = unite#get_current_unite()
   if unite.prompt_linenr < 0
     return
@@ -49,7 +49,7 @@ function! unite#view#_redraw_prompt() "{{{
     let &l:modifiable = modifiable_save
   endtry
 endfunction"}}}
-function! unite#view#_redraw_candidates(...) "{{{
+function! unite#view#_redraw_candidates(...) abort "{{{
   let is_gather_all = get(a:000, 0, 0)
 
   call unite#view#_resize_window()
@@ -105,7 +105,7 @@ function! unite#view#_redraw_candidates(...) "{{{
   " Set syntax.
   call s:set_syntax()
 endfunction"}}}
-function! unite#view#_redraw_line(...) "{{{
+function! unite#view#_redraw_line(...) abort "{{{
   let prompt_linenr = unite#get_current_unite().prompt_linenr
   let linenr = a:0 > 0 ? a:1 : line('.')
   if linenr ==# prompt_linenr
@@ -125,7 +125,7 @@ function! unite#view#_redraw_line(...) "{{{
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! unite#view#_quick_match_redraw(quick_match_table, is_define) "{{{
+function! unite#view#_quick_match_redraw(quick_match_table, is_define) abort "{{{
   for [key, number] in items(a:quick_match_table)
     if a:is_define
       execute printf(
@@ -141,7 +141,7 @@ function! unite#view#_quick_match_redraw(quick_match_table, is_define) "{{{
     endif
   endfor
 endfunction"}}}
-function! unite#view#_set_candidates_lines(lines) "{{{
+function! unite#view#_set_candidates_lines(lines) abort "{{{
   let unite = unite#get_current_unite()
   let modifiable_save = &l:modifiable
   try
@@ -165,7 +165,7 @@ function! unite#view#_set_candidates_lines(lines) "{{{
   endtry
 endfunction"}}}
 
-function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
+function! unite#view#_redraw(is_force, winnr, is_gather_all) abort "{{{
   if unite#util#is_cmdwin()
     return
   endif
@@ -260,14 +260,14 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) "{{{
     call unite#view#_do_auto_highlight()
   endif
 endfunction"}}}
-function! unite#view#_redraw_all_candidates() "{{{
+function! unite#view#_redraw_all_candidates() abort "{{{
   let unite = unite#get_current_unite()
   if len(unite.candidates) != len(unite.current_candidates)
     call unite#redraw(0, 1)
   endif
 endfunction"}}}
 
-function! unite#view#_set_syntax() "{{{
+function! unite#view#_set_syntax() abort "{{{
   syntax clear
 
   syntax match uniteInputCommand /\\\@<! :\S\+/ contained
@@ -333,7 +333,7 @@ function! unite#view#_set_syntax() "{{{
 
   let b:current_syntax = 'unite'
 endfunction"}}}
-function! unite#view#_change_highlight()  "{{{
+function! unite#view#_change_highlight() abort  "{{{
   if &filetype !=# 'unite'
         \ || !exists('b:current_syntax')
     return
@@ -381,7 +381,7 @@ function! unite#view#_change_highlight()  "{{{
   syntax case match
 endfunction"}}}
 
-function! unite#view#_resize_window() "{{{
+function! unite#view#_resize_window() abort "{{{
   if &filetype !=# 'unite'
     return
   endif
@@ -444,7 +444,7 @@ function! unite#view#_resize_window() "{{{
   let context.unite__old_winwidth = winwidth(winnr())
 endfunction"}}}
 
-function! unite#view#_do_auto_preview() "{{{
+function! unite#view#_do_auto_preview() abort "{{{
   let unite = unite#get_current_unite()
 
   if unite.preview_candidate == unite#helper#get_current_candidate()
@@ -460,7 +460,7 @@ function! unite#view#_do_auto_preview() "{{{
     call unite#view#_resize_window()
   endif
 endfunction"}}}
-function! unite#view#_do_auto_highlight() "{{{
+function! unite#view#_do_auto_highlight() abort "{{{
   let unite = unite#get_current_unite()
 
   if unite.highlight_candidate == unite#helper#get_current_candidate()
@@ -471,7 +471,7 @@ function! unite#view#_do_auto_highlight() "{{{
   call unite#action#do('highlight', [], {})
 endfunction"}}}
 
-function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
+function! unite#view#_switch_unite_buffer(buffer_name, context) abort "{{{
   " Search unite window.
   let winnr = unite#helper#get_unite_winnr(a:buffer_name)
   if a:context.split && winnr > 0
@@ -504,7 +504,7 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) "{{{
   doautocmd BufWinEnter
 endfunction"}}}
 
-function! unite#view#_close(buffer_name)  "{{{
+function! unite#view#_close(buffer_name) abort  "{{{
   let buffer_name = a:buffer_name
 
   if buffer_name == ''
@@ -539,7 +539,7 @@ function! unite#view#_close(buffer_name)  "{{{
   return quit_winnr > 0
 endfunction"}}}
 
-function! unite#view#_init_cursor() "{{{
+function! unite#view#_init_cursor() abort "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
 
@@ -608,7 +608,7 @@ function! unite#view#_init_cursor() "{{{
   call unite#handlers#_on_cursor_moved()
 endfunction"}}}
 
-function! unite#view#_quit(is_force, ...)  "{{{
+function! unite#view#_quit(is_force, ...) abort  "{{{
   if &filetype !=# 'unite'
     return
   endif
@@ -694,7 +694,7 @@ function! unite#view#_quit(is_force, ...)  "{{{
   call unite#set_current_unite(unite_save)
 endfunction"}}}
 
-function! unite#view#_set_cursor_line() "{{{
+function! unite#view#_set_cursor_line() abort "{{{
   if !exists('b:current_syntax') || &filetype !=# 'unite'
     return
   endif
@@ -716,7 +716,7 @@ function! unite#view#_set_cursor_line() "{{{
   let unite.cursor_line_time = reltime()
 endfunction"}}}
 
-function! unite#view#_bottom_cursor() "{{{
+function! unite#view#_bottom_cursor() abort "{{{
   let pos = getpos('.')
   try
     normal! zb
@@ -724,13 +724,13 @@ function! unite#view#_bottom_cursor() "{{{
     call setpos('.', pos)
   endtry
 endfunction"}}}
-function! unite#view#_clear_match() "{{{
+function! unite#view#_clear_match() abort "{{{
   if &filetype ==# 'unite'
     setlocal nocursorline
   endif
 endfunction"}}}
 
-function! unite#view#_save_position() "{{{
+function! unite#view#_save_position() abort "{{{
   let unite = b:unite
   let context = unite.context
 
@@ -764,7 +764,7 @@ function! unite#view#_save_position() "{{{
 endfunction"}}}
 
 " Message output.
-function! unite#view#_print_error(message) "{{{
+function! unite#view#_print_error(message) abort "{{{
   let message = map(s:msg2list(a:message), '"[unite.vim] " . v:val')
   let unite = unite#get_current_unite()
   if !empty(unite)
@@ -774,18 +774,18 @@ function! unite#view#_print_error(message) "{{{
     echohl WarningMsg | echomsg mes | echohl None
   endfor
 endfunction"}}}
-function! unite#view#_print_warning(message) "{{{
+function! unite#view#_print_warning(message) abort "{{{
   let message = map(s:msg2list(a:message), '"[unite.vim] " . v:val')
   for mes in message
     echohl WarningMsg | echon mes | echohl None
   endfor
 endfunction"}}}
-function! unite#view#_print_source_error(message, source_name) "{{{
+function! unite#view#_print_source_error(message, source_name) abort "{{{
   call unite#view#_print_error(
         \ map(copy(s:msg2list(a:message)),
         \   "printf('[%s] %s', a:source_name, v:val)"))
 endfunction"}}}
-function! unite#view#_print_message(message, ...) "{{{
+function! unite#view#_print_message(message, ...) abort "{{{
   let context = unite#get_context()
   let unite = unite#get_current_unite()
   let message = s:msg2list(a:message)
@@ -798,22 +798,22 @@ function! unite#view#_print_message(message, ...) "{{{
     echohl Comment | call unite#view#_redraw_echo(message[: &cmdheight-1]) | echohl None
   endif
 endfunction"}}}
-function! unite#view#_print_source_message(message, source_name) "{{{
+function! unite#view#_print_source_message(message, source_name) abort "{{{
   call unite#view#_print_message(
         \ map(copy(s:msg2list(a:message)),
         \    "printf('[%s] %s', a:source_name, v:val)"))
 endfunction"}}}
-function! unite#view#_add_source_message(message, source_name) "{{{
+function! unite#view#_add_source_message(message, source_name) abort "{{{
   call unite#view#_print_message(
         \ map(copy(s:msg2list(a:message)),
         \    "printf('[%s] %s', a:source_name, v:val)"), 1)
 endfunction"}}}
-function! unite#view#_clear_message() "{{{
+function! unite#view#_clear_message() abort "{{{
   let unite = unite#get_current_unite()
   let unite.msgs = []
   redraw
 endfunction"}}}
-function! unite#view#_redraw_echo(expr) "{{{
+function! unite#view#_redraw_echo(expr) abort "{{{
   if has('vim_starting')
     echo join(s:msg2list(a:expr), "\n")
     return
@@ -842,7 +842,7 @@ function! unite#view#_redraw_echo(expr) "{{{
   endtry
 endfunction"}}}
 
-function! unite#view#_match_line(highlight, line, id) "{{{
+function! unite#view#_match_line(highlight, line, id) abort "{{{
   if &filetype ==# 'unite'
     setlocal cursorline
     return
@@ -853,11 +853,11 @@ function! unite#view#_match_line(highlight, line, id) "{{{
         \ matchaddpos(a:highlight, [a:line], 10, a:id) :
         \ matchadd(a:highlight, '^\%'.a:line.'l.*', 10, a:id)
 endfunction"}}}
-function! unite#view#_clear_match_highlight() "{{{
+function! unite#view#_clear_match_highlight() abort "{{{
   silent! call matchdelete(10)
 endfunction"}}}
 
-function! unite#view#_get_status_plane_string() "{{{
+function! unite#view#_get_status_plane_string() abort "{{{
   return (b:unite.is_async ? '[async] ' : '') .
         \ join(map(copy(unite#loaded_sources_list()), "
         \ (v:val.unite__len_candidates == 0) ? '_' :
@@ -873,14 +873,14 @@ function! unite#view#_get_status_plane_string() "{{{
         \ "))
 endfunction"}}}
 
-function! unite#view#_get_status_head_string() "{{{
+function! unite#view#_get_status_head_string() abort "{{{
   if !exists('b:unite')
     return ''
   endif
 
   return b:unite.is_async ? '[async] ' : ''
 endfunction"}}}
-function! unite#view#_get_status_tail_string() "{{{
+function! unite#view#_get_status_tail_string() abort "{{{
   if !exists('b:unite')
     return ''
   endif
@@ -890,13 +890,13 @@ function! unite#view#_get_status_tail_string() "{{{
         \    substitute(get(b:unite.msgs, 0, ''), '^\[.\{-}\]\s*', '', '')
 endfunction"}}}
 
-function! unite#view#_get_source_name_string(source) "{{{
+function! unite#view#_get_source_name_string(source) abort "{{{
   return (a:source.unite__orig_len_candidates == 0) ? '_' :
         \ join(insert(filter(copy(a:source.args),
         \  'type(v:val) <= 1'),
         \   unite#helper#convert_source_name(a:source.name)), ':')
 endfunction"}}}
-function! unite#view#_get_source_candidates_string(source) "{{{
+function! unite#view#_get_source_candidates_string(source) abort "{{{
   return a:source.unite__orig_len_candidates == 0 ? '' :
         \      a:source.unite__orig_len_candidates ==
         \            a:source.unite__len_candidates ?
@@ -905,7 +905,7 @@ function! unite#view#_get_source_candidates_string(source) "{{{
         \      a:source.unite__orig_len_candidates)
 endfunction"}}}
 
-function! unite#view#_get_status_string(unite) "{{{
+function! unite#view#_get_status_string(unite) abort "{{{
   let statusline = "%#uniteStatusHead# %{unite#view#_get_status_head_string()}%*"
   let cnt = 0
   if empty(a:unite.sources)
@@ -931,18 +931,18 @@ function! unite#view#_get_status_string(unite) "{{{
   return statusline
 endfunction"}}}
 
-function! unite#view#_add_previewed_buffer_list(bufnr) "{{{
+function! unite#view#_add_previewed_buffer_list(bufnr) abort "{{{
   call s:clear_previewed_buffer_list()
 
   let unite = unite#get_current_unite()
   call add(unite.previewed_buffer_list, a:bufnr)
 endfunction"}}}
-function! unite#view#_remove_previewed_buffer_list(bufnr) "{{{
+function! unite#view#_remove_previewed_buffer_list(bufnr) abort "{{{
   let unite = unite#get_current_unite()
   call filter(unite.previewed_buffer_list, 'v:val != a:bufnr')
 endfunction"}}}
 
-function! unite#view#_preview_file(filename) "{{{
+function! unite#view#_preview_file(filename) abort "{{{
   let context = unite#get_context()
   if context.vertical_preview
     let unite_winwidth = winwidth(0)
@@ -961,7 +961,7 @@ function! unite#view#_preview_file(filename) "{{{
   endif
 endfunction"}}}
 
-function! unite#view#_close_preview_window() "{{{
+function! unite#view#_close_preview_window() abort "{{{
   let unite = unite#get_current_unite()
 
   if !unite.has_preview_window
@@ -977,7 +977,7 @@ function! unite#view#_close_preview_window() "{{{
 
   let unite.preview_candidate = {}
 endfunction"}}}
-function! s:clear_previewed_buffer_list() "{{{
+function! s:clear_previewed_buffer_list() abort "{{{
   let unite = unite#get_current_unite()
 
   " Clear previewed buffer list
@@ -996,7 +996,7 @@ endfunction"}}}
 " @vimlint(EVL102, 1, l:max_source_name)
 " @vimlint(EVL102, 1, l:context)
 " @vimlint(EVL102, 1, l:padding)
-function! unite#view#_convert_lines(candidates) "{{{
+function! unite#view#_convert_lines(candidates) abort "{{{
   let unite = unite#get_current_unite()
   let context = unite#get_context()
   let [max_width, max_source_name] = unite#helper#adjustments(
@@ -1026,7 +1026,7 @@ endfunction"}}}
 " @vimlint(EVL102, 0, l:context)
 " @vimlint(EVL102, 0, l:padding)
 
-function! unite#view#_search_cursor(candidate) "{{{
+function! unite#view#_search_cursor(candidate) abort "{{{
   " Optimized
   if empty(a:candidate) ||
         \ unite#helper#get_current_candidate() ==# a:candidate
@@ -1050,7 +1050,7 @@ function! unite#view#_search_cursor(candidate) "{{{
   endwhile
 endfunction"}}}
 
-function! s:set_syntax() "{{{
+function! s:set_syntax() abort "{{{
   let unite = unite#get_current_unite()
 
   " Set syntax.
@@ -1063,16 +1063,16 @@ function! s:set_syntax() "{{{
   call unite#view#_change_highlight()
 endfunction"}}}
 
-function! s:has_preview_window() "{{{
+function! s:has_preview_window() abort "{{{
   return len(filter(range(1, winnr('$')),
         \    'getwinvar(v:val, "&previewwindow")')) > 0
 endfunction"}}}
 
-function! s:msg2list(expr) "{{{
+function! s:msg2list(expr) abort "{{{
   return type(a:expr) ==# type([]) ? a:expr : split(a:expr, '\n')
 endfunction"}}}
 
-function! s:get_buffer_direction(context) "{{{
+function! s:get_buffer_direction(context) abort "{{{
   let direction = a:context.direction
   if direction ==# 'dynamictop' || direction ==# 'dynamicbottom'
     " Use dynamic direction calculation
@@ -1091,7 +1091,7 @@ function! s:get_buffer_direction(context) "{{{
   return direction
 endfunction"}}}
 
-function! s:restore_position(position) "{{{
+function! s:restore_position(position) abort "{{{
   call setpos('.', a:position.pos)
   if winline() < a:position.winline
     execute 'normal!' (a:position.winline - winline())."\<C-y>"

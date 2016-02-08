@@ -29,7 +29,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#command#define() "{{{
+function! unite#sources#command#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -44,13 +44,13 @@ let s:source = {
       \ 'syntax' : 'uniteSource__Command',
       \ }
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   " Get command list.
   redir => a:context.source__command
   silent! command
   redir END
 endfunction"}}}
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__Command_DescriptionLine
         \ / -- .*$/
         \ contained containedin=uniteSource__Command
@@ -66,7 +66,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
 endfunction"}}}
 
 let s:cached_result = []
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if a:context.is_redraw || empty(s:cached_result)
     let s:cached_result = s:make_cache_commands()
   endif
@@ -119,7 +119,7 @@ function! s:source.gather_candidates(args, context) "{{{
 
   return unite#util#sort_by(result, 'tolower(v:val.word)')
 endfunction"}}}
-function! s:source.change_candidates(args, context) "{{{
+function! s:source.change_candidates(args, context) abort "{{{
   let dummy = substitute(a:context.input, '[*\\]', '', 'g')
   if len(split(dummy)) > 1
     " Add dummy result.
@@ -135,7 +135,7 @@ function! s:source.change_candidates(args, context) "{{{
   return []
 endfunction"}}}
 
-function! s:make_cache_commands() "{{{
+function! s:make_cache_commands() abort "{{{
   let helpfile = expand(findfile('doc/index.txt', &runtimepath))
   if !filereadable(helpfile)
     return []
@@ -166,7 +166,7 @@ let s:source.action_table.preview = {
       \ 'description' : 'view the help documentation',
       \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.preview.func(candidate) "{{{
+function! s:source.action_table.preview.func(candidate) abort "{{{
   let winnr = winnr()
 
   try

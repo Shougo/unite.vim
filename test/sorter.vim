@@ -1,7 +1,7 @@
 let s:suite = themis#suite('parser')
 let s:assert = themis#helper('assert')
 
-function! s:suite.sorter_rank()
+function! s:suite.sorter_rank() abort
   if !has('lua')
     return
   endif

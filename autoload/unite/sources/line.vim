@@ -32,7 +32,7 @@ call unite#util#set_default(
 let s:supported_search_direction =
       \ ['forward', 'backward', 'all', 'buffers', 'args']
 
-function! unite#sources#line#define() "{{{
+function! unite#sources#line#define() abort "{{{
   return s:source_line
 endfunction "}}}
 
@@ -47,7 +47,7 @@ let s:source_line = {
       \ 'sorters' : 'sorter_nothing',
       \ }
 
-function! s:source_line.hooks.on_init(args, context) "{{{
+function! s:source_line.hooks.on_init(args, context) abort "{{{
   let a:context.source__linenr = line('.')
   let a:context.source__linemax = line('$')
   let a:context.source__is_bang =
@@ -96,7 +96,7 @@ function! s:source_line.hooks.on_init(args, context) "{{{
 
   let a:context.source__direction = direction
 endfunction"}}}
-function! s:source_line.hooks.on_syntax(args, context) "{{{
+function! s:source_line.hooks.on_syntax(args, context) abort "{{{
   let highlight = get(a:context, 'custom_line_enable_highlight',
         \ g:unite_source_line_enable_highlight)
 
@@ -131,7 +131,7 @@ function! s:source_line.hooks.on_syntax(args, context) "{{{
   endtry
 endfunction"}}}
 
-function! s:source_line.hooks.on_post_filter(args, context) "{{{
+function! s:source_line.hooks.on_post_filter(args, context) abort "{{{
   for candidate in a:context.candidates
     let candidate.is_multiline = 1
     let candidate.action__col_pattern = a:context.source__input
@@ -141,7 +141,7 @@ function! s:source_line.hooks.on_post_filter(args, context) "{{{
   endfor
 endfunction"}}}
 
-function! s:source_line.gather_candidates(args, context) "{{{
+function! s:source_line.gather_candidates(args, context) abort "{{{
   let direction = a:context.source__direction
   let start = a:context.source__linenr
 
@@ -155,11 +155,11 @@ function! s:source_line.gather_candidates(args, context) "{{{
   return direction ==# 'backward' ? reverse(_) : _
 endfunction"}}}
 
-function! s:source_line.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source_line.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return s:supported_search_direction
 endfunction"}}}
 
-function! s:source_line.source__converter(candidates, context) "{{{
+function! s:source_line.source__converter(candidates, context) abort "{{{
   if len(a:context.source__bufnrs) > 1
     for candidate in a:candidates
       let candidate.abbr = printf(a:context.source__format,
@@ -183,7 +183,7 @@ let s:source_line.converters = [s:source_line.source__converter]
 "}}}
 
 " Misc. "{{{
-function! s:on_gather_candidates(direction, context, start, max) "{{{
+function! s:on_gather_candidates(direction, context, start, max) abort "{{{
   let candidates = []
   for bufnr in a:context.source__bufnrs
     " source__info = [bufnr, [line, text]]
@@ -196,7 +196,7 @@ function! s:on_gather_candidates(direction, context, start, max) "{{{
 
   return candidates
 endfunction"}}}
-function! s:get_lines(context, direction, bufnr, start, max) "{{{
+function! s:get_lines(context, direction, bufnr, start, max) abort "{{{
   let [start, end] =
         \ a:direction ==# 'forward' ?
         \ [a:start, (a:max == 0 ? '$' : a:start + a:max - 1)] :
@@ -220,7 +220,7 @@ function! s:get_lines(context, direction, bufnr, start, max) "{{{
   return _
 endfunction"}}}
 
-function! s:get_context_lines(context, direction, start) "{{{
+function! s:get_context_lines(context, direction, start) abort "{{{
   if a:direction !=# 'forward' && a:direction !=# 'backward'
     let lines = s:on_gather_candidates('forward', a:context, 1, 0)
   else

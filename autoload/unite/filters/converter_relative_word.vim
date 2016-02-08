@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#converter_relative_word#define() "{{{
+function! unite#filters#converter_relative_word#define() abort "{{{
   return s:converter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:converter = {
       \ 'description' : 'relative path word converter',
       \}
 
-function! s:converter.filter(candidates, context) "{{{
+function! s:converter.filter(candidates, context) abort "{{{
   if a:context.input =~ '^\%(/\|\a\+:/\)'
     " Use full path.
     return unite#filters#converter_full_path#define().filter(
@@ -74,7 +74,7 @@ function! s:converter.filter(candidates, context) "{{{
   return a:candidates
 endfunction"}}}
 
-function! unite#filters#converter_relative_word#lua(candidates, cwd) "{{{
+function! unite#filters#converter_relative_word#lua(candidates, cwd) abort "{{{
   let cwd = a:cwd
   if cwd != '/' && cwd[-1:] != '/'
     let cwd .= '/'

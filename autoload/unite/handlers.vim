@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#handlers#_on_insert_enter()  "{{{
+function! unite#handlers#_on_insert_enter() abort  "{{{
   if &filetype !=# 'unite'
     return
   endif
@@ -50,7 +50,7 @@ function! unite#handlers#_on_insert_enter()  "{{{
   endtry
   call unite#view#_redraw_prompt()
 endfunction"}}}
-function! unite#handlers#_on_insert_leave()  "{{{
+function! unite#handlers#_on_insert_leave() abort  "{{{
   let unite = unite#get_current_unite()
 
   if line('.') != unite.prompt_linenr
@@ -64,7 +64,7 @@ function! unite#handlers#_on_insert_leave()  "{{{
     setlocal nomodifiable
   endif
 endfunction"}}}
-function! unite#handlers#_on_cursor_hold_i()  "{{{
+function! unite#handlers#_on_cursor_hold_i() abort  "{{{
   let unite = unite#get_current_unite()
 
   call unite#view#_change_highlight()
@@ -79,7 +79,7 @@ function! unite#handlers#_on_cursor_hold_i()  "{{{
     call feedkeys("a\<BS>", 'n')
   endif
 endfunction"}}}
-function! unite#handlers#_on_cursor_moved_i()  "{{{
+function! unite#handlers#_on_cursor_moved_i() abort  "{{{
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
 
@@ -94,13 +94,13 @@ function! unite#handlers#_on_cursor_moved_i()  "{{{
     startinsert!
   endif
 endfunction"}}}
-function! unite#handlers#_on_text_changed()  "{{{
+function! unite#handlers#_on_text_changed() abort  "{{{
   let unite = unite#get_current_unite()
   if unite#helper#get_input(1) !=# unite.last_input
     call s:check_redraw()
   endif
 endfunction"}}}
-function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
+function! unite#handlers#_on_bufwin_enter(bufnr) abort  "{{{
   silent! let unite = getbufvar(a:bufnr, 'unite')
   if type(unite) != type({})
         \ || bufwinnr(a:bufnr) < 1
@@ -129,7 +129,7 @@ function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
   call unite#init#_tab_variables()
   let t:unite.last_unite_bufnr = a:bufnr
 endfunction"}}}
-function! unite#handlers#_on_cursor_hold()  "{{{
+function! unite#handlers#_on_cursor_hold() abort  "{{{
   let is_async = 0
 
   call s:restore_statusline()
@@ -163,7 +163,7 @@ function! unite#handlers#_on_cursor_hold()  "{{{
     call feedkeys("g\<ESC>" . (v:count > 0 ? v:count : ''), 'n')
   endif
 endfunction"}}}
-function! unite#handlers#_on_cursor_moved()  "{{{
+function! unite#handlers#_on_cursor_moved() abort  "{{{
   if &filetype !=# 'unite'
     return
   endif
@@ -264,7 +264,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
     call setpos('.', pos)
   endif"}}}
 endfunction"}}}
-function! unite#handlers#_on_buf_unload(bufname)  "{{{
+function! unite#handlers#_on_buf_unload(bufname) abort  "{{{
   call unite#view#_clear_match()
   call unite#view#_clear_match_highlight()
 
@@ -296,7 +296,7 @@ function! unite#handlers#_on_buf_unload(bufname)  "{{{
   call unite#helper#call_hook(unite#loaded_sources_list(), 'on_close')
   let unite.is_finalized = 1
 endfunction"}}}
-function! unite#handlers#_on_insert_char_pre()  "{{{
+function! unite#handlers#_on_insert_char_pre() abort  "{{{
   let prompt_linenr = unite#get_current_unite().prompt_linenr
 
   if line('.') == prompt_linenr
@@ -308,7 +308,7 @@ function! unite#handlers#_on_insert_char_pre()  "{{{
   call unite#handlers#_on_cursor_moved()
 endfunction"}}}
 
-function! unite#handlers#_save_updatetime()  "{{{
+function! unite#handlers#_save_updatetime() abort  "{{{
   let unite = unite#get_current_unite()
 
   if unite.is_async && unite.context.update_time > 0
@@ -317,7 +317,7 @@ function! unite#handlers#_save_updatetime()  "{{{
     let &updatetime = unite.context.update_time
   endif
 endfunction"}}}
-function! unite#handlers#_restore_updatetime()  "{{{
+function! unite#handlers#_restore_updatetime() abort  "{{{
   let unite = unite#get_current_unite()
 
   if !has_key(unite, 'update_time_save')
@@ -329,7 +329,7 @@ function! unite#handlers#_restore_updatetime()  "{{{
     let &updatetime = unite.update_time_save
   endif
 endfunction"}}}
-function! s:restore_statusline()  "{{{
+function! s:restore_statusline() abort  "{{{
   if &filetype !=# 'unite' || !g:unite_force_overwrite_statusline
     return
   endif
@@ -342,7 +342,7 @@ function! s:restore_statusline()  "{{{
   endif
 endfunction"}}}
 
-function! s:check_redraw() "{{{
+function! s:check_redraw() abort "{{{
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
   if line('.') == prompt_linenr || unite.context.is_redraw
@@ -351,7 +351,7 @@ function! s:check_redraw() "{{{
   endif
 endfunction"}}}
 
-function! s:cursor_up() "{{{
+function! s:cursor_up() abort "{{{
   nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
         \ unite#mappings#cursor_up(0)
   nnoremap <expr><buffer> <Plug>(unite_skip_cursor_up)
@@ -361,7 +361,7 @@ function! s:cursor_up() "{{{
   inoremap <expr><buffer> <Plug>(unite_skip_previous_line)
         \ unite#mappings#cursor_up(1)
 endfunction"}}}
-function! s:cursor_down() "{{{
+function! s:cursor_down() abort "{{{
   nnoremap <expr><buffer> <Plug>(unite_loop_cursor_down)
         \ unite#mappings#cursor_down(0)
   nnoremap <expr><buffer> <Plug>(unite_skip_cursor_down)

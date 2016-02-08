@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#action#define()
+function! unite#sources#action#define() abort
   return s:source
 endfunction
 
@@ -40,7 +40,7 @@ let s:source = {
       \ 'is_listed' : 0,
       \}
 
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__ActionDescriptionLine / -- .*$/
         \ contained containedin=uniteSource__Action
   syntax match uniteSource__ActionDescription /.*$/
@@ -55,7 +55,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
 endfunction"}}}
 
 " @vimlint(EVL102, 1, l:sources)
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if empty(a:args)
     return []
   endif
@@ -112,7 +112,7 @@ function! s:source.gather_candidates(args, context) "{{{
 endfunction"}}}
 " @vimlint(EVL102, 0, l:sources)
 
-function! s:compare_word(i1, i2)
+function! s:compare_word(i1, i2) abort
   return (a:i1.word ># a:i2.word) ? 1 : -1
 endfunction
 
@@ -120,7 +120,7 @@ endfunction
 let s:source.action_table.do = {
       \ 'description' : 'do action',
       \ }
-function! s:source.action_table.do.func(candidate) "{{{
+function! s:source.action_table.do.func(candidate) abort "{{{
   let context = a:candidate.source__context
 
   if !empty(context.unite__old_buffer_info)
@@ -169,7 +169,7 @@ function! s:source.action_table.do.func(candidate) "{{{
 endfunction"}}}
 "}}}
 
-function! s:get_actions(candidates, sources) "{{{
+function! s:get_actions(candidates, sources) abort "{{{
   let actions = unite#action#_get_candidate_action_table(
         \ a:candidates[0], a:sources)
 

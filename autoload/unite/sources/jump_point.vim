@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#jump_point#define() "{{{
+function! unite#sources#jump_point#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -36,13 +36,13 @@ let s:source = {
       \ 'hooks' : {},
       \ 'default_kind' : 'jump_list',
       \}
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   let line = substitute(getline('.'), '^!!!\|!!!$', '', 'g')
   let a:context.source__line =
         \ (line =~ '^\f\+:') ?  line : ''
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if a:context.source__line == ''
     return []
   endif

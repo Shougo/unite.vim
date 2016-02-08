@@ -40,7 +40,7 @@ augroup END
 
 let g:loaded_unite_source_window = 1
 
-function! s:append() "{{{
+function! s:append() abort "{{{
   if &filetype == 'unite'
     " Ignore unite window.
     return

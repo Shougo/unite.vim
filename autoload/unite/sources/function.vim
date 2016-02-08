@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#function#define() "{{{
+function! unite#sources#function#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -40,7 +40,7 @@ let s:source = {
       \ }
 
 let s:cached_result = []
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if a:context.is_redraw || empty(s:cached_result)
     let s:cached_result = s:make_cache_functions()
   endif
@@ -77,7 +77,7 @@ function! s:source.gather_candidates(args, context) "{{{
         \ s:cached_result + result, 'tolower(v:val.word)')
 endfunction"}}}
 
-function! s:make_cache_functions() "{{{
+function! s:make_cache_functions() abort "{{{
   let helpfile = expand(findfile('doc/eval.txt', &runtimepath))
   if !filereadable(helpfile)
     return []
@@ -109,7 +109,7 @@ let s:source.action_table.preview = {
       \ 'description' : 'view the help documentation',
       \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.preview.func(candidate) "{{{
+function! s:source.action_table.preview.func(candidate) abort "{{{
   let winnr = winnr()
 
   try
@@ -127,7 +127,7 @@ endfunction"}}}
 let s:source.action_table.call = {
       \ 'description' : 'call the function and print result',
       \ }
-function! s:source.action_table.call.func(candidate) "{{{
+function! s:source.action_table.call.func(candidate) abort "{{{
   if has_key(a:candidate, 'action__description')
     " Print description.
 
@@ -153,7 +153,7 @@ endfunction"}}}
 let s:source.action_table.edit = {
       \ 'description' : 'edit the function from the source',
       \ }
-function! s:source.action_table.edit.func(candidates) "{{{
+function! s:source.action_table.edit.func(candidates) abort "{{{
   redir => func
   silent execute 'verbose function '.a:candidates.action__function
   redir END

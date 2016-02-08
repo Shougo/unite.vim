@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#converter_relative_abbr#define() "{{{
+function! unite#filters#converter_relative_abbr#define() abort "{{{
   return s:converter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:converter = {
       \ 'description' : 'relative path abbr converter',
       \}
 
-function! s:converter.filter(candidates, context) "{{{
+function! s:converter.filter(candidates, context) abort "{{{
   try
     let directory = unite#util#substitute_path_separator(getcwd())
     let old_dir = directory

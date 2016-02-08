@@ -113,7 +113,7 @@ function! s:call_unite(command, args, line1, line2) abort "{{{
 
   call unite#start(args, context)
 endfunction"}}}
-function! s:call_unite_resume(args) "{{{
+function! s:call_unite_resume(args) abort "{{{
   let [args, context] = unite#helper#parse_options(a:args)
 
   call unite#resume(join(args), context)

@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#resume#define() "{{{
+function! unite#sources#resume#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:source = {
       \ 'default_kind' : 'command',
       \}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   let a:context.source__unite_list = map(filter(range(1, bufnr('$')), "
         \ getbufvar(v:val, '&filetype') ==# 'unite'
         \  && getbufvar(v:val, 'unite').sources[0].name != 'resume'"),
@@ -68,7 +68,7 @@ function! s:source.gather_candidates(args, context) "{{{
 endfunction"}}}
 
 " Misc.
-function! s:compare(candidate_a, candidate_b) "{{{
+function! s:compare(candidate_a, candidate_b) abort "{{{
   return a:candidate_b.source__time - a:candidate_a.source__time
 endfunction"}}}
 

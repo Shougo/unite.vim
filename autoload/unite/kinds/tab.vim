@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#tab#define() "{{{
+function! unite#kinds#tab#define() abort "{{{
   return s:kind
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:kind = {
 let s:kind.action_table.open = {
       \ 'description' : 'open this tab',
       \ }
-function! s:kind.action_table.open.func(candidate) "{{{
+function! s:kind.action_table.open.func(candidate) abort "{{{
   execute 'tabnext' a:candidate.action__tab_nr
 endfunction"}}}
 
@@ -51,7 +51,7 @@ let s:kind.action_table.delete = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.delete.func(candidates) "{{{
+function! s:kind.action_table.delete.func(candidates) abort "{{{
   for candidate in sort(a:candidates, 's:compare')
     execute 'tabclose' candidate.action__tab_nr
   endfor
@@ -61,7 +61,7 @@ let s:kind.action_table.preview = {
       \ 'description' : 'preview tab',
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.preview.func(candidate) "{{{
+function! s:kind.action_table.preview.func(candidate) abort "{{{
   let tabnr = tabpagenr()
   execute 'tabnext' a:candidate.action__tab_nr
   redraw
@@ -73,7 +73,7 @@ let s:kind.action_table.unite__new_candidate = {
       \ 'description' : 'create new tab',
       \ 'is_invalidate_cache' : 1,
       \ }
-function! s:kind.action_table.unite__new_candidate.func(candidate) "{{{
+function! s:kind.action_table.unite__new_candidate.func(candidate) abort "{{{
   let title = input('Please input tab title: ', '',
         \ 'customlist,' . s:SID_PREFIX() . 'history_complete')
 
@@ -84,11 +84,11 @@ function! s:kind.action_table.unite__new_candidate.func(candidate) "{{{
 endfunction"}}}
 
 " Anywhere SID.
-function! s:SID_PREFIX()
+function! s:SID_PREFIX() abort
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
 
-function! s:history_complete(arglead, cmdline, cursorpos)
+function! s:history_complete(arglead, cmdline, cursorpos) abort
   return filter(map(reverse(range(1, histnr('input'))),
   \                     'histget("input", v:val)'),
   \                 'v:val != "" && stridx(v:val, a:arglead) == 0')
@@ -104,7 +104,7 @@ if exists('*gettabvar')
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
         \ }
-  function! s:kind.action_table.rename.func(candidates) "{{{
+  function! s:kind.action_table.rename.func(candidates) abort "{{{
     for candidate in a:candidates
       let old_title = gettabvar(candidate.action__tab_nr, 'title')
       let title = input(printf('New title: %s -> ', old_title), old_title)
@@ -117,7 +117,7 @@ endif
 "}}}
 
 " Misc
-function! s:compare(candidate_a, candidate_b) "{{{
+function! s:compare(candidate_a, candidate_b) abort "{{{
   return a:candidate_b.action__tab_nr - a:candidate_a.action__tab_nr
 endfunction"}}}
 

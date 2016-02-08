@@ -35,7 +35,7 @@ else
 endif
 "}}}
 
-function! unite#kinds#jump_list#define() "{{{
+function! unite#kinds#jump_list#define() abort "{{{
   let kind = {
         \ 'name' : 'jump_list',
         \ 'default_action' : 'open',
@@ -49,7 +49,7 @@ function! unite#kinds#jump_list#define() "{{{
         \ 'description' : 'jump to this position',
         \ 'is_selectable' : 1,
         \ }
-  function! kind.action_table.open.func(candidates) "{{{
+  function! kind.action_table.open.func(candidates) abort "{{{
     for candidate in a:candidates
       " Save current line in jump_list
       execute 'normal!' line('.').'G'
@@ -80,7 +80,7 @@ function! unite#kinds#jump_list#define() "{{{
         \ 'description' : 'preview this position',
         \ 'is_quit' : 0,
         \ }
-  function! kind.action_table.preview.func(candidate) "{{{
+  function! kind.action_table.preview.func(candidate) abort "{{{
     let filename = s:get_filename(a:candidate)
     let bufwinnr = bufwinnr(filename)
     let buflisted = buflisted(filename)
@@ -111,7 +111,7 @@ function! unite#kinds#jump_list#define() "{{{
         \ 'description' : 'highlight this position',
         \ 'is_quit' : 0,
         \ }
-  function! kind.action_table.highlight.func(candidate) "{{{
+  function! kind.action_table.highlight.func(candidate) abort "{{{
     let candidate_winnr = bufwinnr(s:get_bufnr(a:candidate))
 
     if candidate_winnr > 0
@@ -143,7 +143,7 @@ function! unite#kinds#jump_list#define() "{{{
         \ 'description' : 'replace with qfreplace',
         \ 'is_selectable' : 1,
         \ }
-  function! kind.action_table.replace.func(candidates) "{{{
+  function! kind.action_table.replace.func(candidates) abort "{{{
     if globpath(&runtimepath, 'autoload/qfreplace.vim') == ''
       echo 'qfreplace.vim is not installed.'
       return
@@ -174,7 +174,7 @@ endfunction"}}}
 "}}}
 
 " Misc.
-function! s:jump(candidate, is_highlight) "{{{
+function! s:jump(candidate, is_highlight) abort "{{{
   let line = get(a:candidate, 'action__line', 1)
   let pattern = get(a:candidate, 'action__pattern', '')
 
@@ -250,11 +250,11 @@ function! s:jump(candidate, is_highlight) "{{{
   call s:open_current_line(a:is_highlight)
 endfunction"}}}
 
-function! s:best_winline() "{{{
+function! s:best_winline() abort "{{{
   return max([1, winheight(0) * g:unite_kind_jump_list_after_jump_scroll / 100])
 endfunction"}}}
 
-function! s:adjust_scroll(best_winline) "{{{
+function! s:adjust_scroll(best_winline) abort "{{{
   normal! zt
   let save_cursor = getpos('.')
   let winl = 1
@@ -274,7 +274,7 @@ function! s:adjust_scroll(best_winline) "{{{
   call setpos('.', save_cursor)
 endfunction"}}}
 
-function! s:open_current_line(is_highlight) "{{{
+function! s:open_current_line(is_highlight) abort "{{{
   normal! zv
   normal! zz
   if a:is_highlight
@@ -283,7 +283,7 @@ function! s:open_current_line(is_highlight) "{{{
   endif
 endfunction"}}}
 
-function! s:open(candidate) "{{{
+function! s:open(candidate) abort "{{{
   let bufnr = s:get_bufnr(a:candidate)
   if bufnr != bufnr('%')
     if has_key(a:candidate, 'action__buffer_nr')
@@ -298,17 +298,17 @@ function! s:open(candidate) "{{{
 
   return bufnr
 endfunction"}}}
-function! s:get_filename(candidate) "{{{
+function! s:get_filename(candidate) abort "{{{
   return has_key(a:candidate, 'action__path') ?
             \ a:candidate.action__path :
             \ bufname(a:candidate.action__buffer_nr)
 endfunction"}}}
-function! s:get_bufnr(candidate) "{{{
+function! s:get_bufnr(candidate) abort "{{{
   return has_key(a:candidate, 'action__buffer_nr') ?
         \ a:candidate.action__buffer_nr :
         \ bufnr(a:candidate.action__path)
 endfunction"}}}
-function! s:convert_path(path) "{{{
+function! s:convert_path(path) abort "{{{
   return unite#util#substitute_path_separator(fnamemodify(a:path, ':p'))
 endfunction"}}}
 

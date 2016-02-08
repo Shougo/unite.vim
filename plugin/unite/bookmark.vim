@@ -40,7 +40,7 @@ command! -nargs=? -complete=file UniteBookmarkAdd
 let s:file_bookmark_action = {
       \ 'description' : 'append files to bookmark list',
       \ }
-function! s:file_bookmark_action.func(candidate) "{{{
+function! s:file_bookmark_action.func(candidate) abort "{{{
   " Add to bookmark.
   call unite#sources#bookmark#_append(a:candidate.action__path)
 endfunction"}}}
@@ -48,7 +48,7 @@ endfunction"}}}
 let s:buffer_bookmark_action = {
       \ 'description' : 'append buffers to bookmark list',
       \ }
-function! s:buffer_bookmark_action.func(candidate) "{{{
+function! s:buffer_bookmark_action.func(candidate) abort "{{{
   let filetype = getbufvar(
         \ a:candidate.action__buffer_nr, '&filetype')
   if filetype ==# 'vimfiler'

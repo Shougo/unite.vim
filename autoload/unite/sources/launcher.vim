@@ -29,7 +29,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#launcher#define() "{{{
+function! unite#sources#launcher#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -42,7 +42,7 @@ let s:source = {
       \ }
 
 let s:cached_result = {}
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   let path = get(a:args, 0, '')
   if path == ''
     " Use $PATH.
@@ -61,7 +61,7 @@ function! s:source.gather_candidates(args, context) "{{{
   return s:cached_result[path]
 endfunction"}}}
 
-function! unite#sources#launcher#get_executables(path) "{{{
+function! unite#sources#launcher#get_executables(path) abort "{{{
   " Search executable files from $PATH.
   let files = unite#util#uniq(split(globpath(a:path, '*'), '\n'))
 

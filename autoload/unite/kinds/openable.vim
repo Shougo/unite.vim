@@ -29,7 +29,7 @@ set cpo&vim
 " Variables  "{{{
 call unite#util#set_default('g:unite_kind_openable_persist_open_blink_time', '250m')
 "}}}
-function! unite#kinds#openable#define() "{{{
+function! unite#kinds#openable#define() abort "{{{
   return s:kind
 endfunction"}}}
 
@@ -45,7 +45,7 @@ let s:kind.action_table.tabopen = {
       \ 'is_selectable' : 1,
       \ 'is_tab' : 1,
       \ }
-function! s:kind.action_table.tabopen.func(candidates) "{{{
+function! s:kind.action_table.tabopen.func(candidates) abort "{{{
   for candidate in a:candidates
     let hidden_save = &hidden
     try
@@ -62,7 +62,7 @@ let s:kind.action_table.choose = {
       \ 'description' : 'choose windows and open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.choose.func(candidates) "{{{
+function! s:kind.action_table.choose.func(candidates) abort "{{{
   for candidate in a:candidates
     if winnr('$') != 1
       let winnr = unite#helper#choose_window()
@@ -79,7 +79,7 @@ let s:kind.action_table.split = {
       \ 'description' : 'horizontal split open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.split.func(candidates) "{{{
+function! s:kind.action_table.split.func(candidates) abort "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('split')
     call unite#take_action('open', candidate)
@@ -90,7 +90,7 @@ let s:kind.action_table.vsplit = {
       \ 'description' : 'vertical split open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.vsplit.func(candidates) "{{{
+function! s:kind.action_table.vsplit.func(candidates) abort "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('vsplit')
     call unite#take_action('open', candidate)
@@ -101,7 +101,7 @@ let s:kind.action_table.left = {
       \ 'description' : 'vertical left split items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.left.func(candidates) "{{{
+function! s:kind.action_table.left.func(candidates) abort "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('leftabove vsplit')
     call unite#take_action('open', candidate)
@@ -112,7 +112,7 @@ let s:kind.action_table.right = {
       \ 'description' : 'vertical right split open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.right.func(candidates) "{{{
+function! s:kind.action_table.right.func(candidates) abort "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('rightbelow vsplit')
     call unite#take_action('open', candidate)
@@ -123,7 +123,7 @@ let s:kind.action_table.above = {
       \ 'description' : 'horizontal above split open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.above.func(candidates) "{{{
+function! s:kind.action_table.above.func(candidates) abort "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('leftabove split')
     call unite#take_action('open', candidate)
@@ -134,7 +134,7 @@ let s:kind.action_table.below = {
       \ 'description' : 'horizontal below split open items',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.below.func(candidates) "{{{
+function! s:kind.action_table.below.func(candidates) abort "{{{
   for candidate in a:candidates
     call unite#util#command_with_restore_cursor('rightbelow split')
     call unite#take_action('open', candidate)
@@ -145,7 +145,7 @@ let s:kind.action_table.persist_open = {
       \ 'description' : 'persistent open',
       \ 'is_quit'     : 0,
       \ }
-function! s:kind.action_table.persist_open.func(candidate) "{{{
+function! s:kind.action_table.persist_open.func(candidate) abort "{{{
   let unite = unite#get_current_unite()
 
   let current_winnr = winnr()
@@ -190,7 +190,7 @@ let s:kind.action_table.tabsplit = {
       \ 'is_selectable' : 1,
       \ 'is_tab' : 1,
       \ }
-function! s:kind.action_table.tabsplit.func(candidates) "{{{
+function! s:kind.action_table.tabsplit.func(candidates) abort "{{{
   let hidden_save = &hidden
   try
     set nohidden
@@ -213,7 +213,7 @@ let s:kind.action_table.switch = {
       \   . ' or jump to existing window/tabpage',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.switch.func(candidates) "{{{
+function! s:kind.action_table.switch.func(candidates) abort "{{{
   for candidate in a:candidates
     call s:switch(candidate)
   endfor
@@ -224,7 +224,7 @@ let s:kind.action_table.tabswitch = {
       \   . ' or jump to existing window/tabpage',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.tabswitch.func(candidates) "{{{
+function! s:kind.action_table.tabswitch.func(candidates) abort "{{{
   for candidate in a:candidates
     if s:switch(candidate)
       call unite#take_action('tabopen', candidate)
@@ -237,7 +237,7 @@ let s:kind.action_table.splitswitch = {
       \   . ' or jump to existing window/tabpage',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.splitswitch.func(candidates) "{{{
+function! s:kind.action_table.splitswitch.func(candidates) abort "{{{
   for candidate in a:candidates
     if s:switch(candidate)
       call unite#take_action('split', candidate)
@@ -250,7 +250,7 @@ let s:kind.action_table.vsplitswitch = {
       \   . ' or jump to existing window/tabpage',
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.vsplitswitch.func(candidates) "{{{
+function! s:kind.action_table.vsplitswitch.func(candidates) abort "{{{
   for candidate in a:candidates
     if s:switch(candidate)
       call unite#take_action('vsplit', candidate)
@@ -260,7 +260,7 @@ endfunction"}}}
 
 "}}}
 
-function! s:search_buffer(candidate) "{{{
+function! s:search_buffer(candidate) abort "{{{
   let bufnr = bufnr(a:candidate.action__path)
   for tabnr in range(1, tabpagenr('$'))
     if index(tabpagebuflist(tabnr), bufnr) >= 0
@@ -271,7 +271,7 @@ function! s:search_buffer(candidate) "{{{
   return -1
 endfunction"}}}
 
-function! s:switch(candidate) "{{{
+function! s:switch(candidate) abort "{{{
   let tabnr = s:search_buffer(a:candidate)
   if tabnr < 0
     " Not found

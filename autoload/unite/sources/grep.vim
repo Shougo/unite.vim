@@ -36,7 +36,7 @@ call unite#util#set_default('g:unite_source_grep_search_word_highlight', 'Search
 call unite#util#set_default('g:unite_source_grep_encoding', 'char')
 "}}}
 
-function! unite#sources#grep#define() "{{{
+function! unite#sources#grep#define() abort "{{{
   return s:source
 endfunction "}}}
 
@@ -55,7 +55,7 @@ let s:source = {
       \ ],
       \ }
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   if !unite#util#has_vimproc()
     call unite#print_source_error(
           \ 'vimproc is not installed.', s:source.name)
@@ -109,7 +109,7 @@ function! s:source.hooks.on_init(args, context) "{{{
         \ unite#util#substitute_path_separator(
         \  unite#util#expand(a:context.source__targets[0])) : ''
 endfunction"}}}
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   if !unite#util#has_vimproc()
     return
   endif
@@ -134,12 +134,12 @@ function! s:source.hooks.on_syntax(args, context) "{{{
         \ get(a:context, 'custom_grep_search_word_highlight',
         \ g:unite_source_grep_search_word_highlight)
 endfunction"}}}
-function! s:source.hooks.on_close(args, context) "{{{
+function! s:source.hooks.on_close(args, context) abort "{{{
   if has_key(a:context, 'source__proc')
     call a:context.source__proc.kill()
   endif
 endfunction "}}}
-function! s:source.hooks.on_post_filter(args, context) "{{{
+function! s:source.hooks.on_post_filter(args, context) abort "{{{
   for candidate in a:context.candidates
     let candidate.kind = ['file', 'jump_list']
     let candidate.action__col_pattern = a:context.source__input
@@ -149,7 +149,7 @@ function! s:source.hooks.on_post_filter(args, context) "{{{
   endfor
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   let command = get(a:context, 'custom_grep_command',
         \ g:unite_source_grep_command)
   let default_opts = get(a:context, 'custom_grep_default_opts',
@@ -209,7 +209,7 @@ function! s:source.gather_candidates(args, context) "{{{
   return self.async_gather_candidates(a:args, a:context)
 endfunction "}}}
 
-function! s:source.async_gather_candidates(args, context) "{{{
+function! s:source.async_gather_candidates(args, context) abort "{{{
   let default_opts = get(a:context, 'custom_grep_default_opts',
         \ g:unite_source_grep_default_opts)
 
@@ -291,7 +291,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   return candidates
 endfunction "}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return ['%', '#', '$buffers'] + unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}

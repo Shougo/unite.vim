@@ -28,7 +28,7 @@ set cpo&vim
 
 let s:buffer_list = {}
 
-function! unite#sources#buffer#variables#append(bufnr) "{{{
+function! unite#sources#buffer#variables#append(bufnr) abort "{{{
   " Append the current buffer.
   let s:buffer_list[a:bufnr] = {
         \ 'action__buffer_nr' : a:bufnr,
@@ -36,7 +36,7 @@ function! unite#sources#buffer#variables#append(bufnr) "{{{
         \ }
 endfunction"}}}
 
-function! unite#sources#buffer#variables#get_buffer_list() "{{{
+function! unite#sources#buffer#variables#get_buffer_list() abort "{{{
   return s:buffer_list
 endfunction"}}}
 

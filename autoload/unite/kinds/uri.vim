@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#uri#define() "{{{
+function! unite#kinds#uri#define() abort "{{{
   return s:kind
 endfunction"}}}
 
@@ -44,7 +44,7 @@ let s:kind.action_table.start = {
       \ 'is_selectable' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:kind.action_table.start.func(candidates) "{{{
+function! s:kind.action_table.start.func(candidates) abort "{{{
   for candidate in a:candidates
     let path = has_key(candidate, 'action__uri') ?
           \ candidate.action__uri : candidate.action__path

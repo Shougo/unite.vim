@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#complete#source(arglead, cmdline, cursorpos) "{{{
+function! unite#complete#source(arglead, cmdline, cursorpos) abort "{{{
   let ret = unite#helper#parse_options_args(a:cmdline)[0]
   let source_name = ret[-1][0]
   let source_args = ret[-1][1:]
@@ -64,7 +64,7 @@ function! unite#complete#source(arglead, cmdline, cursorpos) "{{{
   return sort(filter(_, 'stridx(v:val, a:arglead) == 0'))
 endfunction"}}}
 
-function! unite#complete#buffer_name(arglead, cmdline, cursorpos) "{{{
+function! unite#complete#buffer_name(arglead, cmdline, cursorpos) abort "{{{
   let _ = map(filter(range(1, bufnr('$')),
         \ 'getbufvar(v:val, "&filetype") ==# "unite"'),
         \ 'getbufvar(v:val, "unite").buffer_name')
@@ -73,7 +73,7 @@ function! unite#complete#buffer_name(arglead, cmdline, cursorpos) "{{{
   return filter(_, printf('stridx(v:val, %s) == 0', string(a:arglead)))
 endfunction"}}}
 
-function! unite#complete#vimfiler(sources, arglead, cmdline, cursorpos) "{{{
+function! unite#complete#vimfiler(sources, arglead, cmdline, cursorpos) abort "{{{
   let context = {}
   let context = unite#init#_context(context,
         \ unite#helper#get_source_names(a:sources))
@@ -97,7 +97,7 @@ function! unite#complete#vimfiler(sources, arglead, cmdline, cursorpos) "{{{
   return _
 endfunction"}}}
 
-function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
+function! unite#complete#args(sources, arglead, cmdline, cursorpos) abort "{{{
   let context = {}
   let context = unite#init#_context(context,
         \ unite#helper#get_source_names(a:sources))
@@ -131,13 +131,13 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) "{{{
   return _
 endfunction"}}}
 
-function! unite#complete#gather(candidates, input) "{{{
+function! unite#complete#gather(candidates, input) abort "{{{
   return unite#util#has_lua() ?
         \ unite#complete#gather_lua(a:candidates, a:input) :
         \ unite#complete#gather_vim(a:candidates, a:input)
 endfunction"}}}
 
-function! unite#complete#gather_vim(candidates, input) "{{{
+function! unite#complete#gather_vim(candidates, input) abort "{{{
   let dup = {}
   let _ = []
   let search_input = tolower(a:input)
@@ -163,7 +163,7 @@ function! unite#complete#gather_vim(candidates, input) "{{{
   return _
 endfunction"}}}
 
-function! unite#complete#gather_lua(candidates, input) "{{{
+function! unite#complete#gather_lua(candidates, input) abort "{{{
   let _ = []
 
   lua << EOF

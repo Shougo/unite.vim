@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#converter_default#define() "{{{
+function! unite#filters#converter_default#define() abort "{{{
   return s:converter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:converter = {
       \ 'description' : 'default converter',
       \}
 
-function! s:converter.filter(candidates, context) "{{{
+function! s:converter.filter(candidates, context) abort "{{{
   let candidates = a:candidates
   for default in s:default_converters
     let filter = unite#get_filters(default)
@@ -49,10 +49,10 @@ endfunction"}}}
 
 
 let s:default_converters = ['converter_nothing']
-function! unite#filters#converter_default#get() "{{{
+function! unite#filters#converter_default#get() abort "{{{
   return s:default_converters
 endfunction"}}}
-function! unite#filters#converter_default#use(converters) "{{{
+function! unite#filters#converter_default#use(converters) abort "{{{
   let s:default_converters = type(a:converters) == type([]) ?
         \ a:converters : [a:converters]
 endfunction"}}}

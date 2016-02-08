@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#action#get_action_table(source_name, kind, self_func, ...) "{{{
+function! unite#action#get_action_table(source_name, kind, self_func, ...) abort "{{{
   let is_parents_action = get(a:000, 0, 0)
   let source_table = get(a:000, 1, {})
 
@@ -41,7 +41,7 @@ function! unite#action#get_action_table(source_name, kind, self_func, ...) "{{{
   return action_table
 endfunction"}}}
 
-function! unite#action#get_alias_table(source_name, kind, ...) "{{{
+function! unite#action#get_alias_table(source_name, kind, ...) abort "{{{
   let source_table = get(a:000, 0, {})
   let alias_table = {}
   for kind_name in unite#util#convert2list(a:kind)
@@ -52,13 +52,13 @@ function! unite#action#get_alias_table(source_name, kind, ...) "{{{
   return alias_table
 endfunction"}}}
 
-function! unite#action#get_default_action(source_name, kind) "{{{
+function! unite#action#get_default_action(source_name, kind) abort "{{{
   let kinds = unite#util#convert2list(a:kind)
 
   return s:get_default_action(a:source_name, kinds[-1])
 endfunction"}}}
 
-function! s:get_action_table(source_name, kind_name, self_func, is_parents_action, source_table) "{{{
+function! s:get_action_table(source_name, kind_name, self_func, is_parents_action, source_table) abort "{{{
   let kind = unite#get_kinds(a:kind_name)
   let source = empty(a:source_table) ?
         \ unite#get_sources(a:source_name) :
@@ -199,7 +199,7 @@ function! s:get_action_table(source_name, kind_name, self_func, is_parents_actio
   return filter(action_table, 'v:key !=# "nop"')
 endfunction"}}}
 
-function! s:get_alias_table(source_name, kind_name, source_table) "{{{
+function! s:get_alias_table(source_name, kind_name, source_table) abort "{{{
   let kind = unite#get_kinds(a:kind_name)
   let source = empty(a:source_table) ?
         \ unite#get_sources(a:source_name) :
@@ -244,7 +244,7 @@ function! s:get_alias_table(source_name, kind_name, source_table) "{{{
   return table
 endfunction"}}}
 
-function! s:get_default_action(source_name, kind_name) "{{{
+function! s:get_default_action(source_name, kind_name) abort "{{{
   let source = unite#get_all_sources(a:source_name)
   if empty(source)
     return ''
@@ -285,7 +285,7 @@ function! s:get_default_action(source_name, kind_name) "{{{
   return get(kind, 'default_action', '')
 endfunction"}}}
 
-function! unite#action#take(action_name, candidate, is_parent_action) "{{{
+function! unite#action#take(action_name, candidate, is_parent_action) abort "{{{
   let candidate_head = type(a:candidate) == type([]) ?
         \ a:candidate[0] : a:candidate
 
@@ -311,7 +311,7 @@ function! unite#action#take(action_name, candidate, is_parent_action) "{{{
         \ [a:candidate] : a:candidate)
 endfunction"}}}
 
-function! unite#action#do(action_name, ...) "{{{
+function! unite#action#do(action_name, ...) abort "{{{
   if &filetype == 'vimfiler' && has_key(b:vimfiler, 'unite')
     " Restore unite condition in vimfiler.
     call unite#set_current_unite(b:vimfiler.unite)
@@ -436,7 +436,7 @@ function! unite#action#do(action_name, ...) "{{{
   return _
 endfunction"}}}
 
-function! unite#action#do_candidates(action_name, candidates, ...) "{{{
+function! unite#action#do_candidates(action_name, candidates, ...) abort "{{{
   let context = get(a:000, 0, {})
   let context = unite#init#_context(context)
   let context.unite__is_interactive = 0
@@ -447,13 +447,13 @@ function! unite#action#do_candidates(action_name, candidates, ...) "{{{
         \ a:action_name, a:candidates, context)
 endfunction"}}}
 
-function! unite#action#_get_candidate_action_table(candidate, sources) "{{{
+function! unite#action#_get_candidate_action_table(candidate, sources) abort "{{{
   return unite#action#get_action_table(
         \ a:candidate.source, a:candidate.kind,
         \ unite#get_self_functions()[-1], 0, a:sources)
 endfunction"}}}
 
-function! s:get_candidates_action_table(action_name, candidates, sources) "{{{
+function! s:get_candidates_action_table(action_name, candidates, sources) abort "{{{
   let action_tables = []
   for candidate in a:candidates
     let action_table = unite#action#_get_candidate_action_table(
@@ -515,7 +515,7 @@ function! s:get_candidates_action_table(action_name, candidates, sources) "{{{
   return action_tables
 endfunction"}}}
 
-function! s:extend_actions(self_func, action_table1, action_table2, ...) "{{{
+function! s:extend_actions(self_func, action_table1, action_table2, ...) abort "{{{
   let filterd_table = s:filter_self_func(a:action_table2, a:self_func)
 
   if a:0 > 0
@@ -526,7 +526,7 @@ function! s:extend_actions(self_func, action_table1, action_table2, ...) "{{{
 
   return extend(a:action_table1, filterd_table, 'keep')
 endfunction"}}}
-function! s:filter_alias_action(action_table, alias_table, from) "{{{
+function! s:filter_alias_action(action_table, alias_table, from) abort "{{{
   for [alias_name, alias_action] in items(a:alias_table)
     if alias_action ==# 'nop'
       if has_key(a:action_table, alias_name)
@@ -540,11 +540,11 @@ function! s:filter_alias_action(action_table, alias_table, from) "{{{
     endif
   endfor
 endfunction"}}}
-function! s:filter_self_func(action_table, self_func) "{{{
+function! s:filter_self_func(action_table, self_func) abort "{{{
   return filter(copy(a:action_table),
         \ printf("string(v:val.func) !=# \"function('%s')\"", a:self_func))
 endfunction"}}}
-function! s:clear_marks(candidates) "{{{
+function! s:clear_marks(candidates) abort "{{{
   for candidate in a:candidates
     let candidate.unite__is_marked = 0
   endfor

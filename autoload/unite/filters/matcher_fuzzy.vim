@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_fuzzy#define() "{{{
+function! unite#filters#matcher_fuzzy#define() abort "{{{
   return s:matcher
 endfunction"}}}
 
@@ -37,7 +37,7 @@ let s:matcher = {
       \ 'description' : 'fuzzy matcher',
       \}
 
-function! s:matcher.pattern(input) "{{{
+function! s:matcher.pattern(input) abort "{{{
   let chars = map(split(a:input, '\zs'), "escape(v:val, '\\[]^$.*')")
   if empty(chars)
     return ''
@@ -50,7 +50,7 @@ function! s:matcher.pattern(input) "{{{
   return pattern
 endfunction"}}}
 
-function! s:matcher.filter(candidates, context) "{{{
+function! s:matcher.filter(candidates, context) abort "{{{
   if a:context.input == ''
     return unite#filters#filter_matcher(
           \ a:candidates, '', a:context)
@@ -92,7 +92,7 @@ function! s:matcher.filter(candidates, context) "{{{
   return candidates
 endfunction"}}}
 
-function! unite#filters#matcher_fuzzy#get_fuzzy_input(input) "{{{
+function! unite#filters#matcher_fuzzy#get_fuzzy_input(input) abort "{{{
   let input = a:input
   let head = ''
   if len(input) > g:unite_matcher_fuzzy_max_input_length

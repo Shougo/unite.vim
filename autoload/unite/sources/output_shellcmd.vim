@@ -36,7 +36,7 @@ let g:unite_source_output_shellcmd_colors =
         \])
 "}}}
 
-function! unite#sources#output_shellcmd#define() "{{{
+function! unite#sources#output_shellcmd#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -49,7 +49,7 @@ let s:source = {
       \ 'hooks' : {},
       \ }
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   let command = join(filter(copy(a:args), "v:val !=# '!'"))
   if command == ''
     let command = unite#util#input(
@@ -65,7 +65,7 @@ function! s:source.hooks.on_init(args, context) "{{{
           \ 'command: ' . command, s:source.name)
   endif
 endfunction"}}}
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   let highlight_table = {
         \ '0' : ' cterm=NONE ctermfg=NONE ctermbg=NONE gui=NONE guifg=NONE guibg=NONE',
         \ '1' : ' cterm=BOLD gui=BOLD',
@@ -121,7 +121,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
     execute 'highlight' syntax_name highlight
   endfor
 endfunction"}}}
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if !unite#util#has_vimproc()
     call unite#print_source_message(
           \ 'vimproc plugin is not installed.', self.name)
@@ -145,7 +145,7 @@ function! s:source.gather_candidates(args, context) "{{{
 
   return self.async_gather_candidates(a:args, a:context)
 endfunction"}}}
-function! s:source.async_gather_candidates(args, context) "{{{
+function! s:source.async_gather_candidates(args, context) abort "{{{
   let stdout = a:context.source__proc.stdout
   if stdout.eof
     " Disable async.
@@ -164,7 +164,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
         \ 'is_dummy' : a:context.source__is_dummy,
         \ }")
 endfunction"}}}
-function! s:source.hooks.on_close(args, context) "{{{
+function! s:source.hooks.on_close(args, context) abort "{{{
   if has_key(a:context, 'source__proc')
     call a:context.source__proc.kill()
   endif

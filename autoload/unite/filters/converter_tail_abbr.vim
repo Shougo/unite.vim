@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#converter_tail_abbr#define() "{{{
+function! unite#filters#converter_tail_abbr#define() abort "{{{
   return s:converter
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:converter = {
       \ 'description' : 'converts abbr to tail of filename',
       \}
 
-function! s:converter.filter(candidates, context) "{{{
+function! s:converter.filter(candidates, context) abort "{{{
   for candidate in a:candidates
     let candidate.abbr = fnamemodify(get(candidate,
           \ 'action__path', candidate.word), ':t')

@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#converter_full_path#define() "{{{
+function! unite#filters#converter_full_path#define() abort "{{{
   return s:converter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:converter = {
       \ 'description' : 'converts word to full path of filename',
       \}
 
-function! s:converter.filter(candidates, context) "{{{
+function! s:converter.filter(candidates, context) abort "{{{
   for candidate in a:candidates
     if !has_key(candidate, 'abbr')
       " Save original word.

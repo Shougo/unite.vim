@@ -26,44 +26,44 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#util#get_vital() "{{{
+function! unite#util#get_vital() abort "{{{
   if !exists('s:V')
     let s:V = vital#of('unite')
   endif
   return s:V
 endfunction"}}}
 
-function! s:get_prelude() "{{{
+function! s:get_prelude() abort "{{{
   if !exists('s:Prelude')
     let s:Prelude = unite#util#get_vital().import('Prelude')
   endif
   return s:Prelude
 endfunction"}}}
-function! s:get_list() "{{{
+function! s:get_list() abort "{{{
   if !exists('s:List')
     let s:List = unite#util#get_vital().import('Data.List')
   endif
   return s:List
 endfunction"}}}
-function! s:get_string() "{{{
+function! s:get_string() abort "{{{
   if !exists('s:String')
     let s:String = unite#util#get_vital().import('Data.String')
   endif
   return s:String
 endfunction"}}}
-function! s:get_message() "{{{
+function! s:get_message() abort "{{{
   if !exists('s:Message')
     let s:Message = unite#util#get_vital().import('Vim.Message')
   endif
   return s:Message
 endfunction"}}}
-function! s:get_system() "{{{
+function! s:get_system() abort "{{{
   if !exists('s:System')
     let s:System = unite#util#get_vital().import('System.File')
   endif
   return s:System
 endfunction"}}}
-function! s:get_process() "{{{
+function! s:get_process() abort "{{{
   if !exists('s:Process')
     let s:Process = unite#util#get_vital().import('Process')
   endif
@@ -73,54 +73,54 @@ endfunction"}}}
 " TODO use vital's
 let s:is_windows = has('win16') || has('win32') || has('win64')
 
-function! unite#util#truncate_smart(...)
+function! unite#util#truncate_smart(...) abort
   return call(s:get_string().truncate_skipping, a:000)
 endfunction
-function! unite#util#truncate(...)
+function! unite#util#truncate(...) abort
   return call(s:get_string().truncate, a:000)
 endfunction
-function! unite#util#strchars(...)
+function! unite#util#strchars(...) abort
   return call(s:get_string().strchars, a:000)
 endfunction
-function! unite#util#strwidthpart(...)
+function! unite#util#strwidthpart(...) abort
   return call(s:get_string().strwidthpart, a:000)
 endfunction
-function! unite#util#strwidthpart_reverse(...)
+function! unite#util#strwidthpart_reverse(...) abort
   return call(s:get_string().strwidthpart_reverse, a:000)
 endfunction
-function! unite#util#wcswidth(string)
+function! unite#util#wcswidth(string) abort
   return strwidth(a:string)
 endfunction
-function! unite#util#is_win(...)
+function! unite#util#is_win(...) abort
   echoerr 'unite#util#is_win() is deprecated. use unite#util#is_windows() instead.'
   return call(s:get_prelude().is_windows, a:000)
 endfunction
-function! unite#util#is_windows(...)
+function! unite#util#is_windows(...) abort
   return call(s:get_prelude().is_windows, a:000)
 endfunction
-function! unite#util#is_mac(...)
+function! unite#util#is_mac(...) abort
   return call(s:get_prelude().is_mac, a:000)
 endfunction
-function! unite#util#print_error(msg)
+function! unite#util#print_error(msg) abort
   let msg = '[unite.vim] ' . a:msg
   return call(s:get_message().error, [msg])
 endfunction
-function! unite#util#smart_execute_command(action, word)
+function! unite#util#smart_execute_command(action, word) abort
   execute a:action . ' ' . fnameescape(a:word)
 endfunction
-function! unite#util#smart_open_command(action, word)
+function! unite#util#smart_open_command(action, word) abort
   call unite#util#smart_execute_command(a:action, a:word)
 
   call unite#remove_previewed_buffer_list(bufnr(a:word))
 endfunction
-function! unite#util#escape_file_searching(buffer_name)
+function! unite#util#escape_file_searching(buffer_name) abort
   " You should not escape for buflisted() or bufnr()
   return a:buffer_name
 endfunction
-function! unite#util#escape_pattern(...)
+function! unite#util#escape_pattern(...) abort
   return call(s:get_prelude().escape_pattern, a:000)
 endfunction
-function! unite#util#set_default(var, val, ...)  "{{{
+function! unite#util#set_default(var, val, ...) abort  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
     if exists(a:var) && type({a:var}) != type(a:val)
       call unite#print_error(printf(
@@ -136,25 +136,25 @@ function! unite#util#set_default(var, val, ...)  "{{{
 endfunction"}}}
 
 if unite#util#is_windows()
-  function! unite#util#substitute_path_separator(...)
+  function! unite#util#substitute_path_separator(...) abort
     return call(s:get_prelude().substitute_path_separator, a:000)
   endfunction
 else
-  function! unite#util#substitute_path_separator(path)
+  function! unite#util#substitute_path_separator(path) abort
     return a:path
   endfunction
 endif
 
-function! unite#util#path2directory(...)
+function! unite#util#path2directory(...) abort
   return call(s:get_prelude().path2directory, a:000)
 endfunction
-function! unite#util#path2project_directory(...)
+function! unite#util#path2project_directory(...) abort
   return call(s:get_prelude().path2project_directory, a:000)
 endfunction
-function! unite#util#has_vimproc(...)
+function! unite#util#has_vimproc(...) abort
   return call(s:get_process().has_vimproc, a:000)
 endfunction
-function! unite#util#has_lua()
+function! unite#util#has_lua() abort
   " Note: Disabled if_lua feature if less than 7.3.885.
   " Because if_lua has double free problem.
   " Note: Cannot use lua interface in Windows environment if encoding is not utf-8.
@@ -163,29 +163,29 @@ function! unite#util#has_lua()
         \ && (!unite#util#is_windows() ||
         \     &encoding ==# 'utf-8' || &encoding ==# 'latin1')
 endfunction
-function! unite#util#system(...)
+function! unite#util#system(...) abort
   return call(s:get_process().system, a:000)
 endfunction
-function! unite#util#system_passwd(...)
+function! unite#util#system_passwd(...) abort
   return call((unite#util#has_vimproc() ?
         \ 'vimproc#system_passwd' : 'system'), a:000)
 endfunction
-function! unite#util#get_last_status(...)
+function! unite#util#get_last_status(...) abort
   return call(s:get_process().get_last_status, a:000)
 endfunction
-function! unite#util#get_last_errmsg()
+function! unite#util#get_last_errmsg() abort
   return unite#util#has_vimproc() ? vimproc#get_last_errmsg() : ''
 endfunction
-function! unite#util#sort_by(...)
+function! unite#util#sort_by(...) abort
   return call(s:get_list().sort_by, a:000)
 endfunction
-function! unite#util#uniq(...)
+function! unite#util#uniq(...) abort
   return call(s:get_list().uniq, a:000)
 endfunction
-function! unite#util#uniq_by(...)
+function! unite#util#uniq_by(...) abort
   return call(s:get_list().uniq_by, a:000)
 endfunction
-function! unite#util#input(prompt, ...) "{{{
+function! unite#util#input(prompt, ...) abort "{{{
   let context = unite#get_context()
   let prompt = a:prompt
   let default = get(a:000, 0, '')
@@ -202,7 +202,7 @@ function! unite#util#input(prompt, ...) "{{{
 
   return context.unite__is_interactive ? call('input', args) : default
 endfunction"}}}
-function! unite#util#input_yesno(message) "{{{
+function! unite#util#input_yesno(message) abort "{{{
   let yesno = input(a:message . ' [yes/no]: ')
   while yesno !~? '^\%(y\%[es]\|n\%[o]\)$'
     redraw
@@ -220,7 +220,7 @@ function! unite#util#input_yesno(message) "{{{
 
   return yesno =~? 'y\%[es]'
 endfunction"}}}
-function! unite#util#input_directory(message) "{{{
+function! unite#util#input_directory(message) abort "{{{
   echo a:message
   let dir = unite#util#substitute_path_separator(
         \ unite#util#expand(input('', '', 'dir')))
@@ -240,11 +240,11 @@ function! unite#util#input_directory(message) "{{{
 
   return dir
 endfunction"}}}
-function! unite#util#iconv(...)
+function! unite#util#iconv(...) abort
   return call(s:get_process().iconv, a:000)
 endfunction
 
-function! unite#util#alternate_buffer() "{{{
+function! unite#util#alternate_buffer() abort "{{{
   let unite = unite#get_current_unite()
   if s:buflisted(unite.prev_bufnr)
         \ && getbufvar(unite.prev_bufnr, '&filetype') !=# "unite"
@@ -281,17 +281,17 @@ function! unite#util#alternate_buffer() "{{{
     bnext
   endif
 endfunction"}}}
-function! unite#util#is_cmdwin() "{{{
+function! unite#util#is_cmdwin() abort "{{{
   return bufname('%') ==# '[Command Line]'
 endfunction"}}}
-function! s:buflisted(bufnr) "{{{
+function! s:buflisted(bufnr) abort "{{{
   return (getbufvar(a:bufnr, '&bufhidden') == '' || buflisted(a:bufnr)) &&
         \ (exists('t:tabpagebuffer') ?
         \   has_key(t:tabpagebuffer, a:bufnr) && buflisted(a:bufnr) :
         \   buflisted(a:bufnr))
 endfunction"}}}
 
-function! unite#util#glob(pattern, ...) "{{{
+function! unite#util#glob(pattern, ...) abort "{{{
   let is_force_glob = get(a:000, 0, 1)
 
   if !is_force_glob && (a:pattern =~ '\*$' || a:pattern == '*')
@@ -307,7 +307,7 @@ function! unite#util#glob(pattern, ...) "{{{
           \ + split(unite#util#substitute_path_separator(glob(glob2)), '\n'))
   endif
 endfunction"}}}
-function! unite#util#command_with_restore_cursor(command) "{{{
+function! unite#util#command_with_restore_cursor(command) abort "{{{
   let pos = getpos('.')
   let current = winnr()
 
@@ -320,31 +320,31 @@ function! unite#util#command_with_restore_cursor(command) "{{{
 
   execute next 'wincmd w'
 endfunction"}}}
-function! unite#util#expand(path) "{{{
+function! unite#util#expand(path) abort "{{{
   return s:get_prelude().substitute_path_separator(
         \ (a:path =~ '^\~') ? fnamemodify(a:path, ':p') :
         \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
         \               '^\$\h\w*', '\=eval(submatch(0))', '') :
         \ a:path)
 endfunction"}}}
-function! unite#util#set_default_dictionary_helper(variable, keys, value) "{{{
+function! unite#util#set_default_dictionary_helper(variable, keys, value) abort "{{{
   for key in split(a:keys, '\s*,\s*')
     if !has_key(a:variable, key)
       let a:variable[key] = a:value
     endif
   endfor
 endfunction"}}}
-function! unite#util#set_dictionary_helper(variable, keys, value) "{{{
+function! unite#util#set_dictionary_helper(variable, keys, value) abort "{{{
   for key in split(a:keys, '\s*,\s*')
     let a:variable[key] = a:value
   endfor
 endfunction"}}}
 
-function! unite#util#convert2list(expr) "{{{
+function! unite#util#convert2list(expr) abort "{{{
   return type(a:expr) ==# type([]) ? a:expr : [a:expr]
 endfunction"}}}
 
-function! unite#util#truncate_wrap(str, max, footer_width, separator) "{{{
+function! unite#util#truncate_wrap(str, max, footer_width, separator) abort "{{{
   let width = strwidth(a:str)
   if width <= a:max
     return unite#util#truncate(a:str, a:max)
@@ -357,31 +357,31 @@ function! unite#util#truncate_wrap(str, max, footer_width, separator) "{{{
         \ . unite#util#strwidthpart_reverse(a:str, a:footer_width)
 endfunction"}}}
 
-function! unite#util#index_name(list, name) "{{{
+function! unite#util#index_name(list, name) abort "{{{
   return index(map(copy(a:list), 'v:val.name'), a:name)
 endfunction"}}}
-function! unite#util#get_name(list, name, default) "{{{
+function! unite#util#get_name(list, name, default) abort "{{{
   return get(a:list, unite#util#index_name(a:list, a:name), a:default)
 endfunction"}}}
 
-function! unite#util#escape_match(str) "{{{
+function! unite#util#escape_match(str) abort "{{{
   return substitute(substitute(escape(a:str, '~\.^$[]'),
         \ '\*\@<!\*\*\@!', '[^/]*', 'g'), '\*\*\+', '.*', 'g')
 endfunction"}}}
 
-function! unite#util#escape_shell(str) "{{{
+function! unite#util#escape_shell(str) abort "{{{
   return '"' . a:str . '"'
 endfunction"}}}
 
-function! unite#util#open(path) "{{{
+function! unite#util#open(path) abort "{{{
   return s:get_system().open(a:path)
 endfunction"}}}
 
-function! unite#util#move(src, dest) "{{{
+function! unite#util#move(src, dest) abort "{{{
   return s:get_system().move(a:src, a:dest)
 endfunction"}}}
 
-function! unite#util#read_lines(source, ...) "{{{
+function! unite#util#read_lines(source, ...) abort "{{{
   let timeout = get(a:000, 0, -1)
   if timeout < 0
     return a:source.read_lines(-1, timeout)
@@ -394,13 +394,13 @@ function! unite#util#read_lines(source, ...) "{{{
   return lines
 endfunction"}}}
 
-function! unite#util#is_sudo() "{{{
+function! unite#util#is_sudo() abort "{{{
   return $SUDO_USER != '' && $USER !=# $SUDO_USER
         \ && $HOME !=# expand('~'.$USER)
         \ && $HOME ==# expand('~'.$SUDO_USER)
 endfunction"}}}
 
-function! unite#util#lcd(dir) "{{{
+function! unite#util#lcd(dir) abort "{{{
   if isdirectory(a:dir)
     execute (haslocaldir() ? 'lcd' : 'cd') fnameescape(a:dir)
   endif

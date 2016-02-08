@@ -29,7 +29,7 @@ call unite#util#set_default('g:unite_source_find_default_opts', '')
 call unite#util#set_default('g:unite_source_find_default_expr', '-name ')
 "}}}
 
-function! unite#sources#find#define() "{{{
+function! unite#sources#find#define() abort "{{{
   return executable(g:unite_source_find_command) && unite#util#has_vimproc() ?
         \ s:source : []
 endfunction "}}}
@@ -46,7 +46,7 @@ let s:source = {
       \ ],
       \ }
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   let target = get(a:args, 0, '')
   if target == ''
     let target = isdirectory(a:context.path) ?
@@ -68,13 +68,13 @@ function! s:source.hooks.on_init(args, context) "{{{
           \   g:unite_source_find_default_expr)
   endif
 endfunction"}}}
-function! s:source.hooks.on_close(args, context) "{{{
+function! s:source.hooks.on_close(args, context) abort "{{{
   if has_key(a:context, 'source__proc')
     call a:context.source__proc.waitpid()
   endif
 endfunction "}}}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if empty(a:context.source__targets)
         \ || a:context.source__input == ''
     let a:context.is_async = 0
@@ -109,7 +109,7 @@ function! s:source.gather_candidates(args, context) "{{{
   return []
 endfunction "}}}
 
-function! s:source.async_gather_candidates(args, context) "{{{
+function! s:source.async_gather_candidates(args, context) abort "{{{
   let stdout = a:context.source__proc.stdout
   if stdout.eof
     " Disable async.
@@ -134,7 +134,7 @@ function! s:source.async_gather_candidates(args, context) "{{{
   return candidates
 endfunction "}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}

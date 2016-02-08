@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#source#define() "{{{
+function! unite#sources#source#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -39,7 +39,7 @@ let s:source = {
       \ 'syntax' : 'uniteSource__Source',
       \}
 
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__SourceDescriptionLine / -- .*$/
         \ contained containedin=uniteSource__Source
   syntax match uniteSource__SourceDescription /.*$/
@@ -50,7 +50,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   highlight default link uniteSource__SourceDescription Comment
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   let sources = filter(values(unite#get_all_sources()),
         \        'v:val.is_listed && (empty(a:args) ||
         \            index(a:args, v:val.name) >= 0)')
@@ -63,7 +63,7 @@ function! s:source.gather_candidates(args, context) "{{{
         \}")
 endfunction"}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return keys(filter(unite#init#_sources([], a:arglead),
             \ 'v:val.is_listed'))
 endfunction"}}}

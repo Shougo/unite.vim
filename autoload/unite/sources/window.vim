@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#window#define() "{{{
+function! unite#sources#window#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -49,7 +49,7 @@ let s:source = {
       \ 'sorters': function('unite#sources#window#sorter'),
       \}
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   let no_current = index(a:args, 'no-current') >= 0
   if index(a:args, 'all') >= 0
     let a:context.source__candidates = []
@@ -62,7 +62,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     let a:context.source__candidates = s:get_windows(no_current, tabpagenr())
   endif
 endfunction"}}}
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__Window_prefix /\d\+: \[.\{-}\]/
         \ contained containedin=uniteSource__Window
   highlight default link uniteSource__Window_prefix Constant
@@ -73,10 +73,10 @@ function! s:source.hooks.on_syntax(args, context) "{{{
         \ contained containedin=uniteSource__Window
   highlight default link uniteSource__Window_directory PreProc
 endfunction"}}}
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   return a:context.source__candidates
 endfunction"}}}
-function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return ['no-current', 'all']
 endfunction"}}}
 

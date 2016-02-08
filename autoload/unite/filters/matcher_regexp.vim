@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_regexp#define() "{{{
+function! unite#filters#matcher_regexp#define() abort "{{{
   return s:matcher
 endfunction"}}}
 
@@ -35,11 +35,11 @@ let s:matcher = {
       \ 'description' : 'regular expression matcher',
       \}
 
-function! s:matcher.pattern(input) "{{{
+function! s:matcher.pattern(input) abort "{{{
   return a:input
 endfunction"}}}
 
-function! s:matcher.filter(candidates, context) "{{{
+function! s:matcher.filter(candidates, context) abort "{{{
   if a:context.input == ''
     return unite#filters#filter_matcher(
           \ a:candidates, '', a:context)
@@ -58,7 +58,7 @@ function! s:matcher.filter(candidates, context) "{{{
   return candidates
 endfunction"}}}
 
-function! unite#filters#matcher_regexp#regexp_matcher(candidates, input, context) "{{{
+function! unite#filters#matcher_regexp#regexp_matcher(candidates, input, context) abort "{{{
   let expr = unite#filters#matcher_regexp#get_expr(a:input, a:context)
 
   try
@@ -67,7 +67,7 @@ function! unite#filters#matcher_regexp#regexp_matcher(candidates, input, context
     return []
   endtry
 endfunction"}}}
-function! unite#filters#matcher_regexp#get_expr(input, context) "{{{
+function! unite#filters#matcher_regexp#get_expr(input, context) abort "{{{
   let input = a:input
 
   if input =~ '^!'

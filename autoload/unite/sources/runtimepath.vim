@@ -29,7 +29,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#runtimepath#define() "{{{
+function! unite#sources#runtimepath#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -41,7 +41,7 @@ let s:source = {
       \ 'action_table' : {},
       \ }
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   return map(map(s:split_rtp(), 'unite#util#expand(v:val)'), "{
         \ 'word' : unite#util#expand(v:val),
         \ 'abbr' : unite#util#substitute_path_separator(
@@ -58,14 +58,14 @@ let s:source.action_table.delete = {
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:source.action_table.delete.func(candidates) "{{{
+function! s:source.action_table.delete.func(candidates) abort "{{{
   for candidate in a:candidates
     execute 'set runtimepath-=' . fnameescape(candidate.action__path)
   endfor
 endfunction"}}}
 "}}}
 
-function! s:split_rtp(...) "{{{
+function! s:split_rtp(...) abort "{{{
   let rtp = a:0 ? a:1 : &runtimepath
   if type(rtp) == type([])
     return rtp

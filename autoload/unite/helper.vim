@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#helper#call_hook(sources, hook_name) "{{{
+function! unite#helper#call_hook(sources, hook_name) abort "{{{
   let context = unite#get_context()
   if context.unite__disable_hooks
     return
@@ -51,7 +51,7 @@ function! unite#helper#call_hook(sources, hook_name) "{{{
   endfor
 endfunction"}}}
 
-function! unite#helper#get_substitute_input(input) "{{{
+function! unite#helper#get_substitute_input(input) abort "{{{
   let unite = unite#get_current_unite()
 
   let input = a:input
@@ -80,7 +80,7 @@ function! unite#helper#get_substitute_input(input) "{{{
 
   return map(inputs, 'head . v:val')
 endfunction"}}}
-function! unite#helper#get_substitute_input_loop(input, substitute_patterns) "{{{
+function! unite#helper#get_substitute_input_loop(input, substitute_patterns) abort "{{{
   if empty(a:substitute_patterns)
     return [a:input]
   endif
@@ -112,7 +112,7 @@ function! unite#helper#get_substitute_input_loop(input, substitute_patterns) "{{
   return inputs
 endfunction"}}}
 
-function! unite#helper#adjustments(currentwinwidth, the_max_source_name, size) "{{{
+function! unite#helper#adjustments(currentwinwidth, the_max_source_name, size) abort "{{{
   let max_width = a:currentwinwidth - a:the_max_source_name - a:size
   if max_width < 20
     return [a:currentwinwidth - a:size, 0]
@@ -121,7 +121,7 @@ function! unite#helper#adjustments(currentwinwidth, the_max_source_name, size) "
   endif
 endfunction"}}}
 
-function! unite#helper#parse_options(cmdline) "{{{
+function! unite#helper#parse_options(cmdline) abort "{{{
   let args = []
   let options = {}
 
@@ -146,7 +146,7 @@ function! unite#helper#parse_options(cmdline) "{{{
 
   return [args, options]
 endfunction"}}}
-function! unite#helper#parse_options_args(cmdline) "{{{
+function! unite#helper#parse_options_args(cmdline) abort "{{{
   let _ = []
   let [args, options] = unite#helper#parse_options(a:cmdline)
   for arg in args
@@ -161,7 +161,7 @@ function! unite#helper#parse_options_args(cmdline) "{{{
 
   return [_, options]
 endfunction"}}}
-function! unite#helper#parse_options_user(args) "{{{
+function! unite#helper#parse_options_user(args) abort "{{{
   " Add for history/unite.
   let [args, options] = unite#helper#parse_options_args(a:args)
   let options.unite__is_manual = 1
@@ -189,7 +189,7 @@ function! s:eval_cmdline(cmdline) abort "{{{
   return cmdline
 endfunction"}}}
 
-function! unite#helper#parse_source_args(args) "{{{
+function! unite#helper#parse_source_args(args) abort "{{{
   let args = copy(a:args)
   if empty(args)
     return []
@@ -199,7 +199,7 @@ function! unite#helper#parse_source_args(args) "{{{
   return args
 endfunction"}}}
 
-function! unite#helper#parse_source_path(path) "{{{
+function! unite#helper#parse_source_path(path) abort "{{{
   " Expand ?!/buffer_project_subdir, !/project_subdir and ?/buffer_subdir
   if a:path =~ '^?!'
     " Use project directory from buffer directory
@@ -236,12 +236,12 @@ function! unite#helper#parse_source_path(path) "{{{
   return path
 endfunction"}}}
 
-function! unite#helper#get_marked_candidates() "{{{
+function! unite#helper#get_marked_candidates() abort "{{{
   return unite#util#sort_by(filter(copy(unite#get_unite_candidates()),
         \ 'v:val.unite__is_marked'), 'v:val.unite__marked_time')
 endfunction"}}}
 
-function! unite#helper#get_input(...) "{{{
+function! unite#helper#get_input(...) abort "{{{
   let is_force = get(a:000, 0, 0)
   let unite = unite#get_current_unite()
   if !is_force && mode() !=# 'i'
@@ -268,13 +268,13 @@ function! unite#helper#get_input(...) "{{{
   return getline(unite.prompt_linenr)[len(unite.context.prompt):]
 endfunction"}}}
 
-function! unite#helper#get_source_names(sources) "{{{
+function! unite#helper#get_source_names(sources) abort "{{{
   return map(map(copy(a:sources),
         \ "type(v:val) == type([]) ? v:val[0] : v:val"),
         \ "type(v:val) == type('') ? v:val : v:val.name")
 endfunction"}}}
 
-function! unite#helper#get_postfix(prefix, is_create, ...) "{{{
+function! unite#helper#get_postfix(prefix, is_create, ...) abort "{{{
   let prefix = substitute(a:prefix, '@\d\+$', '', '')
   let buffers = get(a:000, 0, range(1, bufnr('$')))
   let buflist = sort(filter(map(buffers,
@@ -287,11 +287,11 @@ function! unite#helper#get_postfix(prefix, is_create, ...) "{{{
         \ : matchstr(buflist[-1], '@\d\+$')
 endfunction"}}}
 
-function! s:sort_buffer_name(lhs, rhs) "{{{
+function! s:sort_buffer_name(lhs, rhs) abort "{{{
   return matchstr(a:lhs, '@\zs\d\+$') - matchstr(a:rhs, '@\zs\d\+$')
 endfunction"}}}
 
-function! unite#helper#convert_source_name(source_name) "{{{
+function! unite#helper#convert_source_name(source_name) abort "{{{
   let unite = unite#get_current_unite()
   return (len(unite.sources) == 1 ||
         \  !unite.context.short_source_names) ? a:source_name :
@@ -299,7 +299,7 @@ function! unite#helper#convert_source_name(source_name) "{{{
         \ substitute(a:source_name, '\a\zs\a\+', '', 'g')
 endfunction"}}}
 
-function! unite#helper#invalidate_cache(source_name)  "{{{
+function! unite#helper#invalidate_cache(source_name) abort  "{{{
   for source in unite#get_current_unite().sources
     if source.name ==# a:source_name
       let source.unite__is_invalidate = 1
@@ -307,7 +307,7 @@ function! unite#helper#invalidate_cache(source_name)  "{{{
   endfor
 endfunction"}}}
 
-function! unite#helper#get_unite_winnr(buffer_name) "{{{
+function! unite#helper#get_unite_winnr(buffer_name) abort "{{{
   for winnr in filter(range(1, winnr('$')),
         \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'")
     let buffer_context = get(getbufvar(
@@ -326,7 +326,7 @@ function! unite#helper#get_unite_winnr(buffer_name) "{{{
 
   return -1
 endfunction"}}}
-function! unite#helper#get_unite_bufnr(buffer_name) "{{{
+function! unite#helper#get_unite_bufnr(buffer_name) abort "{{{
   for bufnr in filter(range(1, bufnr('$')),
         \ "getbufvar(v:val, '&filetype') ==# 'unite'")
     let buffer_context = get(getbufvar(bufnr, 'unite'), 'context', {})
@@ -346,7 +346,7 @@ function! unite#helper#get_unite_bufnr(buffer_name) "{{{
   return -1
 endfunction"}}}
 
-function! unite#helper#get_current_candidate(...) "{{{
+function! unite#helper#get_current_candidate(...) abort "{{{
   let linenr = a:0 >= 1? a:1 : line('.')
   let unite = unite#get_current_unite()
   if unite.context.prompt_direction ==# 'below'
@@ -364,7 +364,7 @@ function! unite#helper#get_current_candidate(...) "{{{
   return get(unite#get_unite_candidates(), num, {})
 endfunction"}}}
 
-function! unite#helper#get_current_candidate_linenr(num) "{{{
+function! unite#helper#get_current_candidate_linenr(num) abort "{{{
   let candidate_num = 0
   let num = 0
   for candidate in unite#get_unite_candidates()
@@ -392,7 +392,7 @@ function! unite#helper#get_current_candidate_linenr(num) "{{{
   return unite.prompt_linenr + num
 endfunction"}}}
 
-function! unite#helper#call_filter(filter_name, candidates, context) "{{{
+function! unite#helper#call_filter(filter_name, candidates, context) abort "{{{
   let filter = unite#get_filters(a:filter_name)
   if empty(filter)
     return a:candidates
@@ -400,7 +400,7 @@ function! unite#helper#call_filter(filter_name, candidates, context) "{{{
 
   return filter.filter(a:candidates, a:context)
 endfunction"}}}
-function! unite#helper#call_source_filters(filters, candidates, context, source) "{{{
+function! unite#helper#call_source_filters(filters, candidates, context, source) abort "{{{
   let candidates = a:candidates
   for l:Filter in a:filters
     if type(l:Filter) == type('')
@@ -416,12 +416,12 @@ function! unite#helper#call_source_filters(filters, candidates, context, source)
   return candidates
 endfunction"}}}
 
-function! unite#helper#get_source_args(sources) "{{{
+function! unite#helper#get_source_args(sources) abort "{{{
   return map(copy(a:sources),
         \ 'type(v:val) == type([]) ? [v:val[0], v:val[1:]] : [v:val, []]')
 endfunction"}}}
 
-function! unite#helper#choose_window() "{{{
+function! unite#helper#choose_window() abort "{{{
   " Create key table.
   let keys = {}
   for [key, number] in items(g:unite_quick_match_table)
@@ -472,7 +472,7 @@ function! unite#helper#choose_window() "{{{
   endtry
 endfunction"}}}
 
-function! unite#helper#get_choose_windows() "{{{
+function! unite#helper#get_choose_windows() abort "{{{
   return filter(range(1, winnr('$')), "v:val != winnr()
         \ && !getwinvar(v:val, '&previewwindow')
         \ && (getwinvar(v:val, '&buftype') !~# 'nofile'
@@ -480,7 +480,7 @@ function! unite#helper#get_choose_windows() "{{{
         \ && !getwinvar(v:val, '&filetype') !=# 'qf'")
 endfunction"}}}
 
-function! unite#helper#get_buffer_directory(bufnr) "{{{
+function! unite#helper#get_buffer_directory(bufnr) abort "{{{
   let filetype = getbufvar(a:bufnr, '&filetype')
   if filetype ==# 'vimfiler'
     let dir = getbufvar(a:bufnr, 'vimfiler').current_dir
@@ -496,14 +496,14 @@ function! unite#helper#get_buffer_directory(bufnr) "{{{
   return dir
 endfunction"}}}
 
-function! unite#helper#cursor_prompt() "{{{
+function! unite#helper#cursor_prompt() abort "{{{
   " Move to prompt linenr.
   let unite = unite#get_current_unite()
   call cursor((unite.context.prompt_direction ==# 'below' ?
         \ line('$') : unite.init_prompt_linenr), 0)
 endfunction"}}}
 
-function! unite#helper#skip_prompt() "{{{
+function! unite#helper#skip_prompt() abort "{{{
   " Skip prompt linenr.
   let unite = unite#get_current_unite()
   if line('.') == unite.prompt_linenr
@@ -513,7 +513,7 @@ function! unite#helper#skip_prompt() "{{{
 endfunction"}}}
 
 if unite#util#has_lua()
-  function! unite#helper#paths2candidates(paths) "{{{
+  function! unite#helper#paths2candidates(paths) abort "{{{
     let candidates = []
   lua << EOF
 do
@@ -531,7 +531,7 @@ EOF
     return candidates
   endfunction"}}}
 else
-  function! unite#helper#paths2candidates(paths) "{{{
+  function! unite#helper#paths2candidates(paths) abort "{{{
     return map(copy(a:paths), "{
           \ 'word' : v:val,
           \ 'action__path' : v:val,
@@ -539,20 +539,20 @@ else
   endfunction"}}}
 endif
 
-function! unite#helper#get_candidate_directory(candidate) "{{{
+function! unite#helper#get_candidate_directory(candidate) abort "{{{
   return has_key(a:candidate, 'action__directory') ?
         \ a:candidate.action__directory :
         \ unite#util#path2directory(a:candidate.action__path)
 endfunction"}}}
 
-function! unite#helper#is_prompt(line) "{{{
+function! unite#helper#is_prompt(line) abort "{{{
   let prompt_linenr = unite#get_current_unite().prompt_linenr
   let context = unite#get_context()
   return (context.prompt_direction ==# 'below' && a:line >= prompt_linenr)
         \ || (context.prompt_direction !=# 'below' && a:line <= prompt_linenr)
 endfunction"}}}
 
-function! unite#helper#relative_target(target) "{{{
+function! unite#helper#relative_target(target) abort "{{{
   let target = unite#util#substitute_path_separator(fnamemodify(
         \ substitute(a:target, '[^:]\zs/$', '', ''), ':.'))
   if target == unite#util#substitute_path_separator(getcwd())
@@ -566,19 +566,19 @@ function! unite#helper#relative_target(target) "{{{
   return target
 endfunction"}}}
 
-function! unite#helper#join_targets(targets) "{{{
+function! unite#helper#join_targets(targets) abort "{{{
   return join(map(copy(a:targets),
         \    "unite#util#escape_shell(unite#helper#relative_target(v:val))"))
 endfunction"}}}
 
-function! unite#helper#is_pty(command) "{{{
+function! unite#helper#is_pty(command) abort "{{{
   " Note: "pt" and "ack" and "ag" and "hw" needs pty.
   " It is too bad.
   return fnamemodify(a:command, ':t:r') =~#
         \ '^pt$\|^ack\%(-grep\)\?$\|^ag$\|^hw$'
 endfunction"}}}
 
-function! unite#helper#complete_search_history(arglead, cmdline, cursorpos) "{{{
+function! unite#helper#complete_search_history(arglead, cmdline, cursorpos) abort "{{{
   return filter(map(unite#util#uniq(s:histget('search')
         \                           + s:histget('input')),
         \           "substitute(v:val, '\\c^\\(\\\\[cmv<]\\)*\\|\\\\>$', '', 'g')"),
@@ -596,7 +596,7 @@ function! s:histget(type) abort "{{{
         \       'v:val != ""')
 endfunction"}}}
 
-function! unite#helper#ignore_candidates(candidates, context) "{{{
+function! unite#helper#ignore_candidates(candidates, context) abort "{{{
   let candidates = copy(a:candidates)
 
   if a:context.ignore_pattern != ''

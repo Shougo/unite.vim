@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#candidates#_recache(input, is_force) "{{{
+function! unite#candidates#_recache(input, is_force) abort "{{{
   let unite = unite#get_current_unite()
 
   " Save options.
@@ -150,7 +150,7 @@ function! unite#candidates#_recache(input, is_force) "{{{
   call unite#handlers#_save_updatetime()
 endfunction"}}}
 
-function! unite#candidates#gather(...) "{{{
+function! unite#candidates#gather(...) abort "{{{
   let is_gather_all = get(a:000, 0, 0)
 
   let unite = unite#get_current_unite()
@@ -204,7 +204,7 @@ function! unite#candidates#gather(...) "{{{
   return candidates
 endfunction"}}}
 
-function! unite#candidates#_gather_pos(offset) "{{{
+function! unite#candidates#_gather_pos(offset) abort "{{{
   let unite = unite#get_current_unite()
   if unite.context.is_redraw || unite.candidates_pos == 0
     return []
@@ -219,7 +219,7 @@ function! unite#candidates#_gather_pos(offset) "{{{
   return unite#init#_candidates(candidates)
 endfunction"}}}
 
-function! s:recache_candidates_loop(context, is_force) "{{{
+function! s:recache_candidates_loop(context, is_force) abort "{{{
   let unite = unite#get_current_unite()
 
   let input_len = unite#util#strchars(a:context.input)
@@ -331,7 +331,7 @@ function! s:recache_candidates_loop(context, is_force) "{{{
   endif
 endfunction"}}}
 
-function! s:get_source_candidates(source) "{{{
+function! s:get_source_candidates(source) abort "{{{
   let custom_source = get(unite#custom#get().sources, a:source.name, {})
   let context_ignore = {
         \ 'path' : a:source.unite__context.path,

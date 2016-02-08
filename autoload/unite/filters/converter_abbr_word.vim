@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#converter_abbr_word#define() "{{{
+function! unite#filters#converter_abbr_word#define() abort "{{{
   return s:converter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:converter = {
       \ 'description' : 'abbr to word converter',
       \}
 
-function! s:converter.filter(candidates, context) "{{{
+function! s:converter.filter(candidates, context) abort "{{{
   for candidate in a:candidates
     let candidate.word = get(candidate, 'abbr', candidate.word)
   endfor

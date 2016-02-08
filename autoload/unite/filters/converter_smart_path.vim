@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#converter_smart_path#define() "{{{
+function! unite#filters#converter_smart_path#define() abort "{{{
   return s:converter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:converter = {
       \ 'description' : 'converts word to smart path of filename',
       \}
 
-function! s:converter.filter(candidates, context) "{{{
+function! s:converter.filter(candidates, context) abort "{{{
   if a:context.input =~ '^\%(\a\+:/\|/\)'
     return unite#filters#converter_full_path#define().filter(
           \ a:candidates, a:context)

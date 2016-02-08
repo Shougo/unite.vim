@@ -25,11 +25,11 @@
 " }}}
 "=============================================================================
 let s:PREFIX = unite#util#is_windows() ? '[exrename]' : '*exrename*'
-function! s:void(exrename)
+function! s:void(exrename) abort
 endfunction
 let s:VOID = function('s:void')
 
-function! unite#exrename#create_buffer(candidates, ...) "{{{
+function! unite#exrename#create_buffer(candidates, ...) abort "{{{
   let options = extend({
         \ 'cwd': getcwd(),
         \ 'bufnr': bufnr('%'),
@@ -117,11 +117,11 @@ function! unite#exrename#create_buffer(candidates, ...) "{{{
   setlocal nomodified
 endfunction"}}}
 
-function! s:is_absolute(path) "{{{
+function! s:is_absolute(path) abort "{{{
   return a:path =~# '^\%(\a\a\+:\)\|^\%(\a:\|/\)'
 endfunction "}}}
 
-function! s:do_rename() "{{{
+function! s:do_rename() abort "{{{
   if line('$') != len(b:exrename.filenames)
     echohl Error | echo 'Invalid rename buffer!' | echohl None
     return
@@ -166,7 +166,7 @@ function! s:do_rename() "{{{
   endif
 endfunction"}}}
 
-function! s:exit(bufnr) "{{{
+function! s:exit(bufnr) abort "{{{
   if !bufexists(a:bufnr)
     return
   endif
@@ -180,7 +180,7 @@ function! s:exit(bufnr) "{{{
   silent execute 'bdelete!' a:bufnr
 endfunction "}}}
 
-function! s:check_lines() "{{{
+function! s:check_lines() abort "{{{
   if !exists('b:exrename')
     return
   endif
@@ -191,7 +191,7 @@ function! s:check_lines() "{{{
   endif
 endfunction "}}}
 
-function! s:custom_alternate_buffer() "{{{
+function! s:custom_alternate_buffer() abort "{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
     buffer #
   endif

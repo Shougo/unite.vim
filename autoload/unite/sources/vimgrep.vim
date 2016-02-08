@@ -28,7 +28,7 @@ call unite#util#set_default(
       \ 'g:unite_source_vimgrep_search_word_highlight', 'Search')
 "}}}
 
-function! unite#sources#vimgrep#define() "{{{
+function! unite#sources#vimgrep#define() abort "{{{
   return s:source
 endfunction "}}}
 
@@ -45,7 +45,7 @@ let s:source = {
       \ ],
       \ }
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   let args = unite#helper#parse_source_args(a:args)
 
   let target = get(args, 0, '')
@@ -74,7 +74,7 @@ function! s:source.hooks.on_init(args, context) "{{{
         \ unite#util#substitute_path_separator(
         \  unite#util#expand(a:context.source__targets[0])) : ''
 endfunction"}}}
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   syntax case ignore
   syntax region uniteSource__VimgrepLine
         \ start=' ' end='$'
@@ -96,7 +96,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   execute 'highlight default link uniteSource__VimgrepPattern'
         \ g:unite_source_vimgrep_search_word_highlight
 endfunction"}}}
-function! s:source.hooks.on_post_filter(args, context) "{{{
+function! s:source.hooks.on_post_filter(args, context) abort "{{{
   for candidate in a:context.candidates
     let candidate.kind = ['file', 'jump_list']
     let candidate.action__col_pattern = a:context.source__input
@@ -104,7 +104,7 @@ function! s:source.hooks.on_post_filter(args, context) "{{{
   endfor
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if empty(a:context.source__targets)
         \ || a:context.source__input == ''
     return []
@@ -166,7 +166,7 @@ function! s:source.gather_candidates(args, context) "{{{
   return _
 endfunction "}}}
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}

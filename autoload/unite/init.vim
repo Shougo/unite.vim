@@ -44,7 +44,7 @@ let g:unite_enable_auto_select =
       \ get(g:, 'unite_enable_auto_select', 1)
 "}}}
 
-function! unite#init#_context(context, ...) "{{{
+function! unite#init#_context(context, ...) abort "{{{
   let source_names = get(a:000, 0, [])
 
   let default_context = extend(copy(unite#variables#default_context()),
@@ -132,7 +132,7 @@ function! unite#init#_context(context, ...) "{{{
   return context
 endfunction"}}}
 
-function! unite#init#_unite_buffer() "{{{
+function! unite#init#_unite_buffer() abort "{{{
   let current_unite = unite#variables#current_unite()
   let is_bufexists = bufexists(current_unite.real_buffer_name)
   let current_unite.context.real_buffer_name =
@@ -250,7 +250,7 @@ function! unite#init#_unite_buffer() "{{{
   setfiletype unite
 endfunction"}}}
 
-function! unite#init#_current_unite(sources, context) "{{{
+function! unite#init#_current_unite(sources, context) abort "{{{
   let context = a:context
 
   " Overwrite previous unite buffer.
@@ -373,7 +373,7 @@ function! unite#init#_current_unite(sources, context) "{{{
 endfunction"}}}
 
 " @vimlint(EVL102, 1, l:max_source_name)
-function! unite#init#_candidates(candidates) "{{{
+function! unite#init#_candidates(candidates) abort "{{{
   let unite = unite#get_current_unite()
   let context = unite.context
   let [max_width, max_source_name] = unite#helper#adjustments(
@@ -463,7 +463,7 @@ function! unite#init#_candidates(candidates) "{{{
 endfunction"}}}
 " @vimlint(EVL102, 0, l:max_source_name)
 
-function! unite#init#_candidates_source(candidates, source_name) "{{{
+function! unite#init#_candidates_source(candidates, source_name) abort "{{{
   let source = unite#variables#loaded_sources(a:source_name)
 
   let default_candidate = {
@@ -485,7 +485,7 @@ function! unite#init#_candidates_source(candidates, source_name) "{{{
   return candidates
 endfunction"}}}
 
-function! unite#init#_default_scripts(kind, names) "{{{
+function! unite#init#_default_scripts(kind, names) abort "{{{
   let names = empty(a:names) ? [''] : a:names
   if a:kind ==# 'sources' && !empty(a:names)
     call add(names, 'alias')
@@ -548,7 +548,7 @@ function! unite#init#_default_scripts(kind, names) "{{{
   endfor
 endfunction"}}}
 
-function! unite#init#_kinds() "{{{
+function! unite#init#_kinds() abort "{{{
   let kinds = extend(copy(unite#variables#static().kinds),
         \ unite#variables#dynamic().kinds)
   for kind in values(filter(copy(kinds),
@@ -567,12 +567,12 @@ function! unite#init#_kinds() "{{{
 
   return kinds
 endfunction"}}}
-function! unite#init#_filters() "{{{
+function! unite#init#_filters() abort "{{{
   return extend(copy(unite#variables#static().filters),
         \ unite#variables#dynamic().filters)
 endfunction"}}}
 
-function! unite#init#_loaded_sources(sources, context) "{{{
+function! unite#init#_loaded_sources(sources, context) abort "{{{
   let all_sources = unite#init#_sources(
         \ unite#helper#get_source_names(a:sources))
   let sources = []
@@ -633,7 +633,7 @@ function! unite#init#_loaded_sources(sources, context) "{{{
   return sources
 endfunction"}}}
 
-function! unite#init#_sources(...) "{{{
+function! unite#init#_sources(...) abort "{{{
   " args: source_names or source_definition
 
   " Initialize load.
@@ -783,7 +783,7 @@ function! unite#init#_sources(...) "{{{
   return sources
 endfunction"}}}
 
-function! unite#init#_tab_variables() "{{{
+function! unite#init#_tab_variables() abort "{{{
   if !exists('t:unite')
     let t:unite = { 'last_unite_bufnr' : -1 }
   endif

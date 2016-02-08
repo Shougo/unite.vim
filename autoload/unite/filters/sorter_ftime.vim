@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#sorter_ftime#define() "{{{
+function! unite#filters#sorter_ftime#define() abort "{{{
   return s:sorter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:sorter = {
       \ 'description' : 'sort by getftime() order',
       \}
 
-function! s:sorter.filter(candidates, context) "{{{
+function! s:sorter.filter(candidates, context) abort "{{{
   return unite#util#sort_by(a:candidates, "
       \   has_key(v:val, 'action__path')      ?
       \       getftime(v:val.action__path)

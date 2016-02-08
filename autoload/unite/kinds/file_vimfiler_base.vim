@@ -55,7 +55,7 @@ call unite#util#set_default('g:unite_kind_file_use_trashbox',
       \ unite#util#is_windows() && unite#util#has_vimproc())
 "}}}
 
-function! unite#kinds#file_vimfiler_base#define() "{{{
+function! unite#kinds#file_vimfiler_base#define() abort "{{{
   return s:kind
 endfunction"}}}
 
@@ -77,7 +77,7 @@ let s:kind.action_table.vimfiler__move = {
       \ 'is_selectable' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__move.func(candidates) "{{{
+function! s:kind.action_table.vimfiler__move.func(candidates) abort "{{{
   if !unite#util#input_yesno('Really move files?')
     echo 'Canceled.'
     return
@@ -145,7 +145,7 @@ endfunction"}}}
 let s:kind.action_table.move =
       \ deepcopy(s:kind.action_table.vimfiler__move)
 let s:kind.action_table.move.is_listed = 1
-function! s:kind.action_table.move.func(candidates) "{{{
+function! s:kind.action_table.move.func(candidates) abort "{{{
   return s:kind.action_table.vimfiler__move.func(a:candidates)
 endfunction"}}}
 
@@ -156,7 +156,7 @@ let s:kind.action_table.vimfiler__copy = {
       \ 'is_selectable' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__copy.func(candidates) "{{{
+function! s:kind.action_table.vimfiler__copy.func(candidates) abort "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -202,7 +202,7 @@ endfunction"}}}
 
 let s:kind.action_table.copy = deepcopy(s:kind.action_table.vimfiler__copy)
 let s:kind.action_table.copy.is_listed = 1
-function! s:kind.action_table.copy.func(candidates) "{{{
+function! s:kind.action_table.copy.func(candidates) abort "{{{
   return s:kind.action_table.vimfiler__copy.func(a:candidates)
 endfunction"}}}
 
@@ -213,7 +213,7 @@ let s:kind.action_table.vimfiler__delete = {
       \ 'is_selectable' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__delete.func(candidates) "{{{
+function! s:kind.action_table.vimfiler__delete.func(candidates) abort "{{{
   if g:unite_kind_file_delete_file_command == ''
         \ || g:unite_kind_file_delete_directory_command == ''
     call unite#print_error('Please install rm.exe.')
@@ -234,7 +234,7 @@ let s:kind.action_table.vimfiler__rename = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__rename.func(candidate) "{{{
+function! s:kind.action_table.vimfiler__rename.func(candidate) abort "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -270,7 +270,7 @@ let s:kind.action_table.vimfiler__newfile = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__newfile.func(candidate) "{{{
+function! s:kind.action_table.vimfiler__newfile.func(candidate) abort "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(),
         \   'vimfiler__current_directory', '')
@@ -327,7 +327,7 @@ let s:kind.action_table.vimfiler__shell = {
       \ 'description' : 'popup shell',
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__shell.func(candidate) "{{{
+function! s:kind.action_table.vimfiler__shell.func(candidate) abort "{{{
   if !exists(':VimShellPop')
     shell
     return
@@ -349,7 +349,7 @@ let s:kind.action_table.vimfiler__shellcmd = {
       \ 'is_listed' : 0,
       \ 'is_start' : 1,
       \ }
-function! s:kind.action_table.vimfiler__shellcmd.func(candidate) "{{{
+function! s:kind.action_table.vimfiler__shellcmd.func(candidate) abort "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -377,7 +377,7 @@ let s:kind.action_table.vimfiler__mkdir = {
       \ 'is_listed' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:kind.action_table.vimfiler__mkdir.func(candidates) "{{{
+function! s:kind.action_table.vimfiler__mkdir.func(candidates) abort "{{{
   let context = unite#get_context()
   let vimfiler_current_dir = get(context, 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -426,7 +426,7 @@ let s:kind.action_table.vimfiler__execute = {
       \ 'is_selectable' : 1,
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__execute.func(candidates) "{{{
+function! s:kind.action_table.vimfiler__execute.func(candidates) abort "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -455,7 +455,7 @@ let s:kind.action_table.vimfiler__external_filer = {
       \ 'description' : 'open file with external file explorer',
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__external_filer.func(candidate) "{{{
+function! s:kind.action_table.vimfiler__external_filer.func(candidate) abort "{{{
   let vimfiler_current_dir =
         \ get(unite#get_context(), 'vimfiler__current_directory', '')
   if vimfiler_current_dir == ''
@@ -506,7 +506,7 @@ let s:kind.action_table.vimfiler__write = {
       \ 'description' : 'save file',
       \ 'is_listed' : 0,
       \ }
-function! s:kind.action_table.vimfiler__write.func(candidate) "{{{
+function! s:kind.action_table.vimfiler__write.func(candidate) abort "{{{
   let context = unite#get_context()
   let lines = getline(context.vimfiler__line1, context.vimfiler__line2)
 
@@ -518,7 +518,7 @@ function! s:kind.action_table.vimfiler__write.func(candidate) "{{{
 endfunction"}}}
 "}}}
 
-function! s:move_to_other_drive(candidate, filename) "{{{
+function! s:move_to_other_drive(candidate, filename) abort "{{{
   " move command doesn't supported directory over drive move in Windows.
   if g:unite_kind_file_copy_file_command == ''
         \ || g:unite_kind_file_copy_directory_command == ''
@@ -541,7 +541,7 @@ function! s:move_to_other_drive(candidate, filename) "{{{
   endif
 endfunction"}}}
 
-function! s:search_cursor(filename, dest_dir, candidate) "{{{
+function! s:search_cursor(filename, dest_dir, candidate) abort "{{{
   if &filetype !=# 'vimfiler'
     return
   endif

@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_migemo#define() "{{{
+function! unite#filters#matcher_migemo#define() abort "{{{
   if !has('migemo') && !executable('cmigemo')
     " Not supported.
     return {}
@@ -44,7 +44,7 @@ function! unite#filters#matcher_migemo#define() "{{{
   return s:matcher
 endfunction"}}}
 
-function! s:search_dict()
+function! s:search_dict() abort
   let dict = s:search_dict2('cmigemo/'.&encoding.'/migemo-dict')
   if dict == ''
     let dict = s:search_dict2('migemo/'.&encoding.'/migemo-dict')
@@ -59,7 +59,7 @@ function! s:search_dict()
   return dict
 endfunction
 
-function! s:search_dict2(name)
+function! s:search_dict2(name) abort
   let path = $VIM . ',' . &runtimepath
   let dict = globpath(path, 'dict/'.a:name)
   if dict == ''
@@ -85,7 +85,7 @@ let s:matcher = {
       \ 'description' : 'migemo matcher',
       \}
 
-function! s:matcher.filter(candidates, context) "{{{
+function! s:matcher.filter(candidates, context) abort "{{{
   if a:context.input == ''
     return a:candidates
   endif
@@ -118,11 +118,11 @@ function! s:matcher.filter(candidates, context) "{{{
 
   return candidates
 endfunction"}}}
-function! s:matcher.pattern(input) "{{{
+function! s:matcher.pattern(input) abort "{{{
   return s:get_migemo_pattern(a:input)
 endfunction"}}}
 
-function! s:get_migemo_pattern(input)
+function! s:get_migemo_pattern(input) abort
   if has('migemo')
     " Use migemo().
     return migemo(a:input)

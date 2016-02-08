@@ -29,7 +29,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#output#define() "{{{
+function! unite#sources#output#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -42,7 +42,7 @@ let s:source = {
       \ 'hooks' : {},
       \ }
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   if type(get(a:args, 0, '')) == type([])
     " Use args directly.
     let a:context.source__is_dummy = 0
@@ -63,7 +63,7 @@ function! s:source.hooks.on_init(args, context) "{{{
     call unite#print_source_message('command: ' . command, s:source.name)
   endif
 endfunction"}}}
-function! s:source.hooks.on_syntax(args, context) "{{{
+function! s:source.hooks.on_syntax(args, context) abort "{{{
   let save_current_syntax = get(b:, 'current_syntax', '')
   unlet! b:current_syntax
 
@@ -75,7 +75,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
     let b:current_syntax = save_current_syntax
   endtry
 endfunction"}}}
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if type(get(a:args, 0, '')) == type([])
     " Use args directly.
     let result = a:args[0]

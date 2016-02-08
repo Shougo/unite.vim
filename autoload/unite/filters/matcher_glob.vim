@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_glob#define() "{{{
+function! unite#filters#matcher_glob#define() abort "{{{
   return s:matcher
 endfunction"}}}
 
@@ -35,12 +35,12 @@ let s:matcher = {
       \ 'description' : 'glob matcher',
       \}
 
-function! s:matcher.pattern(input) "{{{
+function! s:matcher.pattern(input) abort "{{{
   return substitute(unite#util#escape_match(a:input),
           \ '\\\@<!|', '\\|', 'g')
 endfunction"}}}
 
-function! s:matcher.filter(candidates, context) "{{{
+function! s:matcher.filter(candidates, context) abort "{{{
   if a:context.input == ''
     return unite#filters#filter_matcher(
           \ a:candidates, '', a:context)
@@ -55,7 +55,7 @@ function! s:matcher.filter(candidates, context) "{{{
   return candidates
 endfunction"}}}
 
-function! unite#filters#matcher_glob#glob_matcher(candidates, input, context) "{{{
+function! unite#filters#matcher_glob#glob_matcher(candidates, input, context) abort "{{{
   let input = a:input
 
   if input =~ '^!'

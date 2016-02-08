@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#directory#define() "{{{
+function! unite#kinds#directory#define() abort "{{{
   return s:kind
 endfunction"}}}
 

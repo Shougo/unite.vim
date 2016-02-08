@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_project_files#define() "{{{
+function! unite#filters#matcher_project_files#define() abort "{{{
   return s:matcher
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:matcher = {
       \ 'description' : 'project files matcher',
       \}
 
-function! s:matcher.filter(candidates, context) "{{{
+function! s:matcher.filter(candidates, context) abort "{{{
   let path = a:context.path != '' ? a:context.path : getcwd()
   let project = unite#util#path2project_directory(path) . '/'
 

@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#history_input#define()
+function! unite#sources#history_input#define() abort
   return s:source
 endfunction
 
@@ -38,7 +38,7 @@ let s:source = {
       \ 'is_listed' : 0,
       \}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   let context = unite#get_context()
   let inputs = unite#get_profile(
         \ context.unite__old_buffer_info[0].profile_name, 'unite__inputs')
@@ -57,7 +57,7 @@ let s:source.action_table.narrow = {
       \ 'description' : 'narrow by history',
       \ 'is_quit' : 0,
       \ }
-function! s:source.action_table.narrow.func(candidate) "{{{
+function! s:source.action_table.narrow.func(candidate) abort "{{{
   call unite#force_quit_session()
   call unite#mappings#narrowing(a:candidate.word, 0)
 endfunction"}}}
@@ -68,7 +68,7 @@ let s:source.action_table.delete = {
       \ 'is_quit' : 0,
       \ 'is_invalidate_cache' : 1,
       \ }
-function! s:source.action_table.delete.func(candidates) "{{{
+function! s:source.action_table.delete.func(candidates) abort "{{{
   let context = unite#get_context()
   let inputs = unite#get_profile(
         \ context.unite__old_buffer_info[0].profile_name, 'unite__inputs')

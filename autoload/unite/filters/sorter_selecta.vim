@@ -29,7 +29,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#sorter_selecta#define()
+function! unite#filters#sorter_selecta#define() abort
   if has('python') || has('python3')
     return s:sorter
   else
@@ -51,7 +51,7 @@ if exists(':Python2or3') != 2
   endif
 endif
 
-function! s:sorter.filter(candidates, context)
+function! s:sorter.filter(candidates, context) abort
   if a:context.input == '' || !has('float') || empty(a:candidates)
     return a:candidates
   endif
@@ -60,7 +60,7 @@ function! s:sorter.filter(candidates, context)
         \ a:candidates, a:context.input)
 endfunction
 
-function! unite#filters#sorter_selecta#_sort(candidates, input)
+function! unite#filters#sorter_selecta#_sort(candidates, input) abort
   " Initialize.
   let is_path = has_key(a:candidates[0], 'action__path')
   for candidate in a:candidates
@@ -81,7 +81,7 @@ endfunction
 
 " @vimlint(EVL102, 1, l:input)
 " @vimlint(EVL102, 1, l:candidate)
-function! s:sort_python(candidates, inputs)
+function! s:sort_python(candidates, inputs) abort
   for input in a:inputs
     for candidate in a:candidates
       Python2or3 score()
@@ -94,7 +94,7 @@ endfunction"}}}
 " @vimlint(EVL102, 0, l:candidate)
 
 " @vimlint(EVL102, 1, l:root)
-function! s:def_python()
+function! s:def_python() abort
   if !(has('python') || has('python3'))
     return
   endif

@@ -29,7 +29,7 @@ set cpo&vim
 " Variables  "{{{
 "}}}
 
-function! unite#sources#file_list#define() "{{{
+function! unite#sources#file_list#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -39,12 +39,12 @@ let s:source = {
       \ 'default_kind' : 'file',
       \ }
 
-function! s:source.complete(args, context, arglead, cmdline, cursorpos) "{{{
+function! s:source.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return unite#sources#file#complete_file(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   let args = unite#helper#parse_source_args(a:args)
 
   if empty(args)

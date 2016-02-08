@@ -9,7 +9,7 @@ let g:kind = {
 let g:kind.action_table.open = {
       \ 'is_selectable' : 1,
       \ }
-function! g:kind.action_table.open.func(candidate)
+function! g:kind.action_table.open.func(candidate) abort
   echo 'hoge'
 endfunction
 
@@ -18,7 +18,7 @@ let g:source = {
       \ 'is_volatile' : 1,
       \ 'variables' : {'foo' : 'foo'}
       \}
-function! g:source.gather_candidates(args, context) "{{{
+function! g:source.gather_candidates(args, context) abort "{{{
   " Add dummy candidate.
   let g:candidates = [ a:context.input ]
 
@@ -31,7 +31,7 @@ function! g:source.gather_candidates(args, context) "{{{
   return g:candidates
 endfunction"}}}
 
-function! s:suite.source()
+function! s:suite.source() abort
   call s:assert.equals(unite#define_kind(g:kind), 0)
 
   call s:assert.equals(unite#define_source(g:source), 0)

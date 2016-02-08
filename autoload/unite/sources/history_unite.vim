@@ -38,7 +38,7 @@ call unite#util#set_default('g:unite_source_history_unite_file',
 call unite#util#set_default('g:unite_source_history_unite_limit', 100)
 "}}}
 
-function! unite#sources#history_unite#add(unite)"{{{
+function! unite#sources#history_unite#add(unite) abort"{{{
   let s:unite_histories = filter(s:unite_histories,
         \ 'v:val.sources !=# a:unite.sources
         \  && v:val.context.input !=# a:unite.context.input')
@@ -62,7 +62,7 @@ function! unite#sources#history_unite#add(unite)"{{{
         \ })
 endfunction"}}}
 
-function! unite#sources#history_unite#define()
+function! unite#sources#history_unite#define() abort
   return s:source
 endfunction
 
@@ -73,7 +73,7 @@ let s:source = {
       \ 'default_action' : 'start',
       \}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   return map(copy(s:unite_histories), "{
         \ 'word' : v:val.source_args,
         \ 'abbr' : v:val.source_args . ' -- ' . v:val.context.input,
@@ -86,7 +86,7 @@ let s:source.action_table.start = {
       \ 'description' : 'start sources',
       \ 'is_start' : 1,
       \ }
-function! s:source.action_table.start.func(candidate) "{{{
+function! s:source.action_table.start.func(candidate) abort "{{{
   let history = a:candidate.source__history
   let history.context.split = unite#get_context().split
   let history.context.no_split = 0
