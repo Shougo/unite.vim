@@ -210,7 +210,7 @@ function! s:kind.action_table.diff.func(candidates) abort "{{{
       " Use selected candidates or current buffer.
       if &filetype ==# 'vimfiler'
         let file = get(vimfiler#get_marked_files(
-              \ b:vimfiler), 0, vimfiler#get_file())
+              \ b:vimfiler), 0, vimfiler#get_file(b:vimfiler))
         if empty(file) || isdirectory(file.action__path)
           echo 'Invalid candidate is detected.'
           return
