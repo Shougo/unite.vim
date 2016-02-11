@@ -39,13 +39,6 @@ function! unite#start#standard(sources, ...) abort "{{{
   let context = unite#init#_context(context,
         \ unite#helper#get_source_names(a:sources))
 
-  if empty(a:sources)
-    echohl Comment
-    call unite#view#_redraw_echo(
-          \ '[unite.vim] interactive mode: Please input source name')
-    echohl None
-  endif
-
   if context.resume
     " Check resume buffer.
     let resume_bufnr = s:get_resume_buffer(context.buffer_name)
@@ -63,6 +56,13 @@ function! unite#start#standard(sources, ...) abort "{{{
       return
     endif
   endif"}}}
+
+  if empty(a:sources)
+    echohl Comment
+    call unite#view#_redraw_echo(
+          \ '[unite.vim] interactive mode: Please input source name')
+    echohl None
+  endif
 
   try
     call unite#init#_current_unite(a:sources, context)
@@ -365,7 +365,8 @@ function! unite#start#resume(buffer_name, ...) abort "{{{
   let unite.preview_candidate = {}
   let unite.highlight_candidate = {}
   let unite.context.resume = 1
-  let unite.context.buffer_name = a:buffer_name
+  let unite.context.buffer_name =
+        \ (a:buffer_name == '' ? 'default' : a:buffer_name)
   if context.winwidth != 0
     let unite.context.unite__old_winwidth = 0
   endif
