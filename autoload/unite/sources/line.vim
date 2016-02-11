@@ -210,7 +210,7 @@ function! s:get_lines(context, direction, bufnr, start, max) abort "{{{
   for line in getbufline(a:bufnr, start, end)
     if input == ''
           \ || (!is_expr && stridx(tolower(line), input) >= 0)
-          \ || line =~ input
+          \ || line =~? input
       call add(_, [linenr, line])
     endif
 
