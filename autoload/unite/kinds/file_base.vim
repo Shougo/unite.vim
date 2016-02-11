@@ -209,11 +209,12 @@ function! s:kind.action_table.diff.func(candidates) abort "{{{
     try
       " Use selected candidates or current buffer.
       if &filetype ==# 'vimfiler'
-        let file = get(vimfiler#get_marked_files(), 0, vimfiler#get_file())
+        let file = get(vimfiler#get_marked_files(
+              \ b:vimfiler), 0, vimfiler#get_file())
         if empty(file) || isdirectory(file.action__path)
           echo 'Invalid candidate is detected.'
           return
-        elseif len(vimfiler#get_marked_files()) > 1
+        elseif len(vimfiler#get_marked_files(b:vimfiler)) > 1
           echo 'Too many candidates!'
           return
         endif
