@@ -455,6 +455,9 @@ function! s:toggle_mark(map) abort "{{{
   call unite#helper#skip_prompt()
 
   let candidate = unite#helper#get_current_candidate()
+  if empty(candidate)
+    return
+  endif
   if !get(candidate, 'is_dummy', 0)
     let candidate.unite__is_marked = !candidate.unite__is_marked
     let candidate.unite__marked_time = has('reltime') && has('float') ?
