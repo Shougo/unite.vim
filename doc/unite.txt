@@ -3794,7 +3794,7 @@ A: >
 Q: Unite adds unite buffer to jumplist automatically.
 https://github.com/Shougo/unite.vim/issues/278
 
-A: You can use |unite-options-wipe| option.  But it is used, you cannot use
+A: You can use |unite-options-wipe| option.  But if it is used, you cannot use
 the |:UniteResume| feature.
 
 Q: unite.vim is too slow.
