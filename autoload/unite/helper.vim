@@ -432,7 +432,11 @@ function! unite#helper#choose_window() abort "{{{
   let save_statuslines = map(unite#helper#get_choose_windows(),
         \ "[v:val, getbufvar(winbufnr(v:val), '&statusline')]")
 
+  let save_laststatus = &laststatus
+
   try
+    let &laststatus = 2
+
     let winnr_save = winnr()
     for [winnr, statusline] in save_statuslines
       noautocmd execute winnr.'wincmd w'
@@ -458,6 +462,8 @@ function! unite#helper#choose_window() abort "{{{
       echo ''
     endwhile
   finally
+    let &laststatus = save_laststatus
+
     echo ''
 
     let winnr_save = winnr()
