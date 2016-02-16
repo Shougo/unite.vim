@@ -584,6 +584,7 @@ function! unite#view#_init_cursor() abort "{{{
 
   if context.quick_match
     call unite#helper#cursor_prompt()
+    call unite#view#_bottom_cursor()
 
     call unite#mappings#_quick_match(0)
   endif
