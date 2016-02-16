@@ -295,6 +295,9 @@ function! unite#init#_current_unite(sources, context) abort "{{{
   let unite.prev_bufnr =
         \ (exists('b:unite') && !context.split) ?
         \ b:unite.prev_bufnr : bufnr('%')
+  let unite.prev_pos =
+        \ (exists('b:unite') && !context.split) ?
+        \ b:unite.prev_pos : getpos('.')
   let unite.prev_winnr = winnr()
   let unite.prev_winsaveview = winsaveview()
   let unite.prev_line = 0
