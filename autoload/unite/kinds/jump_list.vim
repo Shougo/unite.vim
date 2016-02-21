@@ -119,12 +119,6 @@ function! unite#kinds#jump_list#define() abort "{{{
       let context = unite.context
       let current_winnr = winnr()
 
-      if context.vertical
-          setlocal winfixwidth
-      else
-          setlocal winfixheight
-      endif
-
       noautocmd execute candidate_winnr 'wincmd w'
 
       call s:jump(a:candidate, 1)

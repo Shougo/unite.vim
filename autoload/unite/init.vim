@@ -190,6 +190,12 @@ function! unite#init#_unite_buffer() abort "{{{
       setlocal norelativenumber
     endif
 
+    if context.vertical
+      setlocal winfixwidth
+    else
+      setlocal winfixheight
+    endif
+
     " Autocommands.
     augroup plugin-unite
       autocmd! * <buffer>

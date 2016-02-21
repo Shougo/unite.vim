@@ -104,7 +104,6 @@ function! s:source.action_table.preview.func(candidate) abort "{{{
     normal! zv
     normal! zt
     setlocal previewwindow
-    setlocal winfixheight
   catch /^Vim\%((\a\+)\)\?:E149/
     " Ignore
   endtry
