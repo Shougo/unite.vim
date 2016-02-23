@@ -556,111 +556,6 @@ function! s:source_file_neovim.hooks.on_close(args, context) abort "{{{
   endif
 endfunction "}}}
 
-" Source neovim2.
-let s:source_file_neovim2 = deepcopy(s:source_file_rec)
-let s:source_file_neovim2.name = 'file_rec/neovim2'
-let s:source_file_neovim2.description =
-      \ 'neovim remote asynchronous candidates from directory by recursive'
-
-function! s:source_file_neovim2.gather_candidates(args, context) abort "{{{
-  let paths = s:get_paths(a:args, a:context)
-  let a:context.source__directory = join(paths, "\n")
-
-  if !has('nvim')
-    call unite#print_source_message(
-          \ 'Your vim is not neovim.', self.name)
-    let a:context.is_async = 0
-    return []
-  endif
-
-  if !has('python3')
-    call unite#print_source_message(
-          \ 'Your nvim has not Python3 support.', self.name)
-    let a:context.is_async = 0
-    return []
-  endif
-
-  if !exists(':UniteInitializePython')
-    call unite#print_source_message(
-          \ 'Please execute :UpdateRemotePlugins command.', self.name)
-    let a:context.is_async = 0
-    return []
-  endif
-
-  let directory = a:context.source__directory
-
-  call unite#print_source_message(
-        \ 'directory: ' . directory, self.name)
-
-  if type(g:unite_source_rec_async_command) == type('')
-    " You must specify list type.
-    call unite#print_source_message(
-          \ 'g:unite_source_rec_async_command must be list type.', self.name)
-    let a:context.is_async = 0
-    return []
-  endif
-
-  let args = g:unite_source_rec_async_command
-  if a:context.source__is_directory
-    " Use find command.
-    let args = ['find', '-L']
-  endif
-
-  if empty(args) || !executable(args[0])
-    if empty(args)
-      call unite#print_source_message(
-            \ 'You must install file list command and specify '
-            \  . 'g:unite_source_rec_async_command variable.', self.name)
-    else
-      call unite#print_source_message('async command : "'.
-            \ args[0].'" is not executable.', self.name)
-    endif
-    let a:context.is_async = 0
-    return []
-  endif
-
-  " Note: If find command and args used, uses whole command line.
-  let commands = args + paths
-  if args[0] ==# 'find'
-    " Default option.
-    let commands += g:unite_source_rec_find_args
-    let commands +=
-          \ ['-o', '-type',
-          \ (a:context.source__is_directory ? 'd' : 'f'), '-print']
-  endif
-
-  call unite#add_source_message(
-        \ 'Command-line: ' . string(commands), self.name)
-
-  let s:neovim_candidates = []
-  let s:neovim_eof = 0
-  call rpcnotify(g:unite#_channel_id, 'unite_rec', a:context, commands)
-
-  return []
-endfunction"}}}
-
-function! s:source_file_neovim2.async_gather_candidates(args, context) abort "{{{
-  if s:neovim_eof
-    let a:context.is_async = 0
-  endif
-  let ret = copy(s:neovim_candidates)
-  let s:neovim_candidates = []
-  return ret
-endfunction"}}}
-
-function! s:source_file_neovim2.hooks.on_init(args, context) abort "{{{
-  let a:context.source__is_directory = 0
-endfunction"}}}
-function! s:source_file_neovim.hooks.on_close(args, context) abort "{{{
-endfunction "}}}
-
-let s:neovim_candidates = []
-let s:neovim_eof = 0
-function! unite#sources#rec#_remote_append(candidates, eof) abort "{{{
-  let s:neovim_candidates += a:candidates
-  let s:neovim_eof = a:eof
-endfunction"}}}
-
 " Source git.
 let s:source_file_git = deepcopy(s:source_file_async)
 let s:source_file_git.name = 'file_rec/git'
@@ -980,7 +875,7 @@ function! unite#sources#rec#define() abort "{{{
   let sources = [ s:source_file_rec, s:source_directory_rec ]
   let sources += [ s:source_file_async, s:source_directory_async]
   let sources += [ s:source_file_git ]
-  let sources += [ s:source_file_neovim, s:source_file_neovim2 ]
+  let sources += [ s:source_file_neovim ]
   return sources
 endfunction"}}}
 
