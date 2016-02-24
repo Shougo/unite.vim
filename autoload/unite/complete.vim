@@ -39,7 +39,7 @@ function! unite#complete#source(arglead, cmdline, cursorpos) abort "{{{
 
     " Source name completion.
     if mode() ==# 'c' || unite#util#is_cmdwin() || &l:filetype ==# 'unite'
-      let _ += keys(filter(unite#init#_sources([], a:arglead),
+      let _ += keys(filter(unite#init#_sources([], ''),
             \ 'v:val.is_listed'))
     endif
   else
