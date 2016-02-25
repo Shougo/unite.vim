@@ -653,6 +653,7 @@ function! unite#view#_quit(is_force, ...) abort  "{{{
     call unite#view#_close_preview_window()
 
     if winnr('$') != 1 && winnr('$') == unite.winmax
+          \ && !context.temporary
       execute unite.win_rest_cmd
       noautocmd execute unite.prev_winnr 'wincmd w'
     endif
