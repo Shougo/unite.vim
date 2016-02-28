@@ -160,10 +160,10 @@ function! s:kind.action_table.persist_open.func(candidate) abort "{{{
     execute winnr 'wincmd w'
   endif
   let unite.prev_winnr = winnr()
-  let unite.prev_pos = getpos('.')
 
   call unite#take_action('open', a:candidate)
   let unite.prev_bufnr = bufnr('%')
+  let unite.prev_pos = getpos('.')
 
   if g:unite_kind_openable_persist_open_blink_time != ''
     let left = getpos("'<")
