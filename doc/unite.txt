@@ -274,8 +274,8 @@ More advanced configuration example:
 	  endif
 
 	  nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
-	  nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
-	          \ empty(unite#mappings#get_current_filters()) ?
+	  nnoremap <buffer><expr> S      unite#mappings#set_current_sorters(
+	          \ empty(unite#mappings#get_current_sorters()) ?
 	          \ ['sorter_reverse'] : [])
 
 	  " Runs "split" action by <C-s>.
@@ -1333,7 +1333,7 @@ unite#mappings#set_current_sorters({sorters})
 		Example:
 >
   nnoremap <buffer><expr> S      unite#mappings#set_current_sorters(
-        \ empty(unite#mappings#get_current_matchers()) ?
+        \ empty(unite#mappings#get_current_sorters()) ?
 	\ ['sorter_reverse'] : [])
 <
 				*unite#mappings#set_current_converters()*
