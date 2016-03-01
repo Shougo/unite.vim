@@ -115,7 +115,7 @@ function! s:source.hooks.on_syntax(args, context) abort "{{{
         \ containedin=uniteSource__Output_Shellcmd
 
   syntax match uniteSource__Output_Shellcmd_Ignore
-        \ contained conceal    '\e\[?\dh\|\e=\r'
+        \ contained conceal    '\e\[?\d[hl]\|\e=\r\|\r\|\e>'
         \ containedin=uniteSource__Output_Shellcmd
 
   for [key, highlight] in items(highlight_table)
