@@ -110,6 +110,14 @@ function! s:source.hooks.on_syntax(args, context) abort "{{{
         \ contained conceal    '\e\[[0-9;]*m'
         \ containedin=uniteSource__Output_Shellcmd
 
+  syntax match uniteSource__Output_Shellcmd_Conceal
+        \ contained conceal    '\e\[?1h'
+        \ containedin=uniteSource__Output_Shellcmd
+
+  syntax match uniteSource__Output_Shellcmd_Ignore
+        \ contained conceal    '\e\[?\dh\|\e=\r'
+        \ containedin=uniteSource__Output_Shellcmd
+
   for [key, highlight] in items(highlight_table)
     let syntax_name = 'uniteSource__Output_Shellcmd_Color'
           \ . substitute(key, ';', '_', 'g')
