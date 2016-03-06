@@ -70,7 +70,8 @@ function! unite#kinds#jump_list#define() abort "{{{
 
     " Add search history
     let context = unite#get_context()
-    if len(context.input_list) == 1
+    if has_key(context, 'input_list')
+          \ && len(context.input_list) == 1
           \ && context.input != ''
       call histadd("search", context.input)
     endif
