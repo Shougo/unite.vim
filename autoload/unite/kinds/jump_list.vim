@@ -95,12 +95,8 @@ function! unite#kinds#jump_list#define() abort "{{{
     wincmd P
     try
       let bufnr = s:open(a:candidate)
-      if bufwinnr < 0
-        silent doautocmd BufRead
-        setlocal nomodified
-        if !buflisted
-          call unite#add_previewed_buffer_list(bufnr)
-        endif
+      if bufwinnr < 0 && !buflisted
+        call unite#add_previewed_buffer_list(bufnr)
       endif
       call s:jump(a:candidate, 1)
     finally
