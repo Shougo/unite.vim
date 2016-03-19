@@ -402,13 +402,18 @@ function! unite#start#resume_from_temporary(context) abort  "{{{
   let buffer_info = a:context.unite__old_buffer_info[0]
   call unite#start#resume(buffer_info.buffer_name,
         \ {'unite__direct_switch' : 1})
-  call setpos('.', buffer_info.pos)
   let a:context.unite__old_buffer_info = a:context.unite__old_buffer_info[1:]
 
   " Overwrite unite.
   let unite = unite#get_current_unite()
   let unite.prev_bufnr = unite_save.prev_bufnr
   let unite.prev_winnr = unite_save.prev_winnr
+
+  " Restore the previous position
+  call setpos('.', buffer_info.pos)
+  if line('.') == unite.prompt_linenr && unite.context.start_insert
+    startinsert!
+  endif
 
   call unite#redraw()
 endfunction"}}}
