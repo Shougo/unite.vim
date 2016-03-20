@@ -190,10 +190,12 @@ function! unite#init#_unite_buffer() abort "{{{
       setlocal norelativenumber
     endif
 
-    if context.vertical
-      setlocal winfixwidth
-    else
-      setlocal winfixheight
+    if context.split
+      if context.vertical
+        setlocal winfixwidth
+      else
+        setlocal winfixheight
+      endif
     endif
 
     " Autocommands.
