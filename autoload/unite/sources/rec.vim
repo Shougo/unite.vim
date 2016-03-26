@@ -54,7 +54,7 @@ call unite#util#set_default(
       \ 'g:unite_source_rec_git_command', 'git')
 "}}}
 
-let s:Cache = unite#util#get_vital().import('System.Cache')
+let s:Cache = unite#util#get_vital_cache()
 
 let s:continuation = { 'directory' : {}, 'file' : {} }
 

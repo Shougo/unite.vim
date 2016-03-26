@@ -32,6 +32,12 @@ function! unite#util#get_vital() abort "{{{
   endif
   return s:V
 endfunction"}}}
+function! unite#util#get_vital_cache() abort "{{{
+  if !exists('s:Cache')
+    let s:Cache = unite#util#get_vital().import('System.Cache')
+  endif
+  return s:Cache
+endfunction"}}}
 
 function! s:get_prelude() abort "{{{
   if !exists('s:Prelude')
