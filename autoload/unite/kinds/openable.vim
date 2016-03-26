@@ -274,13 +274,11 @@ endfunction"}}}
 
 function! s:switch(candidate) abort "{{{
   let tabnr = s:search_buffer(a:candidate)
-  if tabnr < 0
-    " Not found
-    return 1
+  if tabnr >= 0
+    execute 'tabnext' tabnr
+    execute bufwinnr(a:candidate.action__path) . 'wincmd w'
   endif
 
-  execute 'tabnext' tabnr
-  execute bufwinnr(a:candidate.action__path) . 'wincmd w'
   call unite#take_action('open', a:candidate)
 endfunction"}}}
 
