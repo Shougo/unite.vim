@@ -1,9 +1,9 @@
 unite
-bb1d9cb
+1a385f58a58571e4cb6309831ad4d7260180bc71
 
 Prelude
 Data.List
-System.Cache
+System.Cache.Deprecated
 Data.String
 Vim.Message
 Process

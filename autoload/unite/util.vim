@@ -28,13 +28,13 @@ set cpo&vim
 
 function! unite#util#get_vital() abort "{{{
   if !exists('s:V')
-    let s:V = vital#of('unite')
+    let s:V = vital#unite#of()
   endif
   return s:V
 endfunction"}}}
 function! unite#util#get_vital_cache() abort "{{{
   if !exists('s:Cache')
-    let s:Cache = unite#util#get_vital().import('System.Cache')
+    let s:Cache = unite#util#get_vital().import('System.Cache.Deprecated')
   endif
   return s:Cache
 endfunction"}}}
@@ -124,7 +124,7 @@ function! unite#util#escape_file_searching(buffer_name) abort
   return a:buffer_name
 endfunction
 function! unite#util#escape_pattern(...) abort
-  return call(s:get_prelude().escape_pattern, a:000)
+  return call(s:get_string().escape_pattern, a:000)
 endfunction
 function! unite#util#set_default(var, val, ...) abort  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
