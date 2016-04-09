@@ -692,7 +692,7 @@ function! unite#mappings#_quick_match(is_jump) abort "{{{
   endif
 
   if candidate.is_dummy
-    call unite#util#print_error('Canceled.')
+    call unite#util#print_error('Dummy.')
     return
   endif
 
@@ -865,7 +865,8 @@ function! s:get_quick_match_table() abort "{{{
     call map(table, 'max - v:val')
   endif
   for key in keys(table)
-    let table[key] += offset
+    let table[key] = unite#helper#get_current_candidate_linenr(
+          \ table[key]+offset-1)
   endfor
   return table
 endfunction"}}}
