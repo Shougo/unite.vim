@@ -71,6 +71,9 @@ function! s:source_line.hooks.on_init(args, context) abort "{{{
         \ (direction ==# 'args') ?
         \    filter(map(argv(), "bufnr(v:val)"), 'v:val > 0') :
         \ [bufnr('%')]
+  " Dummy loading
+  call s:dummy_loading(a:context.source__bufnrs)
+
   if len(a:context.source__bufnrs) == 1
     let a:context.source__syntax =
           \ getbufvar(a:context.source__bufnrs[0], '&l:syntax')
@@ -239,6 +242,19 @@ function! s:get_context_lines(context, direction, start) abort "{{{
   endif
 
   return lines
+endfunction"}}}
+function! s:dummy_loading(bufnrs) abort "{{{
+  let load_bufnrs = filter(a:bufnrs, '!bufloaded(v:val)')
+  if empty(load_bufnrs)
+    return
+  endif
+
+  let prev_bufnr = bufnr('%')
+  try
+    silent bufdo echo
+  finally
+    execute 'buffer' prev_bufnr
+  endtry
 endfunction"}}}
 "}}}
 
