@@ -1,6 +1,6 @@
 *unite.txt*	Unite and create user interfaces.
 
-Version: 6.2
+Version: 6.3
 Author:  Shougo <Shougo.Matsu@gmail.com>
 Documentation Author: ujihisa <ujihisa at gmail com>
 License: MIT license  {{{
