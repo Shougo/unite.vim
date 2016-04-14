@@ -216,7 +216,9 @@ let s:kind.action_table.switch = {
       \ }
 function! s:kind.action_table.switch.func(candidates) abort "{{{
   for candidate in a:candidates
-    call s:switch(candidate)
+    if s:switch(candidate)
+      call unite#take_action('open', candidate)
+    endif
   endfor
 endfunction"}}}
 
@@ -274,12 +276,12 @@ endfunction"}}}
 
 function! s:switch(candidate) abort "{{{
   let tabnr = s:search_buffer(a:candidate)
-  if tabnr >= 0
-    execute 'tabnext' tabnr
-    execute bufwinnr(a:candidate.action__path) . 'wincmd w'
+  if tabnr < 0
+    return 1
   endif
 
-  call unite#take_action('open', a:candidate)
+  execute 'tabnext' tabnr
+  execute bufwinnr(a:candidate.action__path) . 'wincmd w'
 endfunction"}}}
 
 let &cpo = s:save_cpo
