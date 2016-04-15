@@ -371,10 +371,10 @@ function! unite#sources#file#create_file_dict(file, is_relative_path, ...) abort
   let is_newfile = get(a:000, 0, 0)
 
   let dict = {
-        \ 'word' : a:file, 'abbr' : a:file,
+        \ 'word' : fnamemodify(a:file, ':t'),
         \ 'action__path' : a:file,
         \}
-
+  let dict.abbr = dict.word
   let dict.vimfiler__is_directory =
         \ isdirectory(dict.action__path)
 
