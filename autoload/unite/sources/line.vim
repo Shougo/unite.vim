@@ -244,7 +244,7 @@ function! s:get_context_lines(context, direction, start) abort "{{{
   return lines
 endfunction"}}}
 function! s:dummy_loading(bufnrs) abort "{{{
-  let load_bufnrs = filter(a:bufnrs, '!bufloaded(v:val)')
+  let load_bufnrs = filter(copy(a:bufnrs), '!bufloaded(v:val)')
   if empty(load_bufnrs)
     return
   endif
