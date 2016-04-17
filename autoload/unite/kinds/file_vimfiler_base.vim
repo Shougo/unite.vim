@@ -306,8 +306,7 @@ function! s:kind.action_table.vimfiler__newfile.func(candidate) abort "{{{
       endif
 
       if filename !~ '/$'
-        let file = unite#sources#file#create_file_dict(
-              \ filename, filename !~ '^\%(/\|\a\+:/\)')
+        let file = unite#sources#file#create_file_dict(filename, '')
         let file.source = 'file'
 
         call writefile([], filename)

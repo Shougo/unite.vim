@@ -61,12 +61,12 @@ function! s:source_file.change_candidates(args, context) abort "{{{
 
   if !isdirectory(path) && filereadable(path)
     return [ unite#sources#file#create_file_dict(
-          \      path, path !~ '^\%(/\|\a\+:/\)') ]
+          \      path, a:context.input) ]
   endif
 
   let input = unite#sources#file#_get_input(path, a:context)
   return map(unite#sources#file#_get_files(input, a:context),
-          \ 'unite#sources#file#create_file_dict(v:val, 0)')
+          \ 'unite#sources#file#create_file_dict(v:val, a:context.input)')
 endfunction"}}}
 function! s:source_file.vimfiler_check_filetype(args, context) abort "{{{
   let path = s:parse_path(a:args)
@@ -77,7 +77,7 @@ function! s:source_file.vimfiler_check_filetype(args, context) abort "{{{
   elseif filereadable(path)
     let type = 'file'
     let info = [readfile(path),
-          \ unite#sources#file#create_file_dict(path, 0)]
+          \ unite#sources#file#create_file_dict(path, '')]
   else
     " Ignore.
     return []
@@ -99,7 +99,7 @@ function! s:source_file.vimfiler_gather_candidates(args, context) abort "{{{
 
     " echomsg reltimestr(reltime(start))
   elseif filereadable(path)
-    let candidates = [ unite#sources#file#create_file_dict(path, 0) ]
+    let candidates = [ unite#sources#file#create_file_dict(path, '') ]
   else
     let candidates = []
   endif
@@ -143,10 +143,8 @@ function! s:source_file.vimfiler_dummy_candidates(args, context) abort "{{{
   let exts = s:is_windows ?
         \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
 
-  let is_relative_path = path !~ '^\%(/\|\a\+:/\)'
-
   " Set vimfiler property.
-  let candidates = [ unite#sources#file#create_file_dict(path, is_relative_path) ]
+  let candidates = [ unite#sources#file#create_file_dict(path, '') ]
   for candidate in candidates
     call unite#sources#file#create_vimfiler_dict(candidate, exts)
   endfor
@@ -185,7 +183,8 @@ function! s:source_file_new.change_candidates(args, context) abort "{{{
     return []
   endif
 
-  return [unite#sources#file#create_file_dict(input, 0, 1)]
+  return [unite#sources#file#create_file_dict(
+        \ input, a:context.input, 1)]
 endfunction"}}}
 
 let s:source_file_async = deepcopy(s:source_file)
@@ -341,7 +340,8 @@ function! unite#sources#file#_get_files(input, context) abort "{{{
 
   if !is_vimfiler
     let files = sort(filter(copy(files),
-          \ "v:val != '.' && isdirectory(v:val)"), 1) +
+          \ "v:val != '.' && (a:input =~ '/\\.' || v:val !~ '/\.')
+          \  && isdirectory(v:val)"), 1) +
           \ sort(filter(copy(files), "!isdirectory(v:val)"), 1)
 
     let s:cache_files[directory] = {
@@ -367,18 +367,20 @@ function! s:parse_path(args) abort "{{{
   return path
 endfunction"}}}
 
-function! unite#sources#file#create_file_dict(file, is_relative_path, ...) abort "{{{
+function! unite#sources#file#create_file_dict(file, input, ...) abort "{{{
   let is_newfile = get(a:000, 0, 0)
 
   let dict = {
-        \ 'word' : fnamemodify(a:file, ':t'),
+        \ 'word' : a:file,
         \ 'action__path' : a:file,
         \}
+  if a:input !~ '/'
+    let dict.word = fnamemodify(a:file, ':t')
+  endif
   let dict.abbr = dict.word
-  let dict.vimfiler__is_directory =
-        \ isdirectory(dict.action__path)
+  let dict.vimfiler__is_directory = isdirectory(dict.action__path)
 
-  if a:is_relative_path
+  if a:file !~ '^\%(/\|\a\+:/\)'
     let dict.action__path = unite#util#substitute_path_separator(
         \                    fnamemodify(a:file, ':p'))
   endif

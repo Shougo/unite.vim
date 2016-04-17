@@ -48,7 +48,7 @@ function! s:source_directory.change_candidates(args, context) abort "{{{
   return map(sort(filter(unite#sources#file#_get_files(input, a:context),
           \ "isdirectory(v:val) && v:val !~
           \ '^\\%(/\\|\\a\\+:/\\)$\\|\\%(^\\|/\\)\\.$'"), 1),
-          \ 'unite#sources#file#create_file_dict(v:val, 0)')
+          \ "unite#sources#file#create_file_dict(v:val, '')")
 endfunction"}}}
 function! s:source_directory.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return map(filter(split(glob(a:arglead . '*'), '\n'),
@@ -74,7 +74,7 @@ function! s:source_directory_new.change_candidates(args, context) abort "{{{
     return []
   endif
 
-  return [unite#sources#file#create_file_dict(input, 0, 2)]
+  return [unite#sources#file#create_file_dict(input, a:context.input, 2)]
 endfunction"}}}
 
 let &cpo = s:save_cpo
