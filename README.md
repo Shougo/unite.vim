@@ -121,6 +121,7 @@ unite menu source with customization
 ![Unite menu source with customization.](https://f.cloud.github.com/assets/390964/734885/82b91006-e2e1-11e2-9957-fb279bc71311.png)
 
 ```viml
+let g:unite_source_menu_menus = get(g:,'unite_source_menu_menus',{})
 let g:unite_source_menu_menus.git = {
     \ 'description' : '            gestionar repositorios git
         \                            ⌘ [espacio]g',
