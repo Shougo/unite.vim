@@ -13,6 +13,8 @@ sources and you can create new interfaces using unite.
 
 ## Usage
 
+[![Join the chat at https://gitter.im/Shougo/unite.vim](https://badges.gitter.im/Shougo/unite.vim.svg)](https://gitter.im/Shougo/unite.vim?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Run unite to display files and buffers as sources to pick from.
 
 	:Unite file buffer
