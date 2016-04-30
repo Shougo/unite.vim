@@ -862,12 +862,13 @@ function! s:get_quick_match_table() abort "{{{
   let table = deepcopy(g:unite_quick_match_table)
   if unite.context.prompt_direction ==# 'below'
     let max = len(unite.current_candidates)
-    call map(table, 'max - v:val')
+    call map(table, 'max - v:val + offset')
+  else
+    for key in keys(table)
+      let table[key] = unite#helper#get_current_candidate_linenr(
+            \ table[key]+offset-1)
+    endfor
   endif
-  for key in keys(table)
-    let table[key] = unite#helper#get_current_candidate_linenr(
-          \ table[key]+offset-1)
-  endfor
   return table
 endfunction"}}}
 
