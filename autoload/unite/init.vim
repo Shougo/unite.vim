@@ -475,6 +475,9 @@ endfunction"}}}
 
 function! unite#init#_candidates_source(candidates, source_name) abort "{{{
   let source = unite#variables#loaded_sources(a:source_name)
+  if empty(source)
+    return []
+  endif
 
   let default_candidate = {
         \ 'kind' : source.default_kind,
