@@ -2868,6 +2868,11 @@ converter_smart_path
 		A converter which converts a candidate's word into the
 		full path if you input full path.
 
+					*unite-filter-converter_uniq_word*
+converter_uniq_word
+		A converter which converts a candidate's word into the
+		unique of the filenames.
+
 ==============================================================================
 ACTIONS						*unite-actions*
 

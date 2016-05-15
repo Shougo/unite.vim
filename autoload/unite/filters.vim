@@ -274,6 +274,60 @@ function! s:glob2_pattern(glob, is_lua) abort "{{{
   return glob
 endfunction"}}}
 
+function! unite#filters#uniq(list) abort "{{{
+  let dict = {}
+  for word in a:list
+    let key = fnamemodify(word, ':t')
+    if key == ''
+      let key = word
+    endif
+    if !has_key(dict, key)
+      let dict[key] = [word]
+    else
+      call add(dict[key], word)
+    endif
+  endfor
+
+  " Remove the unique keys
+  for key in keys(dict)
+    if len(dict[key]) == 1
+      call remove(dict, key)
+    else
+      let dict[key] = unite#filters#common_string(dict[key])
+    endif
+  endfor
+
+  let uniq = []
+  for word in a:list
+    let key = fnamemodify(word, ':t')
+    if key != ''
+      if !has_key(dict, key)
+        let word = key
+      elseif dict[key] != '/' && dict[key] != ''
+        let word = '.../' . word[len(dict[key]):]
+      endif
+    endif
+    call add(uniq, word)
+  endfor
+  return uniq
+endfunction"}}}
+function! unite#filters#common_string(list) abort "{{{
+  if empty(a:list)
+    return ''
+  endif
+  let splits = split(a:list[0], '/', 1)
+  let common_str = join(splits[: -2], '/') . '/'
+  let splits = splits[: -2]
+  for word in a:list[1:]
+    while common_str != '/' && stridx(word, common_str) != 0
+      let common_str = join(splits[: -2], '/') . '/'
+      let splits = splits[: -2]
+    endwhile
+  endfor
+
+  return common_str
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
