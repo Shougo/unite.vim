@@ -2844,6 +2844,10 @@ converter_relative_abbr
 converter_abbr_word
 		A converter which converts a candidate's abbr into a word.
 
+					*unite-filter-converter_word_abbr*
+converter_word_abbr
+		A converter which converts a candidate's word into a abbr.
+
 					*unite-filter-converter_tail*
 converter_tail
 		A converter which converts a candidate's word into the
