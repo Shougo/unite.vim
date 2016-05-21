@@ -182,7 +182,7 @@ function! s:source.gather_candidates(args, context) abort "{{{
     let a:context.is_async = 1
   endif
 
-  let cmdline = printf('"%s" %s %s %s %s %s',
+  let cmdline = printf('"%s" %s %s %s -- %s %s',
     \   unite#util#substitute_path_separator(command),
     \   default_opts,
     \   recursive_opt,
