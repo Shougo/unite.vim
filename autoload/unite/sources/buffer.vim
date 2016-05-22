@@ -165,16 +165,20 @@ endfunction"}}}
 function! s:make_word(bufnr) abort "{{{
   let filetype = getbufvar(a:bufnr, '&filetype')
   if filetype ==# 'vimfiler'
-    let path = getbufvar(a:bufnr, 'vimfiler').current_dir
-    let path = printf('*vimfiler* [%s]',
-          \ unite#util#substitute_path_separator(simplify(path)))
+    let path = unite#util#substitute_path_separator(
+          \ simplify(getbufvar(a:bufnr, 'vimfiler').current_dir))
+    let path = unite#util#substitute_path_separator(
+          \ simplify(bufname(a:bufnr))) . ' ' . path . '/'
   elseif filetype ==# 'vimshell'
-    let vimshell = getbufvar(a:bufnr, 'vimshell')
-    let path = printf('*vimshell*: [%s]',
-          \ unite#util#substitute_path_separator(simplify(vimshell.current_dir)))
+    let path = unite#util#substitute_path_separator(
+          \ simplify(getbufvar(a:bufnr, 'vimshell').current_dir))
+    let path = unite#util#substitute_path_separator(
+          \ simplify(bufname(a:bufnr))) . ' ' . path . '/'
   else
-    let path = unite#util#substitute_path_separator(simplify(bufname(a:bufnr)))
+    let path = unite#util#substitute_path_separator(
+          \ simplify(bufname(a:bufnr)))
   endif
+  echomsg path
 
   return path
 endfunction"}}}
