@@ -304,7 +304,10 @@ function! unite#filters#uniq(list) abort "{{{
       if !has_key(dict, key)
         let word = key
       elseif dict[key] != '/' && dict[key] != ''
-        let word = '.../' . word[len(dict[key]):]
+        let rest = split(word[len(dict[key]):], '/', 1)
+        let word = '.../' . (len(rest) > 3 ?
+              \ (rest[0] . '/.../' . rest[-2] . '/' . rest[-1]) :
+              \ join(rest, '/'))
       endif
     endif
     call add(uniq, word)

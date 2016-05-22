@@ -30,6 +30,9 @@ function! s:suite.uniq() abort
   call s:assert.equals(unite#filters#uniq(
         \ [ '/foo/baz/bar/', '/foo/bar/bar/' ]),
         \ ['.../baz/bar/', '.../bar/bar/'])
+  call s:assert.equals(unite#filters#uniq(
+        \ [ '/foo/bar/bar', '/foo/bar/bar' ]),
+        \ ['.../bar', '.../bar'])
 endfunction
 
 " vim:foldmethod=marker:fen:
