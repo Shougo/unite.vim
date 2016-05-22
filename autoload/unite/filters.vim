@@ -277,7 +277,7 @@ endfunction"}}}
 function! unite#filters#uniq(list) abort "{{{
   let dict = {}
   for word in a:list
-    let key = fnamemodify(word, ':t')
+    let key = matchstr(word, '[^/]\+/\?$')
     if key == ''
       let key = word
     endif
@@ -299,7 +299,7 @@ function! unite#filters#uniq(list) abort "{{{
 
   let uniq = []
   for word in a:list
-    let key = fnamemodify(word, ':t')
+    let key = matchstr(word, '[^/]\+/\?$')
     if key != ''
       if !has_key(dict, key)
         let word = key
