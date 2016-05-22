@@ -178,7 +178,6 @@ function! s:make_word(bufnr) abort "{{{
     let path = unite#util#substitute_path_separator(
           \ simplify(bufname(a:bufnr)))
   endif
-  echomsg path
 
   return path
 endfunction"}}}
