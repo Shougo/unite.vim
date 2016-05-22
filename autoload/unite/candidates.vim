@@ -305,14 +305,12 @@ function! s:recache_candidates_loop(context, is_force) abort "{{{
     if !unite.context.unite__is_vimfiler
       " Call filters.
       let source_candidates = unite#helper#call_source_filters(
-            \ matchers + sorters,
+            \ matchers + sorters + converters,
             \ source_candidates, context, source)
       if context.unite__max_candidates > 0
         let source_candidates = source_candidates[:
               \ context.unite__max_candidates - 1]
       endif
-      let source_candidates = unite#helper#call_source_filters(
-            \ converters, source_candidates, context, source)
     endif
 
     " Get execute_command.
