@@ -228,6 +228,8 @@ function! unite#init#_unite_buffer() abort "{{{
     if !has('timers')
       autocmd unite CursorHoldI <buffer> *
             \ call unite#handlers#_on_cursor_hold_i()
+    else
+      call unite#handlers#_init_timer()
     endif
 
     if context.prompt != ''

@@ -344,6 +344,37 @@ function! s:restore_statusline() abort  "{{{
   endif
 endfunction"}}}
 
+function! s:timer_handler(timer) abort "{{{
+  if mode() ==# 'i'
+    if &filetype ==# 'unite'
+      call unite#handlers#_on_cursor_hold_i()
+    endif
+  else
+    call unite#handlers#_on_cursor_hold()
+  endif
+
+  call s:check_timer()
+endfunction"}}}
+function! unite#handlers#_init_timer() abort  "{{{
+  if !exists('s:timer')
+    let s:timer = timer_start(500,
+          \ function('s:timer_handler'), {'repeat': -1})
+    autocmd plugin-unite VimLeavePre *
+          \ if exists('s:timer') | call timer_stop(s:timer) | endif
+  endif
+endfunction"}}}
+function! s:check_timer() abort  "{{{
+  if !empty(filter(range(1, winnr('$')),
+          \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'"))
+    return
+  endif
+
+  if exists('s:timer')
+    call timer_stop(s:timer)
+    unlet s:timer
+  endif
+endfunction"}}}
+
 function! s:check_redraw() abort "{{{
   let unite = unite#get_current_unite()
   let prompt_linenr = unite.prompt_linenr
