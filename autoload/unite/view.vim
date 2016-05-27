@@ -657,7 +657,9 @@ function! unite#view#_quit(is_force, ...) abort  "{{{
       execute unite.win_rest_cmd
       noautocmd execute unite.prev_winnr 'wincmd w'
     endif
-    call setpos('.', unite.prev_pos)
+    if context.quit
+      call setpos('.', unite.prev_pos)
+    endif
   else
     call unite#view#_close_preview_window()
 
