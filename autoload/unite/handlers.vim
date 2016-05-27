@@ -112,6 +112,7 @@ function! unite#handlers#_on_bufwin_enter(bufnr) abort  "{{{
     execute bufwinnr(a:bufnr) 'wincmd w'
   endif
 
+  call unite#handlers#_init_timer()
   call unite#handlers#_save_updatetime()
 
   call s:restore_statusline()
@@ -353,25 +354,21 @@ function! s:timer_handler(timer) abort "{{{
     call unite#handlers#_on_cursor_hold()
   endif
 
-  call s:check_timer()
+  if !empty(filter(range(1, winnr('$')),
+          \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'"))
+          \ || !exists('s:timer')
+    return
+  endif
+
+  call timer_stop(s:timer)
+  unlet s:timer
 endfunction"}}}
 function! unite#handlers#_init_timer() abort  "{{{
-  if !exists('s:timer')
+  if has('timers') && !exists('s:timer')
     let s:timer = timer_start(500,
           \ function('s:timer_handler'), {'repeat': -1})
     autocmd plugin-unite VimLeavePre *
           \ if exists('s:timer') | call timer_stop(s:timer) | endif
-  endif
-endfunction"}}}
-function! s:check_timer() abort  "{{{
-  if !empty(filter(range(1, winnr('$')),
-          \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'unite'"))
-    return
-  endif
-
-  if exists('s:timer')
-    call timer_stop(s:timer)
-    unlet s:timer
   endif
 endfunction"}}}
 
