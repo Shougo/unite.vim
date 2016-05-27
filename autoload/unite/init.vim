@@ -227,6 +227,10 @@ function! unite#init#_unite_buffer() abort "{{{
       autocmd plugin-unite TextChanged <buffer>
             \ call unite#handlers#_on_text_changed()
     endif
+    if !has('timers')
+      autocmd unite CursorHoldI <buffer> *
+            \ call unite#handlers#_on_cursor_hold_i()
+    endif
 
     if context.prompt != ''
       execute printf(

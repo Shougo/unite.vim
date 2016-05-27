@@ -74,7 +74,7 @@ function! unite#handlers#_on_cursor_hold_i() abort  "{{{
     call s:check_redraw()
   endif
 
-  if unite.is_async && &l:modifiable
+  if unite.is_async && &l:modifiable && !has('timers')
     " Ignore key sequences.
     call feedkeys("a\<BS>", 'n')
   endif
@@ -158,7 +158,7 @@ function! unite#handlers#_on_cursor_hold() abort  "{{{
     endfor
   endif
 
-  if is_async
+  if is_async && !has('timers')
     " Ignore key sequences.
     call feedkeys("g\<ESC>" . (v:count > 0 ? v:count : ''), 'n')
   endif
@@ -313,6 +313,7 @@ function! unite#handlers#_save_updatetime() abort  "{{{
 
   if unite.is_async && unite.context.update_time > 0
         \ && &updatetime > unite.context.update_time
+        \ && !has('timers')
     let unite.update_time_save = &updatetime
     let &updatetime = unite.context.update_time
   endif
@@ -326,6 +327,7 @@ function! unite#handlers#_restore_updatetime() abort  "{{{
 
   if unite.context.update_time > 0
         \ && &updatetime < unite.update_time_save
+        \ && !has('timers')
     let &updatetime = unite.update_time_save
   endif
 endfunction"}}}

@@ -27,9 +27,30 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 augroup plugin-unite
-  autocmd CursorHold *
-        \ call unite#handlers#_on_cursor_hold()
 augroup END
+
+if !has('timers')
+  autocmd plugin-unite CursorHold *
+        \ call unite#handlers#_on_cursor_hold()
+else
+  function! s:timer_handler(timer) abort "{{{
+    if mode() ==# 'i'
+      if &filetype !=# 'unite'
+        return
+      endif
+
+      call unite#handlers#_on_cursor_hold_i()
+    else
+      call unite#handlers#_on_cursor_hold()
+    endif
+  endfunction"}}}
+  if !exists('s:timer')
+    let s:timer = timer_start(500,
+          \ function('s:timer_handler'), {'repeat': -1})
+    autocmd plugin-unite VimLeavePre *
+          \ call timer_stop(s:timer)
+  endif
+endif
 
 function! unite#version() abort "{{{
   return str2nr(printf('%02d%02d', 6, 3))
