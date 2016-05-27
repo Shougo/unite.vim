@@ -205,8 +205,6 @@ function! unite#init#_unite_buffer() abort "{{{
             \ call unite#handlers#_on_insert_enter()
       autocmd InsertLeave <buffer>
             \ call unite#handlers#_on_insert_leave()
-      autocmd CursorHoldI <buffer>
-            \ call unite#handlers#_on_cursor_hold_i()
       autocmd CursorMovedI <buffer>
             \ call unite#handlers#_on_cursor_moved_i()
       autocmd CursorMoved,CursorMovedI <buffer>  nested
