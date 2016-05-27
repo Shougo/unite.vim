@@ -234,7 +234,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) abort "{{{
         call cursor(line('$'), 0)
         call unite#view#_bottom_cursor()
       endif
-    else
+    elseif !context.log
       call unite#view#_search_cursor(current_candidate)
     endif
 
