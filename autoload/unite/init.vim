@@ -226,7 +226,7 @@ function! unite#init#_unite_buffer() abort "{{{
             \ call unite#handlers#_on_text_changed()
     endif
     if !has('timers')
-      autocmd unite CursorHoldI <buffer> *
+      autocmd plugin-unite CursorHoldI <buffer> *
             \ call unite#handlers#_on_cursor_hold_i()
     else
       call unite#handlers#_init_timer()
