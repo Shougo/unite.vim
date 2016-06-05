@@ -482,7 +482,7 @@ function! unite#start#_pos(buffer_name, direction, count) abort "{{{
   endtry
 endfunction"}}}
 
-function! unite#do_command(cmd)
+function! unite#start#do_command(cmd)
    " The step by step is done backwards because, if the command happens to
    " include or exclude lines in the file, the remaining candidates don't have
    " its position changed when the default action is applied.
