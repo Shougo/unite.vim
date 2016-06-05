@@ -383,6 +383,21 @@ COMMANDS 					*unite-commands*
 		buffer with {buffer-name}.
 		You can use it like |:clast|.
 
+:UniteDo {command}		         	*:UniteDo*
+		Executes a {command} for each candidate's default action.
+		You can use it like |:argdo|.
+
+		Example of use case:
+		https://github.com/Shougo/unite.vim/issues/1166
+
+		Limitations: If the candidates are lines in a file, UniteDo
+		assumes that either:
+		- {command} doesn't change the number of lines; or
+		- candidates are sorted in ascending order by line.
+
+		UniteDo might have unexpected behaviour if none of the
+		two conditions above are met.
+
 The commands of source				*:unite-sources-commands*
 
 :UniteBookmarkAdd [{file}]			*:UniteBookmarkAdd*
