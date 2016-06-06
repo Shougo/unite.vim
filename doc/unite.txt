@@ -389,7 +389,7 @@ COMMANDS 					*unite-commands*
 
 		Example:
 
-		Concider the JavaScript with the code below.
+		Concider a JavaScript file with the code below.
 >
 		/* jshint unused: true */
 		var variable = 1;
