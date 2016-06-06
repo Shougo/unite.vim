@@ -387,9 +387,46 @@ COMMANDS 					*unite-commands*
 		Executes a {command} for each candidate's default action.
 		You can use it like |:argdo|.
 
-		Example of use case:
-		https://github.com/Shougo/unite.vim/issues/1166
+		Example:
 
+		Concider the JavaScript with the code below.
+>
+		/* jshint unused: true */
+		var variable = 1;
+		function foo () {
+		  console.log('Hello foo!')
+		}
+		function bar () {
+		  console.log('Good bye bar!')
+		}
+<
+		Apply JsHint (http://jshint.com/) linting tool to the
+		example.
+>
+		test.js: line 6, col 30, Missing semicolon.
+		test.js: line 10, col 33, Missing semicolon.
+		test.js: line 3, col 5, 'variable' is defined but never used.
+		test.js: line 5, col 10, 'foo' is defined but never used.
+		test.js: line 9, col 10, 'bar' is defined but never used.
+<
+		Syntastic (https://github.com/scrooloose/syntastic) can
+		use JsHint to populate the location list with those warnings.
+		So, use the quick fix external source to populate a Unite
+		buffer with those issues.
+>
+		:Unite localtion_list
+<
+		Use "semicolon" as narrowing text so there is only one type of
+		error.
+>
+		test.js: line 6, col 30, Missing semicolon.
+		test.js: line 10, col 33, Missing semicolon.
+<
+		Then, use UniteDo to apply a fix to these lines using a single
+		command.
+>
+		:UniteDo normal! A;
+<
 		Limitations: If the candidates are lines in a file, UniteDo
 		assumes that either:
 		- {command} doesn't change the number of lines; or
