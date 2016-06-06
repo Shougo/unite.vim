@@ -371,9 +371,11 @@ function! unite#action#do(action_name, ...) abort "{{{
       call unite#all_quit_session(0)
       if &buftype =~# 'nofile'
         " Switch to file buffer.
-        let winnr = get(filter(range(0, winnr('$')),
+        let winnr = get(filter(range(1, winnr('$')),
               \ "getwinvar(v:val, '&buftype') !~# 'nofile'"), 0, 0)
-        execute winnr.'wincmd w'
+        if winnr > 0
+          execute winnr.'wincmd w'
+        endif
       endif
       let is_quit = 1
     endif
