@@ -482,18 +482,18 @@ function! unite#start#_pos(buffer_name, direction, count) abort "{{{
   endtry
 endfunction"}}}
 
-function! unite#start#do_command(cmd)
-   " The step by step is done backwards because, if the command happens to
-   " include or exclude lines in the file, the remaining candidates don't have
-   " its position changed when the default action is applied.
+function! unite#start#_do_command(cmd)
+  " The step by step is done backwards because, if the command happens to
+  " include or exclude lines in the file, the remaining candidates don't have
+  " its position changed when the default action is applied.
 
-   silent! UniteLast
-   let current_pos = []
-   while current_pos != getpos('.')
-     silent! execute a:cmd
-     let current_pos = getpos('.')
-     silent! UnitePrevious
-   endwhile
+  silent! UniteLast
+  let current_pos = []
+  while current_pos != getpos('.')
+    silent! execute a:cmd
+    let current_pos = getpos('.')
+    silent! UnitePrevious
+  endwhile
 endfunction
 
 function! s:get_candidates(sources, context) abort "{{{

@@ -78,7 +78,7 @@ command! -nargs=? -bar -complete=customlist,unite#complete#buffer_name
 command! -nargs=? -bar -complete=customlist,unite#complete#buffer_name
       \ UniteLast call unite#start#_pos(<q-args>, 'last', 1)
 command! -nargs=1 -complete=command
-      \ UniteDo call unite#start#do_command(<q-args>)
+      \ UniteDo call unite#start#_do_command(<q-args>)
 
 function! s:call_unite(command, args, line1, line2) abort "{{{
   let [args, context] = unite#helper#parse_options_user(a:args)
