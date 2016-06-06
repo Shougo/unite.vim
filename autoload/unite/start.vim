@@ -170,7 +170,6 @@ function! unite#start#temporary(sources, ...) abort "{{{
   let context.auto_preview = 0
   let context.auto_highlight = 0
   let context.unite__is_vimfiler = 0
-  let context.default_action = 'default'
   let context.unite__old_winwidth = 0
   let context.unite__old_winheight = 0
   let context.unite__is_resize = 0

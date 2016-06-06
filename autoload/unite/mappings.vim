@@ -536,6 +536,7 @@ function! unite#mappings#_choose_action(candidates, ...) abort "{{{
         \                 'v:val.source')), context)
   let context.buffer_name = 'action'
   let context.profile_name = 'action'
+  let context.default_action = 'default'
   let context.start_insert = 1
   let context.truncate = 1
 
