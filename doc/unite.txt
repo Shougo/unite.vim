@@ -414,7 +414,7 @@ COMMANDS 					*unite-commands*
 		So, use the quick fix external source to populate a Unite
 		buffer with those issues.
 >
-		:Unite localtion_list
+		:Unite location_list
 <
 		Use "semicolon" as narrowing text so there is only one type of
 		error.
