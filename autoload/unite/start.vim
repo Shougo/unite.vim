@@ -498,7 +498,7 @@ function! unite#start#_do_command(cmd)
 
   silent! UniteLast
   silent! execute a:cmd
-  while unite.candidate_cursor <= 0
+  while unite.candidate_cursor > 0
     silent! UnitePrevious
     silent! execute a:cmd
   endwhile
