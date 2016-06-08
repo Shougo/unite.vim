@@ -180,6 +180,7 @@ function! s:initialize_default() abort "{{{
         \ 'script' : 0,
         \ 'col' : -1,
         \ 'quit' : 1,
+        \ 'file_quit' : 0,
         \ 'buffer_name' : 'default',
         \ 'profile_name' : '',
         \ 'default_action' : 'default',

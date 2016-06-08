@@ -2109,6 +2109,12 @@ the context dictionary.
 		Enable input keyword match highlight.
 		Default: match-input
 
+						*unite-options-file-quit*
+		-file-quit
+		Jump to file buffer after firing an action.
+
+		Default: no-file-quit
+
 ==============================================================================
 SOURCES						*unite-sources*
 
