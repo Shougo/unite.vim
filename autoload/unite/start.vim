@@ -497,12 +497,10 @@ function! unite#start#_do_command(cmd)
   " its position changed when the default action is applied.
 
   silent! UniteLast
-  while 1
-    silent! execute a:cmd
+  silent! execute a:cmd
+  while unite.candidate_cursor <= 0
     silent! UnitePrevious
-    if unite.candidate_cursor <= 0
-      break
-    endif
+    silent! execute a:cmd
   endwhile
 endfunction
 
