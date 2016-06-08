@@ -567,7 +567,12 @@ function! s:source_file_git.gather_candidates(args, context) abort "{{{
     return []
   endif
 
-  if finddir('.git', ';') == ''
+  let directory = fnamemodify(finddir('.git', ';'), ':p:h:h')
+  if directory == ''
+    let directory = fnamemodify(findfile('.git', ';'), ':p:h')
+  endif
+  let directory = unite#util#substitute_path_separator(directory)
+  if directory == ''
     " Not in git directory.
     call unite#print_source_message(
           \ 'Not in git directory.', self.name)
@@ -577,8 +582,6 @@ function! s:source_file_git.gather_candidates(args, context) abort "{{{
 
   let a:context.source__directory =
         \ unite#util#substitute_path_separator(getcwd()) . '/'
-  let directory = unite#util#substitute_path_separator(
-        \   fnamemodify(finddir('.git', ';'), ':p:h:h'))
 
   call unite#print_source_message(
         \ 'directory: ' . directory, self.name)
