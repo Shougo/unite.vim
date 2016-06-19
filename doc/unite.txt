@@ -2171,6 +2171,8 @@ file_rec/async	Similar to |unite-source-file_rec|, but get files
 		Note: In windows environment, you must define
 		|g:unite_source_rec_async_command| variable.
 		Note: It is really slow in Windows.
+		"gtags/path" source is recommended.
+		https://github.com/hewes/unite-gtags
 
 		Source arguments:
 		1. the target directories splitted by newlines.
