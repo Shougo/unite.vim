@@ -52,9 +52,7 @@ function! s:source.hooks.on_init(args, context) abort "{{{
   endif
 
   " Get mapping list.
-  redir => redir
-  silent! nmap
-  redir END
+  let redir = unite#util#redir('nmap')
 
   if oldnr != bufnr('%')
     execute 'buffer' oldnr

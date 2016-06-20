@@ -46,9 +46,7 @@ function! s:source.gather_candidates(args, context) abort "{{{
   endif
 
   " Get command list.
-  redir => cmd
-  silent! function
-  redir END
+  let cmd = unite#util#redir('function')
 
   let result = []
   for line in split(cmd, '\n')[1:]
@@ -153,9 +151,8 @@ let s:source.action_table.edit = {
       \ 'description' : 'edit the function from the source',
       \ }
 function! s:source.action_table.edit.func(candidates) abort "{{{
-  redir => func
-  silent execute 'verbose function '.a:candidates.action__function
-  redir END
+  let func = unite#util#redir(
+        \ 'verbose function '.a:candidates.action__function)
   let path = matchstr(split(func,'\n')[1], 'Last set from \zs.*$')
   execute 'edit' fnameescape(path)
   execute search('^[ \t]*fu\%(nction\)\?[ !]*'.

@@ -42,12 +42,8 @@ let s:source = {
 let s:cached_result = []
 function! s:source.gather_candidates(args, context) abort "{{{
   " Get jumps list.
-  redir => redir
-  silent! jumps
-  redir END
-
   let result = []
-  for jump in split(redir, '\n')[1:]
+  for jump in split(unite#util#redir('jumps'), '\n')[1:]
     let list = split(jump)
     if len(list) < 4
       continue

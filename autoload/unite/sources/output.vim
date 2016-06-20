@@ -80,9 +80,7 @@ function! s:source.gather_candidates(args, context) abort "{{{
     " Use args directly.
     let result = a:args[0]
   else
-    redir => output
-    silent! execute a:context.source__command
-    redir END
+    let output = unite#util#redir(a:context.source__command)
 
     let result = split(output, '\r\n\|\n')
   endif

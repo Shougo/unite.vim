@@ -41,13 +41,8 @@ let s:source = {
 
 let s:cached_result = []
 function! s:source.hooks.on_init(args, context) abort "{{{
-  " Get changes list.
-  redir => redir
-  silent! changes
-  redir END
-
   let result = []
-  for change in split(redir, '\n')[1:]
+  for change in split(unite#util#redir('changes'), '\n')[1:]
     let list = split(change)
     if len(list) < 4
       continue

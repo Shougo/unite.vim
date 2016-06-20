@@ -412,6 +412,20 @@ function! unite#util#lcd(dir) abort "{{{
   endif
 endfunction"}}}
 
+function! unite#util#redir(cmd) abort "{{{
+  if exists('*capture')
+    return capture(a:cmd)
+  else
+    let [save_verbose, save_verbosefile] = [&verbose, &verbosefile]
+    set verbose=0 verbosefile=
+    redir => res
+    silent! execute a:cmd
+    redir END
+    let [&verbose, &verbosefile] = [save_verbose, save_verbosefile]
+    return res
+  endif
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

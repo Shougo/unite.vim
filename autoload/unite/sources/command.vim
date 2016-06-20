@@ -46,9 +46,7 @@ let s:source = {
 
 function! s:source.hooks.on_init(args, context) abort "{{{
   " Get command list.
-  redir => a:context.source__command
-  silent! command
-  redir END
+  let a:context.source__command = unite#util#redir('command')
 endfunction"}}}
 function! s:source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__Command_DescriptionLine
