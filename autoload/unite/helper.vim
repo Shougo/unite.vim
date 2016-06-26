@@ -32,14 +32,19 @@ function! unite#helper#call_hook(sources, hook_name) abort "{{{
     return
   endif
 
+  let custom = unite#custom#get()
   for source in a:sources
-    if !has_key(source.hooks, a:hook_name)
-      continue
-    endif
+    let custom_source = get(custom.sources, source.name, {})
 
     try
-      call call(source.hooks[a:hook_name],
-            \ [source.args, source.unite__context], source.hooks)
+      if has_key(source.hooks, a:hook_name)
+        call call(source.hooks[a:hook_name],
+              \ [source.args, source.unite__context], source.hooks)
+      endif
+      if has_key(custom_source, a:hook_name)
+        call call(custom_source[a:hook_name],
+              \ [source.args, source.unite__context])
+      endif
     catch
       call unite#print_error(v:throwpoint)
       call unite#print_error(v:exception)
