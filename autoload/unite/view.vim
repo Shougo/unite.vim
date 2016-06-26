@@ -329,7 +329,7 @@ function! unite#view#_set_syntax() abort "{{{
 
   call s:set_syntax()
 
-  call unite#view#_redraw_prompt()
+  silent! call unite#view#_redraw_prompt()
 
   let b:current_syntax = 'unite'
 endfunction"}}}
