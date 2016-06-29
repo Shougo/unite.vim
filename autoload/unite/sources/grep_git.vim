@@ -84,7 +84,6 @@ function! s:source.gather_candidates(args, context) abort "{{{
   " replace ^/ into the repository root
   let root = unite#sources#grep_git#repository_root()
   call map(a:context.source__targets, 'substitute(v:val, "^/", root . "/", "")')
-  echomsg string(a:context.source__targets)
 
   if a:context.is_redraw
     let a:context.is_async = 1
