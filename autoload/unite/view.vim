@@ -684,6 +684,11 @@ function! unite#view#_quit(is_force, ...) abort  "{{{
     endtry
   endif
 
+  if g:unite_restore_alternate_file
+    silent! execute 'buffer' unite.alternate_bufnr
+    buffer #
+  endif
+
   if context.complete
     if context.col < col('$')
       startinsert

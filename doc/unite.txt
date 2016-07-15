@@ -500,6 +500,13 @@ g:unite_enable_auto_select		*g:unite_enable_auto_select*
 
 		The default value is 1.
 
+					*g:unite_restore_alternate_file*
+g:unite_restore_alternate_file
+		Option to restore alternate file after open action. The
+		unite buffer does not become the alternate file by default.
+
+		Default value is 1.
+
 SOURCES VARIABLES 				*unite-sources-variables*
 
 					*g:unite_source_buffer_time_format*
