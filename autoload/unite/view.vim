@@ -687,7 +687,7 @@ function! unite#view#_quit(is_force, ...) abort  "{{{
   if g:unite_restore_alternate_file
         \ && bufnr('%') != unite.alternate_bufnr
         \ && unite.alternate_bufnr > 0
-    silent! execute 'buffer' unite.alternate_bufnr
+    silent! execute 'buffer!' unite.alternate_bufnr
     buffer #
   endif
 
