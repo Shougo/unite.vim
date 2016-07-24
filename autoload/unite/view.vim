@@ -685,10 +685,11 @@ function! unite#view#_quit(is_force, ...) abort  "{{{
   endif
 
   if g:unite_restore_alternate_file
+        \ && bufexists(unite.alternate_bufnr)
         \ && bufnr('%') != unite.alternate_bufnr
         \ && unite.alternate_bufnr > 0
     silent! execute 'buffer!' unite.alternate_bufnr
-    buffer #
+    silent! buffer! #
   endif
 
   if context.complete
