@@ -44,7 +44,9 @@ let s:kind.action_table.open = {
       \ }
 function! s:kind.action_table.open.func(candidates) abort "{{{
   for candidate in a:candidates
-    execute 'buffer' candidate.action__buffer_nr
+    if bufexists(candidate.action__buffer_nr)
+      execute 'buffer' candidate.action__buffer_nr
+    endif
   endfor
 endfunction"}}}
 
