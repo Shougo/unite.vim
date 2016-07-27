@@ -98,17 +98,7 @@ let s:source = {
       \}
 
 function! s:source.gather_candidates(args, context) abort "{{{
-  let bookmark_name = get(a:args, 0, '')
-  if bookmark_name =~ '/$'
-    let bookmark_name = bookmark_name[: -2]
-  endif
-  if bookmark_name == ''
-    let bookmark_name = 'default'
-  endif
-
-  if bookmark_name == '_'
-    let bookmark_name = '*'
-  endif
+  let bookmark_name = s:get_bookmark_name(a:args)
 
   if stridx(bookmark_name, '*') != -1
     let bookmarks = map(filter(
@@ -152,17 +142,11 @@ function! s:source.vimfiler_complete(args, context, arglead, cmdline, cursorpos)
   return self.complete(a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
 endfunction"}}}
 function! s:source.vimfiler_check_filetype(args, context) abort "{{{
-  return ['directory', get(a:args, 0, 'default')]
+  return ['directory', s:get_bookmark_name(a:args)]
 endfunction"}}}
 function! s:source.vimfiler_gather_candidates(args, context) abort "{{{
   let exts = unite#util#is_windows() ?
         \ escape(substitute($PATHEXT . ';.LNK', ';', '\\|', 'g'), '.') : ''
-
-  if join(a:args, ':') =~ '^/.\|^\a:'
-    " Fall back to file source.
-    return unite#sources#file#get_file_source().vimfiler_gather_candidates(
-          \ a:args, a:context)
-  endif
 
   let candidates = self.gather_candidates(a:args, a:context)
   for candidate in candidates
@@ -227,7 +211,7 @@ function! s:load(filename) abort  "{{{
 
   let bookmark = s:bookmarks[a:filename]
   if filereadable(filename)
-  \  && bookmark.file_mtime != getftime(filename)
+        \  && bookmark.file_mtime != getftime(filename)
     let [ver; bookmark.files] = readfile(filename)
     if ver !=# s:VERSION
       echohl WarningMsg
@@ -260,6 +244,21 @@ endfunction"}}}
 function! s:SID_PREFIX() abort
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
+function! s:get_bookmark_name(args) abort "{{{
+  let bookmark_name = get(a:args, 0, '')
+  if bookmark_name =~ '/$'
+    let bookmark_name = bookmark_name[: -2]
+  endif
+  if bookmark_name == ''
+    let bookmark_name = 'default'
+  endif
+
+  if bookmark_name == '_'
+    let bookmark_name = '*'
+  endif
+
+  return bookmark_name
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
