@@ -113,7 +113,9 @@ function! unite#exrename#create_buffer(candidates, ...) abort "{{{
     let cnt += 1
   endfor
   " write filenames
+  let [undolevels, &undolevels] = [&undolevels, -1]
   call setline(1, b:exrename.filenames)
+  let &undolevels = undolevels
   setlocal nomodified
 endfunction"}}}
 
