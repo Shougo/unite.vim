@@ -141,11 +141,16 @@ function! s:source.gather_candidates(args, context) abort "{{{
     let a:context.is_async = 1
   endif
 
+  let cwd = getcwd()
   try
+    if a:context.path != ''
+      call unite#util#lcd(a:context.path)
+    endif
     let a:context.source__proc = vimproc#plineopen2(
           \ vimproc#util#iconv(
           \   a:context.source__command, &encoding, 'char'), 1)
   catch
+    call unite#util#lcd(cwd)
     call unite#print_error(v:exception)
     let a:context.is_async = 0
     return []
