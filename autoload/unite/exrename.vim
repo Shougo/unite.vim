@@ -98,8 +98,7 @@ function! unite#exrename#create_buffer(candidates, ...) abort "{{{
       let filename = filename[len(b:exrename.cwd) :]
     endif
     " directory should end with a trailing slash (to distinguish easily)
-    if get(candidate, 'vimfiler__is_directory',
-          \ get(candidate, 'kind', '') == 'directory')
+    if s:is_directory(candidate)
       let filename .= '/'
     endif
 
@@ -120,6 +119,15 @@ endfunction"}}}
 function! s:is_absolute(path) abort "{{{
   return a:path =~# '^\%(\a\a\+:\)\|^\%(\a:\|/\)'
 endfunction "}}}
+
+function! s:is_directory(candidate) abort "{{{
+  let isdir = get(a:candidate, 'vimfiler__is_directory', v:none)
+  if !(isdir is v:none)
+    return isdir
+  endif
+  let kind = get(a:candidate, 'kind', '')
+  return index(type(kind) != type([]) ? [kind] : kind, 'directory') >= 0
+endfunction"}}}
 
 function! s:do_rename() abort "{{{
   if line('$') != len(b:exrename.filenames)
