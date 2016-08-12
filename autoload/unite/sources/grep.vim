@@ -237,45 +237,17 @@ function! s:source.async_gather_candidates(args, context) abort "{{{
 
   let lines = map(unite#util#read_lines(stdout, 1000),
           \ "unite#util#iconv(v:val, g:unite_source_grep_encoding, &encoding)")
-  if default_opts =~ '^-[^-]*l'
-        \ || a:context.source__extra_opts =~ '^-[^-]*l'
-    let lines = map(filter(lines, 'v:val != ""'),
-          \ '[v:val, [v:val[2:], 0]]')
-  else
-    let lines = map(filter(lines, 'v:val =~ "^.\\+:.\\+$"'),
-          \ '[v:val, split(v:val[2:], ":", 1)]')
-  endif
 
   let candidates = []
-  for [line, fields] in lines
-    let col = 0
-
-    if len(fields) <= 1 || fields[1] !~ '^\d\+$'
-      let path = a:context.source__targets[0]
-      if len(fields) <= 1
-        let linenr = line[:1][0]
-        let text = fields[0]
-      else
-        let linenr = line[:1] . fields[0]
-        let text = join(fields[1:], ':')
-      endif
-    else
-      let path = line[:1] . fields[0]
-      let linenr = fields[1]
-      let text = join(fields[2:], ':')
-      if text =~ '^\d\+:'
-        let col = matchstr(text, '^\d\+')
-        let text = text[len(col)+1 :]
-      endif
-    endif
-
-    if path ==# '.'
+  for line in lines
+    let ret = unite#sources#grep#parse(line)
+    if empty(ret)
       call unite#print_source_error(
-            \ 'Your grep configuration is wrong.'
-            \ . ' Please check ":help unite-source-grep" example.',
-            \ s:source.name)
-      break
+            \ 'Invalid grep line: ' . line,  s:source.name)
+      continue
     endif
+
+    let [path, linenr, col, text] = ret
 
     call add(candidates, {
           \ 'word' : printf('%s: %s: %s', path,
@@ -294,6 +266,32 @@ endfunction "}}}
 function! s:source.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return ['%', '#', '$buffers'] + unite#sources#file#complete_directory(
         \ a:args, a:context, a:arglead, a:cmdline, a:cursorpos)
+endfunction"}}}
+
+function! unite#sources#grep#parse(line) abort "{{{
+  let ret = matchlist(a:line, '^\(.*\):\(\d\+\)\%(:\(\d\+\)\)\?:\(.*\)$')
+  if empty(ret) || ret[1] == '' || ret[4] == ''
+    return []
+  endif
+
+  if ret[1] =~ ':\d\+$'
+    " Use column pattern
+    let ret = matchlist(a:line, '^\(.*\):\(\d\+\):\(\d\+\):\(.*\)$')
+  endif
+
+  let path = ret[1]
+  let linenr = ret[2]
+  let col = ret[3]
+  let text = ret[4]
+
+  if linenr == ''
+    let linenr = '1'
+  endif
+  if col == ''
+    let col = '0'
+  endif
+
+  return [path, linenr, col, text]
 endfunction"}}}
 
 " vim: foldmethod=marker
