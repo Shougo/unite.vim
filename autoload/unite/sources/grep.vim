@@ -210,9 +210,6 @@ function! s:source.gather_candidates(args, context) abort "{{{
 endfunction "}}}
 
 function! s:source.async_gather_candidates(args, context) abort "{{{
-  let default_opts = get(a:context, 'custom_grep_default_opts',
-        \ g:unite_source_grep_default_opts)
-
   if !has_key(a:context, 'source__proc')
     let a:context.is_async = 0
     return []
