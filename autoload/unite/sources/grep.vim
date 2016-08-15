@@ -30,10 +30,13 @@ call unite#util#set_default(
       \ 'g:unite_source_grep_command', 'grep')
 call unite#util#set_default(
       \ 'g:unite_source_grep_default_opts', '-inH')
-
 call unite#util#set_default('g:unite_source_grep_recursive_opt', '-r')
-call unite#util#set_default('g:unite_source_grep_search_word_highlight', 'Search')
+call unite#util#set_default('g:unite_source_grep_search_word_highlight',
+      \ 'Search')
 call unite#util#set_default('g:unite_source_grep_encoding', 'char')
+" Note: jvgrep does not support "--" separator
+call unite#util#set_default('g:unite_source_grep_separator',
+      \ (g:unite_source_grep_command !=# 'jvgrep' ? '--' : ''))
 "}}}
 
 function! unite#sources#grep#define() abort "{{{
@@ -182,11 +185,12 @@ function! s:source.gather_candidates(args, context) abort "{{{
     let a:context.is_async = 1
   endif
 
-  let cmdline = printf('"%s" %s %s %s -- %s %s',
+  let cmdline = printf('"%s" %s %s %s %s %s %s',
     \   unite#util#substitute_path_separator(command),
     \   default_opts,
     \   recursive_opt,
     \   a:context.source__extra_opts,
+    \   g:unite_source_grep_separator,
     \   string(a:context.source__input),
     \   unite#helper#join_targets(a:context.source__targets)
     \)
