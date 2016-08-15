@@ -121,9 +121,8 @@ function! s:is_absolute(path) abort "{{{
 endfunction "}}}
 
 function! s:is_directory(candidate) abort "{{{
-  let isdir = get(a:candidate, 'vimfiler__is_directory', v:none)
-  if !(isdir is v:none)
-    return isdir
+  if has_key(a:candidate, 'vimfiler__is_directory')
+    return a:candidate['vimfiler__is_directory']
   endif
   let kind = get(a:candidate, 'kind', '')
   return index(type(kind) != type([]) ? [kind] : kind, 'directory') >= 0
