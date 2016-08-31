@@ -74,7 +74,7 @@ function! unite#handlers#_on_cursor_hold_i() abort  "{{{
     call s:check_redraw()
   endif
 
-  if unite.is_async && &l:modifiable && !has('timers')
+  if unite.is_async && &l:modifiable && !unite#util#has_timers()
     " Ignore key sequences.
     call feedkeys("a\<BS>", 'n')
   endif
@@ -159,7 +159,7 @@ function! unite#handlers#_on_cursor_hold() abort  "{{{
     endfor
   endif
 
-  if is_async && !has('timers')
+  if is_async && !unite#util#has_timers()
     " Ignore key sequences.
     call feedkeys("g\<ESC>" . (v:count > 0 ? v:count : ''), 'n')
   endif
@@ -314,7 +314,7 @@ function! unite#handlers#_save_updatetime() abort  "{{{
 
   if unite.is_async && unite.context.update_time > 0
         \ && &updatetime > unite.context.update_time
-        \ && !has('timers')
+        \ && !unite#util#has_timers()
     let unite.update_time_save = &updatetime
     let &updatetime = unite.context.update_time
   endif
@@ -328,7 +328,7 @@ function! unite#handlers#_restore_updatetime() abort  "{{{
 
   if unite.context.update_time > 0
         \ && &updatetime < unite.update_time_save
-        \ && !has('timers')
+        \ && !unite#util#has_timers()
     let &updatetime = unite.update_time_save
   endif
 endfunction"}}}
@@ -364,7 +364,7 @@ function! s:timer_handler(timer) abort "{{{
   unlet s:timer
 endfunction"}}}
 function! unite#handlers#_init_timer() abort  "{{{
-  if has('timers') && !exists('s:timer')
+  if unite#util#has_timers() && !exists('s:timer')
     let s:timer = timer_start(500,
           \ function('s:timer_handler'), {'repeat': -1})
     autocmd plugin-unite VimLeavePre *

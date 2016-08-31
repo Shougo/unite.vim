@@ -29,7 +29,7 @@ set cpo&vim
 augroup plugin-unite
 augroup END
 
-if !has('timers')
+if !unite#util#has_timers()
   autocmd plugin-unite CursorHold *
         \ call unite#handlers#_on_cursor_hold()
 endif
