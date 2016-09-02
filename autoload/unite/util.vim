@@ -172,7 +172,7 @@ endfunction
 function! unite#util#has_timers() abort
   " Vim timers implementation has bug.
   " It cannot stop callback handler in the handler.
-  return has('timers') && has('nvim')
+  return has('timers') && (has('nvim') || has('patch-7.4.2304'))
 endfunction
 function! unite#util#system(...) abort
   return call(s:get_process().system, a:000)
