@@ -36,7 +36,7 @@ endfunction "}}}
 
 let s:source = {
       \ 'name': 'find',
-      \ 'max_candidates': 100,
+      \ 'max_candidates': 1000,
       \ 'hooks' : {},
       \ 'matchers' : ['matcher_regexp'],
       \ 'ignore_globs' : [

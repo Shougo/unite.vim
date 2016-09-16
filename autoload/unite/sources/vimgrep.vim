@@ -34,7 +34,7 @@ endfunction "}}}
 
 let s:source = {
       \ 'name': 'vimgrep',
-      \ 'max_candidates': 100,
+      \ 'max_candidates': 1000,
       \ 'hooks' : {},
       \ 'syntax' : 'uniteSource__Vimgrep',
       \ 'matchers' : 'matcher_regexp',

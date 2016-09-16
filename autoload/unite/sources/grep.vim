@@ -45,7 +45,7 @@ endfunction "}}}
 
 let s:source = {
       \ 'name': 'grep',
-      \ 'max_candidates': 100,
+      \ 'max_candidates': 1000,
       \ 'hooks' : {},
       \ 'syntax' : 'uniteSource__Grep',
       \ 'matchers' : 'matcher_regexp',

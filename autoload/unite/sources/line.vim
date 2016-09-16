@@ -41,7 +41,7 @@ let s:source_line = {
       \ 'name' : 'line',
       \ 'syntax' : 'uniteSource__Line',
       \ 'hooks' : {},
-      \ 'max_candidates': 100,
+      \ 'max_candidates': 1000,
       \ 'default_kind' : 'jump_list',
       \ 'matchers' : 'matcher_regexp',
       \ 'sorters' : 'sorter_nothing',

@@ -64,7 +64,7 @@ let s:source_file_rec = {
       \ 'description' : 'candidates from directory by recursive',
       \ 'hooks' : {},
       \ 'default_kind' : 'file',
-      \ 'max_candidates' : 50,
+      \ 'max_candidates' : 1000,
       \ 'ignore_globs' : [
       \         '.', '*~', '*.o', '*.exe', '*.bak',
       \         'DS_Store', '*.pyc', '*.sw[po]', '*.class',
