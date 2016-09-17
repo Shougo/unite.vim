@@ -2780,7 +2780,7 @@ matcher_regexp
 		Narrowing down can be done by word.
 
 						*unite-filter-matcher_fuzzy*
-matcher_full_fuzzy
+matcher_fuzzy
 		A matcher which filters the candidates with user given fuzzy
 		string.
 		This recognizes "!" as negative.
