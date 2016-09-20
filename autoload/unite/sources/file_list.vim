@@ -53,10 +53,27 @@ function! s:source.gather_candidates(args, context) abort "{{{
     return []
   endif
 
-  return map(readfile(args[0]), "{
+  let file_list = args[0]
+
+  if filereadable(file_list)
+    call unite#print_source_error(
+          \ 'filelist open failed.', s:source.name)
+    return []
+  endif
+
+  let cwd = getcwd()
+  try
+    call unite#util#lcd(fnamemodify(file_list, ':h'))
+
+    let candidates = map(readfile(file_list), "{
         \ 'word' : v:val,
-        \ 'action__path' : v:val,
+        \ 'action__path' : fnamemodify(v:val, ':p'),
         \}")
+  finally
+    call unite#util#lcd(cwd)
+  endtry
+
+  return candidates
 endfunction "}}}
 
 let &cpo = s:save_cpo
