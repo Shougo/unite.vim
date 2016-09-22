@@ -95,7 +95,7 @@ function! s:source_file.vimfiler_gather_candidates(args, context) abort "{{{
     let context.is_vimfiler = 1
     let context.path .= path
     let candidates = self.change_candidates(a:args, context)
-    call filter(candidates, 'v:val.word !~ "/\\.\\.\\?$"')
+    call filter(candidates, 'v:val.action__path !~ "/\\.\\.\\?$"')
 
     " echomsg reltimestr(reltime(start))
   elseif filereadable(path)
