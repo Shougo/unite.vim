@@ -55,7 +55,7 @@ function! s:source.gather_candidates(args, context) abort "{{{
 
   let file_list = args[0]
 
-  if filereadable(file_list)
+  if !filereadable(file_list)
     call unite#print_source_error(
           \ 'filelist open failed.', s:source.name)
     return []
