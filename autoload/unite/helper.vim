@@ -484,11 +484,13 @@ function! unite#helper#choose_window() abort "{{{
 endfunction"}}}
 
 function! unite#helper#get_choose_windows() abort "{{{
-  return filter(range(1, winnr('$')), "v:val != winnr()
-        \ && !getwinvar(v:val, '&previewwindow')
+  return filter(range(1, winnr('$')), "
+        \ !getwinvar(v:val, '&previewwindow')
+        \ && getwinvar(v:val, '&filetype') !=# 'vimfiler'
+        \ && getwinvar(v:val, '&filetype') !=# 'unite'
         \ && (getwinvar(v:val, '&buftype') !~# 'nofile'
         \   || getwinvar(v:val, '&buftype') =~# 'acwrite')
-        \ && !getwinvar(v:val, '&filetype') !=# 'qf'")
+        \ && getwinvar(v:val, '&filetype') !=# 'qf'")
 endfunction"}}}
 
 function! unite#helper#get_buffer_directory(bufnr) abort "{{{
