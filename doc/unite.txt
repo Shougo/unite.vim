@@ -1336,7 +1336,7 @@ unite#start_complete({sources}, [{context}])	*unite#start_complete()*
 unite#get_candidates({sources}, [, {context}])	*unite#get_candidates()*
 		Get a list of all source candidates.  A unite buffer is not
 		created.  This function may not work with some sources.
-		The arguments are the same as with |unite#start()|.
+		The arguments are the same as |unite#start()|.
 		Note: the max_candidates source option is ignored.
 
 						*unite#action#do_candidates()*
@@ -2868,10 +2868,8 @@ sorter_ftime
 
 						*unite-filter-sorter_rank*
 sorter_rank
-		Matched rank order sorter.  The higher the matched word is or
-		the longer the matched length is, the higher the rank is.
-		This sorter is useful for file candidate source.
-		Note: This sorter is slow.
+		It is the same as |unite-filter-sorter_rank|.
+		Note: This sorter requires |:python| or |:python3| support.
 >
 		call unite#custom#source('buffer,file,file_rec',
 		\ 'sorters', 'sorter_rank')
@@ -2882,7 +2880,7 @@ sorter_selecta
 		from selecta: https://github.com/garybernhardt/selecta.
 		If the matched length is shorter, the rank is higher.
 		This sorter is useful for file candidate source.
-		Note: This sorter requires |:python| support.
+		Note: This sorter requires |:python| or |:python3| support.
 >
 		call unite#custom#source('buffer,file,file_rec',
 		\ 'sorters', 'sorter_selecta')
