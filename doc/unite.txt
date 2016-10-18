@@ -1644,6 +1644,10 @@ unite#custom#source({source-name}, {option-name}, {value})
 		Example: >
 		call unite#custom#source('file_rec', 'ignore_globs',
 		\ split(&wildignore, ','))
+
+		" Ignore ignore1 and ignore2/ignore3.
+		call unite#custom#source('file_rec', 'ignore_globs',
+		\ ['./ignore1', './ignore2/ignore3'])
 <
 		white_globs			(List) or (String)
 		Specify the whitelist glob pattern list not to ignore
