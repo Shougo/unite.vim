@@ -1,26 +1,7 @@
 "=============================================================================
 " FILE: helpers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" License: MIT license  {{{
-"     Permission is hereby granted, free of charge, to any person obtaining
-"     a copy of this software and associated documentation files (the
-"     "Software"), to deal in the Software without restriction, including
-"     without limitation the rights to use, copy, modify, merge, publish,
-"     distribute, sublicense, and/or sell copies of the Software, and to
-"     permit persons to whom the Software is furnished to do so, subject to
-"     the following conditions:
-"
-"     The above copyright notice and this permission notice shall be included
-"     in all copies or substantial portions of the Software.
-"
-"     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-"     OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-"     MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-"     IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-"     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-"     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-"     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-" }}}
+" License: MIT license
 "=============================================================================
 
 let s:save_cpo = &cpo
@@ -629,6 +610,47 @@ function! unite#helper#ignore_candidates(candidates, context) abort "{{{
   endif
 
   return candidates
+endfunction"}}}
+
+function! unite#helper#call_unite(command, args, line1, line2) abort "{{{
+  let [args, context] = unite#helper#parse_options_user(a:args)
+  if a:command ==# 'UniteWithCurrentDir'
+        \ && !has_key(context, 'path')
+    let path = &filetype ==# 'vimfiler' ?
+          \ b:vimfiler.current_dir :
+          \ unite#util#substitute_path_separator(fnamemodify(getcwd(), ':p'))
+    let context.path = path
+  elseif a:command ==# 'UniteWithBufferDir'
+        \ && !has_key(context, 'path')
+    let context.path = unite#helper#get_buffer_directory(bufnr('%'))
+  elseif a:command ==# 'UniteWithProjectDir'
+        \ && !has_key(context, 'path')
+    let path = &filetype ==# 'vimfiler' ?
+          \ b:vimfiler.current_dir :
+          \ unite#util#substitute_path_separator(getcwd())
+    let context.path = unite#util#path2project_directory(path)
+  elseif a:command ==# 'UniteWithInputDirectory'
+        \ && !has_key(context, 'path')
+    let context.path = unite#helper#parse_source_path(
+          \ input('Input narrowing directory: ', '', 'dir'))
+  elseif a:command ==# 'UniteWithCursorWord'
+        \ && !has_key(context, 'input')
+    let context.input = expand('<cword>')
+  elseif a:command ==# 'UniteWithInput'
+        \ && !has_key(context, 'input')
+    let context.input = input('Input narrowing text: ', '')
+  endif
+
+  let context.firstline = a:line1
+  let context.lastline = a:line2
+  let context.bufnr = bufnr('%')
+
+  call unite#start(args, context)
+endfunction"}}}
+function! unite#helper#call_unite_resume(args) abort "{{{
+  let [args, context] = unite#helper#parse_options(a:args)
+
+  call unite#resume(join(args), context)
 endfunction"}}}
 
 let &cpo = s:save_cpo
