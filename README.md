@@ -1,6 +1,12 @@
 [![Stories in Ready](https://badge.waffle.io/Shougo/unite.vim.png)](https://waffle.io/Shougo/unite.vim)  
 ![Unite.vim](https://s3.amazonaws.com/github-csexton/unite-brand.png)
 
+
+**Note**: Active developement on unite.vim has stopped. The only future changes will be bug fixes.
+
+Please see [Denite.nvim](https://github.com/Shougo/denite.nvim).
+
+
 The unite or unite.vim plug-in can search and display information from
 arbitrary sources like files, buffers, recently used files or registers.  You
 can run several pre-defined actions on a target displayed in the unite window.
