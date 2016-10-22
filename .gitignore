@@ -1,2 +1,2 @@
 doc/tags*
-*.pyc
+*.py[cod]

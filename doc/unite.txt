@@ -46,6 +46,7 @@ Create source		|unite-create-source|
 Create kind		|unite-create-kind|
 Create filter		|unite-create-filter|
 External source		|unite-external-sources|
+Denite			|unite-denite|
 FAQ			|unite-faq|
 
 ==============================================================================
@@ -3777,6 +3778,19 @@ And so on...
 
 See Wiki page(Japanese).
 https://github.com/Shougo/unite.vim/wiki/unite-plugins
+
+==============================================================================
+DENITE						*unite-denite*
+
+------------------------------------------------------------------------------
+SOURCES						*unite-denite-sources*
+
+						*unite-denite-source-unite*
+unite		Nominates an unite candidate as a candidate.
+		Note: It doesn't support the all unite sources.
+
+		Source arguments:
+		1. the source name.
 
 ==============================================================================
 FAQ						*unite-faq*

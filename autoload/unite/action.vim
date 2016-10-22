@@ -319,8 +319,8 @@ function! unite#action#do(action_name, ...) abort "{{{
 
   call unite#redraw()
 
-  let candidates = get(a:000, 0,
-        \ unite#helper#get_marked_candidates())
+  let candidates = empty(a:000) ?
+        \ unite#helper#get_marked_candidates() : a:1
   let new_context = get(a:000, 1, {})
   let sources = get(a:000, 2, {})
 
