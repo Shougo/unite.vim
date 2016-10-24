@@ -963,6 +963,9 @@ function! unite#view#_close_preview_window() abort "{{{
           \ 'getwinvar(v:val, "&previewwindow") != 0')
     if !empty(preview_windows)
       " Close preview window.
+      if winnr('$') == 1
+        new
+      endif
       noautocmd pclose!
     endif
   endif
