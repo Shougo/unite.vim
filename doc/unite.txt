@@ -3764,15 +3764,17 @@ https://github.com/Shougo/unite.vim/wiki/unite-plugins
 ==============================================================================
 DENITE						*unite-denite*
 
-------------------------------------------------------------------------------
-SOURCES						*unite-denite-sources*
-
 						*unite-denite-source-unite*
 unite		Nominates an unite candidate as a candidate.
 		Note: It doesn't support the all unite sources.
 
 		Source arguments:
 		1. the source name.
+
+						*unite-denite-kind-unite*
+unite		Unite candidates.
+						*unite-denite-action-unite*
+	do		Do "default" action
 
 ==============================================================================
 FAQ						*unite-faq*

@@ -430,10 +430,11 @@ function! unite#action#do_candidates(action_name, candidates, ...) abort "{{{
   let context = unite#init#_context(context)
   let context.unite__is_interactive = 0
   let context.unite__disable_hooks = 1
-  call unite#set_context(context)
+  call unite#init#_current_unite([], context)
 
   return unite#action#do(
-        \ a:action_name, a:candidates, context)
+        \ a:action_name, a:candidates, context,
+        \ values(unite#get_all_sources()))
 endfunction"}}}
 
 function! unite#action#_get_candidate_action_table(candidate, sources) abort "{{{
