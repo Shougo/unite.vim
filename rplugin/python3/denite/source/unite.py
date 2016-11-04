@@ -6,6 +6,7 @@
 
 from .base import Base
 from copy import copy
+from re import sub
 
 
 class Source(Base):
@@ -25,4 +26,7 @@ class Source(Base):
         for candidate in candidates:
             candidate['source__candidate'] = copy(candidate)
             candidate['kind'] = 'unite'
+            candidate['word'] = sub(r'\n.*', r'', candidate['word'])
+            if 'abbr' in candidate:
+                candidate['abbr'] = sub(r'\n.*', r'', candidate['abbr'])
         return candidates
