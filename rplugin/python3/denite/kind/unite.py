@@ -18,3 +18,11 @@ class Kind(Base):
     def action_do(self, context):
         self.vim.call('unite#action#do_candidates', 'default',
                       [x['source__candidate'] for x in context['targets']])
+
+    def action_preview(self, context):
+        self.vim.call('unite#action#do_candidates', 'preview',
+                      [x['source__candidate'] for x in context['targets']])
+
+    def action_delete(self, context):
+        self.vim.call('unite#action#do_candidates', 'delete',
+                      [x['source__candidate'] for x in context['targets']])

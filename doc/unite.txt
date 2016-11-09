@@ -3775,6 +3775,8 @@ unite		Nominates an unite candidate as a candidate.
 unite		Unite candidates.
 						*unite-denite-action-unite*
 	do		Do "default" action
+	delete		Do "delete" action
+	preview		Do "preview" action
 
 ==============================================================================
 FAQ						*unite-faq*
