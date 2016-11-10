@@ -83,9 +83,11 @@ endfunction
 " @vimlint(EVL102, 1, l:candidate)
 function! s:sort_python(candidates, inputs) abort
   for input in a:inputs
-    for candidate in a:candidates
-      Python2or3 score()
-    endfor
+    if input != ''
+      for candidate in a:candidates
+        Python2or3 score()
+      endfor
+    endif
   endfor
 
   return unite#util#sort_by(a:candidates, 'v:val.filter__rank')
