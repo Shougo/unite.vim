@@ -21,7 +21,7 @@ class Source(Base):
         if not context['args']:
             return []
         candidates = self.vim.call('unite#get_candidates',
-                                   [context['args'][0]])
+                                   [context['args']])
         # Convert the attributes for compatibility.
         for candidate in candidates:
             candidate['source__candidate'] = copy(candidate)
