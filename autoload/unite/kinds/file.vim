@@ -191,7 +191,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) abort "{{{
             \ fnameescape(new_filename)
       if &l:buftype == ''
         " Remove old buffer.
-        silent bdelete! #
+        silent! bdelete! #
       endif
       noautocmd silent execute 'buffer' bufnr_save
     endif
