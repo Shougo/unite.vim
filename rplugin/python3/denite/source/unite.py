@@ -27,6 +27,6 @@ class Source(Base):
             candidate['source__candidate'] = copy(candidate)
             candidate['kind'] = 'unite'
             candidate['word'] = sub(r'\n.*', r'', candidate['word'])
-            if 'abbr' in candidate:
-                candidate['abbr'] = sub(r'\n.*', r'', candidate['abbr'])
+            candidate['abbr'] = candidate['source'] + ': ' + sub(
+                r'\n.*', r'', candidate.get('abbr', candidate['word']))
         return candidates
