@@ -427,10 +427,11 @@ endfunction"}}}
 
 function! unite#action#do_candidates(action_name, candidates, ...) abort "{{{
   let context = get(a:000, 0, {})
+  let sources = get(a:000, 1, [])
   let context = unite#init#_context(context)
   let context.unite__is_interactive = 0
   let context.unite__disable_hooks = 1
-  call unite#init#_current_unite([], context)
+  call unite#init#_current_unite(sources, context)
 
   return unite#action#do(
         \ a:action_name, a:candidates, context,

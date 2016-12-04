@@ -437,7 +437,8 @@ function! unite#start#_pos(buffer_name, direction, count) abort "{{{
 
   " Immediately action.
   silent call unite#action#do_candidates(
-        \ unite.context.default_action, [candidate], unite.context)
+        \ unite.context.default_action, [candidate],
+        \ unite.context, unite.sources)
 
   let unite.candidate_cursor = next
 
