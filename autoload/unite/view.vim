@@ -167,7 +167,7 @@ function! unite#view#_redraw(is_force, winnr, is_gather_all) abort "{{{
         \ {} : unite#helper#get_current_candidate()
 
   try
-    if &filetype !=# 'unite'
+    if &filetype !=# 'unite' || !unite.is_initialized
       return
     endif
 
