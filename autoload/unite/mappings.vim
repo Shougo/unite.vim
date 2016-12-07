@@ -739,7 +739,7 @@ function! unite#mappings#cursor_up(is_skip_not_matched) abort "{{{
         \ (unite#helper#is_prompt(line('.') - cnt) ? "\<End>" : "\<Home>")
   else
     let cnt += v:count == 0 ? 0 : (v:count - 1)
-    return "\<Esc>" . (cnt == 1 ? 'k' : cnt.'k')
+    return (v:count ? "\<Esc>" : '') . (cnt == 1 ? 'k' : cnt.'k')
   endif
 endfunction"}}}
 function! unite#mappings#cursor_down(is_skip_not_matched) abort "{{{
@@ -769,7 +769,7 @@ function! unite#mappings#cursor_down(is_skip_not_matched) abort "{{{
           \ (unite#helper#is_prompt(line('.') + cnt) ? "\<End>" : "\<Home>")
   else
     let cnt += v:count == 0 ? 0 : (v:count - 1)
-    return "\<Esc>" . (cnt == 1 ? 'j' : cnt.'j')
+    return (v:count ? "\<Esc>" : '') . (cnt == 1 ? 'j' : cnt.'j')
   endif
 endfunction"}}}
 function! s:smart_preview() abort "{{{
