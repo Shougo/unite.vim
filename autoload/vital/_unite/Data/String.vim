@@ -3,13 +3,13 @@
 " Do not mofidify the code nor insert new lines before '" ___vital___'
 if v:version > 703 || v:version == 703 && has('patch1170')
   function! vital#_unite#Data#String#import() abort
-    return map({'starts_with': '', 'split3': '', 'chop': '', 'unescape': '', 'split_posix_text': '', 'replace': '', 'scan': '', 'strchars': '', 'strwidthpart': '', 'common_head': '', 'reverse': '', 'escape_pattern': '', 'trim_end': '', '_vital_depends': '', 'wrap': '', 'join_posix_lines': '', 'contains_multibyte': '', 'truncate_skipping': '', 'split_leftright': '', 'ends_with': '', 'nsplit': '', 'substitute_last': '', 'strwidthpart_reverse': '', 'unescape_pattern': '', 'levenshtein_distance': '', 'trim_start': '', 'nr2hex': '', 'remove_ansi_sequences': '', 'iconv': '', 'pad_left': '', 'nr2enc_char': '', 'lines': '', 'repair_posix_text': '', 'nr2byte': '', 'trim': '', 'diffidx': '', 'truncate': '', 'split_by_displaywidth': '', 'padding_by_displaywidth': '', 'hash': '', 'chomp': '', 'pad_between_letters': '', 'wcswidth': '', 'dstring': '', 'pad_both_sides': '', 'justify_equal_spacing': '', 'pad_right': '', 'replace_first': '', '_vital_loaded': ''},  'function("s:" . v:key)')
+    return map({'starts_with': '', 'split3': '', 'replace_first': '', 'chop': '', 'unescape': '', 'split_posix_text': '', 'replace': '', 'scan': '', 'strwidthpart': '', 'common_head': '', 'reverse': '', 'escape_pattern': '', 'trim_end': '', '_vital_depends': '', 'wrap': '', 'join_posix_lines': '', 'contains_multibyte': '', 'truncate_skipping': '', 'split_leftright': '', 'ends_with': '', 'nsplit': '', 'strwidthpart_reverse': '', 'unescape_pattern': '', 'levenshtein_distance': '', 'trim_start': '', 'justify_equal_spacing': '', 'nr2hex': '', 'iconv': '', 'pad_left': '', 'nr2enc_char': '', 'lines': '', 'repair_posix_text': '', 'nr2byte': '', 'trim': '', 'diffidx': '', 'truncate': '', 'split_by_displaywidth': '', '_vital_created': '', 'padding_by_displaywidth': '', 'hash': '', 'chomp': '', 'pad_between_letters': '', 'dstring': '', 'pad_both_sides': '', 'substitute_last': '', 'pad_right': '', 'remove_ansi_sequences': '', '_vital_loaded': ''},  'function("s:" . v:key)')
   endfunction
 else
   function! s:_SID() abort
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze__SID$')
   endfunction
-  execute join(['function! vital#_unite#Data#String#import() abort', printf("return map({'starts_with': '', 'split3': '', 'chop': '', 'unescape': '', 'split_posix_text': '', 'replace': '', 'scan': '', 'strchars': '', 'strwidthpart': '', 'common_head': '', 'reverse': '', 'escape_pattern': '', 'trim_end': '', '_vital_depends': '', 'wrap': '', 'join_posix_lines': '', 'contains_multibyte': '', 'truncate_skipping': '', 'split_leftright': '', 'ends_with': '', 'nsplit': '', 'substitute_last': '', 'strwidthpart_reverse': '', 'unescape_pattern': '', 'levenshtein_distance': '', 'trim_start': '', 'nr2hex': '', 'remove_ansi_sequences': '', 'iconv': '', 'pad_left': '', 'nr2enc_char': '', 'lines': '', 'repair_posix_text': '', 'nr2byte': '', 'trim': '', 'diffidx': '', 'truncate': '', 'split_by_displaywidth': '', 'padding_by_displaywidth': '', 'hash': '', 'chomp': '', 'pad_between_letters': '', 'wcswidth': '', 'dstring': '', 'pad_both_sides': '', 'justify_equal_spacing': '', 'pad_right': '', 'replace_first': '', '_vital_loaded': ''}, \"function('<SNR>%s_' . v:key)\")", s:_SID()), 'endfunction'], "\n")
+  execute join(['function! vital#_unite#Data#String#import() abort', printf("return map({'starts_with': '', 'split3': '', 'replace_first': '', 'chop': '', 'unescape': '', 'split_posix_text': '', 'replace': '', 'scan': '', 'strwidthpart': '', 'common_head': '', 'reverse': '', 'escape_pattern': '', 'trim_end': '', '_vital_depends': '', 'wrap': '', 'join_posix_lines': '', 'contains_multibyte': '', 'truncate_skipping': '', 'split_leftright': '', 'ends_with': '', 'nsplit': '', 'strwidthpart_reverse': '', 'unescape_pattern': '', 'levenshtein_distance': '', 'trim_start': '', 'justify_equal_spacing': '', 'nr2hex': '', 'iconv': '', 'pad_left': '', 'nr2enc_char': '', 'lines': '', 'repair_posix_text': '', 'nr2byte': '', 'trim': '', 'diffidx': '', 'truncate': '', 'split_by_displaywidth': '', '_vital_created': '', 'padding_by_displaywidth': '', 'hash': '', 'chomp': '', 'pad_between_letters': '', 'dstring': '', 'pad_both_sides': '', 'substitute_last': '', 'pad_right': '', 'remove_ansi_sequences': '', '_vital_loaded': ''}, \"function('<SNR>%s_' . v:key)\")", s:_SID()), 'endfunction'], "\n")
   delfunction s:_SID
 endif
 " ___vital___
@@ -25,6 +25,16 @@ endfunction
 
 function! s:_vital_depends() abort
   return ['Data.List']
+endfunction
+
+function! s:_vital_created(module) abort
+  " Expose script-local funcref
+  if exists('s:strchars')
+    let a:module.strchars = s:strchars
+  endif
+  if exists('s:wcswidth')
+    let a:module.wcswidth = s:wcswidth
+  endif
 endfunction
 
 " Substitute a:from => a:to by string.
@@ -142,9 +152,7 @@ endfunction
 " even if a:str contains multibyte character(s).
 " s:strchars(str) {{{
 if exists('*strchars')
-  function! s:strchars(str) abort
-    return strchars(a:str)
-  endfunction
+  let s:strchars = function('strchars')
 else
   function! s:strchars(str) abort
     return strlen(substitute(copy(a:str), '.', 'x', 'g'))
@@ -452,8 +460,9 @@ function! s:truncate(str, width) abort
   " http://github.com/mattn/googlereader-vim/tree/master
 
   if a:str =~# '^[\x00-\x7f]*$'
-    return len(a:str) < a:width ?
-          \ printf('%-'.a:width.'s', a:str) : strpart(a:str, 0, a:width)
+    return len(a:str) < a:width
+          \ ? printf('%-' . a:width . 's', a:str)
+          \ : strpart(a:str, 0, a:width)
   endif
 
   let ret = a:str
@@ -483,57 +492,20 @@ function! s:truncate_skipping(str, max, footer_width, separator) abort
 endfunction
 
 function! s:strwidthpart(str, width) abort
-  if a:width <= 0
-    return ''
-  endif
-  let strarr = split(a:str, '\zs')
-  let width = s:wcswidth(a:str)
-  let index = len(strarr)
-  let diff = (index + 1) / 2
-  let rightindex = index - 1
-  while width > a:width
-    let index = max([rightindex - diff + 1, 0])
-    let partwidth = s:wcswidth(join(strarr[(index):(rightindex)], ''))
-    if width - partwidth >= a:width || diff <= 1
-      let width -= partwidth
-      let rightindex = index - 1
-    endif
-    if diff > 1
-      let diff = diff / 2
-    endif
-  endwhile
-  return index ? join(strarr[:index - 1], '') : ''
+  let str = tr(a:str, "\t", ' ')
+  let vcol = a:width + 2
+  return matchstr(str, '.*\%<' . (vcol < 0 ? 0 : vcol) . 'v')
 endfunction
 
 function! s:strwidthpart_reverse(str, width) abort
-  if a:width <= 0
-    return ''
-  endif
-  let strarr = split(a:str, '\zs')
-  let width = s:wcswidth(a:str)
-  let strlen = len(strarr)
-  let diff = (strlen + 1) / 2
-  let leftindex = 0
-  let index = -1
-  while width > a:width
-    let index = min([leftindex + diff, strlen]) - 1
-    let partwidth = s:wcswidth(join(strarr[(leftindex):(index)], ''))
-    if width - partwidth >= a:width || diff <= 1
-      let width -= partwidth
-      let leftindex = index + 1
-    endif
-    if diff > 1
-      let diff = diff / 2
-    endif
-  endwhile
-  return index < strlen ? join(strarr[(index + 1):], '') : ''
+  let str = tr(a:str, "\t", ' ')
+  let vcol = s:wcswidth(str) - a:width
+  return matchstr(str, '\%>' . (vcol < 0 ? 0 : vcol) . 'v.*')
 endfunction
 
 if v:version >= 703
   " Use builtin function.
-  function! s:wcswidth(str) abort
-    return strwidth(a:str)
-  endfunction
+  let s:wcswidth = function('strwidth')
 else
   function! s:wcswidth(str) abort
     if a:str =~# '^[\x00-\x7f]*$'
@@ -577,7 +549,7 @@ else
 endif
 
 function! s:remove_ansi_sequences(text) abort
-  return substitute(a:text, '\e\[\%(\%(\d;\)\?\d\{1,2}\)\?[mK]', '', 'g')
+  return substitute(a:text, '\e\[\%(\%(\d\+;\)*\d\+\)\?[mK]', '', 'g')
 endfunction
 
 function! s:escape_pattern(str) abort

@@ -62,9 +62,6 @@ function! s:open(filename) abort
     " Linux.
     call system(printf('%s %s &', 'xdg-open',
           \ shellescape(filename)))
-  elseif executable('lemonade')
-    call system(printf('%s %s &', 'lemonade open',
-          \ shellescape(filename)))
   elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
     " KDE.
     call system(printf('%s %s &', 'kioclient exec',

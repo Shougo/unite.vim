@@ -9,7 +9,7 @@ set cpo&vim
 
 function! unite#util#get_vital() abort "{{{
   if !exists('s:V')
-    let s:V = vital#unite#of()
+    let s:V = vital#unite#new()
   endif
   return s:V
 endfunction"}}}
