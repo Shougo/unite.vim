@@ -340,7 +340,6 @@ function! unite#init#_current_unite(sources, context) abort "{{{
   let unite.redraw_hold_candidates = g:unite_redraw_hold_candidates
   let unite.disabled_max_candidates = 0
   let unite.cursor_line_time = reltime()
-  let unite.match_id = 11
   let unite.sign_offset = 0
   let unite.is_initialized = 0
 

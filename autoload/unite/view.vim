@@ -701,11 +701,8 @@ function! unite#view#_set_cursor_line() abort "{{{
 
   let prompt_linenr = unite.prompt_linenr
 
-  call unite#view#_clear_match()
-
   if line('.') != prompt_linenr
-    call unite#view#_match_line(context.cursor_line_highlight,
-          \ line('.'), unite.match_id)
+    call unite#view#_match_line(context.cursor_line_highlight, line('.'))
   endif
   let unite.cursor_line_time = reltime()
 endfunction"}}}
@@ -836,19 +833,26 @@ function! unite#view#_redraw_echo(expr) abort "{{{
   endtry
 endfunction"}}}
 
-function! unite#view#_match_line(highlight, line, id) abort "{{{
+function! unite#view#_match_line(highlight, line) abort "{{{
+  call unite#view#_clear_match()
+
   if &filetype ==# 'unite'
     setlocal cursorline
     return
   endif
 
+  call unite#view#_clear_match_highlight()
+
   " For compatibility
-  return exists('*matchaddpos') ?
-        \ matchaddpos(a:highlight, [a:line], 10, a:id) :
-        \ matchadd(a:highlight, '^\%'.a:line.'l.*', 10, a:id)
+  let w:unite_match_id = exists('*matchaddpos') ?
+        \ matchaddpos(a:highlight, [a:line], 10) :
+        \ matchadd(a:highlight, '^\%'.a:line.'l.*', 10)
 endfunction"}}}
 function! unite#view#_clear_match_highlight() abort "{{{
-  silent! call matchdelete(10)
+  if exists('w:unite_match_id')
+    call matchdelete(w:unite_match_id)
+    unlet w:unite_match_id
+  endif
 endfunction"}}}
 
 function! unite#view#_get_status_plane_string() abort "{{{

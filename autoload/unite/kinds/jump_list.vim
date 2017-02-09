@@ -258,7 +258,7 @@ function! s:open_current_line(is_highlight) abort "{{{
   normal! zz
   if a:is_highlight
     call unite#view#_clear_match_highlight()
-    call unite#view#_match_line('Search', line('.'), 10)
+    call unite#view#_match_line('Search', line('.'))
   endif
 endfunction"}}}
 
