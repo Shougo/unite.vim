@@ -227,7 +227,7 @@ function! s:jump_column(candidate) abort "{{{
     endif
 
     let col = 0
-    silent! let col = match(getline(line), pattern) + 1
+    silent! let col = match(getline('.'), pattern) + 1
   endif
 
   call cursor(0, col)
