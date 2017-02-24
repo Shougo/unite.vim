@@ -14,7 +14,7 @@ endfunction"}}}
 let s:kind = {
       \ 'name' : 'directory',
       \ 'default_action' : 'narrow',
-      \ 'alias_table' : { 'diff' : 'dirdiff', 'tabopen' : 'tabvimfiler' },
+      \ 'alias_table' : { 'diff' : 'dirdiff', 'tabopen' : 'tabvimfiler', 'open' : 'narrow' },
       \ 'parents': ['file'],
       \}
 
