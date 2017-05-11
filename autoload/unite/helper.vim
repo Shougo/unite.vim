@@ -468,6 +468,7 @@ function! unite#helper#get_choose_windows() abort "{{{
         \ !getwinvar(v:val, '&previewwindow')
         \ && getwinvar(v:val, '&filetype') !=# 'vimfiler'
         \ && getwinvar(v:val, '&filetype') !=# 'unite'
+        \ && getwinvar(v:val, '&buftype') !~# 'terminal'
         \ && (getwinvar(v:val, '&buftype') !~# 'nofile'
         \   || getwinvar(v:val, '&buftype') =~# 'acwrite')
         \ && getwinvar(v:val, '&filetype') !=# 'qf'")
