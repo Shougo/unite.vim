@@ -409,12 +409,12 @@ function! unite#view#_resize_window() abort "{{{
     let context.unite__is_resize = winheight != winheight(0)
   elseif context.vertical
         \ && context.unite__old_winwidth == 0
-    execute 'vertical resize' context.winwidth
+    silent! execute 'vertical resize' context.winwidth
 
     let context.unite__is_resize = 1
   elseif !context.vertical
         \ && (context.unite__old_winheight == 0 || context.auto_preview)
-    execute 'resize' context.winheight
+    silent! execute 'resize' context.winheight
 
     let context.unite__is_resize = 1
   else
