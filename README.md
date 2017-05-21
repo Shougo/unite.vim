@@ -2,7 +2,7 @@
 ![Unite.vim](https://s3.amazonaws.com/github-csexton/unite-brand.png)
 
 
-**Note**: Active developement on unite.vim has stopped. The only future changes will be bug fixes.
+**Note**: Active development on unite.vim has stopped. The only future changes will be bug fixes.
 
 Please see [Denite.nvim](https://github.com/Shougo/denite.nvim).
 
