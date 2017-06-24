@@ -2468,8 +2468,8 @@ line		Nominates current buffer lines as candidates.
 		Source arguments:
 		1. the search direction:
 		"all":       Search from buffer top
-		"forward":   Search from the current to the buffer top
-		"backward":  Search from the current to the buffer bottom
+		"backward":   Search from the current to the buffer top
+		"forward":  Search from the current to the buffer bottom
 		"buffers":   Search from all buffers
 		"args":      Search from argument buffers
 		Note: If the direction is "all" or omitted, it searches from

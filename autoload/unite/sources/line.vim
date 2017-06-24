@@ -206,14 +206,14 @@ endfunction"}}}
 
 function! s:get_context_lines(context, direction, start) abort "{{{
   if a:direction !=# 'forward' && a:direction !=# 'backward'
-    let lines = s:on_gather_candidates('forward', a:context, 1, 0)
+    let lines = s:on_gather_candidates('backward', a:context, 1, 0)
   else
     let lines = s:on_gather_candidates(a:direction, a:context, a:start, 0)
 
     if a:context.source__wrap
-      let start = ((a:direction ==# 'forward') ?
+      let start = ((a:direction ==# 'backward') ?
             \       1 : a:context.source__linemax)
-      let max = ((a:direction ==# 'forward') ?
+      let max = ((a:direction ==# 'backward') ?
             \       a:context.source__linenr-1 :
             \       a:context.source__linemax-a:context.source__linenr-1)
       if max != 0
