@@ -457,7 +457,7 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) abort "{{{
 
   if a:context.split && !a:context.unite__direct_switch
     " Split window.
-    doautocmd WinLeave
+    silent doautocmd WinLeave
     execute s:get_buffer_direction(a:context) ((bufnr > 0) ?
           \ ((a:context.vertical) ? 'vsplit' : 'split') :
           \ ((a:context.vertical) ? 'vnew' : 'new'))
@@ -473,8 +473,8 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) abort "{{{
   endif
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
-  doautocmd WinEnter
-  doautocmd BufWinEnter
+  silent doautocmd WinEnter
+  silent doautocmd BufWinEnter
 endfunction"}}}
 
 function! unite#view#_close(buffer_name) abort  "{{{
