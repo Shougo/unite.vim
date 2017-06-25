@@ -457,6 +457,7 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) abort "{{{
 
   if a:context.split && !a:context.unite__direct_switch
     " Split window.
+    doautocmd WinLeave
     execute s:get_buffer_direction(a:context) ((bufnr > 0) ?
           \ ((a:context.vertical) ? 'vsplit' : 'split') :
           \ ((a:context.vertical) ? 'vnew' : 'new'))
