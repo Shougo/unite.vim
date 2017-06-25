@@ -457,19 +457,18 @@ function! unite#view#_switch_unite_buffer(buffer_name, context) abort "{{{
 
   if a:context.split && !a:context.unite__direct_switch
     " Split window.
-    noautocmd execute s:get_buffer_direction(a:context) ((bufnr > 0) ?
+    execute s:get_buffer_direction(a:context) ((bufnr > 0) ?
           \ ((a:context.vertical) ? 'vsplit' : 'split') :
           \ ((a:context.vertical) ? 'vnew' : 'new'))
   endif
 
   if bufnr > 0
-    silent noautocmd execute bufnr 'buffer'
+    silent execute bufnr 'buffer'
   else
     if bufname('%') == ''
       noautocmd silent enew
     endif
-    silent! execute 'noautocmd edit'
-          \ fnameescape(a:context.real_buffer_name)
+    silent! execute 'edit' fnameescape(a:context.real_buffer_name)
   endif
 
   call unite#handlers#_on_bufwin_enter(bufnr('%'))
