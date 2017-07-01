@@ -321,8 +321,7 @@ function! unite#sources#file#_get_files(input, context) abort "{{{
 
   if !is_vimfiler
     let files = sort(filter(copy(files),
-          \ "v:val != '.' && (a:input =~ '/\\.' || v:val !~ '/\\.')
-          \  && isdirectory(v:val)"), 1) +
+          \ "v:val != '.' && isdirectory(v:val)"), 1) +
           \ sort(filter(copy(files), "!isdirectory(v:val)"), 1)
 
     let s:cache_files[directory] = {
