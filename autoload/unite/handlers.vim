@@ -267,9 +267,6 @@ function! unite#handlers#_on_buf_unload(bufname) abort  "{{{
   endif
 
   " Restore options.
-  if has_key(unite, 'redrawtime_save')
-    let &redrawtime = unite.redrawtime_save
-  endif
   let &sidescrolloff = unite.sidescrolloff_save
 
   call unite#handlers#_restore_updatetime()

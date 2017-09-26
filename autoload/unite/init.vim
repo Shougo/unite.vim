@@ -230,12 +230,6 @@ function! unite#init#_unite_buffer() abort "{{{
 
   let &l:wrap = context.wrap
 
-  if exists('&redrawtime')
-    " Save redrawtime
-    let unite.redrawtime_save = &redrawtime
-    let &redrawtime = 100
-  endif
-
   call unite#handlers#_save_updatetime()
 
   " User's initialization.
