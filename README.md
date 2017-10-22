@@ -1,8 +1,9 @@
-[![Stories in Ready](https://badge.waffle.io/Shougo/unite.vim.png)](https://waffle.io/Shougo/unite.vim)  
+[![Stories in Ready](https://badge.waffle.io/Shougo/unite.vim.png)](https://waffle.io/Shougo/unite.vim)
 ![Unite.vim](https://s3.amazonaws.com/github-csexton/unite-brand.png)
 
 
-**Note**: Active development on unite.vim has stopped. The only future changes will be bug fixes.
+**Note**: Active development on unite.vim has stopped. The only future changes
+will be bug fixes.
 
 Please see [Denite.nvim](https://github.com/Shougo/denite.nvim).
 
