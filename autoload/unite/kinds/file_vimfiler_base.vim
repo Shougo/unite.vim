@@ -10,13 +10,13 @@ set cpo&vim
 " Global options definition. "{{{
 call unite#util#set_default(
       \ 'g:unite_kind_file_delete_file_command',
-      \ unite#util#is_windows() && !executable('rm') ? '' :
+      \ unite#util#is_windows() ? 'rmdir /S /Q $srcs' :
       \ executable('trash-put') ? 'trash-put $srcs' :
       \ executable('rmtrash') ? 'rmtrash $srcs' :
       \ 'rm $srcs')
 call unite#util#set_default(
       \ 'g:unite_kind_file_delete_directory_command',
-      \ unite#util#is_windows() && !executable('rm') ? '' :
+      \ unite#util#is_windows() ? 'rmdir /S /Q $srcs' :
       \ executable('trash-put') ? 'trash-put $srcs' :
       \ executable('rmtrash') ? 'rmtrash $srcs' :
       \ 'rm -r $srcs')
