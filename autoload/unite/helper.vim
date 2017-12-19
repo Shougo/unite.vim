@@ -604,11 +604,6 @@ function! unite#helper#ignore_candidates(candidates, context) abort "{{{
           \ unite#filters#globs2patterns(a:context.white_globs))
   endif
 
-  if a:context.path != ''
-    let candidates = unite#filters#{unite#util#has_lua()? 'lua' : 'vim'}
-          \_filter_head(candidates, a:context.path)
-  endif
-
   return candidates
 endfunction"}}}
 
