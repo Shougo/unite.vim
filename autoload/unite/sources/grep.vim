@@ -46,7 +46,7 @@ function! s:source.hooks.on_init(args, context) abort "{{{
     return
   endif
 
-  let target = get(a:args, 0, '')
+  let target = unite#util#expand(get(a:args, 0, ''))
 
   if target ==# ''
     let target = isdirectory(a:context.path) ?
