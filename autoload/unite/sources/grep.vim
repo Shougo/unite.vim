@@ -46,13 +46,15 @@ function! s:source.hooks.on_init(args, context) abort "{{{
     return
   endif
 
-  let target = unite#util#expand(get(a:args, 0, ''))
+  let target = get(a:args, 0, '')
 
   if target ==# ''
     let target = isdirectory(a:context.path) ?
       \ a:context.path :
       \ unite#util#input('Target: ', '.', 'file')
   endif
+
+  let target = unite#util#expand(target)
 
   if target ==# ''
     let a:context.source__targets = []
