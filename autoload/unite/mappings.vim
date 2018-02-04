@@ -735,7 +735,9 @@ function! unite#mappings#cursor_up(is_skip_not_matched) abort "{{{
   endwhile
 
   if is_insert
-    return repeat("\<Up>", cnt) .
+    let unite = unite#get_current_unite()
+    return repeat("\<Up>",
+            \ unite.context.prompt_direction ==# 'below' && line('$') == line('.') ? cnt - 1 : cnt) .
         \ (unite#helper#is_prompt(line('.') - cnt) ? "\<End>" : "\<Home>")
   else
     let cnt += v:count == 0 ? 0 : (v:count - 1)
@@ -765,7 +767,9 @@ function! unite#mappings#cursor_down(is_skip_not_matched) abort "{{{
   endwhile
 
   if is_insert
-    return repeat("\<Down>", cnt) .
+    let unite = unite#get_current_unite()
+    return repeat("\<Down>",
+              \ unite.context.prompt_direction !=# 'below' && line('.') == 1 ? cnt - 1 : cnt) .
           \ (unite#helper#is_prompt(line('.') + cnt) ? "\<End>" : "\<Home>")
   else
     let cnt += v:count == 0 ? 0 : (v:count - 1)
