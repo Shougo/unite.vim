@@ -254,7 +254,7 @@ endfunction"}}}
 
 function! unite#sources#grep#parse(line) abort "{{{
   let ret = matchlist(a:line,
-        \ '^\([a-zA-Z]\?[^:]*\):\(\d\+\)\%(:\(\d\+\)\)\?:\(.*\)$')
+        \ '^\(\%([a-zA-Z]:\)\?[^:]*\):\(\d\+\)\%(:\(\d\+\)\)\?:\(.*\)$')
   if empty(ret) || ret[1] == '' || ret[4] == ''
     return []
   endif
