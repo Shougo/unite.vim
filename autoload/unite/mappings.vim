@@ -257,46 +257,73 @@ function! unite#mappings#define_default_mappings() abort "{{{
         \ <Plug>(unite_toggle_mark_selected_candidates)
 
   " Insert mode key-mappings.
-  imap <buffer> <TAB>     <Plug>(unite_choose_action)
-  imap <buffer> <C-n>     <Plug>(unite_select_next_line)
-  imap <buffer> <Down>    <Plug>(unite_select_next_line)
-  imap <buffer> <C-p>     <Plug>(unite_select_previous_line)
-  imap <buffer> <Up>      <Plug>(unite_select_previous_line)
-  imap <buffer> <C-f>     <Plug>(unite_select_next_page)
-  imap <buffer> <C-b>     <Plug>(unite_select_previous_page)
-  imap <buffer> <CR>      <Plug>(unite_do_default_action)
-  imap <buffer> <C-h>     <Plug>(unite_delete_backward_char)
-  imap <buffer> <BS>      <Plug>(unite_delete_backward_char)
-  imap <buffer> <C-u>     <Plug>(unite_delete_backward_line)
-  imap <buffer> <C-w>     <Plug>(unite_delete_backward_word)
-  imap <buffer> <C-a>     <Plug>(unite_move_head)
-  imap <buffer> <Home>    <Plug>(unite_move_head)
-  imap <buffer> <Left>    <Plug>(unite_move_left)
-  imap <buffer> <Right>   <Plug>(unite_move_right)
-  imap <buffer> <C-l>     <Plug>(unite_redraw)
+  imap <buffer><expr> <TAB>
+        \ pumvisible() ? '<TAB>'   : '<Plug>(unite_choose_action)'
+  imap <buffer><expr> <C-n>
+        \ pumvisible() ? '<C-n>'   : '<Plug>(unite_select_next_line)'
+  imap <buffer><expr> <Down>
+        \ pumvisible() ? '<Down>'  : '<Plug>(unite_select_next_line)'
+  imap <buffer><expr> <C-p>
+        \ pumvisible() ? '<C-p>'   : '<Plug>(unite_select_previous_line)'
+  imap <buffer><expr> <Up>
+        \ pumvisible() ? '<Up>'    : '<Plug>(unite_select_previous_line)'
+  imap <buffer><expr> <C-f>
+        \ pumvisible() ? '<C-f>'   : '<Plug>(unite_select_next_page)'
+  imap <buffer><expr> <C-b>
+        \ pumvisible() ? '<C-b>'   : '<Plug>(unite_select_previous_page)'
+  imap <buffer><expr> <CR>
+        \ pumvisible() ? '<C-Y>'   : '<Plug>(unite_do_default_action)'
+  imap <buffer><expr> <C-h>
+        \ pumvisible() ? '<C-h>'   : '<Plug>(unite_delete_backward_char)'
+  imap <buffer><expr> <BS>
+        \ pumvisible() ? '<BS>'    : '<Plug>(unite_delete_backward_char)'
+  imap <buffer><expr> <C-u>
+        \ pumvisible() ? '<C-u>'   : '<Plug>(unite_delete_backward_line)'
+  imap <buffer><expr> <C-w>
+        \ pumvisible() ? '<C-w>'   : '<Plug>(unite_delete_backward_word)'
+  imap <buffer><expr> <C-a>
+        \ pumvisible() ? '<C-a>'   : '<Plug>(unite_move_head)'
+  imap <buffer><expr> <Home>
+        \ pumvisible() ? '<Home>'  : '<Plug>(unite_move_head)'
+  imap <buffer><expr> <Left>
+        \ pumvisible() ? '<Left>'  : '<Plug>(unite_move_left)'
+  imap <buffer><expr> <Right>
+        \ pumvisible() ? '<Right>' : '<Plug>(unite_move_right)'
+  imap <buffer><expr> <C-l>
+        \ pumvisible() ? '<C-l>'   : '<Plug>(unite_redraw)'
+
   if has('gui_running')
-    imap <buffer> <ESC>   <Plug>(unite_insert_leave)
+    imap <buffer><expr> <ESC>
+          \ pumvisible() ? '<ESC>' : '<Plug>(unite_insert_leave)'
   endif
+
   execute s:nowait_map('i') '<C-g>'
         \ '<Plug>(unite_exit)'
-  imap <buffer> <2-LeftMouse>   <Plug>(unite_do_default_action)
-  imap <buffer> <RightMouse>    <Plug>(unite_exit)
+
+  imap <buffer><expr> <2-LeftMouse>
+        \ pumvisible() ? '<2-LeftMouse>' : '<Plug>(unite_do_default_action)'
+  imap <buffer><expr> <RightMouse>
+        \ pumvisible() ? '<RightMouse>'  : '<Plug>(unite_exit)'
 
   imap <silent><buffer><expr> <Space>
-        \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
+        \ pumvisible()
+        \ ? '<Space>'
+        \ : unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate)")
   imap <silent><buffer><expr> <S-Space>
-        \ unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate_up)")
+        \ pumvisible()
+        \ ? '<S-Space>'
+        \ : unite#smart_map(' ', "\<Plug>(unite_toggle_mark_current_candidate_up)")
 
   inoremap <silent><buffer><expr> <C-d>
-        \ unite#do_action('delete')
+        \ pumvisible() ? '<C-d>' : unite#do_action("delete")
   inoremap <silent><buffer><expr> <C-e>
-        \ unite#do_action('edit')
+        \ pumvisible() ? '<C-e>' : unite#do_action("edit")
   inoremap <silent><buffer><expr> <C-t>
-        \ unite#do_action('tabopen')
+        \ pumvisible() ? '<C-t>' : unite#do_action("tabopen")
   inoremap <silent><buffer><expr> <C-y>
-        \ unite#do_action('yank')
+        \ pumvisible() ? '<C-y>' : unite#do_action("yank")
   inoremap <silent><buffer><expr> <C-o>
-        \ unite#do_action('open')
+        \ pumvisible() ? '<C-o>' : unite#do_action("open")
 endfunction"}}}
 
 function! s:nowait_map(mode) abort "{{{
@@ -855,7 +882,6 @@ function! s:get_quick_match_table() abort "{{{
   endif
   return table
 endfunction"}}}
-
 
 function! s:complete() abort "{{{
   let unite = unite#get_current_unite()
