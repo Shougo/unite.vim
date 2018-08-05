@@ -36,6 +36,8 @@ function! s:source.hooks.on_init(args, context) abort "{{{
         \ unite#util#input('Target: ', '.', 'dir'))
   endif
 
+  let target = unite#util#expand(target)
+
   let a:context.source__targets = split(target, "\n")
   let a:context.source__input = get(a:args, 1, a:context.input)
   if a:context.source__input == ''
