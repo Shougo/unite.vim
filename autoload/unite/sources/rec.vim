@@ -609,6 +609,10 @@ endfunction"}}}
 function! s:source_file_git.complete(args, context, arglead, cmdline, cursorpos) abort "{{{
   return []
 endfunction"}}}
+function! s:source_file_git.hooks.on_init(args, context) abort "{{{
+  let a:context.source__is_directory = 0
+  call s:on_init(a:args, a:context, s:source_file_git.name)
+endfunction"}}}
 
 " Source directory.
 let s:source_directory_rec = deepcopy(s:source_file_rec)
