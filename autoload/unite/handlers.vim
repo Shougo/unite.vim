@@ -154,8 +154,7 @@ function! unite#handlers#_on_cursor_moved() abort  "{{{
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
 
-  let &l:modifiable =
-        \ line('.') == prompt_linenr && col('.') >= 1
+  setlocal modifiable
 
   if line('.') == 1
     nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
