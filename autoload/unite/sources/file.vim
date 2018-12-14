@@ -432,8 +432,7 @@ function! unite#sources#file#create_vimfiler_dict(candidate, exts) abort "{{{
           \ filewritable(a:candidate.action__path)
   endif
 
-  let a:candidate.vimfiler__filetime =
-        \ s:get_filetime(a:candidate.action__path)
+  let a:candidate.vimfiler__filetime = getftime(a:candidate.action__path)
 endfunction"}}}
 
 function! unite#sources#file#complete_file(args, context, arglead, cmdline, cursorpos) abort "{{{
@@ -484,31 +483,6 @@ endfunction
 call unite#custom_action('cdable', 'file', s:cdable_action_file)
 unlet! s:cdable_action_file
 "}}}
-
-function! s:get_filetime(filename) abort "{{{
-  let filetime = getftime(a:filename)
-  if !has('python3')
-    return filetime
-  endif
-
-  if filetime < 0 && getftype(a:filename) !=# 'link' "{{{
-    " Use python3 interface.
-python3 <<END
-import os
-import os.path
-import vim
-os.stat_float_times(False)
-try:
-  ftime = os.path.getmtime(vim.eval(\
-    'unite#util#iconv(a:filename, &encoding, "char")'))
-except:
-  ftime = -1
-vim.command('let filetime = ' + str(ftime))
-END
-  endif"}}}
-
-  return filetime
-endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
