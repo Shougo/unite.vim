@@ -181,7 +181,7 @@ function! unite#kinds#file#do_rename(old_filename, new_filename) abort "{{{
       call mkdir(fnamemodify(new_filename, ':h'), 'p')
     endif
 
-    let bufnr = bufnr(old_filename)
+    let bufnr = get(filter(range(bufnr('$')), 'bufname(v:val) ==# old_filename'), 0, -1)
     if bufnr > 0
       " Buffer rename.
       setlocal hidden
