@@ -41,7 +41,8 @@ function! s:source.hooks.on_init(args, context) abort "{{{
           \ bufname(unite#get_current_unite().prev_bufnr))
   endif
 
-  let a:context.source__targets = split(target, "\n")
+  let a:context.source__targets = map(split(target, "\n"),
+        \ "isdirectory(v:val) ? v:val . '/**' : v:val")
 
   let a:context.source__input = get(args, 1, '')
   if a:context.source__input == '' || a:context.unite__is_restart
