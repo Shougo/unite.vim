@@ -248,11 +248,6 @@ function! unite#init#_current_unite(sources, context) abort "{{{
     let winnr = unite#helper#get_unite_winnr(context.buffer_name)
     if winnr > 0
       execute winnr 'wincmd w'
-
-      if context.input == ''
-        " Get input text.
-        let context.input = unite#helper#get_input()
-      endif
     endif
   endif
 
