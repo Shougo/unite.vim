@@ -21,10 +21,7 @@ function! s:matcher.filter(candidates, context) abort "{{{
     return a:candidates
   endif
 
-  return unite#util#has_lua() ?
-        \ unite#filters#lua_filter_patterns(a:candidates,
-        \   ['^%.[^/]*/?$', '/%.[^/]*/?$'], []) :
-        \ filter(a:candidates, "
+  return filter(a:candidates, "
         \   has_key(v:val, 'action__path')
         \    && v:val.action__path !~ '\\%(^\\|/\\)\\.[^/]*/\\?$'")
 endfunction"}}}

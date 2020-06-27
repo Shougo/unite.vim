@@ -35,11 +35,6 @@ function! s:converter.filter(candidates, context) abort "{{{
       endif
     endif
 
-    if unite#util#has_lua()
-      return unite#filters#converter_relative_word#lua(
-            \ a:candidates, directory)
-    endif
-
     for candidate in a:candidates
       let candidate.word = unite#util#substitute_path_separator(
             \ fnamemodify(get(candidate, 'action__path',
@@ -51,31 +46,6 @@ function! s:converter.filter(candidates, context) abort "{{{
       call unite#util#lcd(old_dir)
     endif
   endtry
-
-  return a:candidates
-endfunction"}}}
-
-function! unite#filters#converter_relative_word#lua(candidates, cwd) abort "{{{
-  let cwd = a:cwd
-  if cwd != '/' && cwd[-1:] != '/'
-    let cwd .= '/'
-  endif
-
-  lua << EOF
-  do
-  local candidates = vim.eval('a:candidates')
-  local cwd = vim.eval('cwd')
-  local home = vim.eval('unite#util#substitute_path_separator(expand("~/"))')
-  for candidate in candidates() do
-    local path = candidate.action__path or candidate.word
-    if path:find(cwd, 1, true) == 1 then
-      candidate.word = path:sub(cwd:len() + 1)
-    elseif path:find(home, 1, true) == 1 then
-      candidate.word = path:sub(home:len() + 1)
-    end
-  end
-end
-EOF
 
   return a:candidates
 endfunction"}}}

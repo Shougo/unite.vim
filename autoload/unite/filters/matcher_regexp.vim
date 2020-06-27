@@ -63,18 +63,13 @@ function! unite#filters#matcher_regexp#get_expr(input, context) abort "{{{
     let a:context.execute_command = input[1:]
     return '1'
   elseif input !~ '[~\\.^$\[\]*]'
-    if unite#util#has_lua()
-      let expr = 'if_lua'
-      let a:context.input_lua = input
-    else
-      " Optimized filter.
-      let input = substitute(input, '\\\(.\)', '\1', 'g')
-      let expr = &ignorecase ?
-            \ printf('stridx(tolower(v:val.word), %s) != -1',
-            \    string(tolower(input))) :
-            \ printf('stridx(v:val.word, %s) != -1',
-            \    string(input))
-    endif
+    " Optimized filter.
+    let input = substitute(input, '\\\(.\)', '\1', 'g')
+    let expr = &ignorecase ?
+          \ printf('stridx(tolower(v:val.word), %s) != -1',
+          \    string(tolower(input))) :
+          \ printf('stridx(v:val.word, %s) != -1',
+          \    string(input))
   else
     let expr = 'v:val.word =~ '.string(input)
   endif

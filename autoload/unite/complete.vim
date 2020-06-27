@@ -113,9 +113,7 @@ function! unite#complete#args(sources, arglead, cmdline, cursorpos) abort "{{{
 endfunction"}}}
 
 function! unite#complete#gather(candidates, input) abort "{{{
-  return unite#util#has_lua() ?
-        \ unite#complete#gather_lua(a:candidates, a:input) :
-        \ unite#complete#gather_vim(a:candidates, a:input)
+  return unite#complete#gather_vim(a:candidates, a:input)
 endfunction"}}}
 
 function! unite#complete#gather_vim(candidates, input) abort "{{{
@@ -140,41 +138,6 @@ function! unite#complete#gather_vim(candidates, input) abort "{{{
   endfor
 
   call add(_, a:input)
-
-  return _
-endfunction"}}}
-
-function! unite#complete#gather_lua(candidates, input) abort "{{{
-  let _ = []
-
-  lua << EOF
-do
-  local dup = {}
-  local _ = vim.eval('_')
-  local candidates = vim.eval('a:candidates')
-  local len_input = vim.eval('len(a:input)')
-  local search_input = vim.eval('tolower(a:input)')
-  for i = 0, #candidates-1, 1 do
-    local start_index, end_index = string.find(
-         candidates[i].word, '[a-zA-Z_][0-9a-zA-Z_]*')
-
-    while start_index ~= nil and start_index >= 1 do
-      local str = string.sub(candidates[i].word, start_index, end_index)
-
-      if string.len(str) > len_input
-            and string.sub(string.lower(str), 1, len_input) == search_input
-            and dup[str] == nil then
-        dup[str] = 1
-        _:add(str)
-      end
-
-      start_index = end_index + 1
-      start_index, end_index = string.find(
-          candidates[i].word, '[a-zA-Z_][0-9a-zA-Z_]*', start_index)
-    end
-  end
-end
-EOF
 
   return _
 endfunction"}}}

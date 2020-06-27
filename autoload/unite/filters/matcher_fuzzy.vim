@@ -61,9 +61,6 @@ function! s:matcher.filter(candidates, context) abort "{{{
     let expr = (pattern =~ '^!') ?
           \ 'v:val.word !~ ' . string(pattern[1:]) :
           \ 'v:val.word =~ ' . string(pattern)
-    if input !~ '^!' && unite#util#has_lua()
-      let expr = 'if_lua_fuzzy'
-      let a:context.input_lua = input
     endif
 
     let candidates = unite#filters#filter_matcher(
