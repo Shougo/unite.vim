@@ -67,6 +67,7 @@ function! unite#filters#filter_patterns(candidates, patterns, whites) abort "{{{
   return unite#filters#vim_filter_patterns(
           \   a:candidates, a:patterns, a:whites)
 endfunction"}}}
+" @vimlint(EVL102, 1, l:pattern)
 function! unite#filters#vim_filter_patterns(candidates, patterns, whites) abort "{{{
   let pattern = join(a:patterns, '\|')
   let white = join(a:whites, '\|')
@@ -74,6 +75,7 @@ function! unite#filters#vim_filter_patterns(candidates, patterns, whites) abort 
         \ "'./'.get(v:val, 'action__path', v:val.word) !~? pattern"
         \ .(white == "" ? "" : "|| './'.get(v:val, 'action__path', v:val.word) =~? white"))
 endfunction"}}}
+" @vimlint(EVL102, 0, l:pattern)
 
 function! unite#filters#globs2patterns(globs) abort "{{{
   return unite#filters#globs2vim_patterns(a:globs)
