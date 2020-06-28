@@ -61,7 +61,6 @@ function! s:matcher.filter(candidates, context) abort "{{{
     let expr = (pattern =~ '^!') ?
           \ 'v:val.word !~ ' . string(pattern[1:]) :
           \ 'v:val.word =~ ' . string(pattern)
-    endif
 
     let candidates = unite#filters#filter_matcher(
           \ a:candidates, expr, a:context)
