@@ -13,7 +13,7 @@ endfunction"}}}
 
 let s:kind = {
       \ 'name' : 'word',
-      \ 'default_action' : 'insert',
+      \ 'default_action' : 'append',
       \ 'action_table': {},
       \}
 
