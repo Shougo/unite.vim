@@ -306,8 +306,8 @@ endfunction"}}}
 function! unite#util#expand(path) abort "{{{
   return s:get_prelude().substitute_path_separator(
         \ (a:path =~ '^\~') ? fnamemodify(a:path, ':p') :
-        \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
-        \               '^\$\h\w*', '\=eval(submatch(0))', '') :
+        \ (a:path =~ '^\$\h\w*') && exists(matchstr(a:path, '\$\h\w*')) ?
+        \   substitute(a:path, '^\$\h\w*', '\=eval(submatch(0))', '') :
         \ a:path)
 endfunction"}}}
 function! unite#util#set_default_dictionary_helper(variable, keys, value) abort "{{{
