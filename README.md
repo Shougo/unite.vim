@@ -2,10 +2,10 @@
 ![Unite.vim](https://s3.amazonaws.com/github-csexton/unite-brand.png)
 
 
-**Note**: Active development on unite.vim has stopped. The only future changes
-will be bug fixes.
+**Note**: Active development on denite.nvim has stopped. The only future
+changes will be bug fixes.
 
-Please see [Denite.nvim](https://github.com/Shougo/denite.nvim).
+Please see [ddu.vim](https://github.com/Shougo/ddu.vim).
 
 
 The unite or unite.vim plug-in can search and display information from
